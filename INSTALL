@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# Install all .sh script files by putting symlinks into a destination directory (default is users's ~/bin dir)
+
+DESTINATIONDIR=~/bin
+
+# Not more thank one parameter is allowed
+if [ $# -gt 1 ] ; then
+    echo "usage: $0 [<destination directory, default: $DESTINATIONDIR)>]"
+    exit 1
+fi
+
+# A way to clean up again
+if [[ $1 == "--remove" ]] ; then
+  SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" #set the variable to the place where script is loaded from
+  find $DESTINATIONDIR -lname "$SCRIPTDIR/*" -delete
+  exit 2
+fi
+
+# If no parameter is given, destination directory is set to default
+if [ $# -eq 1 ] ; then
+    DESTINATIONDIR=$1
+fi
+
+# Make symbolic links to all .sh files in directory
+for f in *.sh ; do
+    if [ "$f" = "$(basename "$0")" -o ! -x "$f" ] ; then
+        continue
+    fi
+    echo "$f"
+    ln -fs "$(realpath "$f")" "$DESTINATIONDIR/$f"
+done
