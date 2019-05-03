@@ -3,17 +3,7 @@
 # authored by.  Torsten Juul-Jensen/oct. 2015
 # last edited: February 06, 2018 09:45
 
-_confirm () {
-  # prompt user for confirmation. Default is No
-    read -r -p "${1:-Do you want to proceed? [y/N]} " RESPONSE
-    RESPONSE=${RESPONSE,,}
-    if [[ $RESPONSE =~ ^(yes|y| ) ]]
-      then
-        true
-      else
-        false
-    fi
-}
+
 
 _gnomeConfig() {
   # add date to top bar
@@ -83,45 +73,12 @@ _gnomeShellExtensions(){
     ln -s ~/git_projects/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar
   #fi
 
-  if (rpm -q lm_sensors >/dev/null 2>&1) ; then   #  _confirm "Do you want to install GIT extension 'system monitor'? [yN] " ; then
-    # install system monitor from source
-    # prepare git project directories
-    mkdir -p ~/git_projects
-    cd ~/git_projects
-    git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git
-    mkdir -p ~/.local/share/gnome-shell/extensions
-    cd ~/.local/share/gnome-shell/extensions
-    ln -s ~/git_projects/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com
-  fi
+
 }
 
-_vmwareConfig(){
-  if ( command -v vmware > /dev/null 2>&1 ) ; then
-    # enable 3D acceleration in VMware Workstation
-    mkdir -p ~/.vmware
-    touch ~/.vmware/preferences
-    echo "mks.gl.allowBlacklistedDrivers = TRUE" >> ~/.vmware/preferences
-  fi
-}
 
-_atomPlugins(){
-  if ( command -v atom > /dev/null 2>&1 ) ; then
-    echo Installing atom packages...
-    apm install minimap
-    apm install line-ending-converter
-    apm install git-plus
-    apm install atom-beautify
-    apm install autoclose-html
-    apm install ask-stack
-    #apm install autohide-tree-view
-    apm install open-recent
-    apm install compare-files
-    apm install language-powershell
-    #apm install bezier-curve-editor
-    #apm install emmet
 
-  fi
-}
+
 
 _firefoxConfig(){
   if ( command -v mozilla-extension-manager  > /dev/null 2>&1 ) ; then
@@ -140,8 +97,7 @@ _firefoxConfig(){
     firefox-extension-manager --install --user --url https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/
 
     #firefox --new-tab https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/
-    
-    #wget --content-disposition  https://addons.mozilla.org/firefox/downloads/file/1730458/addon-1730458-latest.xpi -O addon-1730458-latest.xpi
+
 
 
   fi
@@ -187,16 +143,5 @@ _makeCustomizations(){
 
 # must be run as a regular user and NOT root
 # exit if the user is root
+
 [ "$UID" -eq 0 ] && { echo Do no run as root - script will exit.; exit ;}
-
-_gnomeConfig
-_gnomeShellExtensions
-_vmwareConfig
-_atomPlugins
-_firefoxConfig
-_thunderbirdConfig
-_makeCustomizations
-
-_confirm "Do you want to reboot? [yN]" && reboot
-
-##############################

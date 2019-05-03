@@ -66,7 +66,7 @@ _parseArguments () {
 _help()
 {
     SCRIPT_NAME=$(basename $0)
-    echo "usage: $SCRIPT_NAME [--preset filename] [[_]tweakname]"
+    echo "usage: $SCRIPT_NAME [--include <function library file>] [--preset <filename>] [[_]tweakname]"
 }
 
 _readPresetFile(){
