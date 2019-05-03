@@ -1,0 +1,91 @@
+
+##########
+# Fedora bootstrap script - default preset
+# Author: Torsten Juul-Jensen
+# Version: v1.0 2019-01-28
+# Source: https://github.com/...
+##########
+
+### Require administrator privileges ###
+# RequireAdmin
+
+### Auxiliary Functions Begin ###
+DisableScreensaver       # EnableScreenSaver
+# Restart
+
+### Generic Fedora ###
+UpdateFedora
+InstallRequired
+InstallMiscTools           # RemoveMiscTools
+InstallRPMfusionRepos      # RemoveRPMfusionRepos
+InstallKernelTools         # RemoveKernelTools
+#InstallFedy               # RemoveFedy
+
+### Forensic Tools ###
+InstallForensicImageTools  # RemoveForensicImageTools
+InstallFTKImager           # RemoveFTKImager
+InstallExifTool            # RemoveExifTool
+
+### Basic Tools and Support ###
+InstallExfatSupport        # RemoveExfatSupport
+InstallPackagingTools      # RemovePackagingTools
+InstallAtomEditor          # RemoveAtomEditor
+InstallAtomPlugins         # RemoveAtomPlugins
+InstallBasicEditors        # RemoveBasicEditors
+# InstallCommanderFileMgrs # RemoveCommanderFileMgrs
+InstallTerminator          # RemoveTerminator
+InstallKeepassx            # RemoveKeepassx
+
+### Communication ####
+InstallChatProgs           # RemoveChatProgs
+InstallThunderbird         # RemoveThunderbird
+
+### NetworkConfiguration ####
+# DisableMulticastDNS      #
+InstallNetworkTools        # RemoveNetworkTools
+InstallNetCommsTools       # RemoveNetCommsTools
+InstallNetMgrL2TP          # RemoveNetMgrL2TP
+#InstallOpenconnectVPN     #
+
+### Productivity Tools ###
+# InstallDia               # RemoveDia
+InstallWine                # RemoveWine
+
+### Supporting scripts ###
+InstallTecmintMonitorSh    # RemoveTecmintMonitorSh
+InstallGnomeExtInstaller   # RemoveGnomeExtInstaller
+InstallMozExtensionMgr     # RemoveMozExtensionMgr
+
+### Web Browsers ###
+InstallChromium             # RemoveChromium
+InstallChrome               # RemoveChrome
+SetChromePreferences        # UnsetChromePreferences
+SetFirefoxPreferences       # UnsetFirefoxPreferences
+
+### Multimedia ###
+InstallSpotifyClient        # RemoveSpotifyClient
+InstallVLCPlayer            # RemoveVLCPlayer
+#InstallClementinePlayer    # RemoveClementinePlayer
+InstallPulseAudioEq         # RemovePulseAudioEq
+InstallYouTubeDownloader    # RemoveYouTubeDownloader
+
+### Gnome Tools & Tweaks ###
+InstallGnomeTools          # RemoveGnomeTools
+InstallSystemMonitor       # RemoveSystemMonitor
+
+### Miscellaneous tweaks and installs  ###
+InstallCheat                #
+InstallThinkfanOnThinkpad   # RemoveThinkfanIfInstalled
+InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
+InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
+
+### 3rd party applications ###
+InstallOwnCloudClient       # RemoveOwnCloudClient
+InstallVeraCrypt            #
+InstallVMwareWorkstation    # RemoveVMwareWorkstation
+InstallCitrixClient         # RemoveCitrixClient
+
+### Auxiliary Functions End ###
+EnableScreenSaver           # DisableScreensaver
+SetHostname
+Restart
