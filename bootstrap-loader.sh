@@ -40,22 +40,12 @@ _parseArguments () {
               shift
               shift
               ;;
-            -c | --config-file )
-              if realpath -e -q $2 &>/dev/null ; then
-                echo Feature is not implemented yet
-              else
-                echo "Config file ($2) does not exist"
-                exit 444
-              fi
-              shift
-              shift
-              ;;
             -h | --help )
               _help
               exit 1
               ;;
             * )
-            _AddOrRemoveAction $1
+            _addOrRemoveAction $1
              shift
         esac
         #$i=$((i + 1))
@@ -94,10 +84,9 @@ _functionExists() {
 }
 
 _executeFunctions(){
-  cd /tmp
   # execute all valid functions
   for i in "${!ACTIONS[@]}"; do
-      _function_exists "${ACTIONS[$i]}" && echo "${ACTIONS[$i]}" &&  (${ACTIONS[$i]}) # print name & execute function
+      _functionExists "${ACTIONS[$i]}" && echo "${ACTIONS[$i]}" &&  (${ACTIONS[$i]}) # print name & execute function
   done
 }
 
