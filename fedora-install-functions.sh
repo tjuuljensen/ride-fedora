@@ -1,14 +1,20 @@
 #!/bin/sh
-# script will automatically escalate to root privileges. Do not run as root
-# last edited: April 16, 2019 11:32
+#
+# Author: Torsten Juul-Jensen
+# Edited: May 4, 2019 15:50
+#
+# This file is a function library only and is meant for . sourcing into other scripts
+# It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
+#
 
 MYUSER=$(logname)
-DOWNLOADDIR=/home/$MYUSER/Downloads
+LOGINUSERUID=$(id -u ${MYUSER})
+DOWNLOADDIR=/tmp
 FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
 
 
 ################################################################
-###### Require administrator privileges
+###### Auxiliary Functions  ###
 ################################################################
 
 RequireAdmin(){
@@ -16,22 +22,10 @@ RequireAdmin(){
     [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
 }
 
-################################################################
-###### Auxiliary Functions  ###
-################################################################
-
-EnableScreenSaver(){
-  # enable screensaver
-  su $MYUSER -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled 'true'"
-  su $MYUSER -c "gsettings set org.gnome.desktop.screensaver lock-enabled 'true'"
-  su $MYUSER -c "gsettings set org.gnome.desktop.session idle-delay 300"
-}
-
-DisableScreensaver(){
-  # disable screensaver
-  su $MYUSER -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled 'false'"
-  su $MYUSER -c "gsettings set org.gnome.desktop.screensaver lock-enabled 'false'"
-  su $MYUSER -c "gsettings set org.gnome.desktop.session idle-delay 0"
+SetupUserDefaultDirs(){
+  # Create user's bin and git directories
+  sudo -u $MYUSER mkdir -p ~/bin > /dev/null
+  sudo -u $MYUSER mkdir -p ~/git > /dev/null
 }
 
 Restart(){
@@ -128,6 +122,7 @@ RemoveFedy(){
 ###### Forensic Tools ###
 ################################################################
 
+
 InstallForensicImageTools(){
   # install libewf - a library for access to EWF (Expert Witness Format)
   # See more at https://github.com/libyal/libewf
@@ -177,6 +172,13 @@ RemoveExfatSupport(){
   dnf remove -y exfat-utils fuse-exfat
 }
 
+InstallPython(){
+  # Install pyhton and pip
+  dnf install -y python python-pip
+  pip install --upgrade pip
+
+}
+
 InstallPackagingTools(){
   # install 7zip and dependencies
   dnf install -y p7zip unrar
@@ -217,29 +219,29 @@ RemoveAtomEditor(){
 
 InstallAtomPlugins(){
     if ( command -v atom > /dev/null 2>&1 ) ; then
-      su $MYUSER -c "apm install minimap"
-      su $MYUSER -c "apm install line-ending-converter"
-      su $MYUSER -c "apm install git-plus"
-      su $MYUSER -c "apm install atom-beautify"
-      su $MYUSER -c "apm install autoclose-html"
-      su $MYUSER -c "apm install ask-stack"
-      su $MYUSER -c "apm install open-recent"
-      su $MYUSER -c "apm install compare-files"
-      su $MYUSER -c "apm install language-powershell"
+      sudo -u $MYUSER apm install minimap
+      sudo -u $MYUSER apm install line-ending-converter
+      sudo -u $MYUSER apm install git-plus
+      sudo -u $MYUSER apm install atom-beautify
+      sudo -u $MYUSER apm install autoclose-html
+      sudo -u $MYUSER apm install ask-stack
+      sudo -u $MYUSER apm install open-recent
+      sudo -u $MYUSER apm install compare-files
+      sudo -u $MYUSER apm install language-powershell
     fi
 }
 
 RemoveAtomPlugins(){
     if ( command -v atom > /dev/null 2>&1 ) ; then
-      su $MYUSER -c "apm uninstall minimap"
-      su $MYUSER -c "apm uninstall line-ending-converter"
-      su $MYUSER -c "apm uninstall git-plus"
-      su $MYUSER -c "apm uninstall atom-beautify"
-      su $MYUSER -c "apm uninstall autoclose-html"
-      su $MYUSER -c "apm uninstall ask-stack"
-      su $MYUSER -c "apm uninstall open-recent"
-      su $MYUSER -c "apm uninstall compare-files"
-      su $MYUSER -c "apm uninstall language-powershell"
+      sudo -u $MYUSER apm uninstall minimap
+      sudo -u $MYUSER apm uninstall line-ending-converter
+      sudo -u $MYUSER apm uninstall git-plus
+      sudo -u $MYUSER apm uninstall atom-beautify
+      sudo -u $MYUSER apm uninstall autoclose-html
+      sudo -u $MYUSER apm uninstall ask-stack
+      sudo -u $MYUSER apm uninstall open-recent
+      sudo -u $MYUSER apm uninstall compare-files
+      sudo -u $MYUSER apm uninstall language-powershell
     fi
 }
 
@@ -296,6 +298,56 @@ RemoveThunderbird(){
   dnf remove -y thunderbird
 }
 
+InstallThunderbirdExts(){
+  # Install Thunderbird Extensions
+
+  if ( command -v mozilla-extension-manager  > /dev/null 2>&1 ) ; then
+
+    ADDONS=(
+      "https://addons.mozilla.org/thunderbird/downloads/latest/71/addon-71-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/google-search-for-thunderbi/addon-370540-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/thunderkeep/addon-464405-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/dansk-ordbog/addon-3596-latest.xpi"
+      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
+    )
+
+    sudo -u $MYUSER thunderbird & # start Thunderbird so profile is created
+    sleep 15
+    pkill thunderbird
+
+    for ADDON in "${ADDONS[@]}"
+    do
+      sudo -u $MYUSER mozilla-extension-manager --install --user --url $ADDON
+    done
+  fi
+
+}
+
+RemoveThunderbirdExts(){
+  # Remove Thunderbird Extensions
+
+  if ( command -v mozilla-extension-manager  > /dev/null 2>&1 ) ; then
+
+    ADDONS=(
+      "https://addons.mozilla.org/thunderbird/downloads/latest/71/addon-71-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/google-search-for-thunderbi/addon-370540-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/thunderkeep/addon-464405-latest.xpi"
+      "https://addons.mozilla.org/thunderbird/downloads/latest/dansk-ordbog/addon-3596-latest.xpi"
+      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
+    )
+
+    for ADDON in "${ADDONS[@]}"
+    do
+      sudo -u $MYUSER mozilla-extension-manager --remove --user --url $ADDON
+    done
+  fi
+
+}
+
 
 ################################################################
 ###### NetworkConfiguration ####
@@ -343,8 +395,8 @@ RemoveNetMgrL2TP(){
 InstallOpenconnectVPN(){
   # OpenConnect for use with Juniper VPN
   dnf install -y automake libtool openssl-devel libxml2 libxml2-devel vpnc-script NetworkManager-openconnect-gnome
-  su $MYUSER -c 'mkdir -p ~/git &>/dev/null'
-  su $MYUSER -c 'cd ~/git ;  git clone git://git.infradead.org/users/dwmw2/openconnect.git ; cd openconnect/ ; ./autogen.sh ; ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls ; make'
+  sudo -u $MYUSER mkdir -p ~/git &>/dev/null
+  sudo -u $MYUSER cd ~/git ;  git clone git://git.infradead.org/users/dwmw2/openconnect.git ; cd openconnect/ ; ./autogen.sh ; ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls ; make
   make install
 }
 
@@ -390,8 +442,8 @@ InstallGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
 
-  su $MYUSER -c "mkdir -p ~/git &>/dev/null"
-  su $MYUSER -c "cd ~/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer"
+  sudo -u $MYUSER mkdir -p ~/git &>/dev/null
+  sudo -u $MYUSER cd ~/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer
 
   ln -fs "/home/$MYUSER/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
 }
@@ -400,7 +452,7 @@ RemoveGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
 
-  su $MYUSER -c "rm -rf ~/git/gnome-shell-extension-installer" # remove github repo clone
+  sudo -u $MYUSER rm -rf ~/git/gnome-shell-extension-installer # remove github repo clone
   rm "/usr/local/bin/gnome-shell-extension-installer" &>/dev/null # remove symlink
 }
 
@@ -409,8 +461,8 @@ InstallMozExtensionMgr(){
   # Script for searching and installing Firefox extensions
   # http://www.bernaerts-nicolas.fr/linux/74-ubuntu/271-ubuntu-firefox-thunderbird-addon-commandline
 
-  su $MYUSER -c "mkdir -p ~/git &>/dev/null"
-  su $MYUSER -c "cd ~/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts"
+  sudo -u $MYUSER mkdir -p ~/git &>/dev/null
+  sudo -u $MYUSER cd ~/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts
 
   # Fix missing executable flag when fetched from repo
   chmod 755 "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager"
@@ -421,7 +473,7 @@ InstallMozExtensionMgr(){
 }
 
 RemoveMozExtensionMgr(){
-  su $MYUSER -c "rm -rf ~/git/ubuntu-scripts" # remove github repo clone
+  sudo -u $MYUSER rm -rf ~/git/ubuntu-scripts # remove github repo clone
   rm "/usr/local/bin/firefox-extension-manager"  &>/dev/null # remove symlink
   rm "/usr/local/bin/mozilla-extension-manager"  &>/dev/null # remove symlink
 }
@@ -565,6 +617,52 @@ UnsetFirefoxPreferences() {
   rm $FIREFOXOVERRIDEFILE
 }
 
+InstallFirefoxAddons(){
+  if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
+
+    ADDONS=(
+      "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin"
+      "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17"
+      "https://addons.mozilla.org/firefox/downloads/latest/https-everywhere/"
+      "https://addons.mozilla.org/firefox/downloads/latest/noscript"
+      "https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/"
+      "https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/"
+      "https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/"
+    )
+
+    sudo -u $MYUSER firefox & # start Firefox so default profile is created
+    sleep 10
+    pkill firefox
+
+    sudo -u $MYUSER mkdir -p ~/.mozilla/firefox &>/dev/null
+    sudo -u $MYUSER cd ~/.mozilla/firefox ; cd $(ls -d *.default) ; mkdir extensions &>/dev/null
+
+    for ADDON in "${ADDONS[@]}"
+    do
+      sudo -u $MYUSER firefox-extension-manager --install --user --url $ADDON
+    done
+  fi
+}
+
+RemoveFirefoxAddons(){
+  if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
+
+    ADDONS=(
+      "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin"
+      "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17"
+      "https://addons.mozilla.org/firefox/downloads/latest/https-everywhere/"
+      "https://addons.mozilla.org/firefox/downloads/latest/noscript"
+      "https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/"
+      "https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/"
+      "https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/"
+    )
+
+    for ADDON in "${ADDONS[@]}"
+    do
+      sudo -u $MYUSER firefox-extension-manager --remove --user --url $ADDON
+    done
+  fi
+}
 
 ################################################################
 ###### Multimedia ###
@@ -642,20 +740,228 @@ InstallSystemMonitor(){
   dnf install -y libgtop2-devel NetworkManager-glib-devel
   dnf install -y lm_sensors #for fan overview
 
-  # install system monitor from github
-  su $MYUSER -c "mkdir -p ~/git &>/dev/null ; mkdir -p ~/.local/share/gnome-shell/extensions > /dev/null"
-  su $MYUSER -c "cd ~/git ;  git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git"
-  su $MYUSER -c "ln -fs ~/git/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com ~/.local/share/gnome-shell/extensions/system-monitor"
-
+  # install system monitor gnome addon from github
+  sudo -u $MYUSER mkdir -p ~/git &>/dev/null ; mkdir -p ~/.local/share/gnome-shell/extensions > /dev/null
+  sudo -u $MYUSER cd ~/git ;  git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git
+  sudo -u $MYUSER ln -fs ~/git/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com ~/.local/share/gnome-shell/extensions/system-monitor
 }
 
 RemoveSystemMonitor(){
   # install system monitor dependecies
   dnf remove -y libgtop2-devel NetworkManager-glib-devel lm_sensors
 
-  su $MYUSER -c "rm ~/git/gnome-shell-system-monitor-applet.git"
-  su $MYUSER -c "rm ~/.local/share/gnome-shell/extensions/system-monitor"
+  sudo -u $MYUSER rm ~/git/gnome-shell-system-monitor-applet.git
+  sudo -u $MYUSER rm ~/.local/share/gnome-shell/extensions/system-monitor
+}
 
+InstallGnomeExtensions(){
+  # Install Gnome extensions
+
+  # Install using gnome-shell-extension-installer script
+  if ( command -v gnome-shell-extension-installer > /dev/null 2>&1 ) ; then
+    # install frippery move clock - https://extensions.gnome.org/extension/2/move-clock/
+    sudo -u $MYUSER gnome-shell-extension-installer 2
+    # install caffeine - https://extensions.gnome.org/extension/517/caffeine/
+    sudo -u $MYUSER gnome-shell-extension-installer 517
+    # Install scale switcher - https://extensions.gnome.org/extension/1306/scale-switcher/
+    sudo -u $MYUSER gnome-shell-extension-installer 1306
+  fi
+
+  # get gnome extensions from github
+    sudo -u $MYUSER mkdir -p ~/git >/dev/null; mkdir -p ~/.local/share/gnome-shell/extensions  >/dev/null # setup base directories
+    sudo -u $MYUSER cd ~/git_projects ; git clone git://github.com/tjuuljensen/gnome-shell-extension-hostname-in-taskbar.git # clone
+    sudo -u $MYUSER ln -s ~/git_projects/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar ~/.local/share/gnome-shell/extensions/hostname-in-taskbar # Make symlink
+  #fi
+
+  # restart gnome shell is not available under Wayland
+  [[ $XDG_SESSION_TYPE != "wayland" ]] && gnome-shell-extension-installer --restart-shell
+
+}
+
+RemoveGnomeExtensions(){
+  # Remove Gnome extensions
+  if ( command -v gnome-shell-extension-installer > /dev/null 2>&1 ) ; then
+    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/Move_Clock@rmy.pobox.com"
+    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/caffeine@patapon.info"
+    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/ScaleSwitcher@jabi.irontec.com"
+    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/hostname-in-taskbar" # remove symlink
+
+    # restart gnome shell is not available under Wayland
+    [[ $XDG_SESSION_TYPE != "wayland" ]] && gnome-shell-extension-installer --restart-shell
+  fi
+
+}
+
+
+
+EnableScreenSaver(){
+  # enable screensaver
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver idle-activation-enabled 'true'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver lock-enabled 'true'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.session idle-delay 300
+}
+
+DisableScreensaver(){
+  # disable screensaver
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver idle-activation-enabled 'false'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver lock-enabled 'false'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.session idle-delay 0
+}
+
+ShowDateInTaskbar(){
+  # add date to top bar
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.interface clock-show-date true
+}
+
+HideDateInTaskbar(){
+  # add date to top bar
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.interface clock-show-date false
+}
+
+ShowWeekNumbersInTaskbar(){
+  # show week numbers in calendar drop-down
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.calendar show-weekdate true
+}
+
+HideWeekNumbersInTaskbar(){
+  # show week numbers in calendar drop-down
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.calendar show-weekdate false
+}
+
+ShowGnomeDesktopIcons(){
+  #enable desktop icons
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.background show-desktop-icons true
+}
+
+HideGnomeDesktopIcons(){
+  #enable desktop icons
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.background show-desktop-icons false
+}
+
+SetWindowCtlMinMaxClose(){
+  # add minimize and maximize buttons to windows
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
+}
+
+SetWindowCtlAppmenuClose(){
+  # AppMenuClose (default in Fedora 28)
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.preferences button-layout ':appmenu:close'
+}
+
+SetWindowCtlLeftClsMinMax(){
+  # Set buttons on the left - Close, Min & Max
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:'
+}
+
+SetGnomeRegionDaDK(){
+  # Set system locale to da_DK
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.system.locale region "'da_DK.UTF-8'"
+}
+
+RemoveGnomeRegion(){
+  # Remove system locale value (default)
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.system.locale region ''
+}
+
+SetScreensaverSlp10Lgn5(){
+  # set sleep timeout to 10 minutes (600 seconds), then require login after 5 minutes (300 seconds)
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.session idle-delay 600
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver idle-activation-enabled 'true'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver lock-enabled 'true'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver lock-delay 300
+}
+
+SetScreensaverSlp15Lgn5(){
+  # set sleep timeout to 15 minutes (900 seconds), then require login after 5 minutes (300 seconds)
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.session idle-delay 900
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver idle-activation-enabled 'true'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver lock-enabled 'true'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.screensaver lock-delay 300
+}
+
+SetCustomKeyboardShortcut(){
+
+  # add <Super>+D as show-desktop shortcut
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+
+  # add the list of custom shortcuts
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/','/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/','/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/']"
+
+  # add the first shortcut - Terminal
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ name 'Terminal'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ command 'gnome-terminal'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ binding '<Control><Shift>t'
+
+  # add the second shortcut - Terminator
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ name 'Terminator'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ command 'terminator'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ binding '<Super><Control>t'
+
+  # add the third shortcut - Home
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ name 'Nautilus - home folder'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ command 'nautilus'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ binding '<Super>e'
+}
+
+SetVMKeyboardShortcut(){
+
+  # add <Control><Alt>+D as show-desktop shortcut
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Control><Alt>d']"
+
+  # add the list of custom shortcuts
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/','/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/','/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/']"
+
+  # add the first shortcut - Terminal
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ name 'Terminal'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ command 'gnome-terminal'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ binding '<Control><Shift>t'
+
+  # add the second shortcut - Terminator
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ name 'Terminator'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ command 'terminator'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ binding '<Control><Alt>t'
+
+  # add the third shortcut - Home
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ name 'Nautilus - home folder'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ command 'nautilus'
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ binding '<Control><Alt>e'
+
+}
+
+RemoveCustomKbrdShortcut(){
+
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.keybindings show-desktop "@as []"
+
+  # add the list of custom shortcuts
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "@as []"
+
+  # add the first shortcut - Terminal
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ name ''
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ command ''
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/ binding ''
+
+  # add the second shortcut - Terminator
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ name ''
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ command ''
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/ binding ''
+
+  # add the third shortcut - Home
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ name ''
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ command ''
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/ binding ''
+
+}
+
+SetGnomeCustomFavorites(){
+    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'mozilla-thunderbird.desktop', 'vmware-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'veracrypt.desktop', 'keepassx2.desktop', 'terminator.desktop' ]"
+}
+
+SetGnomeDefaultFavorites(){
+    ssudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'org.gnome.Evolution.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop']"
+}
+
+SetGnomeMinimalFavorites(){
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop',  'org.gnome.Terminal.desktop']"
 }
 
 ################################################################
@@ -664,21 +970,25 @@ RemoveSystemMonitor(){
 
 InstallCheat(){
   # install cheat sheet - http://www.tecmint.com/cheat-command-line-cheat-sheet-for-linux-users/
-  dnf install -y python python-pip
-  pip install --upgrade pip
-  pip install docopt pygments
-  su $MYUSER -c 'mkdir -p ~/git &>/dev/null'
-  su $MYUSER -c "cd ~/git ; git clone https://github.com/chrisallenlane/cheat.git ; "
-  cd /home/$MYUSER/git/cheat
-  python setup.py install
+  # https://github.com/chrisallenlane/cheat.git
+
+  dnf copr enable tkorbar/cheat
+  dnf install -y cheat
+
 }
+
+RemoveCheat(){
+    dnf copr disable tkorbar/cheat
+    dnf remove -y cheat
+}
+
 
 InstallThinkfanOnThinkpad(){
   # http://thinkfan.sourceforge.net/
   #Check if machine is a ThinkPad
   if [ $( dmidecode -s system-version | grep ThinkPad -i | wc -l ) -ne 0 ] ; then
   # install the thinkfan program
-    dnf -y install thinkfan
+    dnf install -y thinkfan
     systemctl enable thinkfan.service # enable service
   fi
 }
@@ -783,8 +1093,8 @@ InstallVMwareWorkstation(){
   vmware-modconfig --console --install-all --eulas-agreed
 
   # enable 3D acceleration in VMware Workstation
-  su $MYUSER -c 'mkdir -p ~/.vmware ; touch ~/.vmware/preferences'
-  su $MYUSER -c 'echo "mks.gl.allowBlacklistedDrivers = TRUE" >> ~/.vmware/preferences'
+  sudo -u $MYUSER mkdir -p ~/.vmware ; touch ~/.vmware/preferences
+  sudo -u $MYUSER echo "mks.gl.allowBlacklistedDrivers = TRUE" >> ~/.vmware/preferences
 
 }
 
@@ -806,58 +1116,162 @@ RemoveCitrixClient(){
     rpm -q --quiet ICAClient && dnf remove -y ICAClient FIXME
 }
 
+################################################################
+###### Encryption Functions ###
+################################################################
 
+AddExtraLUKSpasswords(){
+  # Add extra password for LUKS partition
 
-#############################33
+  LUKSDEVICES=$(blkid -o list | grep "LUKS" | cut -d ' ' -f1)
 
-_addLUKSpassword(){
-  # Add extra password for LUKS
-  echo
-  for DISKLETTER in {a..z}
-  do
-    NUMBEROFPARTITIONS=$(ls /dev |grep sd$DISKLETTER. |wc -l)
-    for (( PARTITIONNO=1; PARTITIONNO<=$NUMBEROFPARTITIONS; PARTITIONNO++ ))
-    do
-      if  (cryptsetup isLuks /dev/sd$DISKLETTER$PARTITIONNO) ; then
-        PARTITION="sd$DISKLETTER$PARTITIONNO" # partition name
-        echo Add password for $PARTITION...
-        cryptsetup luksAddKey $PARTITION
-      fi
-    done
+  for DEVICE in $LUKSDEVICES; do
+    PARTITION=${DEVICE##*/}
+    if  (cryptsetup isLuks $DEVICE) ; then
+      echo Add password for $PARTITION...
+      cryptsetup luksAddKey $DEVICE
+    fi
   done
 }
 
-_addExtraLUKSdisk(){
-  # See more here: https://fedoraproject.org/wiki/Disk_Encryption_User_Guide
-  # Check this one too: https://www.centos.org/forums/viewtopic.php?t=50535
-  # http://forums.fedoraforum.org/showthread.php?t=304345
+EncryptUnpartitionedDisks(){
+  # Reclaim and encrypt disks without partitions (that are not already encrypted using LUKS)
+  # BE AWARE that using this function might lead to dataloss - especially if you are using third party encrypting tools.
+  MOUNTBASE=/mnt/
 
-  DISKLETTER=b
-  MOUNTPOINT=/mnt/sd$DISKLETTER
-  DEVICE=/dev/sd$DISKLETTER
+  DISKDEVICES=$(lsblk -l | grep disk | awk '{print $1}')
+  UNPARTEDDISKS=()
 
-  cryptsetup -y -v luksFormat $DEVICE
-  cryptsetup isLuks $DEVICE && echo Success
-  HDDUUID=$(cryptsetup luksUUID $DEVICE)
-  LUKSNAME="luks-$HDDUUID"
+  # Check for upartitioned disks & put in array
+  for DISK in $DISKDEVICES ; do
+    DISKDEVICE="/dev/$DISK"
+    PARTITIONS=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' )
+    #Check if DISKDEVICE has 0 partitions and is not a LUKS device itself
+    [[ ${#PARTITIONS} == 0 ]] &&  cryptsetup isLuks $DEVICE || UNPARTEDDISKS+=($DISKDEVICE)
+  done
 
-  cryptsetup luksOpen $DEVICE $LUKSNAME
-  mkfs.ext4 /dev/mapper/$LUKSNAME
-  mkdir -p $MOUNTPOINT
-  mount /dev/mapper/$LUKSNAME $MOUNTPOINT
-  chmod 755 $MOUNTPOINT
+  for DISK in $UNPARTEDDISKS ; do
 
-  # Generate key file for LUKS encryption
-  dd if=/dev/urandom of=/root/keyfile_sd$DISKLETTER bs=1024 count=4
-  chmod 0400 /root/keyfile_sd$DISKLETTER
-  cryptsetup luksAddKey $DEVICE /root/keyfile_sd$DISKLETTER
+# to create the partitions programatically (rather than manually)
+# we're going to simulate the manual input to fdisk
+# The sed script strips off all the comments so that we can
+# document what we're doing in-line with the actual commands
+# Note that a blank line (commented as "default" will send a empty
+# line terminated with a newline to take the fdisk default.
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $DISK
+  g # Create a new GPT partition table
+  n # new partition
+  1 # partition number 1
+    # default - start at beginning of disk
+    # default, extend partition to end of disk
+  y # If there is an existing Ext4 signature it will need y to remove it
+  p # print the in-memory partition table
+  w # write the partition table
+EOF
 
-  #For /etc/crypttab
-  echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_sd$DISKLETTER" >> /etc/crypttab
+    NEWPARTITION=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' | awk '{print $1}')
+    echo About to encrypted content of $NEWPARTITION
+    cryptsetup -y -v luksFormat $NEWPARTITION
+    # cryptsetup isLuks $DISK && echo Success
+    HDDUUID=$(cryptsetup luksUUID $NEWPARTITION)
+    LUKSNAME="luks-$HDDUUID"
+    DEVICENAME=${NEWPARTITION##*/}
 
-  #For /etc/fstab
-  echo "/dev/mapper/$LUKSNAME   $MOUNTPOINT   ext4   defaults  0  2" >> /etc/fstab
+    cryptsetup luksOpen $NEWPARTITION $LUKSNAME
+    mkfs.ext4 /dev/mapper/$LUKSNAME
+    MOUNTPOINT=$MOUNTBASE$DEVICENAME
+    mkdir -p $MOUNTPOINT
+    mount /dev/mapper/$LUKSNAME $MOUNTPOINT
+    chmod 755 $MOUNTPOINT
+    chown $MYUSER:$MYUSER $MOUNTPOINT
 
-  #sdX_crypt      /dev/sdX  /root/keyfile  luks
-  #sdX_crypt      /dev/disk/by-uuid/247ad289-dbe5-4419-9965-e3cd30f0b080  /root/keyfile  luks
+    # Generate key file for LUKS encryption
+    dd if=/dev/urandom of=/root/keyfile_$DEVICENAME bs=1024 count=4
+    chmod 0400 /root/keyfile_$DEVICENAME
+    cryptsetup luksAddKey $NEWPARTITION /root/keyfile_$DEVICENAME
+
+    #Update /etc/crypttab
+    echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$DEVICENAME" >> /etc/crypttab
+
+    #Update /etc/fstab
+    echo "/dev/mapper/$LUKSNAME   $MOUNTPOINT   ext4   defaults  0  2" >> /etc/fstab
+
+  done
+
+}
+
+ReclaimEncryptDWUnmntPrt(){
+  # Reclaim and encrypt disks with unmounted partitions
+  # This function will reclaim disks with unmounted partitions - encrypted or not
+  # BE AWARE! Using this function could make you loose data permanently
+
+    DISKDEVICES=$(lsblk -l | grep disk | awk '{print $1}')
+    NOTMOUNTED=$(blkid -o list | grep "not mounted" | cut -d ' ' -f1 | sed '/^$/d')
+
+    #NOTMOUNTED_UNENCRYPTED=()
+    NOTMOUNTED=$(blkid -o list | grep "not mounted" | cut -d ' ' -f1 | sed '/^$/d')
+
+
+    if [ ! -z ${#NOTMOUNTED} ] ; then
+      # Check for encrypted partitions & put in array
+
+      for DISK in $DISKDEVICES ; do
+          DISKDEVICE="/dev/$DISK"
+          NUMBEROFDEVICES=$(ls $DISKDEVICE? 2>/dev/null)
+          NUMBEROFUNMOUNTED=$(blkid -o list | grep "not mounted" | cut -d ' ' -f1 | sed '/^$/d' | grep $DISKDEVICE)
+          #PARTITIONS=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' )
+
+          #Check if DISKDEVICE has 0 partitions and is not a LUKS device itself
+          if [ ${#NUMBEROFDEVICES} == ${#NUMBEROFUNMOUNTED} ] ; then
+            echo No mounted partitions found on $DISKDEVICE - cleaning and encrypting
+
+            # to create the partitions programatically (rather than manually)
+            # we're going to simulate the manual input to fdisk
+            # The sed script strips off all the comments so that we can
+            # document what we're doing in-line with the actual commands
+            # Note that a blank line (commented as "default" will send a empty
+            # line terminated with a newline to take the fdisk default.
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $DISK
+  g # Create a new GPT partition table
+  n # new partition
+  1 # partition number 1
+    # default - start at beginning of disk
+    # default, extend partition to end of disk
+  y # If there is an existing Ext4 signature it will need y to remove it
+  p # print the in-memory partition table
+  w # write the partition table
+EOF
+
+                NEWPARTITION=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' | awk '{print $1}')
+                echo About to encrypted content of $NEWPARTITION
+                cryptsetup -y -v luksFormat $NEWPARTITION
+                # cryptsetup isLuks $DISK && echo Success
+                HDDUUID=$(cryptsetup luksUUID $NEWPARTITION)
+                LUKSNAME="luks-$HDDUUID"
+                DEVICENAME=${NEWPARTITION##*/}
+
+                cryptsetup luksOpen $NEWPARTITION $LUKSNAME
+                mkfs.ext4 /dev/mapper/$LUKSNAME
+                MOUNTPOINT=$MOUNTBASE$DEVICENAME
+                mkdir -p $MOUNTPOINT
+                mount /dev/mapper/$LUKSNAME $MOUNTPOINT
+                chmod 755 $MOUNTPOINT
+                chown $MYUSER:$MYUSER $MOUNTPOINT
+
+                # Generate key file for LUKS encryption
+                dd if=/dev/urandom of=/root/keyfile_$DEVICENAME bs=1024 count=4
+                chmod 0400 /root/keyfile_$DEVICENAME
+                cryptsetup luksAddKey $NEWPARTITION /root/keyfile_$DEVICENAME
+
+                #Update /etc/crypttab
+                echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$DEVICENAME" >> /etc/crypttab
+
+                #Update /etc/fstab
+                echo "/dev/mapper/$LUKSNAME   $MOUNTPOINT   ext4   defaults  0  2" >> /etc/fstab
+
+          fi
+        done
+
+    fi
+
 }

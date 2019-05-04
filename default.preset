@@ -1,17 +1,16 @@
-
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Version: v1.0 2019-01-28
-# Source: https://github.com/...
+# Edited: 2019-05-04 16:00
+# Source: https://github.com/tjuuljensen/bootstrap-fedora
 ##########
 
 ### Require administrator privileges ###
-# RequireAdmin
+RequireAdmin
 
-### Auxiliary Functions Begin ###
+### Bootstrap Begin ###
 DisableScreensaver       # EnableScreenSaver
-# Restart
+SetupUserDefaultDirs
 
 ### Generic Fedora ###
 UpdateFedora
@@ -38,7 +37,8 @@ InstallKeepassx            # RemoveKeepassx
 
 ### Communication ####
 InstallChatProgs           # RemoveChatProgs
-InstallThunderbird         # RemoveThunderbird
+# InstallThunderbird       # RemoveThunderbird
+# InstallThunderbirdExts   # RemoveThunderbirdExts
 
 ### NetworkConfiguration ####
 # DisableMulticastDNS      #
@@ -61,6 +61,7 @@ InstallChromium             # RemoveChromium
 InstallChrome               # RemoveChrome
 SetChromePreferences        # UnsetChromePreferences
 SetFirefoxPreferences       # UnsetFirefoxPreferences
+InstallFirefoxAddons        # RemoveFirefoxAddons
 
 ### Multimedia ###
 InstallSpotifyClient        # RemoveSpotifyClient
@@ -72,9 +73,18 @@ InstallYouTubeDownloader    # RemoveYouTubeDownloader
 ### Gnome Tools & Tweaks ###
 InstallGnomeTools          # RemoveGnomeTools
 InstallSystemMonitor       # RemoveSystemMonitor
+InstallGnomeExtensions     # RemoveGnomeExtensions
+ShowDateInTaskbar          # HideDateInTaskbar
+ShowWeekNumbersInTaskbar   # HideWeekNumbersInTaskbar
+ShowGnomeDesktopIcons      # HideGnomeDesktopIcons
+SetWindowCtlMinMaxClose    # SetWindowCtlAppmenuClose     # SetWindowCtlLeftClsMinMax
+SetGnomeRegionDaDK         # RemoveGnomeRegion
+SetScreensaverSlp10Lgn5    # SetScreensaverSlp15Lgn5
+SetCustomKeyboardShortcut  # SetVMKeyboardShortcut        # RemoveCustomKbrdShortcut
+SetGnomeCustomFavorites    # SetGnomeDefaultFavorites     # SetGnomeMinimalFavorites
 
 ### Miscellaneous tweaks and installs  ###
-InstallCheat                #
+InstallCheat                # RemoveCheat
 InstallThinkfanOnThinkpad   # RemoveThinkfanIfInstalled
 InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
 InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
@@ -85,7 +95,14 @@ InstallVeraCrypt            #
 InstallVMwareWorkstation    # RemoveVMwareWorkstation
 InstallCitrixClient         # RemoveCitrixClient
 
-### Auxiliary Functions End ###
-EnableScreenSaver           # DisableScreensaver
+### Auxiliary Functions ###
 SetHostname
+
+### Encryption Functions ###
+AddExtraLUKSpasswords
+# EncryptUnpartitionedDisks
+# ReclaimEncryptDWUnmntPrt
+
+### Bootstrap End ###
+EnableScreenSaver           # DisableScreensaver
 Restart
