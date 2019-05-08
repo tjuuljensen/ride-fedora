@@ -663,11 +663,13 @@ InstallFirefoxAddons(){
     sleep 10
     pkill firefox
 
+    cd /tmp
+
     if [ ! -d $MYUSERDIR/.mozilla/firefox ] ; then
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
       chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
     fi
-    su  $MYUSER -c "cd $MYUSERDIR/.mozilla/firefox ; cd $(ls -d *.default) ; mkdir extensions &>/dev/null"
+    su  $MYUSER -c "cd $MYUSERDIR/.mozilla/firefox ; cd $(ls -d $MYUSERDIR/.mozilla/firefox/*.default) ; mkdir extensions &>/dev/null"
 
     for ADDON in "${ADDONS[@]}"
     do
@@ -682,8 +684,8 @@ RemoveFirefoxAddons(){
     ADDONS=(
       "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin"
       "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17"
-      "https://addons.mozilla.org/firefox/downloads/latest/https-everywhere/"
-      "https://addons.mozilla.org/firefox/downloads/latest/noscript"
+      "https://addons.mozilla.org/da/firefox/addon/https-everywhere/" 
+      "https://addons.mozilla.org/da/firefox/addon/noscript"
       "https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/"
       "https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/"
       "https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/"
