@@ -24,8 +24,13 @@ RequireAdmin(){
 
 SetupUserDefaultDirs(){
   # Create user's bin and git directories
-  sudo -u $MYUSER mkdir -p ~/bin > /dev/null
-  sudo -u $MYUSER mkdir -p ~/git > /dev/null
+  MYUSERDIR=/home/$MYUSER
+  cd $MYUSERDIR
+  mkdir -p git > /dev/null
+  chown $MYUSER:$MYUSER git
+  mkdir -p bin > /dev/null
+  chown $MYUSER:$MYUSE bin
+
 }
 
 Restart(){
@@ -209,10 +214,8 @@ gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey' > $ATOMREPO
 }
 
 RemoveAtomEditor(){
-  #Install atom repo
-  # See more here https://flight-manual.atom.io/getting-started/sections/installing-atom/#platform-linux
-  ### FIXME: ###
-  #rpm --import https://packagecloud.io/AtomEditor/atom/gpgkey
+  #remove atom gpg key, repo and package
+  rpm -e gpg-pubkey-de9e3b09-5a34231f
   rm /etc/yum.repos.d/atom.repo
   dnf remove -y atom
 }
@@ -395,8 +398,15 @@ RemoveNetMgrL2TP(){
 InstallOpenconnectVPN(){
   # OpenConnect for use with Juniper VPN
   dnf install -y automake libtool openssl-devel libxml2 libxml2-devel vpnc-script NetworkManager-openconnect-gnome
-  sudo -u $MYUSER mkdir -p ~/git &>/dev/null
-  sudo -u $MYUSER cd ~/git ;  git clone git://git.infradead.org/users/dwmw2/openconnect.git ; cd openconnect/ ; ./autogen.sh ; ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls ; make
+
+  MYUSERDIR=/home/$MYUSER
+  if [ ! -d $MYUSERDIR ] ; then
+    cd $MYUSERDIR
+    mkdir -p git > /dev/null
+    chown $MYUSER:$MYUSER git
+  fi
+
+  sudo -u $MYUSER cd $MYUSERDIR/git ;  git clone git://git.infradead.org/users/dwmw2/openconnect.git ; cd openconnect/ ; ./autogen.sh ; ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls ; make
   make install
 }
 
@@ -442,17 +452,24 @@ InstallGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
 
-  sudo -u $MYUSER mkdir -p ~/git &>/dev/null
-  sudo -u $MYUSER cd ~/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer
+  # Check if git library exists and create if it doesn't
+  MYUSERDIR=/home/$MYUSER
+  if [ ! -d $MYUSERDIR=/home/$MYUSER/git ] ; then
+    cd $MYUSERDIR
+    mkdir -p git > /dev/null
+    chown $MYUSER:$MYUSER git
+  fi
 
-  ln -fs "/home/$MYUSER/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
+  sudo -u $MYUSER cd $MYUSERDIR/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer
+
+  ln -fs "$MYUSERDIR/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
 }
 
 RemoveGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
-
-  sudo -u $MYUSER rm -rf ~/git/gnome-shell-extension-installer # remove github repo clone
+  MYUSERDIR=/home/$MYUSER
+  sudo -u $MYUSER rm -rf $MYUSERDIR/git/gnome-shell-extension-installer # remove github repo clone
   rm "/usr/local/bin/gnome-shell-extension-installer" &>/dev/null # remove symlink
 }
 
@@ -461,8 +478,15 @@ InstallMozExtensionMgr(){
   # Script for searching and installing Firefox extensions
   # http://www.bernaerts-nicolas.fr/linux/74-ubuntu/271-ubuntu-firefox-thunderbird-addon-commandline
 
-  sudo -u $MYUSER mkdir -p ~/git &>/dev/null
-  sudo -u $MYUSER cd ~/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts
+  # Check if git library exists and create if it doesn't
+  MYUSERDIR=/home/$MYUSER
+  if [ ! -d $MYUSERDIR ] ; then
+    cd $MYUSERDIR
+    mkdir -p git > /dev/null
+    chown $MYUSER:$MYUSER git
+  fi
+
+  sudo -u $MYUSER cd $MYUSERDIR/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts
 
   # Fix missing executable flag when fetched from repo
   chmod 755 "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager"
@@ -473,7 +497,8 @@ InstallMozExtensionMgr(){
 }
 
 RemoveMozExtensionMgr(){
-  sudo -u $MYUSER rm -rf ~/git/ubuntu-scripts # remove github repo clone
+  MYUSERDIR=/home/$MYUSER
+  sudo -u $MYUSER rm -rf $MYUSERDIR/git/ubuntu-scripts # remove github repo clone
   rm "/usr/local/bin/firefox-extension-manager"  &>/dev/null # remove symlink
   rm "/usr/local/bin/mozilla-extension-manager"  &>/dev/null # remove symlink
 }
@@ -574,6 +599,7 @@ SetFirefoxPreferences() {
 
   FIREFOXINSTALLDIR=/usr/lib64/firefox/
   FIREFOXPREFFILE=$FIREFOXINSTALLDIR"mozilla.cfg"
+  MYUSERDIR=/home/$MYUSER
 
 echo '//
 pref("network.dns.disablePrefetch", true);
@@ -634,8 +660,11 @@ InstallFirefoxAddons(){
     sleep 10
     pkill firefox
 
-    sudo -u $MYUSER mkdir -p ~/.mozilla/firefox &>/dev/null
-    sudo -u $MYUSER cd ~/.mozilla/firefox ; cd $(ls -d *.default) ; mkdir extensions &>/dev/null
+    if [ ! -d $MYUSERDIR/.mozilla/firefox ] ; then
+      mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
+      chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
+    fi
+    sudo -u $MYUSER cd $MYUSERDIR/.mozilla/firefox ; cd $(ls -d *.default) ; mkdir extensions &>/dev/null
 
     for ADDON in "${ADDONS[@]}"
     do
@@ -741,17 +770,29 @@ InstallSystemMonitor(){
   dnf install -y lm_sensors #for fan overview
 
   # install system monitor gnome addon from github
-  sudo -u $MYUSER mkdir -p ~/git &>/dev/null ; mkdir -p ~/.local/share/gnome-shell/extensions > /dev/null
-  sudo -u $MYUSER cd ~/git ;  git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git
-  sudo -u $MYUSER ln -fs ~/git/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com ~/.local/share/gnome-shell/extensions/system-monitor
+  # Check if git library exists and create if it doesn't
+  MYUSERDIR=/home/$MYUSER
+  if [ ! -d $MYUSERDIR=/home/$MYUSER/git ] ; then
+    cd $MYUSERDIR
+    mkdir -p git > /dev/null
+    chown $MYUSER:$MYUSER git
+  fi
+
+  if [ ! -d $MYUSERDIR/.local/share/gnome-shell/extensions ] ; then
+    sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions > /dev/null
+    chown $MYUSER:$MYUSER $MYUSERDIR/.local/share/gnome-shell/extensions
+  fi
+  sudo -u $MYUSER cd $MYUSERDIR/git ;  git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git
+  sudo -u $MYUSER ln -fs $MYUSERDIR/git/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com $MYUSERDIR/.local/share/gnome-shell/extensions/system-monitor
 }
 
 RemoveSystemMonitor(){
   # install system monitor dependecies
   dnf remove -y libgtop2-devel NetworkManager-glib-devel lm_sensors
+  MYUSERDIR=/home/$MYUSER
 
-  sudo -u $MYUSER rm ~/git/gnome-shell-system-monitor-applet.git
-  sudo -u $MYUSER rm ~/.local/share/gnome-shell/extensions/system-monitor
+  sudo -u $MYUSER rm $MYUSERDIR/git/gnome-shell-system-monitor-applet.git
+  sudo -u $MYUSER rm $MYUSERDIR/.local/share/gnome-shell/extensions/system-monitor
 }
 
 InstallGnomeExtensions(){
@@ -768,10 +809,17 @@ InstallGnomeExtensions(){
   fi
 
   # get gnome extensions from github
-    sudo -u $MYUSER mkdir -p ~/git >/dev/null; mkdir -p ~/.local/share/gnome-shell/extensions  >/dev/null # setup base directories
-    sudo -u $MYUSER cd ~/git_projects ; git clone git://github.com/tjuuljensen/gnome-shell-extension-hostname-in-taskbar.git # clone
-    sudo -u $MYUSER ln -s ~/git_projects/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar ~/.local/share/gnome-shell/extensions/hostname-in-taskbar # Make symlink
-  #fi
+  # Check if git library exists and create if it doesn't
+  MYUSERDIR=/home/$MYUSER
+  if [ ! -d $MYUSERDIR=/home/$MYUSER/git ] ; then
+    cd $MYUSERDIR
+    mkdir -p git > /dev/null
+    chown $MYUSER:$MYUSER git
+  fi
+
+  sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions  >/dev/null # setup base directories
+  sudo -u $MYUSER cd $MYUSERDIR/git ; git clone git://github.com/tjuuljensen/gnome-shell-extension-hostname-in-taskbar.git # clone
+  sudo -u $MYUSER ln -s $MYUSERDIR/git/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar $MYUSERDIR/.local/share/gnome-shell/extensions/hostname-in-taskbar # Make symlink
 
   # restart gnome shell is not available under Wayland
   [[ $XDG_SESSION_TYPE != "wayland" ]] && gnome-shell-extension-installer --restart-shell
@@ -1092,9 +1140,16 @@ InstallVMwareWorkstation(){
 
   vmware-modconfig --console --install-all --eulas-agreed
 
+  MYUSERDIR=/home/$MYUSER
   # enable 3D acceleration in VMware Workstation
-  sudo -u $MYUSER mkdir -p ~/.vmware ; touch ~/.vmware/preferences
-  sudo -u $MYUSER echo "mks.gl.allowBlacklistedDrivers = TRUE" >> ~/.vmware/preferences
+  cd $MYUSERDIR
+  if [ ! -d $MYUSERDIR/.vmware ] ; then
+    mkdir $MYUSERDIR/.vmware
+    chown $MYUSER:$MYUSER $MYUSERDIR/.vmware
+  fi
+
+  sudo -u $MYUSER touch $MYUSERDIR/.vmware/preferences
+  sudo -u $MYUSER echo "mks.gl.allowBlacklistedDrivers = TRUE" >> $MYUSERDIR/.vmware/preferences
 
 }
 
@@ -1113,7 +1168,7 @@ InstallCitrixClient(){
 }
 
 RemoveCitrixClient(){
-    rpm -q --quiet ICAClient && dnf remove -y ICAClient FIXME
+    rpm -q --quiet ICAClient && dnf remove -y ICAClient
 }
 
 ################################################################
@@ -1135,36 +1190,41 @@ AddExtraLUKSpasswords(){
 }
 
 EncryptUnpartitionedDisks(){
+
+  #####   STILL UNTESTED : Be careful!!!  ##########
+
   # Reclaim and encrypt disks without partitions (that are not already encrypted using LUKS)
   # BE AWARE that using this function might lead to dataloss - especially if you are using third party encrypting tools.
   MOUNTBASE=/mnt/
 
-  DISKDEVICES=$(lsblk -l | grep disk | awk '{print $1}')
+  DISKS=$(lsblk -l | grep disk | awk '{print $1}') #sda, sdb
   UNPARTEDDISKS=()
 
   # Check for upartitioned disks & put in array
-  for DISK in $DISKDEVICES ; do
+  for DISK in $DISKS ; do
     DISKDEVICE="/dev/$DISK"
     PARTITIONS=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' )
     #Check if DISKDEVICE has 0 partitions and is not a LUKS device itself
-    [[ ${#PARTITIONS} == 0 ]] &&  cryptsetup isLuks $DEVICE || UNPARTEDDISKS+=($DISKDEVICE)
+    if [[ -z $PARTITIONS ]] ; then
+      cryptsetup isLuks $DEVICE || UNPARTEDDISKS+=($DISKDEVICE)
+    fi
   done
 
-  for DISK in $UNPARTEDDISKS ; do
+  for DISKDEVICE in $UNPARTEDDISKS ; do
 
+    echo Removing partition table on $DISKDEVICE and creating new partition
 # to create the partitions programatically (rather than manually)
 # we're going to simulate the manual input to fdisk
 # The sed script strips off all the comments so that we can
 # document what we're doing in-line with the actual commands
 # Note that a blank line (commented as "default" will send a empty
 # line terminated with a newline to take the fdisk default.
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $DISK
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $DISKDEVICE
   g # Create a new GPT partition table
   n # new partition
   1 # partition number 1
     # default - start at beginning of disk
     # default, extend partition to end of disk
-  y # If there is an existing Ext4 signature it will need y to remove it
   p # print the in-memory partition table
   w # write the partition table
 EOF
@@ -1172,28 +1232,46 @@ EOF
     NEWPARTITION=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' | awk '{print $1}')
     echo About to encrypted content of $NEWPARTITION
     cryptsetup -y -v luksFormat $NEWPARTITION
-    # cryptsetup isLuks $DISK && echo Success
+    cryptsetup isLuks $DISK && echo Encryption of $DISKDEVICE was a success
     HDDUUID=$(cryptsetup luksUUID $NEWPARTITION)
     LUKSNAME="luks-$HDDUUID"
     DEVICENAME=${NEWPARTITION##*/}
 
+    echo Opening encrypted device and creating ext4 filesystem
     cryptsetup luksOpen $NEWPARTITION $LUKSNAME
     mkfs.ext4 /dev/mapper/$LUKSNAME
-    MOUNTPOINT=$MOUNTBASE$DEVICENAME
+    MOUNTPOINT=$MOUNTBASE$DISK
     mkdir -p $MOUNTPOINT
     mount /dev/mapper/$LUKSNAME $MOUNTPOINT
     chmod 755 $MOUNTPOINT
     chown $MYUSER:$MYUSER $MOUNTPOINT
 
+    # rotate keyfile
+    KEYFILE=/root/keyfile_$DEVICENAME
+    if [ -f $KEYFILE ] ; then
+      i=1
+      NEWKEYFILE=$KEYFILE.$i
+      while [ -f $NEWKEYFILE ]
+      do
+        i=$(( $i + 1 ))
+        NEWKEYFILE="$KEYFILE.$i"
+      done
+      mv $KEYFILE $NEWKEYFILE
+    fi
+
+
     # Generate key file for LUKS encryption
-    dd if=/dev/urandom of=/root/keyfile_$DEVICENAME bs=1024 count=4
-    chmod 0400 /root/keyfile_$DEVICENAME
-    cryptsetup luksAddKey $NEWPARTITION /root/keyfile_$DEVICENAME
+    dd if=/dev/urandom of=$KEYFILE bs=1024 count=4
+    chmod 0400 $KEYFILE
+    echo Adding a keyfile for $DEVICENAME for atomount configuration
+    cryptsetup luksAddKey $NEWPARTITION $KEYFILE
 
     #Update /etc/crypttab
+    echo Updating /etc/crypttab
     echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$DEVICENAME" >> /etc/crypttab
 
     #Update /etc/fstab
+    echo Updating /etc/fstab
     echo "/dev/mapper/$LUKSNAME   $MOUNTPOINT   ext4   defaults  0  2" >> /etc/fstab
 
   done
@@ -1201,21 +1279,22 @@ EOF
 }
 
 ReclaimEncryptDWUnmntPrt(){
+
+  #####   STILL UNTESTED : Be careful!!!  ##########
+
   # Reclaim and encrypt disks with unmounted partitions
   # This function will reclaim disks with unmounted partitions - encrypted or not
   # BE AWARE! Using this function could make you loose data permanently
 
-    DISKDEVICES=$(lsblk -l | grep disk | awk '{print $1}')
+    MOUNTBASE=/mnt/
+
+    DISKS=$(lsblk -l | grep disk | awk '{print $1}')
     NOTMOUNTED=$(blkid -o list | grep "not mounted" | cut -d ' ' -f1 | sed '/^$/d')
 
-    #NOTMOUNTED_UNENCRYPTED=()
-    NOTMOUNTED=$(blkid -o list | grep "not mounted" | cut -d ' ' -f1 | sed '/^$/d')
-
-
-    if [ ! -z ${#NOTMOUNTED} ] ; then
+    if [ ! -z ${#NOTMOUNTED} ] ; then # some partitions are unmounted
       # Check for encrypted partitions & put in array
 
-      for DISK in $DISKDEVICES ; do
+      for DISK in $DISKS ; do
           DISKDEVICE="/dev/$DISK"
           NUMBEROFDEVICES=$(ls $DISKDEVICE? 2>/dev/null)
           NUMBEROFUNMOUNTED=$(blkid -o list | grep "not mounted" | cut -d ' ' -f1 | sed '/^$/d' | grep $DISKDEVICE)
@@ -1231,13 +1310,12 @@ ReclaimEncryptDWUnmntPrt(){
             # document what we're doing in-line with the actual commands
             # Note that a blank line (commented as "default" will send a empty
             # line terminated with a newline to take the fdisk default.
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $DISK
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $DISKDEVICE
   g # Create a new GPT partition table
   n # new partition
   1 # partition number 1
     # default - start at beginning of disk
     # default, extend partition to end of disk
-  y # If there is an existing Ext4 signature it will need y to remove it
   p # print the in-memory partition table
   w # write the partition table
 EOF
@@ -1245,28 +1323,59 @@ EOF
                 NEWPARTITION=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' | awk '{print $1}')
                 echo About to encrypted content of $NEWPARTITION
                 cryptsetup -y -v luksFormat $NEWPARTITION
-                # cryptsetup isLuks $DISK && echo Success
+                cryptsetup isLuks $DISK && echo Encryption of $DISKDEVICE was a success
                 HDDUUID=$(cryptsetup luksUUID $NEWPARTITION)
                 LUKSNAME="luks-$HDDUUID"
                 DEVICENAME=${NEWPARTITION##*/}
 
+                echo Opening encrypted device and creating ext4 filesystem
                 cryptsetup luksOpen $NEWPARTITION $LUKSNAME
                 mkfs.ext4 /dev/mapper/$LUKSNAME
-                MOUNTPOINT=$MOUNTBASE$DEVICENAME
+                MOUNTPOINT=$MOUNTBASE$DISK
                 mkdir -p $MOUNTPOINT
                 mount /dev/mapper/$LUKSNAME $MOUNTPOINT
                 chmod 755 $MOUNTPOINT
                 chown $MYUSER:$MYUSER $MOUNTPOINT
 
+                # rotate keyfile
+                KEYFILE=/root/keyfile_$DEVICENAME
+                if [ -f $KEYFILE ] ; then
+                  i=1
+                  NEWKEYFILE=$KEYFILE.$i
+                  while [ -f $NEWKEYFILE ]
+                  do
+                    i=$(( $i + 1 ))
+                    NEWKEYFILE="$KEYFILE.$i"
+                  done
+                  mv $KEYFILE $NEWKEYFILE
+                fi
+
+                KEYFILE=/root/keyfile_$DEVICENAME
+                # rotate keyfile
+                KEYFILE=/root/keyfile_$DEVICENAME
+                if [ -f $KEYFILE ] ; then
+                  i=1
+                  NEWKEYFILE=$KEYFILE.$i
+                  while [ -f $NEWKEYFILE ]
+                  do
+                    i=$(( $i + 1 ))
+                    NEWKEYFILE="$KEYFILE.$i"
+                  done
+                  mv $KEYFILE $NEWKEYFILE
+                fi
+
                 # Generate key file for LUKS encryption
-                dd if=/dev/urandom of=/root/keyfile_$DEVICENAME bs=1024 count=4
-                chmod 0400 /root/keyfile_$DEVICENAME
-                cryptsetup luksAddKey $NEWPARTITION /root/keyfile_$DEVICENAME
+                dd if=/dev/urandom of=$KEYFILE bs=1024 count=4
+                chmod 0400 $KEYFILE
+                echo Adding a keyfile for $DEVICENAME for atomount configuration
+                cryptsetup luksAddKey $NEWPARTITION $KEYFILE
 
                 #Update /etc/crypttab
+                echo Updating /etc/crypttab
                 echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$DEVICENAME" >> /etc/crypttab
 
                 #Update /etc/fstab
+                echo Updating /etc/fstab
                 echo "/dev/mapper/$LUKSNAME   $MOUNTPOINT   ext4   defaults  0  2" >> /etc/fstab
 
           fi
