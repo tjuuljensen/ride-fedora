@@ -45,7 +45,7 @@ _parse_arguments () {
                 DESTINATIONDIR=~/bin
               else
                 echo Target directory does not exist
-                exit 404
+                exit 2
               fi
               shift
               shift
@@ -61,7 +61,7 @@ _parse_arguments () {
               else #Invalid input
                 echo The input is not a valid directory
                 _help
-                exit 444
+                exit 2
               fi
         esac
     done

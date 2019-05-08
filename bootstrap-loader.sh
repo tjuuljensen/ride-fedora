@@ -14,7 +14,12 @@ _parseArguments () {
     declare -g -a ACTIONS
     #declare -g -a NEWACTIONS
 
-    if [[ $# -eq 0 ]] ; then _help ; fi
+    if [[ $# -eq 0 ]] ; then
+      _help
+    else
+      # check if script is root and restart as root if not
+      [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
+    fi
 
       #i=0
 
@@ -32,10 +37,10 @@ _parseArguments () {
             -p | --preset)
               if [ -f $2 ] ; then
                 PRESET+="$2"
-                _ReadPresetFile $PRESET
+                _readPresetFile $PRESET
               else
                 echo Preset file does not exist
-                exit 404
+                exit 2
               fi
               shift
               shift
@@ -57,6 +62,7 @@ _help()
 {
     SCRIPT_NAME=$(basename $0)
     echo "usage: $SCRIPT_NAME [--include <function library file>] [--preset <filename>] [[_]tweakname]"
+    exit 1
 }
 
 _readPresetFile(){
@@ -86,7 +92,7 @@ _functionExists() {
 _executeFunctions(){
   # execute all valid functions
   for i in "${!ACTIONS[@]}"; do
-      _functionExists "${ACTIONS[$i]}" && echo "${ACTIONS[$i]}" &&  (${ACTIONS[$i]}) # print name & execute function
+      _functionExists "${ACTIONS[$i]}" && echo ":::${ACTIONS[$i]}:::" &&  (${ACTIONS[$i]}) # print name & execute function
   done
 }
 
