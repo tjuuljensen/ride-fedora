@@ -48,6 +48,10 @@ SetHostname(){
   fi
 }
 
+PressAnyKeyToContinue(){
+    read -n 1 -s -r -p "Press any key to continue"
+}
+
 ################################################################
 ###### Generic Fedora ###
 ################################################################
@@ -406,7 +410,7 @@ InstallOpenconnectVPN(){
     chown $MYUSER:$MYUSER git
   fi
 
-  sudo -u $MYUSER cd $MYUSERDIR/git ;  git clone git://git.infradead.org/users/dwmw2/openconnect.git ; cd openconnect/ ; ./autogen.sh ; ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls ; make
+  su $MYUSER -c "cd $MYUSERDIR/git ;  git clone git://git.infradead.org/users/dwmw2/openconnect.git ; cd openconnect/ ; ./autogen.sh ; ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls ; make"
   make install
 }
 
@@ -460,16 +464,15 @@ InstallGnomeExtInstaller(){
     chown $MYUSER:$MYUSER git
   fi
 
-  sudo -u $MYUSER cd $MYUSERDIR/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer
-
-  ln -fs "$MYUSERDIR/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
+  su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer"
+  sudo -u $MYUSER ln -fs "$MYUSERDIR/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
 }
 
 RemoveGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
   MYUSERDIR=/home/$MYUSER
-  sudo -u $MYUSER rm -rf $MYUSERDIR/git/gnome-shell-extension-installer # remove github repo clone
+  rm -rf $MYUSERDIR/git/gnome-shell-extension-installer # remove github repo clone
   rm "/usr/local/bin/gnome-shell-extension-installer" &>/dev/null # remove symlink
 }
 
@@ -486,19 +489,19 @@ InstallMozExtensionMgr(){
     chown $MYUSER:$MYUSER git
   fi
 
-  sudo -u $MYUSER cd $MYUSERDIR/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts
+  su $MYUSER "cd $MYUSERDIR/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts"
 
   # Fix missing executable flag when fetched from repo
   chmod 755 "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager"
 
   # create symlinks
-  ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager" "/usr/local/bin/firefox-extension-manager"
-  ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/mozilla-extension-manager" "/usr/local/bin/mozilla-extension-manager"
+  sudo -u $MYUSER ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager" "/usr/local/bin/firefox-extension-manager"
+  sudo -u $MYUSER ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/mozilla-extension-manager" "/usr/local/bin/mozilla-extension-manager"
 }
 
 RemoveMozExtensionMgr(){
   MYUSERDIR=/home/$MYUSER
-  sudo -u $MYUSER rm -rf $MYUSERDIR/git/ubuntu-scripts # remove github repo clone
+  rm -rf $MYUSERDIR/git/ubuntu-scripts # remove github repo clone
   rm "/usr/local/bin/firefox-extension-manager"  &>/dev/null # remove symlink
   rm "/usr/local/bin/mozilla-extension-manager"  &>/dev/null # remove symlink
 }
@@ -664,7 +667,7 @@ InstallFirefoxAddons(){
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
       chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
     fi
-    sudo -u $MYUSER cd $MYUSERDIR/.mozilla/firefox ; cd $(ls -d *.default) ; mkdir extensions &>/dev/null
+    su  $MYUSER -c "cd $MYUSERDIR/.mozilla/firefox ; cd $(ls -d *.default) ; mkdir extensions &>/dev/null"
 
     for ADDON in "${ADDONS[@]}"
     do
@@ -782,7 +785,7 @@ InstallSystemMonitor(){
     sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions > /dev/null
     chown $MYUSER:$MYUSER $MYUSERDIR/.local/share/gnome-shell/extensions
   fi
-  sudo -u $MYUSER cd $MYUSERDIR/git ;  git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git
+  su $MYUSER "cd $MYUSERDIR/git ;  git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git"
   sudo -u $MYUSER ln -fs $MYUSERDIR/git/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com $MYUSERDIR/.local/share/gnome-shell/extensions/system-monitor
 }
 
@@ -818,7 +821,7 @@ InstallGnomeExtensions(){
   fi
 
   sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions  >/dev/null # setup base directories
-  sudo -u $MYUSER cd $MYUSERDIR/git ; git clone git://github.com/tjuuljensen/gnome-shell-extension-hostname-in-taskbar.git # clone
+  su $MYUSER -c "cd $MYUSERDIR/git ; git clone git://github.com/tjuuljensen/gnome-shell-extension-hostname-in-taskbar.git" # clone
   sudo -u $MYUSER ln -s $MYUSERDIR/git/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar $MYUSERDIR/.local/share/gnome-shell/extensions/hostname-in-taskbar # Make symlink
 
   # restart gnome shell is not available under Wayland
@@ -1012,6 +1015,22 @@ SetGnomeMinimalFavorites(){
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop',  'org.gnome.Terminal.desktop']"
 }
 
+SetGnmLocationServiceOff(){
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.system.location enabled false
+}
+
+SetGnmLocationServiceOn(){
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.system.location enabled true
+}
+
+SetGnmAutoProblemRptOff(){
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.privacy report-technical-problems false
+}
+
+SetGnmAutoProblemRptOn(){
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.privacy report-technical-problems true
+}
+
 ################################################################
 ###### Miscellaneous tweaks and installs  ###
 ################################################################
@@ -1020,7 +1039,7 @@ InstallCheat(){
   # install cheat sheet - http://www.tecmint.com/cheat-command-line-cheat-sheet-for-linux-users/
   # https://github.com/chrisallenlane/cheat.git
 
-  dnf copr enable tkorbar/cheat
+  dnf -y copr enable tkorbar/cheat
   dnf install -y cheat
 
 }
@@ -1131,7 +1150,7 @@ InstallVMwareWorkstation(){
 
   wget --content-disposition -N -q --show-progress $VMWAREURL # Overwrite file, quiet
   chmod +x $BINARYFILENAME
-  ./$BINARYFILENAME --required --console #
+  ./$BINARYFILENAME --required --console --eulas-agreed #
 
   # add serial number if serial number is defined
   if [ ! -z $CURRENTVMWSERIAL ] ; then #Serial number for major version is loaded as a variable
@@ -1162,7 +1181,7 @@ InstallCitrixClient(){
   # Citrix Client
   CITRIXCLIENTURL=https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html
   BINARYURL="https:$(curl $CITRIXCLIENTURL 2>&1 | grep rel | grep rhel | grep x86_64 | sed 's/^.*rel/rel/' | cut -d '"' -f2 | grep Web)"
-  BINARYFILENAME=$(echo "${BIN##*/}" | sed 's/?.*//' )
+  BINARYFILENAME=$(echo "${BINARYURL##*/}" | sed 's/?.*//' )
   wget $BINARYURL -O $BINARYFILENAME
   dnf -y install $BINARYFILENAME
 }

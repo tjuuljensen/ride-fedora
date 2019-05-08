@@ -82,6 +82,8 @@ SetGnomeRegionDaDK         # RemoveGnomeRegion
 SetScreensaverSlp10Lgn5    # SetScreensaverSlp15Lgn5
 SetCustomKeyboardShortcut  # SetVMKeyboardShortcut        # RemoveCustomKbrdShortcut
 SetGnomeCustomFavorites    # SetGnomeDefaultFavorites     # SetGnomeMinimalFavorites
+SetGnmLocationServiceOff   # SetGnmLocationServiceOn
+SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 
 ### Miscellaneous tweaks and installs  ###
 InstallCheat                # RemoveCheat
@@ -90,10 +92,10 @@ InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
 InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 
 ### 3rd party applications ###
-InstallOwnCloudClient       # RemoveOwnCloudClient
-InstallVeraCrypt            #
-InstallVMwareWorkstation    # RemoveVMwareWorkstation
-InstallCitrixClient         # RemoveCitrixClient
+# InstallOwnCloudClient       # RemoveOwnCloudClient
+# InstallVeraCrypt            #
+# InstallVMwareWorkstation    # RemoveVMwareWorkstation
+# InstallCitrixClient         # RemoveCitrixClient
 
 ### Auxiliary Functions ###
 SetHostname
@@ -106,3 +108,4 @@ AddExtraLUKSpasswords
 ### Bootstrap End ###
 EnableScreenSaver           # DisableScreensaver
 Restart
+PressAnyKeyToContinue
