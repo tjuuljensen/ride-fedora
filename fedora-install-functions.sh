@@ -465,7 +465,7 @@ InstallGnomeExtInstaller(){
   fi
 
   su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer"
-  sudo -u $MYUSER ln -fs "$MYUSERDIR/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
+  ln -fs "$MYUSERDIR/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
 }
 
 RemoveGnomeExtInstaller(){
@@ -489,14 +489,14 @@ InstallMozExtensionMgr(){
     chown $MYUSER:$MYUSER git
   fi
 
-  su $MYUSER "cd $MYUSERDIR/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts"
+  su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts"
 
   # Fix missing executable flag when fetched from repo
   chmod 755 "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager"
 
   # create symlinks
-  sudo -u $MYUSER ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager" "/usr/local/bin/firefox-extension-manager"
-  sudo -u $MYUSER ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/mozilla-extension-manager" "/usr/local/bin/mozilla-extension-manager"
+  ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager" "/usr/local/bin/firefox-extension-manager"
+  ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/mozilla-extension-manager" "/usr/local/bin/mozilla-extension-manager"
 }
 
 RemoveMozExtensionMgr(){
@@ -785,7 +785,7 @@ InstallSystemMonitor(){
     sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions > /dev/null
     chown $MYUSER:$MYUSER $MYUSERDIR/.local/share/gnome-shell/extensions
   fi
-  su $MYUSER "cd $MYUSERDIR/git ;  git clone git://github.com/paradoxxxzero/gnome-shell-system-monitor-applet.git"
+  su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet"
   sudo -u $MYUSER ln -fs $MYUSERDIR/git/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com $MYUSERDIR/.local/share/gnome-shell/extensions/system-monitor
 }
 
