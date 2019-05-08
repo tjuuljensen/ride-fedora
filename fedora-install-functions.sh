@@ -320,6 +320,8 @@ InstallThunderbirdExts(){
       "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
     )
 
+    cd /tmp
+
     sudo -u $MYUSER thunderbird & # start Thunderbird so profile is created
     sleep 15
     pkill thunderbird
@@ -346,6 +348,8 @@ RemoveThunderbirdExts(){
       "https://addons.mozilla.org/thunderbird/downloads/latest/dansk-ordbog/addon-3596-latest.xpi"
       "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
     )
+
+    cd /tmp
 
     for ADDON in "${ADDONS[@]}"
     do
@@ -652,18 +656,18 @@ InstallFirefoxAddons(){
     ADDONS=(
       "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin"
       "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17"
-      "https://addons.mozilla.org/firefox/downloads/latest/https-everywhere/"
-      "https://addons.mozilla.org/firefox/downloads/latest/noscript"
+      "https://addons.mozilla.org/en-US/firefox/addon/https-everywhere/"
+      "https://addons.mozilla.org/en-US/firefox/addon/noscript"
       "https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/"
       "https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/"
       "https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/"
     )
 
+    cd /tmp
+
     sudo -u $MYUSER firefox & # start Firefox so default profile is created
     sleep 10
     pkill firefox
-
-    cd /tmp
 
     if [ ! -d $MYUSERDIR/.mozilla/firefox ] ; then
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
@@ -673,7 +677,7 @@ InstallFirefoxAddons(){
 
     for ADDON in "${ADDONS[@]}"
     do
-      sudo -u $MYUSER firefox-extension-manager --install --user --url $ADDON
+      su $MYUSER firefox-extension-manager --install --user --url $ADDON
     done
   fi
 }
@@ -684,16 +688,18 @@ RemoveFirefoxAddons(){
     ADDONS=(
       "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin"
       "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17"
-      "https://addons.mozilla.org/da/firefox/addon/https-everywhere/" 
-      "https://addons.mozilla.org/da/firefox/addon/noscript"
+      "https://addons.mozilla.org/en-US/firefox/addon/https-everywhere/"
+      "https://addons.mozilla.org/en-US/firefox/addon/noscript"
       "https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/"
       "https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/"
       "https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/"
     )
 
+    cd /tmp
+    
     for ADDON in "${ADDONS[@]}"
     do
-      sudo -u $MYUSER firefox-extension-manager --remove --user --url $ADDON
+      su $MYUSER -c "firefox-extension-manager --remove --user --url $ADDON"
     done
   fi
 }
