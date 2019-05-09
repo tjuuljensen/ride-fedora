@@ -647,32 +647,36 @@ InstallFirefoxAddons(){
   if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
 
     ADDONS=(
-      "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin"
-      "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17"
-      "https://addons.mozilla.org/en-US/firefox/addon/https-everywhere/"
-      "https://addons.mozilla.org/en-US/firefox/addon/noscript"
-      "https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/"
-      "https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/"
-      "https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/"
+      "ublock-origin"
+      "privacy-badger17"
+      "https-everywhere"
+      "noscript"
+      "print-friendly-pdf"
+      "disable-autoplay"
+      "video-downloadhelper"
     )
 
     cd /tmp
 
+    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
 
-    if [ ! -d $(ls -d $MYUSERDIR/.mozilla/firefox/*.default) ] ; then
+    if [ ! -d $FIREFOXCONFIGDIR ] ; then
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
       chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
       sudo -u $MYUSER firefox & # start Firefox so default profile is created
       sleep 10
       pkill firefox
+      FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
     fi
 
-    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
-    su  $MYUSER -c "cd $MYUSERDIR/.mozilla/firefox ; cd $FIREFOXCONFIGDIR ; mkdir extensions &>/dev/null"
+    if [ ! -d "$FIREFOXCONFIGDIR/extensions" ] ; then
+      mkdir $FIREFOXCONFIGDIR/extensions &>/dev/null
+    fi
 
+    BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
-      su $MYUSER -c "firefox-extension-manager --install --user --url $ADDON"
+      su $MYUSER -c "firefox-extension-manager --install --user --url $BASEURL/$ADDON"
     done
   fi
 }
@@ -681,20 +685,21 @@ RemoveFirefoxAddons(){
   if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
 
     ADDONS=(
-      "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin"
-      "https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17"
-      "https://addons.mozilla.org/en-US/firefox/addon/https-everywhere/"
-      "https://addons.mozilla.org/en-US/firefox/addon/noscript"
-      "https://addons.mozilla.org/en-US/firefox/addon/print-friendly-pdf/"
-      "https://addons.mozilla.org/en-US/firefox/addon/disable-autoplay/"
-      "https://addons.mozilla.org/en-US/firefox/addon/video-downloadhelper/"
+      "ublock-origin"
+      "privacy-badger17"
+      "https-everywhere"
+      "noscript"
+      "print-friendly-pdf"
+      "disable-autoplay"
+      "video-downloadhelper"
     )
 
     cd /tmp
 
+    BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
-      su $MYUSER -c "firefox-extension-manager --remove --user --url $ADDON"
+      su $MYUSER -c "firefox-extension-manager --remove --user --url $BASEURL/$ADDON"
     done
   fi
 }
@@ -784,14 +789,22 @@ RemoveSystemMonitor(){
 InstallGnomeExtensions(){
   # Install Gnome extensions
 
+  GNOMEEXTENSIONS=(
+    2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
+    517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
+    1306 # Scale switcher - https://extensions.gnome.org/extension/1306/scale-switcher/
+    1465 # Desktop Icons
+  )
+
   # Install using gnome-shell-extension-installer script
   if ( command -v gnome-shell-extension-installer > /dev/null 2>&1 ) ; then
-    # install frippery move clock - https://extensions.gnome.org/extension/2/move-clock/
-    sudo -u $MYUSER gnome-shell-extension-installer 2
-    # install caffeine - https://extensions.gnome.org/extension/517/caffeine/
-    sudo -u $MYUSER gnome-shell-extension-installer 517
-    # Install scale switcher - https://extensions.gnome.org/extension/1306/scale-switcher/
-    sudo -u $MYUSER gnome-shell-extension-installer 1306
+
+    for GNOMEEXTENSION in "${GNOMEEXTENSIONS[@]}"
+    do
+      sudo -u $MYUSER gnome-shell-extension-installer $GNOMEEXTENSION
+    done
+
+
   fi
 
   # get gnome extensions from github
@@ -1164,6 +1177,9 @@ InstallCitrixClient(){
   CITRIXCLIENTURL=https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html
   BINARYURL="https:$(curl $CITRIXCLIENTURL 2>&1 | grep rel | grep rhel | grep x86_64 | sed 's/^.*rel/rel/' | cut -d '"' -f2 | grep Web)"
   BINARYFILENAME=$(echo "${BINARYURL##*/}" | sed 's/?.*//' )
+
+  cd /tmp
+
   wget $BINARYURL -O $BINARYFILENAME
   dnf -y install $BINARYFILENAME
 }
