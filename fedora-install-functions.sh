@@ -658,25 +658,10 @@ InstallFirefoxAddons(){
 
     cd /tmp
 
-    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
-
-    if [ ! -d $FIREFOXCONFIGDIR ] ; then
-      mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
-      chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
-      sudo -u $MYUSER firefox & # start Firefox so default profile is created
-      sleep 10
-      pkill firefox
-      FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
-    fi
-
-    if [ ! -d "$FIREFOXCONFIGDIR/extensions" ] ; then
-      mkdir $FIREFOXCONFIGDIR/extensions &>/dev/null
-    fi
-
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
-      su $MYUSER -c "firefox-extension-manager --install --user --url $BASEURL/$ADDON"
+      su $MYUSER -c "firefox-extension-manager --install --allow-create --user --url $BASEURL/$ADDON"
     done
   fi
 }
