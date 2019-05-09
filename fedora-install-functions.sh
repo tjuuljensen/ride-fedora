@@ -29,7 +29,7 @@ SetupUserDefaultDirs(){
   mkdir -p git > /dev/null
   chown $MYUSER:$MYUSER git
   mkdir -p bin > /dev/null
-  chown $MYUSER:$MYUSE bin
+  chown $MYUSER:$MYUSER bin
 
 }
 
@@ -328,7 +328,7 @@ InstallThunderbirdExts(){
 
     for ADDON in "${ADDONS[@]}"
     do
-      sudo -u $MYUSER mozilla-extension-manager --install --user --url $ADDON
+      su $MYUSER -c "mozilla-extension-manager --install --user --url $ADDON"
     done
   fi
 
@@ -353,7 +353,7 @@ RemoveThunderbirdExts(){
 
     for ADDON in "${ADDONS[@]}"
     do
-      sudo -u $MYUSER mozilla-extension-manager --remove --user --url $ADDON
+      su $MYUSER -c "mozilla-extension-manager --remove --user --url $ADDON"
     done
   fi
 
@@ -665,19 +665,21 @@ InstallFirefoxAddons(){
 
     cd /tmp
 
-    sudo -u $MYUSER firefox & # start Firefox so default profile is created
-    sleep 10
-    pkill firefox
 
-    if [ ! -d $MYUSERDIR/.mozilla/firefox ] ; then
+    if [ ! -d $(ls -d $MYUSERDIR/.mozilla/firefox/*.default) ] ; then
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
       chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
+      sudo -u $MYUSER firefox & # start Firefox so default profile is created
+      sleep 10
+      pkill firefox
     fi
-    su  $MYUSER -c "cd $MYUSERDIR/.mozilla/firefox ; cd $(ls -d $MYUSERDIR/.mozilla/firefox/*.default) ; mkdir extensions &>/dev/null"
+
+    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
+    su  $MYUSER -c "cd $MYUSERDIR/.mozilla/firefox ; cd $FIREFOXCONFIGDIR ; mkdir extensions &>/dev/null"
 
     for ADDON in "${ADDONS[@]}"
     do
-      su $MYUSER firefox-extension-manager --install --user --url $ADDON
+      su $MYUSER -c "firefox-extension-manager --install --user --url $ADDON"
     done
   fi
 }
@@ -696,7 +698,7 @@ RemoveFirefoxAddons(){
     )
 
     cd /tmp
-    
+
     for ADDON in "${ADDONS[@]}"
     do
       su $MYUSER -c "firefox-extension-manager --remove --user --url $ADDON"
@@ -776,34 +778,14 @@ RemoveGnomeTools(){
 }
 
 InstallSystemMonitor(){
-  # install system monitor dependecies
-  dnf install -y libgtop2-devel NetworkManager-glib-devel
-  dnf install -y lm_sensors #for fan overview
-
-  # install system monitor gnome addon from github
-  # Check if git library exists and create if it doesn't
-  MYUSERDIR=/home/$MYUSER
-  if [ ! -d $MYUSERDIR=/home/$MYUSER/git ] ; then
-    cd $MYUSERDIR
-    mkdir -p git > /dev/null
-    chown $MYUSER:$MYUSER git
-  fi
-
-  if [ ! -d $MYUSERDIR/.local/share/gnome-shell/extensions ] ; then
-    sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions > /dev/null
-    chown $MYUSER:$MYUSER $MYUSERDIR/.local/share/gnome-shell/extensions
-  fi
-  su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet"
-  sudo -u $MYUSER ln -fs $MYUSERDIR/git/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com $MYUSERDIR/.local/share/gnome-shell/extensions/system-monitor
+  # install system monitor dependecies and applet
+  # lm_sensors is for fan overview
+  dnf install -y libgtop2-devel NetworkManager-glib-devel lm_sensors gnome-shell-extension-system-monitor-applet
 }
 
 RemoveSystemMonitor(){
   # install system monitor dependecies
-  dnf remove -y libgtop2-devel NetworkManager-glib-devel lm_sensors
-  MYUSERDIR=/home/$MYUSER
-
-  sudo -u $MYUSER rm $MYUSERDIR/git/gnome-shell-system-monitor-applet.git
-  sudo -u $MYUSER rm $MYUSERDIR/.local/share/gnome-shell/extensions/system-monitor
+  dnf remove -y libgtop2-devel NetworkManager-glib-devel lm_sensors gnome-shell-extension-system-monitor-applet
 }
 
 InstallGnomeExtensions(){
