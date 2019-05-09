@@ -11,7 +11,7 @@ MYUSER=$(logname)
 LOGINUSERUID=$(id -u ${MYUSER})
 DOWNLOADDIR=/tmp
 FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
-
+MYUSERDIR=/home/$MYUSER
 
 ################################################################
 ###### Auxiliary Functions  ###
@@ -24,7 +24,6 @@ RequireAdmin(){
 
 SetupUserDefaultDirs(){
   # Create user's bin and git directories
-  MYUSERDIR=/home/$MYUSER
   cd $MYUSERDIR
   mkdir -p git > /dev/null
   chown $MYUSER:$MYUSER git
@@ -407,7 +406,6 @@ InstallOpenconnectVPN(){
   # OpenConnect for use with Juniper VPN
   dnf install -y automake libtool openssl-devel libxml2 libxml2-devel vpnc-script NetworkManager-openconnect-gnome
 
-  MYUSERDIR=/home/$MYUSER
   if [ ! -d $MYUSERDIR ] ; then
     cd $MYUSERDIR
     mkdir -p git > /dev/null
@@ -461,8 +459,7 @@ InstallGnomeExtInstaller(){
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
 
   # Check if git library exists and create if it doesn't
-  MYUSERDIR=/home/$MYUSER
-  if [ ! -d $MYUSERDIR=/home/$MYUSER/git ] ; then
+  if [ ! -d $MYUSERDIR/git ] ; then
     cd $MYUSERDIR
     mkdir -p git > /dev/null
     chown $MYUSER:$MYUSER git
@@ -475,7 +472,6 @@ InstallGnomeExtInstaller(){
 RemoveGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
-  MYUSERDIR=/home/$MYUSER
   rm -rf $MYUSERDIR/git/gnome-shell-extension-installer # remove github repo clone
   rm "/usr/local/bin/gnome-shell-extension-installer" &>/dev/null # remove symlink
 }
@@ -486,7 +482,6 @@ InstallMozExtensionMgr(){
   # http://www.bernaerts-nicolas.fr/linux/74-ubuntu/271-ubuntu-firefox-thunderbird-addon-commandline
 
   # Check if git library exists and create if it doesn't
-  MYUSERDIR=/home/$MYUSER
   if [ ! -d $MYUSERDIR ] ; then
     cd $MYUSERDIR
     mkdir -p git > /dev/null
@@ -504,7 +499,6 @@ InstallMozExtensionMgr(){
 }
 
 RemoveMozExtensionMgr(){
-  MYUSERDIR=/home/$MYUSER
   rm -rf $MYUSERDIR/git/ubuntu-scripts # remove github repo clone
   rm "/usr/local/bin/firefox-extension-manager"  &>/dev/null # remove symlink
   rm "/usr/local/bin/mozilla-extension-manager"  &>/dev/null # remove symlink
@@ -606,7 +600,6 @@ SetFirefoxPreferences() {
 
   FIREFOXINSTALLDIR=/usr/lib64/firefox/
   FIREFOXPREFFILE=$FIREFOXINSTALLDIR"mozilla.cfg"
-  MYUSERDIR=/home/$MYUSER
 
 echo '//
 pref("network.dns.disablePrefetch", true);
@@ -803,8 +796,7 @@ InstallGnomeExtensions(){
 
   # get gnome extensions from github
   # Check if git library exists and create if it doesn't
-  MYUSERDIR=/home/$MYUSER
-  if [ ! -d $MYUSERDIR=/home/$MYUSER/git ] ; then
+  if [ ! -d $MYUSERDIR/git ] ; then
     cd $MYUSERDIR
     mkdir -p git > /dev/null
     chown $MYUSER:$MYUSER git
@@ -1135,6 +1127,8 @@ InstallVMwareWorkstation(){
     CURRENTVMWSERIAL=${!TMPSERIAL}
   fi
 
+  cd /tmp
+
   # Starting with prerequisites
   dnf -y install elfutils-libelf-devel
 
@@ -1149,9 +1143,7 @@ InstallVMwareWorkstation(){
 
   vmware-modconfig --console --install-all --eulas-agreed
 
-  MYUSERDIR=/home/$MYUSER
   # enable 3D acceleration in VMware Workstation
-  cd $MYUSERDIR
   if [ ! -d $MYUSERDIR/.vmware ] ; then
     mkdir $MYUSERDIR/.vmware
     chown $MYUSER:$MYUSER $MYUSERDIR/.vmware
