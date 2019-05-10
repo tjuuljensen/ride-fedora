@@ -29,6 +29,7 @@ InstallExifTool            # RemoveExifTool
 InstallExfatSupport        # RemoveExfatSupport
 InstallPackagingTools      # RemovePackagingTools
 InstallAtomEditor          # RemoveAtomEditor
+DisableAtomTelemetry       # EnableAtomTelemetry
 InstallAtomPlugins         # RemoveAtomPlugins
 InstallBasicEditors        # RemoveBasicEditors
 # InstallCommanderFileMgrs # RemoveCommanderFileMgrs
@@ -41,7 +42,7 @@ InstallChatProgs           # RemoveChatProgs
 # InstallThunderbirdExts   # RemoveThunderbirdExts
 
 ### NetworkConfiguration ####
-# DisableMulticastDNS      #
+# DisableMulticastDNS      # EnableMulticastDNS
 InstallNetworkTools        # RemoveNetworkTools
 InstallNetCommsTools       # RemoveNetCommsTools
 InstallNetMgrL2TP          # RemoveNetMgrL2TP

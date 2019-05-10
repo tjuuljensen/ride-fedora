@@ -223,6 +223,21 @@ RemoveAtomEditor(){
   dnf remove -y atom
 }
 
+DisableAtomTelemetry(){
+  # This function also disables the normal welcome screen in atom
+  echo "atom.config.set 'welcome.showOnStartup', false
+atom.config.set 'core.telemetryConsent', 'no'
+" > .atom/init.coffee
+}
+
+EnableAtomTelemetry(){
+  # This function also enables the normal welcome screen in atom
+  # These settings will be set every time atom is started. To avoid this, delete the init.coffee file
+  echo "atom.config.set 'welcome.showOnStartup', true
+atom.config.set 'core.telemetryConsent', 'limited'
+" > .atom/init.coffee
+}
+
 InstallAtomPlugins(){
     if ( command -v atom > /dev/null 2>&1 ) ; then
       sudo -u $MYUSER apm install minimap
@@ -365,17 +380,34 @@ RemoveThunderbirdExts(){
 
 DisableMulticastDNS(){
   # change /etc/nsswitch.conf file to disable mulicast dns and use dns first
+  # Original line will be left in the file with a # in the beginning of the line
   # multicast dns has to be disabled to resolve .local dns names (like in Active Directory domains called eg. contoso.local)
   NSSWITCHFILE=/etc/nsswitch.conf
   DNSLINENO=$(cat $NSSWITCHFILE | grep -in ^hosts | cut -c1-2)
-  NEWLINENO=$(($DNSLINENO)) #Why is it not +1 ???
+  NEWLINENO=$(($DNSLINENO))
 
-  NEWDNSLINE=$(cat $NSSWITCHFILE | grep -i ^hosts | sed 's/dns //g' | sed 's/files/files dns/g')
   NOMULTIDNSLINE=$(cat $NSSWITCHFILE | grep -i ^hosts | sed 's/mdns4_minimal //g' | sed 's/dns //g' | sed 's/files/files dns/g')
 
   sed -i "s/^hosts/#hosts/g" $NSSWITCHFILE
-  #sed -i "$NEWLINENO a $NEWDNSLINE" $NSSWITCHFILE #Keep Multicast DNS
   sed -i "$NEWLINENO a $NOMULTIDNSLINE" $NSSWITCHFILE # Discard Multicast DNS
+}
+
+EnableMulticastDNS(){
+  # change /etc/nsswitch.conf file back to default to mulicast dns
+  # Original #hosts line will be enabled and current hosts line will be disabled
+
+  NSSWITCHFILE=/etc/nsswitch.conf
+
+  OLDDNSLINE=$(cat $NSSWITCHFILE | grep -in "^#hosts")
+
+  if [ ! -z $OLDDNSLINE ] ; then # the old DNS line exists and can be reactivated
+    DNSLINENO=$(cat $NSSWITCHFILE | grep -in ^hosts | cut -c1-2)
+    sed -i $DNSLINENO"d" $NSSWITCHFILE
+    sed -i "s/^#hosts/hosts/g" $NSSWITCHFILE
+  fi
+  #sed -i "s/^hosts/#hosts/g" $NSSWITCHFILE
+  #sed -i "s/^##hosts/hosts/g" $NSSWITCHFILE
+
 }
 
 InstallNetworkTools(){
@@ -607,10 +639,10 @@ pref("network.prefetch-next", false);
 pref("browser.rights.3.shown", true);
 pref("browser.startup.homepage_override.mstone","ignore");
 pref("browser.newtabpage.introShown", false);
-pref("startup.homepage_welcome_url.additional", "https://encrypted.google.com");
+pref("startup.homepage_welcome_url.additional", "https://www.google.com");
 pref("browser.usedOnWindows10", true);
-pref("browser.startup.homepage", "https://encrypted.google.com");
-pref("browser.newtabpage.pinned", "https://encrypted.google.com");
+pref("browser.startup.homepage", "https://www.google.com");
+pref("browser.newtabpage.pinned", "https://www.google.com");
 pref("datareporting.healthreport.service.enabled", false);
 pref("datareporting.healthreport.uploadEnabled", false);
 pref("datareporting.policy.dataSubmissionEnabled", false);
@@ -658,6 +690,24 @@ InstallFirefoxAddons(){
 
     cd /tmp
 
+    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
+
+    # Make sure that the Firefox firectory and profile is created so extensions can be installed
+    if [ ! -d $FIREFOXCONFIGDIR ] ; then
+      mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
+      chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
+      sudo -u $MYUSER firefox & # start Firefox so default profile is created
+      sleep 10
+      pkill firefox
+      FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
+    fi
+
+    if [ ! -d "$FIREFOXCONFIGDIR/extensions" ] ; then
+      mkdir $FIREFOXCONFIGDIR/extensions &>/dev/null
+      chown $MYUSER:$MYUSER $FIREFOXCONFIGDIR/extensions
+    fi
+
+    # Install extensions
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
