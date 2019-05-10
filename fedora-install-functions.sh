@@ -69,11 +69,11 @@ InstallRequired(){
   done
 }
 
-InstallMiscTools(){
+InstallShellTools(){
   dnf install -y pv
 }
 
-RemoveMiscTools(){
+RemoveShellTools(){
   dnf remove -y pv
 }
 
@@ -292,13 +292,6 @@ EnableAtomTelemetry(){
 
 InstallAtomPlugins(){
 
-  #if [ ! -d $MYUSERDIR/.atom/packages ] ; then # atom user library does not exist
-    #mkdir -p $MYUSERDIR/.atom/packages
-    #chown $MYUSER:$MYUSER $MYUSERDIR/.atom/packages
-    #mkdir -p $MYUSERDIR/.atom/.node-gyp
-    #chown $MYUSER:$MYUSER $MYUSERDIR/.atom/.node-gyp
-  #fi
-
     if ( command -v atom > /dev/null 2>&1 ) ; then
       sudo -u $MYUSER apm install minimap
       sudo -u $MYUSER apm install line-ending-converter
@@ -465,8 +458,6 @@ EnableMulticastDNS(){
     sed -i $DNSLINENO"d" $NSSWITCHFILE
     sed -i "s/^#hosts/hosts/g" $NSSWITCHFILE
   fi
-  #sed -i "s/^hosts/#hosts/g" $NSSWITCHFILE
-  #sed -i "s/^##hosts/hosts/g" $NSSWITCHFILE
 
 }
 
@@ -895,13 +886,10 @@ InstallGnomeExtensions(){
 
   # Install using gnome-shell-extension-installer script
   if ( command -v gnome-shell-extension-installer > /dev/null 2>&1 ) ; then
-
     for GNOMEEXTENSION in "${GNOMEEXTENSIONS[@]}"
     do
-      sudo -u $MYUSER gnome-shell-extension-installer $GNOMEEXTENSION
+      sudo -u $MYUSER gnome-shell-extension-installer $GNOMEEXTENSION --restart-shell
     done
-
-
   fi
 
   # get gnome extensions from github
@@ -914,10 +902,8 @@ InstallGnomeExtensions(){
 
   sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions  >/dev/null # setup base directories
   su $MYUSER -c "cd $MYUSERDIR/git ; git clone git://github.com/tjuuljensen/gnome-shell-extension-hostname-in-taskbar.git" # clone
-  sudo -u $MYUSER ln -s $MYUSERDIR/git/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar $MYUSERDIR/.local/share/gnome-shell/extensions/hostname-in-taskbar # Make symlink
+  su $MYUSER -c "ln -s $MYUSERDIR/git/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar $MYUSERDIR/.local/share/gnome-shell/extensions/hostname-in-taskbar" # Make symlink
 
-  # restart gnome shell is not available under Wayland
-  [[ $XDG_SESSION_TYPE != "wayland" ]] && gnome-shell-extension-installer --restart-shell
 
 }
 
@@ -1216,7 +1202,13 @@ InstallVeraCrypt(){
   wget -q --show-progress  $VERACRYPTURL
   tar xvjf $VERACRYPTPKG -C /tmp veracrypt-*-setup-gui-x64 #extract only the x64 bit console installer
   mv /tmp/veracrypt-*-setup-gui-x64  /tmp/veracrypt-setup-gui-x64
-  /tmp/veracrypt-setup-gui-x64
+  /tmp/veracrypt-setup-gui-x64 --quiet
+
+}
+
+UninstallVeraCrypt(){
+
+  veracrypt-uninstall.sh
 
 }
 
@@ -1268,7 +1260,7 @@ RemoveVMwareWorkstation(){
   vmware-installer --uninstall-product=vmware-workstation
 }
 
-PatchWMwareModules(){
+PatchVMwareModules(){
   # Relies on repo maintaned by mkubecek on https://github.com/mkubecek/vmware-host-modules
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
@@ -1334,11 +1326,11 @@ AddExtraLUKSpasswords(){
 
 EncryptUnpartitionedDisks(){
 
-  #####   STILL UNTESTED : Be careful!!!  ##########
-
   # Reclaim and encrypt disks without partitions (that are not already encrypted using LUKS)
   # BE AWARE that using this function might lead to dataloss - especially if you are using third party encrypting tools.
-  MOUNTBASE=/mnt/
+  # Use this function carefully and understand what is it doing before ativating it.
+
+  MOUNTBASE=/mnt
 
   DISKS=$(lsblk -l | grep disk | awk '{print $1}') #sda, sdb
   UNPARTEDDISKS=()
@@ -1349,7 +1341,7 @@ EncryptUnpartitionedDisks(){
     PARTITIONS=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' )
     #Check if DISKDEVICE has 0 partitions and is not a LUKS device itself
     if [[ -z $PARTITIONS ]] ; then
-      cryptsetup isLuks $DEVICE || UNPARTEDDISKS+=($DISKDEVICE)
+      cryptsetup isLuks $DISKDEVICE || UNPARTEDDISKS+=($DISKDEVICE)
     fi
   done
 
@@ -1375,7 +1367,7 @@ EOF
     NEWPARTITION=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' | awk '{print $1}')
     echo About to encrypted content of $NEWPARTITION
     cryptsetup -y -v luksFormat $NEWPARTITION
-    cryptsetup isLuks $DISK && echo Encryption of $DISKDEVICE was a success
+    cryptsetup isLuks $DISKDEVICE && echo Encryption of $DISKDEVICE was a success
     HDDUUID=$(cryptsetup luksUUID $NEWPARTITION)
     LUKSNAME="luks-$HDDUUID"
     DEVICENAME=${NEWPARTITION##*/}
@@ -1383,7 +1375,7 @@ EOF
     echo Opening encrypted device and creating ext4 filesystem
     cryptsetup luksOpen $NEWPARTITION $LUKSNAME
     mkfs.ext4 /dev/mapper/$LUKSNAME
-    MOUNTPOINT=$MOUNTBASE$DISK
+    MOUNTPOINT=$MOUNTBASE/$DEVICENAME
     mkdir -p $MOUNTPOINT
     mount /dev/mapper/$LUKSNAME $MOUNTPOINT
     chmod 755 $MOUNTPOINT
@@ -1402,12 +1394,11 @@ EOF
       mv $KEYFILE $NEWKEYFILE
     fi
 
-
     # Generate key file for LUKS encryption
     dd if=/dev/urandom of=$KEYFILE bs=1024 count=4
     chmod 0400 $KEYFILE
     echo Adding a keyfile for $DEVICENAME for atomount configuration
-    cryptsetup luksAddKey $NEWPARTITION $KEYFILE
+    cryptsetup -v luksAddKey $NEWPARTITION $KEYFILE
 
     #Update /etc/crypttab
     echo Updating /etc/crypttab
@@ -1423,13 +1414,11 @@ EOF
 
 ReclaimEncryptDWUnmntPrt(){
 
-  #####   STILL UNTESTED : Be careful!!!  ##########
-
   # Reclaim and encrypt disks with unmounted partitions
   # This function will reclaim disks with unmounted partitions - encrypted or not
   # BE AWARE! Using this function could make you loose data permanently
 
-    MOUNTBASE=/mnt/
+    MOUNTBASE=/mnt
 
     DISKS=$(lsblk -l | grep disk | awk '{print $1}')
     NOTMOUNTED=$(blkid -o list | grep "not mounted" | cut -d ' ' -f1 | sed '/^$/d')
@@ -1466,7 +1455,7 @@ EOF
                 NEWPARTITION=$(/sbin/sfdisk -d $DISKDEVICE 2>&1 | grep '^/' | awk '{print $1}')
                 echo About to encrypted content of $NEWPARTITION
                 cryptsetup -y -v luksFormat $NEWPARTITION
-                cryptsetup isLuks $DISK && echo Encryption of $DISKDEVICE was a success
+                cryptsetup isLuks $DISKDEVICE && echo Encryption of $DISKDEVICE was a success
                 HDDUUID=$(cryptsetup luksUUID $NEWPARTITION)
                 LUKSNAME="luks-$HDDUUID"
                 DEVICENAME=${NEWPARTITION##*/}
@@ -1474,7 +1463,7 @@ EOF
                 echo Opening encrypted device and creating ext4 filesystem
                 cryptsetup luksOpen $NEWPARTITION $LUKSNAME
                 mkfs.ext4 /dev/mapper/$LUKSNAME
-                MOUNTPOINT=$MOUNTBASE$DISK
+                MOUNTPOINT=$MOUNTBASE/$DEVICENAME
                 mkdir -p $MOUNTPOINT
                 mount /dev/mapper/$LUKSNAME $MOUNTPOINT
                 chmod 755 $MOUNTPOINT
@@ -1526,4 +1515,27 @@ EOF
 
     fi
 
+}
+
+RemoveKeyFileMounts(){
+  # This function is made to *partially* revert the setup made by ReclaimEncryptDWUnmntPrt and EncryptUnpartitionedDisks
+  # The function cleans up *all mounts* made with keyfiles (!!!)
+  # No unmounts are being made, so you have to either reboot or manually unmount
+  # Encrypted drives will still be encrypted after this function runs
+
+  LUKSNAMES=$(grep "root/keyfile" /etc/crypttab | cut -d ' ' -f1 |  uniq)
+
+  while [[ $(grep -in "root/keyfile" /etc/crypttab) ]]
+  do
+    FIRSTLINE2DEL=$(grep -in "root/keyfile" /etc/crypttab | cut -c1-2 | cut -d ':' -f1 | awk NR==1)
+    sed -i $FIRSTLINE2DEL"d" /etc/crypttab  # Remove lines from crypttab
+  done
+
+  for LUKSDEVICE in $LUKSNAMES ; do
+    while [[ $(grep -in $LUKSDEVICE /etc/fstab) ]]
+    do
+      FIRSTLINE2DEL=$(grep -in $LUKSDEVICE /etc/fstab | cut -c1-2 | cut -d ':' -f1 | awk NR==1)
+      sed -i $FIRSTLINE2DEL"d" /etc/fstab  # Remove lines from fstab
+    done
+  done
 }

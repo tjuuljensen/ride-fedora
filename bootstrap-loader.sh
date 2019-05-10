@@ -89,7 +89,7 @@ _functionExists() {
 _executeFunctions(){
   # execute all valid functions
   for i in "${!ACTIONS[@]}"; do
-      _functionExists "${ACTIONS[$i]}" && echo ":::${ACTIONS[$i]}:::" &&  (${ACTIONS[$i]}) # print name & execute function
+      _functionExists "${ACTIONS[$i]}" && echo "::: ${ACTIONS[$i]} :::" &&  (${ACTIONS[$i]}) # print name & execute function
   done
 }
 

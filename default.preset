@@ -15,7 +15,7 @@ SetupUserDefaultDirs
 ### Generic Fedora ###
 UpdateFedora
 InstallRequired
-InstallMiscTools           # RemoveMiscTools
+InstallShellTools          # RemoveShellTools
 InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
 #InstallFedy               # RemoveFedy
@@ -50,7 +50,7 @@ InstallNetMgrL2TP          # RemoveNetMgrL2TP
 
 ### Productivity Tools ###
 # InstallDia               # RemoveDia
-InstallWine                # RemoveWine
+# InstallWine              # RemoveWine
 
 ### Supporting scripts ###
 InstallTecmintMonitorSh    # RemoveTecmintMonitorSh
@@ -94,9 +94,9 @@ InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 
 ### 3rd party applications ###
 # InstallOwnCloudClient       # RemoveOwnCloudClient
-# InstallVeraCrypt            #
+# InstallVeraCrypt            # UninstallVeraCrypt
 # InstallVMwareWorkstation    # RemoveVMwareWorkstation
-# PatchWMwareModules
+# PatchVMwareModules
 # InstallCitrixClient         # RemoveCitrixClient
 
 ### Auxiliary Functions ###
@@ -104,8 +104,8 @@ SetHostname
 
 ### Encryption Functions ###
 AddExtraLUKSpasswords
-# EncryptUnpartitionedDisks
-# ReclaimEncryptDWUnmntPrt
+# EncryptUnpartitionedDisks  # RemoveKeyFileMounts
+# ReclaimEncryptDWUnmntPrt   # RemoveKeyFileMounts
 
 ### Bootstrap End ###
 EnableScreenSaver           # DisableScreensaver
