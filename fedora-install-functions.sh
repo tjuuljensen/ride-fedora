@@ -1070,7 +1070,7 @@ RemoveCustomKbrdShortcut(){
 }
 
 SetGnomeCustomFavorites(){
-    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'mozilla-thunderbird.desktop', 'vmware-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'veracrypt.desktop', 'keepassx2.desktop', 'terminator.desktop' ]"
+    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'vmware-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'veracrypt.desktop', 'keepassx2.desktop', 'terminator.desktop' ]"
 }
 
 SetGnomeDefaultFavorites(){
@@ -1263,7 +1263,7 @@ PatchWMwareModules(){
     sudo -u $MYUSER make
     make install
 
-    systemctl restart vmware 
+    systemctl restart vmware
   else
     echo "There is not a valid branch in mkubecek's repo that matches current VMware version $VMWAREVERSION"
   fi
