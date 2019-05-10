@@ -279,6 +279,8 @@ InstallAtomPlugins(){
   if [ ! -d $MYUSERDIR/.atom/packages ] ; then # atom user library does not exist
     mkdir -p $MYUSERDIR/.atom/packages
     chown $MYUSER:$MYUSER $MYUSERDIR/.atom/packages
+    mkdir -p $MYUSERDIR/.atom/.node-gyp
+    chown $MYUSER:$MYUSER $MYUSERDIR/.atom/.node-gyp
   fi
 
     if ( command -v atom > /dev/null 2>&1 ) ; then
