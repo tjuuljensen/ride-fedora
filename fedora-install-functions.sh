@@ -111,12 +111,13 @@ InstallFedy(){
   FEDYRELEASEURL="https://dl.folkswithhats.org/fedora/$(rpm -E %fedora)/RPMS/fedy-release.rpm"
 
   if ( wget -q "$FEDYRELEASEURL" ) ; then # the file is there
-    dnf install FEDYRELEASEURL
+    dnf install $FEDYRELEASEURL
     dnf install $RPMFUSIONURL $RPMFUSIONNONFREEURL
     dnf install fedy
   else
     # Clone and install
-    dnf install $RPMFUSIONURL $RPMFUSIONNONFREEURL
+    dnf install $RPMFUSIONURL
+    dnf install $RPMFUSIONNONFREEURL
     su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/fedy/fedy.git"
     cd $MYUSERDIR/git/fedy
     make install
