@@ -107,9 +107,21 @@ RemoveKernelTools(){
 InstallFedy(){
   # Depends on rpmfusion
   # From https://www.folkswithhats.org/
-  dnf install https://dl.folkswithhats.org/fedora/$(rpm -E %fedora)/RPMS/fedy-release.rpm
-  dnf install $RPMFUSIONURL $RPMFUSIONNONFREEURL
-  dnf install fedy
+
+  FEDYRELEASEURL="https://dl.folkswithhats.org/fedora/$(rpm -E %fedora)/RPMS/fedy-release.rpm"
+
+  if ( wget -q "$FEDYRELEASEURL" ) ; then # the file is there
+    dnf install FEDYRELEASEURL
+    dnf install $RPMFUSIONURL $RPMFUSIONNONFREEURL
+    dnf install fedy
+  else
+    # Clone and install
+    dnf install $RPMFUSIONURL $RPMFUSIONNONFREEURL
+    su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/fedy/fedy.git"
+    cd $MYUSERDIR/git/fedy
+    make install
+    cd
+  fi
 }
 
 RemoveFedy(){
@@ -123,6 +135,8 @@ RemoveFedy(){
   # remove RPM
   dnf remove -y fedy-release
   dnf remove -y fedy
+
+  [[ -d $MYUSERDIR/git/fedy ]] && rm $MYUSERDIR/git/fedy -rf
 }
 
 
@@ -276,12 +290,12 @@ EnableAtomTelemetry(){
 
 InstallAtomPlugins(){
 
-  if [ ! -d $MYUSERDIR/.atom/packages ] ; then # atom user library does not exist
-    mkdir -p $MYUSERDIR/.atom/packages
-    chown $MYUSER:$MYUSER $MYUSERDIR/.atom/packages
-    mkdir -p $MYUSERDIR/.atom/.node-gyp
-    chown $MYUSER:$MYUSER $MYUSERDIR/.atom/.node-gyp
-  fi
+  #if [ ! -d $MYUSERDIR/.atom/packages ] ; then # atom user library does not exist
+    #mkdir -p $MYUSERDIR/.atom/packages
+    #chown $MYUSER:$MYUSER $MYUSERDIR/.atom/packages
+    #mkdir -p $MYUSERDIR/.atom/.node-gyp
+    #chown $MYUSER:$MYUSER $MYUSERDIR/.atom/.node-gyp
+  #fi
 
     if ( command -v atom > /dev/null 2>&1 ) ; then
       sudo -u $MYUSER apm install minimap
