@@ -217,7 +217,7 @@ gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey' > $ATOMREPO
 
   if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
     mkdir $MYUSERDIR/.atom
-    chmod $MYUSER:$MYUSER $MYUSERDIR/.atom
+    chown $MYUSER:$MYUSER $MYUSERDIR/.atom
   fi
 
   echo "atom.config.set 'welcome.showOnStartup', false" > $MYUSERDIR/.atom/init.coffee
@@ -235,7 +235,7 @@ DisableAtomTelemetry(){
 
   if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
     mkdir $MYUSERDIR/.atom
-    chmod $MYUSER:$MYUSER $MYUSERDIR/.atom
+    chown $MYUSER:$MYUSER $MYUSERDIR/.atom
   fi
 
   if [ ! -f $MYUSERDIR/.atom/init.coffee ] ; then # coffee file is not created yet
@@ -254,7 +254,7 @@ EnableAtomTelemetry(){
 
   if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
     mkdir $MYUSERDIR/.atom
-    chmod $MYUSER:$MYUSER $MYUSERDIR/.atom
+    chown $MYUSER:$MYUSER $MYUSERDIR/.atom
   fi
 
   if [ ! -f $MYUSERDIR/.atom/init.coffee ] ; then # coffee file is not created yet
@@ -275,6 +275,12 @@ EnableAtomTelemetry(){
 }
 
 InstallAtomPlugins(){
+
+  if [ ! -d $MYUSERDIR/.atom/packages ] ; then # atom user library does not exist
+    mkdir -p $MYUSERDIR/.atom/packages
+    chown $MYUSER:$MYUSER $MYUSERDIR/.atom/packages
+  fi
+
     if ( command -v atom > /dev/null 2>&1 ) ; then
       sudo -u $MYUSER apm install minimap
       sudo -u $MYUSER apm install line-ending-converter
@@ -447,11 +453,11 @@ EnableMulticastDNS(){
 }
 
 InstallNetworkTools(){
-  dnf install -y tcpdump wireshark-gnome tftp-server nmap macchanger flow-tools
+  dnf install -y tcpdump wireshark tftp-server nmap macchanger flow-tools
 }
 
 RemoveNetworkTools(){
-  dnf remove -y tcpdump wireshark-gnome tftp-server nmap macchanger flow-tools
+  dnf remove -y tcpdump wireshark tftp-server nmap macchanger flow-tools
 }
 
 InstallNetCommsTools(){
@@ -726,14 +732,14 @@ InstallFirefoxAddons(){
 
     cd /tmp
 
-    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
+    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default 2>/dev/null)
 
     # Make sure that the Firefox firectory and profile is created so extensions can be installed
     if [ ! -d $FIREFOXCONFIGDIR ] ; then
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
       chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
       sudo -u $MYUSER firefox & # start Firefox so default profile is created
-      sleep 10
+      sleep 12
       pkill firefox
       FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
     fi
@@ -849,12 +855,13 @@ RemoveGnomeTools(){
 InstallSystemMonitor(){
   # install system monitor dependecies and applet
   # lm_sensors is for fan overview
-  dnf install -y libgtop2-devel NetworkManager-glib-devel lm_sensors gnome-shell-extension-system-monitor-applet
+  # For more information see https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
+  dnf install -y libgtop2-devel lm_sensors gnome-shell-extension-system-monitor-applet
 }
 
 RemoveSystemMonitor(){
   # install system monitor dependecies
-  dnf remove -y libgtop2-devel NetworkManager-glib-devel lm_sensors gnome-shell-extension-system-monitor-applet
+  dnf remove -y libgtop2-devel lm_sensors gnome-shell-extension-system-monitor-applet
 }
 
 InstallGnomeExtensions(){
@@ -862,9 +869,10 @@ InstallGnomeExtensions(){
 
   GNOMEEXTENSIONS=(
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
+    120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
     517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
     1306 # Scale switcher - https://extensions.gnome.org/extension/1306/scale-switcher/
-    1465 # Desktop Icons
+    1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
   )
 
   # Install using gnome-shell-extension-installer script
@@ -1248,6 +1256,8 @@ PatchWMwareModules(){
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
   BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
+
+  systemctl stop vmware
 
   cd $MYUSERDIR/git
   if [ ! -d vmware-host-modules ]; then

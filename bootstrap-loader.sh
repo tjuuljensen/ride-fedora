@@ -12,7 +12,6 @@ _parseArguments () {
     declare -g -a PRESET
     declare -g -a INCLUDE
     declare -g -a ACTIONS
-    #declare -g -a NEWACTIONS
 
     if [[ $# -eq 0 ]] ; then
       _help
@@ -20,8 +19,6 @@ _parseArguments () {
       # check if script is root and restart as root if not
       [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
     fi
-
-      #i=0
 
       while [[ $# -gt 0 ]]
       do
