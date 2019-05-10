@@ -147,7 +147,7 @@ InstallFTKImager(){
   FTKPKG=${FTKURL##${FTKURL%/*}"/"}
 
   # download ftkimager from AccessSoftware and put it in /usr/bin
-  wget $FTKURL
+  wget -q --show-progress $FTKURL
   tar xzvf $FTKPKG -C /usr/bin/
   chown $MYUSER:$MYUSER $FTKPKG
 }
@@ -513,7 +513,7 @@ InstallTecmintMonitorSh(){
   # A Shell Script to Monitor Network, Disk Usage, Uptime, Load Average and RAM Usage in Linux
   # https://www.tecmint.com/linux-server-health-monitoring-script/
   TECMINTMONSCRIPT=http://tecmint.com/wp-content/scripts/tecmint_monitor.sh
-  wget -O /usr/local/bin/tecmint_monitor.sh $TECMINTMONSCRIPT
+  wget -q --show-progress -O /usr/local/bin/tecmint_monitor.sh $TECMINTMONSCRIPT
   chmod 755 /usr/local/bin/tecmint_monitor.sh
 }
 
@@ -1187,7 +1187,7 @@ InstallVeraCrypt(){
                 grep -v freebsd | grep -v legacy | grep setup.tar | grep -v sig | awk NR==1 | sed 's/&#43;/+/g')
   VERACRYPTPKG="${VERACRYPTURL##*/}"
 
-  wget $VERACRYPTURL
+  wget -q --show-progress  $VERACRYPTURL
   tar xvjf $VERACRYPTPKG -C /tmp veracrypt-*-setup-gui-x64 #extract only the x64 bit console installer
   mv /tmp/veracrypt-*-setup-gui-x64  /tmp/veracrypt-setup-gui-x64
   /tmp/veracrypt-setup-gui-x64
@@ -1278,7 +1278,7 @@ InstallCitrixClient(){
 
   cd /tmp
 
-  wget $BINARYURL -O $BINARYFILENAME
+  wget -q --show-progress $BINARYURL -O $BINARYFILENAME
   dnf -y install $BINARYFILENAME
 }
 
