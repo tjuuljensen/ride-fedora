@@ -214,6 +214,14 @@ repo_gpgcheck=1
 gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey' > $ATOMREPO
 
   dnf install -y atom
+
+  if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
+    mkdir $MYUSERDIR/.atom
+    chmod $MYUSER:$MYUSER $MYUSERDIR/.atom
+  fi
+
+  echo "atom.config.set 'welcome.showOnStartup', false" > $MYUSERDIR/.atom/init.coffee
+
 }
 
 RemoveAtomEditor(){
@@ -224,18 +232,46 @@ RemoveAtomEditor(){
 }
 
 DisableAtomTelemetry(){
-  # This function also disables the normal welcome screen in atom
-  echo "atom.config.set 'welcome.showOnStartup', false
-atom.config.set 'core.telemetryConsent', 'no'
-" > .atom/init.coffee
+
+  if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
+    mkdir $MYUSERDIR/.atom
+    chmod $MYUSER:$MYUSER $MYUSERDIR/.atom
+  fi
+
+  if [ ! -f $MYUSERDIR/.atom/init.coffee ] ; then # coffee file is not created yet
+    touch $MYUSERDIR/.atom/init.coffee
+  fi
+
+  # This should be rewritten to use sed
+  if [ -z $(grep "core.telemetryConsent', 'no'" $MYUSERDIR/.atom/init.coffee) ] ; then # the telemetry line is not present
+    echo "atom.config.set 'core.telemetryConsent', 'no'" >> $MYUSERDIR/.atom/init.coffee
+  fi
+
+
 }
 
 EnableAtomTelemetry(){
-  # This function also enables the normal welcome screen in atom
-  # These settings will be set every time atom is started. To avoid this, delete the init.coffee file
-  echo "atom.config.set 'welcome.showOnStartup', true
-atom.config.set 'core.telemetryConsent', 'limited'
-" > .atom/init.coffee
+
+  if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
+    mkdir $MYUSERDIR/.atom
+    chmod $MYUSER:$MYUSER $MYUSERDIR/.atom
+  fi
+
+  if [ ! -f $MYUSERDIR/.atom/init.coffee ] ; then # coffee file is not created yet
+    touch $MYUSERDIR/.atom/init.coffee
+  fi
+
+  # This should be rewritten to use sed
+  if [ -z $(grep "telemetryConsent', 'no'" $MYUSERDIR/.atom/init.coffee) ] ; then # the telemetry line is not present
+    echo "atom.config.set 'core.telemetryConsent', 'limited'" >> $MYUSERDIR/.atom/init.coffee
+  fi
+
+  sudo -u $MYUSER atom &
+  sleep 15
+  pkill atom
+
+  rm $MYUSERDIR/.atom/init.coffee
+
 }
 
 InstallAtomPlugins(){
@@ -1206,6 +1242,33 @@ RemoveVMwareWorkstation(){
   vmware-installer --uninstall-product=vmware-workstation
 }
 
+PatchWMwareModules(){
+  # Relies on repo maintaned by mkubecek on https://github.com/mkubecek/vmware-host-modules
+
+  VMWAREURL=https://www.vmware.com/go/getworkstation-linux
+  BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
+  VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
+
+  cd $MYUSERDIR/git
+  if [ ! -d vmware-host-modules ]; then
+    sudo -u $MYUSER git clone https://github.com/mkubecek/vmware-host-modules.git
+  fi
+
+  cd vmware-host-modules
+
+  if [[ ! -z $(sudo -u $MYUSER git checkout workstation-$VMWAREVERSION 2>/dev/null) ]] ; then # current vmware version is a branch in mkubecek's github library
+
+    # get github repo to recompile vmware kernel modules to newer kernel modules
+    git branch workstation-$VMWAREVERSION
+    sudo -u $MYUSER make
+    make install
+
+    systemctl restart vmware 
+  else
+    echo "There is not a valid branch in mkubecek's repo that matches current VMware version $VMWAREVERSION"
+  fi
+
+}
 
 InstallCitrixClient(){
   # Citrix Client

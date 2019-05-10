@@ -96,6 +96,7 @@ InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 # InstallOwnCloudClient       # RemoveOwnCloudClient
 # InstallVeraCrypt            #
 # InstallVMwareWorkstation    # RemoveVMwareWorkstation
+# PatchWMwareModules
 # InstallCitrixClient         # RemoveCitrixClient
 
 ### Auxiliary Functions ###
