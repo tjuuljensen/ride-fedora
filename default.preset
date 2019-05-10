@@ -108,5 +108,5 @@ AddExtraLUKSpasswords
 
 ### Bootstrap End ###
 EnableScreenSaver           # DisableScreensaver
-Restart
 PressAnyKeyToContinue
+Restart
