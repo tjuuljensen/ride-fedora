@@ -1,7 +1,8 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: May 4, 2019 15:50
+# Edited: May 10, 2019 15:50
+# Latest verification done on Fedora 30
 #
 # This file is a function library only and is meant for . sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
@@ -61,7 +62,7 @@ UpdateFedora(){
 }
 
 InstallRequired(){
-  REQUIREDPACKAGES=("coreutils" "git" "gnupg" "python" "ssh" "tar" "wget" "gcc")
+  REQUIREDPACKAGES=("coreutils" "git" "gnupg" "python" "tar" "wget" "gcc")
   for i in ${!REQUIREDPACKAGES[@]};
   do
     rpm -q --quiet ${REQUIREDPACKAGES[$i]}  || dnf install -y ${REQUIREDPACKAGES[$i]}
