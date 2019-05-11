@@ -112,13 +112,13 @@ InstallFedy(){
   FEDYRELEASEURL="https://dl.folkswithhats.org/fedora/$(rpm -E %fedora)/RPMS/fedy-release.rpm"
 
   if ( wget -q "$FEDYRELEASEURL" ) ; then # the file is there
-    dnf install $FEDYRELEASEURL
-    dnf install $RPMFUSIONURL $RPMFUSIONNONFREEURL
-    dnf install fedy
+    dnf install -y $FEDYRELEASEURL
+    dnf install -y $RPMFUSIONURL $RPMFUSIONNONFREEURL
+    dnf install -y fedy
   else
     # Clone and install
-    dnf install $RPMFUSIONURL
-    dnf install $RPMFUSIONNONFREEURL
+    dnf install -y $RPMFUSIONURL
+    dnf install -y $RPMFUSIONNONFREEURL
     su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/fedy/fedy.git"
     cd $MYUSERDIR/git/fedy
     make install
@@ -272,7 +272,7 @@ InstallenaEtcher() {
 
   cd /tmp
 
-  dnf install zenity
+  dnf install -y zenity
   URL=https://www.balena.io/etcher/
   curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep linux-x64 | xargs --no-run-if-empty wget -q --show-progress
   unzip -o balena-etcher*
@@ -547,7 +547,7 @@ InstallNetCommsTools(){
 }
 
 RemoveNetCommsTools(){
-  dnf install -y minicom putty remmina
+  dnf remove -y minicom putty remmina
 }
 
 InstallNetMgrL2TP(){
@@ -670,7 +670,7 @@ InstallChromium(){
 }
 
 RemoveChromium(){
-  # Install Chromium browser
+  # Remove Chromium browser
   dnf remove -y chromium
 }
 
@@ -971,7 +971,7 @@ InstallGnomeExtensions(){
     120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
     517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
-    1306 # Scale switcher - https://extensions.gnome.org/extension/1306/scale-switcher/
+    1018 # Text scaler - https://extensions.gnome.org/extension/1018/text-scaler/
     1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
   )
 
@@ -1243,11 +1243,7 @@ InstallUnifyingOnLaptop(){
 }
 
 RemoveUnifyingOnLaptop(){
-  UNIFYINGPACKAGES=("solaar" "acpi")
-  for i in ${!UNIFYINGPACKAGES[@]};
-  do
-    rpm -q --quiet ${UNIFYINGPACKAGES[$i]}  && dnf remove -y ${UNIFYINGPACKAGES[$i]}
-  done
+  dnf remove -y solaar
 }
 
 InstallVMtoolsOnVM(){
@@ -1323,7 +1319,7 @@ InstallVMwareWorkstation(){
   cd /tmp
 
   # Starting with prerequisites
-  dnf -y install elfutils-libelf-devel
+  dnf install -y elfutils-libelf-devel
 
   wget --content-disposition -N -q --show-progress $VMWAREURL # Overwrite file, quiet
   chmod +x $BINARYFILENAME
@@ -1390,7 +1386,7 @@ InstallCitrixClient(){
   cd /tmp
 
   wget -q --show-progress $BINARYURL -O $BINARYFILENAME
-  dnf -y install $BINARYFILENAME
+  dnf install -y $BINARYFILENAME
 }
 
 RemoveCitrixClient(){
