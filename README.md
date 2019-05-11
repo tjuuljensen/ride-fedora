@@ -6,7 +6,7 @@ usage: bootstrap-loader.sh [--include \<function library file>] [--preset \<file
 
 ### Example
 
-bootstrap-loader.sh  --include fedora-install-functions.sh --include serialnumbers.config --preset default.preset actionFunction1 actionFunction2
+bootstrap-loader.sh  --include fedora-lib.sh --include serialnumbers.config --preset default.preset actionFunction1 actionFunction2
 
 ### FAQ
 **Q:** What is an action?
