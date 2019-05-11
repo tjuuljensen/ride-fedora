@@ -1,7 +1,7 @@
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Edited: 2019-05-04 16:00
+# Edited: May 11, 2019 14:00
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
 ##########
 
@@ -18,7 +18,7 @@ InstallRequired
 InstallShellTools          # RemoveShellTools
 InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
-#InstallFedy               # RemoveFedy
+# InstallFedy              # RemoveFedy
 
 ### Forensic Tools ###
 InstallForensicImageTools  # RemoveForensicImageTools
@@ -28,13 +28,22 @@ InstallExifTool            # RemoveExifTool
 ### Basic Tools and Support ###
 InstallExfatSupport        # RemoveExfatSupport
 InstallPackagingTools      # RemovePackagingTools
-InstallAtomEditor          # RemoveAtomEditor
-DisableAtomTelemetry       # EnableAtomTelemetry
-InstallAtomPlugins         # RemoveAtomPlugins
 InstallBasicEditors        # RemoveBasicEditors
 # InstallCommanderFileMgrs # RemoveCommanderFileMgrs
 InstallTerminator          # RemoveTerminator
+# InstallQbittorrent       # RemoveQbittorrent
+
+### Accessories ###
 InstallKeepassx            # RemoveKeepassx
+# InstallWoeUSB            # RemoveWoeUSB
+# InstallBalenaEtcher      #
+
+### Programming ####
+InstallVisualStudioCode
+InstallArduinoIDE          # RemoveArduinoIDE
+InstallAtomEditor          # RemoveAtomEditor
+DisableAtomTelemetry       # EnableAtomTelemetry
+InstallAtomPlugins         # RemoveAtomPlugins
 
 ### Communication ####
 InstallChatProgs           # RemoveChatProgs
@@ -46,7 +55,7 @@ InstallChatProgs           # RemoveChatProgs
 InstallNetworkTools        # RemoveNetworkTools
 InstallNetCommsTools       # RemoveNetCommsTools
 InstallNetMgrL2TP          # RemoveNetMgrL2TP
-#InstallOpenconnectVPN     #
+# InstallOpenconnectVPN    #
 
 ### Productivity Tools ###
 # InstallDia               # RemoveDia
@@ -70,6 +79,8 @@ InstallVLCPlayer            # RemoveVLCPlayer
 #InstallClementinePlayer    # RemoveClementinePlayer
 InstallPulseAudioEq         # RemovePulseAudioEq
 InstallYouTubeDownloader    # RemoveYouTubeDownloader
+InstallGIMP                 # RemoveGIMP
+InstallHandBrake            # RemoveHandBrake
 
 ### Gnome Tools & Tweaks ###
 InstallGnomeTools          # RemoveGnomeTools
@@ -103,9 +114,9 @@ InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 SetHostname
 
 ### Encryption Functions ###
-AddExtraLUKSpasswords
-# EncryptUnpartitionedDisks  # RemoveKeyFileMounts
-# ReclaimEncryptDWUnmntPrt   # RemoveKeyFileMounts
+# AddExtraLUKSpasswords
+# EncryptUnpartitionedDisks  # RemoveKeyfileMounts
+# ReclaimEncryptDWUnmntPrt   # RemoveKeyfileMounts
 
 ### Bootstrap End ###
 EnableScreenSaver           # DisableScreensaver

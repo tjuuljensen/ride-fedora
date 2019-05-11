@@ -1,10 +1,10 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: May 10, 2019 15:50
+# Edited: May 11, 2019 14:00
 # Latest verification done on Fedora 30
 #
-# This file is a function library only and is meant for . sourcing into other scripts
+# This file is a function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
 #
 
@@ -213,6 +213,95 @@ RemovePackagingTools(){
   dnf remove -y p7zip unrar
 }
 
+InstallBasicEditors(){
+  dnf install -y nano vim
+}
+
+RemoveBasicEditors(){
+  dnf remove -y nano vim
+}
+
+InstallCommanderFileMgrs(){
+  dnf install -y gnome-commander mc
+}
+
+RemoveCommanderFileMgrs(){
+  dnf remove -y gnome-commander mc
+}
+
+InstallTerminator(){
+  dnf install -y terminator
+}
+
+RemoveTerminator(){
+  dnf remove -y terminator
+}
+
+InstallQbittorrent(){
+  dnf install -y qbittorrent
+}
+
+RemoveQbittorrent(){
+  dnf remove -y qbittorrent
+}
+
+
+################################################################
+###### Accessories ###
+################################################################
+
+InstallKeepassx(){
+  dnf install -y keepassx
+}
+
+RemoveKeepassx(){
+  dnf remove -y keepassx
+}
+
+InstallWoeUSB(){
+  dnf install -y woeusb
+}
+
+RemoveWoeUSB(){
+  dnf remove -y woeusb
+}
+
+InstallBalenaEtcher() {
+  # For install details, see debian guide here: https://linuxhint.com/install_etcher_linux/
+  cd /tmp
+
+  dnf install zenity
+  URL=https://www.balena.io/etcher/
+  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep linux-x64 | xargs --no-run-if-empty wget -q --show-progress
+  unzip -o balena-etcher*
+  ETCHERAPP=$(ls balena*.AppImage)
+  mv $ETCHERAPP /opt
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" /opt/$ETCHERAPP &
+
+}
+
+
+################################################################
+###### Programming ####s
+################################################################
+
+InstallVisualStudioCode() {
+  # https://code.visualstudio.com/docs/setup/linux
+  sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+
+  dnf check-update
+  sudo dnf install code
+}
+
+InstallArduinoIDE(){
+  dnf install -y arduino
+}
+
+RemoveArduinoIDE(){
+  dnf remove -y arduino
+}
+
 InstallAtomEditor(){
   #Install atom repo
   # See more here https://flight-manual.atom.io/getting-started/sections/installing-atom/#platform-linux
@@ -319,37 +408,7 @@ RemoveAtomPlugins(){
     fi
 }
 
-InstallBasicEditors(){
-  dnf install -y nano vim
-}
 
-RemoveBasicEditors(){
-  dnf remove -y nano vim
-}
-
-InstallCommanderFileMgrs(){
-  dnf install -y gnome-commander mc
-}
-
-RemoveCommanderFileMgrs(){
-  dnf remove -y gnome-commander mc
-}
-
-InstallTerminator(){
-  dnf install -y terminator
-}
-
-RemoveTerminator(){
-  dnf remove -y terminator
-}
-
-InstallKeepassx(){
-  dnf install -y keepassx
-}
-
-RemoveKeepassx(){
-  dnf remove -y keepassx
-}
 
 
 ################################################################
@@ -848,6 +907,23 @@ RemoveYouTubeDownloader(){
   # remove Youtube Downloader
    dnf remove -y youtube-dl
 }
+
+InstallGIMP(){
+  dnf install -y gimp
+}
+
+RemoveGIMP(){
+  dnf remove -y gimp
+}
+
+InstallHandBrake(){
+  dnf install -y HandBrake
+}
+
+RemoveHandBrake(){
+  dnf remove -y HandBrake
+}
+
 
 ################################################################
 ###### Gnome Tools & Tweaks ###
@@ -1509,15 +1585,12 @@ EOF
                 #Update /etc/fstab
                 echo Updating /etc/fstab
                 echo "/dev/mapper/$LUKSNAME   $MOUNTPOINT   ext4   defaults  0  2" >> /etc/fstab
-
           fi
         done
-
     fi
-
 }
 
-RemoveKeyFileMounts(){
+RemoveKeyfileMounts(){
   # This function is made to *partially* revert the setup made by ReclaimEncryptDWUnmntPrt and EncryptUnpartitionedDisks
   # The function cleans up *all mounts* made with keyfiles (!!!)
   # No unmounts are being made, so you have to either reboot or manually unmount
