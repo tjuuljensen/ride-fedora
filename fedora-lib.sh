@@ -958,6 +958,7 @@ InstallGnomeExtensions(){
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
     120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
     517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
+    615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/ 
     1306 # Scale switcher - https://extensions.gnome.org/extension/1306/scale-switcher/
     1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
   )
