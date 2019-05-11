@@ -39,7 +39,7 @@ InstallKeepassx            # RemoveKeepassx
 # InstallBalenaEtcher      #
 
 ### Programming ####
-InstallVisualStudioCode
+InstallVisualStudioCode    # RemoveVisualStudioCode
 InstallArduinoIDE          # RemoveArduinoIDE
 InstallAtomEditor          # RemoveAtomEditor
 DisableAtomTelemetry       # EnableAtomTelemetry

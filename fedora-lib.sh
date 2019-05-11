@@ -289,11 +289,23 @@ InstallenaEtcher() {
 
 InstallVisualStudioCode() {
   # https://code.visualstudio.com/docs/setup/linux
-  sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-  sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+  VSCODEREPO=/etc/yum.repos.d/vscode.repo
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  echo -e "[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > $VSCODEREPO
 
-  dnf check-update
-  sudo dnf install code
+  dnf install -y code
+}
+
+RemoveVisualStudioCode() {
+  # https://code.visualstudio.com/docs/setup/linux
+  rpm -e gpg-pubkey-be1229cf-5631588c
+  rm /etc/yum.repos.d/vscode.repo
+  dnf remove -y code
 }
 
 InstallArduinoIDE(){
@@ -958,7 +970,7 @@ InstallGnomeExtensions(){
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
     120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
     517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
-    615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/ 
+    615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
     1306 # Scale switcher - https://extensions.gnome.org/extension/1306/scale-switcher/
     1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
   )
