@@ -266,8 +266,10 @@ RemoveWoeUSB(){
   dnf remove -y woeusb
 }
 
-InstallBalenaEtcher() {
+InstallenaEtcher() {
   # For install details, see debian guide here: https://linuxhint.com/install_etcher_linux/
+  # This function is not finished. It installs an old package
+
   cd /tmp
 
   dnf install zenity
