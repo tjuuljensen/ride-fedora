@@ -34,7 +34,9 @@ InstallTerminator          # RemoveTerminator
 # InstallQbittorrent       # RemoveQbittorrent
 
 ### Accessories ###
-InstallKeepassx            # RemoveKeepassx
+InstallKeepass             # RemoveKeepass
+InstallKeepassOtpKeyProv   # RemoveKeepassOtpKeyProv
+# InstallKeepassx          # RemoveKeepassx
 InstallWoeUSB              # RemoveWoeUSB
 InstallBalenaEtcher        # RemoveBalenaEtcher
 

@@ -250,6 +250,51 @@ RemoveQbittorrent(){
 ###### Accessories ###
 ################################################################
 
+InstallKeepass(){
+  dnf install -y keepass
+  mkdir /usr/lib/keepass/plugins
+}
+
+RemoveKeepass(){
+  dnf remove -y keepass
+  rmdir -rf /usr/lib/keepass/plugins
+}
+
+InstallKeepassOtpKeyProv(){
+# Install OtpKeyProv plugin for keepass - Key provider based on onetime passwords (OATH HOTP standard, RFC 4226)
+  if ( command -v keepass > /dev/null 2>&1 ) ; then # keepass is installed
+
+    if [ ! -d /usr/lib/keepass/plugins ] ; then # plugins directory does not exist
+      mkdir /usr/lib/keepass/plugins
+    fi
+
+    cd /tmp
+
+    # Find the OtpKey download URL
+    URL=https://keepass.info/plugins.html
+    PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | grep OtpKey | grep -vi source | sort -n -r | awk NR==1 )
+    OTPKEYURL="https://keepass.info/"$PARTIALURL
+    wget $OTPKEYURL
+    # unzip to plugins library
+    unzip OtpKey* -d /usr/lib/keepass/plugins/
+
+  else
+    echo keepass is not installed. Exiting.
+  fi
+}
+
+RemoveKeepassOtpKeyProv(){
+# Remove OtpKeyProv plugin
+
+    if [ -d /usr/lib/keepass/plugins ] ; then # plugins directory exists
+      rm /usr/lib/keepass/plugins/OtpKey* -f
+    else
+      echo No plugins library exist for keepass. Exiting.
+    fi
+
+}
+
+
 InstallKeepassx(){
   dnf install -y keepassx
 }
