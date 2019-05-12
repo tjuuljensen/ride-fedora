@@ -2,7 +2,7 @@
 #
 # Author: Torsten Juul-Jensen
 # Edited: May 11, 2019 14:00
-# Latest verification done on Fedora 30
+# Latest verification and tests done on Fedora 30
 #
 # This file is a function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
@@ -266,22 +266,27 @@ RemoveWoeUSB(){
   dnf remove -y woeusb
 }
 
-InstallenaEtcher() {
+InstallBalenaEtcher() {
   # For install details, see debian guide here: https://linuxhint.com/install_etcher_linux/
   # This function is not finished. It installs an old package
 
   cd /tmp
 
-  dnf install -y zenity
-  URL=https://www.balena.io/etcher/
-  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep linux-x64 | xargs --no-run-if-empty wget -q --show-progress
-  unzip -o balena-etcher*
-  ETCHERAPP=$(ls balena*.AppImage)
-  mv $ETCHERAPP /opt
-  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" /opt/$ETCHERAPP &
+  URL=https://github.com/balena-io/etcher/releases
+
+  # get the latest rpm package from balena website and install it
+  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep rpm | grep "x86_64" | sort -r -n | awk 'NR==1' )
+  BALENABINURL="https://github.com$PARTIALPATH"
+  dnf install -y $BALENABINURL
 
 }
 
+RemoveBalenaEtcher() {
+  # For install details, see debian guide here: https://linuxhint.com/install_etcher_linux/
+
+  dnf remove -y balena-etcher-electron
+
+}
 
 ################################################################
 ###### Programming ####s

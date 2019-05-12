@@ -35,12 +35,12 @@ InstallTerminator          # RemoveTerminator
 
 ### Accessories ###
 InstallKeepassx            # RemoveKeepassx
-# InstallWoeUSB            # RemoveWoeUSB
-# InstallBalenaEtcher      #
+InstallWoeUSB              # RemoveWoeUSB
+InstallBalenaEtcher        # RemoveBalenaEtcher
 
 ### Programming ####
-InstallVisualStudioCode    # RemoveVisualStudioCode
-InstallArduinoIDE          # RemoveArduinoIDE
+# InstallVisualStudioCode  # RemoveVisualStudioCode
+# InstallArduinoIDE        # RemoveArduinoIDE
 InstallAtomEditor          # RemoveAtomEditor
 DisableAtomTelemetry       # EnableAtomTelemetry
 InstallAtomPlugins         # RemoveAtomPlugins
