@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: May 11, 2019 14:00
+# Edited: May 13, 2019 08:00
 # Latest verification and tests done on Fedora 30
 #
 # This file is a function library only and is meant for sourcing into other scripts
@@ -251,6 +251,7 @@ RemoveQbittorrent(){
 ################################################################
 
 InstallKeepass(){
+  # Install the portable version og the original keepass (uses mono to run)
   dnf install -y keepass
   mkdir /usr/lib/keepass/plugins
 }
@@ -295,12 +296,12 @@ RemoveKeepassOtpKeyProv(){
 }
 
 
-InstallKeepassx(){
-  dnf install -y keepassx
+InstallKeepassXC(){
+  dnf install -y keepassxc
 }
 
-RemoveKeepassx(){
-  dnf remove -y keepassx
+RemoveKeepassXC(){
+  dnf remove -y keepassxc
 }
 
 InstallWoeUSB(){

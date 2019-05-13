@@ -1,7 +1,7 @@
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Edited: May 11, 2019 14:00
+# Edited: May 13, 2019 08:00
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
 ##########
 
@@ -34,9 +34,9 @@ InstallTerminator          # RemoveTerminator
 # InstallQbittorrent       # RemoveQbittorrent
 
 ### Accessories ###
-InstallKeepass             # RemoveKeepass
-InstallKeepassOtpKeyProv   # RemoveKeepassOtpKeyProv
-# InstallKeepassx          # RemoveKeepassx
+# InstallKeepass           # RemoveKeepass
+# InstallKeepassOtpKeyProv # RemoveKeepassOtpKeyProv
+InstallKeepassXC           # RemoveKeepassXC
 InstallWoeUSB              # RemoveWoeUSB
 InstallBalenaEtcher        # RemoveBalenaEtcher
 
