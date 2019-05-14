@@ -1025,6 +1025,7 @@ InstallGnomeExtensions(){
     517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
     1018 # Text scaler - https://extensions.gnome.org/extension/1018/text-scaler/
+    1166 # Extension Update Notifier - https://extensions.gnome.org/extension/1166/extension-update-notifier/
     1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
   )
 
