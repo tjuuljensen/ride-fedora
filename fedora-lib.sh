@@ -1432,13 +1432,15 @@ PatchVMwareModules(){
       echo Building modules for latest installed kernel $LATESTINSTALLEDKERNEL
       sudo -u $MYUSER make VM_UNAME=$LATESTINSTALLEDKERNEL
       make install VM_UNAME=$LATESTINSTALLEDKERNEL
+      echo "Make sure to reboot before starting VMware (You are running an older kernel than the compiled modules for VMware)"
     else # install for current kernel
       echo Building modules for current installed kernel $RUNNINGKERNEL
       sudo -u $MYUSER make
       make install
+      systemctl restart vmware
     fi
 
-    systemctl restart vmware
+
   else
     echo "There is not a valid branch in mkubecek's repo that matches current Mware version $VMWAREVERSION"
   fi
@@ -1502,7 +1504,14 @@ EncryptUnpartitionedDisks(){
 
   for DISKDEVICE in $UNPARTEDDISKS ; do
 
+    read -r -p -n 1 "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " RESPONSE
+    if [[ ! $REPLY =~ ^[Yy]$ ]] ; then # if NOT yes then exit
+      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
+    fi
+
     echo Removing partition table on $DISKDEVICE and creating new partition
+
+
 # to create the partitions programatically (rather than manually)
 # we're going to simulate the manual input to fdisk
 # The sed script strips off all the comments so that we can
@@ -1589,7 +1598,14 @@ ReclaimEncryptDWUnmntPrt(){
 
           #Check if DISKDEVICE has 0 partitions and is not a LUKS device itself
           if [ ${#NUMBEROFDEVICES} == ${#NUMBEROFUNMOUNTED} ] ; then
-            echo No mounted partitions found on $DISKDEVICE - cleaning and encrypting
+            echo No mounted partitions found on $DISKDEVICE
+
+            read -r -p -n 1 "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " RESPONSE
+            if [[ ! $REPLY =~ ^[Yy]$ ]] ; then # if NOT yes then exit
+              [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
+            fi
+
+            echo Cleaning and encrypting disk
 
             # to create the partitions programatically (rather than manually)
             # we're going to simulate the manual input to fdisk
