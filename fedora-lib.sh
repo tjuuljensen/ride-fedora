@@ -162,6 +162,8 @@ InstallFTKImager(){
   FTKURL=https://ad-zip.s3.amazonaws.com/ftkimager.3.1.1_fedora64.tar.gz
   FTKPKG=${FTKURL##${FTKURL%/*}"/"}
 
+  cd /tmp
+
   # download ftkimager from AccessSoftware and put it in /usr/bin
   wget -q --show-progress $FTKURL
   tar xzvf $FTKPKG -C /usr/bin/
@@ -1337,6 +1339,8 @@ InstallVeraCrypt(){
                 grep -v freebsd | grep -v legacy | grep setup.tar | grep -v sig | awk NR==1 | sed 's/&#43;/+/g')
   VERACRYPTPKG="${VERACRYPTURL##*/}"
 
+  cd /tmp
+
   wget -q --show-progress  $VERACRYPTURL
   tar xvjf $VERACRYPTPKG -C /tmp veracrypt-*-setup-gui-x64 #extract only the x64 bit console installer
   mv /tmp/veracrypt-*-setup-gui-x64  /tmp/veracrypt-setup-gui-x64
@@ -1431,7 +1435,7 @@ PatchVMwareModules(){
     else # install for current kernel
       echo Building modules for current installed kernel $RUNNINGKERNEL
       sudo -u $MYUSER make
-      make install 
+      make install
     fi
 
     systemctl restart vmware
