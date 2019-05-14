@@ -1361,7 +1361,7 @@ InstallVMwareWorkstation(){
   MAJORVERSION=$(echo $BINARYURL | cut -d '-' -f4 | cut -d '.' -f1) # In the format XX
   # Another way of getting MAJORVERSION: curl -sIkL $VMWAREURL | grep "filename=" | sed -r 's|^([^.]+).*$|\1|; s|^[^0-9]*([0-9]+).*$|\1|'
 
-  if [ ! -z "VMWARESERIAL$MAJORVERSION" ] ; then # VMWARESERIALXX of the current major release is defined in config file
+  if [ ! -z "VMWARESERIAL$MAJORVERSION" ] ; then # VMWARESERIALXX of the current major release is defined in include file
     # TMPSERIAL is used to translate serial numbers from config file - if major version is 15 then the value of the entry VMWARESERIAL15 is assigned to TMPSERIAL.
     TMPSERIAL=VMWARESERIAL$MAJORVERSION # Addressing of a dynamic variable is different. Therefore it is put into CURRENTVMWSERIAL
     CURRENTVMWSERIAL=${!TMPSERIAL}
@@ -1381,7 +1381,7 @@ InstallVMwareWorkstation(){
     /usr/lib/vmware/bin/vmware-vmx --new-sn $CURRENTVMWSERIAL #please note that this variable needs to be addressed differently because it's dynamically defined
   fi
 
-  vmware-modconfig --console --install-all --eulas-agreed
+  vmware-modconfig --console --install-all
 
   # enable 3D acceleration in VMware Workstation
   if [ ! -d $MYUSERDIR/.vmware ] ; then
@@ -1417,13 +1417,26 @@ PatchVMwareModules(){
   if [[ ! -z $(sudo -u $MYUSER git checkout workstation-$VMWAREVERSION 2>/dev/null) ]] ; then # current vmware version is a branch in mkubecek's github library
 
     # get github repo to recompile vmware kernel modules to newer kernel modules
-    git branch workstation-$VMWAREVERSION
-    sudo -u $MYUSER make
-    make install
+    #git branch workstation-$VMWAREVERSION
+
+    LATESTINSTALLEDKERNEL=$(rpm -qa kernel | sed 's/kernel-//g' | sort -r -V | awk 'NR==1' )
+    RUNNINGKERNEL=$(uname -r)
+    #LATESTKERNELVER=$(echo $LATESTINSTALLEDKERNEL | sed 's/kernel-//g' | sed 's/\.fc[0-9].*//g')
+
+    # Build for the latest kernel installed
+    if [ $LATESTINSTALLEDKERNEL != $RUNNINGKERNEL ] ; then
+      echo Building modules for latest installed kernel $LATESTINSTALLEDKERNEL
+      sudo -u $MYUSER make VM_UNAME=$LATESTINSTALLEDKERNEL
+      make install VM_UNAME=$LATESTINSTALLEDKERNEL
+    else # install for current kernel
+      echo Building modules for current installed kernel $RUNNINGKERNEL
+      sudo -u $MYUSER make
+      make install 
+    fi
 
     systemctl restart vmware
   else
-    echo "There is not a valid branch in mkubecek's repo that matches current VMware version $VMWAREVERSION"
+    echo "There is not a valid branch in mkubecek's repo that matches current Mware version $VMWAREVERSION"
   fi
 
 }
