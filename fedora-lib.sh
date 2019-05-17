@@ -1019,8 +1019,11 @@ RemoveSystemMonitor(){
 InstallGnomeExtensions(){
   # Install Gnome extensions
 
+  dnf install -y chrome-gnome-shell # Gnome integration for browsers
+
   GNOMEEXTENSIONS=(
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
+    15   # Alternate Tab - https://extensions.gnome.org/extension/15/alternatetab/
     120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
     517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
