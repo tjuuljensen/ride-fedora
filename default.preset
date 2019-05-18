@@ -56,7 +56,8 @@ InstallChatProgs           # RemoveChatProgs
 # DisableMulticastDNS      # EnableMulticastDNS
 InstallNetworkTools        # RemoveNetworkTools
 InstallNetCommsTools       # RemoveNetCommsTools
-InstallNetMgrL2TP          # RemoveNetMgrL2TP
+InstallNetMgrLibreswan     # RemoveNetMgrLibreswan
+# InstallNetMgrL2TP        # RemoveNetMgrL2TP
 # InstallOpenconnectVPN    #
 
 ### Productivity Tools ###

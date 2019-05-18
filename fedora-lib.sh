@@ -611,6 +611,14 @@ RemoveNetMgrL2TP(){
   dnf remove -y NetworkManager-l2tp NetworkManager-l2tp-gnome
 }
 
+InstallNetMgrLibreswan(){
+  dnf install -y NetworkManager-libreswan NetworkManager-libreswan-gnome
+}
+
+RemoveNetMgrLibreswan(){
+  dnf remove -y NetworkManager-libreswan NetworkManager-libreswan-gnome 
+}
+
 InstallOpenconnectVPN(){
   # OpenConnect for use with Juniper VPN
   dnf install -y automake libtool openssl-devel libxml2 libxml2-devel vpnc-script NetworkManager-openconnect-gnome
