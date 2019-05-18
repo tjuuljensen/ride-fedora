@@ -127,8 +127,6 @@ InstallFedy(){
 }
 
 RemoveFedy(){
-  # Installing fedy
-  # From https://www.folkswithhats.org/
 
   # Remove repo
   REPONAME=$(dnf -q repolist | grep -i fedy | cut -d ' ' -f1 | sed 's/*//g' | awk 'NR==1' )
@@ -162,7 +160,7 @@ InstallFTKImager(){
   FTKURL=https://ad-zip.s3.amazonaws.com/ftkimager.3.1.1_fedora64.tar.gz
   FTKPKG=${FTKURL##${FTKURL%/*}"/"}
 
-  cd /tmp
+  cd $DOWNLOADDIR
 
   # download ftkimager from AccessSoftware and put it in /usr/bin
   wget -q --show-progress $FTKURL
@@ -271,7 +269,7 @@ InstallKeepassOtpKeyProv(){
       mkdir /usr/lib/keepass/plugins
     fi
 
-    cd /tmp
+    cd $DOWNLOADDIR
 
     # Find the OtpKey download URL
     URL=https://keepass.info/plugins.html
@@ -318,7 +316,7 @@ InstallBalenaEtcher() {
   # For install details, see debian guide here: https://linuxhint.com/install_etcher_linux/
   # This function is not finished. It installs an old package
 
-  cd /tmp
+  cd $DOWNLOADDIR
 
   URL=https://github.com/balena-io/etcher/releases
 
@@ -513,7 +511,7 @@ InstallThunderbirdExts(){
       "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
     )
 
-    cd /tmp
+    cd $DOWNLOADDIR
 
     sudo -u $MYUSER thunderbird & # start Thunderbird so profile is created
     sleep 15
@@ -542,7 +540,7 @@ RemoveThunderbirdExts(){
       "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
     )
 
-    cd /tmp
+    cd $DOWNLOADDIR
 
     for ADDON in "${ADDONS[@]}"
     do
@@ -616,7 +614,7 @@ InstallNetMgrLibreswan(){
 }
 
 RemoveNetMgrLibreswan(){
-  dnf remove -y NetworkManager-libreswan NetworkManager-libreswan-gnome 
+  dnf remove -y NetworkManager-libreswan NetworkManager-libreswan-gnome
 }
 
 InstallOpenconnectVPN(){
@@ -873,7 +871,7 @@ InstallFirefoxAddons(){
       "video-downloadhelper"
     )
 
-    cd /tmp
+    cd $DOWNLOADDIR
 
     FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default 2>/dev/null)
 
@@ -914,7 +912,7 @@ RemoveFirefoxAddons(){
       "video-downloadhelper"
     )
 
-    cd /tmp
+    cd $DOWNLOADDIR
 
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
@@ -1351,11 +1349,11 @@ InstallVeraCrypt(){
                 grep -v freebsd | grep -v legacy | grep setup.tar | grep -v sig | awk NR==1 | sed 's/&#43;/+/g')
   VERACRYPTPKG="${VERACRYPTURL##*/}"
 
-  cd /tmp
+  cd $DOWNLOADDIR
 
   wget -q --show-progress  $VERACRYPTURL
-  tar xvjf $VERACRYPTPKG -C /tmp veracrypt-*-setup-gui-x64 #extract only the x64 bit console installer
-  mv /tmp/veracrypt-*-setup-gui-x64  /tmp/veracrypt-setup-gui-x64
+  tar xvjf $VERACRYPTPKG -C $DOWNLOADDIR veracrypt-*-setup-gui-x64 #extract only the x64 bit console installer
+  mv $DOWNLOADDIR/veracrypt-*-setup-gui-x64  /tmp/veracrypt-setup-gui-x64
   /tmp/veracrypt-setup-gui-x64 --quiet
 
 }
@@ -1383,7 +1381,7 @@ InstallVMwareWorkstation(){
     CURRENTVMWSERIAL=${!TMPSERIAL}
   fi
 
-  cd /tmp
+  cd $DOWNLOADDIR
 
   # Starting with prerequisites
   dnf install -y elfutils-libelf-devel
@@ -1465,7 +1463,7 @@ InstallCitrixClient(){
   BINARYURL="https:$(curl $CITRIXCLIENTURL 2>&1 | grep rel | grep rhel | grep x86_64 | sed 's/^.*rel/rel/' | cut -d '"' -f2 | grep Web)"
   BINARYFILENAME=$(echo "${BINARYURL##*/}" | sed 's/?.*//' )
 
-  cd /tmp
+  cd $DOWNLOADDIR
 
   wget -q --show-progress $BINARYURL -O $BINARYFILENAME
   dnf install -y $BINARYFILENAME
