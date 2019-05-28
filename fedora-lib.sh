@@ -109,9 +109,13 @@ InstallFedy(){
   # Depends on rpmfusion
   # From https://www.folkswithhats.org/
 
+  # Dependencies URLs
+  RPMFUSIONURL=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$FEDORARELEASE.noarch.rpm
+  RPMFUSIONNONFREEURL=https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$FEDORARELEASE.noarch.rpm
+
   FEDYRELEASEURL="https://dl.folkswithhats.org/fedora/$(rpm -E %fedora)/RPMS/fedy-release.rpm"
 
-  if ( wget -q "$FEDYRELEASEURL" ) ; then # the file is there
+if ( wget -q "$FEDYRELEASEURL" ) ; then # the file is there
     dnf install -y $FEDYRELEASEURL
     dnf install -y $RPMFUSIONURL $RPMFUSIONNONFREEURL
     dnf install -y fedy
@@ -305,11 +309,11 @@ RemoveKeepassXC(){
 }
 
 InstallWoeUSB(){
-  dnf install -y woeusb
+  dnf install -y WoeUSB
 }
 
 RemoveWoeUSB(){
-  dnf remove -y woeusb
+  dnf remove -y WoeUSB
 }
 
 InstallBalenaEtcher() {
@@ -1515,7 +1519,7 @@ EncryptUnpartitionedDisks(){
   for DISKDEVICE in $UNPARTEDDISKS ; do
 
     read -r -p -n 1 "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " RESPONSE
-    if [[ ! $REPLY =~ ^[Yy]$ ]] ; then # if NOT yes then exit
+    if [[ ! $RESPONSE =~ ^[Yy]$ ]] ; then # if NOT yes then exit
       [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
     fi
 
@@ -1611,7 +1615,7 @@ ReclaimEncryptDWUnmntPrt(){
             echo No mounted partitions found on $DISKDEVICE
 
             read -r -p -n 1 "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " RESPONSE
-            if [[ ! $REPLY =~ ^[Yy]$ ]] ; then # if NOT yes then exit
+            if [[ ! $RESPONSE =~ ^[Yy]$ ]] ; then # if NOT yes then exit
               [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
             fi
 
