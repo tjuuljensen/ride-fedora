@@ -1553,14 +1553,14 @@ EOF
     echo Opening encrypted device and creating ext4 filesystem
     cryptsetup luksOpen $NEWPARTITION $LUKSNAME
     mkfs.ext4 /dev/mapper/$LUKSNAME
-    MOUNTPOINT=$MOUNTBASE/$DEVICENAME
+    MOUNTPOINT=$MOUNTBASE/$HDDUUID
     mkdir -p $MOUNTPOINT
     mount /dev/mapper/$LUKSNAME $MOUNTPOINT
     chmod 755 $MOUNTPOINT
     chown $MYUSER:$MYUSER $MOUNTPOINT
 
     # rotate keyfile
-    KEYFILE=/root/keyfile_$DEVICENAME
+    KEYFILE=/root/keyfile_$HDDUUID
     if [ -f $KEYFILE ] ; then
       i=1
       NEWKEYFILE=$KEYFILE.$i
@@ -1575,7 +1575,7 @@ EOF
     # Generate key file for LUKS encryption
     dd if=/dev/urandom of=$KEYFILE bs=1024 count=4
     chmod 0400 $KEYFILE
-    echo Adding a keyfile for $DEVICENAME for atomount configuration
+    echo Adding a keyfile for $DEVICENAME for atomount configuration on $MOUNTPOINT
     cryptsetup -v luksAddKey $NEWPARTITION $KEYFILE
 
     #Update /etc/crypttab
@@ -1648,28 +1648,14 @@ EOF
                 echo Opening encrypted device and creating ext4 filesystem
                 cryptsetup luksOpen $NEWPARTITION $LUKSNAME
                 mkfs.ext4 /dev/mapper/$LUKSNAME
-                MOUNTPOINT=$MOUNTBASE/$DEVICENAME
+                MOUNTPOINT=$MOUNTBASE/$HDDUUID
                 mkdir -p $MOUNTPOINT
                 mount /dev/mapper/$LUKSNAME $MOUNTPOINT
                 chmod 755 $MOUNTPOINT
                 chown $MYUSER:$MYUSER $MOUNTPOINT
 
                 # rotate keyfile
-                KEYFILE=/root/keyfile_$DEVICENAME
-                if [ -f $KEYFILE ] ; then
-                  i=1
-                  NEWKEYFILE=$KEYFILE.$i
-                  while [ -f $NEWKEYFILE ]
-                  do
-                    i=$(( $i + 1 ))
-                    NEWKEYFILE="$KEYFILE.$i"
-                  done
-                  mv $KEYFILE $NEWKEYFILE
-                fi
-
-                KEYFILE=/root/keyfile_$DEVICENAME
-                # rotate keyfile
-                KEYFILE=/root/keyfile_$DEVICENAME
+                KEYFILE=/root/keyfile_$HDDUUID
                 if [ -f $KEYFILE ] ; then
                   i=1
                   NEWKEYFILE=$KEYFILE.$i
@@ -1684,7 +1670,7 @@ EOF
                 # Generate key file for LUKS encryption
                 dd if=/dev/urandom of=$KEYFILE bs=1024 count=4
                 chmod 0400 $KEYFILE
-                echo Adding a keyfile for $DEVICENAME for atomount configuration
+                echo Adding a keyfile for $DEVICENAME for atomount configuration on $MOUNTPOINT
                 cryptsetup luksAddKey $NEWPARTITION $KEYFILE
 
                 #Update /etc/crypttab
@@ -1709,14 +1695,14 @@ RemoveKeyfileMounts(){
 
   while [[ $(grep -in "root/keyfile" /etc/crypttab) ]]
   do
-    FIRSTLINE2DEL=$(grep -in "root/keyfile" /etc/crypttab | cut -c1-2 | cut -d ':' -f1 | awk NR==1)
+    FIRSTLINE2DEL=$(grep -in "root/keyfile" /etc/crypttab | cut -d ':' -f1 | awk NR==1)
     sed -i $FIRSTLINE2DEL"d" /etc/crypttab  # Remove lines from crypttab
   done
 
   for LUKSDEVICE in $LUKSNAMES ; do
     while [[ $(grep -in $LUKSDEVICE /etc/fstab) ]]
     do
-      FIRSTLINE2DEL=$(grep -in $LUKSDEVICE /etc/fstab | cut -c1-2 | cut -d ':' -f1 | awk NR==1)
+      FIRSTLINE2DEL=$(grep -in $LUKSDEVICE /etc/fstab | cut -d ':' -f1 | awk NR==1)
       sed -i $FIRSTLINE2DEL"d" /etc/fstab  # Remove lines from fstab
     done
   done
