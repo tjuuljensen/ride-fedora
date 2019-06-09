@@ -1518,7 +1518,7 @@ EncryptUnpartitionedDisks(){
 
   for DISKDEVICE in $UNPARTEDDISKS ; do
 
-    read -r -p -n 1 "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " RESPONSE
+    read -r -p "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " -n 1  RESPONSE
     if [[ ! $RESPONSE =~ ^[Yy]$ ]] ; then # if NOT yes then exit
       [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
     fi
@@ -1580,7 +1580,7 @@ EOF
 
     #Update /etc/crypttab
     echo Updating /etc/crypttab
-    echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$DEVICENAME" >> /etc/crypttab
+    echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$HDDUUID" >> /etc/crypttab
 
     #Update /etc/fstab
     echo Updating /etc/fstab
@@ -1675,7 +1675,7 @@ EOF
 
                 #Update /etc/crypttab
                 echo Updating /etc/crypttab
-                echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$DEVICENAME" >> /etc/crypttab
+                echo "$LUKSNAME UUID=$HDDUUID /root/keyfile_$HDDUUID" >> /etc/crypttab
 
                 #Update /etc/fstab
                 echo Updating /etc/fstab
