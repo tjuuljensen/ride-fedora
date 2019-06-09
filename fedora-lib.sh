@@ -1614,7 +1614,7 @@ ReclaimEncryptDWUnmntPrt(){
           if [ ${#NUMBEROFDEVICES} == ${#NUMBEROFUNMOUNTED} ] ; then
             echo No mounted partitions found on $DISKDEVICE
 
-            read -r -p -n 1 "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " RESPONSE
+            read -r -p "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " -n 1  RESPONSE
             if [[ ! $RESPONSE =~ ^[Yy]$ ]] ; then # if NOT yes then exit
               [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
             fi
