@@ -19,6 +19,7 @@ InstallShellTools          # RemoveShellTools
 InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
 # InstallFedy              # RemoveFedy
+InstallVersionLock         # RemoveVersionLock
 
 ### Forensic Tools ###
 InstallForensicImageTools  # RemoveForensicImageTools

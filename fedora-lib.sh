@@ -143,6 +143,14 @@ RemoveFedy(){
   [[ -d $MYUSERDIR/git/fedy ]] && rm $MYUSERDIR/git/fedy -rf
 }
 
+InstallVersionLock(){
+    dnf install python3-dnf-plugin-versionlock
+}
+
+RemoveVersionLock(){
+    dnf remove python3-dnf-plugin-versionlock
+}
+
 
 ################################################################
 ###### Forensic Tools ###
