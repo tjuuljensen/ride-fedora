@@ -144,11 +144,11 @@ RemoveFedy(){
 }
 
 InstallVersionLock(){
-    dnf install python3-dnf-plugin-versionlock
+    dnf install -y python3-dnf-plugin-versionlock
 }
 
 RemoveVersionLock(){
-    dnf remove python3-dnf-plugin-versionlock
+    dnf remove -y python3-dnf-plugin-versionlock
 }
 
 
@@ -243,10 +243,14 @@ RemoveCommanderFileMgrs(){
 
 InstallTerminator(){
   dnf install -y terminator
+  # Change iBus keyboard shortcut to not interfere with Terminator
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.freedesktop.ibus.panel.emoji hotkey "['<Control><Alt><Shift>e']"
 }
 
 RemoveTerminator(){
   dnf remove -y terminator
+  # Change iBus keyboard back to default
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.freedesktop.ibus.panel.emoji hotkey "['<Control><Shift>e']"
 }
 
 InstallQbittorrent(){
