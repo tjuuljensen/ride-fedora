@@ -1348,7 +1348,30 @@ RemoveVMtoolsOnVM(){
 InstallOwnCloudClient(){
   # OwnCloud client
   FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
-  dnf config-manager --add-repo http://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_$FEDORARELEASE/isv:ownCloud:desktop.repo
+  if ( ! dnf config-manager --add-repo http://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_$FEDORARELEASE/isv:ownCloud:desktop.repo ) ; then
+    echo "[-] Adding OwnCloud repo failed. Installing latest rpm from web"
+
+    # manually resolve latest linked owncloud-client rpm
+    OCDOWNLOADURL="https://download.opensuse.org/repositories/isv:/ownCloud:/desktop/"
+    LATESTRELEASE=$(curl $OCDOWNLOADURL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'Fedora' | uniq | cut -d'"' -f2 | sort -r | awk NR==1 )
+    PACKAGEURL="$OCDOWNLOADURL$LATESTRELEASE"x86_64/
+    LATESTPACKAGE=$(curl $PACKAGEURL/ 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2  \
+      | grep -v dolphin | grep -v nemo | grep -v overlays | grep -v caja | grep -v debug | grep -v l10n | grep -v doc | grep -v mirrorlist | grep -v nautilus | uniq | grep owncloud-client )
+    LATESTPACKAGEURL=$PACKAGEURL$LATESTPACKAGE
+
+    # Get latest package and install
+    cd $DOWNLOADDIR
+    wget $LATESTPACKAGEURL
+    dnf -y install $LATESTPACKAGE
+
+    # Get latest nautilus package and install
+    #LATESTNAUTILUSPACKAGE=$(curl $PACKAGEURL/ 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2  \
+    #  | grep -v dolphin | grep -v nemo | grep -v overlays | grep -v caja | grep -v debug | grep -v l10n | grep -v doc | grep -v mirrorlist | uniq | grep owncloud-client | grep nautilus )
+    #LATESTNAUTILUSPACKAGEURL=$PACKAGEURL$LATESTNAUTILUSPACKAGE
+    #wget $LATESTNAUTILUSPACKAGEURL
+
+  fi
+
   dnf install -y owncloud-client
 }
 
