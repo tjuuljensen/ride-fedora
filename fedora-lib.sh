@@ -1252,7 +1252,7 @@ RemoveCustomKbrdShortcut(){
 }
 
 SetGnomeCustomFavorites(){
-    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'vmware-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'veracrypt.desktop', 'org.keepassxc.KeePassXC.desktop', 'terminator.desktop' ]"
+    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 're-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'veracrypt.desktop', 'org.keepassxc.KeePassXC.desktop', 'terminator.desktop' ]"
 }
 
 SetGnomeDefaultFavorites(){
@@ -1328,7 +1328,7 @@ RemoveUnifyingOnLaptop(){
 InstallVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i VMware | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-product-name | grep -i re | wc -l ) -ne 0 ] ; then
     dnf install -y open-vm-tools
   fi
 }
@@ -1336,7 +1336,7 @@ InstallVMtoolsOnVM(){
 RemoveVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i VMware | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-product-name | grep -i re | wc -l ) -ne 0 ] ; then
     rpm -q --quiet open-vm-tools && dnf remove -y open-vm-tools
   fi
 }
@@ -1408,11 +1408,18 @@ InstallVMwareWorkstation(){
   # if serialnumberfile is sourced with script, it can autoadd serial number
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
+  #BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer using wget (original method)
+  BINARYURL=$(curl -sI  $VMWAREURL | grep -o -E 'Location:.*$' | sed -e 's/Location: //') # Full URL to binary installer using curl
   BINARYFILENAME="${BINARYURL##*/}" # Filename of binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
   MAJORVERSION=$(echo $BINARYURL | cut -d '-' -f4 | cut -d '.' -f1) # In the format XX
   # Another way of getting MAJORVERSION: curl -sIkL $VMWAREURL | grep "filename=" | sed -r 's|^([^.]+).*$|\1|; s|^[^0-9]*([0-9]+).*$|\1|'
+
+  echo VMWAREVERSION: $VMWAREVERSION
+  echo MAJORVERSION: $MAJORVERSION
+  echo SERIALvariable: VMWARESERIAL$MAJORVERSION
+  exit 0
+  # FIXME
 
   if [ ! -z "VMWARESERIAL$MAJORVERSION" ] ; then # VMWARESERIALXX of the current major release is defined in include file
     # TMPSERIAL is used to translate serial numbers from config file - if major version is 15 then the value of the entry VMWARESERIAL15 is assigned to TMPSERIAL.
