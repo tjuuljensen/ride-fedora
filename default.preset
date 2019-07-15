@@ -103,7 +103,7 @@ SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 
 ### Miscellaneous tweaks and installs  ###
 InstallCheat                # RemoveCheat
-InstallThinkfanOnThinkpad   # RemoveThinkfanIfInstalled
+# InstallThinkfanOnThinkpad   # RemoveThinkfanIfInstalled
 InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
 InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 
