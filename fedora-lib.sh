@@ -501,7 +501,7 @@ InstallChatProgs(){
 }
 
 RemoveChatProgs(){
-  dnf install -y hexchat pidgin pidgin-otr
+  dnf remove -y hexchat pidgin pidgin-otr
 }
 
 InstallThunderbird(){
