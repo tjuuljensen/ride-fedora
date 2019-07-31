@@ -1456,7 +1456,7 @@ PatchVMwareModules(){
   # Relies on repo maintaned by mkubecek on https://github.com/mkubecek/vmware-host-modules
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
+  BINARYURL=$(curl -sI  $VMWAREURL | grep -o -E 'Location:.*$' | sed -e 's/Location: //' | sed 's/\r//g') # Full URL to binary installer using curl (and remove CR in the end)
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
 
   systemctl stop vmware
