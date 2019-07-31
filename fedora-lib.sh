@@ -1408,7 +1408,6 @@ InstallVMwareWorkstation(){
   # if serialnumberfile is sourced with script, it can autoadd serial number
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  #BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer using wget (original method)
   BINARYURL=$(curl -sI  $VMWAREURL | grep -o -E 'Location:.*$' | sed -e 's/Location: //' | sed 's/\r//g') # Full URL to binary installer using curl (and remove CR in the end)
   BINARYFILENAME="${BINARYURL##*/}" # Filename of binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
