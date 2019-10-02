@@ -885,6 +885,15 @@ InstallFirefoxAddons(){
       "print-friendly-pdf"
       "disable-autoplay"
       "video-downloadhelper"
+      # "bulk-media-downloader"
+      # "fireshot"
+      # "nimbus-screenshot"
+      # "exif-viewer"
+      # "mjsonviewer"
+      # "user-agent-switcher-revived"
+      # "image-search-options"
+      # "google-translator-webextension"
+      # "link-gopher" # Not the one mentioned in the OSINT Techniques boks
     )
 
     cd $DOWNLOADDIR
