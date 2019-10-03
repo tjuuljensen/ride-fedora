@@ -1408,7 +1408,7 @@ InstallVMwareWorkstation(){
   # if serialnumberfile is sourced with script, it can autoadd serial number
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
+  BINARYURL=$(curl -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
   BINARYFILENAME="${BINARYURL##*/}" # Filename of binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
   MAJORVERSION=$(echo $BINARYURL | cut -d '-' -f4 | cut -d '.' -f1) # In the format XX
@@ -1455,7 +1455,7 @@ PatchVMwareModules(){
   # Relies on repo maintaned by mkubecek on https://github.com/mkubecek/vmware-host-modules
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(wget $VMWAREURL -O - --content-disposition --spider 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
+  BINARYURL=$(curl -I $VMWAREURL 2>&1 | grep Location | cut -d ' ' -f2) # Full URL to binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
 
   systemctl stop vmware
@@ -1463,9 +1463,12 @@ PatchVMwareModules(){
   cd $MYUSERDIR/git
   if [ ! -d vmware-host-modules ]; then
     sudo -u $MYUSER git clone https://github.com/mkubecek/vmware-host-modules.git
+    cd vmware-host-modules
+  else
+    cd vmware-host-modules
+    sudo -u $MYUSER git pull
   fi
 
-  cd vmware-host-modules
 
   if [[ ! -z $(sudo -u $MYUSER git checkout workstation-$VMWAREVERSION 2>/dev/null) ]] ; then # current vmware version is a branch in mkubecek's github library
 
