@@ -1297,10 +1297,10 @@ RemoveCheat(){
     dnf remove -y cheat
 }
 
-
 InstallThinkfanOnThinkpad(){
   # http://thinkfan.sourceforge.net/
-  #Check if machine is a ThinkPad
+  # July 2019: I noticed that it is failing in Fedora 30 - is it deprecated? (removed from preset)
+  # Check if machine is a ThinkPad
   if [ $( dmidecode -s system-version | grep ThinkPad -i | wc -l ) -ne 0 ] ; then
   # install the thinkfan program
     dnf install -y thinkfan
@@ -1328,7 +1328,7 @@ RemoveUnifyingOnLaptop(){
 InstallVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i VMware | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-product-name | grep -i WMware | wc -l ) -ne 0 ] ; then
     dnf install -y open-vm-tools
   fi
 }
@@ -1336,7 +1336,7 @@ InstallVMtoolsOnVM(){
 RemoveVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i VMware | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-product-name | grep -i WMware | wc -l ) -ne 0 ] ; then
     rpm -q --quiet open-vm-tools && dnf remove -y open-vm-tools
   fi
 }
