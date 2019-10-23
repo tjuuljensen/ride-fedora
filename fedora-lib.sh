@@ -204,8 +204,21 @@ InstallExfatSupport(){
 }
 
 RemoveExfatSupport(){
-  # install exfat utils (depends on RPMfusion)
+  # remove exfat utils
   dnf remove -y exfat-utils fuse-exfat
+}
+
+InstallVMFStools(){
+  # install vmfs tools
+  URL=https://github.com/rpmsphere/x86_64/tree/master/v
+  PARTIALURL=$(curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep vmfs-tools |  cut -d'"' -f8 | sed 's/blob/raw/g' )
+  RPMURL=https://github.com$PARTIALURL
+  dnf install -y $RPMURL
+}
+
+RemoveVMFStools(){
+  # install vmfs tools
+  dnf remove -y vmfs-tools
 }
 
 InstallPython(){

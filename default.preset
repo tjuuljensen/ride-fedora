@@ -28,6 +28,7 @@ InstallExifTool            # RemoveExifTool
 
 ### Basic Tools and Support ###
 InstallExfatSupport        # RemoveExfatSupport
+InstallVMFStools           # RemoveVMFStools
 InstallPackagingTools      # RemovePackagingTools
 InstallBasicEditors        # RemoveBasicEditors
 # InstallCommanderFileMgrs # RemoveCommanderFileMgrs
@@ -39,7 +40,7 @@ InstallTerminator          # RemoveTerminator
 # InstallKeepassOtpKeyProv # RemoveKeepassOtpKeyProv
 InstallKeepassXC           # RemoveKeepassXC
 InstallWoeUSB              # RemoveWoeUSB
-InstallBalenaEtcher        # RemoveBalenaEtcher
+# InstallBalenaEtcher      # RemoveBalenaEtcher
 
 ### Programming ####
 # InstallVisualStudioCode  # RemoveVisualStudioCode
