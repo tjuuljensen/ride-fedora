@@ -660,6 +660,15 @@ InstallOpenconnectVPN(){
   make install
 }
 
+InstallSpeedtestCLI(){
+  dnf intall -y speedtest-cli
+}
+
+RemoveSpeedtestCLI(){
+  dnf remove -y speedtest-cli
+}
+
+
 ################################################################
 ###### Productivity Tools ###
 ################################################################

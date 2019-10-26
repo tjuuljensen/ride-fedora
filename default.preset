@@ -61,6 +61,7 @@ InstallNetCommsTools       # RemoveNetCommsTools
 InstallNetMgrLibreswan     # RemoveNetMgrLibreswan
 # InstallNetMgrL2TP        # RemoveNetMgrL2TP
 # InstallOpenconnectVPN    #
+InstallSpeedtestCLI        # RemoveSpeedtestCLI
 
 ### Productivity Tools ###
 # InstallDia               # RemoveDia
