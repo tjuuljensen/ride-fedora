@@ -907,6 +907,8 @@ InstallFirefoxAddons(){
       "print-friendly-pdf"
       "disable-autoplay"
       "video-downloadhelper"
+      "fireshot"
+      "wayback-machine_new"
     )
 
     cd $DOWNLOADDIR
@@ -948,6 +950,8 @@ RemoveFirefoxAddons(){
       "print-friendly-pdf"
       "disable-autoplay"
       "video-downloadhelper"
+      "fireshot"
+      "wayback-machine_new"
     )
 
     cd $DOWNLOADDIR
