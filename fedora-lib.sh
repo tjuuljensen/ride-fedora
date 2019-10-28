@@ -972,6 +972,40 @@ RemoveFirefoxAddons(){
   fi
 }
 
+InstallOpera(){
+  # Install signing key
+  rpm --import https://rpm.opera.com/rpmrepo.key
+
+  # Manually create repo file
+  OPERAREPOFILE=/etc/yum.repos.d/opera.repo
+
+  echo '[opera]
+name=Opera packages
+type=rpm-md
+baseurl=https://rpm.opera.com/rpm
+gpgcheck=1
+gpgkey=https://rpm.opera.com/rpmrepo.key
+enabled=1' > $OPERAREPOFILE
+
+  dnf install -y opera-developer
+
+}
+
+RemoveOpera(){
+  # remove package
+  dnf remove -y opera-developer
+
+  # remove repo file
+  OPERAREPOFILE=/etc/yum.repos.d/opera.repo
+  rm $OPERAREPOFILE
+
+  # remove Opera signing keys
+  rpm -e gpg-pubkey-abdc4346-5d79ff84
+  rpm -e gpg-pubkey-a5c7ff72-58ecd72d
+
+}
+
+
 ################################################################
 ###### Multimedia ###
 ################################################################
@@ -1329,21 +1363,6 @@ InstallCheat(){
 RemoveCheat(){
     dnf copr disable tkorbar/cheat
     dnf remove -y cheat
-}
-
-InstallThinkfanOnThinkpad(){
-  # http://thinkfan.sourceforge.net/
-  # July 2019: I noticed that it is failing in Fedora 30 - is it deprecated? (removed from preset)
-  # Check if machine is a ThinkPad
-  if [ $( dmidecode -s system-version | grep ThinkPad -i | wc -l ) -ne 0 ] ; then
-  # install the thinkfan program
-    dnf install -y thinkfan
-    systemctl enable thinkfan.service # enable service
-  fi
-}
-
-RemoveThinkfanIfInstalled(){
-      rpm -q --quiet thinkfan && dnf remove -y thinkfan
 }
 
 InstallUnifyingOnLaptop(){

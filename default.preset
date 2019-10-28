@@ -78,6 +78,7 @@ InstallChrome               # RemoveChrome
 SetChromePreferences        # UnsetChromePreferences
 SetFirefoxPreferences       # UnsetFirefoxPreferences
 InstallFirefoxAddons        # RemoveFirefoxAddons
+# InstallOpera              # RemoveOpera
 
 ### Multimedia ###
 InstallSpotifyClient        # RemoveSpotifyClient
@@ -105,7 +106,6 @@ SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 
 ### Miscellaneous tweaks and installs  ###
 InstallCheat                # RemoveCheat
-# InstallThinkfanOnThinkpad   # RemoveThinkfanIfInstalled
 InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
 InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 
