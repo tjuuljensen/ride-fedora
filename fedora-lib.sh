@@ -909,6 +909,14 @@ InstallFirefoxAddons(){
       "video-downloadhelper"
       "fireshot"
       "wayback-machine_new"
+      "exif-viewer"
+      "link-gopher"
+      "nimbus-screenshot"
+      # "bulk-media-downloader"
+      # "mjsonviewer"
+      # "user-agent-switcher-revived"
+      # "image-search-options"
+      # "google-translator-webextension"
     )
 
     cd $DOWNLOADDIR
