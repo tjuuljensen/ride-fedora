@@ -204,8 +204,21 @@ InstallExfatSupport(){
 }
 
 RemoveExfatSupport(){
-  # install exfat utils (depends on RPMfusion)
+  # remove exfat utils
   dnf remove -y exfat-utils fuse-exfat
+}
+
+InstallVMFStools(){
+  # install vmfs tools
+  URL=https://github.com/rpmsphere/x86_64/tree/master/v
+  PARTIALURL=$(curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep vmfs-tools |  cut -d'"' -f8 | sed 's/blob/raw/g' )
+  RPMURL=https://github.com$PARTIALURL
+  dnf install -y $RPMURL
+}
+
+RemoveVMFStools(){
+  # install vmfs tools
+  dnf remove -y vmfs-tools
 }
 
 InstallPython(){
@@ -647,6 +660,15 @@ InstallOpenconnectVPN(){
   make install
 }
 
+InstallSpeedtestCLI(){
+  dnf intall -y speedtest-cli
+}
+
+RemoveSpeedtestCLI(){
+  dnf remove -y speedtest-cli
+}
+
+
 ################################################################
 ###### Productivity Tools ###
 ################################################################
@@ -885,15 +907,8 @@ InstallFirefoxAddons(){
       "print-friendly-pdf"
       "disable-autoplay"
       "video-downloadhelper"
-      # "bulk-media-downloader"
-      # "fireshot"
-      # "nimbus-screenshot"
-      # "exif-viewer"
-      # "mjsonviewer"
-      # "user-agent-switcher-revived"
-      # "image-search-options"
-      # "google-translator-webextension"
-      # "link-gopher" # Not the one mentioned in the OSINT Techniques boks
+      "fireshot"
+      "wayback-machine_new"
     )
 
     cd $DOWNLOADDIR
@@ -935,6 +950,8 @@ RemoveFirefoxAddons(){
       "print-friendly-pdf"
       "disable-autoplay"
       "video-downloadhelper"
+      "fireshot"
+      "wayback-machine_new"
     )
 
     cd $DOWNLOADDIR
@@ -1261,7 +1278,7 @@ RemoveCustomKbrdShortcut(){
 }
 
 SetGnomeCustomFavorites(){
-    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 're-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'veracrypt.desktop', 'org.keepassxc.KeePassXC.desktop', 'terminator.desktop' ]"
+    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'vmware-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'veracrypt.desktop', 'org.keepassxc.KeePassXC.desktop', 'terminator.desktop' ]"
 }
 
 SetGnomeDefaultFavorites(){
@@ -1337,7 +1354,7 @@ RemoveUnifyingOnLaptop(){
 InstallVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i re | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-product-name | grep -i WMware | wc -l ) -ne 0 ] ; then
     dnf install -y open-vm-tools
   fi
 }
@@ -1345,7 +1362,7 @@ InstallVMtoolsOnVM(){
 RemoveVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i re | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-product-name | grep -i WMware | wc -l ) -ne 0 ] ; then
     rpm -q --quiet open-vm-tools && dnf remove -y open-vm-tools
   fi
 }
@@ -1417,7 +1434,7 @@ InstallVMwareWorkstation(){
   # if serialnumberfile is sourced with script, it can autoadd serial number
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(curl -sI  $VMWAREURL | grep -o -E 'Location:.*$' | sed -e 's/Location: //' | sed 's/\r//g') # Full URL to binary installer using curl (and remove CR in the end)
+  BINARYURL=$(curl -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
   BINARYFILENAME="${BINARYURL##*/}" # Filename of binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
   MAJORVERSION=$(echo $BINARYURL | cut -d '-' -f4 | cut -d '.' -f1) # In the format XX
@@ -1464,7 +1481,7 @@ PatchVMwareModules(){
   # Relies on repo maintaned by mkubecek on https://github.com/mkubecek/vmware-host-modules
 
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(curl -sI  $VMWAREURL | grep -o -E 'Location:.*$' | sed -e 's/Location: //' | sed 's/\r//g') # Full URL to binary installer using curl (and remove CR in the end)
+  BINARYURL=$(curl -I $VMWAREURL 2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
 
   systemctl stop vmware
@@ -1472,9 +1489,12 @@ PatchVMwareModules(){
   cd $MYUSERDIR/git
   if [ ! -d vmware-host-modules ]; then
     sudo -u $MYUSER git clone https://github.com/mkubecek/vmware-host-modules.git
+    cd vmware-host-modules
+  else
+    cd vmware-host-modules
+    sudo -u $MYUSER git pull
   fi
 
-  cd vmware-host-modules
 
   if [[ ! -z $(sudo -u $MYUSER git checkout workstation-$VMWAREVERSION 2>/dev/null) ]] ; then # current vmware version is a branch in mkubecek's github library
 
