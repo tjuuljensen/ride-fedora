@@ -18,10 +18,10 @@ MYUSERDIR=/home/$MYUSER
 ###### Auxiliary Functions  ###
 ################################################################
 
-RequireAdmin(){
+#RequireAdmin(){
     # check if script is root and restart as root if not
-    [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
-}
+#    [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
+#}
 
 SetupUserDefaultDirs(){
   # Create user's bin and git directories
@@ -274,6 +274,23 @@ RemoveQbittorrent(){
   dnf remove -y qbittorrent
 }
 
+InstallPowerShell(){
+  # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6#fedora
+
+  # Register the Microsoft signature key
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  # Register the Microsoft RedHat repository
+  curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
+  # Install a system component
+  dnf install -y compat-openssl10
+  # Install PowerShell
+  dnf install -y powershell
+}
+
+RemovePowerShell(){
+  dnf remove -y powershell compat-openssl10
+  rm /etc/yum.repos.d/microsoft.repo
+}
 
 ################################################################
 ###### Accessories ###

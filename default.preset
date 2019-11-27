@@ -34,6 +34,7 @@ InstallBasicEditors        # RemoveBasicEditors
 # InstallCommanderFileMgrs # RemoveCommanderFileMgrs
 InstallTerminator          # RemoveTerminator
 # InstallQbittorrent       # RemoveQbittorrent
+# InstallPowerShell        # RemovePowerShell
 
 ### Accessories ###
 # InstallKeepass           # RemoveKeepass
