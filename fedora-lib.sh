@@ -4,7 +4,7 @@
 # Edited: December 19, 2019 13:00
 # Latest verification and tests done on Fedora 30
 #
-# This file is a function library only and is meant for sourcing into other scripts
+# This file is a Fedora function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
 #
 
