@@ -3,7 +3,7 @@
 # Generic INSTALL script
 #
 # Author: Torsten Juul-Jensen
-# Date: May 3, 2019
+# Date: December 19, 2019
 #
 # Install all .sh script files by putting symlinks into a destination directory (default is users's ~/bin dir)
 #
@@ -42,7 +42,7 @@ _parse_arguments () {
               elif [ "$2" = "" ] ; then
                 # DESTINATIONDIR is default
                 CREATESYMLINKS=1
-                DESTINATIONDIR=~/bin
+                #DESTINATIONDIR=~/bin
               else
                 echo Target directory does not exist
                 exit 2
@@ -80,6 +80,8 @@ _removeSymlinks(){
 
 _createSymlinks(){
   # Make symbolic links to all .sh files in directory
+  if [ ! -d $DESTINATIONDIR ] ; then mkdir -p $DESTINATIONDIR ; fi  #if default directory hasn't been created, create it
+
   for f in $FILEFILTER ; do
       if [ "$f" = $SCRIPT_NAME -o ! -x "$f" ] ; then  # Either the script itself or not executable
           continue
