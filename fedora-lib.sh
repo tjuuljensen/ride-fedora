@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: May 13, 2019 08:00
+# Edited: December 19, 2019 13:00
 # Latest verification and tests done on Fedora 30
 #
 # This file is a function library only and is meant for sourcing into other scripts
@@ -113,21 +113,21 @@ InstallFedy(){
   RPMFUSIONURL=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$FEDORARELEASE.noarch.rpm
   RPMFUSIONNONFREEURL=https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$FEDORARELEASE.noarch.rpm
 
-  FEDYRELEASEURL="https://dl.folkswithhats.org/fedora/$(rpm -E %fedora)/RPMS/fedy-release.rpm"
-
-if ( wget -q "$FEDYRELEASEURL" ) ; then # the file is there
-    dnf install -y $FEDYRELEASEURL
-    dnf install -y $RPMFUSIONURL $RPMFUSIONNONFREEURL
-    dnf install -y fedy
-  else
     # Clone and install
     dnf install -y $RPMFUSIONURL
     dnf install -y $RPMFUSIONNONFREEURL
-    su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/fedy/fedy.git"
-    cd $MYUSERDIR/git/fedy
-    make install
-    cd
-  fi
+
+    # Install fedy copr repository
+    dnf -y copr enable kwizart/fedy
+
+    # Install fedy
+    dnf -y install fedy
+
+    # install from git repo
+    #su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/fedy/fedy.git"
+    #cd $MYUSERDIR/git/fedy
+    #make install
+
 }
 
 RemoveFedy(){
@@ -137,10 +137,17 @@ RemoveFedy(){
   rm  /etc/yum.repos.d/$REPONAME.repo
 
   # remove RPM
-  dnf remove -y fedy-release
   dnf remove -y fedy
 
   [[ -d $MYUSERDIR/git/fedy ]] && rm $MYUSERDIR/git/fedy -rf
+}
+
+InstallDNFutils(){
+    dnf install -y dnf-utils
+}
+
+RemoveDNFutils(){
+    dnf remove -y dnf-utils
 }
 
 InstallVersionLock(){
@@ -279,8 +286,10 @@ InstallPowerShell(){
 
   # Register the Microsoft signature key
   rpm --import https://packages.microsoft.com/keys/microsoft.asc
-  # Register the Microsoft RedHat repository
-  curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
+  # Register the Microsoft Fedora repository
+  #MSFEDORAREPO=https://packages.microsoft.com/config/fedora/$FEDORARELEASE/prod.repo
+  MSFEDORAREPO=https://packages.microsoft.com/config/rhel/7/prod.repo
+  curl $MSFEDORAREPO | sudo tee /etc/yum.repos.d/microsoft-rhel7.repo
   # Install a system component
   dnf install -y compat-openssl10
   # Install PowerShell
@@ -289,7 +298,36 @@ InstallPowerShell(){
 
 RemovePowerShell(){
   dnf remove -y powershell compat-openssl10
-  rm /etc/yum.repos.d/microsoft.repo
+  rm /etc/yum.repos.d/microsoft-rhel7.repo
+}
+
+InstallMicrosoftTeams(){
+
+  # check for whether the URL exists
+  curl -s --head https://packages.microsoft.com/yumrepos/ms-teams/ | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null
+
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+  MSTEAMSREPO=/etc/yum.repos.d/teams.repo
+
+  echo -e "[teams]
+name=teams
+baseurl=https://packages.microsoft.com/yumrepos/ms-teams
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > $MSTEAMSREPO
+
+  dnf install -y teams
+
+}
+
+RemoveMicrosoftTeams(){
+  # https://packages.microsoft.com/config/fedora/30/prod.repo
+  MSTEAMSREPO=/etc/yum.repos.d/teams.repo
+  rm $MSTEAMSREPO
+
+  dnf remove -y teams
+
 }
 
 ################################################################

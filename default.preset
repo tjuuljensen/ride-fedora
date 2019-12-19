@@ -19,6 +19,7 @@ InstallShellTools          # RemoveShellTools
 InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
 # InstallFedy              # RemoveFedy
+InstallDNFutils            # RemoveDNFutils
 InstallVersionLock         # RemoveVersionLock
 
 ### Forensic Tools ###
@@ -35,6 +36,7 @@ InstallBasicEditors        # RemoveBasicEditors
 InstallTerminator          # RemoveTerminator
 # InstallQbittorrent       # RemoveQbittorrent
 # InstallPowerShell        # RemovePowerShell
+# InstallMicrosoftTeams    # RemoveMicrosoftTeams
 
 ### Accessories ###
 # InstallKeepass           # RemoveKeepass
