@@ -38,6 +38,7 @@ _parseArguments () {
 
     if [[ $# -eq 0 ]] ; then
       _help
+      exit 1
     else
       # check if script is root and restart as root if not
       [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
