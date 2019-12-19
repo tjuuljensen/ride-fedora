@@ -304,20 +304,24 @@ RemovePowerShell(){
 InstallMicrosoftTeams(){
 
   # check for whether the URL exists
-  curl -s --head https://packages.microsoft.com/yumrepos/ms-teams/ | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null
+  REPOURL=https://packages.microsoft.com/yumrepos/ms-teams
+  if (curl -s --head $REPOURL/ | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null) ; then # URL exists
 
-  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    rpm --import https://packages.microsoft.com/keys/microsoft.asc
 
-  MSTEAMSREPO=/etc/yum.repos.d/teams.repo
+    MSTEAMSREPO=/etc/yum.repos.d/teams.repo
 
   echo -e "[teams]
 name=teams
-baseurl=https://packages.microsoft.com/yumrepos/ms-teams
+baseurl=$REPOURL
 enabled=1
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > $MSTEAMSREPO
 
-  dnf install -y teams
+    dnf install -y teams
+  else
+    echo Repo $REPOURL does not exist
+  fi
 
 }
 
