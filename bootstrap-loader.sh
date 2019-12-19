@@ -7,11 +7,28 @@
 # Version:
 # Purpose: To start bootloader install of Fedora workstation
 
+################################################################
+###### Default Bootstrap Library Functions ###
+################################################################
+
 RequireAdmin(){
     # Function name if different from rest of script to match the library function names½
     # check if script is root and restart as root if not
     [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
 }
+
+PressAnyKeyToContinue(){
+    read -n 1 -s -r -p "Press any key to continue"
+}
+
+Restart(){
+  echo Rebooting now...
+  reboot now
+}
+
+################################################################
+###### Bootstrap Loader Functions (local only) ###
+################################################################
 
 _parseArguments () {
     #declare global variable arrays

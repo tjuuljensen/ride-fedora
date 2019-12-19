@@ -33,11 +33,6 @@ SetupUserDefaultDirs(){
 
 }
 
-Restart(){
-  echo Rebooting now...
-  reboot now
-}
-
 SetHostname(){
   # set hostname
   echo
@@ -46,10 +41,6 @@ SetHostname(){
   if [ ! -z $NEWHOSTNAME ] ; then
     hostnamectl set-hostname --static "$NEWHOSTNAME"
   fi
-}
-
-PressAnyKeyToContinue(){
-    read -n 1 -s -r -p "Press any key to continue"
 }
 
 ################################################################
