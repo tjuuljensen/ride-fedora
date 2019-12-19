@@ -2,7 +2,7 @@
 # bootstrap-loader.sh
 #
 # Author: Torsten Juul-Jensen
-# May 2, 2019
+# December 19, 2019
 #
 # Version:
 # Purpose: To start bootloader install of Fedora workstation
