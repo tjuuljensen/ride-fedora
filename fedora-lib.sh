@@ -1165,6 +1165,7 @@ InstallGnomeExtensions(){
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
     15   # Alternate Tab - https://extensions.gnome.org/extension/15/alternatetab/
     120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
+    307  # Dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
     517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
     1018 # Text scaler - https://extensions.gnome.org/extension/1018/text-scaler/
