@@ -69,7 +69,6 @@ RemoveShellTools(){
 }
 
 InstallRPMfusionRepos(){
-  FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
   RPMFUSIONURL=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$FEDORARELEASE.noarch.rpm
   RPMFUSIONNONFREEURL=https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$FEDORARELEASE.noarch.rpm
   # install rpmfusion
@@ -1451,7 +1450,6 @@ RemoveVMtoolsOnVM(){
 
 InstallOwnCloudClient(){
   # OwnCloud client
-  FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
   if ( ! dnf config-manager --add-repo http://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_$FEDORARELEASE/isv:ownCloud:desktop.repo ) ; then
     echo "[-] Adding OwnCloud repo failed. Installing latest rpm from web"
 
