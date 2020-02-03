@@ -12,7 +12,7 @@
 ################################################################
 
 RequireAdmin(){
-    # Function name if different from rest of script to match the library function names½
+    # Function name if different from rest of script to match the library function names
     # check if script is root and restart as root if not
     [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
 }

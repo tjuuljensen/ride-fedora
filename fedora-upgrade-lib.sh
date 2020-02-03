@@ -24,8 +24,8 @@ UpgradeFedora(){
   # next release upgrade fedora
   dnf upgrade -y --refresh
   dnf install -y dnf-plugin-system-upgrade
-  dnf system-upgrade download --releasever=$NEXTFEDORARELEASE
-  dnf system-upgrade reboot
+  dnf system-upgrade download -y --releasever=$NEXTFEDORARELEASE
+  dnf system-upgrade -y reboot
 
 }
 
