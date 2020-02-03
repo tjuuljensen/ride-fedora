@@ -61,11 +61,11 @@ InstallRequired(){
 }
 
 InstallShellTools(){
-  dnf install -y pv
+  dnf install -y pv strace
 }
 
 RemoveShellTools(){
-  dnf remove -y pv
+  dnf remove -y pv strace
 }
 
 InstallRPMfusionRepos(){
