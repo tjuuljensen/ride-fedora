@@ -182,8 +182,13 @@ RemoveFTKImager(){
 }
 
 InstallExifTool(){
-  # ExitTool - http://owl.phy.queensu.ca/~phil/exiftool/
+  # ExifTool - http://owl.phy.queensu.ca/~phil/exiftool/
   dnf install -y perl-Image-ExifTool
+}
+
+RemoveExifTool(){
+  # remove ExifTool
+  dnf remove -y perl-Image-ExifTool
 }
 
 InstallExifTool(){
@@ -218,10 +223,15 @@ RemoveVMFStools(){
   dnf remove -y vmfs-tools
 }
 
-InstallPython(){
+InstallPythonPip(){
   # Install pyhton and pip
-  dnf install -y python python-pip
+  dnf install -y python-pip
   pip install --upgrade pip
+}
+
+RemovePythonPip(){
+  # Remove pyhton and pip
+  dnf remove -y python-pip
 
 }
 

@@ -30,6 +30,7 @@ InstallExifTool            # RemoveExifTool
 ### Basic Tools and Support ###
 InstallExfatSupport        # RemoveExfatSupport
 InstallVMFStools           # RemoveVMFStools
+InstallPythonPip           # RemovePythonPip
 InstallPackagingTools      # RemovePackagingTools
 InstallBasicEditors        # RemoveBasicEditors
 # InstallCommanderFileMgrs # RemoveCommanderFileMgrs
