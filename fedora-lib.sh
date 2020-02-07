@@ -1529,7 +1529,7 @@ InstallVMwareWorkstation(){
 
   wget --content-disposition -N -q --show-progress $BINARYURL # Overwrite file, quiet
   chmod +x $BINARYFILENAME
-  ./$BINARYFILENAME --required --console --eulas-agreed #
+  ./$BINARYFILENAME --required --console --eulas-agreed --deferred-gtk
 
   # add serial number if serial number is defined
   if [ ! -z $CURRENTVMWSERIAL ] ; then #Serial number for major version is loaded as a variable
@@ -1588,7 +1588,7 @@ PatchVMwareModules(){
       make install VM_UNAME=$LATESTINSTALLEDKERNEL
       echo "Make sure to reboot before starting VMware (You are running an older kernel than the compiled modules for VMware)"
     else # install for current kernel
-      echo Building modules for current installed kernel $RUNNINGKERNEL
+      echo Building modules for current running kernel $RUNNINGKERNEL
       sudo -u $MYUSER make
       make install
       systemctl restart vmware
