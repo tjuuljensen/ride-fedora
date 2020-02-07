@@ -51,6 +51,8 @@ _parseArguments () {
                 if [ -f $2 ] ; then
                   INCLUDE+="$2"
                   source $2 # Load script from file
+                else
+                  echo Function library $2 was not found
                 fi
                 shift
                 shift
