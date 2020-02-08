@@ -39,6 +39,7 @@ _help()
 
 _logOutput(){
   # Logs the output of the script to a log file
+  # Redirect stdout and stderr to tee. Append all to LOGFILE
   MYUSER=$(logname)
   MYUSERDIR=/home/$MYUSER
   LOGFILE=$MYUSERDIR/bootstrap-log.$(date +"%Y%m%d%H%M%S") #"$(mktemp $MYUSERDIR/bootstrap-log.XXXXXX)"
@@ -48,12 +49,12 @@ _logOutput(){
   exec 2> >(tee -a "${LOGFILE}" >&2)
 
   echo "################################################################"
-  echo "#"
-  echo Logfile for script $0
+  echo ""
+  echo Logfile:  $LOGFILE
+  echo Script: $0
   echo Command line parameters: $@
-  echo Script executed at $(date)
-  echo Log saved to $LOGFILE
-  echo "#"
+  echo "Timestamp: "$(date)
+  echo ""
   echo "################################################################"
 }
 
