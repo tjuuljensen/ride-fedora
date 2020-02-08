@@ -30,62 +30,31 @@ Restart(){
 ###### Bootstrap Loader Functions (local only) ###
 ################################################################
 
-_parseArguments () {
-    #declare global variable arrays
-    declare -g -a PRESET
-    declare -g -a INCLUDE
-    declare -g -a ACTIONS
-
-    if [[ $# -eq 0 ]] ; then
-      _help
-      exit 1
-    else
-      # check if script is root and restart as root if not
-      [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
-    fi
-
-      while [[ $# -gt 0 ]]
-      do
-        case $1 in
-            -i | --include)
-                if [ -f $2 ] ; then
-                  INCLUDE+="$2"
-                  source $2 # Load script from file
-                else
-                  echo Function library $2 was not found
-                fi
-                shift
-                shift
-                ;;
-            -p | --preset)
-              if [ -f $2 ] ; then
-                PRESET+="$2"
-                _readPresetFile $PRESET
-              else
-                echo Preset file does not exist
-                exit 2
-              fi
-              shift
-              shift
-              ;;
-            -h | --help )
-              _help
-              exit 1
-              ;;
-            * )
-            _addOrRemoveAction $1
-             shift
-        esac
-        #$i=$((i + 1))
-    done
-}
-
-
 _help()
 {
     SCRIPT_NAME=$(basename $0)
     echo "usage: $SCRIPT_NAME [--include <function library file>] [--preset <filename>] [[_]tweakname]"
     exit 1
+}
+
+_logOutput(){
+  # Logs the output of the script to a log file
+  MYUSER=$(logname)
+  MYUSERDIR=/home/$MYUSER
+  LOGFILE=$MYUSERDIR/bootstrap-log.$(date +"%Y%m%d%H%M%S") #"$(mktemp $MYUSERDIR/bootstrap-log.XXXXXX)"
+  touch $LOGFILE
+  chown $MYUSER:$MYUSER $LOGFILE
+  exec >  >(tee -a "${LOGFILE}")
+  exec 2> >(tee -a "${LOGFILE}" >&2)
+
+  echo "################################################################"
+  echo "#"
+  echo Logfile for script $0
+  echo Command line parameters: $@
+  echo Script executed at $(date)
+  echo Log saved to $LOGFILE
+  echo "#"
+  echo "################################################################"
 }
 
 _readPresetFile(){
@@ -119,7 +88,63 @@ _executeFunctions(){
   done
 }
 
-#### Main ####
+_parseArguments () {
+    #declare global variable arrays
+    declare -g -a PRESET # preset file(s)
+    declare -g -a INCLUDE # library file(s)
+    declare -g -a ACTIONS # atomic action(s)
 
+    declare -g LOGACTIONS # log yes/no
+    LOGACTIONS=1 # controls whether script is logging all output to logfile
+
+    if [[ $# -eq 0 ]] ; then
+      _help
+      exit 1
+    else
+      # check if script is root and restart as root if not
+      [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
+    fi
+
+      while [[ $# -gt 0 ]]
+      do
+        case $1 in
+            -i | --include)
+                if [ -f $2 ] ; then
+                  INCLUDE+="$2"
+                  source $2 # Load script from file
+                else
+                  echo Function library $2 was not found
+                fi
+                shift
+                shift
+                ;;
+            -p | --preset)
+              if [ -f $2 ] ; then
+                PRESET+="$2"
+                _readPresetFile $PRESET
+              else
+                echo Preset file does not exist
+                exit 2
+              fi
+              shift
+              shift
+              ;;
+            -n | --nolog)
+              $LOGACTIONS=0
+              ;;
+            -h | --help )
+              _help
+              exit 1
+              ;;
+            * )
+            _addOrRemoveAction $1
+             shift
+        esac
+        #$i=$((i + 1))
+    done
+}
+
+#### Main ####
 _parseArguments $@
+(( $LOGACTIONS == 1)) && _logOutput $@
 _executeFunctions

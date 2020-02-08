@@ -380,9 +380,7 @@ RemoveKeepassOtpKeyProv(){
     else
       echo No plugins library exist for keepass. Exiting.
     fi
-
 }
-
 
 InstallKeepassXC(){
   dnf install -y keepassxc
@@ -560,7 +558,6 @@ RemoveAtomPlugins(){
       sudo -u $MYUSER apm uninstall language-powershell
     fi
 }
-
 
 
 
@@ -1441,8 +1438,11 @@ RemoveUnifyingOnLaptop(){
 InstallVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i WMware | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-manufacturer | grep -i WMware | wc -l ) -ne 0 ] ; then
     dnf install -y open-vm-tools
+  elif [ $( dmidecode -s system-manufacturer | grep -i QEMU | wc -l ) -ne 0 ] ; then
+    # QEMU / Gnome boxes
+    dnf install -y spice-webdavd
   fi
 }
 
