@@ -289,7 +289,9 @@ InstallPowerShell(){
   # Register the Microsoft Fedora repository
   #MSFEDORAREPO=https://packages.microsoft.com/config/fedora/$FEDORARELEASE/prod.repo
   MSFEDORAREPO=https://packages.microsoft.com/config/rhel/7/prod.repo
-  curl $MSFEDORAREPO | sudo tee /etc/yum.repos.d/microsoft-rhel7.repo
+  cd $DOWNLOADDIR
+  wget $MSFEDORAREPO
+  mv prod.repo /etc/yum.repos.d/microsoft-rhel7.repo
   # Install a system component
   dnf install -y compat-openssl10
   # Install PowerShell
