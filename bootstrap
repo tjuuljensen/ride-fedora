@@ -7,7 +7,6 @@
 
 # Direct URL to bootstrap master archive on github
 BOOTSTRAP_ARCHIVE="https://github.com/tjuuljensen/bootstrap-fedora/archive/master.zip"
-
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" #set the variable to the place where script is loaded from
 
 # Fail on any error
@@ -15,7 +14,7 @@ set -e
 
 # If this file does not exist it's probably because we're bootstrapping a fresh
 # system.  So we download the Git repository and bootstrap from there
-if [ ! -e "$SCRIPTDIR/fedora-lib.sh" ] ; then
+if [ ! -e "$SCRIPTDIR/run-command.sh" ] ; then #the file run-command.sh does NOT exist in current dir
     # Install required packages
     REQUIREDPACKAGES=("unzip" "wget")
     for i in ${!REQUIREDPACKAGES[@]};
@@ -28,8 +27,13 @@ if [ ! -e "$SCRIPTDIR/fedora-lib.sh" ] ; then
     cd $TEMPDIR
     wget "$BOOTSTRAP_ARCHIVE"
     unzip master.zip
-    DIR="$(realpath "$TEMPDIR/bootstrap-fedora-master/")"
+    INSTALLDIR="$(realpath "$TEMPDIR/bootstrap-fedora-master/")"
+    cd $INSTALLDIR
 fi
 
-# Start the installation of the default preset
-./bootstrap-loader.sh --include fedora-lib.sh --preset default.preset
+if [[ $# -eq 0 ]] ; then
+  # Start the installation of the default preset
+  ./run-command.sh --include fedora-lib.sh --preset default.preset
+else
+  ./run-command.sh $@
+fi

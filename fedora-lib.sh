@@ -1,8 +1,8 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: December 19, 2019 13:00
-# Latest verification and tests done on Fedora 30
+# Edited: February 9, 2020 14:00
+# Latest verification and tests done on Fedora 31
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
@@ -283,6 +283,7 @@ RemoveQbittorrent(){
 
 InstallPowerShell(){
   # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6#fedora
+  # Newer fedora versions arent supported with pwershell 6 (which is installed January 2020 from rhel repos)
 
   # Register the Microsoft signature key
   rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -293,7 +294,7 @@ InstallPowerShell(){
   wget $MSFEDORAREPO
   mv prod.repo /etc/yum.repos.d/microsoft-rhel7.repo
   # Install a system component
-  dnf install -y compat-openssl10
+  dnf install -y compat-openssl10 libunwind libcurl openssl-libs libicu
   # Install PowerShell
   dnf install -y powershell
 }

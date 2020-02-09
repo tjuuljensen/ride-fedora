@@ -4,17 +4,43 @@
 #
 # Author: Torsten Juul-Jensen
 # Date: December 19, 2019
+# Edited February 9, 2020
 #
-# Install all .sh script files by putting symlinks into a destination directory (default is users's ~/bin dir)
-#
+# Install all executables files by putting symlinks into a destination directory (default is users's ~/bin dir)
+
 DESTINATIONDIR=~/bin #default installation directory
 SCRIPT_NAME=$(basename $0)
 FILEFILTER="*" # customizable filter for selecting which executable files to process - "all files" (*) is the default
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" #set the variable to the place where script is loaded from
 
+_help()
+{
+    echo "usage: $SCRIPT_NAME [[--create] [--remove ] <TargetDirectory>] [--help]  "
+    echo "       (default destination is: $DESTINATIONDIR)"
+    exit 1
+}
+
 _set-flags-init() {
     REMOVESYMLINKS=0
     CREATESYMLINKS=0
+}
+
+_removeSymlinks(){
+  find $DESTINATIONDIR -lname "$SCRIPTDIR/*" -delete -print 2>/dev/null
+}
+
+_createSymlinks(){
+  # Make symbolic links to all .sh files in directory
+  if [ ! -d $DESTINATIONDIR ] ; then mkdir -p $DESTINATIONDIR ; fi  #if default directory hasn't been created, create it
+
+  for f in $FILEFILTER ; do
+      if [ "$f" = $SCRIPT_NAME -o ! -x "$f" ] ; then  # if either it's the script itself or it's not executable, continue
+          continue
+      elif [ -f "${f}" ] ; then # (only executable files goes here) - if it is a file make symlink
+        echo "$f"
+        ln -fs "$(realpath "$f")" "$DESTINATIONDIR/$f"
+      fi
+  done
 }
 
 _parse_arguments () {
@@ -65,32 +91,6 @@ _parse_arguments () {
               fi
         esac
     done
-}
-
-_help()
-{
-    echo "usage: $SCRIPT_NAME [[--create] [--remove ] <TargetDirectory>] [--help]  "
-    echo "       (default destination is: $DESTINATIONDIR)"
-    exit 1
-}
-
-_removeSymlinks(){
-  find $DESTINATIONDIR -lname "$SCRIPTDIR/*" -delete -print 2>/dev/null
-}
-
-_createSymlinks(){
-  # Make symbolic links to all .sh files in directory
-  if [ ! -d $DESTINATIONDIR ] ; then mkdir -p $DESTINATIONDIR ; fi  #if default directory hasn't been created, create it
-
-  for f in $FILEFILTER ; do
-      if [ "$f" = $SCRIPT_NAME -o ! -x "$f" ] ; then  # Either the script itself or not executable
-          continue
-      fi
-      if [ -f "${f}" ] ; then # if it is a file make symlink (skip directories)
-        echo "$f"
-        ln -fs "$(realpath "$f")" "$DESTINATIONDIR/$f"
-      fi
-  done
 }
 
 ### main ###
