@@ -35,7 +35,7 @@ CheckNextVersionRepos(){
     "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$NEXTFEDORARELEASE.noarch.rpm" # rpmfusion free
     "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$NEXTFEDORARELEASE.noarch.rpm" # rpmfusion non-free
     "http://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_$NEXTFEDORARELEASE/isv:ownCloud:desktop.repo"  # owncloud
-    "MSFEDORAREPO=https://packages.microsoft.com/config/fedora/$NEXTFEDORARELEASE/prod.repo" # microsoft repo (might not be not used)
+    "https://packages.microsoft.com/config/fedora/$NEXTFEDORARELEASE/prod.repo" # microsoft repo (might not be not used)
   )
 
 for i in ${!RELEASEREPOS[@]};
