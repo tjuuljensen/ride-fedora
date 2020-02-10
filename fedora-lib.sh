@@ -191,11 +191,6 @@ RemoveExifTool(){
   dnf remove -y perl-Image-ExifTool
 }
 
-InstallExifTool(){
-  # ExitTool - http://owl.phy.queensu.ca/~phil/exiftool/
-  dnf remove -y perl-Image-ExifTool
-}
-
 ################################################################
 ###### Basic Tools and Support ###
 ################################################################
@@ -998,9 +993,11 @@ InstallFirefoxAddons(){
     fi
 
     # Install extensions
+    Echo "Installing Firefox extensions:"
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
+      echo $ADDON
       su $MYUSER -c "firefox-extension-manager --install --allow-create --user --url $BASEURL/$ADDON"
     done
   fi
@@ -1019,13 +1016,24 @@ RemoveFirefoxAddons(){
       "video-downloadhelper"
       "fireshot"
       "wayback-machine_new"
+      "exif-viewer"
+      "link-gopher"
+      "nimbus-screenshot"
+      # "bulk-media-downloader"
+      # "mjsonviewer"
+      # "user-agent-switcher-revived"
+      # "image-search-options"
+      # "google-translator-webextension"
     )
 
     cd $DOWNLOADDIR
 
+    # remove extensions
+    Echo "Removing Firefox extensions:"
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
+      echo $ADDON
       su $MYUSER -c "firefox-extension-manager --remove --user --url $BASEURL/$ADDON"
     done
   fi
