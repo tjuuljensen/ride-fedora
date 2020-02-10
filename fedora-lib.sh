@@ -1453,7 +1453,7 @@ InstallVMtoolsOnVM(){
     dnf install -y open-vm-tools
   elif [ $( dmidecode -s system-manufacturer | grep -i QEMU | wc -l ) -ne 0 ] ; then
     # QEMU / Gnome boxes
-    dnf install -y spice-webdavd
+    dnf install -y spice-webdavd spice-vdagent
   fi
 }
 
