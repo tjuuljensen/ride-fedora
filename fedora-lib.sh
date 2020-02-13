@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: February 9, 2020 14:00
+# Edited: February 13, 2020 21:30
 # Latest verification and tests done on Fedora 31
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
@@ -1461,7 +1461,7 @@ InstallProjecteur(){
   wget --content-disposition -N -q --show-progress $LATESTRPMURL
 
   dnf -y install $LATESTRPM
-  
+
 }
 
 RemoveProjecteur(){
