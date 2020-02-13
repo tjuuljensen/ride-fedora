@@ -1446,6 +1446,28 @@ RemoveUnifyingOnLaptop(){
   dnf remove -y solaar
 }
 
+InstallProjecteur(){
+  # Linux driver for Logitech Spotlight
+  # https://github.com/jahnf/Projecteur
+
+  cd $DOWNLOADDIR
+
+  PROJECTEURBRANCHES="https://dl.bintray.com/jahnf/Projecteur/packages/branches/develop/"
+  LATESTDEVBRANCH=$(curl $PROJECTEURBRANCHES 2>&1 | sort -rV | grep -o -E 'href="([^"#]+)"' |  sed 's/\://g' | cut -d'"' -f2 | awk NR==1)
+  PACKAGEURL="$PROJECTEURBRANCHES$LATESTDEVBRANCH"
+  LATESTRPM=$(curl $PACKAGEURL 2>&1 | grep fedora | sort -rV | grep -o -E 'href="([^"#]+)"' | sed 's/\://g' | cut -d'"' -f2 | awk NR==1)
+  LATESTRPMURL=$PACKAGEURL$LATESTRPM
+
+  wget --content-disposition -N -q --show-progress $LATESTRPMURL
+
+  dnf -y install $LATESTRPM
+  
+}
+
+RemoveProjecteur(){
+  dnf remove -y projecteur
+}
+
 InstallVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology

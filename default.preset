@@ -111,6 +111,7 @@ SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 ### Miscellaneous tweaks and installs  ###
 InstallCheat                # RemoveCheat
 InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
+InstallProjecteur           # RemoveProjecteur
 InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 
 ### 3rd party applications ###
