@@ -1,7 +1,7 @@
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Edited: February 13, 2019 21:00
+# Edited: February 15, 202020 09:00
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
 ##########
 
@@ -87,11 +87,11 @@ InstallFirefoxAddons        # RemoveFirefoxAddons
 ### Multimedia ###
 InstallSpotifyClient        # RemoveSpotifyClient
 InstallVLCPlayer            # RemoveVLCPlayer
-#InstallClementinePlayer    # RemoveClementinePlayer
+# InstallClementinePlayer   # RemoveClementinePlayer
 InstallPulseAudioEq         # RemovePulseAudioEq
 InstallYouTubeDownloader    # RemoveYouTubeDownloader
 InstallGIMP                 # RemoveGIMP
-InstallHandBrake            # RemoveHandBrake
+# InstallHandBrake          # RemoveHandBrake
 
 ### Gnome Tools & Tweaks ###
 InstallGnomeTools          # RemoveGnomeTools
