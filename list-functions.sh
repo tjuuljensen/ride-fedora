@@ -25,7 +25,7 @@ _parseArguments(){
               _help
               exit 1
             fi
-            grep -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)|###+' $2 | sed -e 's/[(){)]//g' | grep -v -e '^##############'
+            grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)|###+' $2 | sed -e 's/[(){)]//g' | sed -e 's/function //I' | grep -v -e '^##############'
             exit 0
             shift
             shift
@@ -37,7 +37,7 @@ _parseArguments(){
               exit 1
             fi
             # preset file read
-            LIBFUNCTIONS=$(grep -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $2 | sed -e 's/[(){)]//g')
+            LIBFUNCTIONS=$(grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $2 | sed -e 's/[(){)]//g') | sed -e 's/function//I'
             PRESETFILECONTENT=$( cat $3 | sed -n '7,$p' | grep -v -e '^##'  | sed 's/#/\n/g'| grep -v -e '^[[:space:]]*$' -e '^#'  | sed "s/\t\t*//g" | sed 's/ //g' | sed 's/\r//g' )
 
             echo Preset functions from $3 missing in library file $2:
@@ -73,7 +73,7 @@ _parseArguments(){
             exit 1
             ;;
           * )
-           grep -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $1 | sed -e 's/[(){)]//g'
+           grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $1 | sed -e 's/[(){)]//g' | sed -e 's/function //I'
            exit 0
            shift
       esac
