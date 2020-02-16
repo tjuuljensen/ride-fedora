@@ -37,7 +37,7 @@ _parseArguments(){
               exit 1
             fi
             # preset file read
-            LIBFUNCTIONS=$(grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $2 | sed -e 's/[(){)]//g') | sed -e 's/function//I'
+            LIBFUNCTIONS=$(grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $2 | sed -e 's/[(){)]//g') | sed -e 's/function //I'
             PRESETFILECONTENT=$( cat $3 | sed -n '7,$p' | grep -v -e '^##'  | sed 's/#/\n/g'| grep -v -e '^[[:space:]]*$' -e '^#'  | sed "s/\t\t*//g" | sed 's/ //g' | sed 's/\r//g' )
 
             echo Preset functions from $3 missing in library file $2:
