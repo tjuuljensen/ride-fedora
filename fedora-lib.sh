@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: February 13, 2020 21:30
+# Edited: February 17, 2020 17:30
 # Latest verification and tests done on Fedora 31
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
@@ -189,6 +189,21 @@ InstallExifTool(){
 RemoveExifTool(){
   # remove ExifTool
   dnf remove -y perl-Image-ExifTool
+}
+
+InstallPlaso(){
+  # Plaso is a computer forensic tool for timeline generation and analysis.
+  # https://plaso.readthedocs.io/en/latest/index.html
+  # https://github.com/log2timeline/plaso
+  dnf install -y dnf-plugins-core
+  dnf copr -y enable @gift/stable
+  dnf install -y plaso-tools
+}
+
+RemovePlaso(){
+  # Remove Plaso
+  dnf remove -y plaso-tools
+  dnf copr -y disable @gift/stable
 }
 
 ################################################################
@@ -1429,7 +1444,7 @@ InstallCheat(){
 }
 
 RemoveCheat(){
-    dnf copr disable tkorbar/cheat
+    dnf copr -y disable tkorbar/cheat
     dnf remove -y cheat
 }
 

@@ -1,7 +1,7 @@
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Edited: February 15, 202020 09:00
+# Edited: February 17, 2020 17:30
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
 ##########
 
@@ -26,6 +26,7 @@ InstallVersionLock         # RemoveVersionLock
 InstallForensicImageTools  # RemoveForensicImageTools
 InstallFTKImager           # RemoveFTKImager
 InstallExifTool            # RemoveExifTool
+InstallPlaso               # RemovePlaso
 
 ### Basic Tools and Support ###
 InstallExfatSupport        # RemoveExfatSupport
