@@ -1,7 +1,15 @@
 #!/bin/bash
-# list-functions.#!/bin/sh
+# list-functions.sh
+#
+# Author: Torsten Juul-Jensen
+# Edited: February 18, 2020 14:30
 #
 # Helper for outputting contents of code-libraries
+# Can be used for creating preset files used in misc. repos, e.g. https://github.com/tjuuljensen/bootstrap-fedora
+# Examples:
+#   Output all functions:             list-functions.sh code-library.sh
+#   Output with section information:  list-functions.sh --verbose code-library.sh
+#   Compare code with preset file:    list-functions.sh --compare code-library.sh myfile.preset
 
 _help()
 {
@@ -77,7 +85,7 @@ _parseArguments(){
             ;;
           * )
           PRESETFILEFIRSTLINE=$(grep -n -v ^"#" $1 | head -n1 | cut -d: -f1)
-          sed -n "${PRESETFILEFIRSTLINE},\$p" $1 | grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' | sed -e 's/[(){)]//g' | sed -e 's/function //I' | sed 's/\r$//g' 
+          sed -n "${PRESETFILEFIRSTLINE},\$p" $1 | grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' | sed -e 's/[(){)]//g' | sed -e 's/function //I' | sed 's/\r$//g'
            exit 0
            shift
       esac
