@@ -25,7 +25,9 @@ _parseArguments(){
               _help
               exit 1
             fi
-            grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)|###+' $2 | sed -e 's/[(){)]//g' | sed -e 's/function //I' | grep -v -e '^##############'
+            # find first line without hashmarks and read from there
+            PRESETFILEFIRSTLINE=$(grep -n -v ^"#" $2 | head -n1 | cut -d: -f1)
+            sed -n "${PRESETFILEFIRSTLINE},\$p" $2 | grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)|###+' | sed -e 's/[(){)]//g' | sed -e 's/function //I' | sed 's/\r$//g' | grep -v -e '^##############'
             exit 0
             shift
             shift
@@ -37,8 +39,9 @@ _parseArguments(){
               exit 1
             fi
             # preset file read
-            LIBFUNCTIONS=$(grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $2 | sed -e 's/[(){)]//g') | sed -e 's/function //I'
-            PRESETFILECONTENT=$( cat $3 | sed -n '7,$p' | grep -v -e '^##'  | sed 's/#/\n/g'| grep -v -e '^[[:space:]]*$' -e '^#'  | sed "s/\t\t*//g" | sed 's/ //g' | sed 's/\r//g' )
+            LIBFUNCTIONS=$(grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $2 | sed -e 's/[(){)]//g' | sed -e 's/function //I' | sed 's/\r$//g'  )
+            PRESETFILEFIRSTLINE=$(grep -n -v ^"#" $3 | head -n1 | cut -d: -f1)
+            PRESETFILECONTENT=$( sed -n "${PRESETFILEFIRSTLINE},\$p" $3 | grep -v -e '^##'  | sed 's/#/\n/g'| grep -v -e '^[[:space:]]*$' -e '^#'  | sed "s/\t\t*//g" | sed 's/ //g' | sed 's/\r$//g'  )
 
             echo Preset functions from $3 missing in library file $2:
             for PRESET in $PRESETFILECONTENT ; do
@@ -52,6 +55,7 @@ _parseArguments(){
               esac
             done
 
+            echo "${PRESETFILECONTENT[@]}" > /tmp/debug.txt
             echo Library functions from $2 not in preset file $3:
             for LIB in $LIBFUNCTIONS ; do
               case "${PRESETFILECONTENT[@]}" in
@@ -60,7 +64,6 @@ _parseArguments(){
                   ;;
                 *)
                   echo -e "$LIB - \e[1m\e[31mMissing\e[0m"
-                  ;;
               esac
             done
             exit 0
@@ -73,7 +76,8 @@ _parseArguments(){
             exit 1
             ;;
           * )
-           grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' $1 | sed -e 's/[(){)]//g' | sed -e 's/function //I'
+          PRESETFILEFIRSTLINE=$(grep -n -v ^"#" $1 | head -n1 | cut -d: -f1)
+          sed -n "${PRESETFILEFIRSTLINE},\$p" $1 | grep -i -E '^[[:space:]]*([[:alnum:]_]+[[:space:]]*\(\)|function[[:space:]]+[[:alnum:]_]+)' | sed -e 's/[(){)]//g' | sed -e 's/function //I' | sed 's/\r$//g' 
            exit 0
            shift
       esac
