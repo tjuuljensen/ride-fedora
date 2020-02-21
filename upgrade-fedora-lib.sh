@@ -8,12 +8,13 @@
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
 #
 
-MYUSER=$(logname)
-LOGINUSERUID=$(id -u ${MYUSER})
-DOWNLOADDIR=/tmp
+#MYUSER=$(logname)
+#LOGINUSERUID=$(id -u ${MYUSER})
+#MYUSERDIR=$(eval echo "~$MYUSER")
+
+#DOWNLOADDIR=/tmp
 FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
 NEXTFEDORARELEASE=$(($FEDORARELEASE+1))
-MYUSERDIR=/home/$MYUSER
 
 
 ################################################################
