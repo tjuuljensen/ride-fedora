@@ -12,7 +12,7 @@ MYUSER=$(logname)
 LOGINUSERUID=$(id -u ${MYUSER})
 DOWNLOADDIR=/tmp
 FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
-MYUSERDIR=/home/$MYUSER
+MYUSERDIR=$(eval echo "~$MYUSER")
 
 ################################################################
 ###### Auxiliary Functions  ###
