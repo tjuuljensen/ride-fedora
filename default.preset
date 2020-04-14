@@ -27,6 +27,7 @@ InstallForensicImageTools  # RemoveForensicImageTools
 InstallFTKImager           # RemoveFTKImager
 InstallExifTool            # RemoveExifTool
 InstallPlaso               # RemovePlaso
+InstallAutopsy
 
 ### Basic Tools and Support ###
 InstallExfatSupport        # RemoveExfatSupport
@@ -108,6 +109,10 @@ SetCustomKeyboardShortcut  # SetVMKeyboardShortcut        # RemoveCustomKbrdShor
 SetGnomeCustomFavorites    # SetGnomeDefaultFavorites     # SetGnomeMinimalFavorites
 SetGnmLocationServiceOff   # SetGnmLocationServiceOn
 SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
+
+### Security ###
+# InstallLynis             # RemoveLynis
+# InstallClamAV            # RemoveClamAV  
 
 ### Miscellaneous tweaks and installs  ###
 InstallCheat                # RemoveCheat

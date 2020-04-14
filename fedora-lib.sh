@@ -1475,6 +1475,43 @@ SetGnmAutoProblemRptOn(){
 }
 
 ################################################################
+###### Security related  ###
+################################################################
+
+InstallLynis(){
+
+  LYNISREPO=/etc/yum.repos.d/cisofy-lynis.repo
+
+  echo "[lynis]
+  name=CISOfy Software - Lynis package
+  baseurl=https://packages.cisofy.com/community/lynis/rpm/
+  enabled=1
+  gpgkey=https://packages.cisofy.com/keys/cisofy-software-rpms-public.key
+  gpgcheck=1
+  priority=2" > $LYNISREPO
+
+  dnf install -y lynis
+
+}
+
+
+RemoveLynis(){
+
+  LYNISREPO=/etc/yum.repos.d/cisofy-lynis.repo
+  rm $LYNISREPO
+  dnf remove -y lynis
+
+}
+
+InstallClamAV(){
+  dnf install -y clamav
+}
+
+RemoveClamAV(){
+  dnf remove -y clamav
+}
+
+################################################################
 ###### Miscellaneous tweaks and installs  ###
 ################################################################
 
