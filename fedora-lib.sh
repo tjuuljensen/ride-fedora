@@ -206,6 +206,50 @@ RemovePlaso(){
   dnf copr -y disable @gift/stable
 }
 
+InstallAutopsy(){
+  dnf install -y testdisk
+
+  # Install bellsoft java 8
+  #gpg --keyserver keys2.kfwebs.net --recv-keys 32e9750179fcea62
+  #gpg --export -a 32e9750179fcea62 > /etc/pki/rpm-gpg/RPM-GPG-KEY-bellsoft
+  rpm --import https://download.bell-sw.com/pki/GPG-KEY-bellsoft
+  BELLSOFTREPO=/etc/yum.repos.d/bellsoft.repo
+echo -e '[BellSoft]
+name=BellSoft Repository
+baseurl=https://yum.bell-sw.com
+enabled=1
+gpgcheck=1
+gpgkey=https://download.bell-sw.com/pki/GPG-KEY-bellsoft
+priority=1' > $BELLSOFTREPO
+  dnf -y update
+  dnf install -y bellsoft-java8
+  # set JAVA_HOME
+  export JAVA_HOME="/usr/lib/jvm/bellsoft-java8.x86_64/"
+
+  LATESTAUTOPSY="https://github.com"$(curl https://github.com/sleuthkit/autopsy/releases/  2>&1 |  grep -o -E 'href="([^"#]+)"'  | cut -d'"' -f2 | grep zip | grep -v asc | sort -r -V | awk NR==1)
+  LATESTAUTOPSYKEY="https://github.com"$(curl https://github.com/sleuthkit/autopsy/releases/  2>&1 |  grep -o -E 'href="([^"#]+)"'  | cut -d'"' -f2 | grep zip.asc | sort -r -V | awk NR==1)
+
+  cd $DOWNLOADDIR
+  wget --quiet --timestamping --show-progress $LATESTAUTOPSY
+  wget --quiet --timestamping --show-progress $LATESTAUTOPSYKEY
+
+  AUTOPSYINSTALLER="${LATESTAUTOPSY##*/}"
+  unzip $AUTOPSYINSTALLER
+
+  AUTOPSYSUBDIR=$(unzip -l autopsy-4.14.0.zip | awk 'NR==4' | cut -c  31- | sed 's/\/.*/\//')
+  cd $AUTOPSYSUBDIR
+  chmod +x unix_setup.sh
+  ./unix_setup.sh
+
+}
+
+RemoveAutopsy(){
+  dnf remove -y bellsoft-java8 testdisk
+  # remove gpg signing key gpg-pubkey-79fcea62-5c8ff5d5 (BellSoft LLC <info@bell-sw.com> public key)
+  BELLSOFTREPO=/etc/yum.repos.d/bellsoft.repo
+  rm $BELLSOFTREPO
+}
+
 ################################################################
 ###### Basic Tools and Support ###
 ################################################################
@@ -1682,7 +1726,7 @@ RemoveCitrixClient(){
 AddExtraLUKSpasswords(){
   # Add extra password for LUKS partition
 
-  LUKSDEVICES=$(blkid -o list | grep "LUKS" | cut -d ' ' -f1)
+  LUKSDEVICES=$(lsblk -flp | grep "LUKS" | cut -d ' ' -f1)
 
   for DEVICE in $LUKSDEVICES; do
     PARTITION=${DEVICE##*/}
