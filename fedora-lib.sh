@@ -154,15 +154,15 @@ RemoveVersionLock(){
 ################################################################
 
 
-InstallForensicImageTools(){
+InstallLibEWF(){
   # install libewf - a library for access to EWF (Expert Witness Format)
   # See more at https://github.com/libyal/libewf
   # sleuthkit - https://www.sleuthkit.org/sleuthkit/
-  dnf install -y libewf sleuthkit
+  dnf install -y libewf
 }
 
-RemoveForensicImageTools(){
-  dnf remove -y libewf sleuthkit
+RemoveLibEWF(){
+  dnf remove -y libewf
 }
 
 InstallFTKImager(){
@@ -207,7 +207,13 @@ RemovePlaso(){
 }
 
 InstallAutopsy(){
-  dnf install -y testdisk
+
+  # Install prerequisites
+  dnf install -y testdisk sleuthkit
+
+  # Install sluthkit java
+  # curl https://github.com/sleuthkit/sleuthkit/releases 2>&1 |  grep -Eoi '<a [^>]+>'  | grep java |  cut -d'"' -f2
+
 
   # Install bellsoft java 8
   #gpg --keyserver keys2.kfwebs.net --recv-keys 32e9750179fcea62
@@ -226,6 +232,7 @@ priority=1' > $BELLSOFTREPO
   # set JAVA_HOME
   export JAVA_HOME="/usr/lib/jvm/bellsoft-java8.x86_64/"
 
+  # Get autopsy
   LATESTAUTOPSY="https://github.com"$(curl https://github.com/sleuthkit/autopsy/releases/  2>&1 |  grep -o -E 'href="([^"#]+)"'  | cut -d'"' -f2 | grep zip | grep -v asc | sort -r -V | awk NR==1)
   LATESTAUTOPSYKEY="https://github.com"$(curl https://github.com/sleuthkit/autopsy/releases/  2>&1 |  grep -o -E 'href="([^"#]+)"'  | cut -d'"' -f2 | grep zip.asc | sort -r -V | awk NR==1)
 
@@ -236,7 +243,7 @@ priority=1' > $BELLSOFTREPO
   AUTOPSYINSTALLER="${LATESTAUTOPSY##*/}"
   unzip $AUTOPSYINSTALLER
 
-  AUTOPSYSUBDIR=$(unzip -l autopsy-4.14.0.zip | awk 'NR==4' | cut -c  31- | sed 's/\/.*/\//')
+  AUTOPSYSUBDIR=$(unzip -l $AUTOPSYINSTALLER | awk 'NR==4' | cut -c  31- | sed 's/\/.*/\//')
   cd $AUTOPSYSUBDIR
   chmod +x unix_setup.sh
   ./unix_setup.sh
@@ -244,7 +251,7 @@ priority=1' > $BELLSOFTREPO
 }
 
 RemoveAutopsy(){
-  dnf remove -y bellsoft-java8 testdisk
+  dnf remove -y bellsoft-java8 testdisk sleuthkit
   # remove gpg signing key gpg-pubkey-79fcea62-5c8ff5d5 (BellSoft LLC <info@bell-sw.com> public key)
   BELLSOFTREPO=/etc/yum.repos.d/bellsoft.repo
   rm $BELLSOFTREPO
@@ -1246,6 +1253,7 @@ InstallGnomeExtensions(){
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
     1018 # Text scaler - https://extensions.gnome.org/extension/1018/text-scaler/
     1166 # Extension Update Notifier - https://extensions.gnome.org/extension/1166/extension-update-notifier/
+    1401 # bluetooth-quick-connect/ - https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
     1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
   )
 
@@ -1504,11 +1512,11 @@ RemoveLynis(){
 }
 
 InstallClamAV(){
-  dnf install -y clamav
+  dnf install -y clamav clamav-update
 }
 
 RemoveClamAV(){
-  dnf remove -y clamav
+  dnf remove -y clamav clamav-update
 }
 
 ################################################################

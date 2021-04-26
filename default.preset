@@ -23,7 +23,7 @@ InstallDNFutils            # RemoveDNFutils
 InstallVersionLock         # RemoveVersionLock
 
 ### Forensic Tools ###
-InstallForensicImageTools  # RemoveForensicImageTools
+InstallLibEWF              # RemoveLibEWF
 InstallFTKImager           # RemoveFTKImager
 InstallExifTool            # RemoveExifTool
 InstallPlaso               # RemovePlaso
@@ -112,7 +112,7 @@ SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 
 ### Security ###
 # InstallLynis             # RemoveLynis
-# InstallClamAV            # RemoveClamAV  
+# InstallClamAV            # RemoveClamAV
 
 ### Miscellaneous tweaks and installs  ###
 InstallCheat                # RemoveCheat
