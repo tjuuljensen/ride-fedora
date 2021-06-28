@@ -1,7 +1,7 @@
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Edited: February 17, 2020 17:30
+# Edited: June 27, 2020 18:00
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
 ##########
 
@@ -21,6 +21,10 @@ InstallKernelTools         # RemoveKernelTools
 # InstallFedy              # RemoveFedy
 InstallDNFutils            # RemoveDNFutils
 InstallVersionLock         # RemoveVersionLock
+
+### Flatpak & Flathub ###
+# InstallFlatpak           # RemoveFlatpak
+InstallFlathub             # RemoveFlathub
 
 ### Forensic Tools ###
 InstallLibEWF              # RemoveLibEWF

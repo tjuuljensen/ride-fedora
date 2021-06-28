@@ -1,5 +1,5 @@
 #!/bin/bash
-# bootstrap-loader.sh
+# run-commands.sh
 #
 # Author: Torsten Juul-Jensen
 # December 19, 2019

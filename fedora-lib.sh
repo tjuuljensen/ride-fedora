@@ -150,6 +150,32 @@ RemoveVersionLock(){
 
 
 ################################################################
+###### Flatpak & Flathub ###
+################################################################
+
+InstallFlatpak(){
+  # Flatpak Install (user context)
+  dnf install -y flatpak
+}
+
+RemoveFlatpak(){
+  sudo -u $MYUSER flatpak uninstall --all
+  flatpak uninstall --all
+  dnf autoremove -y flatpak
+}
+
+InstallFlathub(){
+  sudo -u $MYUSER flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  sudo -u $MYUSER flatpak install flathub org.gnome.Extensions -y
+}
+
+RemoveFlathub(){
+  sudo -u $MYUSER flatpak uninstall flathub
+}
+
+
+
+################################################################
 ###### Forensic Tools ###
 ################################################################
 
@@ -1656,11 +1682,13 @@ InstallVMwareWorkstation(){
   # download and install vmware workstation
   # if serialnumberfile is sourced with script, it can autoadd serial number
 
+  WGETUSERAGENT="'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0'"
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(curl -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
+  BINARYURL=$(curl -A $WGETUSERAGENT -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
   BINARYFILENAME="${BINARYURL##*/}" # Filename of binary installer
   VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
   MAJORVERSION=$(echo $BINARYURL | cut -d '-' -f4 | cut -d '.' -f1) # In the format XX
+
   # Another way of getting MAJORVERSION: curl -sIkL $VMWAREURL | grep "filename=" | sed -r 's|^([^.]+).*$|\1|; s|^[^0-9]*([0-9]+).*$|\1|'
 
   if [ ! -z "VMWARESERIAL$MAJORVERSION" ] ; then # VMWARESERIALXX of the current major release is defined in include file
