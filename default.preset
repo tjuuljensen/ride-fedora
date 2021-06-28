@@ -93,7 +93,7 @@ InstallFirefoxAddons        # RemoveFirefoxAddons
 InstallSpotifyClient        # RemoveSpotifyClient
 InstallVLCPlayer            # RemoveVLCPlayer
 # InstallClementinePlayer   # RemoveClementinePlayer
-InstallPulseAudioEq         # RemovePulseAudioEq
+# InstallPulseAudioEq         # RemovePulseAudioEq
 InstallYouTubeDownloader    # RemoveYouTubeDownloader
 InstallGIMP                 # RemoveGIMP
 # InstallHandBrake          # RemoveHandBrake
@@ -120,7 +120,7 @@ SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 ### Miscellaneous tweaks and installs  ###
 InstallCheat                # RemoveCheat
 InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
-InstallProjecteur           # RemoveProjecteur
+# InstallProjecteur           # RemoveProjecteur
 InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
 
 ### 3rd party applications ###

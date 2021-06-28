@@ -1135,38 +1135,33 @@ RemoveOpera(){
 InstallSpotifyClient(){
   # install Spotify client
   # See details and firewall config here http://negativo17.org/spotify-client/
-  rpm --import https://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-  dnf config-manager --add-repo=http://negativo17.org/repos/fedora-spotify.repo
-  dnf install -y spotify-client
+  flatpak install -y flathub com.spotify.Client
 }
 
 RemoveSpotifyClient(){
   # remove Spotify client
-  rpm -e gpg-pubkey-f90c0e97-483e8383 # remove imported PGP key
-  SPOTIFYREPO=/etc/yum.repos.d/fedora-spotify.repo
-  rm $SPOTIFYREPO
-  dnf remove -y spotify-client
+  flatpak remove -y flathub com.spotify.Client
 }
 
 InstallVLCPlayer(){
   # install VLC player
   # installed from rpmfusion-free-updates repo
-  dnf install -y vlc
+  flatpak install -y flathub org.videolan.VLC
 }
 
 RemoveVLCPlayer(){
   # remove VLC player
-  dnf remove -y vlc
+  flatpak remove -y flathub org.videolan.VLC
 }
 
 InstallClementinePlayer(){
   # install clementine media player & pulseaudio equalizer
-  dnf install -y clementine gstreamer-plugins-ugly gstreamer-plugins-bad gstreamer-plugins-good
+  flatpak install -y flathub org.clementine_player.Clementine
 }
 
 RemoveClementinePlayer(){
   # install clementine media player & pulseaudio equalizer
-  dnf remove -y clementine gstreamer-plugins-ugly gstreamer-plugins-bad gstreamer-plugins-good
+  flatpak remove -y flathub org.clementine_player.Clementine
 }
 
 InstallPulseAudioEq(){
@@ -1235,15 +1230,19 @@ InstallGnomeExtensions(){
 
   GNOMEEXTENSIONS=(
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
-    15   # Alternate Tab - https://extensions.gnome.org/extension/15/alternatetab/
-    120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
-    307  # Dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
-    517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
+    4135  # Espresso - https://extensions.gnome.org/extension/4135/espresso/
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
-    1018 # Text scaler - https://extensions.gnome.org/extension/1018/text-scaler/
-    1166 # Extension Update Notifier - https://extensions.gnome.org/extension/1166/extension-update-notifier/
     1401 # bluetooth-quick-connect/ - https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
-    1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
+    4141 # username and hostname in top bar - https://extensions.gnome.org/extension/4141/add-userhost-to-panel/
+
+    # The following are disabled after Fedora 34 with Gnome 40
+    #1166 # Extension Update Notifier - https://extensions.gnome.org/extension/1166/extension-update-notifier/
+    #1018 # Text scaler - https://extensions.gnome.org/extension/1018/text-scaler/
+    #307  # Dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
+    #1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
+    #517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
+    #15   # Alternate Tab - https://extensions.gnome.org/extension/15/alternatetab/
+    #120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
   )
 
   # Install using gnome-shell-extension-installer script
@@ -1254,28 +1253,14 @@ InstallGnomeExtensions(){
     done
   fi
 
-  # get gnome extensions from github
-  # Check if git library exists and create if it doesn't
-  if [ ! -d $MYUSERDIR/git ] ; then
-    cd $MYUSERDIR
-    mkdir -p git > /dev/null
-    chown $MYUSER:$MYUSER git
-  fi
-
-  sudo -u $MYUSER mkdir -p $MYUSERDIR/.local/share/gnome-shell/extensions  >/dev/null # setup base directories
-  su $MYUSER -c "cd $MYUSERDIR/git ; git clone git://github.com/tjuuljensen/gnome-shell-extension-hostname-in-taskbar.git" # clone
-  su $MYUSER -c "ln -s $MYUSERDIR/git/gnome-shell-extension-hostname-in-taskbar/hostname-in-taskbar $MYUSERDIR/.local/share/gnome-shell/extensions/hostname-in-taskbar" # Make symlink
-
-
 }
 
 RemoveGnomeExtensions(){
   # Remove Gnome extensions
   if ( command -v gnome-shell-extension-installer > /dev/null 2>&1 ) ; then
     rm "/home/$MYUSER/.local/share/gnome-shell/extensions/Move_Clock@rmy.pobox.com"
-    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/caffeine@patapon.info"
-    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/ScaleSwitcher@jabi.irontec.com"
-    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/hostname-in-taskbar" # remove symlink
+    #rm "/home/$MYUSER/.local/share/gnome-shell/extensions/caffeine@patapon.info"
+    #rm "/home/$MYUSER/.local/share/gnome-shell/extensions/ScaleSwitcher@jabi.irontec.com"
 
     # restart gnome shell is not available under Wayland
     [[ $XDG_SESSION_TYPE != "wayland" ]] && gnome-shell-extension-installer --restart-shell
@@ -1544,6 +1529,13 @@ InstallProjecteur(){
   # https://github.com/jahnf/Projecteur
 
   cd $DOWNLOADDIR
+
+  ## FIXME ####
+  #dnf install yum-utils pygpgme
+  #rpm --import 'https://dl.cloudsmith.io/public/jahnf/projecteur-develop/cfg/gpg/gpg.544E6934C0570750.key'
+  #curl -1sLf 'https://dl.cloudsmith.io/public/jahnf/projecteur-develop/cfg/setup/config.rpm.txt?distro=fedora&codename=33' > /tmp/jahnf-projecteur-develop.repo
+  #dnf config-manager --add-repo '/tmp/jahnf-projecteur-develop.repo'
+  #dnf -q makecache -y --disablerepo='*' --enablerepo='jahnf-projecteur-develop' --enablerepo='jahnf-projecteur-develop-source'
 
   PROJECTEURBRANCHES="https://dl.bintray.com/jahnf/Projecteur/packages/branches/develop/"
   LATESTDEVBRANCH=$(curl $PROJECTEURBRANCHES 2>&1 | sort -rV | grep -o -E 'href="([^"#]+)"' |  sed 's/\://g' | cut -d'"' -f2 | awk NR==1)
