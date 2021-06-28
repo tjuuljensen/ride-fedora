@@ -1,11 +1,18 @@
 # bootstrap-fedora
 Bootstrap installation of fedora system
+Can be initated using these commands:
+
+$ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh
+$ chmod +x bootstrap.sh
+$ ./bootstrap.sh
+
+...or just use the one-liner:  
+$ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh
 
 ## Usage
 usage: run-command.sh [--include \<function library file>] [--preset \<filename>] [[_]actionname]
 
 ### Example
-
 usage: run-command.sh  --include fedora-lib.sh --include serialnumbers.config --preset default.preset actionFunction1 actionFunction2
 
 ### FAQ
