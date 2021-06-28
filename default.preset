@@ -18,7 +18,6 @@ InstallRequired
 InstallShellTools          # RemoveShellTools
 InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
-# InstallFedy              # RemoveFedy
 InstallDNFutils            # RemoveDNFutils
 InstallVersionLock         # RemoveVersionLock
 
@@ -30,8 +29,8 @@ InstallFlathub             # RemoveFlathub
 InstallLibEWF              # RemoveLibEWF
 InstallFTKImager           # RemoveFTKImager
 InstallExifTool            # RemoveExifTool
-InstallPlaso               # RemovePlaso
-InstallAutopsy
+#InstallPlaso               # RemovePlaso
+#InstallAutopsy
 
 ### Basic Tools and Support ###
 InstallExfatSupport        # RemoveExfatSupport
