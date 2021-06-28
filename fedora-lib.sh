@@ -95,42 +95,6 @@ RemoveKernelTools(){
   dnf remove -y kernel-devel kernel-headers
 }
 
-InstallFedy(){
-  # Depends on rpmfusion
-  # From https://www.folkswithhats.org/
-
-  # Dependencies URLs
-  RPMFUSIONURL=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$FEDORARELEASE.noarch.rpm
-  RPMFUSIONNONFREEURL=https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$FEDORARELEASE.noarch.rpm
-
-    # Clone and install
-    dnf install -y $RPMFUSIONURL
-    dnf install -y $RPMFUSIONNONFREEURL
-
-    # Install fedy copr repository
-    dnf -y copr enable kwizart/fedy
-
-    # Install fedy
-    dnf -y install fedy
-
-    # install from git repo
-    #su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/fedy/fedy.git"
-    #cd $MYUSERDIR/git/fedy
-    #make install
-
-}
-
-RemoveFedy(){
-
-  # Remove repo
-  REPONAME=$(dnf -q repolist | grep -i fedy | cut -d ' ' -f1 | sed 's/*//g' | awk 'NR==1' )
-  rm  /etc/yum.repos.d/$REPONAME.repo
-
-  # remove RPM
-  dnf remove -y fedy
-
-  [[ -d $MYUSERDIR/git/fedy ]] && rm $MYUSERDIR/git/fedy -rf
-}
 
 InstallDNFutils(){
     dnf install -y dnf-utils
@@ -159,18 +123,17 @@ InstallFlatpak(){
 }
 
 RemoveFlatpak(){
-  sudo -u $MYUSER flatpak uninstall --all
   flatpak uninstall --all
   dnf autoremove -y flatpak
 }
 
 InstallFlathub(){
-  sudo -u $MYUSER flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-  sudo -u $MYUSER flatpak install flathub org.gnome.Extensions -y
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  flatpak install flathub org.gnome.Extensions -y
 }
 
 RemoveFlathub(){
-  sudo -u $MYUSER flatpak uninstall flathub
+  flatpak uninstall flathub
 }
 
 
