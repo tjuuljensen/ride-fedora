@@ -129,7 +129,6 @@ RemoveFlatpak(){
 
 InstallFlathub(){
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-  flatpak install flathub org.gnome.Extensions -y
 }
 
 RemoveFlathub(){
@@ -770,7 +769,7 @@ InstallOpenconnectVPN(){
 }
 
 InstallSpeedtestCLI(){
-  dnf intall -y speedtest-cli
+  dnf install -y speedtest-cli
 }
 
 RemoveSpeedtestCLI(){
@@ -1225,7 +1224,8 @@ RemoveSystemMonitor(){
 
 InstallGnomeExtensions(){
   # Install Gnome extensions
-
+  # flatpak install flathub org.gnome.Extensions -y
+  dnf install -y gnome-extensions-app
   dnf install -y chrome-gnome-shell # Gnome integration for browsers
 
   GNOMEEXTENSIONS=(

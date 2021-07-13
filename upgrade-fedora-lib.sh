@@ -43,5 +43,45 @@ for i in ${!RELEASEREPOS[@]};
 do
    wget --spider -q  ${RELEASEREPOS[$i]} && echo -e "\e[1mOK\e[0m: ${RELEASEREPOS[$i]}" || echo -e "\e[1m\e[31mFAIL\e[0m: ${RELEASEREPOS[$i]}"
 done
+}
+
+
+InstallKernel(){
+  # Install kernel headers
+  # https://tutorialforlinux.com/2021/03/09/how-to-install-kernel-5-12-from-source-on-fedora-34/
+
+  dnf group install -y "C Development Tools and Libraries"
+  dnf install -y openssl-devel dwarves rpm-build
+
+  # get the file namesudo s
+  DOWNLOADURL="https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/"
+  KERNELVERSION=$(uname -r)
+  KERNELFILENAME=$(curl $DOWNLOADURL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | grep $KERNELVERSION | grep gz)
+  KERNELSIGNNAME=$(curl $DOWNLOADURL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | grep $KERNELVERSION | grep sign)
+
+  # download files
+  wget $DOWNLOADURL$KERNELFILENAME -o ~/Downloads/$KERNELFILENAME
+  wget $DOWNLOADURL$KERNELSIGNNAME -o ~/Downloads/$KERNELSIGNNAME
+
+  # enter working directory
+  mkdir ~/kernel
+  cd ~/kernel
+
+  # unpack kernel
+  tar -xvzf ~/Downloads/$KERNELFILENAME
+  cd *$KERNELVERSION
+
+  # create config file & compile kernel packages
+  find /boot/ \( -iname "*config*64" -a -iname "*`uname -r`*" \) -exec cp -i -t ./ {} \;
+  make clean
+  make rpm-pkg
+
+  # check that rpm packages are there
+  # ls /root/rpmbuild/RPMS/x86_64/ | grep kernel
+
+  # install package
+  dnf install -y /root/rpmbuild/RPMS/x86_64/kernel*.rpm
+
+  reboot
 
 }
