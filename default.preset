@@ -59,7 +59,10 @@ DisableAtomTelemetry       # EnableAtomTelemetry
 InstallAtomPlugins         # RemoveAtomPlugins
 
 ### Communication ####
-InstallChatProgs           # RemoveChatProgs
+InstallHexchat             # RemoveHexchat
+# InstallDiscord           # RemoveDiscord
+# InstallPidgin            # RemovePidgin
+
 # InstallThunderbird       # RemoveThunderbird
 # InstallThunderbirdExts   # RemoveThunderbirdExts
 

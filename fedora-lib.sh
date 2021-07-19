@@ -617,12 +617,29 @@ RemoveAtomPlugins(){
 ###### Communication ####
 ################################################################
 
-InstallChatProgs(){
-  dnf install -y hexchat pidgin pidgin-otr
+InstallHexchat(){
+  # IRC chat - https://hexchat.github.io/index.html
+  dnf install -y hexchat
 }
 
-RemoveChatProgs(){
-  dnf remove -y hexchat pidgin pidgin-otr
+RemoveHexchat(){
+  dnf remove -y hexchat
+}
+
+InstallDiscord(){
+  dnf install -y discord
+}
+
+RemoveDiscord(){
+  dnf remove -y discord
+}
+
+InstallPidgin(){
+  dnf install -y  pidgin pidgin-otr
+}
+
+RemovePidgin(){
+  dnf remove -y  pidgin pidgin-otr
 }
 
 InstallThunderbird(){
