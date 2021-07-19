@@ -1134,33 +1134,33 @@ RemoveOpera(){
 InstallSpotifyClient(){
   # install Spotify client
   # See details and firewall config here http://negativo17.org/spotify-client/
-  flatpak install -y flathub com.spotify.Client
+  dnf install -y lpf-spotify-client
 }
 
 RemoveSpotifyClient(){
   # remove Spotify client
-  flatpak remove -y flathub com.spotify.Client
+  dnf remove -y lpf-spotify-client
 }
 
 InstallVLCPlayer(){
   # install VLC player
   # installed from rpmfusion-free-updates repo
-  flatpak install -y flathub org.videolan.VLC
+  dnf install -y vlc
 }
 
 RemoveVLCPlayer(){
   # remove VLC player
-  flatpak remove -y flathub org.videolan.VLC
+  dnf remove -y vlc
 }
 
 InstallClementinePlayer(){
-  # install clementine media player & pulseaudio equalizer
-  flatpak install -y flathub org.clementine_player.Clementine
+  # install clementine media player
+  dnf install -y clementine
 }
 
 RemoveClementinePlayer(){
-  # install clementine media player & pulseaudio equalizer
-  flatpak remove -y flathub org.clementine_player.Clementine
+  # install clementine media player
+  dnf remove -y clementine
 }
 
 InstallPulseAudioEq(){
