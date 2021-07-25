@@ -2,7 +2,7 @@
 # run-commands.sh
 #
 # Author: Torsten Juul-Jensen
-# December 19, 2019
+# July 25, 2021
 #
 # Version:
 # Purpose: To start bootloader install of Fedora workstation
@@ -41,8 +41,15 @@ _logOutput(){
   # Logs the output of the script to a log file
   # Redirect stdout and stderr to tee. Append all to LOGFILE
   MYUSER=$(logname)
-  MYUSERDIR=/home/$MYUSER
-  LOGFILE=$MYUSERDIR/bootstrap-log.$(date +"%Y%m%d%H%M%S") #"$(mktemp $MYUSERDIR/bootstrap-log.XXXXXX)"
+  #MYUSERDIR=/home/$MYUSER
+
+  LOGDIR=/var/log/bootstrap-installer
+  LOGFILE=$LOGDIR/bootstrap-log.$(date +"%Y%m%d%H%M%S")
+
+  if [ ! -d $LOGDIR ] ; then # log directory does not exist
+    mkdir $LOGDIR
+  fi
+
   touch $LOGFILE
   chown $MYUSER:$MYUSER $LOGFILE
   exec >  >(tee -a "${LOGFILE}")
