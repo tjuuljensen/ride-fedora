@@ -107,7 +107,6 @@ InstallSystemMonitor       # RemoveSystemMonitor
 InstallGnomeExtensions     # RemoveGnomeExtensions
 ShowDateInTaskbar          # HideDateInTaskbar
 ShowWeekNumbersInTaskbar   # HideWeekNumbersInTaskbar
-ShowGnomeDesktopIcons      # HideGnomeDesktopIcons
 SetWindowCtlMinMaxClose    # SetWindowCtlAppmenuClose     # SetWindowCtlLeftClsMinMax
 SetGnomeRegionDaDK         # RemoveGnomeRegion
 SetScreensaverSlp10Lgn5    # SetScreensaverSlp15Lgn5

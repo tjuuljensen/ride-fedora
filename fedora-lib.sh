@@ -1231,12 +1231,12 @@ InstallSystemMonitor(){
   # install system monitor dependecies and applet
   # lm_sensors is for fan overview
   # For more information see https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
-  dnf install -y libgtop2-devel lm_sensors gnome-shell-extension-system-monitor-applet
+  dnf install -y libgtop2-devel lm_sensors NetworkManager-libnm-devel gnome-shell-extension-system-monitor-applet
 }
 
 RemoveSystemMonitor(){
   # install system monitor dependecies
-  dnf remove -y libgtop2-devel lm_sensors gnome-shell-extension-system-monitor-applet
+  dnf remove -y libgtop2-devel lm_sensors NetworkManager-libnm-devel gnome-shell-extension-system-monitor-applet
 }
 
 InstallGnomeExtensions(){
@@ -1247,22 +1247,17 @@ InstallGnomeExtensions(){
 
   GNOMEEXTENSIONS=(
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
-    4135  # Espresso - https://extensions.gnome.org/extension/4135/espresso/
+    4135 # Espresso - https://extensions.gnome.org/extension/4135/espresso/
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
     1401 # bluetooth-quick-connect/ - https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
     4141 # username and hostname in top bar - https://extensions.gnome.org/extension/4141/add-userhost-to-panel/
+    3010 # System Monitor Next - https://extensions.gnome.org/extension/3010/system-monitor-next/
+    3088 # Extension List - https://extensions.gnome.org/extension/3088/extension-list/
+    2087 # Desktop Icons NG - https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/
 
-    # The following are disabled after Fedora 34 with Gnome 40
-    #1166 # Extension Update Notifier - https://extensions.gnome.org/extension/1166/extension-update-notifier/
-    #1018 # Text scaler - https://extensions.gnome.org/extension/1018/text-scaler/
-    #307  # Dash-to-dock - https://extensions.gnome.org/extension/307/dash-to-dock/
-    #1465 # Desktop Icons - https://extensions.gnome.org/extension/1465/desktop-icons/
-    #517  # Caffeine - https://extensions.gnome.org/extension/517/caffeine/
-    #15   # Alternate Tab - https://extensions.gnome.org/extension/15/alternatetab/
-    #120  # System Monitor - https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
   )
 
-  # Install using gnome-shell-extension-installer script
+  # Install using gnome-shell-extension-installer script  "test"
   if ( command -v gnome-shell-extension-installer > /dev/null 2>&1 ) ; then
     for GNOMEEXTENSION in "${GNOMEEXTENSIONS[@]}"
     do
@@ -1273,18 +1268,23 @@ InstallGnomeExtensions(){
 }
 
 RemoveGnomeExtensions(){
-  # Remove Gnome extensions
-  if ( command -v gnome-shell-extension-installer > /dev/null 2>&1 ) ; then
-    rm "/home/$MYUSER/.local/share/gnome-shell/extensions/Move_Clock@rmy.pobox.com"
-    #rm "/home/$MYUSER/.local/share/gnome-shell/extensions/caffeine@patapon.info"
-    #rm "/home/$MYUSER/.local/share/gnome-shell/extensions/ScaleSwitcher@jabi.irontec.com"
-
-    # restart gnome shell is not available under Wayland
-    [[ $XDG_SESSION_TYPE != "wayland" ]] && gnome-shell-extension-installer --restart-shell
-  fi
-
+  GNOMEEXTENSIONS=(
+    "Move_Clock@rmy.pobox.com" #2
+    "espresso@coadmunkee.github.com" #4135
+    "appindicatorsupport@rgcjonas.gmail.com" #615
+    "bluetooth-quick-connect@bjarosze.gmail.com" #1401
+    "user-at-host@cmm.github.com" #4141
+    "system-monitor-next@paradoxxx.zero.gmail.com" #3010
+    "extension-list@tu.berry" #3088
+    "ding@rastersoft.com" #2087
+    )
+  # Remove Gnome extensions by deleting the library they are in
+  # shell should be restarted afterwards
+  for GNOMEEXTENSION in "${GNOMEEXTENSIONS[@]}"
+  do
+    sudo -u $MYUSER rm -rf "/home/$MYUSER/.local/share/gnome-shell/extensions/$GNOMEEXTENSION"
+  done
 }
-
 
 
 EnableScreenSaver(){
@@ -1319,16 +1319,6 @@ ShowWeekNumbersInTaskbar(){
 HideWeekNumbersInTaskbar(){
   # show week numbers in calendar drop-down
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.calendar show-weekdate false
-}
-
-ShowGnomeDesktopIcons(){
-  #enable desktop icons
-  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.background show-desktop-icons true
-}
-
-HideGnomeDesktopIcons(){
-  #enable desktop icons
-  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.background show-desktop-icons false
 }
 
 SetWindowCtlMinMaxClose(){
@@ -1376,6 +1366,9 @@ SetCustomKeyboardShortcut(){
 
   # add <Super>+D as show-desktop shortcut
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+
+  # set Alt-TAB to alternate tab (does not group applications)
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
 
   # add the list of custom shortcuts
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom100/','/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom101/','/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom102/']"
