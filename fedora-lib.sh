@@ -114,7 +114,7 @@ RemoveVersionLock(){
 
 
 ################################################################
-###### Flatpak & Flathub ###
+###### Application Launchers ###
 ################################################################
 
 InstallFlatpak(){
@@ -135,17 +135,59 @@ RemoveFlathub(){
   flatpak uninstall flathub
 }
 
+InstallAppImageLauncher(){
+  # https://github.com/TheAssassin/AppImageLauncher/releases
+  APPIMAGEDIR=~/Applications
+  URl=https://github.com/TheAssassin/AppImageLauncher/releases
+  PARTIALURL=$(curl $URL 2>&1 |   grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
+  RPMURL=https://github.com$PARTIALURL
+
+  dnf install -y $RPMURL
+  mkdir -p $APPIMAGEDIR > /dev/null
+}
+
+RemoveAppImageLauncher(){
+  APPIMAGEDIR=~/Applications
+  dnf remove -y appimagelauncher
+
+  # if applications directory is empty, then delete directory
+  [ "$(ls -A $APPIMAGEDIR )" ] && echo "Files found - cannot delete ~/Applications" || rm -r ~/Applications
+}
 
 
 ################################################################
 ###### Forensic Tools ###
 ################################################################
 
+InstallCERTForensicsRepo(){
+  # Read more here https://forensics.cert.org/
+  # Get full package list here https://forensics.cert.org/ByPackage/index.html
+  URL=https://forensics.cert.org/
+  FEDORARPMURL=$URL$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep rpm | grep $FEDORARELEASE)
+  FERORARPM=${FEDORARPMURL##${FEDORARPMURL%/*}"/"}
+  GPGKEYURL=https://forensics.cert.org/forensics.asc
+  GPGKEY=${GPGKEYURL##${GPGKEYURL%/*}"/"}
+  cd $DOWNLOADDIR
+  # Get the CERT Forensic Repo key [expires: 2022-04-03]
+  gpg --keyserver hkps://keys.openpgp.org --recv-key  26A0829D5C01FC51C3049037E97F3E0A87E360B8
+  gpg --fingerprint 26A0829D5C01FC51C3049037E97F3E0A87E360B8
+
+  wget -q --show-progress $FEDORARPMURL
+  rpm -K $FERORARPM
+
+  dnf install -y $FERORARPM
+
+}
+
+RemoveCERTForensicsRepo(){
+  rpm -e gpg-pubkey-87e360b8-5e87133b
+  rm /etc/yum.repos.d/cert-forensics-tools.repo
+}
 
 InstallLibEWF(){
   # install libewf - a library for access to EWF (Expert Witness Format)
   # See more at https://github.com/libyal/libewf
-  # sleuthkit - https://www.sleuthkit.org/sleuthkit/
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
   dnf install -y libewf
 }
 
@@ -183,88 +225,33 @@ InstallPlaso(){
   # Plaso is a computer forensic tool for timeline generation and analysis.
   # https://plaso.readthedocs.io/en/latest/index.html
   # https://github.com/log2timeline/plaso
-  dnf install -y dnf-plugins-core
-  dnf copr -y enable @gift/stable
-  dnf install -y plaso-tools
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y plaso
 }
 
 RemovePlaso(){
   # Remove Plaso
-  dnf remove -y plaso-tools
-  dnf copr -y disable @gift/stable
+  dnf remove -y plaso
 }
 
 InstallAutopsy(){
-
-  # Install prerequisites
-  dnf install -y testdisk sleuthkit
-
-  # Install sluthkit java
-  # curl https://github.com/sleuthkit/sleuthkit/releases 2>&1 |  grep -Eoi '<a [^>]+>'  | grep java |  cut -d'"' -f2
-
-
-  # Install bellsoft java 8
-  #gpg --keyserver keys2.kfwebs.net --recv-keys 32e9750179fcea62
-  #gpg --export -a 32e9750179fcea62 > /etc/pki/rpm-gpg/RPM-GPG-KEY-bellsoft
-  rpm --import https://download.bell-sw.com/pki/GPG-KEY-bellsoft
-  BELLSOFTREPO=/etc/yum.repos.d/bellsoft.repo
-echo -e '[BellSoft]
-name=BellSoft Repository
-baseurl=https://yum.bell-sw.com
-enabled=1
-gpgcheck=1
-gpgkey=https://download.bell-sw.com/pki/GPG-KEY-bellsoft
-priority=1' > $BELLSOFTREPO
-  dnf -y update
-  dnf install -y bellsoft-java8
-  # set JAVA_HOME
-  export JAVA_HOME="/usr/lib/jvm/bellsoft-java8.x86_64/"
-
-  # Get autopsy
-  LATESTAUTOPSY="https://github.com"$(curl https://github.com/sleuthkit/autopsy/releases/  2>&1 |  grep -o -E 'href="([^"#]+)"'  | cut -d'"' -f2 | grep zip | grep -v asc | sort -r -V | awk NR==1)
-  LATESTAUTOPSYKEY="https://github.com"$(curl https://github.com/sleuthkit/autopsy/releases/  2>&1 |  grep -o -E 'href="([^"#]+)"'  | cut -d'"' -f2 | grep zip.asc | sort -r -V | awk NR==1)
-
-  cd $DOWNLOADDIR
-  wget --quiet --timestamping --show-progress $LATESTAUTOPSY
-  wget --quiet --timestamping --show-progress $LATESTAUTOPSYKEY
-
-  AUTOPSYINSTALLER="${LATESTAUTOPSY##*/}"
-  unzip $AUTOPSYINSTALLER
-
-  AUTOPSYSUBDIR=$(unzip -l $AUTOPSYINSTALLER | awk 'NR==4' | cut -c  31- | sed 's/\/.*/\//')
-  cd $AUTOPSYSUBDIR
-  chmod +x unix_setup.sh
-  ./unix_setup.sh
-
+  # https://sleuthkit.org/autopsy/
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y autopsy
 }
 
 RemoveAutopsy(){
-  dnf remove -y bellsoft-java8 testdisk sleuthkit
-  # remove gpg signing key gpg-pubkey-79fcea62-5c8ff5d5 (BellSoft LLC <info@bell-sw.com> public key)
-  BELLSOFTREPO=/etc/yum.repos.d/bellsoft.repo
-  rm $BELLSOFTREPO
+  dnf remove -y autopsy
 }
 
 ################################################################
 ###### Basic Tools and Support ###
 ################################################################
 
-InstallExfatSupport(){
-  # install exfat utils (depends on RPMfusion)
-  dnf install -y exfat-utils fuse-exfat
-}
-
-RemoveExfatSupport(){
-  # remove exfat utils
-  dnf remove -y exfat-utils fuse-exfat
-}
-
 InstallVMFStools(){
   # install vmfs tools
-  URL=https://github.com/rpmsphere/x86_64/tree/master/v
-  PARTIALURL=$(curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep vmfs-tools |  cut -d'"' -f8 | sed 's/blob/raw/g' )
-  RPMURL=https://github.com$PARTIALURL
-  dnf install -y $RPMURL
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y vmfs-tools
 }
 
 RemoveVMFStools(){
@@ -322,6 +309,14 @@ RemoveTerminator(){
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.freedesktop.ibus.panel.emoji hotkey "['<Control><Shift>e']"
 }
 
+InstallAlien(){
+  dnf install -y alien
+}
+
+RemoveAlien(){
+  dnf remove -y alien
+}
+
 InstallQbittorrent(){
   dnf install -y qbittorrent
 }
@@ -354,27 +349,21 @@ RemovePowerShell(){
 }
 
 InstallMicrosoftTeams(){
-
   # check for whether the URL exists
   REPOURL=https://packages.microsoft.com/yumrepos/ms-teams
   if (curl -s --head $REPOURL/ | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null) ; then # URL exists
-
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
-
     MSTEAMSREPO=/etc/yum.repos.d/teams.repo
-
-  echo -e "[teams]
+    echo -e "[teams]
 name=teams
 baseurl=$REPOURL
 enabled=1
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > $MSTEAMSREPO
-
     dnf install -y teams
   else
     echo Repo $REPOURL does not exist
   fi
-
 }
 
 RemoveMicrosoftTeams(){
@@ -462,14 +451,11 @@ InstallBalenaEtcher() {
   PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep rpm | grep "x86_64" | sort -r -n | awk 'NR==1' )
   BALENABINURL="https://github.com$PARTIALPATH"
   dnf install -y $BALENABINURL
-
 }
 
 RemoveBalenaEtcher() {
   # For install details, see debian guide here: https://linuxhint.com/install_etcher_linux/
-
   dnf remove -y balena-etcher-electron
-
 }
 
 ################################################################
@@ -529,7 +515,6 @@ gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey' > $ATOMREPO
   fi
 
   echo "atom.config.set 'welcome.showOnStartup', false" > $MYUSERDIR/.atom/init.coffee
-
 }
 
 RemoveAtomEditor(){
@@ -540,7 +525,6 @@ RemoveAtomEditor(){
 }
 
 DisableAtomTelemetry(){
-
   if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
     mkdir $MYUSERDIR/.atom
     chown $MYUSER:$MYUSER $MYUSERDIR/.atom
@@ -554,12 +538,9 @@ DisableAtomTelemetry(){
   if [ -z $(grep "core.telemetryConsent', 'no'" $MYUSERDIR/.atom/init.coffee) ] ; then # the telemetry line is not present
     echo "atom.config.set 'core.telemetryConsent', 'no'" >> $MYUSERDIR/.atom/init.coffee
   fi
-
-
 }
 
 EnableAtomTelemetry(){
-
   if [ ! -d $MYUSERDIR/.atom ] ; then # atom user library does ot exist
     mkdir $MYUSERDIR/.atom
     chown $MYUSER:$MYUSER $MYUSERDIR/.atom
@@ -579,11 +560,9 @@ EnableAtomTelemetry(){
   pkill atom
 
   rm $MYUSERDIR/.atom/init.coffee
-
 }
 
 InstallAtomPlugins(){
-
     if ( command -v atom > /dev/null 2>&1 ) ; then
       sudo -u $MYUSER apm install minimap
       sudo -u $MYUSER apm install line-ending-converter

@@ -21,25 +21,27 @@ InstallKernelTools         # RemoveKernelTools
 InstallDNFutils            # RemoveDNFutils
 InstallVersionLock         # RemoveVersionLock
 
-### Flatpak & Flathub ###
+### Application Launchers ###
 # InstallFlatpak           # RemoveFlatpak
 InstallFlathub             # RemoveFlathub
+InstallAppImageLauncher    # RemoveAppImageLauncher
 
 ### Forensic Tools ###
+InstallCERTForensicsRepo   # RemoveCERTForensicsRepo
 InstallLibEWF              # RemoveLibEWF
 InstallFTKImager           # RemoveFTKImager
 InstallExifTool            # RemoveExifTool
-#InstallPlaso               # RemovePlaso
-#InstallAutopsy
+# InstallPlaso             # RemovePlaso
+# InstallAutopsy           # RemoveAutopsy
 
 ### Basic Tools and Support ###
-InstallExfatSupport        # RemoveExfatSupport
 InstallVMFStools           # RemoveVMFStools
 InstallPythonPip           # RemovePythonPip
 InstallPackagingTools      # RemovePackagingTools
 InstallBasicEditors        # RemoveBasicEditors
 # InstallCommanderFileMgrs # RemoveCommanderFileMgrs
 InstallTerminator          # RemoveTerminator
+InstallAlien               # RemoveAlien
 # InstallQbittorrent       # RemoveQbittorrent
 # InstallPowerShell        # RemovePowerShell
 # InstallMicrosoftTeams    # RemoveMicrosoftTeams
@@ -62,7 +64,6 @@ InstallAtomPlugins         # RemoveAtomPlugins
 InstallHexchat             # RemoveHexchat
 # InstallDiscord           # RemoveDiscord
 # InstallPidgin            # RemovePidgin
-
 # InstallThunderbird       # RemoveThunderbird
 # InstallThunderbirdExts   # RemoveThunderbirdExts
 
