@@ -143,7 +143,11 @@ InstallAppImageLauncher(){
   RPMURL=https://github.com$PARTIALURL
 
   dnf install -y $RPMURL
-  mkdir -p $APPIMAGEDIR > /dev/null
+
+  if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
+    mkdir -p $APPIMAGEDIR > /dev/null
+  fi
+
 }
 
 RemoveAppImageLauncher(){
