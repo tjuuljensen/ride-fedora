@@ -24,6 +24,14 @@ RemoveTheHarvester(){
 
 }
 
+InstallYETI(){
+  # https://github.com/yeti-platform/yeti
+}
+
+RemoveYETI(){
+
+}
+
 InstallSpiderFoot(){
   # https://github.com/smicallef/spiderfoot
   # Install Development branch
