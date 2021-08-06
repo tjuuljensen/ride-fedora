@@ -33,7 +33,7 @@ fi
 
 if [[ $# -eq 0 ]] ; then
   # Start the installation of the default preset
-  ./run-command.sh --include fedora-lib.sh --preset default.preset
+  ./run-command.sh --include lib-fedora.sh --preset default.preset
 else
   ./run-command.sh $@
 fi
