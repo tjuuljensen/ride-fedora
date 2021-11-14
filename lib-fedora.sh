@@ -1122,6 +1122,16 @@ RemoveOpera(){
 
 }
 
+InstallEdge(){
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
+  dnf install -y microsoft-edge-dev
+}
+
+RemoveEdge(){
+  rm /etc/yum.repos.d/microsoft-edge-dev.repo 
+  dnf remove -y microsoft-edge-dev
+}
 
 ################################################################
 ###### Multimedia ###

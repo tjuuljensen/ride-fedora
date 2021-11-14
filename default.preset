@@ -93,6 +93,7 @@ SetChromePreferences        # UnsetChromePreferences
 SetFirefoxPreferences       # UnsetFirefoxPreferences
 InstallFirefoxAddons        # RemoveFirefoxAddons
 # InstallOpera              # RemoveOpera
+InstallEdge                 # RemoveEdge
 
 ### Multimedia ###
 InstallSpotifyClient        # RemoveSpotifyClient
