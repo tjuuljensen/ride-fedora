@@ -215,6 +215,15 @@ RemoveFTKImager(){
   rm /usr/bin/ftkimager
 }
 
+InstallDc3dd(){
+  dnf install -y dc3dd
+}
+
+RemoveDc3dd(){
+  dnf remove -y dc3dd
+}
+
+
 InstallExifTool(){
   # ExifTool - http://owl.phy.queensu.ca/~phil/exiftool/
   dnf install -y perl-Image-ExifTool
