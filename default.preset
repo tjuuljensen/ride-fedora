@@ -43,6 +43,7 @@ InstallBasicEditors        # RemoveBasicEditors
 # InstallCommanderFileMgrs # RemoveCommanderFileMgrs
 InstallTerminator          # RemoveTerminator
 InstallAlien               # RemoveAlien
+InstallSmartMonTools       # RemoveSmartMonTools
 # InstallQbittorrent       # RemoveQbittorrent
 # InstallPowerShell        # RemovePowerShell
 # InstallMicrosoftTeams    # RemoveMicrosoftTeams
@@ -93,6 +94,7 @@ SetChromePreferences        # UnsetChromePreferences
 SetFirefoxPreferences       # UnsetFirefoxPreferences
 InstallFirefoxAddons        # RemoveFirefoxAddons
 # InstallOpera              # RemoveOpera
+InstallEdge                 # RemoveEdge
 
 ### Multimedia ###
 InstallSpotifyClient        # RemoveSpotifyClient

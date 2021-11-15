@@ -69,8 +69,8 @@ RemoveShellTools(){
 }
 
 InstallRPMfusionRepos(){
-  RPMFUSIONURL=http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$FEDORARELEASE.noarch.rpm
-  RPMFUSIONNONFREEURL=https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$FEDORARELEASE.noarch.rpm
+  RPMFUSIONURL=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$FEDORARELEASE.noarch.rpm
+  RPMFUSIONNONFREEURL=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$FEDORARELEASE.noarch.rpm
   # install rpmfusion
   dnf install -y $RPMFUSIONURL
   dnf install -y $RPMFUSIONNONFREEURL
@@ -330,6 +330,14 @@ RemoveAlien(){
   dnf remove -y alien
 }
 
+InstallSmartMonTools(){
+  dnf install -y smartmontools
+}
+
+RemoveSmartMonTools(){
+  dnf remove -y smartmontools
+}
+
 InstallQbittorrent(){
   dnf install -y qbittorrent
 }
@@ -344,8 +352,7 @@ InstallPowerShell(){
 
   # Register the Microsoft signature key
   rpm --import https://packages.microsoft.com/keys/microsoft.asc
-  # Register the Microsoft Fedora repository
-  #MSFEDORAREPO=https://packages.microsoft.com/config/fedora/$FEDORARELEASE/prod.repo
+  # Register the Microsoft repository
   MSFEDORAREPO=https://packages.microsoft.com/config/rhel/7/prod.repo
   cd $DOWNLOADDIR
   wget $MSFEDORAREPO
@@ -363,26 +370,14 @@ RemovePowerShell(){
 
 InstallMicrosoftTeams(){
   # check for whether the URL exists
-  REPOURL=https://packages.microsoft.com/yumrepos/ms-teams
-  if (curl -s --head $REPOURL/ | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null) ; then # URL exists
-    rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    MSTEAMSREPO=/etc/yum.repos.d/teams.repo
-    echo -e "[teams]
-name=teams
-baseurl=$REPOURL
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc" > $MSTEAMSREPO
-    dnf install -y teams
-  else
-    echo Repo $REPOURL does not exist
-  fi
+  URL=https://packages.microsoft.com/yumrepos/ms-teams/
+  LATESTRPM=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | sort -r --version-sort | awk NR==1)
+  RPMURL=$URL$LATESTRPM
+
+  dnf install -y $RPMURL
 }
 
 RemoveMicrosoftTeams(){
-  # https://packages.microsoft.com/config/fedora/30/prod.repo
-  MSTEAMSREPO=/etc/yum.repos.d/teams.repo
-  rm $MSTEAMSREPO
 
   dnf remove -y teams
 
@@ -508,6 +503,7 @@ InstallAtomEditor(){
   #Install atom repo
   # See more here https://flight-manual.atom.io/getting-started/sections/installing-atom/#platform-linux
   #
+
   rpm --import https://packagecloud.io/AtomEditor/atom/gpgkey
 
   # Make repo file
@@ -1135,6 +1131,16 @@ RemoveOpera(){
 
 }
 
+InstallEdge(){
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
+  dnf install -y microsoft-edge-dev
+}
+
+RemoveEdge(){
+  rm /etc/yum.repos.d/microsoft-edge-dev.repo 
+  dnf remove -y microsoft-edge-dev
+}
 
 ################################################################
 ###### Multimedia ###
@@ -1501,16 +1507,29 @@ RemoveClamAV(){
 
 InstallCheat(){
   # install cheat sheet - http://www.tecmint.com/cheat-command-line-cheat-sheet-for-linux-users/
-  # https://github.com/chrisallenlane/cheat.git
+  # https://github.com/cheat/cheat
 
-  dnf -y copr enable tkorbar/cheat
-  dnf install -y cheat
+  cd $DOWNLOADDIR
+
+  URL=https://github.com/cheat/cheat/releases
+
+  # get the latest package from github  website and install it
+  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "386" | sort -r -n | awk 'NR==1' )
+  DOWNLOADURL="https://github.com$PARTIALPATH"
+  ARCHIVE="${DOWNLOADURL##*/}"
+  BINARY="${ARCHIVE%.*}" #the name of the archive (without gz) is expected to be the name of the file inside)
+
+  wget --content-disposition -q $DOWNLOADURL
+  chown $MYUSER:$MYUSER $ARCHIVE #change permissions to logged in user
+  gunzip $ARCHIVE
+  chmod +x $BINARY
+
+  mv -f $BINARY /bin/cheat
 
 }
 
 RemoveCheat(){
-    dnf copr -y disable tkorbar/cheat
-    dnf remove -y cheat
+  rm /bin/cheat
 }
 
 InstallUnifyingOnLaptop(){
@@ -1532,16 +1551,7 @@ InstallProjecteur(){
 
   cd $DOWNLOADDIR
 
-  ## FIXME ####
-  #dnf install yum-utils pygpgme
-  #rpm --import 'https://dl.cloudsmith.io/public/jahnf/projecteur-develop/cfg/gpg/gpg.544E6934C0570750.key'
-  #curl -1sLf 'https://dl.cloudsmith.io/public/jahnf/projecteur-develop/cfg/setup/config.rpm.txt?distro=fedora&codename=33' > /tmp/jahnf-projecteur-develop.repo
-  #dnf config-manager --add-repo '/tmp/jahnf-projecteur-develop.repo'
-  #dnf -q makecache -y --disablerepo='*' --enablerepo='jahnf-projecteur-develop' --enablerepo='jahnf-projecteur-develop-source'
-
-  PROJECTEURBRANCHES="https://dl.bintray.com/jahnf/Projecteur/packages/branches/develop/"
-  LATESTDEVBRANCH=$(curl $PROJECTEURBRANCHES 2>&1 | sort -rV | grep -o -E 'href="([^"#]+)"' |  sed 's/\://g' | cut -d'"' -f2 | awk NR==1)
-  PACKAGEURL="$PROJECTEURBRANCHES$LATESTDEVBRANCH"
+  PACKAGEURL="https://projecteur.de/downloads/stable/latest/"
   LATESTRPM=$(curl $PACKAGEURL 2>&1 | grep fedora | sort -rV | grep -o -E 'href="([^"#]+)"' | sed 's/\://g' | cut -d'"' -f2 | awk NR==1)
   LATESTRPMURL=$PACKAGEURL$LATESTRPM
 
@@ -1580,28 +1590,10 @@ RemoveVMtoolsOnVM(){
 
 InstallOwnCloudClient(){
   # OwnCloud client
+
+  OWNCLOUDREPO="https://download.owncloud.com/desktop/ownCloud/stable/latest/linux/Fedora_$FEDORARELEASE/owncloud.repo"
   if ( ! dnf config-manager --add-repo http://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_$FEDORARELEASE/isv:ownCloud:desktop.repo ) ; then
-    echo "[-] Adding OwnCloud repo failed. Installing latest rpm from web"
-
-    # manually resolve latest linked owncloud-client rpm
-    OCDOWNLOADURL="https://download.opensuse.org/repositories/isv:/ownCloud:/desktop/"
-    LATESTRELEASE=$(curl $OCDOWNLOADURL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'Fedora' | uniq | cut -d'"' -f2 | sort -r | awk NR==1 )
-    PACKAGEURL="$OCDOWNLOADURL$LATESTRELEASE"x86_64/
-    LATESTPACKAGE=$(curl $PACKAGEURL/ 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2  \
-      | grep -v dolphin | grep -v nemo | grep -v overlays | grep -v caja | grep -v debug | grep -v l10n | grep -v doc | grep -v mirrorlist | grep -v nautilus | uniq | grep owncloud-client )
-    LATESTPACKAGEURL=$PACKAGEURL$LATESTPACKAGE
-
-    # Get latest package and install
-    cd $DOWNLOADDIR
-    wget $LATESTPACKAGEURL
-    dnf -y install $LATESTPACKAGE
-
-    # Get latest nautilus package and install
-    #LATESTNAUTILUSPACKAGE=$(curl $PACKAGEURL/ 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2  \
-    #  | grep -v dolphin | grep -v nemo | grep -v overlays | grep -v caja | grep -v debug | grep -v l10n | grep -v doc | grep -v mirrorlist | uniq | grep owncloud-client | grep nautilus )
-    #LATESTNAUTILUSPACKAGEURL=$PACKAGEURL$LATESTNAUTILUSPACKAGE
-    #wget $LATESTNAUTILUSPACKAGEURL
-
+    echo "[-] Adding OwnCloud repo for Fedora $FEDORARELEASE failed."
   fi
 
   dnf install -y owncloud-client
