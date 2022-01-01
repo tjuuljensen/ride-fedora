@@ -36,6 +36,7 @@ InstallExifTool            # RemoveExifTool
 # InstallAutopsy           # RemoveAutopsy
 # InstallUnfURL            # RemoveUnfURL
 InstallCyberChef           # RemoveCyberChef
+InstallChepy               # RemoveChepy
 
 ### Basic Tools and Support ###
 InstallVMFStools           # RemoveVMFStools
@@ -111,7 +112,7 @@ InstallGIMP                 # RemoveGIMP
 InstallGnomeTools          # RemoveGnomeTools
 InstallSystemMonitor       # RemoveSystemMonitor
 InstallGnomeExtensions     # RemoveGnomeExtensions
-ShowDateInTaskbar          # HideDateInTaskbar
+ShowDateInTaskbar          # HideDateInTashortcutshortcutshortcutskbar
 ShowWeekNumbersInTaskbar   # HideWeekNumbersInTaskbar
 SetWindowCtlMinMaxClose    # SetWindowCtlAppmenuClose     # SetWindowCtlLeftClsMinMax
 SetGnomeRegionDaDK         # RemoveGnomeRegion
@@ -120,6 +121,9 @@ SetCustomKeyboardShortcut  # SetVMKeyboardShortcut        # RemoveCustomKbrdShor
 SetGnomeCustomFavorites    # SetGnomeDefaultFavorites     # SetGnomeMinimalFavorites
 SetGnmLocationServiceOff   # SetGnmLocationServiceOn
 SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
+
+### Linux Tweaks & tools ###
+SetWanIPAlias              # UnsetWanIPAlias
 
 ### Security ###
 # InstallLynis             # RemoveLynis

@@ -273,26 +273,102 @@ RemoveUnfURL(){
 InstallCyberChef(){
   # https://github.com/gchq/CyberChef
 
+  INSTALLDIR=/usr/lib/cyberchef/
+  DESKTOPFILE=/usr/share/applications/cyberchef.desktop
+
   URL=https://github.com/gchq/CyberChef/releases/
   PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "download" | sort -r -n | awk 'NR==1' )
   DOWNLOADURL="https://github.com$PARTIALPATH"
   ARCHIVE="${DOWNLOADURL##*/}"
 
-  INSTALLDIR=/usr/lib/CyberChef/
+  cd $DOWNLOADDIR
+  wget $DOWNLOADURL
 
   mkdir -p $INSTALLDIR
   unzip -d $INSTALLDIR $ARCHIVE
+
+  HTMLFILE=$(echo $ARCHIVE | sed "s/zip/html/g")
+
+  echo "[Desktop Entry]
+  INSTALLDIR=/usr/lib/cyberchef/
+  DESKTOPFILE=/usr/share/applications/cyberchef.desktop
+
+  URL=https://github.com/gchq/CyberChef/releases/
+  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "download" | sort -r -n | awk 'NR==1' )
+  DOWNLOADURL="https://github.com$PARTIALPATH"
+  ARCHIVE="${DOWNLOADURL##*/}"
+
+  cd $DOWNLOADDIR
+  wget $DOWNLOADURL
+
+  mkdir -p $INSTALLDIR
+  unzip -d $INSTALLDIR $ARCHIVE
+
+  HTMLFILE=$(echo $ARCHIVE | sed "s/zip/html/g")
+
+  echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CyberChef
+Comment=The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis.
+Icon=/usr/lib/CyberChef/images/cyberchef-128x128.png
+Exec=firefox file://$INSTALLDIR$HTMLFILE
+Actions=
+Categories=Network;WebBrowser;" > $DESKTOPFILE
+
+}
+Version=1.0
+Type=Application
+Name=CyberChef
+Comment=The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis.
+Icon=/usr/lib/CyberChef/images/cyberchef-128x128.png
+Exec=firefox file://$INSTALLDIR$HTMLFILE
+Actions=
+Categories=Network;WebBrowser;" > $DESKTOPFILE
+
 }
 
 RemoveCyberChef(){
-  INSTALLDIR=/usr/lib/CyberChef/
+
+  INSTALLDIR=/usr/lib/cyberchef/
+  DESKTOPFILE=/usr/share/applications/cyberchef.desktop
+
   rmdir -rf $INSTALLDIR
+  rmdir -f $DESKTOPFILE
+}
+
+InstallChepy(){
+  #https://github.com/securisec/chepy
+  sudo -u $MYUSER "cd $MYUSERDIR/git ; git clone https://github.com/securisec/chepy.git ; cd chepy"
+  sudo -u $MYUSER "pip install ."
+  sudo -u $MYUSER "pip install pyinstaller"
+  sudo -u $MYUSER "pyinstaller cli.py --name chepy --onefile"
+  cp dist/chepy /usr/bin/
+}
+
+RemoveChepy(){
+  rmdir $MYUSERDIR/git/chepy/ -rf
+  rm /usr/bin/chepy -f
 }
 
 
 ################################################################
 ###### Basic Tools and Support ###
 ################################################################
+
+InstallDocker(){
+  dnf config-manager --add-repo \
+      https://download.docker.com/linux/fedora/docker-ce.repo
+  dnf install docker-ce docker-ce-cli containerd.io
+  systemctl start docker
+}
+
+RemoveDocker(){
+
+  dnf remove docker-ce docker-ce-cli containerd.io
+  rm /etc/yum.repos.d/docker-ce.repo
+
+}
 
 InstallVMFStools(){
   # install vmfs tools
@@ -413,7 +489,6 @@ InstallMicrosoftTeams(){
 RemoveMicrosoftTeams(){
 
   dnf remove -y teams
-
 }
 
 ################################################################
@@ -456,7 +531,9 @@ InstallKeepassOtpKeyProv(){
 
 RemoveKeepassOtpKeyProv(){
 # Remove OtpKeyProv plugin
-
+URL=https://keepass.info/plugins.html
+    PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | grep OtpKey | grep -vi source | sort -n -r | awk NR==1 )
+    OTPKEYURL="https://keepass.info/"$PARTIALURL
     if [ -d /usr/lib/keepass/plugins ] ; then # plugins directory exists
       rm /usr/lib/keepass/plugins/OtpKey* -f
     else
@@ -1287,7 +1364,7 @@ InstallGnomeExtensions(){
     3010 # System Monitor Next - https://extensions.gnome.org/extension/3010/system-monitor-next/
     3088 # Extension List - https://extensions.gnome.org/extension/3088/extension-list/
     2087 # Desktop Icons NG - https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/
-    
+
   )
 
   # Install using gnome-shell-extension-installer script  "test"
@@ -1303,8 +1380,8 @@ InstallGnomeExtensions(){
 RemoveGnomeExtensions(){
   GNOMEEXTENSIONS=(
     "Move_Clock@rmy.pobox.com" #2
-    "drive-menu@gnome-shell-extensions.gcampax.github.com" # 7 removable Drive 
-    "CoverflowAltTab@palatis@blogspot.com" # CoverFlow Alt-Tab 97 
+    "drive-menu@gnome-shell-extensions.gcampax.github.com" # 7 removable Drive
+    "CoverflowAltTab@palatis@blogspot.com" # CoverFlow Alt-Tab 97
     "espresso@coadmunkee.github.com" #4135
     "appindicatorsupport@rgcjonas.gmail.com" #615
     "bluetooth-quick-connect@bjarosze.gmail.com" #1401
@@ -1502,6 +1579,26 @@ SetGnmAutoProblemRptOn(){
 }
 
 ################################################################
+###### Linux tweaks & tools  ###
+################################################################
+
+SetWanIPAlias(){
+
+  cp ~/.bashrc ~/.bashrc.bak
+  # https://unix.stackexchange.com/a/81699/37512
+  echo "
+alias wanip='dig @resolver4.opendns.com myip.opendns.com +short'
+alias wanip4='dig @resolver4.opendns.com myip.opendns.com +short -4'
+alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'" >> ~/.bashrc
+}
+
+UnsetWanIPAlias(){
+
+  sed -i '/alias wanip/d' ~/.bashrc
+
+}
+
+################################################################
 ###### Security related  ###
 ################################################################
 
@@ -1510,12 +1607,12 @@ InstallLynis(){
   LYNISREPO=/etc/yum.repos.d/cisofy-lynis.repo
 
   echo "[lynis]
-  name=CISOfy Software - Lynis package
-  baseurl=https://packages.cisofy.com/community/lynis/rpm/
-  enabled=1
-  gpgkey=https://packages.cisofy.com/keys/cisofy-software-rpms-public.key
-  gpgcheck=1
-  priority=2" > $LYNISREPO
+name=CISOfy Software - Lynis package
+baseurl=https://packages.cisofy.com/community/lynis/rpm/
+enabled=1
+gpgkey=https://packages.cisofy.com/keys/cisofy-software-rpms-public.key
+gpgcheck=1
+priority=2" > $LYNISREPO
 
   dnf install -y lynis
 

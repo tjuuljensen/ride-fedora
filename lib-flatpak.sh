@@ -85,5 +85,29 @@ InstallGnomeExtensions(){
 }
 
 RemoveGnomeExtensions(){
-  flatpak remove -y org.gnome.Extensions 
+  flatpak remove -y org.gnome.Extensions
+}
+
+################################################################
+###### Offensive Tools ###
+################################################################
+
+InstallJohn(){
+  flatpak install -y com.openwall.John
+}
+
+RemoveJohn(){
+  flatpak remove -y com.openwall.John
+}
+
+################################################################
+###### Productivity ###
+################################################################
+
+InstallThunderbird(){
+  flatpak install -y org.mozilla.Thunderbird
+}
+
+RemoveThunderbird(){
+  flatpak remove -y org.mozilla.Thunderbird 
 }
