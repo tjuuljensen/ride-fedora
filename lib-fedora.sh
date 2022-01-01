@@ -1278,14 +1278,16 @@ InstallGnomeExtensions(){
 
   GNOMEEXTENSIONS=(
     2    # move-clock - https://extensions.gnome.org/extension/2/move-clock/
+    7    # Removable Drive Menu - https://extensions.gnome.org/extension/7/removable-drive-menu
+    97   # Coverflow Alt-Tab - https://extensions.gnome.org/extension/97/coverflow-alt-tab
     4135 # Espresso - https://extensions.gnome.org/extension/4135/espresso/
     615  # AppIndicator Support - https://extensions.gnome.org/extension/615/appindicator-support/
     1401 # bluetooth-quick-connect/ - https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
-    4141 # username and hostname in top bar - https://extensions.gnome.org/extension/4141/add-userhost-to-panel/
+   #4141 # username and hostname in top bar - https://extensions.gnome.org/extension/4141/add-userhost-to-panel/
     3010 # System Monitor Next - https://extensions.gnome.org/extension/3010/system-monitor-next/
     3088 # Extension List - https://extensions.gnome.org/extension/3088/extension-list/
     2087 # Desktop Icons NG - https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/
-
+    
   )
 
   # Install using gnome-shell-extension-installer script  "test"
@@ -1301,10 +1303,12 @@ InstallGnomeExtensions(){
 RemoveGnomeExtensions(){
   GNOMEEXTENSIONS=(
     "Move_Clock@rmy.pobox.com" #2
+    "drive-menu@gnome-shell-extensions.gcampax.github.com" # 7 removable Drive 
+    "CoverflowAltTab@palatis@blogspot.com" # CoverFlow Alt-Tab 97 
     "espresso@coadmunkee.github.com" #4135
     "appindicatorsupport@rgcjonas.gmail.com" #615
     "bluetooth-quick-connect@bjarosze.gmail.com" #1401
-    "user-at-host@cmm.github.com" #4141
+    #"user-at-host@cmm.github.com" #4141
     "system-monitor-next@paradoxxx.zero.gmail.com" #3010
     "extension-list@tu.berry" #3088
     "ding@rastersoft.com" #2087
