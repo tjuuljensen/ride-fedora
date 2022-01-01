@@ -34,6 +34,8 @@ InstallDc3dd               # RemoveDc3dd
 InstallExifTool            # RemoveExifTool
 # InstallPlaso             # RemovePlaso
 # InstallAutopsy           # RemoveAutopsy
+# InstallUnfURL            # RemoveUnfURL
+InstallCyberChef           # RemoveCyberChef
 
 ### Basic Tools and Support ###
 InstallVMFStools           # RemoveVMFStools

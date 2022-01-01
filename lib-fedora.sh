@@ -257,6 +257,39 @@ RemoveAutopsy(){
   dnf remove -y autopsy
 }
 
+InstallUnfURL(){
+  # https://github.com/obsidianforensics/unfurl
+  # unresolved Jinja2 requirement
+  sudo -u $MYUSER pip install dfir-unfurl
+  # Run: python unfurl_app.py
+  # Access website on http://localhost:5000
+  # python unfurl_app.py <https://URL>
+}
+
+RemoveUnfURL(){
+  sudo -u $MYUSER pip uninstall dfir-unfurl
+}
+
+InstallCyberChef(){
+  # https://github.com/gchq/CyberChef
+
+  URL=https://github.com/gchq/CyberChef/releases/
+  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "download" | sort -r -n | awk 'NR==1' )
+  DOWNLOADURL="https://github.com$PARTIALPATH"
+  ARCHIVE="${DOWNLOADURL##*/}"
+
+  INSTALLDIR=/usr/lib/CyberChef/
+
+  mkdir -p $INSTALLDIR
+  unzip -d $INSTALLDIR $ARCHIVE
+}
+
+RemoveCyberChef(){
+  INSTALLDIR=/usr/lib/CyberChef/
+  rmdir -rf $INSTALLDIR
+}
+
+
 ################################################################
 ###### Basic Tools and Support ###
 ################################################################
@@ -1138,7 +1171,7 @@ InstallEdge(){
 }
 
 RemoveEdge(){
-  rm /etc/yum.repos.d/microsoft-edge-dev.repo 
+  rm /etc/yum.repos.d/microsoft-edge-dev.repo
   dnf remove -y microsoft-edge-dev
 }
 
