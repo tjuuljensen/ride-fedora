@@ -32,7 +32,7 @@ UpgradeFedora(){
 
 CheckNextVersionRepos(){
 
-  if [-f lib-fedora.sh ] ; then
+  if [ -f lib-fedora.sh ] ; then
 
     RELEASEREPOS=(  )
     RELEASEREPOS+=( $(grep "http.*\.noarch.rpm$" lib-fedora.sh  | cut -d"=" -f2 | sed "s/\$FEDORARELEASE/$NEXTFEDORARELEASE/g") )
@@ -43,7 +43,7 @@ CheckNextVersionRepos(){
        wget --spider -q  ${RELEASEREPOS[$i]} && echo -e "\e[1mOK\e[0m: ${RELEASEREPOS[$i]}" || echo -e "\e[1m\e[31mFAIL\e[0m: ${RELEASEREPOS[$i]}"
     done
   else
-    echo "File lib-fedora not found"
+    echo "File lib-fedora.sh not found"
   fi
 }
 
