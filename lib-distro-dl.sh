@@ -167,7 +167,8 @@ GetSlackware () {
   # Slackware 32bit
   URL=http://www.slackware.com/torrents/
   FILENAME=$(curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | cut -d'"' -f2  | grep torrent | sort -n -r | awk NR==1 |  cut -f3 -d '/' | sed 's/slackware64/slackware/g')
-  wget -q --show-progress $URL$FILENAME -P $DOWNLOADDIR/
+
+  wget -qwget -q --show-progress -P $DOWNLOADDIR/ $LATESTISO --show-progress $URL$FILENAME -P $DOWNLOADDIR/
 
 }
 
@@ -211,10 +212,13 @@ GetSecurityOnion(){
   # gpg --import $GPGKEYFILE
 
   # Check if file exists
-  # [[ `wget -S --spider $LATESTISO  2>&1 | grep -E 'HTTP/1.1 200 OK|Remote file exists'` ]] && echo OK || echo no
+  [[ `wget -S --spider $LATESTISO  2>&1 | grep -E 'HTTP/1.1 200 OK|Remote file exists'` ]] && echo OK || echo no
+
+  wget -q --show-progress -P $DOWNLOADDIR/ $LATESTSIG
+  wget -q --show-progress -P $DOWNLOADDIR/ $LATESTISO
 
   # Check Signature:
-  # [[ `gpg --verify securityonion-2.3.61-MSEARCH.iso.sig securityonion-2.3.61-MSEARCH.iso`  ]] && echo good || echo bad
+  [[ `gpg --verify $SIGFILE $ISOFILE` ]] && echo good || echo bad
 
 }
 
