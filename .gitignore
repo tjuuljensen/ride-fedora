@@ -1,0 +1,9 @@
+# git ignore file
+
+# Exclude libraries
+openvpn/*
+!openvpn/README.md
+
+# exclude ini files
+config.ini
+serials.ini
