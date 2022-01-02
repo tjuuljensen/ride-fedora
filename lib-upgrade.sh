@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: January 19, 2019 16:00
+# Edited: January 1, 2021 09:00
 # Latest verification and tests done on Fedora 30
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
