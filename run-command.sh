@@ -19,6 +19,7 @@ RequireAdmin(){
 
 PressAnyKeyToContinue(){
     read -n 1 -s -r -p "Press any key to continue..."
+    echo ""
 }
 
 Restart(){
@@ -37,17 +38,54 @@ _help()
     exit 1
 }
 
+_setVariables(){
+
+  FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
+  DOWNLOADDIR=/tmp
+  SCRIPTDIR=$( dirname $( realpath "${BASH_SOURCE[0]}" )) #set the variable to the place where script is loaded from
+  MYUSER=$(logname)
+  LOGINUSERUID=$(id -u ${MYUSER})
+  MYUSERDIR=$(eval echo "~$MYUSER")
+  WORKDIR=$(pwd)
+
+  export SCRIPT_FEDORARELEASE=$FEDORARELEASE
+  export SCRIPT_SCRIPTDIR=$SCRIPTDIR
+  export SCRIPT_MYUSER=$MYUSER
+  export SCRIPT_LOGINUSERUID=$LOGINUSERUID
+  export SCRIPT_DOWNLOADDIR=$DOWNLOADDIR
+  export SCRIPT_MYUSERDIRE=$MYUSERDIR
+  export SCRIPT_WORKDIR
+  export SCRIPT_VARSSET=1
+
+}
+
+_unsetVariables(){
+
+  unset SCRIPT_FEDORARELEASE
+  unset SCRIPT_SCRIPTDIR
+  unset SCRIPT_MYUSER
+  unset SCRIPT_LOGINUSERUID
+  unset SCRIPT_DOWNLOADDIR
+  unset SCRIPT_MYUSERDIR
+  unset SCRIPT_WORKDIR
+  unset SCRIPT_VARSSET
+
+}
+
 _logOutput(){
   # Logs the output of the script to a log file
   # Redirect stdout and stderr to tee. Append all to LOGFILE
-  MYUSER=$(logname)
-  #MYUSERDIR=/home/$MYUSER
 
-  LOGDIR=/var/log/bootstrap-installer
+  if [ "$UID" -ne 0 ] ; then # if script is not run with root privileges
+    LOGDIR=~/.log/
+  else
+    LOGDIR=/var/log/bootstrap-installer
+  fi
+
   LOGFILE=$LOGDIR/bootstrap-log.$(date +"%Y%m%d%H%M%S")
 
   if [ ! -d $LOGDIR ] ; then # log directory does not exist
-    mkdir $LOGDIR
+    mkdir -p $LOGDIR
   fi
 
   touch $LOGFILE
@@ -63,6 +101,7 @@ _logOutput(){
   echo "Timestamp: "$(date)
   echo ""
   echo "################################################################"
+  echo ""
 }
 
 _readPresetFile(){
@@ -120,6 +159,9 @@ _parseArguments () {
                 if [ -f $2 ] ; then
                   INCLUDE+="$2"
                   source $2 # Load script from file
+                elif [ -f $SCRIPTDIR/$2 ] ; then
+                  INCLUDE+="$SCRIPTDIR/$2"
+                  source "$SCRIPTDIR/$2" # Load script from file
                 else
                   echo Function library $2 was not found
                 fi
@@ -130,10 +172,14 @@ _parseArguments () {
               if [ -f $2 ] ; then
                 PRESET+="$2"
                 _readPresetFile $PRESET
+              elif [ -f $SCRIPTDIR/$2 ] ; then
+                PRESET+="$SCRIPTDIR/$2"
+                _readPresetFile "$SCRIPTDIR/$2"
               else
                 echo Preset file does not exist
                 exit 2
               fi
+
               shift
               shift
               ;;
@@ -153,6 +199,8 @@ _parseArguments () {
 }
 
 #### Main ####
+_setVariables $@
 _parseArguments $@
 (( $LOGACTIONS == 1)) && _logOutput $@
 _executeFunctions
+_unsetVariables

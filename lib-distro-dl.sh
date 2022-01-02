@@ -8,12 +8,26 @@
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
 #
 
-MYUSER=$(logname)
-LOGINUSERUID=$(id -u ${MYUSER})
-DOWNLOADDIR=~/Downloads
-FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
-MYUSERDIR=$(eval echo "~$MYUSER")
-
+# Declare variables
+if [ -z $SCRIPT_VARSSET ] ; then
+  # if the vars are not exported to bash from another shell script, set variables in this scope (in the case the script is sourced)
+  FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
+  SCRIPTDIR=$( dirname $( realpath "${BASH_SOURCE[0]}" )) #set the variable to the place where script is loaded from
+  WORKDIR=$(pwd)
+  MYUSER=$(logname)
+  LOGINUSERUID=$(id -u ${MYUSER})
+  DOWNLOADDIR=/tmp
+  MYUSERDIR=$(eval echo "~$MYUSER")
+else # if the bash variables are set from a parent script
+  # set local variables from the exported bash variables
+  FEDORARELEASE=$SCRIPT_FEDORARELEASE
+  SCRIPTDIR=$SCRIPT_SCRIPTDIR
+  WORKDIR=$SCRIPT_WORKDIR
+  MYUSER=$SCRIPT_MYUSER
+  LOGINUSERUID=$SCRIPT_LOGINUSERUID
+  DOWNLOADDIR=$SCRIPT_DOWNLOADDIR
+  MYUSERDIR=$SCRIPT_MYUSERDIR
+fi
 
 GetDebianTorrent () {
   # debian amd64/i386 cd/dvd
