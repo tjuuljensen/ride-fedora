@@ -3,10 +3,11 @@
 # Author: Torsten Juul-Jensen
 # Edited: June 27, 2020 18:00
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
+# Don't mind the RequireAdmin being commented out - it will elevate anyway :-)
 ##########
 
 ### Require administrator privileges ###
-RequireAdmin
+# RequireAdmin
 
 ### Bootstrap Begin ###
 DisableScreensaver       # EnableScreenSaver
@@ -39,6 +40,7 @@ InstallCyberChef           # RemoveCyberChef
 InstallChepy               # RemoveChepy
 
 ### Basic Tools and Support ###
+InstallDocker              # RemoveDocker
 InstallVMFStools           # RemoveVMFStools
 InstallPythonPip           # RemovePythonPip
 InstallPackagingTools      # RemovePackagingTools
@@ -112,7 +114,7 @@ InstallGIMP                 # RemoveGIMP
 InstallGnomeTools          # RemoveGnomeTools
 InstallSystemMonitor       # RemoveSystemMonitor
 InstallGnomeExtensions     # RemoveGnomeExtensions
-ShowDateInTaskbar          # HideDateInTashortcutshortcutshortcutskbar
+ShowDateInTaskbar          # HideDateInTaskbar
 ShowWeekNumbersInTaskbar   # HideWeekNumbersInTaskbar
 SetWindowCtlMinMaxClose    # SetWindowCtlAppmenuClose     # SetWindowCtlLeftClsMinMax
 SetGnomeRegionDaDK         # RemoveGnomeRegion
@@ -128,27 +130,38 @@ SetWanIPAlias              # UnsetWanIPAlias
 ### Security ###
 # InstallLynis             # RemoveLynis
 # InstallClamAV            # RemoveClamAV
+# InstallBitwarden         # RemoveBitwarden
+# InstallBitwardenAppImage # RemoveBitwardenAppImage
+
+###### VPN Functions  ###
+# ImportOpenVPNProfiles    # RemoveVPNProfiles             # RemoveExpressVPNProfiles
+# InstallExpressVPN        # RemoveExpressVPN
+# StartExpressVPNafterBoot
+# CreateExpVPNrandomizer   # ScheduleRandomExpVPNChange
+
 
 ### Miscellaneous tweaks and installs  ###
-InstallCheat                # RemoveCheat
-InstallUnifyingOnLaptop     # RemoveUnifyingOnLaptop
-# InstallProjecteur           # RemoveProjecteur
-InstallVMtoolsOnVM          # RemoveVMtoolsOnVM
+InstallCheat               # RemoveCheat
+InstallUnifyingOnLaptop    # RemoveUnifyingOnLaptop
+# InstallProjecteur        # RemoveProjecteur
+InstallVMtoolsOnVM         # RemoveVMtoolsOnVM
 
 ### 3rd party applications ###
-# InstallOwnCloudClient       # RemoveOwnCloudClient
-# InstallVeraCrypt            # UninstallVeraCrypt
-# InstallVMwareWorkstation    # RemoveVMwareWorkstation
+# InstallYubikeyManager    # RemoveYubikeyManager
+# InstallYubikeyPersTool
+# InstallOwnCloudClient    # RemoveOwnCloudClient
+# InstallVeraCrypt         # UninstallVeraCrypt
+# InstallVMwareWorkstation # RemoveVMwareWorkstation
 # PatchVMwareModules
-# InstallCitrixClient         # RemoveCitrixClient
+# InstallCitrixClient      # RemoveCitrixClient
 
 ### Auxiliary Functions ###
 SetHostname
 
 ### Encryption Functions ###
 # AddExtraLUKSpasswords
-# EncryptUnpartitionedDisks  # RemoveKeyfileMounts
-# ReclaimEncryptDWUnmntPrt   # RemoveKeyfileMounts
+# EncryptUnpartitionedDisks # RemoveKeyfileMounts
+# ReclaimEncryptDWUnmntPrt  # RemoveKeyfileMounts
 
 ### Bootstrap End ###
 EnableScreenSaver           # DisableScreensaver

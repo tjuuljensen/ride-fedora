@@ -8,11 +8,26 @@
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
 #
 
-MYUSER=$(logname)
-LOGINUSERUID=$(id -u ${MYUSER})
-DOWNLOADDIR=/tmp
-FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
-MYUSERDIR=$(eval echo "~$MYUSER")
+# Declare variables
+if [ -z $SCRIPT_VARSSET ] ; then
+  # if the vars are not exported to bash from another shell script, set variables in this scope (in the case the script is sourced)
+  FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
+  SCRIPTDIR=$( dirname $( realpath "${BASH_SOURCE[0]}" )) #set the variable to the place where script is loaded from
+  WORKDIR=$(pwd)
+  MYUSER=$(logname)
+  LOGINUSERUID=$(id -u ${MYUSER})
+  DOWNLOADDIR=/tmp
+  MYUSERDIR=$(eval echo "~$MYUSER")
+else # if the bash variables are set from a parent script
+  # set local variables from the exported bash variables
+  FEDORARELEASE=$SCRIPT_FEDORARELEASE
+  SCRIPTDIR=$SCRIPT_SCRIPTDIR
+  WORKDIR=$SCRIPT_WORKDIR
+  MYUSER=$SCRIPT_MYUSER
+  LOGINUSERUID=$SCRIPT_LOGINUSERUID
+  DOWNLOADDIR=$SCRIPT_DOWNLOADDIR
+  MYUSERDIR=$SCRIPT_MYUSERDIR
+fi
 
 ################################################################
 ###### Auxiliary Functions  ###
@@ -1635,6 +1650,186 @@ RemoveClamAV(){
   dnf remove -y clamav clamav-update
 }
 
+
+InstallBitwarden(){
+  # https://addons.mozilla.org/en-GB/firefox/addon/bitwarden-password-manager/
+  # CLI: https://github.com/bitwarden/cli/releases
+
+  URL=https://github.com/bitwarden/desktop/releases
+  DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep rpm | sort -r -n | awk 'NR==1')
+
+  dnf install -y $DOWNLOADURL
+}
+
+RemoveBitwarden(){
+  dnf remove -y bitwarden
+}
+
+InstallBitwardenAppImage(){
+  # AppImage Install
+  # Download AppImage hashes on https://github.com/bitwarden/desktop/releases/download/v1.30.0/latest-linux.yml
+
+  URL=https://github.com/bitwarden/desktop/releases
+  DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep AppImage | sort -r -n | awk 'NR==1')
+  APPIMAGEDIR=~/Applications
+
+  if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
+    mkdir -p $APPIMAGEDIR > /dev/null
+  fi
+
+  wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
+}
+
+RemoveBitwardenAppImage(){
+  rm ~/Applications/Bitwarden*.AppImage
+}
+
+################################################################
+###### VPN Functions  ###
+################################################################
+
+ImportOpenVPNProfiles(){
+  # read openvpn files and import them into NetworkManager
+
+  # checks in a specific order where ovpn files are located
+  # 1. In current directory
+  # 2. In subdirectory openvpn to current directory
+  # 3. In the directory where the script is located
+  # 3. In the directory where the script is located (matches git repo structure)
+
+  if test -n "$(find $WORKDIR/ -maxdepth 1 -name '*.ovpn' -print -quit)" ; then # at least one ovpn file found in current diretory
+    echo OpenVPN files found in $WORKDIR
+    FILES="$WORKDIR/*.ovpn"
+  elif test -n "$(find $WORKDIR/openvpn/ -maxdepth 1 -name '*.ovpn' -print -quit)" ; then #  found in openvpn subdirectory
+    echo OpenVPN files found in $WORKDIR/openvpn
+    FILES="$WORKDIR/openvpn/*.ovpn"
+  elif test -n "$(find $SCRIPTDIR/ -maxdepth 1 -name '*.ovpn' -print -quit)" ; then #  found in scriptdir directory
+    echo OpenVPN files found in $SCRIPTDIR/
+    FILES="$SCRIPTDIR/openvpn/*.ovpn"
+  elif test -n "$(find $SCRIPTDIR/openvpn/ -maxdepth 1 -name '*.ovpn' -print -quit)" ; then #  found in scriptdir's openvpn subdirectory
+    echo OpenVPN files found in $SCRIPTDIR/openvpn
+    FILES="$SCRIPTDIR/openvpn/*.ovpn"
+  else
+    echo OpenVPN files not found - openvpn library does not exist. Exiting.
+    return 2
+  fi
+
+  echo Importing OpenVPN profiles...
+  # read all current
+  CURRENTVPNS=$(nmcli --fields NAME,TYPE connection | awk  '{ if ($2 == "vpn") { print $1} }') # current VPN connections
+  VPNCONNECTIONS=() # array to hold imported connections
+
+  for OVPNFILE in $FILES ; do
+    OVPNNAME=$(echo $OVPNFILE | sed 's/.*\///' | cut -d '.' -f1 )
+    case "${CURRENTVPNS[@]}" in
+      *"$OVPNNAME"*)
+        # VPN with the same name exists
+        echo -e "$OVPNNAME - \e[1m\e[31mVPN already exists\e[0m"
+        ;;
+      *)
+        #echo -e "$OVPNNAME - \e[1mOK\e[0m"
+        # Add to array over modified connections
+        VPNCONNECTIONS+=($OVPNNAME)
+        # Import OpenVPN file
+        sudo -u $MYUSER nmcli connection import type openvpn file $OVPNFILE
+        ;;
+    esac
+
+  done
+
+  # if one or more VPN config was added - optional add username to config
+  if [ ${#VPNCONNECTIONS[@]} -gt 0 ] ; then
+    # add OpenVPN username to configs
+    read -r -p "Do you want to add openvpn username to VPN config files? [y/N]} " RESPONSE
+    RESPONSE=${RESPONSE,,}
+    if [[ $RESPONSE =~ ^(yes|y| ) ]]
+      then
+        read -r -p "${40:-Enter username for openvpn files:} " CREDUSER
+        read -r -s -p "${80:-Enter password for openvpn files:} " CREDPWD
+        echo -e "\n"
+        for i in ${!VPNCONNECTIONS[@]} ; do
+          echo "Credentials added to ${VPNCONNECTIONS[i]}"
+          # add username to VPN file
+          sudo -u $MYUSER nmcli con modify ${VPNCONNECTIONS[i]} +vpn.data "username=$CREDUSER"
+          sudo -u $MYUSER nmcli con modify ${VPNCONNECTIONS[i]} vpn.secrets "password=$CREDPWD"
+        done
+    fi
+  fi
+  #
+
+}
+
+RemoveVPNProfiles(){
+  # remove every VPN connection
+  nmcli con delete `nmcli --fields NAME,UUID,TYPE connection | awk  '{ if ($3 == "vpn") { print $2} }'`
+}
+
+RemoveExpressVPNProfiles(){
+  # remove every VPN connection with the text expressvpn in it
+  nmcli con delete `nmcli --fields NAME,UUID connection | grep -i expressvpn | awk '{print $2}'`
+}
+
+InstallExpressVPN(){
+
+    # Download and install ExpressVPN
+    URL=https://www.expressvpn.com/latest?utm_source=linux_app
+
+    BINARYURL=$(curl $URL 2>&1 | grep rpm | grep -o -E 'value="([^"#]+)"' | cut -d'"' -f2 | grep x86_64)
+    BINARYFILENAME="${BINARYURL##*/}" # Filename of binary installer
+
+    wget $BINARYURL -P $DOWNLOADDIR/
+    dnf install -y $DOWNLOADDIR/$BINARYFILENAME
+
+    if ( expressvpn status | grep -q -i  "Not Activated" ) ; then
+      echo Please activate with ExpressVPN activation code:
+      expressvpn activate
+    fi
+
+}
+
+RemoveExpressVPN(){
+  dnf remove -y expressvpn
+}
+
+StartExpressVPNafterBoot(){
+    # Install cron job to autostart expressvpn connection at reboot
+    command="sleep 10 && expressvpn connect"
+    job="@reboot  $command"
+    cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
+}
+
+CreateExpVPNrandomizer(){
+  # Create Autoswitch VPN script
+  VPNSCRIPTFILE=/usr/sbin/expressvpn-randomizer.sh
+  touch $VPNSCRIPTFILE
+  chmod +x $VPNSCRIPTFILE
+
+  echo '#!/bin/bash
+# expressvpn-randomizer.sh
+# script added from tjuuljensens repo on GitHub
+# Modified script from https://ubuntu101.co.za/security/vpn/expressvpn-automate-connection-switching-linux/
+
+expressvpn refresh
+expressvpn disconnect
+
+# Read recommended VPN connections into an array
+VPNCONNECTIONS=( $(expressvpn list all |  sed -n "/Y$/p"  | sed "s/\ .*//" ) )
+
+ARRAYSIZE=${#VPNCONNECTIONS[@]}
+RND_VPN=$(shuf -i 1-$ARRAYSIZE -n 1)
+VPN=${VPNCONNECTIONS[$RND_VPN]}
+
+expressvpn connect $VPN' >> $VPNSCRIPTFILE
+
+}
+
+ScheduleRandomExpVPNChange(){
+  # Install cron job to run expressvpn randomizer script to change VPN connection every 6th hour
+  command="/usr/sbin/expressvpn-randomizer.sh"
+  job="0 */6 * * * $command"
+  cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
+}
+
 ################################################################
 ###### Miscellaneous tweaks and installs  ###
 ################################################################
@@ -1721,6 +1916,46 @@ RemoveVMtoolsOnVM(){
 ################################################################
 ###### 3rd party applications ###
 ################################################################
+
+
+InstallYubikeyManager(){
+  # https://www.yubico.com/support/download/yubikey-manager/
+  APPIMAGEDIR=~/Applications
+
+  URL=https://www.yubico.com/support/download/yubikey-manager/
+  DOWNLOADURL=$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep AppImage)
+
+  if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
+    mkdir -p $APPIMAGEDIR > /dev/null
+  fi
+
+  wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
+
+}
+
+RemoveYubikeyManager(){
+  rm ~/Applications/yubikey-manager*.AppImage
+}
+
+
+InstallYubikeyPersTool(){
+
+  URL=https://github.com/Yubico/yubikey-personalization-gui
+
+  if [ -d $MYUSERDIR/git ] ; then
+    cd $MYUSERDIR/git
+    echo Cloning git repos...
+    sudo -u $MYUSER git clone $URL
+  else
+    echo The git library in $MYUSER homedir does not exist. Exiting.
+    return 2
+  fi
+
+  sudo -u $MYUSER cd yubikey-personalization-gui
+  dnf install -y libusb-devel qt-devel libyubikey-devel ykpers-devel
+  qmake-qt4 && make
+
+}
 
 InstallOwnCloudClient(){
   # OwnCloud client
