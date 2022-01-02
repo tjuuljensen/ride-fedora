@@ -238,15 +238,41 @@ RemoveDc3dd(){
   dnf remove -y dc3dd
 }
 
-
 InstallExifTool(){
-  # ExifTool - http://owl.phy.queensu.ca/~phil/exiftool/
-  dnf install -y perl-Image-ExifTool
+  # Phil Hangen's ExifTool - https://exiftool.org
+  URL=https://github.com/exiftool/exiftool/tags
+  DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep zip | sort -r -n | awk 'NR==1')
+  FILENAME=${DOWNLOADURL##${DOWNLOADURL%/*}"/"}
+  INSTALLDIR=/usr/lib/exiftool
+
+  cd $DOWNLOADDIR
+  wget -q --show-progress $DOWNLOADURL
+  tar xzvf $FILENAME -C $INSTALLDIR --strip 1
+
+  cd $INSTALLDIR
+
+  # install preconditions
+  dnf install -y perl-App-cpanminus
+  cpanm ExtUtils::MakeMaker
+
+  perl Makefile.PL
+  make test
+  sudo make install
+
 }
 
 RemoveExifTool(){
-  # remove ExifTool
-  dnf remove -y perl-Image-ExifTool
+  INSTALLDIR=/usr/lib/exiftool
+  cd $INSTALLDIR
+
+  sudo make uninstall
+  rm -rf $INSTALLDIR
+
+  # remove preconditions
+  # install preconditions
+  cpanm --uninstall ExtUtils::MakeMaker
+  dnf remove -y perl-App-cpanminus
+
 }
 
 InstallPlaso(){
