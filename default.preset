@@ -136,8 +136,8 @@ SetWanIPAlias              # UnsetWanIPAlias
 ###### VPN Functions  ###
 # ImportOpenVPNProfiles    # RemoveVPNProfiles             # RemoveExpressVPNProfiles
 # InstallExpressVPN        # RemoveExpressVPN
-# StartExpressVPNafterBoot
-# CreateExpVPNrandomizer   # ScheduleRandomExpVPNChange
+# StartExpressVPNafterBoot # RemoveExpressVPNafterBoot
+# CreateExpVPNrandomizer   # ScheduleRandomExpVPNChange    # RemoveScheduleExpVPNChange
 
 
 ### Miscellaneous tweaks and installs  ###

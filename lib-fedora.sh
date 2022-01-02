@@ -1819,9 +1819,16 @@ RemoveExpressVPN(){
 
 StartExpressVPNafterBoot(){
     # Install cron job to autostart expressvpn connection at reboot
-    command="sleep 10 && expressvpn connect"
-    job="@reboot  $command"
-    cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
+    COMMAND="sleep 10 && expressvpn connect"
+    JOB="@reboot  $COMMAND"
+    cat <(fgrep -i -v "$COMMAND" <(crontab -l)) <(echo "$JOB") | crontab -
+}
+
+RemoveExpressVPNafterBoot(){
+  COMMAND="@reboot  sleep 10 && expressvpn connect"
+  TMPCRONFILE=$(mktemp)
+  crontab -l | grep -Fv "$COMMAND" >"$TMPCRONFILE"
+  crontab "$TMPCRONFILE" && rm -f "$TMPCRONFILE"
 }
 
 CreateExpVPNrandomizer(){
@@ -1851,9 +1858,16 @@ expressvpn connect $VPN' >> $VPNSCRIPTFILE
 
 ScheduleRandomExpVPNChange(){
   # Install cron job to run expressvpn randomizer script to change VPN connection every 6th hour
-  command="/usr/sbin/expressvpn-randomizer.sh"
-  job="0 */6 * * * $command"
-  cat <(fgrep -i -v "$command" <(crontab -l)) <(echo "$job") | crontab -
+  COMMAND="/usr/sbin/expressvpn-randomizer.sh"
+  JOB="0 */6 * * * $COMMAND"
+  cat <(fgrep -i -v "$COMMAND" <(crontab -l)) <(echo "$JOB") | crontab -
+}
+
+RemoveScheduleExpVPNChange(){
+  COMMAND="0 */6 * * * /usr/sbin/expressvpn-randomizer.sh"
+  TMPCRONFILE=$(mktemp)
+  crontab -l | grep -Fv "$COMMAND" >"$TMPCRONFILE"
+  crontab "$TMPCRONFILE" && rm -f "$TMPCRONFILE"
 }
 
 ################################################################
