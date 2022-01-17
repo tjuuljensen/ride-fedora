@@ -733,6 +733,7 @@ InstallAtomPlugins(){
       sudo -u $MYUSER apm install open-recent
       sudo -u $MYUSER apm install compare-files
       sudo -u $MYUSER apm install language-powershell
+      sudo -u $MYUSER apm install disable-middle-click-paste
     fi
 }
 
@@ -747,6 +748,7 @@ RemoveAtomPlugins(){
       sudo -u $MYUSER apm uninstall open-recent
       sudo -u $MYUSER apm uninstall compare-files
       sudo -u $MYUSER apm uninstall language-powershell
+      sudo -u $MYUSER apm uninstall disable-middle-click-paste
     fi
 }
 
