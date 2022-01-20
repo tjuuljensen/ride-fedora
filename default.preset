@@ -20,7 +20,7 @@ InstallShellTools          # RemoveShellTools
 InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
 InstallDNFutils            # RemoveDNFutils
-InstallVersionLock         # RemoveVersionLock
+# InstallVersionLock       # RemoveVersionLock
 
 ### Application Launchers ###
 # InstallFlatpak           # RemoveFlatpak
@@ -57,7 +57,7 @@ InstallSmartMonTools       # RemoveSmartMonTools
 # InstallKeepass           # RemoveKeepass
 # InstallKeepassOtpKeyProv # RemoveKeepassOtpKeyProv
 InstallKeepassXC           # RemoveKeepassXC
-InstallWoeUSB              # RemoveWoeUSB
+# InstallWoeUSB            # RemoveWoeUSB
 # InstallBalenaEtcher      # RemoveBalenaEtcher
 
 ### Programming ####
@@ -94,20 +94,20 @@ InstallMozExtensionMgr     # RemoveMozExtensionMgr
 
 ### Web Browsers ###
 InstallChromium             # RemoveChromium
-InstallChrome               # RemoveChrome
-SetChromePreferences        # UnsetChromePreferences
+# InstallChrome             # RemoveChrome
+# SetChromePreferences      # UnsetChromePreferences
 SetFirefoxPreferences       # UnsetFirefoxPreferences
 InstallFirefoxAddons        # RemoveFirefoxAddons
 # InstallOpera              # RemoveOpera
-InstallEdge                 # RemoveEdge
+# InstallEdge               # RemoveEdge
 
 ### Multimedia ###
-InstallSpotifyClient        # RemoveSpotifyClient
-InstallVLCPlayer            # RemoveVLCPlayer
+# InstallSpotifyClient      # RemoveSpotifyClient
+# InstallVLCPlayer          # RemoveVLCPlayer
 # InstallClementinePlayer   # RemoveClementinePlayer
-# InstallPulseAudioEq         # RemovePulseAudioEq
+# InstallPulseAudioEq       # RemovePulseAudioEq
 InstallYouTubeDownloader    # RemoveYouTubeDownloader
-InstallGIMP                 # RemoveGIMP
+# InstallGIMP               # RemoveGIMP
 # InstallHandBrake          # RemoveHandBrake
 
 ### Gnome Tools & Tweaks ###
