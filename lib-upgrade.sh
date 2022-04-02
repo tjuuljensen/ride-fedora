@@ -12,6 +12,7 @@
 if [ -z $SCRIPT_VARSSET ] ; then
   # if the vars are not exported to bash from another shell script, set variables in this scope (in the case the script is sourced)
   FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
+  let NEXTFEDORARELEASE=FEDORARELEASE+1
   SCRIPTDIR=$( dirname $( realpath "${BASH_SOURCE[0]}" )) #set the variable to the place where script is loaded from
   WORKDIR=$(pwd)
   MYUSER=$(logname)
@@ -21,6 +22,7 @@ if [ -z $SCRIPT_VARSSET ] ; then
 else # if the bash variables are set from a parent script
   # set local variables from the exported bash variables
   FEDORARELEASE=$SCRIPT_FEDORARELEASE
+  let NEXTFEDORARELEASE=FEDORARELEASE+1
   SCRIPTDIR=$SCRIPT_SCRIPTDIR
   WORKDIR=$SCRIPT_WORKDIR
   MYUSER=$SCRIPT_MYUSER
