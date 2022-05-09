@@ -86,7 +86,7 @@ InstallKernelHeaders(){
     wget -q --show-progress $DOWNLOADURL$KERNELFILENAME -O $LOCALKERNELFILE
     wget -q --show-progress $DOWNLOADURL$KERNELSIGNNAME -O $LOCALKRNLSIGNFILE
 
-    chown $MYUSER:$MYUSER $LOCALKERNELFILErpm -qa kernel-devel | cut -d"-" -f3
+    chown $MYUSER:$MYUSER $LOCALKERNELFILE
     chown $MYUSER:$MYUSER $LOCALKRNLSIGNFILE
   fi
 
@@ -95,7 +95,7 @@ InstallKernelHeaders(){
   cd  /root/kernel
 
   # unpack kernel
-  tar -xvzf --overwrite $LOCALKERNELFILE
+  tar -xvzf $LOCALKERNELFILE --overwrite
   cd *$KERNELVERSION
 
   # create config file & compile kernel packages
@@ -111,7 +111,7 @@ InstallKernelHeaders(){
   # install package
   dnf install -y /root/rpmbuild/RPMS/x86_64/kernel-headers-$KERNELVERSION*.rpm
 
-  # verify that nstalled kernel-devel file matches
+  # verify that installed kernel-devel file matches
   KERNELDEVELVERSION=$(rpm -qa kernel-devel | cut -d"-" -f3) #Installed kernel-devel version
   if [ $KERNELDEVELVERSION != $KERNELVERSION ] ; then
       dnf remove -y kernel-devel
