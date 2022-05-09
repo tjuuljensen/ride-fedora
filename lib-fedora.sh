@@ -2023,8 +2023,8 @@ InstallVMwareWorkstation(){
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
   BINARYURL=$(curl -A $WGETUSERAGENT -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
   BINARYFILENAME="${BINARYURL##*/}" # Filename of binary installer
-  VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
-  MAJORVERSION=$(echo $BINARYURL | cut -d '-' -f4 | cut -d '.' -f1) # In the format XX
+  VMWAREVERSION=$(echo $BINARYURL | grep -E -o '[0-9]{2}\.[0-9]{1,2}\.[0-9]{1,2}' ) # In the format XX.XX.XX
+  MAJORVERSION=$(echo $VMWAREVERSION | awk -F'.' '{print $1}') # In the format XX
 
   # Another way of getting MAJORVERSION: curl -sIkL $VMWAREURL | grep "filename=" | sed -r 's|^([^.]+).*$|\1|; s|^[^0-9]*([0-9]+).*$|\1|'
 
