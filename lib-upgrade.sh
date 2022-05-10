@@ -112,7 +112,7 @@ InstallKernelHeaders(){
   dnf install -y /root/rpmbuild/RPMS/x86_64/kernel-headers-$KERNELVERSION*.rpm
 
   # verify that installed kernel-devel file matches
-  KERNELDEVELVERSION=$(rpm -qa kernel-devel | cut -d"-" -f3) #Installed kernel-devel version
+  KERNELDEVELVERSION=$(rpm -qa kernel-devel | cut -d"-" -f3 | grep $KERNELVERSION) #Installed kernel-devel version
   if [ $KERNELDEVELVERSION != $KERNELVERSION ] ; then
       dnf remove -y kernel-devel
       dnf install -y kernel-devel-$KERNELVERSION
