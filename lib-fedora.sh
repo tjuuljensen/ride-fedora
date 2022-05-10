@@ -2068,9 +2068,10 @@ RemoveVMwareWorkstation(){
 PatchVMwareModules(){
   # Relies on repo maintaned by mkubecek on https://github.com/mkubecek/vmware-host-modules
 
+  WGETUSERAGENT="'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0'"
   VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(curl -I $VMWAREURL 2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
-  VMWAREVERSION=$(echo $BINARYURL | cut -d '-' -f4 ) # In the format XX.XX.XX
+  BINARYURL=$(curl -A $WGETUSERAGENT -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
+  VMWAREVERSION=$(echo $BINARYURL | grep -E -o '[0-9]{2}\.[0-9]{1,2}\.[0-9]{1,2}' ) # In the format XX.XX.XX
 
   systemctl stop vmware
 
