@@ -2073,6 +2073,11 @@ PatchVMwareModules(){
   BINARYURL=$(curl -A $WGETUSERAGENT -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
   VMWAREVERSION=$(echo $BINARYURL | grep -E -o '[0-9]{2}\.[0-9]{1,2}\.[0-9]{1,2}' ) # In the format XX.XX.XX
 
+  if [ $BINARYURL == "https://www.vmware.com/site_maintenance.html" ] ; then
+    echo "VMware is doing site maintenance. Cannot continue."
+    exit 1
+  fi
+
   systemctl stop vmware
 
   cd $MYUSERDIR/git
