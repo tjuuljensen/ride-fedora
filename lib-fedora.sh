@@ -2028,6 +2028,11 @@ InstallVMwareWorkstation(){
 
   # Another way of getting MAJORVERSION: curl -sIkL $VMWAREURL | grep "filename=" | sed -r 's|^([^.]+).*$|\1|; s|^[^0-9]*([0-9]+).*$|\1|'
 
+  if [ $BINARYURL == "https://www.vmware.com/site_maintenance.html" ] ; then
+    echo "VMware is doing site maintenance. Cannot continue."
+    exit 1
+  fi
+
   if [ ! -z "VMWARESERIAL$MAJORVERSION" ] ; then # VMWARESERIALXX of the current major release is defined in include file
     # TMPSERIAL is used to translate serial numbers from config file - if major version is 15 then the value of the entry VMWARESERIAL15 is assigned to TMPSERIAL.
     TMPSERIAL=VMWARESERIAL$MAJORVERSION # Addressing of a dynamic variable is different. Therefore it is put into CURRENTVMWSERIAL
@@ -2068,15 +2073,7 @@ RemoveVMwareWorkstation(){
 PatchVMwareModules(){
   # Relies on repo maintaned by mkubecek on https://github.com/mkubecek/vmware-host-modules
 
-  WGETUSERAGENT="'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0'"
-  VMWAREURL=https://www.vmware.com/go/getworkstation-linux
-  BINARYURL=$(curl -A $WGETUSERAGENT -I $VMWAREURL  2>&1 | grep Location | cut -d ' ' -f2 | sed 's/\r//g') # Full URL to binary installer
-  VMWAREVERSION=$(echo $BINARYURL | grep -E -o '[0-9]{2}\.[0-9]{1,2}\.[0-9]{1,2}' ) # In the format XX.XX.XX
-
-  if [ $BINARYURL == "https://www.vmware.com/site_maintenance.html" ] ; then
-    echo "VMware is doing site maintenance. Cannot continue."
-    exit 1
-  fi
+  VMWAREVERSION=$(vmware-installer -l | awk 'FNR = /vmware-workstation/ { if (match($0,/[0-9]{2}\.[0-9]{1,2}\.[0-9]{1,2}/,m)) print m[0] }')
 
   systemctl stop vmware
 
