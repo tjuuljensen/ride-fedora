@@ -81,6 +81,8 @@ InstallKernelHeaders(){
   LOCALKERNELFILE=$MYUSERDIR/Downloads/$KERNELFILENAME
   LOCALKRNLSIGNFILE=$MYUSERDIR/Downloads/$KERNELSIGNNAME
 
+  cd $DOWNLOADDIR
+  
   # download files
   if [ ! -f $LOCALKERNELFILE ] ; then
     wget -q --show-progress $DOWNLOADURL$KERNELFILENAME -O $LOCALKERNELFILE
