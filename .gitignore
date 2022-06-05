@@ -7,3 +7,6 @@ openvpn/*
 # exclude ini files
 config.ini
 serials.ini
+
+# exclude dev files
+TODO.md
