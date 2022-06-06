@@ -238,8 +238,16 @@ RemoveDc3dd(){
   dnf remove -y dc3dd
 }
 
+InstallExif(){
+    dnf install -y exif
+}
+
+RemoveExif(){
+    dnf remove -y exif
+}
+
 InstallExifTool(){
-  # Phil Hangen's ExifTool - https://exiftool.org
+  # Phil Harvey's ExifTool - https://exiftool.org
   URL=https://github.com/exiftool/exiftool/tags
   DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep zip | sort -r -n | awk 'NR==1')
   FILENAME=${DOWNLOADURL##${DOWNLOADURL%/*}"/"}
