@@ -35,9 +35,15 @@ InstallDc3dd               # RemoveDc3dd
 InstallExifTool            # RemoveExifTool
 # InstallPlaso             # RemovePlaso
 # InstallAutopsy           # RemoveAutopsy
+# InstallXplico            # RemoveXplico
+# InstallBulkExtractor     # RemoveBulkExtractor
+# InstallVolatility        # RemoveVolatility
+# InstallVolatility3       # InstallVolatility3
+# InstallRekall            # RemoveRekall
 # InstallUnfURL            # RemoveUnfURL
 InstallCyberChef           # RemoveCyberChef
 InstallChepy               # RemoveChepy
+# InstallDumpzilla         # RemoveDumpzilla
 
 ### Basic Tools and Support ###
 InstallDocker              # RemoveDocker
@@ -54,8 +60,6 @@ InstallSmartMonTools       # RemoveSmartMonTools
 # InstallMicrosoftTeams    # RemoveMicrosoftTeams
 
 ### Accessories ###
-# InstallKeepass           # RemoveKeepass
-# InstallKeepassOtpKeyProv # RemoveKeepassOtpKeyProv
 InstallKeepassXC           # RemoveKeepassXC
 # InstallWoeUSB            # RemoveWoeUSB
 # InstallBalenaEtcher      # RemoveBalenaEtcher

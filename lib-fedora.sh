@@ -306,6 +306,52 @@ RemoveAutopsy(){
   dnf remove -y autopsy
 }
 
+InstallXplico(){
+  # https://www.xplico.org/about
+  dnf install -y xplico
+}
+
+RemoveXplico(){
+  dnf remove -y xplico
+}
+
+InstallBulkExtractor(){
+  # https://downloads.digitalcorpora.org/downloads/bulk_extractor/
+  dnf install -y bulk_extractor
+}
+
+RemoveBulkExtractor(){
+  dnf remove -y bulk_extractor
+}
+
+InstallVolatility(){
+  # https://www.volatilityfoundation.org/releases
+  dnf install -y Volatility
+}
+
+RemoveVolatility(){
+  dnf remove -y Volatility
+}
+
+InstallVolatility3(){
+  # https://www.volatilityfoundation.org/releases-vol3
+  #   https://github.com/volatilityfoundation/volatility3
+  dnf install -y Volatility
+}
+
+RemoveVolatility3(){
+  dnf remove -y Volatility
+}
+
+InstallRekall(){
+  # http://www.rekall-forensic.com/
+  dnf install -y rekall-forensics
+}
+
+RemoveRekall(){
+  dnf remove -y rekall-forensics
+}
+
 InstallUnfURL(){
   # https://github.com/obsidianforensics/unfurl
   # unresolved Jinja2 requirement
@@ -339,33 +385,6 @@ InstallCyberChef(){
   HTMLFILE=$(echo $ARCHIVE | sed "s/zip/html/g")
 
   echo "[Desktop Entry]
-  INSTALLDIR=/usr/lib/cyberchef/
-  DESKTOPFILE=/usr/share/applications/cyberchef.desktop
-
-  URL=https://github.com/gchq/CyberChef/releases/
-  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "download" | sort -r -n | awk 'NR==1' )
-  DOWNLOADURL="https://github.com$PARTIALPATH"
-  ARCHIVE="${DOWNLOADURL##*/}"
-
-  cd $DOWNLOADDIR
-  wget $DOWNLOADURL
-
-  mkdir -p $INSTALLDIR
-  unzip -d $INSTALLDIR $ARCHIVE
-
-  HTMLFILE=$(echo $ARCHIVE | sed "s/zip/html/g")
-
-  echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=CyberChef
-Comment=The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis.
-Icon=/usr/lib/CyberChef/images/cyberchef-128x128.png
-Exec=firefox file://$INSTALLDIR$HTMLFILE
-Actions=
-Categories=Network;WebBrowser;" > $DESKTOPFILE
-
-}
 Version=1.0
 Type=Application
 Name=CyberChef
@@ -398,6 +417,64 @@ InstallChepy(){
 RemoveChepy(){
   rmdir $MYUSERDIR/git/chepy/ -rf
   rm /usr/bin/chepy -f
+}
+
+
+InstallDumpzilla(){
+  #  https://www.dumpzilla.org/dumpzilla.py
+  SCRIPTURL=https://www.dumpzilla.org/dumpzilla.py
+  LOCALFILE="/usr/local/bin/dumpzilla.py"
+  wget -q --show-progress -O $LOCALFILE $SCRIPTURL
+  chmod 755 $LOCALFILE
+
+}
+
+RemoveDumpzilla(){
+  LOCALFILE="/usr/local/bin/dumpzilla.py"
+  rm $LOCALFILE -f
+}
+
+InstallNetworkMiner(){
+
+  ZIPFILE=/tmp/NetworkMiner.zip
+  INSTALLDIR=/opt/NetworkMiner
+  LOGOFILE=https://www.netresec.com/images/NetworkMiner_logo_313x313.png
+  DESKTOPFILE=/usr/share/applications/networkminer.desktop
+
+  dnf install -y mono-devel
+
+  wget https://www.netresec.com/?download=NetworkMiner -O $ZIPFILE
+  mkdir -p $INSTALLDIR
+  unzip -d "$INSTALLDIR" "$ZIPFILE" && f=("$INSTALLDIR"/*) && mv "$INSTALLDIR"/*/* "$INSTALLDIR" && rmdir "${f[@]}"
+
+  wget $LOGOFILE -O $INSTALLDIR/NetworkMiner_logo_313x313.png
+
+  chmod +x NetworkMiner.exe
+  chmod -R go+w AssembledFiles/
+  chmod -R go+w Captures/
+
+  echo "[Desktop Entry]
+Type=Application
+Name=NetworkMiner
+GenericName=NetworkMiner
+Comment=NetworkMiner is a Network Forensic Analysis Tool (NFAT) for Windows
+Icon=/opt/NetworkMiner/NetworkMiner_logo_313x313.png
+Exec=mono /opt/NetworkMiner/NetworkMiner.exe
+Terminal=false
+Categories=Network;Utility;" > $DESKTOPFILE
+
+}
+
+RemoveNetworkMiner(){
+
+  INSTALLDIR=/opt/NetworkMiner
+  DESKTOPFILE=/usr/share/applications/networkminer.desktop
+
+  rm -rf $INSTALLDIR
+  rm $DESKTOPFILE
+
+  dnf remove -y  mono-devel
+
 }
 
 
@@ -543,52 +620,6 @@ RemoveMicrosoftTeams(){
 ################################################################
 ###### Accessories ###
 ################################################################
-
-InstallKeepass(){
-  # Install the portable version og the original keepass (uses mono to run)
-  dnf install -y keepass
-  mkdir /usr/lib/keepass/plugins
-}
-
-RemoveKeepass(){
-  dnf remove -y keepass
-  rmdir -rf /usr/lib/keepass/plugins
-}
-
-InstallKeepassOtpKeyProv(){
-# Install OtpKeyProv plugin for keepass - Key provider based on onetime passwords (OATH HOTP standard, RFC 4226)
-  if ( command -v keepass > /dev/null 2>&1 ) ; then # keepass is installed
-
-    if [ ! -d /usr/lib/keepass/plugins ] ; then # plugins directory does not exist
-      mkdir /usr/lib/keepass/plugins
-    fi
-
-    cd $DOWNLOADDIR
-
-    # Find the OtpKey download URL
-    URL=https://keepass.info/plugins.html
-    PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | grep OtpKey | grep -vi source | sort -n -r | awk NR==1 )
-    OTPKEYURL="https://keepass.info/"$PARTIALURL
-    wget $OTPKEYURL
-    # unzip to plugins library
-    unzip OtpKey* -d /usr/lib/keepass/plugins/
-
-  else
-    echo keepass is not installed. Exiting.
-  fi
-}
-
-RemoveKeepassOtpKeyProv(){
-# Remove OtpKeyProv plugin
-URL=https://keepass.info/plugins.html
-    PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | grep OtpKey | grep -vi source | sort -n -r | awk NR==1 )
-    OTPKEYURL="https://keepass.info/"$PARTIALURL
-    if [ -d /usr/lib/keepass/plugins ] ; then # plugins directory exists
-      rm /usr/lib/keepass/plugins/OtpKey* -f
-    else
-      echo No plugins library exist for keepass. Exiting.
-    fi
-}
 
 InstallKeepassXC(){
   dnf install -y keepassxc
