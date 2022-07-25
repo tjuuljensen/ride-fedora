@@ -127,6 +127,21 @@ RemoveVersionLock(){
     dnf remove -y python3-dnf-plugin-versionlock
 }
 
+InstallNautilusHash(){
+  dnf install -y gtkhash-nautilus
+}
+
+RemoveNautilusHash(){
+  dnf remove -y gtkhash-nautilus
+}
+
+InstallNautilusImageTools(){
+  dnf install -y ImageMagick nautilus-image-converter
+}
+
+RemoveNautilusImageTools(){
+  dnf remove -y ImageMagick nautilus-image-converter
+}
 
 ################################################################
 ###### Application Launchers ###

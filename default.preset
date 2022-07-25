@@ -21,6 +21,8 @@ InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
 InstallDNFutils            # RemoveDNFutils
 # InstallVersionLock       # RemoveVersionLock
+InstallNautilusHash        # RemoveNautilusHash
+InstallNautilusImageTools  # RemoveNautilusImageTools
 
 ### Application Launchers ###
 # InstallFlatpak           # RemoveFlatpak
