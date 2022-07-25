@@ -26,6 +26,7 @@ InstallDNFutils            # RemoveDNFutils
 # InstallFlatpak           # RemoveFlatpak
 InstallFlathub             # RemoveFlathub
 InstallAppImageLauncher    # RemoveAppImageLauncher
+# InstallSnap              # RemoveSnap
 
 ### Forensic Tools ###
 InstallCERTForensicsRepo   # RemoveCERTForensicsRepo

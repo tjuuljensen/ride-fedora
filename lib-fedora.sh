@@ -173,6 +173,13 @@ RemoveAppImageLauncher(){
   [ "$(ls -A $APPIMAGEDIR )" ] && echo "Files found - cannot delete ~/Applications" || rm -r ~/Applications
 }
 
+InstallSnap(){
+  dnf install -y snapd
+}
+
+RemoveSnap(){
+  dnf remove -y snapd
+}
 
 ################################################################
 ###### Forensic Tools ###
@@ -1622,7 +1629,7 @@ RemoveCustomKbrdShortcut(){
 }
 
 SetGnomeCustomFavorites(){
-    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'vmware-workstation.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop', 'terminator.desktop' ]"
+    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'org.gnome.Boxes.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'terminator.desktop' ]"
 }
 
 SetGnomeDefaultFavorites(){
