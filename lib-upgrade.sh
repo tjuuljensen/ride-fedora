@@ -1,8 +1,8 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: January 1, 2021 09:00
-# Latest verification and tests done on Fedora 30
+# Edited: July 30, 2022 09:00
+# Latest verification and tests done on Fedora 36
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
@@ -82,7 +82,7 @@ InstallKernelHeaders(){
   LOCALKRNLSIGNFILE=$MYUSERDIR/Downloads/$KERNELSIGNNAME
 
   cd $DOWNLOADDIR
-  
+
   # download files
   if [ ! -f $LOCALKERNELFILE ] ; then
     wget -q --show-progress $DOWNLOADURL$KERNELFILENAME -O $LOCALKERNELFILE
@@ -110,28 +110,34 @@ InstallKernelHeaders(){
   # check that rpm packages are there
   # ls /root/rpmbuild/RPMS/x86_64/ | grep kernel
 
-  # install package
-  dnf install -y /root/rpmbuild/RPMS/x86_64/kernel-headers-$KERNELVERSION*.rpm
+  KERNELHEADERFILES=$(find /root/rpmbuild/RPMS/x86_64/ -name kernel-headers-$KERNELVERSION*.rpm)
 
-  # verify that installed kernel-devel file matches
-  KERNELDEVELVERSION=$(rpm -qa kernel-devel | cut -d"-" -f3 | grep $KERNELVERSION) #Installed kernel-devel version
-  if [ $KERNELDEVELVERSION != $KERNELVERSION ] ; then
-      dnf remove -y kernel-devel
-      dnf install -y kernel-devel-$KERNELVERSION
+  if [ ! -z $KERNELHEADERFILES ] ; then
+    # install package
+    dnf install -y /root/rpmbuild/RPMS/x86_64/kernel-headers-$KERNELVERSION*.rpm
+
+    # verify that installed kernel-devel file matches
+    KERNELDEVELVERSION=$(rpm -qa kernel-devel | cut -d"-" -f3 | grep $KERNELVERSION) #Installed kernel-devel version
+    if [ $KERNELDEVELVERSION != $KERNELVERSION ] ; then
+        dnf remove -y kernel-devel
+        dnf install -y kernel-devel-$KERNELVERSION
+    fi
+
+    echo -n Rebooting in 10 seconds...
+    for ((i=1;i<=10;++i))
+    do
+        echo -n $i
+        sleep 0.5
+        echo -n "."
+        sleep 0.5
+    done
+    echo
+    echo Rebooting now!
+    sleep 2
+
+    reboot
+  else
+    echo "Something went wrong. Please go investigate what happened...""
   fi
-
-  echo -n Rebooting in 10 seconds...
-  for ((i=1;i<=10;++i))
-  do
-      echo -n $i
-      sleep 0.5
-      echo -n "."
-      sleep 0.5
-  done
-  echo
-  echo Rebooting now!
-  sleep 2
-
-  reboot
 
 }
