@@ -1,21 +1,24 @@
 #!/bin/bash
-# list-functions.sh
+# ridechk.sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: February 18, 2020 14:30
+# Edited: July 30, 2022 10:00
 #
 # Helper for outputting contents of code-libraries
 # Can be used for creating preset files used in misc. repos, e.g. https://github.com/tjuuljensen/bootstrap-fedora
 # Examples:
-#   Output all functions:             list-functions.sh code-library.sh
-#   Output with section information:  list-functions.sh --verbose code-library.sh
-#   Compare code with preset file:    list-functions.sh --compare code-library.sh myfile.preset
+#   Output all functions:             ridechk.sh code-library.sh
+#   Output with section information:  ridechk.sh --verbose code-library.sh
+#   Compare code with preset file:    ridechk.sh --compare code-library.sh myfile.preset
 
 _help()
 {
   # output help text (syntax)
   SCRIPT_NAME=$(basename $0)
   echo "usage: $SCRIPT_NAME [--verbose] <code-library.sh> | [--compare <code-library.sh> <functions.preset>] | [--help] "
+  echo " - Output all functions:             ridechk.sh code-library.sh"
+  echo " - Output with section information:  ridechk.sh --verbose code-library.sh"
+  echo " - Compare code with preset file:    ridechk.sh --compare code-library.sh myfile.preset"
 }
 
 # parse command line arguments

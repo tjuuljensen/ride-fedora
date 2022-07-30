@@ -1,11 +1,11 @@
 #!/bin/bash
-# run-commands.sh
+# ride.sh - Remove / Install / Disable / Enable 
 #
 # Author: Torsten Juul-Jensen
-# July 25, 2021
+# July 30, 2022
 #
 # Version:
-# Purpose: To start bootloader install of Fedora workstation
+# Purpose: Assist a slistream/bootloader install of a (Fedora) linux workstation
 
 ################################################################
 ###### Default Bootstrap Library Functions ###
