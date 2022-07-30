@@ -14,6 +14,7 @@ DisableScreensaver       # EnableScreenSaver
 SetupUserDefaultDirs
 
 ### Generic Fedora ###
+EnableFastDNF             # DisableFastDNF
 UpdateFedora
 InstallRequired
 InstallShellTools          # RemoveShellTools
@@ -41,12 +42,14 @@ InstallExifTool            # RemoveExifTool
 # InstallXplico            # RemoveXplico
 # InstallBulkExtractor     # RemoveBulkExtractor
 # InstallVolatility        # RemoveVolatility
-# InstallVolatility3       # InstallVolatility3
+# InstallVolatility3       # RemoveVolatility3
 # InstallRekall            # RemoveRekall
+# InstallSecurityLab       # RemoveSecurityLab
 # InstallUnfURL            # RemoveUnfURL
 InstallCyberChef           # RemoveCyberChef
 InstallChepy               # RemoveChepy
 # InstallDumpzilla         # RemoveDumpzilla
+InstallNetworkMiner        # RemoveNetworkMiner
 
 ### Basic Tools and Support ###
 InstallDocker              # RemoveDocker
@@ -109,6 +112,7 @@ InstallFirefoxAddons        # RemoveFirefoxAddons
 # InstallEdge               # RemoveEdge
 
 ### Multimedia ###
+# InstallCodecs             # RemoveCodecs
 # InstallSpotifyClient      # RemoveSpotifyClient
 # InstallVLCPlayer          # RemoveVLCPlayer
 # InstallClementinePlayer   # RemoveClementinePlayer
