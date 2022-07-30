@@ -1,8 +1,8 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: January 1, 2021 09:00
-# Latest verification and tests done on Fedora 31
+# Edited: July 20, 2022 10:00
+# Latest verification and tests done on Fedora 36
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
@@ -61,6 +61,48 @@ SetHostname(){
 ################################################################
 ###### Generic Fedora ###
 ################################################################
+
+EnableFastDNF(){
+
+  CONFFILE=/etc/dnf/dnf.conf
+
+  NEWCONFIG=(
+    fastestmirror=true # default false
+    max_parallel_downloads=15 # default 3
+    )
+
+  # For each line in NEWCONFIG, delete entry if it exists and re-add it with correct value
+
+  for CONFIG in "${NEWCONFIG[@]}"
+  do
+    KEY="${CONFIG%=*}"
+    VALUE="${CONFIG#*=}"
+    sed -i "/$KEY/d" $CONFFILE
+    sed -i "$ a $KEY=$VALUE" $CONFFILE
+  done
+
+}
+
+DisableFastDNF(){
+
+  # resets to default values
+  CONFFILE=/etc/dnf/dnf.conf
+
+  NEWCONFIG=(
+    fastestmirror=false # default false
+    max_parallel_downloads=3 # default 3
+    )
+
+  # For each line in NEWCONFIG, delete entry if it exists
+
+  for CONFIG in "${NEWCONFIG[@]}"
+  do
+    KEY="${CONFIG%=*}"
+    #VALUE="${CONFIG#*=}"
+    sed -i "/$KEY/d" $CONFFILE
+  done
+
+}
 
 UpdateFedora(){
   # update fedora
@@ -177,7 +219,6 @@ InstallAppImageLauncher(){
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     mkdir -p $APPIMAGEDIR > /dev/null
   fi
-
 }
 
 RemoveAppImageLauncher(){
@@ -372,6 +413,14 @@ InstallRekall(){
 
 RemoveRekall(){
   dnf remove -y rekall-forensics
+}
+
+InstallSecurityLab(){
+  dnf group install -y security-lab
+}
+
+RemoveSecurityLab(){
+  dnf group remove -y security-lab
 }
 
 InstallUnfURL(){
@@ -916,7 +965,7 @@ DisableMulticastDNS(){
   # Original line will be left in the file with a # in the beginning of the line
   # multicast dns has to be disabled to resolve .local dns names (like in Active Directory domains called eg. contoso.local)
   NSSWITCHFILE=/etc/nsswitch.conf
-  DNSLINENO=$(cat $NSSWITCHFILE | grep -in ^hosts | cut -c1-2)
+  DNSLINENO=$(grep -in ^hosts $NSSWITCHFILE  | cut -d ":" -f1)
   NEWLINENO=$(($DNSLINENO))
 
   NOMULTIDNSLINE=$(cat $NSSWITCHFILE | grep -i ^hosts | sed 's/mdns4_minimal //g' | sed 's/dns //g' | sed 's/files/files dns/g')
@@ -934,7 +983,7 @@ EnableMulticastDNS(){
   OLDDNSLINE=$(cat $NSSWITCHFILE | grep -in "^#hosts")
 
   if [ ! -z $OLDDNSLINE ] ; then # the old DNS line exists and can be reactivated
-    DNSLINENO=$(cat $NSSWITCHFILE | grep -in ^hosts | cut -c1-2)
+    DNSLINENO=$(grep -in ^hosts $NSSWITCHFILE  | cut -d ":" -f1)
     sed -i $DNSLINENO"d" $NSSWITCHFILE
     sed -i "s/^#hosts/hosts/g" $NSSWITCHFILE
   fi
@@ -1360,6 +1409,18 @@ RemoveEdge(){
 ###### Multimedia ###
 ################################################################
 
+InstallCodecs(){
+  dnf install -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav --exclude=gstreamer1-plugins-bad-free-devel
+  dnf install -y lame* --exclude=lame-devel
+  dnf group upgrade -y  --with-optional Multimedia
+}
+
+RemoveCodecs(){
+  dnf remove -y gstreamer1-plugins-{bad-\*,good-\*,base} gstreamer1-plugin-openh264 gstreamer1-libav
+  dnf remove -y lame\*
+}
+
+
 InstallSpotifyClient(){
   # install Spotify client
   # See details and firewall config here http://negativo17.org/spotify-client/
@@ -1686,9 +1747,7 @@ alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +sho
 }
 
 UnsetWanIPAlias(){
-
   sed -i '/alias wanip/d' ~/.bashrc
-
 }
 
 ################################################################
@@ -1696,16 +1755,12 @@ UnsetWanIPAlias(){
 ################################################################
 
 InstallLynis(){
-
     dnf install -y lynis
-
 }
 
 
 RemoveLynis(){
-
   dnf remove -y lynis
-
 }
 
 InstallClamAV(){
