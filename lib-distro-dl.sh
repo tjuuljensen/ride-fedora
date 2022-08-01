@@ -52,7 +52,6 @@ GetDebianTorrent () {
 }
 
 GetUbuntu() {
-
   cd $DOWNLOADDIR
   # Ubuntu desktop torrent
   URL="https://ubuntu.com/download/alternative-downloads"
@@ -63,42 +62,59 @@ GetUbuntu() {
 }
 
 GetUbuntuTorrent() {
-
   cd $DOWNLOADDIR
   # Ubuntu desktop torrent
   URL="https://ubuntu.com/download/alternative-downloads"
   curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' | \
-    grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+    grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
 
+GetUbuntuServer () {
+  cd $DOWNLOADDIR
+  # Ubuntu server torrent
+  URL="https://ubuntu.com/download/alternative-downloads"
+  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+    | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 \
+    | awk -F".torr" '{ print $1 }' \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+}
 
 GetUbuntuServerTorrent () {
   cd $DOWNLOADDIR
   # Ubuntu server torrent
   URL="https://ubuntu.com/download/alternative-downloads"
   curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
-    | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+    | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
+
 
 GetFedora(){
   URL=https://getfedora.org/en/workstation/download/
   curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
-    |  grep download | grep x86_64  |sort -n -r | awk NR==1
+    |  grep download | grep x86_64  |sort -n -r | awk NR==1 \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
-
 
 GetFedoraTorrent () {
   cd $DOWNLOADDIR
   # Fedora Workstation x86_64
   URL=https://torrent.fedoraproject.org/
   curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep Workstation | grep -v Atomic | grep -v Beta | grep x86_64  |sort -n -r | awk NR==1 \
+    | grep Workstation | grep -v Beta | grep x86_64  |sort -n -r | awk NR==1 \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+}
+
+GetFedoraServer(){
+  URL=https://getfedora.org/en/server/download/
+  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
+    |  grep dvd | grep x86_64  |sort -n -r | awk NR==1 \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
 
 GetFedoraServerTorrent () {
   cd $DOWNLOADDIR
-
   # Fedora Server x86_64
   URL=https://torrent.fedoraproject.org/
   curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
