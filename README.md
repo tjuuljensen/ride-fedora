@@ -11,12 +11,12 @@ $ ./bootstrap.sh
 $ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh
 ```
 
-This way the one-liner will allow you to edit the preset file before installing:  
+This way the one-liner will allow you to *edit* the preset file before installing:  
 ```
 $ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh --edit
 ```
 
-You can also halt the installation process when the source has been downloaded:  
+You can also *halt the installation* process when the source has been downloaded:  
 ```
 $ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh --stop
 ```
