@@ -9,7 +9,7 @@
 #
 
 # Declare variables
-if [ -z $SCRIPT_VARSSET ] ; then
+if [[ -z $SCRIPT_VARSSET ]] ; then
   # if the vars are not exported to bash from another shell script, set variables in this scope (in the case the script is sourced)
   FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
   SCRIPTDIR=$( dirname $( realpath "${BASH_SOURCE[0]}" )) #set the variable to the place where script is loaded from
