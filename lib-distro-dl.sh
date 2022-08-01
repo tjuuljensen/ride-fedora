@@ -51,42 +51,59 @@ GetDebianTorrent () {
 
 }
 
-GetUbuntuTorrent () {
+GetUbuntu() {
+
+  cd $DOWNLOADDIR
+  # Ubuntu desktop torrent
+  URL="https://ubuntu.com/download/alternative-downloads"
+  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+    | grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 \
+    | awk -F".torr" '{ print $1 }' \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+}
+
+GetUbuntuTorrent() {
 
   cd $DOWNLOADDIR
   # Ubuntu desktop torrent
   URL="https://ubuntu.com/download/alternative-downloads"
   curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' | \
     grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+}
 
+
+GetUbuntuServerTorrent () {
+  cd $DOWNLOADDIR
   # Ubuntu server torrent
-  # URL="https://ubuntu.com/download/alternative-downloads"
+  URL="https://ubuntu.com/download/alternative-downloads"
   curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
     | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
 
+GetFedora(){
+  URL=https://getfedora.org/en/workstation/download/
+  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
+    |  grep download | grep x86_64  |sort -n -r | awk NR==1
+}
+
+
 GetFedoraTorrent () {
-
   cd $DOWNLOADDIR
-  # Fedora Workstation i386
-  URL=https://torrent.fedoraproject.org/
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep Workstation | grep -v Atomic | grep -v Beta | grep i386  |sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
-
   # Fedora Workstation x86_64
   URL=https://torrent.fedoraproject.org/
   curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep Workstation | grep -v Atomic | grep -v Beta | grep x86_64  |sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+    | grep Workstation | grep -v Atomic | grep -v Beta | grep x86_64  |sort -n -r | awk NR==1 \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+}
 
-  # Fedora Server i386
-  URL=https://torrent.fedoraproject.org/
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep Server | grep -v Beta | grep -e i386 | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+GetFedoraServerTorrent () {
+  cd $DOWNLOADDIR
 
   # Fedora Server x86_64
   URL=https://torrent.fedoraproject.org/
   curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep Server | grep -v Beta | grep -e x86_64 | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+    | grep Server | grep -v Beta | grep -e x86_64 | sort -n -r | awk NR==1 \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
 
 GetArchTorrent () {
@@ -103,30 +120,36 @@ GetArchTorrent () {
 
 GetKaliTorrent () {
   cd $DOWNLOADDIR
-  # Kali
-  # get listings: curl http://cdimage.kali.org/current/ |  grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep -E '(SHA|kali)'
-
   IMAGEURL=http://cdimage.kali.org/current/
-  LATESTISO=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64)
-  LATESTTORRENT=$LATESTISO".torrent"
-  TORRENTURL=https://images.kali.org/$LATESTTORRENT
-
-  wget -q --show-progress -P $DOWNLOADDIR/ $TORRENTURL
-
+  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64 | grep torrent )
+  URL="https://images.kali.org/$SUBURL"
+  wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
 GetKaliISO () {
   cd $DOWNLOADDIR
-  # Kali
-  # get listings: curl http://cdimage.kali.org/current/ |  grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep -E '(SHA|kali)'
 
   IMAGEURL=http://cdimage.kali.org/current/
-  LATESTISO=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64)
+  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64 | grep -v torrent )
+  URL="https://images.kali.org/$SUBURL"
+  wget -q --show-progress -P $DOWNLOADDIR/ $URL
+}
 
-  TORRENTURL=https://images.kali.org/$LATESTISO
+GetKaliLiveTorrent () {
+  cd $DOWNLOADDIR
+  IMAGEURL=http://cdimage.kali.org/current/
+  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep live-amd64 | grep torrent )
+  URL="https://images.kali.org/$SUBURL"
+  wget -q --show-progress -P $DOWNLOADDIR/ $URL
+}
 
-  wget -q --show-progress -P $DOWNLOADDIR/ $TORRENTURL
+GetKaliLiveISO () {
+  cd $DOWNLOADDIR
 
+  IMAGEURL=http://cdimage.kali.org/current/
+  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep live-amd64 | grep -v torrent )
+  URL="https://images.kali.org/$SUBURL"
+  wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
 GetRaspbianTorrent () {
@@ -185,14 +208,13 @@ GetSuse () {
 
 }
 
-GetTails() {
+GetTailsTorrent() {
   cd $DOWNLOADDIR
-  #https://tails.boum.org/install/linux/usb-download/index.en.html
+  # https://tails.boum.org/install/expert/index.en.html
   URL=https://tails.boum.org/torrents/files/
-  TAILSIMAGE=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep torrent | cut -d'"' -f2 | grep img )
-
-  wget -q --show-progress -P $DOWNLOADDIR/ $URL$TAILSIMAGE
-
+  SUBURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep torrent | cut -d'"' -f2 | grep img )
+  download_url="$URL$SUBURL"
+  wget -q --show-progress -P $DOWNLOADDIR/ $download_url
 }
 
 GetSecurityOnion(){
