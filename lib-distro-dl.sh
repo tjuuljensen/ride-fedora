@@ -1,61 +1,58 @@
 #!/bin/sh
 # lib-distro.sh
 # Author: Torsten Juul-Jensen
-# Edited: January 1, 2021 09:00
-# Latest verification and tests done on Fedora XX
+# Edited: August 1, 2022 10:00
+# Latest verification and tests done on Fedora 36
 #
-# This file is a Fedora function library only and is meant for sourcing into other scripts
+# This file is a bash function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
 #
 
-# Declare variables
-if [ -z $SCRIPT_VARSSET ] ; then
-  # if the vars are not exported to bash from another shell script, set variables in this scope (in the case the script is sourced)
-  FEDORARELEASE=$(sed 's/[^0-9]//g' /etc/fedora-release) #Fedora release number
-  SCRIPTDIR=$( dirname $( realpath "${BASH_SOURCE[0]}" )) #set the variable to the place where script is loaded from
-  WORKDIR=$(pwd)
-  MYUSER=$(logname)
-  LOGINUSERUID=$(id -u ${MYUSER})
-  DOWNLOADDIR=/tmp
-  MYUSERDIR=$(eval echo "~$MYUSER")
-else # if the bash variables are set from a parent script
-  # set local variables from the exported bash variables
-  FEDORARELEASE=$SCRIPT_FEDORARELEASE
-  SCRIPTDIR=$SCRIPT_SCRIPTDIR
-  WORKDIR=$SCRIPT_WORKDIR
-  MYUSER=$SCRIPT_MYUSER
-  LOGINUSERUID=$SCRIPT_LOGINUSERUID
-  DOWNLOADDIR=$SCRIPT_DOWNLOADDIR
-  MYUSERDIR=$SCRIPT_MYUSERDIR
+# Declare static variables
+MYUSER=$(logname)
+LOGINUSERHOME=$(eval echo "~$(logname)")
+
+if [[ -d $LOGINUSERHOME/Downloads/ ]] ; then
+  DOWNLOADDIR=$(realpath $LOGINUSERHOME/Downloads/)
+else
+  DOWNLOADDIR=$(realpath $LOGINUSERHOME)
 fi
 
-GetDebianTorrent () {
-  # debian amd64/i386 cd/dvd
 
+GetDebian () {
   cd $DOWNLOADDIR
   #Debian DVD amd64
-  URL=https://cdimage.debian.org/debian-cd/current/amd64/bt-dvd/
-  wget -q --show-progress -r -nH --cut-dirs=4 --no-parent -A "*.torrent" -R  "*mac*" $URL/ -P $DOWNLOADDIR/
-
-  #Debian CD amd64
-  URL=https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/
-  wget -q --show-progress -r -nH --cut-dirs=4 --no-parent -A "*netinst*" -R  "*mac*" $URL/ -P $DOWNLOADDIR/
-
-  #Debian DVD i386
-  URL=https://cdimage.debian.org/debian-cd/current/i386/bt-dvd/
-  wget -q --show-progress -r -nH --cut-dirs=4 --no-parent -A "*.torrent" -R  "*mac*" $URL/ -P $DOWNLOADDIR/
-
-  #Debian CD i386
-  URL=https://cdimage.debian.org/debian-cd/current/i386/bt-cd/
-  wget -q --show-progress -r -nH --cut-dirs=4 --no-parent -A "*netinst*" -R  "*mac*" $URL/ -P $DOWNLOADDIR/
-
+  URL=https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/
+  iso_name=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'DVD' | grep -v "debian-edu" \
+    | grep -v mac | cut -d'"' -f2 | sort -r -n | awk NR==1)
+  iso_url="$URL$iso_name"
+  wget -q --show-progress $iso_url/ -P $DOWNLOADDIR/
 }
+
+GetDebianTorrent () {
+  cd $DOWNLOADDIR
+  URL=https://cdimage.debian.org/debian-cd/current/amd64/bt-dvd/
+  iso_name=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep 'DVD' | grep -v "debian-edu" \
+    | grep -v mac | cut -d'"' -f2 | sort -r -n | awk NR==1)
+  iso_url="$URL$iso_name"
+  wget -q --show-progress $iso_url/ -P $DOWNLOADDIR/
+}
+
+GetDebianNetinst () {
+  cd $DOWNLOADDIR
+  URL=https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/
+  iso_name=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E '-netinst' | grep -v "debian-edu" \
+    | grep -v mac | cut -d'"' -f2 | sort -r -n | awk NR==1)
+  iso_url="$URL$iso_name"
+  wget -q --show-progress $iso_url/ -P $DOWNLOADDIR/
+}
+
 
 GetUbuntu() {
   cd $DOWNLOADDIR
   # Ubuntu desktop torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
     | grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 \
     | awk -F".torr" '{ print $1 }' \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
@@ -65,16 +62,17 @@ GetUbuntuTorrent() {
   cd $DOWNLOADDIR
   # Ubuntu desktop torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' | \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' | \
     grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
+
 
 GetUbuntuServer () {
   cd $DOWNLOADDIR
   # Ubuntu server torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
     | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 \
     | awk -F".torr" '{ print $1 }' \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
@@ -84,7 +82,7 @@ GetUbuntuServerTorrent () {
   cd $DOWNLOADDIR
   # Ubuntu server torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
     | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
@@ -92,7 +90,7 @@ GetUbuntuServerTorrent () {
 
 GetFedora(){
   URL=https://getfedora.org/en/workstation/download/
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
     |  grep download | grep x86_64  |sort -n -r | awk NR==1 \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
@@ -101,14 +99,14 @@ GetFedoraTorrent () {
   cd $DOWNLOADDIR
   # Fedora Workstation x86_64
   URL=https://torrent.fedoraproject.org/
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
     | grep Workstation | grep -v Beta | grep x86_64  |sort -n -r | awk NR==1 \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
 
 GetFedoraServer(){
   URL=https://getfedora.org/en/server/download/
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
     |  grep dvd | grep x86_64  |sort -n -r | awk NR==1 \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
@@ -117,7 +115,7 @@ GetFedoraServerTorrent () {
   cd $DOWNLOADDIR
   # Fedora Server x86_64
   URL=https://torrent.fedoraproject.org/
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
+  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
     | grep Server | grep -v Beta | grep -e x86_64 | sort -n -r | awk NR==1 \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
@@ -130,7 +128,7 @@ GetArchTorrent () {
   URL=$BASEURL$SUBPATH
   # curl $URL 2>&1 | grep "torrent/" |  cut -d'"' -f2 | sort -Vr | awk NR==1
 
-  wget --content-disposition  -q --show-progress  $URL -P $DOWNLOADDIR/
+  sudo -u $MYUSER wget --content-disposition  -q --show-progress  $URL -P $DOWNLOADDIR/
 
 }
 
@@ -139,16 +137,15 @@ GetKaliTorrent () {
   IMAGEURL=http://cdimage.kali.org/current/
   SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64 | grep torrent )
   URL="https://images.kali.org/$SUBURL"
-  wget -q --show-progress -P $DOWNLOADDIR/ $URL
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
-GetKaliISO () {
+GetKali () {
   cd $DOWNLOADDIR
-
   IMAGEURL=http://cdimage.kali.org/current/
   SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64 | grep -v torrent )
   URL="https://images.kali.org/$SUBURL"
-  wget -q --show-progress -P $DOWNLOADDIR/ $URL
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
 GetKaliLiveTorrent () {
@@ -156,37 +153,46 @@ GetKaliLiveTorrent () {
   IMAGEURL=http://cdimage.kali.org/current/
   SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep live-amd64 | grep torrent )
   URL="https://images.kali.org/$SUBURL"
-  wget -q --show-progress -P $DOWNLOADDIR/ $URL
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
-GetKaliLiveISO () {
+GetKaliLive () {
   cd $DOWNLOADDIR
-
   IMAGEURL=http://cdimage.kali.org/current/
   SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep live-amd64 | grep -v torrent )
   URL="https://images.kali.org/$SUBURL"
-  wget -q --show-progress -P $DOWNLOADDIR/ $URL
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
-GetRaspbianTorrent () {
+GetMint(){
+  # Linux Mint - Cinnamon
+  IMAGEURL=https://mirrors.edge.kernel.org/linuxmint/stable/
+  latest_version=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | grep -Eow "[0-9\.]{1,4}" | sort -r -g | awk NR==1)
+  latest_version_url="$IMAGEURL$latest_version/"
+  URL=$(curl $latest_version_url 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep cinnamon)
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
+}
+
+GetRaspiOSTorrent () {
   cd $DOWNLOADDIR
   # Raspian downloads
-  # Download zip files like this: wget --content-disposition https://downloads.raspberrypi.org/raspbian_full_latest
 
-  # Raspbian Stretch with desktop and recommended software (FULL)
-  URL=https://www.raspberrypi.org/software/operating-systems
-  curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
+  # Raspbian with desktop and recommended software (FULL)
+  URL=https://www.raspberrypi.com/software/operating-systems/
+  sudo -u $MYUSER curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
     | grep torrent | grep full | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 
-  # Raspbian Stretch with desktop
-  URL=https://www.raspberrypi.org/software/operating-systems
-  curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep torrent | grep raspbian_latest | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  # Raspbian with desktop
+  URL=https://www.raspberrypi.com/software/operating-systems/
+  sudo -u $MYUSER curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
+    | grep arm64 | grep torrent | grep -v lite \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 
-  # Raspbian Stretch Lite
-  URL=https://www.raspberrypi.org/software/operating-systems
-  curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep torrent | grep lite | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  # Raspbian Lite
+  URL=https://www.raspberrypi.com/software/operating-systems/
+  sudo -u $MYUSER curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
+    | grep arm64 | grep torrent | grep lite \
+    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 
   # Get SHA-256 sums for all three files directly from web page using this function:
   # wget -qO- $URL | grep -oP 'SHA-256:.*'  | cut -f 3 -d ">" | cut -f 1 -d "<"
@@ -194,7 +200,7 @@ GetRaspbianTorrent () {
 
 }
 
-GetSlackware () {
+GetSlackwareTorrent () {
   cd $DOWNLOADDIR
   # Slackware
 
@@ -207,20 +213,7 @@ GetSlackware () {
   URL=http://www.slackware.com/torrents/
   FILENAME=$(curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | cut -d'"' -f2  | grep torrent | sort -n -r | awk NR==1 |  cut -f3 -d '/' | sed 's/slackware64/slackware/g')
 
-  wget -qwget -q --show-progress -P $DOWNLOADDIR/ $LATESTISO --show-progress $URL$FILENAME -P $DOWNLOADDIR/
-
-}
-
-GetSuse () {
-  cd $DOWNLOADDIR
-  # OpenSUSE
-  URL=https://get.opensuse.org/leap
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-      | grep torrent | grep DVD | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
-
-  # NetInstall
-  curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-      | grep torrent | grep NET | sort -n -r | awk NR==1 | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  wget -q --show-progress $URL$FILENAME -P $DOWNLOADDIR/
 
 }
 
@@ -230,7 +223,7 @@ GetTailsTorrent() {
   URL=https://tails.boum.org/torrents/files/
   SUBURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep torrent | cut -d'"' -f2 | grep img )
   download_url="$URL$SUBURL"
-  wget -q --show-progress -P $DOWNLOADDIR/ $download_url
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $download_url
 }
 
 GetSecurityOnion(){
@@ -252,17 +245,10 @@ GetSecurityOnion(){
   # Check if file exists
   [[ `wget -S --spider $LATESTISO  2>&1 | grep -E 'HTTP/1.1 200 OK|Remote file exists'` ]] && echo OK || echo no
 
-  wget -q --show-progress -P $DOWNLOADDIR/ $LATESTSIG
-  wget -q --show-progress -P $DOWNLOADDIR/ $LATESTISO
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $LATESTSIG
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $LATESTISO
 
   # Check Signature:
   [[ `gpg --verify $SIGFILE $ISOFILE` ]] && echo good || echo bad
 
-}
-
-_cleanup () {
-  # unfortunately wget leaves traces after some downloads, so this section is for cleaning up the leftovers
-  rm $DOWNLOADDIR/robots.txt.tmp 2> /dev/null
-  rm $DOWNLOADDIR/*.html 2> /dev/null
-  rm $DOWNLOADDIR/*.html.? 2> /dev/null
 }
