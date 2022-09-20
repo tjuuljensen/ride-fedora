@@ -1246,6 +1246,7 @@ pref("datareporting.policy.dataSubmissionEnabled", false);
 pref("toolkit.crashreporter.enabled", false);
 pref("services.sync.enabled", false);
 pref("media.peerconnection.enabled", false);
+pref("middlemouse.paste", false);
 pref("extensions.pocket.enabled", false);' > $FIREFOXPREFFILE
 
   # Create the autoconfig.js file (enables preferences)
@@ -1613,6 +1614,16 @@ SetWindowCtlLeftClsMinMax(){
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:'
 }
 
+EnableMiddleButtonPaste(){
+  # Set buttons on the left - Close, Min & Max
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
+}
+
+DisableMiddleButtonPaste(){
+  # Set buttons on the left - Close, Min & Max
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.interface gtk-enable-primary-paste false
+}
+
 SetGnomeRegionDaDK(){
   # Set system locale to da_DK
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.system.locale region "'da_DK.UTF-8'"
@@ -1861,7 +1872,7 @@ ImportOpenVPNProfiles(){
   # if one or more VPN config was added - optional add username to config
   if [ ${#VPNCONNECTIONS[@]} -gt 0 ] ; then
     # add OpenVPN username to configs
-    read -r -p "Do you want to add openvpn username to VPN config files? [y/N]} " RESPONSE
+    read -r -p "Do you want to add openvpn username to VPN config files? [y/N] " RESPONSE
     RESPONSE=${RESPONSE,,}
     if [[ $RESPONSE =~ ^(yes|y| ) ]]
       then

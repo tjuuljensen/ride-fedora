@@ -128,6 +128,7 @@ InstallGnomeExtensions     # RemoveGnomeExtensions
 ShowDateInTaskbar          # HideDateInTaskbar
 ShowWeekNumbersInTaskbar   # HideWeekNumbersInTaskbar
 SetWindowCtlMinMaxClose    # SetWindowCtlAppmenuClose     # SetWindowCtlLeftClsMinMax
+DisableMiddleButtonPaste   # EnableMiddleButtonPaste
 SetGnomeRegionDaDK         # RemoveGnomeRegion
 SetScreensaverSlp10Lgn5    # SetScreensaverSlp15Lgn5
 SetCustomKeyboardShortcut  # SetVMKeyboardShortcut        # RemoveCustomKbrdShortcut
