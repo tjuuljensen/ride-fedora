@@ -1615,12 +1615,12 @@ SetWindowCtlLeftClsMinMax(){
 }
 
 EnableMiddleButtonPaste(){
-  # Set buttons on the left - Close, Min & Max
+  # Enable middle mouse button in Gnome
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
 }
 
 DisableMiddleButtonPaste(){
-  # Set buttons on the left - Close, Min & Max
+  # Disable middle mouse button in Gnome
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.interface gtk-enable-primary-paste false
 }
 
