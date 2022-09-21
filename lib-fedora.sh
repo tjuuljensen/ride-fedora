@@ -862,7 +862,13 @@ RemoveAtomPlugins(){
     fi
 }
 
+InstallPyhtonAutopep8(){
+  sudo -u $MYUSER pip install --upgrade autopep8
+}
 
+RemovePyhtonAutopep8(){
+  sudo -u $MYUSER pip uninstall autopep8
+}
 
 ################################################################
 ###### Communication ####

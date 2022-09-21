@@ -76,6 +76,7 @@ InstallKeepassXC           # RemoveKeepassXC
 InstallAtomEditor          # RemoveAtomEditor
 DisableAtomTelemetry       # EnableAtomTelemetry
 InstallAtomPlugins         # RemoveAtomPlugins
+InstallPyhtonAutopep8      # RemovePyhtonAutopep8
 
 ### Communication ####
 InstallHexchat             # RemoveHexchat
