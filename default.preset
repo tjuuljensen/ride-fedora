@@ -36,6 +36,9 @@ InstallCERTForensicsRepo   # RemoveCERTForensicsRepo
 InstallLibEWF              # RemoveLibEWF
 InstallFTKImager           # RemoveFTKImager
 InstallDc3dd               # RemoveDc3dd
+# InstallBinwalk           # RemoveBinwalk
+# InstallGalleta           # RemoveGalleta
+# InstallMd5deep           # RemoveMd5deep
 InstallExifTool            # RemoveExifTool
 # InstallPlaso             # RemovePlaso
 # InstallAutopsy           # RemoveAutopsy

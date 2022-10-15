@@ -309,6 +309,32 @@ RemoveExif(){
     dnf remove -y exif
 }
 
+InstallBinwalk(){
+    dnf install -y binwalk
+}
+
+RemoveBinwalk(){
+    dnf remove -y binwalk
+}
+
+InstallGalleta(){
+    #https://www.kali.org/tools/galleta/
+    dnf install -y galleta
+}
+
+RemoveGalleta(){
+    dnf remove -y galleta
+}
+
+InstallMd5deep(){
+    # https://www.kali.org/tools/hashdeep/
+    dnf install -y md5deep
+}
+
+RemoveMd5deep(){
+    dnf remove -y md5deep
+}
+
 InstallExifTool(){
   # Phil Harvey's ExifTool - https://exiftool.org
   URL=https://github.com/exiftool/exiftool/tags
@@ -416,6 +442,8 @@ RemoveRekall(){
 }
 
 InstallSecurityLab(){
+  # See content of the group:
+  # dnf group info security-lab
   dnf group install -y security-lab
 }
 
