@@ -18,6 +18,9 @@ else
   DOWNLOADDIR=$(realpath $LOGINUSERHOME)
 fi
 
+################################################################
+###### Debian  ###
+################################################################
 
 GetDebian () {
   cd $DOWNLOADDIR
@@ -47,6 +50,9 @@ GetDebianNetinst () {
   wget -q --show-progress $iso_url/ -P $DOWNLOADDIR/
 }
 
+################################################################
+###### Ubuntu  ###
+################################################################
 
 GetUbuntu() {
   cd $DOWNLOADDIR
@@ -87,6 +93,9 @@ GetUbuntuServerTorrent () {
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
 
+################################################################
+###### Fedora  ###
+################################################################
 
 GetFedora(){
   URL=https://getfedora.org/en/workstation/download/
@@ -120,25 +129,10 @@ GetFedoraServerTorrent () {
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
 }
 
-GetArchTorrent () {
-  cd $DOWNLOADDIR
-  # Arch Linux
-  BASEURL=https://archlinux.org
-  SUBPATH=$(curl $BASEURL/releng/releases/ 2>&1 | grep "torrent/" |  cut -d'"' -f2 | sort -Vr | awk NR==1 )
-  URL=$BASEURL$SUBPATH
-  # curl $URL 2>&1 | grep "torrent/" |  cut -d'"' -f2 | sort -Vr | awk NR==1
 
-  sudo -u $MYUSER wget --content-disposition  -q --show-progress  $URL -P $DOWNLOADDIR/
-
-}
-
-GetKaliTorrent () {
-  cd $DOWNLOADDIR
-  IMAGEURL=http://cdimage.kali.org/current/
-  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64 | grep torrent )
-  URL="https://images.kali.org/$SUBURL"
-  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
-}
+################################################################
+###### Kali  ###
+################################################################
 
 GetKali () {
   cd $DOWNLOADDIR
@@ -148,10 +142,10 @@ GetKali () {
   sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
-GetKaliLiveTorrent () {
+GetKaliTorrent () {
   cd $DOWNLOADDIR
   IMAGEURL=http://cdimage.kali.org/current/
-  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep live-amd64 | grep torrent )
+  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep installer-amd64 | grep torrent )
   URL="https://images.kali.org/$SUBURL"
   sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
@@ -164,14 +158,43 @@ GetKaliLive () {
   sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
 }
 
+GetKaliLiveTorrent () {
+  cd $DOWNLOADDIR
+  IMAGEURL=http://cdimage.kali.org/current/
+  SUBURL=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep live-amd64 | grep torrent )
+  URL="https://images.kali.org/$SUBURL"
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
+}
+
+################################################################
+###### Mint  ###
+################################################################
+
 GetMint(){
   # Linux Mint - Cinnamon
   IMAGEURL=https://mirrors.edge.kernel.org/linuxmint/stable/
   latest_version=$(curl $IMAGEURL 2>&1 | grep -Eoi '<a [^>]+>' | grep -Eow "[0-9\.]{1,4}" | sort -r -g | awk NR==1)
   latest_version_url="$IMAGEURL$latest_version/"
   URL=$(curl $latest_version_url 2>&1 | grep -Eoi '<a [^>]+>' | cut -d'"' -f2 | grep cinnamon)
-  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $URL
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ ${latest_version_url}${URL}
 }
+
+################################################################
+###### Tails  ###
+################################################################
+
+GetTailsTorrent() {
+  cd $DOWNLOADDIR
+  # https://tails.boum.org/install/expert/index.en.html
+  URL=https://tails.boum.org/torrents/files/
+  SUBURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep torrent | cut -d'"' -f2 | grep img )
+  download_url="$URL$SUBURL"
+  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $download_url
+}
+
+################################################################
+###### Raspberry Pi  ###
+################################################################
 
 GetRaspiOSTorrent () {
   cd $DOWNLOADDIR
@@ -200,6 +223,10 @@ GetRaspiOSTorrent () {
 
 }
 
+################################################################
+###### Other  ###
+################################################################
+
 GetSlackwareTorrent () {
   cd $DOWNLOADDIR
   # Slackware
@@ -217,14 +244,22 @@ GetSlackwareTorrent () {
 
 }
 
-GetTailsTorrent() {
+GetArchTorrent () {
   cd $DOWNLOADDIR
-  # https://tails.boum.org/install/expert/index.en.html
-  URL=https://tails.boum.org/torrents/files/
-  SUBURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep torrent | cut -d'"' -f2 | grep img )
-  download_url="$URL$SUBURL"
-  sudo -u $MYUSER wget -q --show-progress -P $DOWNLOADDIR/ $download_url
+  # Arch Linux
+  BASEURL=https://archlinux.org
+  SUBPATH=$(curl $BASEURL/releng/releases/ 2>&1 | grep "torrent/" |  cut -d'"' -f2 | sort -Vr | awk NR==1 )
+  URL=$BASEURL$SUBPATH
+  # curl $URL 2>&1 | grep "torrent/" |  cut -d'"' -f2 | sort -Vr | awk NR==1
+
+  sudo -u $MYUSER wget --content-disposition  -q --show-progress  $URL -P $DOWNLOADDIR/
+
 }
+
+
+################################################################
+###### SecurityOnion  ###
+################################################################
 
 GetSecurityOnion(){
   cd $DOWNLOADDIR

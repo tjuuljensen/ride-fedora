@@ -1,0 +1,30 @@
+###### Debian  ###
+GetDebian           # GetDebianTorrent    # GetDebianNetinst
+
+###### Ubuntu  ###
+GetUbuntu           # GetUbuntuTorrent
+# GetUbuntuServer   # GetUbuntuServerTorrent
+
+###### Fedora  ###
+GetFedora           # GetFedoraTorrent
+# GetFedoraServer   # GetFedoraServerTorrent
+
+###### Kali  ###
+GetKali             # GetKaliTorrent
+GetKaliLive         # GetKaliLiveTorrent
+
+###### Mint  ###
+# GetMint
+
+###### Tails  ###
+GetTailsTorrent
+
+###### Raspberry Pi  ###
+# GetRaspiOSTorrent
+
+###### Other  ###
+# GetSlackwareTorrent
+# GetArchTorrent
+
+###### SecurityOnion  ###
+# GetSecurityOnion
