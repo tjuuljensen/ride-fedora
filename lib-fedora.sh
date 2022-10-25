@@ -471,8 +471,9 @@ InstallCyberChef(){
   DESKTOPFILE=/usr/share/applications/cyberchef.desktop
 
   URL=https://github.com/gchq/CyberChef/releases/
-  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "download" | sort -r -n | awk 'NR==1' )
-  DOWNLOADURL="https://github.com$PARTIALPATH"
+  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "tree" | sort -r -n | awk 'NR==1' )
+  RELEASE="${PARTIALPATH##*/}"
+  DOWNLOADURL=$URL"download/"$RELEASE"/CyberChef_"$RELEASE".zip"
   ARCHIVE="${DOWNLOADURL##*/}"
 
   cd $DOWNLOADDIR
