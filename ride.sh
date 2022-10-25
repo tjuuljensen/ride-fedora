@@ -207,9 +207,6 @@ parse_arguments() {
     if [[ $# -eq 0 ]] ; then
       usage_help
       exit 1
-    #else
-      # check if script is root and restart as root if not
-      #[[ "$UID" -eq 0 ]] || exec sudo bash "$0" "$@" ; exit
     fi
 
       while [[ $# -gt 0 ]]
@@ -300,8 +297,6 @@ parse_arguments() {
 #### Main ####
 set_constants $@
 parse_arguments $@
-[[ $LOGACTIONS == 1 ]] && echo LOGACTIONS is 1
-exit
-[[ $LOGACTIONS == 1 ]] && log_output $@
+[[ $LOGACTIONS==1 ]] && log_output $@
 execute_functions
 unset_constants
