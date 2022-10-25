@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: July 20, 2022 10:00
+# Edited: October 25, 2022 13:00
 # Latest verification and tests done on Fedora 36
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
@@ -2062,7 +2062,7 @@ RemoveProjecteur(){
 InstallVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-manufacturer | grep -i WMware | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-manufacturer | grep -i VMware | wc -l ) -ne 0 ] ; then
     dnf install -y open-vm-tools
   elif [ $( dmidecode -s system-manufacturer | grep -i QEMU | wc -l ) -ne 0 ] ; then
     # QEMU / Gnome boxes
@@ -2073,7 +2073,7 @@ InstallVMtoolsOnVM(){
 RemoveVMtoolsOnVM(){
   # if a virtual machine, install open-vm-tools
   # for more virtualization vendors check here http://unix.stackexchange.com/questions/89714/easy-way-to-determine-virtualization-technology
-  if [ $( dmidecode -s system-product-name | grep -i WMware | wc -l ) -ne 0 ] ; then
+  if [ $( dmidecode -s system-product-name | grep -i VMware | wc -l ) -ne 0 ] ; then
     rpm -q --quiet open-vm-tools && dnf remove -y open-vm-tools
   fi
 }
