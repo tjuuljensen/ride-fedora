@@ -2,10 +2,10 @@
 # ride.sh - Remove / Install / Disable / Enable
 #
 # Author: Torsten Juul-Jensen
-# July 30, 2022
+# October 35, 2022
 #
 # Version:
-# Purpose: Assist a slistream/bootloader install of a (Fedora) linux workstation
+# Purpose: Assist a slipstream/bootloader install of a (Fedora) linux workstation
 
 ################################################################
 ###### Default Bootstrap Library Functions ###
@@ -37,8 +37,16 @@ Restart(){
 usage_help()
 {
     SCRIPT_NAME=$(basename $0)
-    echo "usage: $SCRIPT_NAME [--include <function library file>] [--preset <filename>] [[_]tweakname]"
+    echo 'usage: $SCRIPT_NAME [--include <function library file>] [--preset <filename>] [{--list}/{--verbose} <function file>] [[_]tweakname]'
+
+    echo '-i | --include <function library file>       - the RIDE function file contains all the functions for installing/removing tools'
+    echo '-p | --preset  <preset filename>             - the preset file contains what functions in the ridefunction file to use'
+    echo '-l | --list    <function library file>       - list the RIDE functions available from the functions file'
+    echo '-c | --verbose <function file>               - list the RIDE functions with sections from the functions file'
+    echo '-v | --compare <function file> <preset file> - compare contents of functions file and preset file'
+    echo '-n | --nolog                                 - disable logging'
     exit 1
+
 }
 
 set_constants(){
@@ -217,6 +225,7 @@ parse_arguments() {
                   source "$SCRIPTDIR/$2" # Load script from file
                 else
                   echo Function library $2 was not found
+                  exit 2
                 fi
                 shift
                 shift
@@ -255,7 +264,7 @@ parse_arguments() {
                 compare_library_preset $2 $3
               else
                 echo "Compare command need two existing files as parameter (files not found)"
-                _help
+                usage_help
                 exit 1
               fi
               exit 0
@@ -273,7 +282,8 @@ parse_arguments() {
               exit 0
               ;;
             -n | --nolog)
-              $LOGACTIONS=0
+              LOGACTIONS=0
+              shift
               ;;
             -h | --help )
               usage_help
@@ -290,6 +300,8 @@ parse_arguments() {
 #### Main ####
 set_constants $@
 parse_arguments $@
+[[ $LOGACTIONS == 1 ]] && echo LOGACTIONS is 1
+exit
 [[ $LOGACTIONS == 1 ]] && log_output $@
 execute_functions
 unset_constants
