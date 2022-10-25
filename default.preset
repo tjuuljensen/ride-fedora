@@ -34,7 +34,6 @@ InstallAppImageLauncher    # RemoveAppImageLauncher
 ### Forensic Tools ###
 InstallCERTForensicsRepo   # RemoveCERTForensicsRepo
 InstallLibEWF              # RemoveLibEWF
-InstallFTKImager           # RemoveFTKImager
 InstallDc3dd               # RemoveDc3dd
 # InstallBinwalk           # RemoveBinwalk
 # InstallGalleta           # RemoveGalleta

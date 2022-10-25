@@ -277,22 +277,6 @@ RemoveLibEWF(){
   dnf remove -y libewf
 }
 
-InstallFTKImager(){
-  FTKURL=https://ad-zip.s3.amazonaws.com/ftkimager.3.1.1_fedora64.tar.gz
-  FTKPKG=${FTKURL##${FTKURL%/*}"/"}
-
-  cd $DOWNLOADDIR
-
-  # download ftkimager from AccessSoftware and put it in /usr/bin
-  wget -q --show-progress $FTKURL
-  tar xzvf $FTKPKG -C /usr/bin/
-  chown $MYUSER:$MYUSER $FTKPKG
-}
-
-RemoveFTKImager(){
-  rm /usr/bin/ftkimager
-}
-
 InstallDc3dd(){
   dnf install -y dc3dd
 }
@@ -506,6 +490,7 @@ RemoveCyberChef(){
 }
 
 InstallChepy(){
+  # Python library with cli aimed to mirror some of the capabilities of CyberChef
   #https://github.com/securisec/chepy
   sudo -u $MYUSER "cd $MYUSERDIR/git ; git clone https://github.com/securisec/chepy.git ; cd chepy"
   sudo -u $MYUSER "pip install ."
@@ -1550,7 +1535,6 @@ RemoveSystemMonitor(){
 
 InstallGnomeExtensions(){
   # Install Gnome extensions
-  # flatpak install flathub org.gnome.Extensions -y
   dnf install -y gnome-extensions-app
   dnf install -y chrome-gnome-shell # Gnome integration for browsers
 
