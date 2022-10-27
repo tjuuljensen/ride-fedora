@@ -2,7 +2,7 @@
 # ride.sh - Remove / Install / Disable / Enable
 #
 # Author: Torsten Juul-Jensen
-# October 35, 2022
+# October 27, 2022
 #
 # Version:
 # Purpose: Assist a slipstream/bootloader install of a (Fedora) linux workstation
@@ -42,8 +42,9 @@ usage_help()
     echo '-i | --include <function library file>       - the RIDE function file contains all the functions for installing/removing tools'
     echo '-p | --preset  <preset filename>             - the preset file contains what functions in the ridefunction file to use'
     echo '-l | --list    <function library file>       - list the RIDE functions available from the functions file'
-    echo '-c | --verbose <function file>               - list the RIDE functions with sections from the functions file'
-    echo '-v | --compare <function file> <preset file> - compare contents of functions file and preset file'
+    echo '-v | --verbose <function file>               - list the RIDE functions with sections from the functions file'
+    echo '-c | --compare <function file> <preset file> - compare contents of functions file and preset file'
+    echo '-d | --downloaddir <directory>               - save downloaded files in this directory'
     echo '-n | --nolog                                 - disable logging'
     exit 1
 
@@ -113,6 +114,7 @@ log_output(){
   echo ""
   echo "################################################################"
   echo ""
+
 }
 
 read_preset_file(){
@@ -125,7 +127,6 @@ add_remove_action(){
   PARAMETER=$1
   if [[ ${PARAMETER:0:1} == "_" ]] ; then
     # If parameter value starts with an underscore "_" then exclude the action
-    #ACTIONS=( "${ACTIONS[@]/${PARAMETER#?}/}" )
     for i in "${!ACTIONS[@]}"; do
         [ "${PARAMETER#?}" == "${ACTIONS[$i]}" ] && unset "ACTIONS[$i]"
     done
@@ -141,15 +142,17 @@ execute_functions() {
     echo ""
     for action in "${!ACTIONS[@]}"; do
         ENTRYTYPE=$( type -t ${ACTIONS[action]} )
-        if [ x${ENTRYTYPE} == x'function' ]; then
+        if [[ x${ENTRYTYPE} == x'function' ]]; then
             echo "::: ${ACTIONS[$action]} :::"
             (${ACTIONS[$action]})
+            EXIT_ERRLEVEL=$?
         else
             echo "${action} is NOT a function - will not be executed"
             continue
         fi
         echo ''
     done
+    return ${EXIT_ERRLEVEL} # returns errorlevel value from last executed function
 }
 
 list_functions() {
@@ -182,7 +185,6 @@ compare_library_preset() {
     esac
   done
 
-  echo "${PRESETFILECONTENT[@]}" > /tmp/debug.txt
   echo Library functions from $1 not in preset file $2:
   for LIB in $LIBFUNCTIONS ; do
     case "${PRESETFILECONTENT[@]}" in
@@ -204,99 +206,119 @@ parse_arguments() {
     declare -g LOGACTIONS # log yes/no
     LOGACTIONS=1 # controls whether script is logging all output to logfile
 
+    ALL_PARAMETERS=$@ # needed to store all variables if a restart as root is required
+
     if [[ $# -eq 0 ]] ; then
       usage_help
       exit 1
     fi
 
-      while [[ $# -gt 0 ]]
-      do
-        case $1 in
-            -i | --include)
-                [[ "$UID" -eq 0 ]] || exec sudo bash "$0" "$@"
-                if [ -f $2 ] ; then
-                  INCLUDE+="$2"
-                  source $2 # Load script from file
-                elif [ -f $SCRIPTDIR/$2 ] ; then
-                  INCLUDE+="$SCRIPTDIR/$2"
-                  source "$SCRIPTDIR/$2" # Load script from file
-                else
-                  echo Function library $2 was not found
-                  exit 2
-                fi
-                shift
-                shift
-                ;;
-            -p | --preset)
-              [[ "$UID" -eq 0 ]] || exec sudo bash "$0" "$@"
-              if [[ -f $2 ]] ; then
-                PRESET+="$2"
-                read_preset_file $PRESET
-              elif [[ -f $SCRIPTDIR/$2 ]] ; then
-                PRESET+="$SCRIPTDIR/$2"
-                read_preset_file "$SCRIPTDIR/$2"
+    while [[ $# -gt 0 ]]
+    do
+      case $1 in
+          -i | --include)
+              [[ "$UID" -eq 0 ]] || exec sudo bash "$0" "${ALL_PARAMETERS}"
+              if [ -f $2 ] ; then
+                INCLUDE+="$2"
+                source $2 # Load script from file
+              elif [ -f $SCRIPTDIR/$2 ] ; then
+                INCLUDE+="$SCRIPTDIR/$2"
+                source "$SCRIPTDIR/$2" # Load script from file
               else
-                echo Preset file does not exist
+                echo Function library $2 was not found
                 exit 2
               fi
-
               shift
               shift
               ;;
-            -l | --list )
-              LOGACTIONS=0
-              if [[ -f $2 ]] ; then
-                list_functions $2
-              elif [[ -f $SCRIPTDIR/$2 ]] ; then
-                list_functions "$SCRIPTDIR/$2"
-              else
-                echo Function library $2 was not found and could not be listed
-                usage_help
-              fi
-              exit 0
-              ;;
-            -c | --compare )
-              LOGACTIONS=0
-              if [[ -f $2 ]] && [[ -f $3 ]]; then
-                compare_library_preset $2 $3
-              else
-                echo "Compare command need two existing files as parameter (files not found)"
-                usage_help
-                exit 1
-              fi
-              exit 0
-              ;;
-            -v | --verbose_list )
-              LOGACTIONS=0
-              if [[ -f $2 ]] ; then
-                verbose_list_functions $2
-              elif [ -f $SCRIPTDIR/$2 ] ; then
-                verbose_list_functions "$SCRIPTDIR/$2"
-              else
-                echo "Verbose list command need an existing file as parameter (file not found)"
-                usage_help
-              fi
-              exit 0
-              ;;
-            -n | --nolog)
-              LOGACTIONS=0
-              shift
-              ;;
-            -h | --help )
+          -p | --preset)
+            [[ "$UID" -eq 0 ]] || exec sudo bash "$0" "${ALL_PARAMETERS}"
+            if [[ -f $2 ]] ; then
+              PRESET+="$2"
+              read_preset_file $PRESET
+            elif [[ -f $SCRIPTDIR/$2 ]] ; then
+              PRESET+="$SCRIPTDIR/$2"
+              read_preset_file "$SCRIPTDIR/$2"
+            else
+              echo Preset file does not exist
+              exit 2
+            fi
+            shift
+            shift
+            ;;
+          -l | --list )
+            LOGACTIONS=0
+            if [[ -f $2 ]] ; then
+              list_functions $2
+            elif [[ -f $SCRIPTDIR/$2 ]] ; then
+              list_functions "$SCRIPTDIR/$2"
+            else
+              echo Function library $2 was not found and could not be listed
+              usage_help
+            fi
+            exit 0
+            ;;
+          -c | --compare )
+            LOGACTIONS=0
+            if [[ -f $2 ]] && [[ -f $3 ]]; then
+              compare_library_preset $2 $3
+            else
+              echo "Compare command need two existing files as parameter (files not found)"
               usage_help
               exit 1
-              ;;
-            * )
+            fi
+            exit 0
+            ;;
+          -v | --verbose_list )
+            LOGACTIONS=0
+            if [[ -f $2 ]] ; then
+              verbose_list_functions $2
+            elif [ -f $SCRIPTDIR/$2 ] ; then
+              verbose_list_functions "$SCRIPTDIR/$2"
+            else
+              echo "Verbose list command need an existing file as parameter (file not found)"
+              usage_help
+            fi
+            exit 0
+            ;;
+          -d | --downloaddir )
+            if [[ -d $2 ]] ; then
+              if [[ -w $2 ]] ; then
+                DOWNLOADDIR=$(realpath ${2})
+                export SCRIPT_DOWNLOADDIR=$DOWNLOADDIR
+              else
+                echo "You don't have write permissions to the download directory"
+                exit 2
+              fi
+            else
+              echo "Download directory does not exist or was not entered"
+              usage_help
+              exit 1
+            fi
+            shift
+            shift
+            ;;
+          -n | --nolog )
+            LOGACTIONS=0
+            shift
+            ;;
+          -h | --help )
+            usage_help
+            exit 1
+            ;;
+          * )
             add_remove_action $1
             shift
-        esac
-        #$i=$((i + 1))
+            ;;
+      esac
     done
 }
 
 #### Main ####
 set_constants $@
 parse_arguments $@
-[[ $LOGACTIONS==1 ]] && log_output $@
+[[ ${LOGACTIONS} -eq 1 ]] && log_output $@
 execute_functions
+RETVAL=$? # last returned errorvalue from execution will be used as exit value
 unset_constants
+exit $RETVAL
