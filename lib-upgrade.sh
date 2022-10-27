@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: July 30, 2022 09:00
+# Edited: October 27, 2022 14:00
 # Latest verification and tests done on Fedora 36
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
@@ -36,32 +36,51 @@ fi
 ###### Upgrade Fedora ###
 ################################################################
 
+CheckNextVersionRepos(){
+  # check if the repos used in the code library are available - testing {Fedoraversion+1} for rpmfusion
+
+  CODE_LIBRARY="lib-fedora.sh"
+
+  if [[ ! -f ${CODE_LIBRARY} ]] ; then
+    [[ -f "${SCRIPTDIR}/${CODE_LIBRARY}" ]] && CODE_LIBRARY="${SCRIPTDIR}/${CODE_LIBRARY}"
+  fi
+
+  if [ -f ${CODE_LIBRARY} ] ; then
+
+    RELEASEREPOS=(  )
+    RELEASEREPOS+=( $(grep "http.*\.rpmfusion.*$" ${CODE_LIBRARY}  | cut -d"=" -f2 | sed "s/\$FEDORARELEASE/$NEXTFEDORARELEASE/g") )
+    RELEASEREPOS+=( $(grep "http.*\.repo$" ${CODE_LIBRARY}  | cut -d"=" -f2 | sed "s/\$FEDORARELEASE/$NEXTFEDORARELEASE/g") )
+
+    for i in ${!RELEASEREPOS[@]};
+    do
+       if wget --spider -q  ${RELEASEREPOS[$i]} ; then
+          echo -e "\e[1mOK\e[0m: ${RELEASEREPOS[$i]}"
+        else
+          echo -e "\e[1m\e[31mFAIL\e[0m: ${RELEASEREPOS[$i]}"
+          ERRFLAG=1
+        fi
+    done
+    [[ ! -z ${ERRFLAG} ]] && exit 2
+  else
+    echo "File ${CODE_LIBRARY} not found"
+    exit 2
+  fi
+  exit 0
+}
+
+
 UpgradeFedora(){
   # next release upgrade fedora
   dnf upgrade -y --refresh
   dnf install -y dnf-plugin-system-upgrade
   dnf system-upgrade download -y --releasever=$NEXTFEDORARELEASE
   dnf system-upgrade -y reboot
-
 }
 
-CheckNextVersionRepos(){
 
-  if [ -f lib-fedora.sh ] ; then
-
-    RELEASEREPOS=(  )
-    RELEASEREPOS+=( $(grep "http.*\.noarch.rpm$" lib-fedora.sh  | cut -d"=" -f2 | sed "s/\$FEDORARELEASE/$NEXTFEDORARELEASE/g") )
-    RELEASEREPOS+=( $(grep "http.*\.repo$" lib-fedora.sh  | cut -d"=" -f2 | sed "s/\$FEDORARELEASE/$NEXTFEDORARELEASE/g") )
-
-    for i in ${!RELEASEREPOS[@]};
-    do
-       wget --spider -q  ${RELEASEREPOS[$i]} && echo -e "\e[1mOK\e[0m: ${RELEASEREPOS[$i]}" || echo -e "\e[1m\e[31mFAIL\e[0m: ${RELEASEREPOS[$i]}"
-    done
-  else
-    echo "File lib-fedora.sh not found"
-  fi
-}
-
+################################################################
+###### Upgrade helper ###
+################################################################
 
 InstallKernelHeaders(){
   # Install kernel headers
@@ -137,7 +156,7 @@ InstallKernelHeaders(){
 
     reboot
   else
-    echo "Something went wrong. Please go investigate what happened...""
+    echo "Something went wrong. Please go investigate what happened..."
   fi
 
 }
