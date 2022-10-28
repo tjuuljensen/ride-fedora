@@ -238,12 +238,14 @@ RemoveSnap(){
 }
 
 ################################################################
-###### Forensic Tools ###
+###### CERT Forensic Repo ###
 ################################################################
 
 InstallCERTForensicsRepo(){
   # Read more here https://forensics.cert.org/
-  # Get full package list here https://forensics.cert.org/ByPackage/index.html
+  # Read full package list here https://forensics.cert.org/ByPackage/index.html
+  # List Repo:$ dnf repository-packages forensics list
+
   URL=https://forensics.cert.org/
   FEDORARPMURL=$URL$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep rpm | grep $FEDORARELEASE)
   FERORARPM=${FEDORARPMURL##${FEDORARPMURL%/*}"/"}
@@ -270,39 +272,18 @@ InstallLibEWF(){
   # install libewf - a library for access to EWF (Expert Witness Format)
   # See more at https://github.com/libyal/libewf
   # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y libewf
+  PROGRAM=libewf
+  command -v ${PROGRAM} &>/dev/null && echo ${PROGRAM} is already installed || dnf install -y ${PROGRAM}
+
 }
 
 RemoveLibEWF(){
   dnf remove -y libewf
 }
 
-InstallDc3dd(){
-  dnf install -y dc3dd
-}
-
-RemoveDc3dd(){
-  dnf remove -y dc3dd
-}
-
-InstallExif(){
-    dnf install -y exif
-}
-
-RemoveExif(){
-    dnf remove -y exif
-}
-
-InstallBinwalk(){
-    dnf install -y binwalk
-}
-
-RemoveBinwalk(){
-    dnf remove -y binwalk
-}
-
 InstallGalleta(){
     #https://www.kali.org/tools/galleta/
+    # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
     dnf install -y galleta
 }
 
@@ -310,14 +291,148 @@ RemoveGalleta(){
     dnf remove -y galleta
 }
 
+InstallPlaso(){
+  # Plaso is a computer forensic tool for timeline generation and analysis.
+  # https://plaso.readthedocs.io/en/latest/index.html
+  # https://github.com/log2timeline/plaso
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y plaso
+}
+
+RemovePlaso(){
+  # Remove Plaso
+  dnf remove -y plaso
+}
+
+InstallAutopsy(){
+  # https://sleuthkit.org/autopsy/
+  # Requires cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y autopsy
+}
+
+RemoveAutopsy(){
+  dnf remove -y autopsy
+}
+
+InstallXplico(){
+  # https://www.xplico.org/about
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y xplico
+}
+
+RemoveXplico(){
+  dnf remove -y xplico
+}
+
+InstallBulkExtractor(){
+  # https://downloads.digitalcorpora.org/downloads/bulk_extractor/
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y bulk_extractor
+}
+
+RemoveBulkExtractor(){
+  dnf remove -y bulk_extractor
+}
+
+InstallVolatility(){
+  # https://www.volatilityfoundation.org/releases
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y Volatility
+}
+
+RemoveVolatility(){
+  dnf remove -y Volatility
+}
+
+InstallVolatility3(){
+  # https://www.volatilityfoundation.org/releases-vol3
+  # https://github.com/volatilityfoundation/volatility3
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y Volatility
+}
+
+RemoveVolatility3(){
+  dnf remove -y Volatility
+}
+
+InstallRekall(){
+  # http://www.rekall-forensic.com/
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y rekall-forensics
+}
+
+RemoveRekall(){
+  dnf remove -y rekall-forensics
+}
+
+InstallVeraCrypt(){
+  # https://www.veracrypt.fr/en/Downloads.html
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+
+  dnf install -y VeraCrypt
+
+}
+
+UninstallVeraCrypt(){
+
+  dnf remove -y VeraCrypt
+
+}
+
+################################################################
+###### Standard Repo Forensic Tools ###
+################################################################
+
+InstallSecurityLab(){
+  # See content of the group:
+  # dnf group info security-lab
+  dnf group install -y security-lab
+}
+
+RemoveSecurityLab(){
+  dnf group remove -y security-lab
+}
+
+InstallDc3dd(){
+  PROGRAM=dc3dd
+  command -v ${PROGRAM} &>/dev/null && echo ${PROGRAM} is already installed || dnf install -y ${PROGRAM}
+}
+
+RemoveDc3dd(){
+  dnf remove -y dc3dd
+}
+
+InstallExif(){
+  PROGRAM=exif
+  command -v ${PROGRAM} &>/dev/null && echo ${PROGRAM} is already installed || dnf install -y ${PROGRAM}
+}
+
+RemoveExif(){
+  dnf remove -y exif
+}
+
+InstallBinwalk(){
+  PROGRAM=binwalk
+  command -v ${PROGRAM} &>/dev/null && echo ${PROGRAM} is already installed || dnf install -y ${PROGRAM}
+}
+
+RemoveBinwalk(){
+    dnf remove -y binwalk
+}
+
 InstallMd5deep(){
     # https://www.kali.org/tools/hashdeep/
-    dnf install -y md5deep
+    PROGRAM=md5deep
+    command -v ${PROGRAM} &>/dev/null && echo ${PROGRAM} is already installed || dnf install -y ${PROGRAM}
 }
 
 RemoveMd5deep(){
     dnf remove -y md5deep
 }
+
+################################################################
+###### Other Forensic Tools ###
+################################################################
 
 InstallExifTool(){
   # Phil Harvey's ExifTool - https://exiftool.org
@@ -356,92 +471,16 @@ RemoveExifTool(){
 
 }
 
-InstallPlaso(){
-  # Plaso is a computer forensic tool for timeline generation and analysis.
-  # https://plaso.readthedocs.io/en/latest/index.html
-  # https://github.com/log2timeline/plaso
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y plaso
-}
-
-RemovePlaso(){
-  # Remove Plaso
-  dnf remove -y plaso
-}
-
-InstallAutopsy(){
-  # https://sleuthkit.org/autopsy/
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y autopsy
-}
-
-RemoveAutopsy(){
-  dnf remove -y autopsy
-}
-
-InstallXplico(){
-  # https://www.xplico.org/about
-  dnf install -y xplico
-}
-
-RemoveXplico(){
-  dnf remove -y xplico
-}
-
-InstallBulkExtractor(){
-  # https://downloads.digitalcorpora.org/downloads/bulk_extractor/
-  dnf install -y bulk_extractor
-}
-
-RemoveBulkExtractor(){
-  dnf remove -y bulk_extractor
-}
-
-InstallVolatility(){
-  # https://www.volatilityfoundation.org/releases
-  dnf install -y Volatility
-}
-
-RemoveVolatility(){
-  dnf remove -y Volatility
-}
-
-InstallVolatility3(){
-  # https://www.volatilityfoundation.org/releases-vol3
-  #   https://github.com/volatilityfoundation/volatility3
-  dnf install -y Volatility
-}
-
-RemoveVolatility3(){
-  dnf remove -y Volatility
-}
-
-InstallRekall(){
-  # http://www.rekall-forensic.com/
-  dnf install -y rekall-forensics
-}
-
-RemoveRekall(){
-  dnf remove -y rekall-forensics
-}
-
-InstallSecurityLab(){
-  # See content of the group:
-  # dnf group info security-lab
-  dnf group install -y security-lab
-}
-
-RemoveSecurityLab(){
-  dnf group remove -y security-lab
-}
-
 InstallUnfURL(){
   # https://github.com/obsidianforensics/unfurl
-  # unresolved Jinja2 requirement
   sudo -u $MYUSER pip install dfir-unfurl
-  # Run: python unfurl_app.py
+
+  # Local Web Application
+  # Run: unfurl_app.py
   # Access website on http://localhost:5000
-  # python unfurl_app.py <https://URL>
+
+  # Command Line
+  # unfurl_cli.py <https://URL>
 }
 
 RemoveUnfURL(){
@@ -521,19 +560,21 @@ RemoveDumpzilla(){
 
 InstallNetworkMiner(){
 
-  ZIPFILE=/tmp/NetworkMiner.zip
+  ZIPFILE=${DOWNLOADDIR}/NetworkMiner.zip
   INSTALLDIR=/opt/NetworkMiner
   LOGOFILE=https://www.netresec.com/images/NetworkMiner_logo_313x313.png
   DESKTOPFILE=/usr/share/applications/networkminer.desktop
+  URL=https://www.netresec.com/?download=NetworkMiner
 
   dnf install -y mono-devel
 
-  wget https://www.netresec.com/?download=NetworkMiner -O $ZIPFILE
+  wget ${URL} -O $ZIPFILE
   mkdir -p $INSTALLDIR
   unzip -d "$INSTALLDIR" "$ZIPFILE" && f=("$INSTALLDIR"/*) && mv "$INSTALLDIR"/*/* "$INSTALLDIR" && rmdir "${f[@]}"
 
-  wget $LOGOFILE -O $INSTALLDIR/NetworkMiner_logo_313x313.png
+  wget $LOGOFILE -O $INSTALLDIR/NetworkMiner_logo.png
 
+  cd ${INSTALLDIR}
   chmod +x NetworkMiner.exe
   chmod -R go+w AssembledFiles/
   chmod -R go+w Captures/
@@ -543,7 +584,7 @@ Type=Application
 Name=NetworkMiner
 GenericName=NetworkMiner
 Comment=NetworkMiner is a Network Forensic Analysis Tool (NFAT) for Windows
-Icon=/opt/NetworkMiner/NetworkMiner_logo_313x313.png
+Icon=/opt/NetworkMiner/NetworkMiner_logo.png
 Exec=mono /opt/NetworkMiner/NetworkMiner.exe
 Terminal=false
 Categories=Network;Utility;" > $DESKTOPFILE
@@ -1806,8 +1847,11 @@ InstallBitwarden(){
   # https://addons.mozilla.org/en-GB/firefox/addon/bitwarden-password-manager/
   # CLI: https://github.com/bitwarden/cli/releases
 
-  URL=https://github.com/bitwarden/desktop/releases
-  DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep rpm | sort -r -n | awk 'NR==1')
+  URL=https://github.com/bitwarden/clients/releases
+  PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "tree/desktop" | sort -V -r | awk 'NR==1')
+  VERSION="${PARTIALURL##*/}"
+  VERSION_NUM="${VERSION##*-v}"
+  DOWNLOADURL="${URL}/download/${VERSION}/Bitwarden-${VERSION_NUM}-x86_64.rpm"
 
   dnf install -y $DOWNLOADURL
 }
@@ -1818,21 +1862,26 @@ RemoveBitwarden(){
 
 InstallBitwardenAppImage(){
   # AppImage Install
-  # Download AppImage hashes on https://github.com/bitwarden/desktop/releases/download/v1.30.0/latest-linux.yml
+  # Hash values can be fetched from (working example):
+  # https://github.com/bitwarden/clients/releases/download/desktop-v2022.10.1/latest-linux.yml
 
-  URL=https://github.com/bitwarden/desktop/releases
-  DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep AppImage | sort -r -n | awk 'NR==1')
+  URL=https://github.com/bitwarden/clients/releases
+  PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "tree/desktop" | sort -V -r | awk 'NR==1')
+  VERSION="${PARTIALURL##*/}"
+  VERSION_NUM="${VERSION##*-v}"
+  DOWNLOADURL="${URL}/download/${VERSION}/Bitwarden-${VERSION_NUM}-x86_64.AppImage"
+
   APPIMAGEDIR=~/Applications
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
-    mkdir -p $APPIMAGEDIR > /dev/null
+    sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
   fi
 
-  wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
+  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
 }
 
 RemoveBitwardenAppImage(){
-  rm ~/Applications/Bitwarden*.AppImage
+  sudo -u $MYUSER rm ~/Applications/Bitwarden*.AppImage
 }
 
 ################################################################
@@ -2091,15 +2140,15 @@ InstallYubikeyManager(){
   DOWNLOADURL=$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep AppImage)
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
-    mkdir -p $APPIMAGEDIR > /dev/null
+    sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
   fi
 
-  wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
+  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
 
 }
 
 RemoveYubikeyManager(){
-  rm ~/Applications/yubikey-manager*.AppImage
+  sudo -u $MYUSER rm ~/Applications/yubikey-manager*.AppImage
 }
 
 
@@ -2124,8 +2173,9 @@ InstallYubikeyPersTool(){
 
 InstallOwnCloudClient(){
   # OwnCloud client
+  rpm --import https://download.owncloud.com/desktop/ownCloud/stable/latest/linux/Fedora_$FEDORARELEASE/repodata/repomd.xml.key
 
-  OWNCLOUDREPO="https://download.owncloud.com/desktop/ownCloud/stable/latest/linux/Fedora_$FEDORARELEASE/owncloud.repo"
+  OWNCLOUDREPO=https://download.owncloud.com/desktop/ownCloud/stable/latest/linux/Fedora_$FEDORARELEASE/owncloud.repo
   if ( ! dnf config-manager --add-repo http://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_$FEDORARELEASE/isv:ownCloud:desktop.repo ) ; then
     echo "[-] Adding OwnCloud repo for Fedora $FEDORARELEASE failed."
   fi
@@ -2137,28 +2187,6 @@ RemoveOwnCloudClient(){
   # Remove OwnCloud client
   rm /etc/yum.repos.d/isv:ownCloud:desktop.repo
   dnf remove -y owncloud-client
-}
-
-InstallVeraCrypt(){
-  # download and install veracrypt archive
-  VERACRYPTDOWNLOADPAGE="https://www.veracrypt.fr/en/Downloads.html"
-  VERACRYPTURL=$(curl $VERACRYPTDOWNLOADPAGE 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 | \
-                grep -v freebsd | grep -v legacy | grep setup.tar | grep -v sig | awk NR==1 | sed 's/&#43;/+/g')
-  VERACRYPTPKG="${VERACRYPTURL##*/}"
-
-  cd $DOWNLOADDIR
-
-  wget -q --show-progress  $VERACRYPTURL
-  tar xvjf $VERACRYPTPKG -C $DOWNLOADDIR veracrypt-*-setup-gui-x64 #extract only the x64 bit console installer
-  mv $DOWNLOADDIR/veracrypt-*-setup-gui-x64  /tmp/veracrypt-setup-gui-x64
-  /tmp/veracrypt-setup-gui-x64 --quiet
-
-}
-
-UninstallVeraCrypt(){
-
-  veracrypt-uninstall.sh
-
 }
 
 InstallVMwareWorkstation(){

@@ -1,7 +1,7 @@
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Edited: January 1, 2021 09:00
+# Edited: October 28, 2022
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
 # Don't mind the RequireAdmin being commented out - it will elevate anyway :-)
 ##########
@@ -31,14 +31,10 @@ InstallFlathub             # RemoveFlathub
 InstallAppImageLauncher    # RemoveAppImageLauncher
 # InstallSnap              # RemoveSnap
 
-### Forensic Tools ###
+### CERT Forensic Repo ###
 InstallCERTForensicsRepo   # RemoveCERTForensicsRepo
 InstallLibEWF              # RemoveLibEWF
-InstallDc3dd               # RemoveDc3dd
-# InstallBinwalk           # RemoveBinwalk
 # InstallGalleta           # RemoveGalleta
-# InstallMd5deep           # RemoveMd5deep
-InstallExifTool            # RemoveExifTool
 # InstallPlaso             # RemovePlaso
 # InstallAutopsy           # RemoveAutopsy
 # InstallXplico            # RemoveXplico
@@ -46,8 +42,18 @@ InstallExifTool            # RemoveExifTool
 # InstallVolatility        # RemoveVolatility
 # InstallVolatility3       # RemoveVolatility3
 # InstallRekall            # RemoveRekall
+InstallVeraCrypt           # UninstallVeraCrypt
+
+### Standard Repo Forensic Tools ###
 # InstallSecurityLab       # RemoveSecurityLab
-# InstallUnfURL            # RemoveUnfURL
+# InstallBinwalk           # RemoveBinwalk
+# InstallDc3dd             # RemoveDc3dd
+InstallExif                # RemoveExif
+InstallMd5deep             # RemoveMd5deep
+
+### Other Forensic Tools ###
+InstallExifTool            # RemoveExifTool
+InstallUnfURL              # RemoveUnfURL
 InstallCyberChef           # RemoveCyberChef
 InstallChepy               # RemoveChepy
 # InstallDumpzilla         # RemoveDumpzilla
@@ -68,7 +74,7 @@ InstallSmartMonTools       # RemoveSmartMonTools
 # InstallMicrosoftTeams    # RemoveMicrosoftTeams
 
 ### Accessories ###
-InstallKeepassXC           # RemoveKeepassXC
+# InstallKeepassXC         # RemoveKeepassXC
 # InstallWoeUSB            # RemoveWoeUSB
 # InstallBalenaEtcher      # RemoveBalenaEtcher
 
@@ -146,7 +152,7 @@ SetWanIPAlias              # UnsetWanIPAlias
 # InstallLynis             # RemoveLynis
 # InstallClamAV            # RemoveClamAV
 # InstallBitwarden         # RemoveBitwarden
-# InstallBitwardenAppImage # RemoveBitwardenAppImage
+InstallBitwardenAppImage   # RemoveBitwardenAppImage
 
 ###### VPN Functions  ###
 # ImportOpenVPNProfiles    # RemoveVPNProfiles             # RemoveExpressVPNProfiles
@@ -162,10 +168,9 @@ InstallUnifyingOnLaptop    # RemoveUnifyingOnLaptop
 InstallVMtoolsOnVM         # RemoveVMtoolsOnVM
 
 ### 3rd party applications ###
-# InstallYubikeyManager    # RemoveYubikeyManager
+InstallYubikeyManager      # RemoveYubikeyManager
 # InstallYubikeyPersTool
 # InstallOwnCloudClient    # RemoveOwnCloudClient
-# InstallVeraCrypt         # UninstallVeraCrypt
 # InstallVMwareWorkstation # RemoveVMwareWorkstation
 # PatchVMwareModules
 # InstallCitrixClient      # RemoveCitrixClient
