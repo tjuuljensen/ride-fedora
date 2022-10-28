@@ -2,7 +2,7 @@
 # ride.sh - Remove / Install / Disable / Enable
 #
 # Author: Torsten Juul-Jensen
-# October 27, 2022
+# October 28, 2022
 #
 # Version:
 # Purpose: Assist a slipstream/bootloader install of a (Fedora) linux workstation
@@ -37,7 +37,7 @@ Restart(){
 usage_help()
 {
     SCRIPT_NAME=$(basename $0)
-    echo 'usage: $SCRIPT_NAME [--include <function library file>] [--preset <filename>] [{--list}/{--verbose} <function file>] [[_]tweakname]'
+    echo "usage: $SCRIPT_NAME [--include <function library file>] [--preset <filename>] [{--list}/{--verbose} <function file>] [[_]tweakname]"
 
     echo '-i | --include <function library file>       - the RIDE function file contains all the functions for installing/removing tools'
     echo '-p | --preset  <preset filename>             - the preset file contains what functions in the ridefunction file to use'
