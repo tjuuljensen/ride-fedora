@@ -211,7 +211,7 @@ InstallAppImageLauncher(){
   # https://github.com/TheAssassin/AppImageLauncher/releases
   APPIMAGEDIR=~/Applications
   URl=https://github.com/TheAssassin/AppImageLauncher/releases
-  PARTIALURL=$(curl $URL 2>&1 |   grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
+  PARTIALURL=$(curl $URL 2>&1 | grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
   RPMURL=https://github.com$PARTIALURL
 
   dnf install -y $RPMURL
@@ -242,6 +242,8 @@ RemoveSnap(){
 ################################################################
 
 InstallCERTForensicsRepo(){
+  ### As of September 30, 2022, maintenance of this repository will cease ###
+
   # Read more here https://forensics.cert.org/
   # Read full package list here https://forensics.cert.org/ByPackage/index.html
   # List Repo:$ dnf repository-packages forensics list
@@ -272,8 +274,7 @@ InstallLibEWF(){
   # install libewf - a library for access to EWF (Expert Witness Format)
   # See more at https://github.com/libyal/libewf
   # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  PROGRAM=libewf
-  command -v ${PROGRAM} &>/dev/null && echo ${PROGRAM} is already installed || dnf install -y ${PROGRAM}
+  dnf install -y libewf
 
 }
 
@@ -282,7 +283,7 @@ RemoveLibEWF(){
 }
 
 InstallGalleta(){
-    #https://www.kali.org/tools/galleta/
+    # https://www.kali.org/tools/galleta/
     # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
     dnf install -y galleta
 }
@@ -325,13 +326,24 @@ RemoveXplico(){
 }
 
 InstallBulkExtractor(){
-  # https://downloads.digitalcorpora.org/downloads/bulk_extractor/
+  # https://github.com/simsong/bulk_extractor
   # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
   dnf install -y bulk_extractor
 }
 
 RemoveBulkExtractor(){
   dnf remove -y bulk_extractor
+}
+
+InstallVMFStools(){
+  # install vmfs tools
+  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
+  dnf install -y vmfs-tools
+}
+
+RemoveVMFStools(){
+  # remove vmfs tools
+  dnf remove -y vmfs-tools
 }
 
 InstallVolatility(){
@@ -365,17 +377,30 @@ RemoveRekall(){
   dnf remove -y rekall-forensics
 }
 
-InstallVeraCrypt(){
-  # https://www.veracrypt.fr/en/Downloads.html
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
 
-  dnf install -y VeraCrypt
+################################################################
+###### Former CERT Forensic Repo ###
+################################################################
+
+InstallVeraCrypt(){
+  # download and install veracrypt archive
+  VERACRYPTDOWNLOADPAGE="https://www.veracrypt.fr/en/Downloads.html"
+  VERACRYPTURL=$(curl $VERACRYPTDOWNLOADPAGE 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 | \
+                grep -v freebsd | grep -v legacy | grep setup.tar | grep -v sig | awk NR==1 | sed 's/&#43;/+/g')
+  VERACRYPTPKG="${VERACRYPTURL##*/}"
+
+  cd $DOWNLOADDIR
+
+  wget -q --show-progress  $VERACRYPTURL
+  tar xvjf $VERACRYPTPKG -C $DOWNLOADDIR veracrypt-*-setup-gui-x64 #extract only the x64 bit console installer
+  mv $DOWNLOADDIR/veracrypt-*-setup-gui-x64  /tmp/veracrypt-setup-gui-x64
+  /tmp/veracrypt-setup-gui-x64 --quiet
 
 }
 
 UninstallVeraCrypt(){
 
-  dnf remove -y VeraCrypt
+  veracrypt-uninstall.sh
 
 }
 
@@ -620,17 +645,6 @@ RemoveDocker(){
   dnf remove docker-ce docker-ce-cli containerd.io
   rm /etc/yum.repos.d/docker-ce.repo
 
-}
-
-InstallVMFStools(){
-  # install vmfs tools
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y vmfs-tools
-}
-
-RemoveVMFStools(){
-  # install vmfs tools
-  dnf remove -y vmfs-tools
 }
 
 InstallPythonPip(){
