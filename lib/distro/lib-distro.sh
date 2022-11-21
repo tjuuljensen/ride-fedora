@@ -58,19 +58,19 @@ GetUbuntu() {
   cd $DOWNLOADDIR
   # Ubuntu desktop torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
     | grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 \
-    | awk -F".torr" '{ print $1 }' \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+    | awk -F".torr" '{ print $1 }')
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 GetUbuntuTorrent() {
   cd $DOWNLOADDIR
   # Ubuntu desktop torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' | \
-    grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1 \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' | \
+    grep releases | grep desktop | cut -d'"' -f2 | sort -n -r | awk NR==1)
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 
@@ -78,19 +78,19 @@ GetUbuntuServer () {
   cd $DOWNLOADDIR
   # Ubuntu server torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
     | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 \
-    | awk -F".torr" '{ print $1 }' \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+    | awk -F".torr" '{ print $1 }' )
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 GetUbuntuServerTorrent () {
   cd $DOWNLOADDIR
   # Ubuntu server torrent
   URL="https://ubuntu.com/download/alternative-downloads"
-  sudo -u $MYUSER curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
-    | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | grep -E 'http|https' \
+    | grep releases | grep server | cut -d'"' -f2 | sort -n -r | awk NR==1 )
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 ################################################################
@@ -99,34 +99,34 @@ GetUbuntuServerTorrent () {
 
 GetFedora(){
   URL=https://getfedora.org/en/workstation/download/
-  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
-    |  grep download | grep x86_64  |sort -n -r | awk NR==1 \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
+    |  grep download | grep x86_64  |sort -n -r | awk NR==1 )
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 GetFedoraTorrent () {
   cd $DOWNLOADDIR
   # Fedora Workstation x86_64
   URL=https://torrent.fedoraproject.org/
-  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep Workstation | grep -v Beta | grep x86_64  |sort -n -r | awk NR==1 \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
+    | grep Workstation | grep -v Beta | grep x86_64  |sort -n -r | awk NR==1)
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 GetFedoraServer(){
   URL=https://getfedora.org/en/server/download/
-  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
-    |  grep dvd | grep x86_64  |sort -n -r | awk NR==1 \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | awk -F"href=" '{ print $2}' | cut -d'"' -f2 \
+    |  grep dvd | grep x86_64  |sort -n -r | awk NR==1 )
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 GetFedoraServerTorrent () {
   cd $DOWNLOADDIR
   # Fedora Server x86_64
   URL=https://torrent.fedoraproject.org/
-  sudo -u $MYUSER curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
-    | grep Server | grep -v Beta | grep -e x86_64 | sort -n -r | awk NR==1 \
-    | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  DOWNLOADURL=$(curl $URL 2>&1 | grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
+    | grep Server | grep -v Beta | grep -e x86_64 | sort -n -r | awk NR==1)
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 }
 
 
@@ -204,18 +204,21 @@ GetRaspiOSTorrent () {
   URL=https://www.raspberrypi.com/software/operating-systems/
   sudo -u $MYUSER curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
     | grep torrent | grep full | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 
   # Raspbian with desktop
   URL=https://www.raspberrypi.com/software/operating-systems/
   sudo -u $MYUSER curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
     | grep arm64 | grep torrent | grep -v lite \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 
   # Raspbian Lite
   URL=https://www.raspberrypi.com/software/operating-systems/
   sudo -u $MYUSER curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | grep -E 'http|https' | cut -d'"' -f2 \
     | grep arm64 | grep torrent | grep lite \
     | xargs --no-run-if-empty wget -q --show-progress -P $DOWNLOADDIR/
+  sudo -u $MYUSER  wget -q --show-progress -P $DOWNLOADDIR/ $DOWNLOADURL
 
   # Get SHA-256 sums for all three files directly from web page using this function:
   # wget -qO- $URL | grep -oP 'SHA-256:.*'  | cut -f 3 -d ">" | cut -f 1 -d "<"
@@ -234,13 +237,13 @@ GetSlackwareTorrent () {
   #Slackware 64bit
   URL=http://www.slackware.com/torrents/
   FILENAME=$(curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | cut -d'"' -f2  | grep torrent | sort -n -r | awk NR==1 |  cut -f3 -d '/')
-  wget -q --show-progress $URL$FILENAME -P $DOWNLOADDIR/
+  sudo -u $MYUSER wget -q --show-progress $URL$FILENAME -P $DOWNLOADDIR/
 
   # Slackware 32bit
   URL=http://www.slackware.com/torrents/
   FILENAME=$(curl $URL 2>&1 |  grep -Eoi '<a [^>]+>' | cut -d'"' -f2  | grep torrent | sort -n -r | awk NR==1 |  cut -f3 -d '/' | sed 's/slackware64/slackware/g')
 
-  wget -q --show-progress $URL$FILENAME -P $DOWNLOADDIR/
+  sudo -u $MYUSER wget -q --show-progress $URL$FILENAME -P $DOWNLOADDIR/
 
 }
 
