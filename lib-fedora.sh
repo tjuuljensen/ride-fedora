@@ -556,15 +556,18 @@ RemoveCyberChef(){
 InstallChepy(){
   # Python library with cli aimed to mirror some of the capabilities of CyberChef
   #https://github.com/securisec/chepy
-  sudo -u $MYUSER "cd $MYUSERDIR/git ; git clone https://github.com/securisec/chepy.git ; cd chepy"
+  cd /opt
+  git clone https://github.com/securisec/chepy.git
+  setfacl -m u:$MYUSER:rwx chepy/
+  cd chepy
   sudo -u $MYUSER "pip install ."
   sudo -u $MYUSER "pip install pyinstaller"
-  sudo -u $MYUSER "pyinstaller cli.py --name chepy --onefile"
+  sudo -u $MYUSER "/home/$MYUSER/.local/bin/pyinstaller cli.py --name chepy --onefile"
   cp dist/chepy /usr/bin/
 }
 
 RemoveChepy(){
-  rmdir $MYUSERDIR/git/chepy/ -rf
+  rm /opt/chepy/ -rf
   rm /usr/bin/chepy -f
 }
 
@@ -1101,13 +1104,12 @@ InstallOpenconnectVPN(){
   # OpenConnect for use with Juniper VPN
   dnf install -y automake libtool openssl-devel libxml2 libxml2-devel vpnc-script NetworkManager-openconnect-gnome
 
-  if [ ! -d $MYUSERDIR ] ; then
-    cd $MYUSERDIR
-    mkdir -p git > /dev/null
-    chown $MYUSER:$MYUSER git
-  fi
-
-  su $MYUSER -c "cd $MYUSERDIR/git ;  git clone git://git.infradead.org/users/dwmw2/openconnect.git ; cd openconnect/ ; ./autogen.sh ; ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls ; make"
+  cd /opt
+  git clone git://git.infradead.org/users/dwmw2/openconnect.git
+  cd openconnect/
+  ./autogen.sh
+  ./configure --with-vpnc-script=/etc/vpnc/vpnc-script --without-openssl-version-check --prefix=/usr/ --disable-nls
+  make
   make install
 }
 
@@ -1162,21 +1164,15 @@ InstallGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
 
-  # Check if git library exists and create if it doesn't
-  if [ ! -d $MYUSERDIR/git ] ; then
-    cd $MYUSERDIR
-    mkdir -p git > /dev/null
-    chown $MYUSER:$MYUSER git
-  fi
-
-  su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/brunelli/gnome-shell-extension-installer"
-  ln -fs "$MYUSERDIR/git/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
+  cd /opt
+  git clone https://github.com/brunelli/gnome-shell-extension-installer
+  ln -fs "/opt/gnome-shell-extension-installer/gnome-shell-extension-installer" "/usr/local/bin/gnome-shell-extension-installer"
 }
 
 RemoveGnomeExtInstaller(){
   # Script for searching and installing Gnome extensions
   # http://www.bernaerts-nicolas.fr/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script
-  rm -rf $MYUSERDIR/git/gnome-shell-extension-installer # remove github repo clone
+  rm -rf /opt/gnome-shell-extension-installer # remove github repo clone
   rm "/usr/local/bin/gnome-shell-extension-installer" &>/dev/null # remove symlink
 }
 
@@ -1192,18 +1188,19 @@ InstallMozExtensionMgr(){
     chown $MYUSER:$MYUSER git
   fi
 
-  su $MYUSER -c "cd $MYUSERDIR/git ; git clone https://github.com/NicolasBernaerts/ubuntu-scripts"
+  cd /opt
+  git clone https://github.com/NicolasBernaerts/ubuntu-scripts
 
   # Fix missing executable flag when fetched from repo
-  chmod 755 "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager"
+  chmod 755 "/opt/ubuntu-scripts/mozilla/firefox-extension-manager"
 
   # create symlinks
-  ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/firefox-extension-manager" "/usr/local/bin/firefox-extension-manager"
-  ln -fs "/home/$MYUSER/git/ubuntu-scripts/mozilla/mozilla-extension-manager" "/usr/local/bin/mozilla-extension-manager"
+  ln -fs "/opt/ubuntu-scripts/mozilla/firefox-extension-manager" "/usr/local/bin/firefox-extension-manager"
+  ln -fs "/opt/ubuntu-scripts/mozilla/mozilla-extension-manager" "/usr/local/bin/mozilla-extension-manager"
 }
 
 RemoveMozExtensionMgr(){
-  rm -rf $MYUSERDIR/git/ubuntu-scripts # remove github repo clone
+  rm -rf /opt/ubuntu-scripts # remove github repo clone
   rm "/usr/local/bin/firefox-extension-manager"  &>/dev/null # remove symlink
   rm "/usr/local/bin/mozilla-extension-manager"  &>/dev/null # remove symlink
 }
@@ -2170,16 +2167,10 @@ InstallYubikeyPersTool(){
 
   URL=https://github.com/Yubico/yubikey-personalization-gui
 
-  if [ -d $MYUSERDIR/git ] ; then
-    cd $MYUSERDIR/git
-    echo Cloning git repos...
-    sudo -u $MYUSER git clone $URL
-  else
-    echo The git library in $MYUSER homedir does not exist. Exiting.
-    return 2
-  fi
-
-  sudo -u $MYUSER cd yubikey-personalization-gui
+  echo Cloning git repos...
+  cd /opt
+  git clone $URL
+  cd yubikey-personalization-gui
   dnf install -y libusb-devel qt-devel libyubikey-devel ykpers-devel
   qmake-qt4 && make
 
@@ -2290,17 +2281,17 @@ PatchVMwareModules(){
 
   systemctl stop vmware
 
-  cd $MYUSERDIR/git
+  cd /opt
   if [ ! -d vmware-host-modules ]; then
-    sudo -u $MYUSER git clone https://github.com/mkubecek/vmware-host-modules.git
+    git clone https://github.com/mkubecek/vmware-host-modules.git
     cd vmware-host-modules
   else
     cd vmware-host-modules
-    sudo -u $MYUSER git pull
+    git pull
   fi
 
 
-  if [[ ! -z $(sudo -u $MYUSER git checkout workstation-$VMWAREVERSION 2>/dev/null) ]] ; then # current vmware version is a branch in mkubecek's github library
+  if [[ ! -z $(git checkout workstation-$VMWAREVERSION 2>/dev/null) ]] ; then # current vmware version is a branch in mkubecek's github library
 
     # get github repo to recompile vmware kernel modules to newer kernel modules
     #git branch workstation-$VMWAREVERSION
