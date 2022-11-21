@@ -115,6 +115,20 @@ RemoveJohn(){
 }
 
 ################################################################
+###### Forensic Tools ###
+################################################################
+
+InstallUpscaler(){
+  # https://gitlab.com/TheEvilSkeleton/Upscaler
+  flatpak install -y io.gitlab.theevilskeleton.Upscaler
+}
+
+RemoveUpscaler(){
+  flatpak remove -y io.gitlab.theevilskeleton.Upscaler
+}
+
+
+################################################################
 ###### Productivity ###
 ################################################################
 
