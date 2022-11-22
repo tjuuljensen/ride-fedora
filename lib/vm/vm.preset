@@ -1,5 +1,17 @@
-###### Forensics ###
+##########
+# Fedora bootstrap script - virtual machine preset
+# Author: Torsten Juul-Jensen
+# Edited: November 22, 2022
+# Source: https://github.com/tjuuljensen/bootstrap-fedora
+# Don't mind the RequireAdmin being commented out - it will elevate anyway :-)
+##########
+
+### Forensics ###
 GetRemnuxVbox    GetRemnuxVmware
+
+### Offensive ###
 GetKaliVbox      GetKaliVMware
+
+### SANS ###
 GetSANSsift
 GetSOFelk

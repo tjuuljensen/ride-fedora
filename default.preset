@@ -1,7 +1,7 @@
 ##########
 # Fedora bootstrap script - default preset
 # Author: Torsten Juul-Jensen
-# Edited: October 28, 2022
+# Edited: November 22, 2022
 # Source: https://github.com/tjuuljensen/bootstrap-fedora
 # Don't mind the RequireAdmin being commented out - it will elevate anyway :-)
 ##########

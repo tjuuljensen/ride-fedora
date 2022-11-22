@@ -1,7 +1,7 @@
 #!/bin/sh
 # lib-distro.sh
 # Author: Torsten Juul-Jensen
-# Edited: August 1, 2022 10:00
+# Edited: November 21, 2022 10:00
 # Latest verification and tests done on Fedora 36
 #
 # This file is a bash function library only and is meant for sourcing into other scripts

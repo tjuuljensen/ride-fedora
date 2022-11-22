@@ -1,8 +1,8 @@
 #!/bin/sh
 #
 # Author: Torsten Juul-Jensen
-# Edited: January 1, 2021 09:00
-# Latest verification and tests done on Fedora XX
+# Edited: November 22, 2022 09:00
+# Latest verification and tests done on Fedora 36
 #
 # This file is a Fedora function library only and is meant for sourcing into other scripts
 # It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora

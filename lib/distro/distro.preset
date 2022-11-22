@@ -1,3 +1,10 @@
+##########
+# Fedora bootstrap script - Distro preset
+# Author: Torsten Juul-Jensen
+# Edited: November 22, 2022
+# Source: https://github.com/tjuuljensen/bootstrap-fedora
+##########
+
 ###### Debian  ###
 GetDebian           # GetDebianTorrent    # GetDebianNetinst
 
