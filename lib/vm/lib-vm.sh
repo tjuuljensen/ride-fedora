@@ -89,3 +89,16 @@ GetSANSsift(){
   return 0
 
 }
+
+GetSOFelk () {
+  # Get from Phil Hagen here:
+  # https://github.com/philhagen/sof-elk/blob/main/VM_README.md
+  
+  cd $DOWNLOADDIR
+  URL=https://for572.com/sof-elk-vm
+  DOWNLOADURL=$(curl -I $URL  2>&1 | grep Location | cut -d ' ' -f2)
+  BINARYFILENAME=${DOWNLOADURL##*/}
+
+  wget --content-disposition -N -q --show-progress -o $DOWNLOADDIR/$BINARYFILENAME $URL
+
+}
