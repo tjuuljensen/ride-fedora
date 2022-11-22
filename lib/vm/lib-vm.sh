@@ -91,9 +91,12 @@ GetSANSsift(){
 }
 
 GetSOFelk () {
+<<<<<<< HEAD
   # Get from Phil Hagen here:
   # https://github.com/philhagen/sof-elk/blob/main/VM_README.md
   
+=======
+>>>>>>> e28c8edc92ec3a17ee849e5759fbea5399e86e4b
   cd $DOWNLOADDIR
   URL=https://for572.com/sof-elk-vm
   DOWNLOADURL=$(curl -I $URL  2>&1 | grep Location | cut -d ' ' -f2)
