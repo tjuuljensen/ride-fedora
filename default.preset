@@ -170,6 +170,7 @@ InstallVMtoolsOnVM         # RemoveVMtoolsOnVM
 ### 3rd party applications ###
 InstallYubikeyManager      # RemoveYubikeyManager
 # InstallYubikeyPersTool
+# InstallXmind             # RemoveXmind
 InstallSonosPlayer         # RemoveSonosPlayer
 # InstallOwnCloudClient    # RemoveOwnCloudClient
 # InstallVMwareWorkstation # RemoveVMwareWorkstation

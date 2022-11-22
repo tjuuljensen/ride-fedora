@@ -1349,6 +1349,7 @@ InstallFirefoxAddons(){
   if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
 
     ADDONS=(
+      "gnome-shell-integration"
       "ublock-origin"
       "privacy-badger17"
       "https-everywhere"
@@ -1358,9 +1359,13 @@ InstallFirefoxAddons(){
       "video-downloadhelper"
       "fireshot"
       "wayback-machine_new"
+      "error-404-wayback-machine"
       "exif-viewer"
       "link-gopher"
       "nimbus-screenshot"
+      "mitaka"
+      "bitwarden-password-manager"
+      "expressvpn"
       # "bulk-media-downloader"
       # "mjsonviewer"
       # "user-agent-switcher-revived"
@@ -1790,12 +1795,13 @@ SetGnomeCustomFavorites(){
     sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'chromium-browser.desktop', 'atom.desktop', 'org.gnome.Boxes.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'terminator.desktop' ]"
 }
 
+# Adjusted to fedora 37
 SetGnomeDefaultFavorites(){
-    ssudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'org.gnome.Evolution.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop']"
+    sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop']"
 }
 
 SetGnomeMinimalFavorites(){
-  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'libreoffice-writer.desktop', 'org.gnome.gedit.desktop', 'org.gnome.Nautilus.desktop',  'org.gnome.Terminal.desktop']"
+  sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'org.gnome.Nautilus.desktop',  'org.gnome.Terminal.desktop']"
 }
 
 SetGnmLocationServiceOff(){
@@ -2174,6 +2180,16 @@ InstallYubikeyPersTool(){
   dnf install -y libusb-devel qt-devel libyubikey-devel ykpers-devel
   qmake-qt4 && make
 
+}
+
+InstallXmind(){
+  URL=https://www.xmind.app/zen/download/linux_rpm/
+  DOWNLOADURL=$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2 )
+  dnf install -y $DOWNLOADURL
+}
+
+RemoveXmind(){
+  dnf remove -y xmind-vana
 }
 
 

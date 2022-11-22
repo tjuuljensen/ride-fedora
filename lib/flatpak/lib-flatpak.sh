@@ -139,3 +139,11 @@ InstallThunderbird(){
 RemoveThunderbird(){
   flatpak remove -y org.mozilla.Thunderbird
 }
+
+InstallXmind(){
+  flatpak install -y net.xmind.XMind
+}
+
+RemoveXmind(){
+  flatpak remove -y net.xmind.XMind
+}
