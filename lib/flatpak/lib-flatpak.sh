@@ -147,3 +147,11 @@ InstallXmind(){
 RemoveXmind(){
   flatpak remove -y net.xmind.XMind
 }
+
+InstallColorPicker(){
+  flatpak install -y nl.hjdskes.gcolor3
+}
+
+RemoveColorPicker(){
+  flatpak remove -y nl.hjdskes.gcolor3
+}
