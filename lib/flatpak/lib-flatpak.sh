@@ -155,3 +155,11 @@ InstallColorPicker(){
 RemoveColorPicker(){
   flatpak remove -y nl.hjdskes.gcolor3
 }
+
+InstallPDFtricks(){
+  flatpak install -y com.github.muriloventuroso.pdftricks
+}
+
+RemovePDFtricks(){
+  flatpak remove -y com.github.muriloventuroso.pdftricks
+}
