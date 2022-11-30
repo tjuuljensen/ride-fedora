@@ -212,7 +212,7 @@ RemoveFlathub(){
 InstallAppImageLauncher(){
   # https://github.com/TheAssassin/AppImageLauncher/releases
   APPIMAGEDIR=~/Applications
-  URl=https://github.com/TheAssassin/AppImageLauncher/releases
+  URL=https://github.com/TheAssassin/AppImageLauncher/releases
   PARTIALURL=$(curl $URL 2>&1 | grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
   RPMURL=https://github.com$PARTIALURL
 
@@ -246,87 +246,101 @@ RemoveSnap(){
 
 InstallGalleta(){
     # https://www.kali.org/tools/galleta/
+    echo https://www.kali.org/tools/galleta/
 
 }
 
 RemoveGalleta(){
     #
+    echo ""
 }
 
 InstallPlaso(){
   # Plaso is a computer forensic tool for timeline generation and analysis.
   # https://plaso.readthedocs.io/en/latest/index.html
   # https://github.com/log2timeline/plaso
-  
+  echo https://github.com/log2timeline/plaso
 }
 
 RemovePlaso(){
   # Remove Plaso
-
+  echo ""
 }
 
 InstallAutopsy(){
   # https://sleuthkit.org/autopsy/
+  echo https://sleuthkit.org/autopsy/
 
 }
 
 RemoveAutopsy(){
   #
+  echo ""
 }
 
 InstallXplico(){
   # https://www.xplico.org/about
+  echo https://www.xplico.org/about
 
 }
 
 RemoveXplico(){
   #
+  echo ""
 }
 
 InstallBulkExtractor(){
   # https://github.com/simsong/bulk_extractor
-
+  echo https://github.com/simsong/bulk_extractor
 }
 
 RemoveBulkExtractor(){
   #
+  echo ""
 }
 
 InstallVMFStools(){
   # install vmfs tools
-
+  # package can be fetched here: https://github.com/rpmsphere/x86_64/tree/master/v
+  echo https://github.com/rpmsphere/x86_64/tree/master/v
+  echo https://github.com/teward/vmfs6-tools
 }
 
 RemoveVMFStools(){
   # remove vmfs tools
-
+  echo ""
 }
 
 InstallVolatility(){
   # https://www.volatilityfoundation.org/releases
-
+  echo https://www.volatilityfoundation.org/releases
 }
 
 RemoveVolatility(){
   #
+  echo ""
+}
 
 InstallVolatility3(){
   # https://www.volatilityfoundation.org/releases-vol3
   # https://github.com/volatilityfoundation/volatility3
+  echo # https://github.com/volatilityfoundation/volatility3
 
 }
 
 RemoveVolatility3(){
-  dnf remove -y Volatility
+  echo ""
 }
 
 InstallRekall(){
   # http://www.rekall-forensic.com/
+  echo http://www.rekall-forensic.com/
 
 }
 
 RemoveRekall(){
   # 
+  echo ""
 }
 
 
