@@ -212,7 +212,7 @@ RemoveFlathub(){
 InstallAppImageLauncher(){
   # https://github.com/TheAssassin/AppImageLauncher/releases
   APPIMAGEDIR=~/Applications
-  URl=https://github.com/TheAssassin/AppImageLauncher/releases
+  URL=https://github.com/TheAssassin/AppImageLauncher/releases
   PARTIALURL=$(curl $URL 2>&1 | grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
   RPMURL=https://github.com$PARTIALURL
 
