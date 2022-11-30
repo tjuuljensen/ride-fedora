@@ -821,7 +821,7 @@ InstallArduinoIDE(){
 
 RemoveArduinoIDE(){
   APPIMAGEDIR=$MYUSERDIR/Applications
-  sudo -u $MYUSER rm $APPIMAGEDIR/arduino-ide*.AppImage
+  rm $APPIMAGEDIR/arduino-ide*.AppImage
 }
 
 InstallAtomEditor(){
