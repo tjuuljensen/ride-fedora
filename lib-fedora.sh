@@ -515,7 +515,7 @@ Version=1.0
 Type=Application
 Name=CyberChef
 Comment=The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis.
-Icon=/usr/lib/CyberChef/images/cyberchef-128x128.png
+Icon=/usr/lib/cyberchef/images/cyberchef-128x128.png
 Exec=firefox file://$INSTALLDIR$HTMLFILE
 Actions=
 Categories=Network;WebBrowser;" > $DESKTOPFILE
@@ -1825,28 +1825,28 @@ SetGnmAutoProblemRptOn(){
 ################################################################
 ###### Linux tweaks & tools  ###
 ################################################################
-
+$MYUSER
 SetWanIPAlias(){
 
-  cp ~/.bashrc ~/.bashrc.bak
+  sudo -u $MYUSER cp ~/.bashrc ~/.bashrc.bak
   # https://unix.stackexchange.com/a/81699/37512
   echo "
 alias wanip='dig @resolver4.opendns.com myip.opendns.com +short'
 alias wanip4='dig @resolver4.opendns.com myip.opendns.com +short -4'
-alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'" >> ~/.bashrc
+alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'" >> $MYUSERDIR/.bashrc
 }
 
 UnsetWanIPAlias(){
-  sed -i '/alias wanip/d' ~/.bashrc
+  sed -i '/alias wanip/d' $MYUSERDIR/.bashrc
 }
 
 SetRideLogAlias(){
   echo "
-alias ride-log='less /var/log/bootstrap-installer/$(ls /var/log/bootstrap-installer/ -1t | head -1)'" >> ~/.bashrc
+alias ride-log='less /var/log/bootstrap-installer/$(ls /var/log/bootstrap-installer/ -1t | head -1)'" >> $MYUSERDIR/.bashrc
 }
 
 UnsetRideLogAlias(){
-  sed -i '/alias ride-log/d' ~/.bashrc
+  sed -i '/alias ride-log/d' $MYUSERDIR/.bashrc
 }
 
 
