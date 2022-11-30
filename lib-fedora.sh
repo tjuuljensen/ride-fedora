@@ -211,7 +211,7 @@ RemoveFlathub(){
 
 InstallAppImageLauncher(){
   # https://github.com/TheAssassin/AppImageLauncher/releases
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
   URL=https://github.com/TheAssassin/AppImageLauncher/releases
   PARTIALURL=$(curl $URL 2>&1 | grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
   RPMURL=https://github.com$PARTIALURL
@@ -224,11 +224,11 @@ InstallAppImageLauncher(){
 }
 
 RemoveAppImageLauncher(){
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
   dnf remove -y appimagelauncher
 
   # if applications directory is empty, then delete directory
-  [ "$(ls -A $APPIMAGEDIR )" ] && echo "Files found - cannot delete ~/Applications" || rm -r ~/Applications
+  [ "$(ls -A $APPIMAGEDIR )" ] && echo "Files found - cannot delete ~/Applications" || rm -r $MYUSERDIR/Applications
 }
 
 InstallSnap(){
@@ -512,7 +512,7 @@ InstallUnfURL(){
 }
 
 RemoveUnfURL(){
-  sudo -u $MYUSER pip uninstall dfir-unfurl
+  sudo -u $MYUSER pip uninstall dfir-unfurl -y
 }
 
 InstallCyberChef(){
@@ -540,7 +540,7 @@ Version=1.0
 Type=Application
 Name=CyberChef
 Comment=The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis.
-Icon=/usr/lib/CyberChef/images/cyberchef-128x128.png
+Icon=/usr/lib/cyberchef/images/cyberchef-128x128.png
 Exec=firefox file://$INSTALLDIR$HTMLFILE
 Actions=
 Categories=Network;WebBrowser;" > $DESKTOPFILE
@@ -642,13 +642,13 @@ RemoveNetworkMiner(){
 InstallDocker(){
   dnf config-manager --add-repo \
       https://download.docker.com/linux/fedora/docker-ce.repo
-  dnf install docker-ce docker-ce-cli containerd.io
+  dnf install -y docker-ce docker-ce-cli containerd.io
   systemctl start docker
 }
 
 RemoveDocker(){
 
-  dnf remove docker-ce docker-ce-cli containerd.io
+  dnf remove -y docker-ce docker-ce-cli containerd.io
   rm /etc/yum.repos.d/docker-ce.repo
 
 }
@@ -835,7 +835,7 @@ InstallArduinoIDE(){
   VERSION="${PARTIALURL##*/}"
   DOWNLOADURL="${URL}/download/${VERSION}/arduino-ide_${VERSION}_Linux_64bit.AppImage"
 
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
@@ -845,8 +845,8 @@ InstallArduinoIDE(){
 }
 
 RemoveArduinoIDE(){
-  APPIMAGEDIR=~/Applications
-  sudo -u $MYUSER rm $APPIMAGEDIR/arduino-ide*.AppImage
+  APPIMAGEDIR=$MYUSERDIR/Applications
+  rm $APPIMAGEDIR/arduino-ide*.AppImage
 }
 
 InstallAtomEditor(){
@@ -956,7 +956,7 @@ InstallPyhtonAutopep8(){
 }
 
 RemovePyhtonAutopep8(){
-  sudo -u $MYUSER pip uninstall autopep8
+  sudo -u $MYUSER pip uninstall autopep8 -y
 }
 
 ################################################################
@@ -1206,7 +1206,7 @@ InstallMozExtensionMgr(){
   fi
 
   cd /opt
-  git clone https://github.com/NicolasBernaerts/ubuntu-scripts
+  git clone https://github.com/tjuuljensen/ubuntu-scripts
 
   # Fix missing executable flag when fetched from repo
   chmod 755 "/opt/ubuntu-scripts/mozilla/firefox-extension-manager"
@@ -1395,11 +1395,11 @@ InstallFirefoxAddons(){
     FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default 2>/dev/null)
 
     # Make sure that the Firefox firectory and profile is created so extensions can be installed
-    if [ ! -d $FIREFOXCONFIGDIR ] ; then
+    if  [ ! -f ${MYUSERDIR}/.mozilla/firefox/profiles.ini ] ; then
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
-      chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
+      chown $MYUSER $MYUSERDIR/.mozilla/firefox
       sudo -u $MYUSER firefox & # start Firefox so default profile is created
-      sleep 12
+      sleep 5
       pkill firefox
       FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
     fi
@@ -1409,21 +1409,27 @@ InstallFirefoxAddons(){
       chown $MYUSER:$MYUSER $FIREFOXCONFIGDIR/extensions
     fi
 
+    # set directories
+    EXTENSIONDIR=$(ls -d $MYUSERDIR/.mozilla/extensions/{* -1t | awk NR==1)
+
     # Install extensions
     Echo "Installing Firefox extensions:"
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
-      echo $ADDON
-      su $MYUSER -c "firefox-extension-manager --install --allow-create --user --url $BASEURL/$ADDON"
+      echo Installing ${ADDON}
+      su ${MYUSER} -c "firefox-extension-manager --install --allow-create --user --url ${BASEURL}/${ADDON}"
     done
   fi
+
+  [ "$(ls -A $FIREFOXCONFIGDIR/extensions)" ] && cp $FIREFOXCONFIGDIR/extensions/* ${EXTENSIONDIR}
 }
 
 RemoveFirefoxAddons(){
   if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
 
     ADDONS=(
+      "gnome-shell-integration"
       "ublock-origin"
       "privacy-badger17"
       "https-everywhere"
@@ -1433,9 +1439,13 @@ RemoveFirefoxAddons(){
       "video-downloadhelper"
       "fireshot"
       "wayback-machine_new"
+      "error-404-wayback-machine"
       "exif-viewer"
       "link-gopher"
       "nimbus-screenshot"
+      "mitaka"
+      "bitwarden-password-manager"
+      "expressvpn"
       # "bulk-media-downloader"
       # "mjsonviewer"
       # "user-agent-switcher-revived"
@@ -1843,25 +1853,25 @@ SetGnmAutoProblemRptOn(){
 
 SetWanIPAlias(){
 
-  cp ~/.bashrc ~/.bashrc.bak
+  sudo -u $MYUSER cp ~/.bashrc ~/.bashrc.bak
   # https://unix.stackexchange.com/a/81699/37512
   echo "
 alias wanip='dig @resolver4.opendns.com myip.opendns.com +short'
 alias wanip4='dig @resolver4.opendns.com myip.opendns.com +short -4'
-alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'" >> ~/.bashrc
+alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'" >> $MYUSERDIR/.bashrc
 }
 
 UnsetWanIPAlias(){
-  sed -i '/alias wanip/d' ~/.bashrc
+  sed -i '/alias wanip/d' $MYUSERDIR/.bashrc
 }
 
 SetRideLogAlias(){
   echo "
-alias ride-log='less /var/log/bootstrap-installer/$(ls /var/log/bootstrap-installer/ -1t | head -1)'" >> ~/.bashrc
+alias ride-log='less /var/log/bootstrap-installer/$(ls /var/log/bootstrap-installer/ -1t | head -1)'" >> $MYUSERDIR/.bashrc
 }
 
 UnsetRideLogAlias(){
-  sed -i '/alias ride-log/d' ~/.bashrc
+  sed -i '/alias ride-log/d' $MYUSERDIR/.bashrc
 }
 
 
@@ -1915,7 +1925,7 @@ InstallBitwardenAppImage(){
   VERSION_NUM="${VERSION##*-v}"
   DOWNLOADURL="${URL}/download/${VERSION}/Bitwarden-${VERSION_NUM}-x86_64.AppImage"
 
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
@@ -1925,7 +1935,7 @@ InstallBitwardenAppImage(){
 }
 
 RemoveBitwardenAppImage(){
-  sudo -u $MYUSER rm ~/Applications/Bitwarden*.AppImage
+  rm $MYUSERDIR/Applications/Bitwarden*.AppImage
 }
 
 ################################################################
@@ -2178,7 +2188,7 @@ RemoveVMtoolsOnVM(){
 
 InstallYubikeyManager(){
   # https://www.yubico.com/support/download/yubikey-manager/
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   URL=https://www.yubico.com/support/download/yubikey-manager/
   DOWNLOADURL=$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep AppImage)
@@ -2192,7 +2202,7 @@ InstallYubikeyManager(){
 }
 
 RemoveYubikeyManager(){
-  sudo -u $MYUSER rm ~/Applications/yubikey-manager*.AppImage
+  rm $MYUSERDIR/Applications/yubikey-manager*.AppImage
 }
 
 
@@ -2228,7 +2238,7 @@ InstallSonosPlayer(){
   PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "releases/download" | grep AppImage | grep -v "arm64\|armv7"  | sort -V -r | awk 'NR==1')
   DOWNLOADURL=https://github.com${PARTIALURL}
 
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
@@ -2238,7 +2248,7 @@ InstallSonosPlayer(){
 }
 
 RemoveSonosPlayer(){
-  sudo -u $MYUSER rm ~/Applications/sonos-controller-unofficial*.AppImage
+  rm $MYUSERDIR/Applications/sonos-controller-unofficial*.AppImage
 }
 
 
