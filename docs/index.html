@@ -2,7 +2,7 @@
 # Bootstrap loader to bootstrap-fedora repo
 #
 # Torsten Juul-Jensen
-# October 28, 2022
+# November 30, 2022
 
 GITHUB_REPO=bootstrap-fedora
 # Direct URL to bootstrap master archive on github
@@ -15,7 +15,8 @@ set -e
 usage_help()
 {
   SCRIPT_NAME=$(basename $0)
-  echo "usage: $SCRIPT_NAME [--ride <options...>] [--default] [--stop] [--edit | --vi ]"
+  echo "normal usage:     $SCRIPT_NAME [--ride <options...>] [--default] [--stop] [--edit | --vi ]"
+  echo "specific release: $SCRIPT_NAME --release v37.0.0"
   exit 1
 }
 
@@ -28,19 +29,28 @@ download_source()
     rpm -q --quiet ${REQUIREDPACKAGES[$i]}  || dnf install -y ${REQUIREDPACKAGES[$i]}
   done
 
+  if [[ $# -ne 0 ]] && [[ "--release | -r" == *"$1"* ]]; then
+    BOOTSTRAP_ARCHIVE="https://github.com/tjuuljensen/${GITHUB_REPO}/archive/refs/tags/${2}.zip"   
+    ARCHIVE=${2}
+    shift 2 
+  else
+    ARCHIVE=master
+  fi
+
   TEMPDIR="$(mktemp -d /tmp/ride.XXXXXXXXXX)"
   echo -e "Downloading \x1b[32m$BOOTSTRAP_ARCHIVE\x1b[m => \x1b[32m$TEMPDIR/\x1b[m"
   cd $TEMPDIR
   wget -q "$BOOTSTRAP_ARCHIVE"
   echo unzipping...
-  unzip master.zip > /dev/null  && mv "$TEMPDIR"/${GITHUB_REPO}-master/* "$TEMPDIR" && rm master.zip && rm -rf ${GITHUB_REPO}-master/ && echo done.
+  unzip ${ARCHIVE}.zip > /dev/null  && mv "$TEMPDIR"/${GITHUB_REPO}-${ARCHIVE##*v}/* "$TEMPDIR" && rm ${ARCHIVE}.zip && rm -rf ${GITHUB_REPO}-${ARCHIVE##*v}/ && echo done.
   INSTALLDIR=$(realpath "$TEMPDIR")
+  
 }
 
 # If this file does not exist it's probably because we're bootstrapping a fresh
 # system.  So we download the Git repository and bootstrap from there
-if [[ ! -f "$SCRIPTDIR/${GITHUB_REPO}/ride.sh" ]] && [[ ! -f "$SCRIPTDIR/../ride.sh" ]]; then #the ride script does NOT exist in current dir
-  download_source
+if [[ ! -f "$SCRIPTDIR/${GITHUB_REPO}/ride.sh" ]] && [[ ! -f "$SCRIPTDIR/../ride.sh" ]]; then #the ride script does NOT exist in a subdir or one level up (run from repo directory)
+  download_source $@
 elif [[ -f "$SCRIPTDIR/${GITHUB_REPO}/ride.sh" ]] ; then
   INSTALLDIR=$(realpath "$SCRIPTDIR/${GITHUB_REPO}/")
 elif [[ -f "$SCRIPTDIR/../ride.sh" ]] ; then
@@ -50,13 +60,15 @@ fi
 if [[ $# -eq 0 ]] ; then
   # show syntax
   echo No command line parameters entered
+
+  # If no parameters were given, and the tempdir exists, move the directory to the script directory
   if [[ ! -z $TEMPDIR ]] && [[ ! -d $SCRIPTDIR/${GITHUB_REPO}/ ]]; then
     cd $SCRIPTDIR
     mv $TEMPDIR ${SCRIPTDIR}/${GITHUB_REPO}/
     echo Files can be found in: $(realpath "${SCRIPTDIR}/${GITHUB_REPO}/")
   fi
   usage_help
-elif [[ "--help | --h" == *"$1"* ]]; then
+elif [[ "--help | -h" == *"$1"* ]]; then
   # show syntax
   usage_help
 elif [[ "--default" == *"$1"* ]] ; then
