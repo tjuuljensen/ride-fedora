@@ -1855,6 +1855,16 @@ UnsetWanIPAlias(){
   sed -i '/alias wanip/d' ~/.bashrc
 }
 
+SetRideLogAlias(){
+  echo "
+alias ride-log='less /var/log/bootstrap-installer/$(ls /var/log/bootstrap-installer/ -1t | head -1)'" >> ~/.bashrc
+}
+
+UnsetRideLogAlias(){
+  sed -i '/alias ride-log/d' ~/.bashrc
+}
+
+
 ################################################################
 ###### Security related  ###
 ################################################################
@@ -2091,7 +2101,7 @@ InstallCheat(){
   URL=https://github.com/cheat/cheat/releases
 
   # get the latest package from github  website and install it
-  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "386" | sort -r -n | awk 'NR==1' )
+  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "linux-amd64" | sort -r -n | awk 'NR==1' )
   DOWNLOADURL="https://github.com$PARTIALPATH"
   ARCHIVE="${DOWNLOADURL##*/}"
   BINARY="${ARCHIVE%.*}" #the name of the archive (without gz) is expected to be the name of the file inside)
@@ -2355,8 +2365,9 @@ PatchVMwareModules(){
 
 InstallCitrixClient(){
   # Citrix Client
-  CITRIXCLIENTURL=https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html
-  BINARYURL="https:$(curl $CITRIXCLIENTURL 2>&1 | grep rel | grep rhel | grep x86_64 | sed 's/^.*rel/rel/' | cut -d '"' -f2 | grep Web)"
+  URL=https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html
+  PARTIALURL=$(curl $CITRIXCLIENTURL 2>&1 | grep downloads.citrix | cut -d '"' -f2 | grep rhel | grep x86_64 )
+  BINARYURL="https:${PARTIALURL}"
   BINARYFILENAME=$(echo "${BINARYURL##*/}" | sed 's/?.*//' )
 
   cd $DOWNLOADDIR

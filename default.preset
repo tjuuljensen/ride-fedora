@@ -22,8 +22,8 @@ InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
 InstallDNFutils            # RemoveDNFutils
 # InstallVersionLock       # RemoveVersionLock
-InstallNautilusHash        # RemoveNautilusHash
-InstallNautilusImageTools  # RemoveNautilusImageTools
+# InstallNautilusHash      # RemoveNautilusHash        # Issue in Gnome 43/Fedora 37
+# InstallNautilusImageTools# RemoveNautilusImageTools  # Issue in Gnome 43/Fedora 37
 
 ### Application Launchers ###
 # InstallFlatpak           # RemoveFlatpak
@@ -147,6 +147,7 @@ SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 
 ### Linux Tweaks & tools ###
 SetWanIPAlias              # UnsetWanIPAlias
+SetRideLogAlias            # UnsetRideLogAlias
 
 ### Security ###
 # InstallLynis             # RemoveLynis
