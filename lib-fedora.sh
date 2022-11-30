@@ -617,13 +617,13 @@ RemoveNetworkMiner(){
 InstallDocker(){
   dnf config-manager --add-repo \
       https://download.docker.com/linux/fedora/docker-ce.repo
-  dnf install docker-ce docker-ce-cli containerd.io
+  dnf install -y docker-ce docker-ce-cli containerd.io
   systemctl start docker
 }
 
 RemoveDocker(){
 
-  dnf remove docker-ce docker-ce-cli containerd.io
+  dnf remove -y docker-ce docker-ce-cli containerd.io
   rm /etc/yum.repos.d/docker-ce.repo
 
 }
@@ -1366,15 +1366,15 @@ InstallFirefoxAddons(){
     )
 
     cd $DOWNLOADDIR
-
+    
     FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default 2>/dev/null)
 
     # Make sure that the Firefox firectory and profile is created so extensions can be installed
-    if [ ! -d $FIREFOXCONFIGDIR ] ; then
+    if  [ ! -f ${MYUSERDIR}/.mozilla/firefox/profiles.ini ] ; then
       mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
-      chown $MYUSER:$MYUSER $MYUSERDIR/.mozilla/firefox
+      chown $MYUSER $MYUSERDIR/.mozilla/firefox
       sudo -u $MYUSER firefox & # start Firefox so default profile is created
-      sleep 12
+      sleep 5
       pkill firefox
       FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
     fi
