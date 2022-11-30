@@ -173,7 +173,6 @@ InstallYubikeyManager      # RemoveYubikeyManager
 # InstallYubikeyPersTool
 # InstallXmind             # RemoveXmind
 InstallSonosPlayer         # RemoveSonosPlayer
-# InstallOwnCloudClient    # RemoveOwnCloudClient
 # InstallVMwareWorkstation # RemoveVMwareWorkstation
 # PatchVMwareModules
 # InstallCitrixClient      # RemoveCitrixClient

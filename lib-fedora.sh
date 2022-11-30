@@ -2224,8 +2224,6 @@ InstallSonosPlayer(){
   # AppImage Install (exists as rpm too)
   # Unofficiel Sonos manager
 
-      https://github.com/pascalopitz/unoffical-sonos-controller-for-linux/releases/download/v0.2.9/sonos-controller-unofficial-0.2.9-arm64.AppImage
-
   URL=https://github.com/pascalopitz/unoffical-sonos-controller-for-linux/releases
   PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "releases/download" | grep AppImage | grep -v "arm64\|armv7"  | sort -V -r | awk 'NR==1')
   DOWNLOADURL=https://github.com${PARTIALURL}
@@ -2236,31 +2234,13 @@ InstallSonosPlayer(){
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
   fi
 
-  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -o $APPIMAGEDIR/sonos-controller-unofficial.AppImage
+  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR
 }
 
 RemoveSonosPlayer(){
   sudo -u $MYUSER rm ~/Applications/sonos-controller-unofficial*.AppImage
 }
 
-
-InstallOwnCloudClient(){
-  # OwnCloud client
-  rpm --import https://download.owncloud.com/desktop/ownCloud/stable/latest/linux/Fedora_$FEDORARELEASE/repodata/repomd.xml.key
-
-  OWNCLOUDREPO=https://download.owncloud.com/desktop/ownCloud/stable/latest/linux/Fedora_$FEDORARELEASE/owncloud.repo
-  if ( ! dnf config-manager --add-repo http://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_$FEDORARELEASE/isv:ownCloud:desktop.repo ) ; then
-    echo "[-] Adding OwnCloud repo for Fedora $FEDORARELEASE failed."
-  fi
-
-  dnf install -y owncloud-client
-}
-
-RemoveOwnCloudClient(){
-  # Remove OwnCloud client
-  rm /etc/yum.repos.d/isv:ownCloud:desktop.repo
-  dnf remove -y owncloud-client
-}
 
 InstallVMwareWorkstation(){
   # download and install vmware workstation
