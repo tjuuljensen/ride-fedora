@@ -211,7 +211,7 @@ RemoveFlathub(){
 
 InstallAppImageLauncher(){
   # https://github.com/TheAssassin/AppImageLauncher/releases
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
   URL=https://github.com/TheAssassin/AppImageLauncher/releases
   PARTIALURL=$(curl $URL 2>&1 | grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
   RPMURL=https://github.com$PARTIALURL
@@ -224,11 +224,11 @@ InstallAppImageLauncher(){
 }
 
 RemoveAppImageLauncher(){
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
   dnf remove -y appimagelauncher
 
   # if applications directory is empty, then delete directory
-  [ "$(ls -A $APPIMAGEDIR )" ] && echo "Files found - cannot delete ~/Applications" || rm -r ~/Applications
+  [ "$(ls -A $APPIMAGEDIR )" ] && echo "Files found - cannot delete ~/Applications" || rm -r $MYUSERDIR/Applications
 }
 
 InstallSnap(){
@@ -810,7 +810,7 @@ InstallArduinoIDE(){
   VERSION="${PARTIALURL##*/}"
   DOWNLOADURL="${URL}/download/${VERSION}/arduino-ide_${VERSION}_Linux_64bit.AppImage"
 
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
@@ -820,7 +820,7 @@ InstallArduinoIDE(){
 }
 
 RemoveArduinoIDE(){
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
   sudo -u $MYUSER rm $APPIMAGEDIR/arduino-ide*.AppImage
 }
 
@@ -1900,7 +1900,7 @@ InstallBitwardenAppImage(){
   VERSION_NUM="${VERSION##*-v}"
   DOWNLOADURL="${URL}/download/${VERSION}/Bitwarden-${VERSION_NUM}-x86_64.AppImage"
 
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
@@ -1910,7 +1910,7 @@ InstallBitwardenAppImage(){
 }
 
 RemoveBitwardenAppImage(){
-  sudo -u $MYUSER rm ~/Applications/Bitwarden*.AppImage
+  rm $MYUSERDIR/Applications/Bitwarden*.AppImage
 }
 
 ################################################################
@@ -2163,7 +2163,7 @@ RemoveVMtoolsOnVM(){
 
 InstallYubikeyManager(){
   # https://www.yubico.com/support/download/yubikey-manager/
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   URL=https://www.yubico.com/support/download/yubikey-manager/
   DOWNLOADURL=$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep AppImage)
@@ -2177,7 +2177,7 @@ InstallYubikeyManager(){
 }
 
 RemoveYubikeyManager(){
-  sudo -u $MYUSER rm ~/Applications/yubikey-manager*.AppImage
+  rm $MYUSERDIR/Applications/yubikey-manager*.AppImage
 }
 
 
@@ -2213,7 +2213,7 @@ InstallSonosPlayer(){
   PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "releases/download" | grep AppImage | grep -v "arm64\|armv7"  | sort -V -r | awk 'NR==1')
   DOWNLOADURL=https://github.com${PARTIALURL}
 
-  APPIMAGEDIR=~/Applications
+  APPIMAGEDIR=$MYUSERDIR/Applications
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
@@ -2223,7 +2223,7 @@ InstallSonosPlayer(){
 }
 
 RemoveSonosPlayer(){
-  sudo -u $MYUSER rm ~/Applications/sonos-controller-unofficial*.AppImage
+  rm $MYUSERDIR/Applications/sonos-controller-unofficial*.AppImage
 }
 
 
