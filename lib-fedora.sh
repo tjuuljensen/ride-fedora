@@ -1384,6 +1384,9 @@ InstallFirefoxAddons(){
       chown $MYUSER:$MYUSER $FIREFOXCONFIGDIR/extensions
     fi
 
+    # set directories
+    EXTENSIONDIR=$(ls -d $MYUSERDIR/.mozilla/extensions/{* -1t | awk NR==1)
+
     # Install extensions
     Echo "Installing Firefox extensions:"
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
@@ -1393,6 +1396,8 @@ InstallFirefoxAddons(){
       su ${MYUSER} -c "firefox-extension-manager --install --allow-create --user --url ${BASEURL}/${ADDON}"
     done
   fi
+
+  [ "$(ls -A $FIREFOXCONFIGDIR/extensions)" ] && cp $FIREFOXCONFIGDIR/extensions/* ${EXTENSIONDIR}
 }
 
 RemoveFirefoxAddons(){
