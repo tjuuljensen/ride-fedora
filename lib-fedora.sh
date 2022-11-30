@@ -1825,7 +1825,7 @@ SetGnmAutoProblemRptOn(){
 ################################################################
 ###### Linux tweaks & tools  ###
 ################################################################
-$MYUSER
+
 SetWanIPAlias(){
 
   sudo -u $MYUSER cp ~/.bashrc ~/.bashrc.bak
