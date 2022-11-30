@@ -243,115 +243,77 @@ RemoveSnap(){
 ###### CERT Forensic Repo ###
 ################################################################
 
-InstallCERTForensicsRepo(){
-  ### As of September 30, 2022, maintenance of this repository will cease ###
-
-  # Read more here https://forensics.cert.org/
-  # Read full package list here https://forensics.cert.org/ByPackage/index.html
-  # List Repo:$ dnf repository-packages forensics list
-
-  URL=https://forensics.cert.org/
-  FEDORARPMURL=$URL$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep rpm | grep $FEDORARELEASE)
-  FERORARPM=${FEDORARPMURL##${FEDORARPMURL%/*}"/"}
-  GPGKEYURL=https://forensics.cert.org/forensics.asc
-  GPGKEY=${GPGKEYURL##${GPGKEYURL%/*}"/"}
-  cd $DOWNLOADDIR
-  # Get the CERT Forensic Repo key [expires: 2022-04-03]
-  gpg --keyserver hkps://keys.openpgp.org --recv-key  26A0829D5C01FC51C3049037E97F3E0A87E360B8
-  gpg --fingerprint 26A0829D5C01FC51C3049037E97F3E0A87E360B8
-
-  wget -q --show-progress $FEDORARPMURL
-  rpm -K $FERORARPM
-
-  dnf install -y $FERORARPM
-
-}
-
-RemoveCERTForensicsRepo(){
-  rpm -e gpg-pubkey-87e360b8-5e87133b
-  rm /etc/yum.repos.d/cert-forensics-tools.repo
-}
-
 
 InstallGalleta(){
     # https://www.kali.org/tools/galleta/
-    # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-    dnf install -y galleta
+
 }
 
 RemoveGalleta(){
-    dnf remove -y galleta
+    #
 }
 
 InstallPlaso(){
   # Plaso is a computer forensic tool for timeline generation and analysis.
   # https://plaso.readthedocs.io/en/latest/index.html
   # https://github.com/log2timeline/plaso
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y plaso
+  
 }
 
 RemovePlaso(){
   # Remove Plaso
-  dnf remove -y plaso
+
 }
 
 InstallAutopsy(){
   # https://sleuthkit.org/autopsy/
-  # Requires cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y autopsy
+
 }
 
 RemoveAutopsy(){
-  dnf remove -y autopsy
+  #
 }
 
 InstallXplico(){
   # https://www.xplico.org/about
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y xplico
+
 }
 
 RemoveXplico(){
-  dnf remove -y xplico
+  #
 }
 
 InstallBulkExtractor(){
   # https://github.com/simsong/bulk_extractor
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y bulk_extractor
+
 }
 
 RemoveBulkExtractor(){
-  dnf remove -y bulk_extractor
+  #
 }
 
 InstallVMFStools(){
   # install vmfs tools
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y vmfs-tools
+
 }
 
 RemoveVMFStools(){
   # remove vmfs tools
-  dnf remove -y vmfs-tools
+
 }
 
 InstallVolatility(){
   # https://www.volatilityfoundation.org/releases
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y Volatility
+
 }
 
 RemoveVolatility(){
-  dnf remove -y Volatility
-}
+  #
 
 InstallVolatility3(){
   # https://www.volatilityfoundation.org/releases-vol3
   # https://github.com/volatilityfoundation/volatility3
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y Volatility
+
 }
 
 RemoveVolatility3(){
@@ -360,12 +322,11 @@ RemoveVolatility3(){
 
 InstallRekall(){
   # http://www.rekall-forensic.com/
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y rekall-forensics
+
 }
 
 RemoveRekall(){
-  dnf remove -y rekall-forensics
+  # 
 }
 
 
@@ -512,7 +473,7 @@ InstallUnfURL(){
 }
 
 RemoveUnfURL(){
-  sudo -u $MYUSER pip uninstall dfir-unfurl
+  sudo -u $MYUSER pip uninstall dfir-unfurl -y
 }
 
 InstallCyberChef(){
@@ -956,7 +917,7 @@ InstallPyhtonAutopep8(){
 }
 
 RemovePyhtonAutopep8(){
-  sudo -u $MYUSER pip uninstall autopep8
+  sudo -u $MYUSER pip uninstall autopep8 -y
 }
 
 ################################################################
@@ -1206,7 +1167,7 @@ InstallMozExtensionMgr(){
   fi
 
   cd /opt
-  git clone https://github.com/NicolasBernaerts/ubuntu-scripts
+  git clone https://github.com/tjuuljensen/ubuntu-scripts
 
   # Fix missing executable flag when fetched from repo
   chmod 755 "/opt/ubuntu-scripts/mozilla/firefox-extension-manager"
@@ -1414,8 +1375,8 @@ InstallFirefoxAddons(){
     BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
     for ADDON in "${ADDONS[@]}"
     do
-      echo $ADDON
-      su $MYUSER -c "firefox-extension-manager --install --allow-create --user --url $BASEURL/$ADDON"
+      echo Installing ${ADDON}
+      su ${MYUSER} -c "firefox-extension-manager --install --allow-create --user --url ${BASEURL}/${ADDON}"
     done
   fi
 }
@@ -1424,6 +1385,7 @@ RemoveFirefoxAddons(){
   if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
 
     ADDONS=(
+      "gnome-shell-integration"
       "ublock-origin"
       "privacy-badger17"
       "https-everywhere"
@@ -1433,9 +1395,13 @@ RemoveFirefoxAddons(){
       "video-downloadhelper"
       "fireshot"
       "wayback-machine_new"
+      "error-404-wayback-machine"
       "exif-viewer"
       "link-gopher"
       "nimbus-screenshot"
+      "mitaka"
+      "bitwarden-password-manager"
+      "expressvpn"
       # "bulk-media-downloader"
       # "mjsonviewer"
       # "user-agent-switcher-revived"

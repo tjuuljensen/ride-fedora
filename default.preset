@@ -31,9 +31,7 @@ InstallFlathub             # RemoveFlathub
 InstallAppImageLauncher    # RemoveAppImageLauncher
 # InstallSnap              # RemoveSnap
 
-### CERT Forensic Repo ###
-InstallCERTForensicsRepo   # RemoveCERTForensicsRepo
-InstallLibEWF              # RemoveLibEWF
+### CERT Forensic Repo  - THESE ARE EMPTY ###
 # InstallGalleta           # RemoveGalleta
 # InstallPlaso             # RemovePlaso
 # InstallAutopsy           # RemoveAutopsy
@@ -42,7 +40,7 @@ InstallLibEWF              # RemoveLibEWF
 # InstallVolatility        # RemoveVolatility
 # InstallVolatility3       # RemoveVolatility3
 # InstallRekall            # RemoveRekall
-InstallVeraCrypt           # UninstallVeraCrypt
+# InstallVMFStools         # RemoveVMFStools
 
 ### Standard Repo Forensic Tools ###
 # InstallSecurityLab       # RemoveSecurityLab
@@ -50,6 +48,7 @@ InstallVeraCrypt           # UninstallVeraCrypt
 # InstallDc3dd             # RemoveDc3dd
 InstallExif                # RemoveExif
 InstallMd5deep             # RemoveMd5deep
+InstallLibEWF              # RemoveLibEWF
 
 ### Other Forensic Tools ###
 InstallExifTool            # RemoveExifTool
@@ -58,6 +57,7 @@ InstallCyberChef           # RemoveCyberChef
 InstallChepy               # RemoveChepy
 # InstallDumpzilla         # RemoveDumpzilla
 InstallNetworkMiner        # RemoveNetworkMiner
+InstallVeraCrypt           # UninstallVeraCrypt
 
 ### Basic Tools and Support ###
 InstallDocker              # RemoveDocker
@@ -79,12 +79,12 @@ InstallSmartMonTools       # RemoveSmartMonTools
 # InstallBalenaEtcher      # RemoveBalenaEtcher
 
 ### Programming ####
-# InstallVisualStudioCode  # RemoveVisualStudioCode
+InstallVisualStudioCode    # RemoveVisualStudioCode
 # InstallArduinoIDE        # RemoveArduinoIDE
-InstallAtomEditor          # RemoveAtomEditor
-DisableAtomTelemetry       # EnableAtomTelemetry
-InstallAtomPlugins         # RemoveAtomPlugins
-InstallPyhtonAutopep8      # RemovePyhtonAutopep8
+# InstallAtomEditor        # RemoveAtomEditor
+# DisableAtomTelemetry     # EnableAtomTelemetry
+# InstallAtomPlugins       # RemoveAtomPlugins
+# InstallPyhtonAutopep8    # RemovePyhtonAutopep8
 
 ### Communication ####
 InstallHexchat             # RemoveHexchat
