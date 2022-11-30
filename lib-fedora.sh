@@ -169,6 +169,7 @@ RemoveVersionLock(){
     dnf remove -y python3-dnf-plugin-versionlock
 }
 
+# ISSUE: Gnome 43 has changed API and this package does not work as of November 2022
 InstallNautilusHash(){
   dnf install -y gtkhash-nautilus
 }
@@ -177,6 +178,7 @@ RemoveNautilusHash(){
   dnf remove -y gtkhash-nautilus
 }
 
+# ISSUE: Removed from Fedora 37 - November 2022
 InstallNautilusImageTools(){
   dnf install -y ImageMagick nautilus-image-converter
 }
@@ -270,17 +272,6 @@ RemoveCERTForensicsRepo(){
   rm /etc/yum.repos.d/cert-forensics-tools.repo
 }
 
-InstallLibEWF(){
-  # install libewf - a library for access to EWF (Expert Witness Format)
-  # See more at https://github.com/libyal/libewf
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y libewf
-
-}
-
-RemoveLibEWF(){
-  dnf remove -y libewf
-}
 
 InstallGalleta(){
     # https://www.kali.org/tools/galleta/
@@ -408,6 +399,18 @@ UninstallVeraCrypt(){
 ###### Standard Repo Forensic Tools ###
 ################################################################
 
+InstallLibEWF(){
+  # install libewf - a library for access to EWF (Expert Witness Format)
+  # See more at https://github.com/libyal/libewf
+  
+  dnf install -y libewf
+
+}
+
+RemoveLibEWF(){
+  dnf remove -y libewf
+}
+
 InstallSecurityLab(){
   # See content of the group:
   # dnf group info security-lab
@@ -463,12 +466,12 @@ InstallExifTool(){
   # Phil Harvey's ExifTool - https://exiftool.org
   URL=https://github.com/exiftool/exiftool/tags
   DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep zip | sort -r -n | awk 'NR==1')
-  FILENAME=${DOWNLOADURL##${DOWNLOADURL%/*}"/"}
+  FILENAME=${DOWNLOADURL##*/}
   INSTALLDIR=/usr/lib/exiftool
 
   cd $DOWNLOADDIR
   wget -q --show-progress $DOWNLOADURL
-  tar xzvf $FILENAME -C $INSTALLDIR --strip 1
+  unzip -d "$INSTALLDIR" "$FILENAME"
 
   cd $INSTALLDIR
 
@@ -560,9 +563,9 @@ InstallChepy(){
   git clone https://github.com/securisec/chepy.git
   setfacl -m u:$MYUSER:rwx chepy/
   cd chepy
-  sudo -u $MYUSER "pip install ."
-  sudo -u $MYUSER "pip install pyinstaller"
-  sudo -u $MYUSER "/home/$MYUSER/.local/bin/pyinstaller cli.py --name chepy --onefile"
+  sudo -u $MYUSER pip install .
+  sudo -u $MYUSER pip install pyinstaller
+  sudo -u $MYUSER /home/${MYUSER}/.local/bin/pyinstaller cli.py --name chepy --onefile
   cp dist/chepy /usr/bin/
 }
 
@@ -736,13 +739,13 @@ InstallPowerShell(){
   wget $MSFEDORAREPO
   mv prod.repo /etc/yum.repos.d/microsoft-rhel7.repo
   # Install a system component
-  dnf install -y compat-openssl10 libunwind libcurl openssl-libs libicu
+  dnf install -y libunwind libcurl openssl-libs libicu
   # Install PowerShell
   dnf install -y powershell
 }
 
 RemovePowerShell(){
-  dnf remove -y powershell compat-openssl10
+  dnf remove -y powershell 
   rm /etc/yum.repos.d/microsoft-rhel7.repo
 }
 
@@ -825,11 +828,25 @@ RemoveVisualStudioCode() {
 }
 
 InstallArduinoIDE(){
-  dnf install -y arduino
+  # https://github.com/arduino/arduino-ide
+  # Get latest AppImage from github
+  URL=https://github.com/arduino/arduino-ide/releases
+  PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep tag/ | sort -V -r | awk 'NR==1')
+  VERSION="${PARTIALURL##*/}"
+  DOWNLOADURL="${URL}/download/${VERSION}/arduino-ide_${VERSION}_Linux_64bit.AppImage"
+
+  APPIMAGEDIR=~/Applications
+
+  if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
+    sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
+  fi
+
+  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
 }
 
 RemoveArduinoIDE(){
-  dnf remove -y arduino
+  APPIMAGEDIR=~/Applications
+  sudo -u $MYUSER rm $APPIMAGEDIR/arduino-ide*.AppImage
 }
 
 InstallAtomEditor(){
@@ -1069,11 +1086,11 @@ EnableMulticastDNS(){
 }
 
 InstallNetworkTools(){
-  dnf install -y tcpdump wireshark tftp-server nmap macchanger flow-tools
+  dnf install -y tcpdump wireshark tftp-server nmap macchanger flow-tools nethogs
 }
 
 RemoveNetworkTools(){
-  dnf remove -y tcpdump wireshark tftp-server nmap macchanger flow-tools
+  dnf remove -y tcpdump wireshark tftp-server nmap macchanger flow-tools nethogs
 }
 
 InstallNetCommsTools(){
