@@ -75,7 +75,7 @@ elif [[ "--default" == *"$1"* ]] ; then
   # Start the installation of the default preset
   cd $INSTALLDIR
   ./ride.sh --include lib-fedora.sh --preset default.preset
-elif [[  "--stop | -s" == *"$1"* ]] ; then
+elif [[  "--stop | -s" == *"$1"* ]] || [[  "--release | -r" == *"$1"* ]]  ; then
   echo "No installation tasks performed. It is up to you now to do the magic."
   if [[ ! -z $TEMPDIR ]]  && [[ ! -d $SCRIPTDIR/${GITHUB_REPO}/ ]]; then
     cd $SCRIPTDIR
