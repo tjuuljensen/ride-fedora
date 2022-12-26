@@ -209,14 +209,18 @@ RemoveFlathub(){
   flatpak uninstall flathub
 }
 
+
 InstallAppImageLauncher(){
   # https://github.com/TheAssassin/AppImageLauncher/releases
   APPIMAGEDIR=$MYUSERDIR/Applications
-  URL=https://github.com/TheAssassin/AppImageLauncher/releases
-  PARTIALURL=$(curl $URL 2>&1 | grep x86_64.rpm | grep -Eoi '<a [^>]+>' |  cut -d'"' -f2 | sort -r -V | awk NR==1)
-  RPMURL=https://github.com$PARTIALURL
 
-  dnf install -y $RPMURL
+  AUTHOR=TheAssassin
+  REPO=AppImageLauncher
+  FILETYPE=rpm #AppImage or rpm
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL  2>&1 | grep browser_download_url | grep x86_64 | grep ${FILETYPE} | cut -d'"' -f4)
+
+  dnf install -y $URL
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
     mkdir -p $APPIMAGEDIR > /dev/null
@@ -402,7 +406,7 @@ UninstallVeraCrypt(){
 InstallLibEWF(){
   # install libewf - a library for access to EWF (Expert Witness Format)
   # See more at https://github.com/libyal/libewf
-  
+
   dnf install -y libewf
 
 }
@@ -464,14 +468,20 @@ RemoveMd5deep(){
 
 InstallExifTool(){
   # Phil Harvey's ExifTool - https://exiftool.org
-  URL=https://github.com/exiftool/exiftool/tags
-  DOWNLOADURL="https://github.com"$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2  | grep zip | sort -r -n | awk 'NR==1')
-  FILENAME=${DOWNLOADURL##*/}
+
+  AUTHOR=exiftool
+  REPO=exiftool
+  URL=https://api.github.com/repos/${AUTHOR}/${REPO}/zipball
+
+  GITHUBTAGS=https://api.github.com/repos/${AUTHOR}/${REPO}/tags
+  VERSION=$(curl $GITHUBTAGS 2>&1 | grep name | awk NR==1 | cut -d'"' -f4)
+  FILENAME=${REPO}-${VERSION}.zip
+
   INSTALLDIR=/usr/lib/exiftool
 
   cd $DOWNLOADDIR
-  wget -q --show-progress $DOWNLOADURL
-  unzip -d "$INSTALLDIR" "$FILENAME"
+  wget -q --show-progress $URL -O $FILENAME
+  unzip -d "$INSTALLDIR" "$FILENAME" && f=("$INSTALLDIR"/*) && mv "$INSTALLDIR"/*/* "$INSTALLDIR" && rmdir "${f[@]}"
 
   cd $INSTALLDIR
 
@@ -518,17 +528,18 @@ RemoveUnfURL(){
 InstallCyberChef(){
   # https://github.com/gchq/CyberChef
 
+  AUTHOR=gchq
+  REPO=CyberChef
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL 2>&1 | grep browser_download_url | awk NR==1 | cut -d'"' -f4)
+
   INSTALLDIR=/usr/lib/cyberchef/
   DESKTOPFILE=/usr/share/applications/cyberchef.desktop
 
-  URL=https://github.com/gchq/CyberChef/releases/
-  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "tree" | sort -r -n | awk 'NR==1' )
-  RELEASE="${PARTIALPATH##*/}"
-  DOWNLOADURL=$URL"download/"$RELEASE"/CyberChef_"$RELEASE".zip"
-  ARCHIVE="${DOWNLOADURL##*/}"
+  ARCHIVE="${URL##*/}"
 
   cd $DOWNLOADDIR
-  wget $DOWNLOADURL
+  wget -q --show-progress $URL
 
   mkdir -p $INSTALLDIR
   unzip -d $INSTALLDIR $ARCHIVE
@@ -745,7 +756,7 @@ InstallPowerShell(){
 }
 
 RemovePowerShell(){
-  dnf remove -y powershell 
+  dnf remove -y powershell
   rm /etc/yum.repos.d/microsoft-rhel7.repo
 }
 
@@ -785,16 +796,15 @@ RemoveWoeUSB(){
 
 InstallBalenaEtcher() {
   # For install details, see debian guide here: https://linuxhint.com/install_etcher_linux/
-  # This function is not finished. It installs an old package
 
-  cd $DOWNLOADDIR
+  AUTHOR=balena-io
+  REPO=etcher
+  FILETYPE=rpm #AppImage or rpm
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL  2>&1| grep browser_download_url | grep x86_64 | grep ${FILETYPE} | cut -d'"' -f4)
 
-  URL=https://github.com/balena-io/etcher/releases
+  dnf install -y $URL
 
-  # get the latest rpm package from balena website and install it
-  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep rpm | grep "x86_64" | sort -r -n | awk 'NR==1' )
-  BALENABINURL="https://github.com$PARTIALPATH"
-  dnf install -y $BALENABINURL
 }
 
 RemoveBalenaEtcher() {
@@ -830,10 +840,12 @@ RemoveVisualStudioCode() {
 InstallArduinoIDE(){
   # https://github.com/arduino/arduino-ide
   # Get latest AppImage from github
-  URL=https://github.com/arduino/arduino-ide/releases
-  PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep tag/ | sort -V -r | awk 'NR==1')
-  VERSION="${PARTIALURL##*/}"
-  DOWNLOADURL="${URL}/download/${VERSION}/arduino-ide_${VERSION}_Linux_64bit.AppImage"
+
+  AUTHOR=arduino
+  REPO=arduino-ide
+  FILETYPE=AppImage #AppImage or rpm
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL  2>&1 | grep browser_download_url | grep ${FILETYPE} | cut -d'"' -f4)
 
   APPIMAGEDIR=$MYUSERDIR/Applications
 
@@ -841,7 +853,7 @@ InstallArduinoIDE(){
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
   fi
 
-  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
+  sudo -u $MYUSER wget -q --show-progress $URL -P $APPIMAGEDIR/
 }
 
 RemoveArduinoIDE(){
@@ -1008,7 +1020,7 @@ InstallThunderbirdExts(){
       "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
       "https://addons.mozilla.org/thunderbird/downloads/latest/thunderkeep/addon-464405-latest.xpi"
       "https://addons.mozilla.org/thunderbird/downloads/latest/dansk-ordbog/addon-3596-latest.xpi"
-      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
+      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v5.0.0-beta1/exchangecalendar-v5.0.0-beta1.xpi"
     )
 
     cd $DOWNLOADDIR
@@ -1037,7 +1049,7 @@ RemoveThunderbirdExts(){
       "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
       "https://addons.mozilla.org/thunderbird/downloads/latest/thunderkeep/addon-464405-latest.xpi"
       "https://addons.mozilla.org/thunderbird/downloads/latest/dansk-ordbog/addon-3596-latest.xpi"
-      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v4.0.0-beta5/exchangecalendar-v4.0.0-beta5.xpi"
+      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v5.0.0-beta1/exchangecalendar-v5.0.0-beta1.xpi"
     )
 
     cd $DOWNLOADDIR
@@ -1901,13 +1913,14 @@ InstallBitwarden(){
   # https://addons.mozilla.org/en-GB/firefox/addon/bitwarden-password-manager/
   # CLI: https://github.com/bitwarden/cli/releases
 
-  URL=https://github.com/bitwarden/clients/releases
-  PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "tree/desktop" | sort -V -r | awk 'NR==1')
-  VERSION="${PARTIALURL##*/}"
-  VERSION_NUM="${VERSION##*-v}"
-  DOWNLOADURL="${URL}/download/${VERSION}/Bitwarden-${VERSION_NUM}-x86_64.rpm"
+  AUTHOR=bitwarden
+  REPO=clients
+  FILETYPE=rpm #AppImage or rpm
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases
+  URL=$(curl $GITHUBURL  2>&1 | grep browser_download_url | grep ${FILETYPE} | awk NR==1 | cut -d'"' -f4)
 
-  dnf install -y $DOWNLOADURL
+  dnf install -y $URL
+
 }
 
 RemoveBitwarden(){
@@ -1916,14 +1929,14 @@ RemoveBitwarden(){
 
 InstallBitwardenAppImage(){
   # AppImage Install
-  # Hash values can be fetched from (working example):
-  # https://github.com/bitwarden/clients/releases/download/desktop-v2022.10.1/latest-linux.yml
+  # Hash values of AppImage files can be fetched from (working example):
+  # https://github.com/bitwarden/clients/releases/download/desktop-v2022.12.1/latest-linux.yml
 
-  URL=https://github.com/bitwarden/clients/releases
-  PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "tree/desktop" | sort -V -r | awk 'NR==1')
-  VERSION="${PARTIALURL##*/}"
-  VERSION_NUM="${VERSION##*-v}"
-  DOWNLOADURL="${URL}/download/${VERSION}/Bitwarden-${VERSION_NUM}-x86_64.AppImage"
+  AUTHOR=bitwarden
+  REPO=clients
+  FILETYPE=rpm #AppImage or rpm
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases
+  URL=$(curl $GITHUBURL  2>&1 | grep browser_download_url | grep ${FILETYPE} | awk NR==1 | cut -d'"' -f4)
 
   APPIMAGEDIR=$MYUSERDIR/Applications
 
@@ -1931,7 +1944,7 @@ InstallBitwardenAppImage(){
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
   fi
 
-  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR/
+  sudo -u $MYUSER wget -q --show-progress $URL -P $APPIMAGEDIR/
 }
 
 RemoveBitwardenAppImage(){
@@ -2108,15 +2121,15 @@ InstallCheat(){
 
   cd $DOWNLOADDIR
 
-  URL=https://github.com/cheat/cheat/releases
+  AUTHOR=cheat
+  REPO=cheat
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL 2>&1 | grep browser_download_url | grep "linux-amd64" | cut -d'"' -f4)
 
-  # get the latest package from github  website and install it
-  PARTIALPATH=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "linux-amd64" | sort -r -n | awk 'NR==1' )
-  DOWNLOADURL="https://github.com$PARTIALPATH"
-  ARCHIVE="${DOWNLOADURL##*/}"
+  ARCHIVE="${URL##*/}"
   BINARY="${ARCHIVE%.*}" #the name of the archive (without gz) is expected to be the name of the file inside)
 
-  wget --content-disposition -q $DOWNLOADURL
+  wget --content-disposition -q $URL
   chown $MYUSER:$MYUSER $ARCHIVE #change permissions to logged in user
   gunzip $ARCHIVE
   chmod +x $BINARY
@@ -2234,9 +2247,11 @@ InstallSonosPlayer(){
   # AppImage Install (exists as rpm too)
   # Unofficiel Sonos manager
 
-  URL=https://github.com/pascalopitz/unoffical-sonos-controller-for-linux/releases
-  PARTIALURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d '"' -f2 | grep "releases/download" | grep AppImage | grep -v "arm64\|armv7"  | sort -V -r | awk 'NR==1')
-  DOWNLOADURL=https://github.com${PARTIALURL}
+  AUTHOR=pascalopitz
+  REPO=unoffical-sonos-controller-for-linux
+  FILETYPE=AppImage #AppImage or rpm
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL  2>&1 | grep browser_download_url | grep -v "arm64\|armv7" | grep ${FILETYPE} | cut -d'"' -f4)
 
   APPIMAGEDIR=$MYUSERDIR/Applications
 
@@ -2244,7 +2259,8 @@ InstallSonosPlayer(){
     sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
   fi
 
-  sudo -u $MYUSER wget -q --show-progress $DOWNLOADURL -P $APPIMAGEDIR
+  sudo -u $MYUSER wget -q --show-progress $URL -P $APPIMAGEDIR/
+
 }
 
 RemoveSonosPlayer(){
