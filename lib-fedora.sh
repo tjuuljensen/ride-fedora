@@ -247,129 +247,104 @@ RemoveSnap(){
 ###### CERT Forensic Repo ###
 ################################################################
 
-InstallCERTForensicsRepo(){
-  ### As of September 30, 2022, maintenance of this repository will cease ###
-
-  # Read more here https://forensics.cert.org/
-  # Read full package list here https://forensics.cert.org/ByPackage/index.html
-  # List Repo:$ dnf repository-packages forensics list
-
-  URL=https://forensics.cert.org/
-  FEDORARPMURL=$URL$(curl $URL  2>&1 |  grep -Eoi 'href="([^"#]+)"'  | cut -d'"' -f2  | grep rpm | grep $FEDORARELEASE)
-  FERORARPM=${FEDORARPMURL##${FEDORARPMURL%/*}"/"}
-  GPGKEYURL=https://forensics.cert.org/forensics.asc
-  GPGKEY=${GPGKEYURL##${GPGKEYURL%/*}"/"}
-  cd $DOWNLOADDIR
-  # Get the CERT Forensic Repo key [expires: 2022-04-03]
-  gpg --keyserver hkps://keys.openpgp.org --recv-key  26A0829D5C01FC51C3049037E97F3E0A87E360B8
-  gpg --fingerprint 26A0829D5C01FC51C3049037E97F3E0A87E360B8
-
-  wget -q --show-progress $FEDORARPMURL
-  rpm -K $FERORARPM
-
-  dnf install -y $FERORARPM
-
-}
-
-RemoveCERTForensicsRepo(){
-  rpm -e gpg-pubkey-87e360b8-5e87133b
-  rm /etc/yum.repos.d/cert-forensics-tools.repo
-}
-
 
 InstallGalleta(){
     # https://www.kali.org/tools/galleta/
-    # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-    dnf install -y galleta
+    echo https://www.kali.org/tools/galleta/
+
 }
 
 RemoveGalleta(){
-    dnf remove -y galleta
+    #
+    echo ""
 }
 
 InstallPlaso(){
   # Plaso is a computer forensic tool for timeline generation and analysis.
   # https://plaso.readthedocs.io/en/latest/index.html
   # https://github.com/log2timeline/plaso
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y plaso
+  echo https://github.com/log2timeline/plaso
 }
 
 RemovePlaso(){
   # Remove Plaso
-  dnf remove -y plaso
+  echo ""
 }
 
 InstallAutopsy(){
   # https://sleuthkit.org/autopsy/
-  # Requires cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y autopsy
+  echo https://sleuthkit.org/autopsy/
+
 }
 
 RemoveAutopsy(){
-  dnf remove -y autopsy
+  #
+  echo ""
 }
 
 InstallXplico(){
   # https://www.xplico.org/about
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y xplico
+  echo https://www.xplico.org/about
+
 }
 
 RemoveXplico(){
-  dnf remove -y xplico
+  #
+  echo ""
 }
 
 InstallBulkExtractor(){
   # https://github.com/simsong/bulk_extractor
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y bulk_extractor
+  echo https://github.com/simsong/bulk_extractor
 }
 
 RemoveBulkExtractor(){
-  dnf remove -y bulk_extractor
+  #
+  echo ""
 }
 
 InstallVMFStools(){
   # install vmfs tools
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y vmfs-tools
+  # package can be fetched here: https://github.com/rpmsphere/x86_64/tree/master/v
+  echo https://github.com/rpmsphere/x86_64/tree/master/v
+  echo https://github.com/teward/vmfs6-tools
 }
 
 RemoveVMFStools(){
   # remove vmfs tools
-  dnf remove -y vmfs-tools
+  echo ""
 }
 
 InstallVolatility(){
   # https://www.volatilityfoundation.org/releases
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y Volatility
+  echo https://www.volatilityfoundation.org/releases
 }
 
 RemoveVolatility(){
-  dnf remove -y Volatility
+  #
+  echo ""
 }
 
 InstallVolatility3(){
   # https://www.volatilityfoundation.org/releases-vol3
   # https://github.com/volatilityfoundation/volatility3
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y Volatility
+  echo # https://github.com/volatilityfoundation/volatility3
+
 }
 
 RemoveVolatility3(){
-  dnf remove -y Volatility
+  echo ""
 }
 
 InstallRekall(){
   # http://www.rekall-forensic.com/
-  # REQUIRES cert-forensics-tools install from InstallCERTForensicsToolRepo
-  dnf install -y rekall-forensics
+  echo http://www.rekall-forensic.com/
+
 }
 
 RemoveRekall(){
-  dnf remove -y rekall-forensics
+  # 
+  echo ""
 }
 
 
@@ -1403,7 +1378,7 @@ InstallFirefoxAddons(){
     )
 
     cd $DOWNLOADDIR
-
+    
     FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default 2>/dev/null)
 
     # Make sure that the Firefox firectory and profile is created so extensions can be installed
