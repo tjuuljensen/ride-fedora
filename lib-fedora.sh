@@ -343,7 +343,7 @@ InstallRekall(){
 }
 
 RemoveRekall(){
-  # 
+  #
   echo ""
 }
 
@@ -440,6 +440,19 @@ RemoveMd5deep(){
 ################################################################
 ###### Other Forensic Tools ###
 ################################################################
+
+InstallMacvendor(){
+  SCRIPTFILE=https://raw.githubusercontent.com/tjuuljensen/linux-scripts/master/mac-vendor.sh
+  LOCALFILE=/usr/local/bin/mac-vendor.sh
+  wget -q --show-progress -O $LOCALFILE $SCRIPTFILE
+  chmod 755 $LOCALFILE
+}
+
+RemoveMacvendor(){
+  # Remove script
+  LOCALFILE=/usr/local/bin/mac-vendor.sh
+  rm $LOCALFILE
+}
 
 InstallExifTool(){
   # Phil Harvey's ExifTool - https://exiftool.org
@@ -625,6 +638,14 @@ RemoveNetworkMiner(){
 ###### Basic Tools and Support ###
 ################################################################
 
+InstallPwgen(){
+  dnf -y install pwgen
+}
+
+RemovePwgen(){
+  dnf -y remove pwgen
+}
+
 InstallDocker(){
   dnf config-manager --add-repo \
       https://download.docker.com/linux/fedora/docker-ce.repo
@@ -722,10 +743,9 @@ InstallPowerShell(){
   # Register the Microsoft repository
   MSFEDORAREPO=https://packages.microsoft.com/config/rhel/7/prod.repo
   cd $DOWNLOADDIR
-  wget $MSFEDORAREPO
+  wget -q --show-progress $MSFEDORAREPO
   mv prod.repo /etc/yum.repos.d/microsoft-rhel7.repo
-  # Install a system component
-  dnf install -y libunwind libcurl openssl-libs libicu
+  dnf makecache
   # Install PowerShell
   dnf install -y powershell
 }
@@ -1378,7 +1398,7 @@ InstallFirefoxAddons(){
     )
 
     cd $DOWNLOADDIR
-    
+
     FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default 2>/dev/null)
 
     # Make sure that the Firefox firectory and profile is created so extensions can be installed
