@@ -105,6 +105,7 @@ InstallSpeedtestCLI        # RemoveSpeedtestCLI
 ### Productivity Tools ###
 # InstallDia               # RemoveDia
 # InstallWine              # RemoveWine
+# InstallJoplin            # RemoveJoplin
 
 ### Supporting scripts ###
 InstallTecmintMonitorSh    # RemoveTecmintMonitorSh

@@ -1166,7 +1166,29 @@ RemoveWine(){
   dnf remove -y wine
 }
 
+InstallJoplin(){
+  # https://github.com/laurent22/joplin/
+  # Get latest AppImage from github
 
+  AUTHOR=laurent22
+  REPO=joplin
+  FILETYPE=AppImage #AppImage or rpm
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL  2>&1 | grep browser_download_url | grep ${FILETYPE} | grep -v sha512 | cut -d'"' -f4)
+
+  APPIMAGEDIR=$MYUSERDIR/Applications
+
+  if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
+    sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
+  fi
+
+  sudo -u $MYUSER wget -q --show-progress $URL -P $APPIMAGEDIR/
+}
+
+RemoveJoplin(){
+  APPIMAGEDIR=$MYUSERDIR/Applications
+  rm $APPIMAGEDIR/Joplin*.AppImage
+}
 ################################################################
 ###### Supporting scripts ###
 ################################################################
