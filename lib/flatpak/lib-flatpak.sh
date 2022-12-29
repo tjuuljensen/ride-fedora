@@ -114,6 +114,15 @@ RemoveJohn(){
   flatpak remove -y com.openwall.John
 }
 
+InstallAuthy(){
+  flatpak install -y com.authy.Authy
+}
+
+RemoveAuthy(){
+  flatpak remove -y com.authy.Authy
+}
+
+
 ################################################################
 ###### Forensic Tools ###
 ################################################################
@@ -127,10 +136,46 @@ RemoveUpscaler(){
   flatpak remove -y io.gitlab.theevilskeleton.Upscaler
 }
 
+InstallGtkhsh(){
+  # https://github.com/tristanheaven/gtkhash
+  flatpak install -y org.gtkhash.gtkhash
+}
+
+RemoveGtkhsh(){
+  flatpak remove -y org.gtkhash.gtkhash
+}
+
+InstallGhidra(){
+  # https://gitlab.com/TheEvilSkeleton/Upscaler
+  flatpak install -y org.ghidra_sre.Ghidra
+}
+
+RemoveGhidra(){
+  flatpak remove -y org.ghidra_sre.Ghidra
+}
+
+InstallUEFItool(){
+  # https://github.com/LongSoft/UEFITool
+  flatpak install -y com.github.LongSoft.UEFITool
+}
+
+RemoveUEFItool(){
+  flatpak remove -y com.github.LongSoft.UEFITool
+}
 
 ################################################################
-###### Productivity ###
+###### Communication ###
 ################################################################
+
+
+InstallSlack(){
+  flatpak install -y flathub com.slack.Slack
+}
+
+RemoveSlack(){
+  flatpak remove -y flathub com.slack.Slack
+}
+
 
 InstallThunderbird(){
   flatpak install -y org.mozilla.Thunderbird
@@ -139,6 +184,11 @@ InstallThunderbird(){
 RemoveThunderbird(){
   flatpak remove -y org.mozilla.Thunderbird
 }
+
+
+################################################################
+###### Productivity ###
+################################################################
 
 InstallXmind(){
   flatpak install -y net.xmind.XMind
