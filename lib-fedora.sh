@@ -646,6 +646,14 @@ RemovePwgen(){
   dnf -y remove pwgen
 }
 
+InstallHtop(){
+  dnf -y install htop
+}
+
+RemoveHtop(){
+  dnf -y remove htop
+}
+
 InstallDocker(){
   dnf config-manager --add-repo \
       https://download.docker.com/linux/fedora/docker-ce.repo
@@ -772,14 +780,6 @@ RemoveMicrosoftTeams(){
 ################################################################
 ###### Accessories ###
 ################################################################
-
-InstallKeepassXC(){
-  dnf install -y keepassxc
-}
-
-RemoveKeepassXC(){
-  dnf remove -y keepassxc
-}
 
 InstallWoeUSB(){
   dnf install -y WoeUSB
@@ -1919,12 +1919,20 @@ RemoveLynis(){
 
 InstallClamAV(){
   dnf install -y clamav clamav-update
+  freshclam
 }
 
 RemoveClamAV(){
   dnf remove -y clamav clamav-update
 }
 
+InstallKeepassXC(){
+  dnf install -y keepassxc
+}
+
+RemoveKeepassXC(){
+  dnf remove -y keepassxc
+}
 
 InstallBitwarden(){
   # https://addons.mozilla.org/en-GB/firefox/addon/bitwarden-password-manager/

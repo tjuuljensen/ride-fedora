@@ -60,6 +60,8 @@ InstallNetworkMiner        # RemoveNetworkMiner
 InstallVeraCrypt           # UninstallVeraCrypt
 
 ### Basic Tools and Support ###
+InstallPwgen               # RemovePwgen
+InstallHtop                # RemoveHtop
 InstallDocker              # RemoveDocker
 InstallVMFStools           # RemoveVMFStools
 InstallPythonPip           # RemovePythonPip
@@ -74,7 +76,6 @@ InstallSmartMonTools       # RemoveSmartMonTools
 # InstallMicrosoftTeams    # RemoveMicrosoftTeams
 
 ### Accessories ###
-# InstallKeepassXC         # RemoveKeepassXC
 # InstallWoeUSB            # RemoveWoeUSB
 # InstallBalenaEtcher      # RemoveBalenaEtcher
 
@@ -153,6 +154,7 @@ SetRideLogAlias            # UnsetRideLogAlias
 ### Security ###
 # InstallLynis             # RemoveLynis
 # InstallClamAV            # RemoveClamAV
+# InstallKeepassXC         # RemoveKeepassXC
 # InstallBitwarden         # RemoveBitwarden
 InstallBitwardenAppImage   # RemoveBitwardenAppImage
 
