@@ -104,6 +104,7 @@ InstallNetMgrLibreswan     # RemoveNetMgrLibreswan
 InstallSpeedtestCLI        # RemoveSpeedtestCLI
 
 ### Productivity Tools ###
+# InstallFlameshot         # RemoveFlameshot
 # InstallDia               # RemoveDia
 # InstallWine              # RemoveWine
 # InstallJoplin            # RemoveJoplin

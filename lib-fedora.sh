@@ -1150,6 +1150,14 @@ RemoveSpeedtestCLI(){
 ###### Productivity Tools ###
 ################################################################
 
+InstallFlameshot(){
+  dnf install -y flameshot
+}
+
+RemoveFlameshot){
+  dnf remove -y flameshot
+}
+
 InstallDia(){
   dnf install -y dia
 }
@@ -1404,6 +1412,7 @@ InstallFirefoxAddons(){
       "disable-autoplay"
       "video-downloadhelper"
       "fireshot"
+      "nimbus-screenshot"
       "wayback-machine_new"
       "error-404-wayback-machine"
       "exif-viewer"
