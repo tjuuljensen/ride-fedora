@@ -2,24 +2,24 @@
 Bootstrap installation of fedora system.  
 Can be initated using these commands:
 ```
-$ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh
+$ wget https://tjuuljensen.github.io/ride-fedora/ -O bootstrap.sh
 $ chmod +x bootstrap.sh
 $ ./bootstrap.sh --default
 ```
 ...or just use the one-liner:  
 ```
-$ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh  --default
+$ wget https://tjuuljensen.github.io/ride-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh  --default
 ```
 
 This way the one-liner will allow you to customize your install by *editing* the preset file before installing:  
 ```
-$ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh --edit
+$ wget https://tjuuljensen.github.io/ride-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh --edit
 ```
 
 You can also *halt the installation* process when the source has been downloaded.
 The source will be left in a subdirectory to current directory:
 ```
-$ wget https://tjuuljensen.github.io/bootstrap-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh --stop
+$ wget https://tjuuljensen.github.io/ride-fedora/ -O bootstrap.sh && chmod +x bootstrap.sh && ./bootstrap.sh --stop
 ```
 
 The bootstrap installer also accepts the full input for the ride.sh script.
