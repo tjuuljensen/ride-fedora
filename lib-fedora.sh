@@ -497,6 +497,24 @@ RemoveExifTool(){
 
 }
 
+InstallASN(){
+  # asn 
+  # https://github.com/nitefood/asn
+  cd $INSTALLDIR
+
+  # nmap, whois and curl are part of the requirements, but will not be removed as they are also part of other functions
+  dnf -y install whois bind-utils mtr jq nmap nmap-ncat ipcalc aha grepcidr
+  curl "https://raw.githubusercontent.com/nitefood/asn/master/asn" > /usr/bin/asn && chmod 0755 /usr/bin/asn
+
+}
+
+RemoveASN(){
+  # nmap, whois and curl are part of the requirements, but will not be removed as they are also part of other functions
+  dnf -y remove bind-utils mtr jq nmap-ncat ipcalc aha grepcidr
+  rm /usr/bin/asn 
+}
+
+
 InstallUnfURL(){
   # https://github.com/obsidianforensics/unfurl
   sudo -u $MYUSER pip install dfir-unfurl

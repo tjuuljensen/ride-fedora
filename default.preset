@@ -52,6 +52,7 @@ InstallLibEWF              # RemoveLibEWF
 
 ### Other Forensic Tools ###
 InstallExifTool            # RemoveExifTool
+InstallASN                 # RemoveASN
 InstallUnfURL              # RemoveUnfURL
 InstallCyberChef           # RemoveCyberChef
 InstallChepy               # RemoveChepy
