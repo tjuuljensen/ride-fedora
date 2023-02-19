@@ -293,15 +293,6 @@ RemoveXplico(){
   echo ""
 }
 
-InstallBulkExtractor(){
-  # https://github.com/simsong/bulk_extractor
-  echo https://github.com/simsong/bulk_extractor
-}
-
-RemoveBulkExtractor(){
-  #
-  echo ""
-}
 
 InstallVMFStools(){
   # install vmfs tools
@@ -336,17 +327,6 @@ RemoveVolatility3(){
   echo ""
 }
 
-InstallRekall(){
-  # http://www.rekall-forensic.com/
-  echo http://www.rekall-forensic.com/
-
-}
-
-RemoveRekall(){
-  #
-  echo ""
-}
-
 
 ################################################################
 ###### Former CERT Forensic Repo ###
@@ -369,10 +349,46 @@ InstallVeraCrypt(){
 }
 
 UninstallVeraCrypt(){
-
   veracrypt-uninstall.sh
+}
+
+InstallBulkExtractor(){
+  # https://github.com/simsong/bulk_extractor
+
+  AUTHOR=simsong
+  REPO=bulk_extractor
+  GITURL=https://github.com/${AUTHOR}/${REPO}.git
+
+  cd /opt
+  git clone $GITURL --recursive
+  setfacl -m u:$MYUSER:rwx ${REPO}
+  cd ${REPO}
+
+  # install preconditions & build hashdb
+  dnf install -y edk2-tools-python
+  build hashdb next 
+
+  # get latest configure script from /etc folder
+  CONFIGURE_SCRIPT=$(ls etc/CONFIGURE_FEDORA* | sort -r | awk NR==1)
+  ($CONFIGURE_SCRIPT)
+
+  ./bootstrap.sh && ./configure && make
+  make install
 
 }
+
+RemoveBulkExtractor(){
+  #
+  echo ""
+  REPO=bulk_extractor
+
+  rm /opt/${REPO}/ -rf
+  rm /usr/local/bin/${REPO} -f
+
+  dnf remove -y edk2-tools-python
+
+}
+
 
 ################################################################
 ###### Standard Repo Forensic Tools ###
@@ -576,10 +592,16 @@ RemoveCyberChef(){
 InstallChepy(){
   # Python library with cli aimed to mirror some of the capabilities of CyberChef
   #https://github.com/securisec/chepy
+
+  AUTHOR=securisec
+  REPO=chepy
+  GITURL=https://github.com/${AUTHOR}/${REPO}.git
+
   cd /opt
-  git clone https://github.com/securisec/chepy.git
-  setfacl -m u:$MYUSER:rwx chepy/
-  cd chepy
+  git clone $GITURL 
+  setfacl -m u:$MYUSER:rwx ${REPO}
+  cd ${REPO}
+
   sudo -u $MYUSER pip install .
   sudo -u $MYUSER pip install pyinstaller
   sudo -u $MYUSER /home/${MYUSER}/.local/bin/pyinstaller cli.py --name chepy --onefile

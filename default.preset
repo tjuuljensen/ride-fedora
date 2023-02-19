@@ -36,10 +36,8 @@ InstallAppImageLauncher    # RemoveAppImageLauncher
 # InstallPlaso             # RemovePlaso
 # InstallAutopsy           # RemoveAutopsy
 # InstallXplico            # RemoveXplico
-# InstallBulkExtractor     # RemoveBulkExtractor
 # InstallVolatility        # RemoveVolatility
 # InstallVolatility3       # RemoveVolatility3
-# InstallRekall            # RemoveRekall
 # InstallVMFStools         # RemoveVMFStools
 
 ### Standard Repo Forensic Tools ###
@@ -59,6 +57,7 @@ InstallChepy               # RemoveChepy
 # InstallDumpzilla         # RemoveDumpzilla
 InstallNetworkMiner        # RemoveNetworkMiner
 InstallVeraCrypt           # UninstallVeraCrypt
+# InstallBulkExtractor     # RemoveBulkExtractor
 
 ### Basic Tools and Support ###
 InstallPwgen               # RemovePwgen
