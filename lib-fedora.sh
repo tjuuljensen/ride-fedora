@@ -1194,7 +1194,7 @@ InstallFlameshot(){
   dnf install -y flameshot
 }
 
-RemoveFlameshot){
+RemoveFlameshot(){
   dnf remove -y flameshot
 }
 
