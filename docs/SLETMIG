@@ -1,0 +1,3 @@
+wget ${URL} -O $ZIPFILE
+  mkdir -p $INSTALLDIR
+  unzip -d "$INSTALLDIR" "$ZIPFILE" && f=("$INSTALLDIR"/*) && mv "$INSTALLDIR"/*/* "$INSTALLDIR" && rmdir "${f[@]}"

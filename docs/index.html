@@ -1,12 +1,15 @@
 #!/bin/bash
-# Bootstrap loader to bootstrap-fedora repo
+# Bootstrap loader to ride-fedora repo
 #
 # Torsten Juul-Jensen
 # November 30, 2022
 
-GITHUB_REPO=bootstrap-fedora
+AUTHOR=tjuuljensen
+REPO=ride-fedora
+URL=https://api.github.com/repos/${AUTHOR}/${REPO}/zipball
+
 # Direct URL to bootstrap master archive on github
-BOOTSTRAP_ARCHIVE="https://github.com/tjuuljensen/${GITHUB_REPO}/archive/master.zip"
+BOOTSTRAP_ARCHIVE="https://github.com/${AUTHOR}/${REPO}/archive/master.zip"
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" #set the variable to the place where script is loaded from
 
 # Fail on any error
@@ -30,7 +33,8 @@ download_source()
   done
 
   if [[ $# -ne 0 ]] && [[ "--release | -r" == *"$1"* ]]; then
-    BOOTSTRAP_ARCHIVE="https://github.com/tjuuljensen/${GITHUB_REPO}/archive/refs/tags/${2}.zip"   
+    BOOTSTRAP_ARCHIVE="https://github.com/${AUTHOR}/${REPO}/archive/refs/tags/${2}.zip"  
+    URL=https://api.github.com/repos/${AUTHOR}/${REPO}/zipball/refs/tags/${2}
     ARCHIVE=${2}
     shift 2 
   else
@@ -42,17 +46,17 @@ download_source()
   cd $TEMPDIR
   wget -q "$BOOTSTRAP_ARCHIVE"
   echo unzipping...
-  unzip ${ARCHIVE}.zip > /dev/null  && mv "$TEMPDIR"/${GITHUB_REPO}-${ARCHIVE##*v}/* "$TEMPDIR" && rm ${ARCHIVE}.zip && rm -rf ${GITHUB_REPO}-${ARCHIVE##*v}/ && echo done.
+  unzip ${ARCHIVE}.zip > /dev/null  && mv "$TEMPDIR"/${REPO}-${ARCHIVE##*v}/* "$TEMPDIR" && rm ${ARCHIVE}.zip && rm -rf ${REPO}-${ARCHIVE##*v}/ && echo done.
   INSTALLDIR=$(realpath "$TEMPDIR")
   
 }
 
 # If this file does not exist it's probably because we're bootstrapping a fresh
 # system.  So we download the Git repository and bootstrap from there
-if [[ ! -f "$SCRIPTDIR/${GITHUB_REPO}/ride.sh" ]] && [[ ! -f "$SCRIPTDIR/../ride.sh" ]]; then #the ride script does NOT exist in a subdir or one level up (run from repo directory)
+if [[ ! -f "$SCRIPTDIR/${REPO}/ride.sh" ]] && [[ ! -f "$SCRIPTDIR/../ride.sh" ]]; then #the ride script does NOT exist in a subdir or one level up (run from repo directory)
   download_source $@
-elif [[ -f "$SCRIPTDIR/${GITHUB_REPO}/ride.sh" ]] ; then
-  INSTALLDIR=$(realpath "$SCRIPTDIR/${GITHUB_REPO}/")
+elif [[ -f "$SCRIPTDIR/${REPO}/ride.sh" ]] ; then
+  INSTALLDIR=$(realpath "$SCRIPTDIR/${REPO}/")
 elif [[ -f "$SCRIPTDIR/../ride.sh" ]] ; then
   INSTALLDIR=$(realpath "$SCRIPTDIR/../")
 fi
@@ -62,10 +66,10 @@ if [[ $# -eq 0 ]] ; then
   echo No command line parameters entered
 
   # If no parameters were given, and the tempdir exists, move the directory to the script directory
-  if [[ ! -z $TEMPDIR ]] && [[ ! -d $SCRIPTDIR/${GITHUB_REPO}/ ]]; then
+  if [[ ! -z $TEMPDIR ]] && [[ ! -d $SCRIPTDIR/${REPO}/ ]]; then
     cd $SCRIPTDIR
-    mv $TEMPDIR ${SCRIPTDIR}/${GITHUB_REPO}/
-    echo Files can be found in: $(realpath "${SCRIPTDIR}/${GITHUB_REPO}/")
+    mv $TEMPDIR ${SCRIPTDIR}/${REPO}/
+    echo Files can be found in: $(realpath "${SCRIPTDIR}/${REPO}/")
   fi
   usage_help
 elif [[ "--help | -h" == *"$1"* ]]; then
@@ -75,12 +79,12 @@ elif [[ "--default" == *"$1"* ]] ; then
   # Start the installation of the default preset
   cd $INSTALLDIR
   ./ride.sh --include lib-fedora.sh --preset default.preset
-elif [[  "--stop | -s" == *"$1"* ]] ; then
+elif [[  "--stop | -s" == *"$1"* ]] || [[  "--release | -r" == *"$1"* ]]  ; then
   echo "No installation tasks performed. It is up to you now to do the magic."
-  if [[ ! -z $TEMPDIR ]]  && [[ ! -d $SCRIPTDIR/${GITHUB_REPO}/ ]]; then
+  if [[ ! -z $TEMPDIR ]]  && [[ ! -d $SCRIPTDIR/${REPO}/ ]]; then
     cd $SCRIPTDIR
-    mv $TEMPDIR ${SCRIPTDIR}/${GITHUB_REPO}/
-    echo Files can be found in: $(realpath "${SCRIPTDIR}/${GITHUB_REPO}/")
+    mv $TEMPDIR ${SCRIPTDIR}/${REPO}/
+    echo Files can be found in: $(realpath "${SCRIPTDIR}/${REPO}/")
   fi
   exit 0
 elif [[  "--edit | --vi | -e" == *"$1"* ]] ; then

@@ -368,18 +368,27 @@ InstallBulkExtractor(){
   dnf install -y edk2-tools-python
   build hashdb next 
 
-  # get latest configure script from /etc folder
+  # get latest configure script from /etc folder 
   CONFIGURE_SCRIPT=$(ls etc/CONFIGURE_FEDORA* | sort -r | awk NR==1)
-  ($CONFIGURE_SCRIPT)
+
+  # if script does not match latest fedora release, copy script & use current fedora version values 
+  SUPPORTED_VERSION=$(awk -F'=' '{if ($1 == "OS_VERSION") {print $2 } }' $CONFIGURE_SCRIPT)
+  if [ $SUPPORTED_VERSION != $FEDORARELEASE ]; then
+    NEWSCRIPT="etc/CONFIGURE_FEDORA${FEDORARELEASE}.bash"
+    cp $CONFIGURE_SCRIPT $NEWSCRIPT
+    sed -i "s/^OS_VERSION=.*/OS_VERSION=${FEDORARELEASE}/g" $NEWSCRIPT
+    $CONFIGURE_SCRIPT=$NEWSCRIPT
+  fi
+
+  ($CONFIGURE_SCRIPT -nowait) 
 
   ./bootstrap.sh && ./configure && make
-  make install
+  make install 
 
 }
 
 RemoveBulkExtractor(){
-  #
-  echo ""
+
   REPO=bulk_extractor
 
   rm /opt/${REPO}/ -rf
