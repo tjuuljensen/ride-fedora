@@ -462,6 +462,14 @@ RemoveMd5deep(){
     dnf remove -y md5deep
 }
 
+InstallLibpst(){
+  dnf install -y libpst
+}
+
+RemoveLibpst(){
+  dnf remove -y libpst
+}
+
 ################################################################
 ###### Other Forensic Tools ###
 ################################################################
