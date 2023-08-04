@@ -176,6 +176,13 @@ RemoveSlack(){
   flatpak remove -y flathub com.slack.Slack
 }
 
+InstallSignal(){
+  flatpak install -y flathub org.signal.Signal
+}
+
+RemoveSignal(){
+  flatpak remove -y flathub org.signal.Signal
+}
 
 InstallThunderbird(){
   flatpak install -y org.mozilla.Thunderbird
