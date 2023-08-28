@@ -3,12 +3,11 @@
 # Generic INSTALL script
 #
 # Author: Torsten Juul-Jensen
-# Date: December 19, 2019
-# Edited February 9, 2020
+# Date: August 28, 2023 13:00
 #
 # Install all executables files by putting symlinks into a destination directory (default is users's ~/bin dir)
 
-DESTINATIONDIR=~/bin #default installation directory
+DESTINATIONDIR=$(eval echo "~$(logname)") #default installation directory
 SCRIPT_NAME=$(basename $0)
 FILEFILTER="*" # customizable filter for selecting which executable files to process - "all files" (*) is the default
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" #set the variable to the place where script is loaded from
