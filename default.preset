@@ -58,6 +58,7 @@ InstallChepy               # RemoveChepy
 InstallNetworkMiner        # RemoveNetworkMiner
 InstallVeraCrypt           # UninstallVeraCrypt
 # InstallBulkExtractor     # RemoveBulkExtractor
+# InstallEmailHeaderAnlzr  # RemoveEmailHeaderAnlzr
 
 ### Basic Tools and Support ###
 InstallPwgen               # RemovePwgen

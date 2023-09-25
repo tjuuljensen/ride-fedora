@@ -399,6 +399,86 @@ RemoveBulkExtractor(){
 }
 
 
+InstallEmailHeaderAnlzr(){
+  # https://github.com/lnxg33k/email-header-analyzer
+  
+  # Install requirements
+  pip3 install virtualenv
+  python3 -m pip install --upgrade pip
+
+  # Create a Python3 virtual environment and activate it
+  sudo -u $MYUSER virtualenv virt
+  sudo -u $MYUSER source virt/bin/activate
+
+  # git clone from github
+  cd /opt
+  git clone https://github.com/lnxg33k/email-header-analyzer.git
+  chown $MYUSER:$MYUSER email-header-analyzer
+  cd email-header-analyzer/
+
+  # Install requirements
+  sudo -u $MYUSER pip3 install -r requirements.txt
+
+  # Generate service file and enable it
+  SERVICEFILE=/etc/systemd/system/email-header-analyzer.service
+
+  echo "# Service file for email-header-analyzer
+  # https://github.com/cyberdefenders/email-header-analyzer
+  # Server.py command can be bound to all IP's using -b 0.0.0.0
+
+  [Unit]
+  Description=Email header Analyzer (MHA)
+  After=network.target
+
+  [Service]
+  Type=simple
+  ExecStart=python3 /opt/email-header-analyzer/mha/server.py -p 8080
+  User=${MYUSER}
+
+  [Install]
+  WantedBy=multi-user.target" > $SERVICEFILE
+
+  systemctl daemon-reload
+  systemctl start email-header-analyzer
+
+  # Create Gnome desktop file
+  DESKTOPFILE=/usr/share/applications/email-header-analyzer.desktop
+
+  echo "[Desktop Entry]
+  Version=1.0
+  Type=Application
+  Name=Email Header Analyzer
+  Comment=E-Mail header analyzer is a tool for parsing email headers and converting them to a human readable format
+  Icon=/opt/email-header-analyzer/mha/static/imgs/fav.png
+  Exec=firefox http://localhost:8080
+  Actions=
+  Categories=Network;WebBrowser;" > $DESKTOPFILE
+
+}
+
+
+RemoveEmailHeaderAnlzr(){
+  # https://github.com/lnxg33k/email-header-analyzer
+  
+  # Remove requirements
+  # pip3 install virtualenv
+  
+  # remove git library
+  rm -rf /opt/email-header-analyzer/ 
+
+  # Stop service file and delete service file
+  systemctl stop email-header-analyzer
+  SERVICEFILE=/etc/systemd/system/email-header-analyzer.service
+  rm $SERVICEFILE
+
+  # Remove desktop file
+  DESKTOPFILE=/usr/share/applications/email-header-analyzer.desktop
+  rm $DESKTOPFILE
+
+}
+
+
+
 ################################################################
 ###### Standard Repo Forensic Tools ###
 ################################################################
