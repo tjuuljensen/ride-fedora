@@ -2600,7 +2600,7 @@ EncryptUnpartitionedDisks(){
 
     read -r -p "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " -n 1  RESPONSE
     if [[ ! $RESPONSE =~ ^[Yy]$ ]] ; then # if NOT yes then exit
-      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
+      [[ "$0" == "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
     fi
 
     echo Removing partition table on $DISKDEVICE and creating new partition
@@ -2696,7 +2696,7 @@ ReclaimEncryptDWUnmntPrt(){
 
             read -r -p "${1:-You are about to remove ALL DATA on $DISKDEVICE. Do you want to proceed?  [y/n]} " -n 1  RESPONSE
             if [[ ! $RESPONSE =~ ^[Yy]$ ]] ; then # if NOT yes then exit
-              [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
+              [[ "$0" == "$BASH_SOURCE" ]] && exit 1 || return 1 # exit from shell or function but not interactive shell
             fi
 
             echo Cleaning and encrypting disk
