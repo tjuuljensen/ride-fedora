@@ -6,7 +6,6 @@
 
 AUTHOR=tjuuljensen
 REPO=ride-fedora
-URL=https://api.github.com/repos/${AUTHOR}/${REPO}/zipball
 
 # Direct URL to bootstrap master archive on github
 BOOTSTRAP_ARCHIVE="https://github.com/${AUTHOR}/${REPO}/archive/master.zip"
@@ -34,7 +33,6 @@ download_source()
 
   if [[ $# -ne 0 ]] && [[ "--release | -r" == *"$1"* ]]; then
     BOOTSTRAP_ARCHIVE="https://github.com/${AUTHOR}/${REPO}/archive/refs/tags/${2}.zip"  
-    URL=https://api.github.com/repos/${AUTHOR}/${REPO}/zipball/refs/tags/${2}
     ARCHIVE=${2}
     shift 2 
   else
