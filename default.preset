@@ -21,6 +21,7 @@ InstallShellTools          # RemoveShellTools
 InstallRPMfusionRepos      # RemoveRPMfusionRepos
 InstallKernelTools         # RemoveKernelTools
 InstallDNFutils            # RemoveDNFutils
+InstallEzaGitHub           # InstallEza                # RemoveEza
 # InstallVersionLock       # RemoveVersionLock
 # InstallNautilusHash      # RemoveNautilusHash        # Issue in Gnome 43/Fedora 37
 # InstallNautilusImageTools# RemoveNautilusImageTools  # Issue in Gnome 43/Fedora 37

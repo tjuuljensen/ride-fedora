@@ -161,6 +161,44 @@ RemoveDNFutils(){
     dnf remove -y dnf-utils
 }
 
+InstallEza(){
+    dnf install -y eza
+}
+
+# As Fedora repos arent updated frequently, install eza from GitHub
+InstallEzaGitHub(){
+
+  AUTHOR=eza-community
+  REPO=eza
+  GITHUBURL=https://api.github.com/repos/${AUTHOR}/${REPO}/releases/latest
+  URL=$(curl $GITHUBURL 2>&1 | grep browser_download_url | cut -d'"' -f4 | grep eza_x86_64-unknown-linux-gnu.zip)
+
+  INSTALLDIR=/usr/local/bin
+
+  ARCHIVE="${URL##*/}"
+
+  cd $DOWNLOADDIR
+  wget -q --show-progress $URL
+
+  unzip -j -d $INSTALLDIR $ARCHIVE
+
+}
+
+RemoveEza(){
+    
+    # remove repo eza
+    PROGRAM=eza
+    command -v ${PROGRAM} &>/dev/null && dnf remove -y eza
+
+    # Remove Github eza
+    INSTALLFILE=/usr/local/bin/$PROGRAM
+
+    if [ -f $INSTALLFILE ]; then
+        rm -rf $INSTALLFILE
+    fi
+
+}
+
 InstallVersionLock(){
     dnf install -y python3-dnf-plugin-versionlock
 }
