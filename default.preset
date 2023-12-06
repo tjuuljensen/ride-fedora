@@ -151,8 +151,10 @@ SetGnmLocationServiceOff   # SetGnmLocationServiceOn
 SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
 
 ### Linux Tweaks & tools ###
-SetWanIPAlias              # UnsetWanIPAlias
-SetRideLogAlias            # UnsetRideLogAlias
+EnableBashAliases          # DisableBashAliases
+SetAliasLsEza              # UnsetAliasLsEza
+SetAliasWanIP              # UnsetAliasWanIP
+# SetAliasRideLog          # UnsetAliasRideLog
 
 ### Security ###
 # InstallLynis             # RemoveLynis

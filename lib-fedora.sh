@@ -2064,26 +2064,49 @@ SetGnmAutoProblemRptOn(){
 ###### Linux tweaks & tools  ###
 ################################################################
 
-SetWanIPAlias(){
+EnableBashAliases(){
+  sudo -u $MYUSER echo "
+# .bash_aliases section
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi # .bash_aliases end" >> $MYUSERDIR/.bashrc
+touch $MYUSERDIR/.bash_aliases
+}
 
-  sudo -u $MYUSER cp ~/.bashrc ~/.bashrc.bak
+DisableBashAliases(){
+  sed -i '/\.bash_aliases/d' $MYUSERDIR/.bashrc
+}
+
+SetAliasLsEza(){
+  # Only set if eza exist on system as a valid command
+  PROGRAM=eza
+  command -v ${PROGRAM} &>/dev/null && sudo -u $MYUSER echo "
+alias ls=eza" >> $MYUSERDIR/.bash_aliases
+}
+
+UnsetAliasLsEza(){
+  sed -i '/alias ride-log/d' $MYUSERDIR/.bash_aliases
+}
+
+SetAliasWanIP(){
   # https://unix.stackexchange.com/a/81699/37512
-  echo "
+
+  sudo -u $MYUSER echo "
 alias wanip='dig @resolver4.opendns.com myip.opendns.com +short'
 alias wanip4='dig @resolver4.opendns.com myip.opendns.com +short -4'
-alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'" >> $MYUSERDIR/.bashrc
+alias wanip6='dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +short -6'" >> $MYUSERDIR/.bash_aliases
 }
 
-UnsetWanIPAlias(){
-  sed -i '/alias wanip/d' $MYUSERDIR/.bashrc
+UnsetAliasWanIP(){
+  sed -i '/alias wanip/d' $MYUSERDIR/.bash_aliases
 }
 
-SetRideLogAlias(){
-  echo "
-alias ride-log='less /var/log/bootstrap-installer/$(ls /var/log/bootstrap-installer/ -1t | head -1)'" >> $MYUSERDIR/.bashrc
+SetAliasRideLog(){
+  sudo -u $MYUSER echo "
+alias ride-log='less /var/log/bootstrap-installer/$(ls /var/log/bootstrap-installer/ -1t | head -1)'" >> $MYUSERDIR/.bash_aliases
 }
 
-UnsetRideLogAlias(){
+UnsetAliasRideLog(){
   sed -i '/alias ride-log/d' $MYUSERDIR/.bashrc
 }
 
