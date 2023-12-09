@@ -180,8 +180,13 @@ InstallEzaGitHub(){
   cd $DOWNLOADDIR
   wget -q --show-progress $URL
 
-  unzip -j -d $INSTALLDIR $ARCHIVE
-
+  if [[ command -v unzip &>/dev/null ]]; then
+    unzip -j -d $INSTALLDIR $ARCHIVE
+  elif [[ command -v 7z &>/dev/null ]]; then
+    7z e $ARCHIVE -o${INSTALLDIR}
+  else
+    echo Neither unzip nor 7z found on system. Cannot unpack file.
+  fi
 }
 
 RemoveEza(){
