@@ -1160,6 +1160,7 @@ RemoveHexchat(){
 }
 
 InstallDiscord(){
+  # USE FLATHUB - more updated
   dnf install -y discord
 }
 

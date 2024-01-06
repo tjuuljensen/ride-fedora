@@ -167,6 +167,13 @@ RemoveUEFItool(){
 ###### Communication ###
 ################################################################
 
+InstallDiscord(){
+  flatpak install -y flathub com.discordapp.Discord
+}
+
+RemoveDiscord(){
+  flatpak remove -y flathub com.discordapp.Discord
+}
 
 InstallSlack(){
   flatpak install -y flathub com.slack.Slack
