@@ -266,7 +266,7 @@ InstallAppImageLauncher(){
   dnf install -y $URL
 
   if [ ! -d $APPIMAGEDIR ] ; then # AppImage directory does not exist
-    mkdir -p $APPIMAGEDIR > /dev/null
+    sudo -u $MYUSER mkdir -p $APPIMAGEDIR > /dev/null
   fi
 }
 
