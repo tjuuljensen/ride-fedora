@@ -1160,7 +1160,7 @@ RemoveHexchat(){
 }
 
 InstallDiscord(){
-  # USE FLATHUB - more updated
+  # USE FLATHUB as it is more frequently updated
   dnf install -y discord
 }
 
@@ -1304,6 +1304,24 @@ InstallNetMgrLibreswan(){
 RemoveNetMgrLibreswan(){
   dnf remove -y NetworkManager-libreswan NetworkManager-libreswan-gnome
 }
+
+InstallWireguard(){
+  # https://fedoramagazine.org/configure-wireguard-vpns-with-networkmanager/
+  dnf -y install wireguard-tools
+  # Test if keys exist in /etc/wireguard
+  if (! [ -f /etc/wireguard/privatekey ] && ! [ -f /etc/wireguard/publickey ]); then
+    cd /etc/wireguard
+    wg genkey | tee privatekey | wg pubkey > publickey
+  else
+    echo 'ERROR: One or more keys were found in /etc/wireguard. Please verify wireguard keys manually.'
+  fi
+}
+
+RemoveWireguard(){
+  dnf remove -y wireguard-tools
+  rm -rf /etc/wireguard 
+}
+
 
 InstallOpenconnectVPN(){
   # OpenConnect for use with Juniper VPN
