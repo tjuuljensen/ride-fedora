@@ -2871,3 +2871,29 @@ RemoveKeyfileMounts(){
     done
   done
 }
+
+################################################################
+###### Misc. functions ###
+################################################################
+
+EnableSSHreboot(){
+
+  SUDOERSFILE=/etc/sudoers.d/allowsshreboot_${MYUSER}
+
+  echo "# Custom - ALLOWSSHREBOOT start
+# Allow reboot without password from ssh command line using: sudo systemctl reboot
+Cmnd_Alias REBOOTSHORTCUT = /usr/bin/systemctl reboot
+$MYUSER ALL = (root) /usr/bin/systemctl
+$MYUSER ALL = (root) NOPASSWD: REBOOTSHORTCUT
+Defaults!REBOOTSHORTCUT !requiretty
+# ALLOWSSHREBOOT end" > $SUDOERSFILE
+
+}
+
+
+DisableSSHreboot(){
+
+    SUDOERSFILE=/etc/sudoers.d/allowsshreboot_${MYUSER}
+    rm -f $SUDOERSFILE
+    
+}

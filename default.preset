@@ -186,6 +186,7 @@ InstallSonosPlayer         # RemoveSonosPlayer
 # InstallCitrixClient      # RemoveCitrixClient
 
 ### Auxiliary Functions ###
+# EnableSSHreboot          # DisableSSHreboot 
 SetHostname
 
 ### Encryption Functions ###
