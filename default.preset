@@ -149,6 +149,7 @@ SetCustomKeyboardShortcut  # SetVMKeyboardShortcut        # RemoveCustomKbrdShor
 SetGnomeCustomFavorites    # SetGnomeDefaultFavorites     # SetGnomeMinimalFavorites
 SetGnmLocationServiceOff   # SetGnmLocationServiceOn
 SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
+SetPowerPercentageLow15    # SetPowerPercentageLow20
 
 ### Linux Tweaks & tools ###
 EnableBashAliases          # DisableBashAliases

@@ -2084,6 +2084,14 @@ SetGnmAutoProblemRptOn(){
   sudo -u $MYUSER DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${LOGINUSERUID}/bus" gsettings set org.gnome.desktop.privacy report-technical-problems true
 }
 
+SetPowerPercentageLow15(){
+  sed -i  "s/^PercentageLow=.*/PercentageLow=15.0/g" /etc/UPower/UPower.conf
+}
+
+SetPowerPercentageLow20(){
+  sed -i  "s/^PercentageLow=.*/PercentageLow=20.0/g" /etc/UPower/UPower.conf
+}
+
 ################################################################
 ###### Linux tweaks & tools  ###
 ################################################################
