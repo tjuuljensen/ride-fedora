@@ -1462,6 +1462,30 @@ RemoveMozExtensionMgr(){
 ###### Web Browsers ###
 ################################################################
 
+InstallBrave(){
+  # Install Brave browser
+  dnf install -y dnf-plugins-core
+  dnf config-manager addrepo --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+  dnf install -y brave-browser
+}
+
+RemoveBrave(){
+  # Remove Brave browser
+  dnf remove -y brave-browser
+}
+
+InstallVivaldi(){
+  # Install Vivaldi browser
+  URL=https://vivaldi.com/download/
+  RPMURL=$(curl $URL 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2  | grep x86_64.rpm | awk NR==1 )
+  dnf install -y $RPMURL
+}
+
+RemoveVivaldi(){
+  # Remove Vivaldi browser
+  dnf remove -y vivaldi-stable
+}
+
 InstallChromium(){
   # Install Chromium browser
   dnf install -y chromium

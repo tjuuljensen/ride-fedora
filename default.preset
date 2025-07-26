@@ -117,6 +117,8 @@ InstallGnomeExtInstaller   # RemoveGnomeExtInstaller
 InstallMozExtensionMgr     # RemoveMozExtensionMgr
 
 ### Web Browsers ###
+InstallBrave                # RemoveBrave
+# InstallVivaldi            # VivaldiBrave
 InstallChromium             # RemoveChromium
 # InstallChrome             # RemoveChrome
 # SetChromePreferences      # UnsetChromePreferences
