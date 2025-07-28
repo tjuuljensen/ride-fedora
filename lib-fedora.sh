@@ -834,6 +834,38 @@ RemoveHtop(){
   dnf -y remove htop
 }
 
+InstallBat(){
+  dnf -y install bat
+}
+
+RemoveBat(){
+  dnf -y remove bat
+}
+
+InstallNcdu(){
+  dnf -y install ncdu
+}
+
+RemoveNcdu(){
+  dnf -y remove ncdu
+}
+
+InstallRipgrep(){
+  dnf -y install ripgrep
+}
+
+RemoveRipgrep(){
+  dnf -y remove ripgrep
+}
+
+InstallFd(){
+  dnf -y install fd-find
+}
+
+RemoveFd(){
+  dnf -y remove fd-find
+}
+
 InstallDocker(){
   dnf config-manager --add-repo \
       https://download.docker.com/linux/fedora/docker-ce.repo

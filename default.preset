@@ -64,6 +64,10 @@ InstallVeraCrypt           # UninstallVeraCrypt
 ### Basic Tools and Support ###
 InstallPwgen               # RemovePwgen
 InstallHtop                # RemoveHtop
+InstallBat                 # RemoveBat
+InstallNcdu                # RemoveNcdu
+InstallRipgrep             # RemoveRipgrep
+InstallFd                  # RemoveFd
 InstallDocker              # RemoveDocker
 InstallVMFStools           # RemoveVMFStools
 InstallPythonPip           # RemovePythonPip
