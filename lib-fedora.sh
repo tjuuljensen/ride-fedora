@@ -1,11 +1,12 @@
-#!/bin/sh
-#
-# Author: Torsten Juul-Jensen
-# Edited: December 26, 2022 10:00
-# Latest verification and tests done on Fedora 36
-#
-# This file is a Fedora function library only and is meant for sourcing into other scripts
-# It is a part of the github repo https://github.com/tjuuljensen/bootstrap-fedora
+#!/usr/bin/env bash
+# Purpose: Fedora workstation installation and configuration function library.
+# Behavior: Defines RIDE actions and is intended to be sourced by ride.sh.
+# Usage: ./ride.sh --include lib-fedora.sh [--preset FILE] [ACTION ...]
+# Inputs: SCRIPT_* variables exported by ride.sh, or local Fedora system state.
+# Outputs/side effects: Installs packages and changes system configuration when
+#   the selected actions are executed.
+# Prerequisites: Bash, Fedora userland, dnf, and root for system-changing actions.
+# Notes: Individual actions document additional tools and network requirements.
 #
 
 # Declare variables
@@ -1216,61 +1217,6 @@ RemoveThunderbird(){
   dnf remove -y thunderbird
 }
 
-InstallThunderbirdExts(){
-  # Install Thunderbird Extensions
-
-  if ( command -v mozilla-extension-manager  > /dev/null 2>&1 ) ; then
-
-    ADDONS=(
-      "https://addons.mozilla.org/thunderbird/downloads/latest/71/addon-71-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/google-search-for-thunderbi/addon-370540-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/thunderkeep/addon-464405-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/dansk-ordbog/addon-3596-latest.xpi"
-      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v5.0.0-beta1/exchangecalendar-v5.0.0-beta1.xpi"
-    )
-
-    cd $DOWNLOADDIR
-
-    sudo -u $MYUSER thunderbird & # start Thunderbird so profile is created
-    sleep 15
-    pkill thunderbird
-
-    for ADDON in "${ADDONS[@]}"
-    do
-      su $MYUSER -c "mozilla-extension-manager --install --user --url $ADDON"
-    done
-  fi
-
-}
-
-RemoveThunderbirdExts(){
-  # Remove Thunderbird Extensions
-
-  if ( command -v mozilla-extension-manager  > /dev/null 2>&1 ) ; then
-
-    ADDONS=(
-      "https://addons.mozilla.org/thunderbird/downloads/latest/71/addon-71-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/google-search-for-thunderbi/addon-370540-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/provider-for-google-calendar/addon-4631-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/thunderkeep/addon-464405-latest.xpi"
-      "https://addons.mozilla.org/thunderbird/downloads/latest/dansk-ordbog/addon-3596-latest.xpi"
-      "https://github.com/ExchangeCalendar/exchangecalendar/releases/download/v5.0.0-beta1/exchangecalendar-v5.0.0-beta1.xpi"
-    )
-
-    cd $DOWNLOADDIR
-
-    for ADDON in "${ADDONS[@]}"
-    do
-      su $MYUSER -c "mozilla-extension-manager --remove --user --url $ADDON"
-    done
-  fi
-
-}
-
-
 ################################################################
 ###### NetworkConfiguration ####
 ################################################################
@@ -1462,34 +1408,6 @@ RemoveGnomeExtInstaller(){
 }
 
 
-InstallMozExtensionMgr(){
-  # Script for searching and installing Firefox extensions
-  # http://www.bernaerts-nicolas.fr/linux/74-ubuntu/271-ubuntu-firefox-thunderbird-addon-commandline
-
-  # Check if git library exists and create if it doesn't
-  if [ ! -d $MYUSERDIR ] ; then
-    cd $MYUSERDIR
-    mkdir -p git > /dev/null
-    chown $MYUSER:$MYUSER git
-  fi
-
-  cd /opt
-  git clone https://github.com/tjuuljensen/ubuntu-scripts
-
-  # Fix missing executable flag when fetched from repo
-  chmod 755 "/opt/ubuntu-scripts/mozilla/firefox-extension-manager"
-
-  # create symlinks
-  ln -fs "/opt/ubuntu-scripts/mozilla/firefox-extension-manager" "/usr/local/bin/firefox-extension-manager"
-  ln -fs "/opt/ubuntu-scripts/mozilla/mozilla-extension-manager" "/usr/local/bin/mozilla-extension-manager"
-}
-
-RemoveMozExtensionMgr(){
-  rm -rf /opt/ubuntu-scripts # remove github repo clone
-  rm "/usr/local/bin/firefox-extension-manager"  &>/dev/null # remove symlink
-  rm "/usr/local/bin/mozilla-extension-manager"  &>/dev/null # remove symlink
-}
-
 ################################################################
 ###### Web Browsers ###
 ################################################################
@@ -1654,109 +1572,43 @@ UnsetFirefoxPreferences() {
   rm $FIREFOXOVERRIDEFILE
 }
 
-InstallFirefoxAddons(){
-  if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
+_FirefoxExtensionPolicyTool(){
+  local tool="${SCRIPTDIR}/tools/manage-firefox-extensions.py"
 
-    ADDONS=(
-      "gnome-shell-integration"
-      "ublock-origin"
-      "privacy-badger17"
-      "https-everywhere"
-      "noscript"
-      "print-friendly-pdf"
-      "disable-autoplay"
-      "video-downloadhelper"
-      "fireshot"
-      "nimbus-screenshot"
-      "wayback-machine_new"
-      "error-404-wayback-machine"
-      "exif-viewer"
-      "link-gopher"
-      "nimbus-screenshot"
-      "mitaka"
-      "bitwarden-password-manager"
-      "expressvpn"
-      # "bulk-media-downloader"
-      # "mjsonviewer"
-      # "user-agent-switcher-revived"
-      # "image-search-options"
-      # "google-translator-webextension"
-    )
-
-    cd $DOWNLOADDIR
-
-    FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default 2>/dev/null)
-
-    # Make sure that the Firefox firectory and profile is created so extensions can be installed
-    if  [ ! -f ${MYUSERDIR}/.mozilla/firefox/profiles.ini ] ; then
-      mkdir -p $MYUSERDIR/.mozilla/firefox &>/dev/null
-      chown $MYUSER $MYUSERDIR/.mozilla/firefox
-      sudo -u $MYUSER firefox & # start Firefox so default profile is created
-      sleep 5
-      pkill firefox
-      FIREFOXCONFIGDIR=$(ls -d $MYUSERDIR/.mozilla/firefox/*.default)
-    fi
-
-    if [ ! -d "$FIREFOXCONFIGDIR/extensions" ] ; then
-      mkdir $FIREFOXCONFIGDIR/extensions &>/dev/null
-      chown $MYUSER:$MYUSER $FIREFOXCONFIGDIR/extensions
-    fi
-
-    # set directories
-    EXTENSIONDIR=$(ls -d $MYUSERDIR/.mozilla/extensions/{* -1t | awk NR==1)
-
-    # Install extensions
-    Echo "Installing Firefox extensions:"
-    BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
-    for ADDON in "${ADDONS[@]}"
-    do
-      echo Installing ${ADDON}
-      su ${MYUSER} -c "firefox-extension-manager --install --allow-create --user --url ${BASEURL}/${ADDON}"
-    done
+  if ! command -v python3 >/dev/null 2>&1; then
+    echo "python3 is required to manage Firefox extension policy" >&2
+    return 1
+  fi
+  if [[ ! -f "$tool" ]]; then
+    echo "Firefox extension policy tool was not found: $tool" >&2
+    return 1
   fi
 
-  [ "$(ls -A $FIREFOXCONFIGDIR/extensions)" ] && cp $FIREFOXCONFIGDIR/extensions/* ${EXTENSIONDIR}
+  printf '%s\n' "$tool"
+}
+
+CheckFirefoxAddons(){
+  local tool
+  tool=$(_FirefoxExtensionPolicyTool) || return 1
+  python3 "$tool" check --online
+}
+
+InstallFirefoxAddons(){
+  local tool
+  tool=$(_FirefoxExtensionPolicyTool) || return 1
+  python3 "$tool" install
 }
 
 RemoveFirefoxAddons(){
-  if ( command -v firefox-extension-manager  > /dev/null 2>&1 ) ; then
+  local tool
+  tool=$(_FirefoxExtensionPolicyTool) || return 1
+  python3 "$tool" remove
+}
 
-    ADDONS=(
-      "gnome-shell-integration"
-      "ublock-origin"
-      "privacy-badger17"
-      "https-everywhere"
-      "noscript"
-      "print-friendly-pdf"
-      "disable-autoplay"
-      "video-downloadhelper"
-      "fireshot"
-      "wayback-machine_new"
-      "error-404-wayback-machine"
-      "exif-viewer"
-      "link-gopher"
-      "nimbus-screenshot"
-      "mitaka"
-      "bitwarden-password-manager"
-      "expressvpn"
-      # "bulk-media-downloader"
-      # "mjsonviewer"
-      # "user-agent-switcher-revived"
-      # "image-search-options"
-      # "google-translator-webextension"
-    )
-
-    cd $DOWNLOADDIR
-
-    # remove extensions
-    Echo "Removing Firefox extensions:"
-    BASEURL="https://addons.mozilla.org/en-US/firefox/addon"
-    for ADDON in "${ADDONS[@]}"
-    do
-      echo $ADDON
-      su $MYUSER -c "firefox-extension-manager --remove --user --url $BASEURL/$ADDON"
-    done
-  fi
+FinalizeFirefoxAddonRemoval(){
+  local tool
+  tool=$(_FirefoxExtensionPolicyTool) || return 1
+  python3 "$tool" finalize-remove
 }
 
 InstallOpera(){

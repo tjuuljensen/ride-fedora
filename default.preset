@@ -98,7 +98,6 @@ InstallHexchat             # RemoveHexchat
 # InstallDiscord           # RemoveDiscord
 # InstallPidgin            # RemovePidgin
 # InstallThunderbird       # RemoveThunderbird
-# InstallThunderbirdExts   # RemoveThunderbirdExts
 
 ### NetworkConfiguration ####
 # DisableMulticastDNS      # EnableMulticastDNS
@@ -118,7 +117,6 @@ InstallSpeedtestCLI        # RemoveSpeedtestCLI
 ### Supporting scripts ###
 InstallTecmintMonitorSh    # RemoveTecmintMonitorSh
 InstallGnomeExtInstaller   # RemoveGnomeExtInstaller
-InstallMozExtensionMgr     # RemoveMozExtensionMgr
 
 ### Web Browsers ###
 InstallBrave                # RemoveBrave

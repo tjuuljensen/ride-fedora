@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "default_installation_mode": "normal_installed",
+  "extensions": [
+    {
+      "name": "GNOME Shell integration",
+      "id": "chrome-gnome-shell@gnome.org",
+      "slug": "gnome-shell-integration"
+    },
+    {
+      "name": "uBlock Origin",
+      "id": "uBlock0@raymondhill.net",
+      "slug": "ublock-origin"
+    },
+    {
+      "name": "Privacy Badger",
+      "id": "jid1-MnnxcxisBPnSXQ@jetpack",
+      "slug": "privacy-badger17"
+    },
+    {
+      "name": "NoScript",
+      "id": "{73a6fe31-595d-460b-a920-fcc0f8843232}",
+      "slug": "noscript"
+    },
+    {
+      "name": "Print Friendly & PDF",
+      "id": "jid0-YQz0l1jthOIz179ehuitYAOdBEs@jetpack",
+      "slug": "print-friendly-pdf"
+    },
+    {
+      "name": "Disable Autoplay",
+      "id": "disable-html5-autoplay@afnankhan",
+      "slug": "disable-autoplay"
+    },
+    {
+      "name": "Video DownloadHelper",
+      "id": "{b9db16a4-6edc-47ec-a1f4-b86292ed211d}",
+      "slug": "video-downloadhelper"
+    },
+    {
+      "name": "FireShot",
+      "id": "{0b457cAA-602d-484a-8fe7-c1d894a011ba}",
+      "slug": "fireshot"
+    },
+    {
+      "name": "Nimbus Screenshot",
+      "id": "nimbusscreencaptureff@everhelper.me",
+      "slug": "nimbus-screenshot"
+    },
+    {
+      "name": "Wayback Machine",
+      "id": "wayback_machine@mozilla.org",
+      "slug": "wayback-machine_new"
+    },
+    {
+      "name": "404 to Wayback Machine",
+      "id": "error404waybackmachine@lafleur.com",
+      "slug": "error-404-wayback-machine"
+    },
+    {
+      "name": "Exif Viewer",
+      "id": "exif_viewer@mozilla.doslash.org",
+      "slug": "exif-viewer"
+    },
+    {
+      "name": "Link Gopher",
+      "id": "linkgopher@oooninja.com",
+      "slug": "link-gopher"
+    },
+    {
+      "name": "Mitaka",
+      "id": "{9efc0280-b125-400e-b53d-2d09d7effab4}",
+      "slug": "mitaka"
+    },
+    {
+      "name": "Bitwarden Password Manager",
+      "id": "{446900e4-71c2-419f-a6a7-df9c091e268b}",
+      "slug": "bitwarden-password-manager"
+    },
+    {
+      "name": "ExpressVPN",
+      "id": "firefox-addon@expressvpn.com",
+      "slug": "expressvpn"
+    }
+  ]
+}
