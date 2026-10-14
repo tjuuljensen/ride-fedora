@@ -1,0 +1,205 @@
+##########
+# Fedora bootstrap script - default preset
+# Author: Torsten Juul-Jensen
+# Edited: November 22, 2022
+# Source: https://github.com/tjuuljensen/bootstrap-fedora
+# Don't mind the RequireAdmin being commented out - it will elevate anyway :-)
+##########
+
+### Require administrator privileges ###
+# RequireAdmin
+
+### Bootstrap Begin ###
+DisableScreensaver       # EnableScreenSaver
+SetupUserDefaultDirs
+
+### Generic Fedora ###
+EnableFastDNF             # DisableFastDNF
+UpdateFedora
+InstallRequired
+InstallShellTools          # RemoveShellTools
+InstallRPMfusionRepos      # RemoveRPMfusionRepos
+InstallKernelTools         # RemoveKernelTools
+InstallDNFutils            # RemoveDNFutils
+InstallEzaGitHub           # InstallEza                # RemoveEza
+# InstallVersionLock       # RemoveVersionLock
+# InstallNautilusHash      # RemoveNautilusHash        # Issue in Gnome 43/Fedora 37
+# InstallNautilusImageTools# RemoveNautilusImageTools  # Issue in Gnome 43/Fedora 37
+
+### Application Launchers ###
+# InstallFlatpak           # RemoveFlatpak
+InstallFlathub             # RemoveFlathub
+InstallAppImageLauncher    # RemoveAppImageLauncher
+# InstallSnap              # RemoveSnap
+
+### CERT Forensic Repo  - THESE ARE EMPTY ###
+# InstallGalleta           # RemoveGalleta
+# InstallPlaso             # RemovePlaso
+# InstallAutopsy           # RemoveAutopsy
+# InstallXplico            # RemoveXplico
+# InstallVolatility        # RemoveVolatility
+# InstallVolatility3       # RemoveVolatility3
+# InstallVMFStools         # RemoveVMFStools
+
+### Standard Repo Forensic Tools ###
+# InstallSecurityLab       # RemoveSecurityLab
+# InstallBinwalk           # RemoveBinwalk
+# InstallDc3dd             # RemoveDc3dd
+InstallExif                # RemoveExif
+InstallMd5deep             # RemoveMd5deep
+InstallLibEWF              # RemoveLibEWF
+
+### Other Forensic Tools ###
+InstallExifTool            # RemoveExifTool
+InstallASN                 # RemoveASN
+InstallUnfURL              # RemoveUnfURL
+InstallCyberChef           # RemoveCyberChef
+InstallChepy               # RemoveChepy
+# InstallDumpzilla         # RemoveDumpzilla
+InstallNetworkMiner        # RemoveNetworkMiner
+InstallVeraCrypt           # UninstallVeraCrypt
+# InstallBulkExtractor     # RemoveBulkExtractor
+# InstallEmailHeaderAnlzr  # RemoveEmailHeaderAnlzr
+
+### Basic Tools and Support ###
+InstallPwgen               # RemovePwgen
+InstallHtop                # RemoveHtop
+InstallBat                 # RemoveBat
+InstallNcdu                # RemoveNcdu
+InstallRipgrep             # RemoveRipgrep
+InstallFd                  # RemoveFd
+InstallDocker              # RemoveDocker
+InstallVMFStools           # RemoveVMFStools
+InstallPythonPip           # RemovePythonPip
+InstallPackagingTools      # RemovePackagingTools
+InstallBasicEditors        # RemoveBasicEditors
+# InstallCommanderFileMgrs # RemoveCommanderFileMgrs
+InstallTerminator          # RemoveTerminator
+InstallAlien               # RemoveAlien
+InstallSmartMonTools       # RemoveSmartMonTools
+# InstallQbittorrent       # RemoveQbittorrent
+# InstallPowerShell        # RemovePowerShell
+# InstallMicrosoftTeams    # RemoveMicrosoftTeams
+
+### Accessories ###
+# InstallWoeUSB            # RemoveWoeUSB
+# InstallBalenaEtcher      # RemoveBalenaEtcher
+
+### Programming ####
+InstallVisualStudioCode    # RemoveVisualStudioCode
+# InstallArduinoIDE        # RemoveArduinoIDE
+# InstallAtomEditor        # RemoveAtomEditor
+# DisableAtomTelemetry     # EnableAtomTelemetry
+# InstallAtomPlugins       # RemoveAtomPlugins
+# InstallPyhtonAutopep8    # RemovePyhtonAutopep8
+
+### Communication ####
+InstallHexchat             # RemoveHexchat
+# InstallDiscord           # RemoveDiscord
+# InstallPidgin            # RemovePidgin
+# InstallThunderbird       # RemoveThunderbird
+
+### NetworkConfiguration ####
+# DisableMulticastDNS      # EnableMulticastDNS
+InstallNetworkTools        # RemoveNetworkTools
+InstallNetCommsTools       # RemoveNetCommsTools
+InstallNetMgrLibreswan     # RemoveNetMgrLibreswan
+# InstallNetMgrL2TP        # RemoveNetMgrL2TP
+# InstallOpenconnectVPN    #
+InstallSpeedtestCLI        # RemoveSpeedtestCLI
+
+### Productivity Tools ###
+# InstallFlameshot         # RemoveFlameshot
+# InstallDia               # RemoveDia
+# InstallWine              # RemoveWine
+# InstallJoplin            # RemoveJoplin
+
+### Supporting scripts ###
+InstallTecmintMonitorSh    # RemoveTecmintMonitorSh
+InstallGnomeExtInstaller   # RemoveGnomeExtInstaller
+
+### Web Browsers ###
+InstallBrave                # RemoveBrave
+# InstallVivaldi            # VivaldiBrave
+InstallChromium             # RemoveChromium
+# InstallChrome             # RemoveChrome
+# SetChromePreferences      # UnsetChromePreferences
+SetFirefoxPreferences       # UnsetFirefoxPreferences
+InstallFirefoxAddons        # RemoveFirefoxAddons
+# InstallOpera              # RemoveOpera
+# InstallEdge               # RemoveEdge
+
+### Multimedia ###
+# InstallCodecs             # RemoveCodecs
+# InstallSpotifyClient      # RemoveSpotifyClient
+# InstallVLCPlayer          # RemoveVLCPlayer
+# InstallClementinePlayer   # RemoveClementinePlayer
+# InstallPulseAudioEq       # RemovePulseAudioEq
+InstallYouTubeDownloader    # RemoveYouTubeDownloader
+# InstallGIMP               # RemoveGIMP
+# InstallHandBrake          # RemoveHandBrake
+
+### Gnome Tools & Tweaks ###
+InstallGnomeTools          # RemoveGnomeTools
+InstallSystemMonitor       # RemoveSystemMonitor
+InstallGnomeExtensions     # RemoveGnomeExtensions
+ShowDateInTaskbar          # HideDateInTaskbar
+ShowWeekNumbersInTaskbar   # HideWeekNumbersInTaskbar
+SetWindowCtlMinMaxClose    # SetWindowCtlAppmenuClose     # SetWindowCtlLeftClsMinMax
+DisableMiddleButtonPaste   # EnableMiddleButtonPaste
+SetGnomeRegionDaDK         # RemoveGnomeRegion
+SetScreensaverSlp10Lgn5    # SetScreensaverSlp15Lgn5
+SetCustomKeyboardShortcut  # SetVMKeyboardShortcut        # RemoveCustomKbrdShortcut
+SetGnomeCustomFavorites    # SetGnomeDefaultFavorites     # SetGnomeMinimalFavorites
+SetGnmLocationServiceOff   # SetGnmLocationServiceOn
+SetGnmAutoProblemRptOff    # SetGnmAutoProblemRptOn
+SetPowerPercentageLow15    # SetPowerPercentageLow20
+
+### Linux Tweaks & tools ###
+EnableBashAliases          # DisableBashAliases
+SetAliasLsEza              # UnsetAliasLsEza
+SetAliasWanIP              # UnsetAliasWanIP
+# SetAliasRideLog          # UnsetAliasRideLog
+
+### Security ###
+# InstallLynis             # RemoveLynis
+# InstallClamAV            # RemoveClamAV
+# InstallKeepassXC         # RemoveKeepassXC
+# InstallBitwarden         # RemoveBitwarden
+InstallBitwardenAppImage   # RemoveBitwardenAppImage
+
+###### VPN Functions  ###
+# ImportOpenVPNProfiles    # RemoveVPNProfiles             # RemoveExpressVPNProfiles
+# InstallExpressVPN        # RemoveExpressVPN
+# StartExpressVPNafterBoot # RemoveExpressVPNafterBoot
+# CreateExpVPNrandomizer   # ScheduleRandomExpVPNChange    # RemoveScheduleExpVPNChange
+
+
+### Miscellaneous tweaks and installs  ###
+InstallCheat               # RemoveCheat
+InstallUnifyingOnLaptop    # RemoveUnifyingOnLaptop
+# InstallProjecteur        # RemoveProjecteur
+InstallVMtoolsOnVM         # RemoveVMtoolsOnVM
+
+### 3rd party applications ###
+InstallYubikeyManager      # RemoveYubikeyManager
+# InstallYubikeyPersTool
+# InstallXmind             # RemoveXmind
+InstallSonosPlayer         # RemoveSonosPlayer
+# InstallVMwareWorkstation # RemoveVMwareWorkstation
+# PatchVMwareModules
+# InstallCitrixClient      # RemoveCitrixClient
+
+### Auxiliary Functions ###
+# EnableSSHreboot          # DisableSSHreboot 
+SetHostname
+
+### Encryption Functions ###
+# AddExtraLUKSpasswords
+# EncryptUnpartitionedDisks # RemoveKeyfileMounts
+# ReclaimEncryptDWUnmntPrt  # RemoveKeyfileMounts
+
+### Bootstrap End ###
+EnableScreenSaver           # DisableScreensaver
+PressAnyKeyToContinue
+Restart

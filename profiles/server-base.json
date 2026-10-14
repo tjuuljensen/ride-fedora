@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "server-base",
+  "description": "Generic Fedora Server pilot without host-specific values.",
+  "operations": [
+    {"id": "package.less", "state": "installed"},
+    {"id": "package.openssh-clients", "state": "installed"}
+  ]
+}

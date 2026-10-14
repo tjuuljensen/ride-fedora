@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "default",
+  "description": "Small Fedora base profile; the legacy 76-action preset is not replayed.",
+  "operations": [
+    {"id": "package.less", "state": "installed"},
+    {"id": "package.openssh-clients", "state": "installed"},
+    {"id": "package.exfatprogs", "state": "installed"}
+  ]
+}

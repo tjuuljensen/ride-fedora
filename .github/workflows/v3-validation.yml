@@ -1,0 +1,29 @@
+name: v3 validation
+
+on:
+  push:
+    branches: [codex/ride-v3-migration]
+  pull_request:
+
+jobs:
+  static-and-mocked:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dash shellcheck jq python3-jsonschema
+      - name: Shell syntax and ShellCheck
+        run: |
+          cmp docs/bootstrap.sh docs/index.html
+          dash -n docs/bootstrap.sh
+          shellcheck --shell=sh --severity=error docs/bootstrap.sh
+          bash -n ride.sh lib/v3/*.sh completion/ride.bash
+          shellcheck --shell=bash --severity=error ride.sh lib/v3/*.sh completion/ride.bash
+      - name: Catalog and generated docs
+        run: |
+          python3 tools/validate_v3.py --check-docs
+          python3 tools/build_burndown.py --check
+      - name: Mocked CLI, cache, completion, and Firefox policy tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v

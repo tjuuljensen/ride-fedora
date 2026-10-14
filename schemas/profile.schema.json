@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tjuuljensen/ride-fedora/schemas/profile.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "id", "description", "operations"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "description": {"type": "string", "minLength": 1},
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "state"], "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^(package|setting|system)\\.[a-z0-9.-]+$"},
+          "state": {"enum": ["installed", "absent", "enabled", "disabled"]}
+        }
+      }
+    }
+  }
+}

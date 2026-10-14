@@ -1,0 +1,4 @@
+# PyPI wheel hashes, reviewed 2026-10-14. Only the core required dependency is included.
+# Optional plugins needing [full] dependencies are outside this operation's claim.
+pefile==2024.8.26 --hash=sha256:76f8b485dcd3b1bb8166f1128d395fa3d87af26360c2358fb75b80019b957c6f
+volatility3==2.28.2 --hash=sha256:0461d6dd71b9ddbaf70c96e079c06efdf174ac65383b3dcf10dd165181fbd3c3

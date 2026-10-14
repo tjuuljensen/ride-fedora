@@ -1,0 +1,393 @@
+{
+  "schemaVersion": 1,
+  "clientVersion": "3.0.0",
+  "operations": [
+    {
+      "id": "package.exfatprogs",
+      "kind": "package",
+      "name": "exFAT tools",
+      "group": "base",
+      "description": "Install filesystem utilities for exFAT volumes.",
+      "handler": "dnf-package",
+      "packageName": "exfatprogs",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "exfatprogs",
+      "productUri": "https://github.com/exfatprogs/exfatprogs",
+      "license": "GPL-2.0-only",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/exfatprogs/exfatprogs/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/exfatprogs/exfatprogs/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.less",
+      "kind": "package",
+      "name": "Less",
+      "group": "base",
+      "description": "Install the terminal pager.",
+      "handler": "dnf-package",
+      "packageName": "less",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "less",
+      "productUri": "https://www.greenwoodsoftware.com/less/",
+      "license": "(GPL-3.0-only OR BSD-2-Clause) AND GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/less/less/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/less/less/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.openssh-clients",
+      "kind": "package",
+      "name": "OpenSSH client",
+      "group": "base",
+      "description": "Install the OpenSSH client tools.",
+      "handler": "dnf-package",
+      "packageName": "openssh-clients",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "openssh",
+      "productUri": "https://www.openssh.com/",
+      "license": "BSD-3-Clause AND BSD-2-Clause AND ISC AND SSH-OpenSSH AND ssh-keyscan AND snprintf AND LicenseRef-Fedora-Public-Domain AND X11-distribute-modifications-variant",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.imhex",
+      "kind": "package",
+      "name": "ImHex",
+      "group": "forensics",
+      "description": "Install the graphical hexadecimal editor.",
+      "handler": "dnf-package",
+      "packageName": "imhex",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "imhex",
+      "productUri": "https://imhex.werwolv.net/",
+      "license": "GPL-2.0-only AND Zlib AND MIT AND Apache-2.0",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/imhex/imhex/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/imhex/imhex/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.yara",
+      "kind": "package",
+      "name": "YARA",
+      "group": "forensics",
+      "description": "Install the YARA pattern-matching CLI.",
+      "handler": "dnf-package",
+      "packageName": "yara",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "yara",
+      "productUri": "https://virustotal.github.io/yara/",
+      "license": "BSD-3-Clause",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/yara/yara/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/yara/yara/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.ewftools",
+      "kind": "package",
+      "name": "EWF tools",
+      "group": "forensics",
+      "description": "Install utilities for Expert Witness Format images.",
+      "handler": "dnf-package",
+      "packageName": "ewftools",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "libewf",
+      "productUri": "https://github.com/libyal/libewf",
+      "license": "LGPL-3.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/libewf/ewftools/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/libewf/ewftools/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.sleuthkit",
+      "kind": "package",
+      "name": "The Sleuth Kit",
+      "group": "forensics",
+      "description": "Install filesystem forensic command-line tools.",
+      "handler": "dnf-package",
+      "packageName": "sleuthkit",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "sleuthkit",
+      "productUri": "https://www.sleuthkit.org/sleuthkit/",
+      "license": "CPL-1.0 AND IPL-1.0 AND GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/sleuthkit/sleuthkit/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/sleuthkit/sleuthkit/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.testdisk",
+      "kind": "package",
+      "name": "TestDisk and PhotoRec",
+      "group": "forensics",
+      "description": "Install partition recovery and file carving tools.",
+      "handler": "dnf-package",
+      "packageName": "testdisk",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "testdisk",
+      "productUri": "https://www.cgsecurity.org/wiki/TestDisk",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/testdisk/testdisk/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/testdisk/testdisk/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "package.audit",
+      "kind": "package",
+      "name": "Linux audit userspace",
+      "group": "security",
+      "description": "Install the Fedora audit userspace and auditd service.",
+      "handler": "dnf-package",
+      "packageName": "audit",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "audit",
+      "productUri": "https://github.com/linux-audit/audit-userspace",
+      "license": "GPL-2.0-or-later AND LGPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/audit/audit/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/audit/audit/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install"
+    },
+    {
+      "id": "artifact.capa-linux",
+      "kind": "artifact",
+      "name": "capa Linux archive",
+      "group": "forensics",
+      "description": "Download and verify the upstream capa Linux archive without installing it.",
+      "handler": "github-asset",
+      "githubRepository": "mandiant/capa",
+      "assetSuffix": "-linux.zip",
+      "maxBytes": 104857600,
+      "states": [
+        "downloaded"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "capa",
+      "productUri": "https://github.com/mandiant/capa",
+      "license": "Apache-2.0",
+      "licenseUri": "https://github.com/mandiant/capa/blob/master/LICENSE.txt",
+      "sourceUri": "https://github.com/mandiant/capa/releases",
+      "verification": "github-release-sha256-observed",
+      "recovery": "none"
+    },
+    {
+      "id": "setting.auditd-enabled",
+      "kind": "setting",
+      "name": "Enable auditd",
+      "group": "security",
+      "description": "Enable or disable auditd at boot without replacing audit rules.",
+      "handler": "systemd-service",
+      "serviceName": "auditd.service",
+      "states": [
+        "enabled",
+        "disabled"
+      ],
+      "dependencies": [
+        "package.audit"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "audit",
+      "productUri": "https://github.com/linux-audit/audit-userspace",
+      "license": "GPL-2.0-or-later AND LGPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/audit/audit/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/audit/audit/",
+      "verification": "local-systemd-state",
+      "recovery": "exact-state"
+    },
+    {
+      "id": "package.volatility3",
+      "kind": "package",
+      "name": "Volatility 3 core",
+      "group": "forensics",
+      "description": "Install pinned Volatility 3 core and pefile wheels in a private user virtual environment.",
+      "handler": "python-venv",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ]
+        }
+      },
+      "productId": "volatility3",
+      "productUri": "https://github.com/volatilityfoundation/volatility3",
+      "license": "Volatility Software License 1.0",
+      "licenseUri": "https://github.com/volatilityfoundation/volatility3/blob/stable/LICENSE.txt",
+      "sourceUri": "https://pypi.org/project/volatility3/2.28.2/",
+      "verification": "pypi-pinned-sha256"
+    }
+  ]
+}

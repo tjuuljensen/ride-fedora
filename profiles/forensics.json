@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "forensics",
+  "description": "Optional repository-backed forensic tools for Fedora.",
+  "operations": [
+    {"id": "package.imhex", "state": "installed"},
+    {"id": "package.yara", "state": "installed"},
+    {"id": "package.ewftools", "state": "installed"},
+    {"id": "package.sleuthkit", "state": "installed"},
+    {"id": "package.testdisk", "state": "installed"}
+  ]
+}

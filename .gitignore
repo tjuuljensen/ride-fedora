@@ -8,5 +8,9 @@ openvpn/*
 config.ini
 serials.ini
 
-# exclude dev files
+# generated files
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
 TODO.md

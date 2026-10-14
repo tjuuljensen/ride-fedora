@@ -1,100 +1,108 @@
-#!/bin/bash
-# Bootstrap loader to ride-fedora repo
-#
-# Torsten Juul-Jensen
-# November 30, 2022
+#!/bin/sh
+# Portable launcher for a tagged RIDE Linux release.
+set -eu
 
-AUTHOR=tjuuljensen
-REPO=ride-fedora
+author=tjuuljensen
+repo=ride-fedora
+ref=v3.0.0
+ref_kind=tags
+mode=download
+profile=default
+destination=
+install_deps=no
+allow_candidate=no
+temporary=
 
-# Direct URL to bootstrap master archive on github
-BOOTSTRAP_ARCHIVE="https://github.com/${AUTHOR}/${REPO}/archive/master.zip"
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" #set the variable to the place where script is loaded from
+usage() {
+  cat <<'HELP'
+Usage: sh bootstrap.sh [--tag TAG | --branch BRANCH] [--destination DIR]
+                       [--download-only | --plan | --apply]
+                       [--profile NAME] [--install-deps] [--allow-candidate]
 
-# Fail on any error
-set -e
-
-usage_help()
-{
-  SCRIPT_NAME=$(basename $0)
-  echo "normal usage:     $SCRIPT_NAME [--ride <options...>] [--default] [--stop] [--edit | --vi ]"
-  echo "specific release: $SCRIPT_NAME --release v37.0.0"
-  exit 1
+Defaults to downloading the v3.0.0 tagged release into ./ride-v3.0.0.
+--branch is for explicit development builds. --apply is the only option that
+applies a profile. Installing missing Bash/jq requires --install-deps.
+HELP
 }
 
-download_source()
-{
-  # Install required packages
-  REQUIREDPACKAGES=("unzip" "wget")
-  for i in ${!REQUIREDPACKAGES[@]};
-  do
-    rpm -q --quiet ${REQUIREDPACKAGES[$i]}  || dnf install -y ${REQUIREDPACKAGES[$i]}
-  done
+fail() { printf 'RIDE bootstrap: %s\n' "$*" >&2; exit 2; }
+cleanup() { if [ -n "$temporary" ] && [ -d "$temporary" ]; then rm -rf "$temporary"; fi; }
+trap cleanup 0
+trap 'exit 2' 1 2 3 15
 
-  if [[ $# -ne 0 ]] && [[ "--release | -r" == *"$1"* ]]; then
-    BOOTSTRAP_ARCHIVE="https://github.com/${AUTHOR}/${REPO}/archive/refs/tags/${2}.zip"  
-    ARCHIVE=${2}
-    shift 2 
-  else
-    ARCHIVE=master
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --tag) [ "$#" -ge 2 ] || fail '--tag needs a value'; ref=$2; ref_kind=tags; shift 2 ;;
+    --branch) [ "$#" -ge 2 ] || fail '--branch needs a value'; ref=$2; ref_kind=heads; shift 2 ;;
+    --destination) [ "$#" -ge 2 ] || fail '--destination needs a value'; destination=$2; shift 2 ;;
+    --download-only) mode=download; shift ;;
+    --plan) mode=plan; shift ;;
+    --apply) mode=apply; shift ;;
+    --profile) [ "$#" -ge 2 ] || fail '--profile needs a value'; profile=$2; shift 2 ;;
+    --install-deps) install_deps=yes; shift ;;
+    --allow-candidate) allow_candidate=yes; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) fail "unknown option: $1" ;;
+  esac
+done
+
+case "$ref" in
+  ''|*[!A-Za-z0-9._/-]*|*..*|/*|*/|-) fail 'invalid release ref' ;;
+esac
+case "$profile" in
+  ''|*[!A-Za-z0-9._/-]*|*..*|/*) fail 'invalid profile name' ;;
+esac
+
+[ -r /etc/os-release ] || fail 'cannot identify this Linux distribution'
+# os-release is a root-owned system file with shell-compatible assignments.
+# shellcheck disable=SC1091
+. /etc/os-release
+case "$ID" in
+  fedora|debian|ubuntu) ;;
+  *) fail "distribution $ID is outside the planned Linux targets" ;;
+esac
+
+if ! command -v bash >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+  if [ "$install_deps" != yes ]; then
+    fail 'Bash and jq are required; install them or pass --install-deps'
   fi
+  [ "$(id -u)" -eq 0 ] || fail '--install-deps requires root'
+  case "$ID" in
+    fedora) dnf install -y bash jq ;;
+    debian|ubuntu) apt-get update && apt-get install -y bash jq ;;
+  esac
+fi
+command -v curl >/dev/null 2>&1 || fail 'curl is required to download source'
+command -v tar >/dev/null 2>&1 || fail 'tar is required to unpack source'
 
-  TEMPDIR="$(mktemp -d /tmp/ride.XXXXXXXXXX)"
-  echo -e "Downloading \x1b[32m$BOOTSTRAP_ARCHIVE\x1b[m => \x1b[32m$TEMPDIR/\x1b[m"
-  cd $TEMPDIR
-  wget -q "$BOOTSTRAP_ARCHIVE"
-  echo unzipping...
-  unzip ${ARCHIVE}.zip > /dev/null  && mv "$TEMPDIR"/${REPO}-${ARCHIVE##*v}/* "$TEMPDIR" && rm ${ARCHIVE}.zip && rm -rf ${REPO}-${ARCHIVE##*v}/ && echo done.
-  INSTALLDIR=$(realpath "$TEMPDIR")
-  
-}
+temporary=$(mktemp -d "${TMPDIR:-/tmp}/ride-bootstrap.XXXXXXXX") || fail 'cannot create temporary directory'
+archive=$temporary/source.tar.gz
+mkdir "$temporary/source"
+url="https://github.com/$author/$repo/archive/refs/$ref_kind/$ref.tar.gz"
+printf 'Downloading %s\n' "$url"
+curl --fail --location --silent --show-error --proto '=https' --tlsv1.2 \
+  --output "$archive" "$url" || fail 'download failed'
+tar -tzf "$archive" >/dev/null || fail 'invalid source archive'
+tar -xzf "$archive" --strip-components=1 -C "$temporary/source" || fail 'unpack failed'
+[ -f "$temporary/source/ride.sh" ] || fail 'download did not contain ride.sh'
 
-# If this file does not exist it's probably because we're bootstrapping a fresh
-# system.  So we download the Git repository and bootstrap from there
-if [[ ! -f "$SCRIPTDIR/${REPO}/ride.sh" ]] && [[ ! -f "$SCRIPTDIR/../ride.sh" ]]; then #the ride script does NOT exist in a subdir or one level up (run from repo directory)
-  download_source $@
-elif [[ -f "$SCRIPTDIR/${REPO}/ride.sh" ]] ; then
-  INSTALLDIR=$(realpath "$SCRIPTDIR/${REPO}/")
-elif [[ -f "$SCRIPTDIR/../ride.sh" ]] ; then
-  INSTALLDIR=$(realpath "$SCRIPTDIR/../")
+if [ "$mode" = download ]; then
+  if [ -z "$destination" ]; then destination="./ride-${ref##*/}"; fi
+  [ ! -e "$destination" ] || fail "destination already exists: $destination"
+  mv "$temporary/source" "$destination" || fail 'cannot retain source'
+  printf 'Source saved at %s\n' "$destination"
+  exit 0
 fi
 
-if [[ $# -eq 0 ]] ; then
-  # show syntax
-  echo No command line parameters entered
-
-  # If no parameters were given, and the tempdir exists, move the directory to the script directory
-  if [[ ! -z $TEMPDIR ]] && [[ ! -d $SCRIPTDIR/${REPO}/ ]]; then
-    cd $SCRIPTDIR
-    mv $TEMPDIR ${SCRIPTDIR}/${REPO}/
-    echo Files can be found in: $(realpath "${SCRIPTDIR}/${REPO}/")
-  fi
-  usage_help
-elif [[ "--help | -h" == *"$1"* ]]; then
-  # show syntax
-  usage_help
-elif [[ "--default" == *"$1"* ]] ; then
-  # Start the installation of the default preset
-  cd $INSTALLDIR
-  ./ride.sh --include lib-fedora.sh --preset default.preset
-elif [[  "--stop | -s" == *"$1"* ]] || [[  "--release | -r" == *"$1"* ]]  ; then
-  echo "No installation tasks performed. It is up to you now to do the magic."
-  if [[ ! -z $TEMPDIR ]]  && [[ ! -d $SCRIPTDIR/${REPO}/ ]]; then
-    cd $SCRIPTDIR
-    mv $TEMPDIR ${SCRIPTDIR}/${REPO}/
-    echo Files can be found in: $(realpath "${SCRIPTDIR}/${REPO}/")
-  fi
-  exit 0
-elif [[  "--edit | --vi | -e" == *"$1"* ]] ; then
-  cd $INSTALLDIR
-  cp default.preset custom.preset
-  vi custom.preset
-  ./ride.sh --include lib-fedora.sh --preset custom.preset
-elif [[ "--ride" == *"$1"* ]] ; then
-  # Start the RIDE installation with remaining parameters
-  cd $INSTALLDIR
-  shift
-  ./ride.sh $@
+if [ -n "$destination" ]; then
+  [ ! -e "$destination" ] || fail "destination already exists: $destination"
+  mv "$temporary/source" "$destination" || fail 'cannot retain source'
+  ride_dir=$destination
 else
-  usage_help
+  ride_dir=$temporary/source
+fi
+if [ "$allow_candidate" = yes ]; then
+  bash "$ride_dir/ride.sh" "$mode" --profile "$profile" --allow-candidate
+else
+  bash "$ride_dir/ride.sh" "$mode" --profile "$profile"
 fi

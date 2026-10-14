@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tjuuljensen/ride-fedora/schemas/catalog.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "clientVersion", "operations"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "clientVersion": {"type": "string", "minLength": 1},
+    "operations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/operation"}}
+  },
+  "$defs": {
+    "target": {
+      "type": "object", "required": ["releases", "architectures"], "additionalProperties": false,
+      "properties": {
+        "releases": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}},
+        "architectures": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z0-9_]+$"}}
+      }
+    },
+    "operation": {
+      "type": "object",
+      "required": ["id", "kind", "name", "group", "description", "handler", "states", "scope", "status", "recovery", "targets", "productId", "productUri", "license", "licenseUri", "sourceUri", "verification"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^(package|setting|artifact|system)\\.[a-z0-9.-]+$"},
+        "kind": {"enum": ["package", "setting", "artifact", "system"]},
+        "name": {"type": "string", "minLength": 1},
+        "group": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "description": {"type": "string", "minLength": 1},
+        "handler": {"enum": ["dnf-package", "systemd-service", "github-asset", "python-venv"]},
+        "packageName": {"type": "string", "pattern": "^[A-Za-z0-9+_.-]+$"},
+        "serviceName": {"type": "string", "pattern": "^[A-Za-z0-9_.@-]+\\.service$"},
+        "githubRepository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "assetSuffix": {"type": "string", "pattern": "^-[A-Za-z0-9_.-]+$"},
+        "maxBytes": {"type": "integer", "minimum": 1, "maximum": 104857600},
+        "states": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["installed", "absent", "enabled", "disabled", "downloaded"]}},
+        "scope": {"enum": ["system", "user"]},
+        "status": {"enum": ["candidate", "supported"]},
+        "recovery": {"enum": ["remove-new-install", "exact-state", "none"]},
+        "acceptanceEvidence": {"type": "string", "pattern": "^docs/acceptance/[a-z0-9._-]+\\.md$"},
+        "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/target"}},
+        "dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^package\\.[a-z0-9.-]+$"}},
+        "productId": {"type": "string", "pattern": "^[a-z0-9.-]+$"},
+        "productUri": {"type": "string", "pattern": "^https://"},
+        "license": {"type": "string", "minLength": 1},
+        "licenseUri": {"type": "string", "pattern": "^https://"},
+        "sourceUri": {"type": "string", "pattern": "^https://"},
+        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "github-release-sha256-observed", "pypi-pinned-sha256"]}
+      },
+      "allOf": [
+        {"if": {"properties": {"handler": {"const": "dnf-package"}}}, "then": {"required": ["packageName"], "properties": {"kind": {"const": "package"}, "states": {"const": ["installed", "absent"]}}}},
+        {"if": {"properties": {"handler": {"const": "systemd-service"}}}, "then": {"required": ["serviceName"], "properties": {"kind": {"const": "setting"}, "states": {"const": ["enabled", "disabled"]}}}},
+        {"if": {"properties": {"handler": {"const": "github-asset"}}}, "then": {"required": ["githubRepository", "assetSuffix", "maxBytes"], "properties": {"kind": {"const": "artifact"}, "states": {"const": ["downloaded"]}}}},
+        {"if": {"properties": {"handler": {"const": "python-venv"}}}, "then": {"properties": {"id": {"const": "package.volatility3"}, "kind": {"const": "package"}, "states": {"const": ["installed", "absent"]}}}}
+      ]
+    }
+  }
+}
