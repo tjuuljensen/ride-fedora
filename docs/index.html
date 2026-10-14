@@ -1,10 +1,40 @@
 #!/bin/sh
-# Portable launcher for a tagged RIDE Linux release.
+# Purpose:
+#   Download a selected RIDE Linux source release and optionally launch it.
+#
+# Behavior:
+#   Download only by default; dependency installation and apply are explicit.
+#
+# Compatibility:
+#   POSIX sh on Fedora, Debian, or Ubuntu; catalog support is declared separately.
+#
+# Usage:
+#   sh docs/bootstrap.sh [--tag TAG | --branch BRANCH] [--download-only | --plan | --apply]
+#
+# Inputs / environment:
+#   GitHub archive ref, destination, profile, and standard TMPDIR.
+#
+# Outputs / side effects:
+#   Downloads source; optional package installation or profile changes require
+#   explicit flags. A temporary directory is removed on exit.
+#
+# Prerequisites:
+#   curl and tar; Bash and jq for the client. Dependency installation needs root.
+#
+# Author:
+#   RIDE Fedora maintainers.
+#
+# Version:
+#   3.0.0
+#
+# Changelog:
+#   3.0.0: Introduce portable download-first RIDE v3 bootstrap.
 set -eu
 
+BOOTSTRAP_VERSION=3.0.0
 author=tjuuljensen
 repo=ride-fedora
-ref=v3.0.0
+ref=v$BOOTSTRAP_VERSION
 ref_kind=tags
 mode=download
 profile=default
@@ -14,12 +44,13 @@ allow_candidate=no
 temporary=
 
 usage() {
-  cat <<'HELP'
-Usage: sh bootstrap.sh [--tag TAG | --branch BRANCH] [--destination DIR]
+  cat <<HELP
+Usage: sh docs/bootstrap.sh [--tag TAG | --branch BRANCH] [--destination DIR]
                        [--download-only | --plan | --apply]
                        [--profile NAME] [--install-deps] [--allow-candidate]
+       sh docs/bootstrap.sh --help | --version
 
-Defaults to downloading the v3.0.0 tagged release into ./ride-v3.0.0.
+Defaults to downloading the v$BOOTSTRAP_VERSION tagged release into ./ride-v$BOOTSTRAP_VERSION.
 --branch is for explicit development builds. --apply is the only option that
 applies a profile. Installing missing Bash/jq requires --install-deps.
 HELP
@@ -42,6 +73,7 @@ while [ "$#" -gt 0 ]; do
     --install-deps) install_deps=yes; shift ;;
     --allow-candidate) allow_candidate=yes; shift ;;
     -h|--help) usage; exit 0 ;;
+    --version) printf 'RIDE bootstrap %s\n' "$BOOTSTRAP_VERSION"; exit 0 ;;
     *) fail "unknown option: $1" ;;
   esac
 done

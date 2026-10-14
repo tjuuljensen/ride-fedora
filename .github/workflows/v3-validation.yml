@@ -5,6 +5,9 @@ on:
     branches: [codex/ride-v3-migration]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   static-and-mocked:
     runs-on: ubuntu-latest
@@ -19,8 +22,14 @@ jobs:
           cmp docs/bootstrap.sh docs/index.html
           dash -n docs/bootstrap.sh
           shellcheck --shell=sh --severity=error docs/bootstrap.sh
-          bash -n ride.sh lib/v3/*.sh completion/ride.bash
-          shellcheck --shell=bash --severity=error ride.sh lib/v3/*.sh completion/ride.bash
+          sh docs/bootstrap.sh --help >/dev/null
+          sh docs/bootstrap.sh --version
+          bash -n ride.sh lib/v3/*.sh completion/ride.bash tools/check-shell-executable.sh reference/install-waydroid-fedora.sh
+          shellcheck --shell=bash --severity=error ride.sh lib/v3/*.sh completion/ride.bash tools/check-shell-executable.sh reference/install-waydroid-fedora.sh
+          bash ride.sh --help >/dev/null
+          bash ride.sh --version
+          tools/check-shell-executable.sh --help >/dev/null
+          tools/check-shell-executable.sh --version
       - name: Catalog and generated docs
         run: |
           python3 tools/validate_v3.py --check-docs

@@ -92,6 +92,32 @@ from outcomes the owner excluded as obsolete or host-specific.
 - Generic server actions remain in `network-devices` until source, consumers, ownership, and rollback are reconciled. No host-specific preset is moved into this repository.
 - Debian and Ubuntu adapters remain outside the supported target matrix until their own VM checks pass.
 
+## Batch delivery and evidence
+
+Use this plan as the handoff record for phased migration. A batch names its
+operation IDs or legacy outcomes, source owner, target VM, dependencies,
+expected prior and final state, recovery limit, acceptance checks, status,
+revision, dated evidence, and exact next action. Keep source readiness separate
+from runtime activation and verified behavior. No batch is currently marked
+verified; catalog operations remain candidates.
+
+| Stage | Agent work | Owner or runtime input | Completion evidence |
+| --- | --- | --- | --- |
+| Select | Group a small related outcome set; identify catalog IDs and deferred neighbors. | Choose a target and provide a disposable VM when runtime testing begins. | Named scope, target distro/release/CPU, owner, and exclusions in this plan. |
+| Assess | Trace legacy behavior, consumers, upstream source, data ownership, dependencies, detection, and inverse. | Resolve host-specific values only if the selected operation needs them. | Current-to-v3 mapping, risks, and recovery limits. |
+| Implement | Prepare catalog, handler, profile, docs, and focused tests; run static and mocked checks. | Review only decisions that cannot be derived from source or established scope. | Reviewable patch and `source-ready` status after relevant CI passes. |
+| Activate | Apply the prepared revision only in a disposable target VM; record exact command and snapshot. | Supply VM access or run the documented commands. | VM log and `deployed-awaiting-verification` status. |
+| Verify | Check plan, apply, repeat apply, status, removal or restore, partial failure, and package or artifact evidence. | Confirm any user-visible desktop behavior that automation cannot observe. | Dated `docs/acceptance/<operation-id>.md` results and `verified` or failed status. |
+| Close or recover | Promote only accepted target rows; otherwise restore the VM snapshot, retain candidate status, and record the failure. | Provide further observations only when a check depends on them. | Updated catalog, migration row, evidence, and concrete next action. |
+
+Begin with a Fedora 44 x86_64 Workstation VM package pilot such as
+`package.less` and `package.exfatprogs`. Run CI first, then use `plan`, `apply`,
+repeat `apply`, `status`, `remove`, and `restore` as applicable. Keep the VM
+snapshot until recovery is checked. A green static check or source commit alone
+does not promote an operation to `supported`. Server, Firefox, third-party
+artifact, and Waydroid work should use separate batches because their state
+and recovery differ.
+
 ## Former CERT forensic repository burndown
 
 `default.preset` labels these entries “CERT Forensic Repo — THESE ARE EMPTY”. The

@@ -90,6 +90,9 @@ package support is advertised yet.
   product facts worth reconciling across both catalogs.
 - [`AGENTS.md`](AGENTS.md) and the local operation migration skill guide
   future AI-assisted changes.
+- [`docs/models/repository-conventions.md`](docs/models/repository-conventions.md)
+  maps the shared portfolio documentation and script standards to RIDE's
+  Bash/POSIX boundaries, generated files, and ownership.
 - [`docs/ai-workflow.md`](docs/ai-workflow.md) gives repeatable AI review and
   migration prompts.
 
@@ -100,6 +103,7 @@ python3 tools/validate_v3.py --check-docs  # needs python3-jsonschema
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 bash -n ride.sh lib/v3/*.sh completion/ride.bash
 sh -n docs/bootstrap.sh
+tools/check-shell-executable.sh
 ```
 
 CI also runs ShellCheck and `dash`. The Firefox policy helper remains in

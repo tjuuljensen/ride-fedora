@@ -3,7 +3,7 @@
 Generated from `ride.sh --help`.
 
 ```text
-RIDE Linux 3.0.0 — explicit, catalog-driven setup
+RIDE Linux 3.0.0 - explicit, catalog-driven setup
 
 Usage: ./ride.sh <command> [argument] [options]
   list [all|packages|artifacts|settings|profiles|groups]

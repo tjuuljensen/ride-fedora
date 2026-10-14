@@ -6,6 +6,18 @@ catalog entries and profiles are data; never source them or evaluate their
 contents as shell code. The v2 function library and presets are migration
 references, not a fallback execution path.
 
+## Portfolio alignment
+
+- Follow the canonical [portfolio documentation model](https://github.com/tjuuljensen/network-devices/blob/master/docs/repository-portfolio/repository-documentation-model.md)
+  and [script model](https://github.com/tjuuljensen/network-devices/blob/master/docs/repository-portfolio/script-repository-model.md),
+  applying the Linux-specific ownership map and exceptions in
+  [RIDE repository conventions](docs/models/repository-conventions.md).
+- Prefer small focused diffs, preserve existing behavior unless the request or
+  a clear bug requires a change, and do not mix unrelated refactors into fixes.
+- New technical documentation, code comments, logs, help, identifiers, and
+  commit messages are English. Preserve meaningful localized values and
+  upstream identifiers; prefer readable ASCII punctuation in prose.
+
 ## Ownership and support
 
 - `catalog/operations.json` defines stable operation IDs, supported targets,
@@ -18,6 +30,11 @@ references, not a fallback execution path.
   public repository. Coordinate movement of generic server behavior with the
   active source in `network-devices`; do not remove that source until its
   consumers and rollback are recorded.
+- Before a cross-repository ownership change, identify the authoritative
+  source, consumers, publication or deployment path, runtime identity, state,
+  and recovery. Unknown use is unverified, not inactive. Keep Windows product
+  facts and the GitHub behavior contract aligned without sharing platform
+  installers prematurely.
 - An operation is supported only on the distro, release, and CPU architecture
   tested for it. Unknown targets fail closed. Never claim a placeholder or
   no-op handler succeeded.
@@ -42,13 +59,38 @@ references, not a fallback execution path.
 - `docs/index.html` is the GitHub Pages shell entry point; keep it byte-for-byte
   identical to `docs/bootstrap.sh` until publication moves to a different URL.
 
+## Scripts and documentation
+
+- Keep the CLI in Bash and the bootstrapper in POSIX `sh`. All tracked `.sh`
+  files must have Git mode `100755`; run `tools/check-shell-executable.sh`
+  after adding or moving them. Do not treat sourced Bash modules as portable
+  `/bin/sh` programs.
+- New or materially changed entry-point scripts need current English headers
+  for purpose, behavior, compatibility, usage, inputs, side effects,
+  prerequisites, ownership, provenance, and version. Keep help and version
+  output synchronized with the code. Tightly coupled `lib/v3/` modules share
+  the client release version; historical v2 files are migration evidence.
+- Keep `README.md` concise. Put detailed procedures and repository-specific
+  rules under `docs/`; use relative links and Linux shell syntax. State the
+  starting directory, user or root scope, side effects, validation, and
+  recovery for copy-ready commands. Regenerate `docs/COMMANDS.md`,
+  `docs/OPERATIONS.md`, and the burndown from their sources rather than editing
+  generated files directly.
+- Distinguish source readiness, publication, VM activation, and verified
+  behavior. For phased work, follow the batch procedure in
+  `docs/MIGRATION-PLAN.md`; keep actual status and evidence there instead of
+  treating chat history or a green static check as acceptance.
+
 ## Validation and release
 
 - Run Bash syntax checks, ShellCheck, JSON/schema validation, mocked engine
   tests, and the Firefox Python tests for relevant changes. Test the POSIX
   bootstrap with `dash` and ShellCheck's `sh` mode.
+- Check `tools/check-shell-executable.sh`, generated documentation, and focused
+  diffs. For Python tool changes, run `python3 -m py_compile` and relevant tests.
 - Run state-changing acceptance only in disposable VMs. Record distro,
   release, architecture, profile, and outcome before declaring support.
 - Keep `master` as the release line while work proceeds on
   `codex/ride-v3-migration`. v3 client tags are independent of Fedora release
-  numbers. Check `git status` and preserve unrelated untracked work.
+  numbers. Check `git status`, preserve unrelated untracked work, and never
+  revert user changes to make a validation pass.

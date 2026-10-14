@@ -1,7 +1,37 @@
 #!/usr/bin/env bash
-# RIDE Linux v3 development client. System changes are explicit and journaled.
+# Purpose:
+#   Apply declared Linux workstation and server operations through RIDE v3.
+#
+# Behavior:
+#   List operations by default; plan without changes; journal explicit changes.
+#
+# Compatibility:
+#   Bash on Linux. Catalog targets currently name Fedora 44 x86_64 candidates.
+#
+# Usage:
+#   ./ride.sh [command] [options]; run ./ride.sh --help for commands.
+#
+# Inputs / environment:
+#   JSON catalog and profiles; optional RIDE_GITHUB_TOKEN for release metadata.
+#
+# Outputs / side effects:
+#   Status output, private run state/cache, package or settings changes only
+#   from explicit commands. System operations require root.
+#
+# Prerequisites:
+#   Bash and jq; operation-specific tools are checked by trusted handlers.
+#
+# Author:
+#   RIDE Fedora maintainers.
+#
+# Version:
+#   3.0.0
+#
+# Changelog:
+#   3.0.0: Begin catalog-driven Linux client development.
 set -euo pipefail
 
+RIDE_VERSION=3.0.0
 RIDE_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 RIDE_CATALOG=${RIDE_CATALOG_PATH:-$RIDE_ROOT/catalog/operations.json}
 RIDE_ALLOW_CANDIDATE=0
@@ -22,8 +52,8 @@ source "$RIDE_ROOT/lib/v3/github.sh"
 trap 'ride_journal_finalize_on_exit "$?"' EXIT
 
 ride_help() {
-  cat <<'HELP'
-RIDE Linux 3.0.0 — explicit, catalog-driven setup
+  cat <<HELP
+RIDE Linux $RIDE_VERSION - explicit, catalog-driven setup
 
 Usage: ./ride.sh <command> [argument] [options]
   list [all|packages|artifacts|settings|profiles|groups]
@@ -283,7 +313,7 @@ ride_main() {
   if [[ $# -gt 0 ]]; then shift; fi
   case "$command" in
     -h|--help|help) ride_help; return ;;
-    -v|--version|version) printf 'RIDE Linux 3.0.0\n'; return ;;
+    -v|--version|version) printf 'RIDE Linux %s\n' "$RIDE_VERSION"; return ;;
   esac
   while [[ $# -gt 0 ]]; do
     case "$1" in
