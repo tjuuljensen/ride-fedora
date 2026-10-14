@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a complete, name-level workstation and server outcome queue."""
+"""Render the scoped workstation and server outcome queue."""
 
 from __future__ import annotations
 
@@ -14,6 +14,25 @@ OUTPUT = ROOT / "docs" / "workstation-server-burndown.md"
 FUNCTION = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\(\)\s*\{", re.MULTILINE)
 SELECTOR = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\b")
 COMMENTED = re.compile(r"^\s*#\s*([A-Za-z][A-Za-z0-9_]*)\b")
+
+# User-scoped exclusions: obsolete or host-specific functions stay in legacy
+# source and the server name inventory, but are not v3 migration outcomes.
+WORKSTATION_OUT_OF_SCOPE = {"InstallCitrixClient", "RemoveCitrixClient"}
+SERVER_OUT_OF_SCOPE_TAIL = (
+    "CreateqBittorrentUser",
+    "InstallqBittorrentServer",
+    "CreateQbtFirewallRules",
+    "CreateQbtServiceFile",
+    "CreateQbtSSHkeys",
+    "CreatePlexUser",
+    "InstallPlexServer",
+    "CreatePlexFirewallRules",
+    "InstallPlexAutoUpdate",
+    "InstallAMP",
+    "InstallFerium",
+    "InstallMinecraftServer",
+)
+SERVER_OUT_OF_SCOPE = {"MountNASSMBfolders", *SERVER_OUT_OF_SCOPE_TAIL}
 
 
 def function_names(path: Path) -> list[str]:
@@ -32,8 +51,6 @@ def workstation_selectors(names: set[str]) -> tuple[list[str], list[str]]:
 
 
 def group_key(name: str) -> tuple[str, str]:
-    if name == "InstallqBittorrentServer":
-        return "package", "qBittorrentServer"
     for first, second, kind in (
         ("Install", "Remove", "package"),
         ("Install", "Uninstall", "package"),
@@ -96,7 +113,7 @@ def server_disposition(members: list[str]) -> str:
     name = members[0]
     if name == "ViewIPaddress":
         return "retire as install outcome; expose inspection through `status` if useful"
-    if name in {"SetHostname", "MountNASSMBfolders", "GenerateSSHkeysRSA", "CreateQbtSSHkeys"}:
+    if name in {"SetHostname", "GenerateSSHkeysRSA"}:
         return "private overlay for host values or key material; extract generic behavior only after ownership review"
     if name in {"InstallPythonPip", "InstallSelenium"}:
         return "replace global Python installation with isolated, pinned per-tool environment"
@@ -104,26 +121,32 @@ def server_disposition(members: list[str]) -> str:
         return "deferred generic server baseline; split package/update/timer behavior and record recovery limits"
     if name == "SetNoRootLogin":
         return "deferred SSH policy setting; preserve existing file content and test exact restore"
-    if name.startswith(("CreateQbt", "CreateqBittorrent", "CreatePlex", "InstallqBittorrent", "InstallPlex", "InstallAMP", "InstallMinecraft", "InstallFerium")):
-        return "deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets"
     if name.startswith(("InstallExpressVPN", "CreateVPN", "SetVPN")):
         return "deferred opt-in VPN profile; keep provider account and host routing private"
     return "deferred optional server operation; verify current package/source, state and recovery"
 
 
 def render() -> str:
-    workstation_names = function_names(ROOT / "lib-fedora.sh")
-    if len(set(workstation_names)) != len(workstation_names):
+    workstation_source_names = function_names(ROOT / "lib-fedora.sh")
+    if len(set(workstation_source_names)) != len(workstation_source_names):
         raise ValueError("duplicate workstation function names")
-    active_list, commented_list = workstation_selectors(set(workstation_names))
+    if not WORKSTATION_OUT_OF_SCOPE <= set(workstation_source_names):
+        raise ValueError("a workstation exclusion is missing from the source library")
+    workstation_names = [name for name in workstation_source_names if name not in WORKSTATION_OUT_OF_SCOPE]
+    active_list, commented_list = workstation_selectors(set(workstation_source_names))
     active, commented = set(active_list), set(commented_list)
     ledger = active_ledger()
     if active != set(ledger):
         raise ValueError("active workstation preset and migration ledger differ")
     inventory = json.loads((ROOT / "migration" / "server-inventory.json").read_text(encoding="utf-8"))
-    server_names = inventory["functions"]
-    if len(set(server_names)) != len(server_names):
+    server_source_names = inventory["functions"]
+    if len(set(server_source_names)) != len(server_source_names):
         raise ValueError("duplicate server function names")
+    if not SERVER_OUT_OF_SCOPE <= set(server_source_names):
+        raise ValueError("a server exclusion is missing from the source inventory")
+    if server_source_names[server_source_names.index(SERVER_OUT_OF_SCOPE_TAIL[0]):] != list(SERVER_OUT_OF_SCOPE_TAIL):
+        raise ValueError("server inventory changed after the excluded outcome boundary; review scope")
+    server_names = [name for name in server_source_names if name not in SERVER_OUT_OF_SCOPE]
     workstation_groups = groups(workstation_names)
     server_groups = groups(server_names)
     inactive_workstation = sum(not any(name in active for name in members) for _, members in workstation_groups)
@@ -134,12 +157,14 @@ def render() -> str:
     lines = [
         "# Workstation and server outcome burndown",
         "",
-        "This queue accounts for **every named function** in the workstation and server libraries,",
-        "including functions absent from active presets. Install/remove and analogous state pairs",
-        "share an outcome row; each exact function name remains visible. A `deferred` row is",
+        "This queue covers workstation and generic server migration candidates, including",
+        "functions absent from active presets. Obsolete and host-specific functions excluded",
+        "by the owner remain in the legacy source and server name inventory, outside this queue.",
+        "Install/remove and analogous state pairs share an outcome row. A `deferred` row is",
         "inventory, not an executable operation or acceptance claim.",
         "",
-        f"Workstation source: `lib-fedora.sh` at Fedora commit `43ba467`; {len(workstation_names)} functions,",
+        f"Workstation source: `lib-fedora.sh` at Fedora commit `43ba467`; {len(workstation_source_names)} source functions,",
+        f"{len(workstation_names)} queued functions,",
         f"{len(workstation_groups)} grouped outcomes, {inactive_workstation} outcomes with no active default selector.",
         f"Function coverage: {len(active & set(workstation_names))} active, "
         f"{len((commented - active) & set(workstation_names))} commented-only, "
@@ -149,7 +174,8 @@ def render() -> str:
         "provides the decisions for all active selectors.",
         "",
         f"Server source: `{inventory['libraryPath']}` at `network-devices` commit",
-        f"`{inventory['sourceCommit']}`; {len(server_names)} functions, {len(server_groups)} outcomes,",
+        f"`{inventory['sourceCommit']}`; {len(server_source_names)} source functions,",
+        f"{len(server_names)} queued functions, {len(server_groups)} outcomes,",
         f"{inactive_server} outcomes absent from all active server presets. Its three preset inventories",
         "are stored as names only in `migration/server-inventory.json`; no host values were copied.",
         f"Function coverage: {len(server_active & set(server_names))} active in a server preset, "

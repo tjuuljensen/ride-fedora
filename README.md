@@ -74,8 +74,9 @@ package support is advertised yet.
 - [`docs/MIGRATION-PLAN.md`](docs/MIGRATION-PLAN.md) accounts for all 76
   active Fedora preset actions.
 - [`docs/workstation-server-burndown.md`](docs/workstation-server-burndown.md)
-  inventories every workstation and server library outcome, including inactive
-  functions and exact preset coverage. Regenerate it with
+  inventories scoped workstation and generic server outcomes, including inactive
+  functions and exact preset coverage. Owner-excluded legacy functions remain
+  outside that queue. Regenerate it with
   `python3 tools/build_burndown.py --write`.
 - [`docs/sander-feature-map.md`](docs/sander-feature-map.md) reviews the 185
   functions and 25 active preset entries in Sander's library by outcome.

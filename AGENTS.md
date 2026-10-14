@@ -29,9 +29,10 @@ references, not a fallback execution path.
   method, license, source and verification evidence, detection, removal, and
   recovery before selecting a handler.
 - Keep operation IDs stable once published. Record replacements or retirement
-  in the migration ledger and complete workstation/server burndown. Regenerate
-  that burndown with `python3 tools/build_burndown.py --write`; CI checks its
-  coverage. Do not directly copy Sander's source without an
+  in the migration ledger and scoped workstation/server burndown. Respect its
+  explicit owner exclusions when regenerating it with
+  `python3 tools/build_burndown.py --write`; CI checks its coverage. Do not
+  directly copy Sander's source without an
   explicit license grant or published license and retained attribution.
 - Prefer distro repositories with signature enforcement. Record what was
   actually verified for other downloads. Do not run remote scripts in default

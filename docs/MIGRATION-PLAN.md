@@ -2,8 +2,9 @@
 
 Source: `default.preset` on `master` at `43ba467`. All 76 active lines are dispositioned below. The v3 default profile is intentionally small; deferred items are not silently executed. These decisions describe the development branch, not VM acceptance.
 
-The [complete workstation and server burndown](workstation-server-burndown.md)
-also inventories every non-active library function and the three server presets.
+The [scoped workstation and server burndown](workstation-server-burndown.md)
+also covers non-active library functions and the three server presets, apart
+from outcomes the owner excluded as obsolete or host-specific.
 
 | Legacy action | Disposition | v3 target or rationale |
 | --- | --- | --- |

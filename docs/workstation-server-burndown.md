@@ -1,22 +1,25 @@
 # Workstation and server outcome burndown
 
-This queue accounts for **every named function** in the workstation and server libraries,
-including functions absent from active presets. Install/remove and analogous state pairs
-share an outcome row; each exact function name remains visible. A `deferred` row is
+This queue covers workstation and generic server migration candidates, including
+functions absent from active presets. Obsolete and host-specific functions excluded
+by the owner remain in the legacy source and server name inventory, outside this queue.
+Install/remove and analogous state pairs share an outcome row. A `deferred` row is
 inventory, not an executable operation or acceptance claim.
 
-Workstation source: `lib-fedora.sh` at Fedora commit `43ba467`; 289 functions,
-166 grouped outcomes, 92 outcomes with no active default selector.
-Function coverage: 74 active, 69 commented-only, 146 library-only.
+Workstation source: `lib-fedora.sh` at Fedora commit `43ba467`; 289 source functions,
+287 queued functions,
+165 grouped outcomes, 91 outcomes with no active default selector.
+Function coverage: 74 active, 68 commented-only, 145 library-only.
 Default preset: 76 active selectors and 71 commented selectors
 that name a defined function or controller action. The [active migration ledger](MIGRATION-PLAN.md)
 provides the decisions for all active selectors.
 
 Server source: `operations/provisioning/ride/lib-fedora-server.sh` at `network-devices` commit
-`fccc70f6825d13f899ac6fd4e72a1af6360be076`; 28 functions, 28 outcomes,
-5 outcomes absent from all active server presets. Its three preset inventories
+`fccc70f6825d13f899ac6fd4e72a1af6360be076`; 28 source functions,
+15 queued functions, 15 outcomes,
+4 outcomes absent from all active server presets. Its three preset inventories
 are stored as names only in `migration/server-inventory.json`; no host values were copied.
-Function coverage: 23 active in a server preset, 3 commented-only, 2 library-only.
+Function coverage: 11 active in a server preset, 3 commented-only, 1 library-only.
 
 ## Workstation library
 
@@ -182,7 +185,6 @@ Function coverage: 23 active in a server preset, 3 commented-only, 2 library-onl
 | `package.SonosPlayer` | `InstallSonosPlayer`, `RemoveSonosPlayer` | `InstallSonosPlayer`: active, `RemoveSonosPlayer`: library only | deferred: Review publisher source and architecture. |
 | `package.VMwareWorkstation` | `InstallVMwareWorkstation`, `RemoveVMwareWorkstation` | `InstallVMwareWorkstation`: commented, `RemoveVMwareWorkstation`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery |
 | `action.PatchVMwareModules` | `PatchVMwareModules` | `PatchVMwareModules`: commented | deferred; classify as explicit operation, private value, CLI utility or retired behavior |
-| `package.CitrixClient` | `InstallCitrixClient`, `RemoveCitrixClient` | `InstallCitrixClient`: commented, `RemoveCitrixClient`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery |
 | `action.AddExtraLUKSpasswords` | `AddExtraLUKSpasswords` | `AddExtraLUKSpasswords`: commented | deferred; classify as explicit operation, private value, CLI utility or retired behavior |
 | `action.EncryptUnpartitionedDisks` | `EncryptUnpartitionedDisks` | `EncryptUnpartitionedDisks`: commented | deferred; classify as explicit operation, private value, CLI utility or retired behavior |
 | `action.ReclaimEncryptDWUnmntPrt` | `ReclaimEncryptDWUnmntPrt` | `ReclaimEncryptDWUnmntPrt`: commented | deferred; classify as explicit operation, private value, CLI utility or retired behavior |
@@ -209,22 +211,9 @@ Function coverage: 23 active in a server preset, 3 commented-only, 2 library-onl
 | `package.Selenium` | `InstallSelenium` | — | complete | replace global Python installation with isolated, pinned per-tool environment |
 | `setting.NoRootLogin` | `SetNoRootLogin` | complete | — | deferred SSH policy setting; preserve existing file content and test exact restore |
 | `action.GenerateSSHkeysRSA` | `GenerateSSHkeysRSA` | — | complete | private overlay for host values or key material; extract generic behavior only after ownership review |
-| `action.MountNASSMBfolders` | `MountNASSMBfolders` | complete, plexserver, streambox | — | private overlay for host values or key material; extract generic behavior only after ownership review |
 | `package.ExpressVPN` | `InstallExpressVPN` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private |
 | `action.CreateVPNrandomizer` | `CreateVPNrandomizer` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private |
 | `setting.VPNRandomizerPersistent` | `SetVPNRandomizerPersistent` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private |
-| `action.CreateqBittorrentUser` | `CreateqBittorrentUser` | complete, streambox | plexserver | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `package.qBittorrentServer` | `InstallqBittorrentServer` | complete, streambox | plexserver | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `action.CreateQbtFirewallRules` | `CreateQbtFirewallRules` | complete, streambox | plexserver | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `action.CreateQbtServiceFile` | `CreateQbtServiceFile` | complete, streambox | plexserver | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `action.CreateQbtSSHkeys` | `CreateQbtSSHkeys` | complete, streambox | plexserver | private overlay for host values or key material; extract generic behavior only after ownership review |
-| `action.CreatePlexUser` | `CreatePlexUser` | complete, plexserver | streambox | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `package.PlexServer` | `InstallPlexServer` | complete, plexserver | streambox | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `action.CreatePlexFirewallRules` | `CreatePlexFirewallRules` | complete, plexserver | streambox | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `package.PlexAutoUpdate` | `InstallPlexAutoUpdate` | complete, plexserver | streambox | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `package.AMP` | `InstallAMP` | complete | — | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `package.Ferium` | `InstallFerium` | — | — | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
-| `package.MinecraftServer` | `InstallMinecraftServer` | complete | plexserver, streambox | deferred opt-in service profile; separate service logic from host users, ports, media paths and secrets |
 
 `RequireAdmin`, `PressAnyKeyToContinue` and `Restart` appear as active server preset
 selectors but are controller flow, not server-library outcomes. The commented
