@@ -195,6 +195,15 @@ Function coverage: 11 active in a server preset, 3 commented-only, 1 library-onl
 `lib-fedora.sh`; both are retired as install outcomes in the active ledger.
 `RequireAdmin` is a commented controller selector, also outside the library.
 
+## Reference-script candidates
+
+These are review inputs outside the v2 function libraries. They have no executable
+v3 catalog ID and are not selected by a profile.
+
+| Outcome | Reference | Status | Migration review |
+| --- | --- | --- | --- |
+| Waydroid on a mutable Fedora workstation | [install-waydroid-fedora.sh](../reference/install-waydroid-fedora.sh) | deferred; reference-only and not clean-VM tested | Split Fedora package installation, OTA image initialization, container service, and optional firewalld policy into owned changes. Verify image provenance, repeat apply, partial failure, removal and restore on a disposable Fedora Wayland workstation. Keep forced reinitialization explicit. |
+
 ## Server library and presets
 
 | Outcome key | Exact source functions | Active presets | Commented presets | v3 disposition / next review |

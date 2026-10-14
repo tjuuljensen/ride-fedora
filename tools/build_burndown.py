@@ -11,6 +11,7 @@ import re
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "docs" / "workstation-server-burndown.md"
+WAYDROID_REFERENCE = ROOT / "reference" / "install-waydroid-fedora.sh"
 FUNCTION = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\(\)\s*\{", re.MULTILINE)
 SELECTOR = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\b")
 COMMENTED = re.compile(r"^\s*#\s*([A-Za-z][A-Za-z0-9_]*)\b")
@@ -127,6 +128,8 @@ def server_disposition(members: list[str]) -> str:
 
 
 def render() -> str:
+    if not WAYDROID_REFERENCE.is_file():
+        raise ValueError("Waydroid reference candidate is missing")
     workstation_source_names = function_names(ROOT / "lib-fedora.sh")
     if len(set(workstation_source_names)) != len(workstation_source_names):
         raise ValueError("duplicate workstation function names")
@@ -200,6 +203,21 @@ def render() -> str:
         "`lib-fedora.sh`; both are retired as install outcomes in the active ledger.",
         "`RequireAdmin` is a commented controller selector, also outside the library.",
         "",
+        "## Reference-script candidates",
+        "",
+        "These are review inputs outside the v2 function libraries. They have no executable",
+        "v3 catalog ID and are not selected by a profile.",
+        "",
+        "| Outcome | Reference | Status | Migration review |",
+        "| --- | --- | --- | --- |",
+        "| Waydroid on a mutable Fedora workstation | "
+        "[install-waydroid-fedora.sh](../reference/install-waydroid-fedora.sh) | "
+        "deferred; reference-only and not clean-VM tested | "
+        "Split Fedora package installation, OTA image initialization, container service, "
+        "and optional firewalld policy into owned changes. Verify image provenance, "
+        "repeat apply, partial failure, removal and restore on a disposable Fedora "
+        "Wayland workstation. Keep forced reinitialization explicit. |",
+        "",
         "## Server library and presets",
         "",
         "| Outcome key | Exact source functions | Active presets | Commented presets | v3 disposition / next review |",
@@ -248,7 +266,8 @@ def main() -> None:
         OUTPUT.write_text(content, encoding="utf-8")
     if args.check and (not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != content):
         raise SystemExit("workstation/server burndown is stale; run --write")
-    print(f"Verified {sum(line.startswith('| `') for line in content.splitlines())} outcome rows")
+    print(f"Verified {sum(line.startswith('| `') for line in content.splitlines())} "
+          "library outcome rows and 1 reference candidate")
 
 
 if __name__ == "__main__":

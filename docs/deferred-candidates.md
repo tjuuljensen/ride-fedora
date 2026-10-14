@@ -8,6 +8,7 @@ These entries are design candidates and have **no executable catalog ID**.
 | Autopsy | Upstream has [Linux setup instructions](https://github.com/sleuthkit/autopsy/blob/develop/Running_Linux_OSX.md). The legacy function is incomplete. | Verify installer and Java dependency lifecycle, source authenticity, ownership and exact removal in VMs. |
 | Firefox policies | The existing helper has merge, block and finalize behavior and unit tests. | Integrate journal ownership and restart-dependent removal before exposing v3 operation. |
 | Hexwalk | Sander's active preset includes it. | Verify maintained source and acquisition method before choosing provider. |
+| Waydroid | The local [reference installer](../reference/install-waydroid-fedora.sh) targets a mutable Fedora workstation and is not clean-VM tested. Fedora [packages Waydroid](https://packages.fedoraproject.org/pkgs/waydroid/waydroid/); upstream documents [Fedora installation](https://docs.waydro.id/usage/install-on-desktops) and [firewalld interface setup](https://docs.waydro.id/debugging/networking-issues). | Separate RPM, OTA image, service and optional firewalld state. Verify image provenance, repeat apply, partial failure, ownership and exact removal or restore in a disposable Wayland VM. Do not make forced reinitialization a default action. |
 
 `InstallVolatility3` and `RemoveVolatility3` are replaced by the isolated
 `package.volatility3` candidate. Only Volatility3 core and its required
