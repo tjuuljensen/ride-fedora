@@ -16,7 +16,7 @@ jobs:
       - name: Install test tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y dash shellcheck jq python3-jsonschema
+          sudo apt-get install -y dash shellcheck jq python3-jsonschema python3-pytest
       - name: Shell syntax and ShellCheck
         run: |
           cmp docs/bootstrap.sh docs/index.html
@@ -36,3 +36,5 @@ jobs:
           python3 tools/build_burndown.py --check
       - name: Mocked CLI, cache, completion, and Firefox policy tests
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Collect VM acceptance contract without starting guests
+        run: python3 -m pytest tests/acceptance --collect-only -q

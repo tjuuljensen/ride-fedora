@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "targets": [
+    {
+      "id": "fedora-44-cloud-x86_64",
+      "distro": "fedora",
+      "release": "44",
+      "edition": "Cloud Base",
+      "architecture": "x86_64",
+      "imageFormat": "qcow2",
+      "imageSha256": "28680fe5b371a5a82ebf43a31926e086a168e59949d03969c5093e7071f90b7f",
+      "imageSource": "https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2",
+      "imageRelease": "44-1.7",
+      "acceptanceScope": "generic-package-pilot",
+      "pilotOperation": "package.exfatprogs",
+      "pilotPackage": "exfatprogs",
+      "packageDatabase": "rpm",
+      "packageVerification": "rpm-signature-and-files"
+    }
+  ]
+}

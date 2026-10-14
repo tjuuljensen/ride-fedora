@@ -118,6 +118,12 @@ does not promote an operation to `supported`. Server, Firefox, third-party
 artifact, and Waydroid work should use separate batches because their state
 and recovery differ.
 
+The [disposable VM harness](acceptance/VM-HARNESS.md) now provides a Fedora 44
+Cloud Base pilot for `package.exfatprogs`, including partial failure. Its Cloud
+result can inform the package handler review; Workstation and Server edition
+acceptance remain separate release gates. No operation has been promoted from
+source readiness by adding the harness.
+
 ## Former CERT forensic repository burndown
 
 `default.preset` labels these entries “CERT Forensic Repo — THESE ARE EMPTY”. The

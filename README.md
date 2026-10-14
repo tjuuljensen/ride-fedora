@@ -69,6 +69,8 @@ package support is advertised yet.
 
 - [`docs/architecture.md`](docs/architecture.md) describes the engine,
   provider boundary, state, cache, and release gate.
+- [`docs/acceptance/VM-HARNESS.md`](docs/acceptance/VM-HARNESS.md) runs the
+  Fedora-first disposable VM lifecycle tests and records their limits.
 - [`docs/OPERATIONS.md`](docs/OPERATIONS.md) is generated from the catalog.
 - [`docs/COMMANDS.md`](docs/COMMANDS.md) is generated from the CLI help.
 - [`docs/MIGRATION-PLAN.md`](docs/MIGRATION-PLAN.md) accounts for all 76

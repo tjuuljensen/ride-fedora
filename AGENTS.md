@@ -90,6 +90,9 @@ references, not a fallback execution path.
   diffs. For Python tool changes, run `python3 -m py_compile` and relevant tests.
 - Run state-changing acceptance only in disposable VMs. Record distro,
   release, architecture, profile, and outcome before declaring support.
+- Use the pinned targets and shared lifecycle contract in `tests/acceptance/`
+  for VM pilots. A Cloud Base result does not establish Workstation or Server
+  support; keep edition-specific evidence under `docs/acceptance/`.
 - Keep `master` as the release line while work proceeds on
   `codex/ride-v3-migration`. v3 client tags are independent of Fedora release
   numbers. Check `git status`, preserve unrelated untracked work, and never

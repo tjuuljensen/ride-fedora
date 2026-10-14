@@ -60,3 +60,8 @@ The new bootstrap defaults to a tagged release and never silently applies a
 profile. Current Fedora Workstation and Server targets require disposable VM
 evidence. The repository name can be revisited after Debian or Ubuntu passes
 acceptance.
+
+The [VM acceptance harness](acceptance/VM-HARNESS.md) uses a target matrix,
+verified base images, fresh qcow2 overlays, and one shared lifecycle contract.
+The first automated target is Fedora Cloud Base for a generic package pilot;
+edition-specific Workstation and Server evidence remains a separate gate.
