@@ -166,7 +166,7 @@ def validate() -> dict:
         if disposition == "review" and progress != "unresolved":
             raise ValueError(f"unreviewed outcome claims progress: {key}")
         if progress in {"operable", "supported"}:
-            if disposition not in {"migrate", "replace"} or not row["v3Ids"] or not row["evidence"]:
+            if disposition != "migrate" or not row["v3Ids"] or not row["evidence"]:
                 raise ValueError(f"{key} claims an operation without mapping and evidence")
             if progress == "operable" and row["risk"] == "high":
                 raise ValueError(f"high-risk {key} cannot count as opt-in operable")
@@ -189,7 +189,7 @@ def validate() -> dict:
             ):
                 raise ValueError(f"{key} lacks passing VM acceptance evidence")
         if progress == "resolved":
-            if (disposition not in {"retire", "private", "unsupported"} or not row["evidence"]
+            if (disposition not in {"replace", "retire", "private", "unsupported"} or not row["evidence"]
                     or not row.get("reason") or not row.get("reviewTrigger")):
                 raise ValueError(f"{key} lacks a documented non-operable resolution")
         if progress in {"operable", "supported", "resolved"} and row.get("blocker"):
@@ -220,7 +220,9 @@ def summarize(data: dict) -> dict:
                         "nextAction": batch["nextAction"]})
     return {"total": len(rows), "complete": complete, "percent": round(100*complete/len(rows), 1),
             "supported": progress["supported"], "operableCandidate": progress["operable"],
-            "replaced": sum(row["disposition"] == "replace" and row["progress"] in {"operable", "supported"} for row in rows),
+            "replaced": disposition["replace"],
+            "runnable": progress["supported"] + progress["operable"],
+            "requiresAllowCandidate": progress["operable"],
             "retired": disposition["retire"], "private": disposition["private"],
             "unsupported": disposition["unsupported"], "unresolved": len(rows)-complete,
             "risk": dict(Counter(row["risk"] for row in rows)), "batches": batches,
@@ -234,9 +236,9 @@ def render(data: dict) -> str:
              "Source outcomes are counted separately from catalog operations. A disposition is not a working install.", "",
              f"**{report['complete']}/{report['total']} complete ({report['percent']}%)**: "
              f"{report['supported']} supported, {report['operableCandidate']} opt-in candidate, "
-             f"{report['retired']} retired, {report['private']} private, "
+             f"{report['replaced']} replaced, {report['retired']} retired, {report['private']} private, "
              f"{report['unsupported']} unsupported; {report['unresolved']} unresolved.", "",
-             f"Replacements with an operable v3 mapping: {report['replaced']}. "
+             f"Runnable outcomes: {report['runnable']}; {report['requiresAllowCandidate']} require `--allow-candidate`. "
              "Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.", "",
              "| Batch | Family | Risk | Complete | Evidence | Next action |",
              "| --- | --- | --- | ---: | --- | --- |"]
@@ -277,6 +279,7 @@ def main() -> int:
             print(f"supported={report['supported']} opt-in-candidate={report['operableCandidate']} "
                   f"replaced={report['replaced']} retired={report['retired']} private={report['private']} "
                   f"unsupported={report['unsupported']} unresolved={report['unresolved']}")
+            print(f"runnable={report['runnable']} requires-allow-candidate={report['requiresAllowCandidate']}")
             for batch in report["batches"]:
                 print(f"{batch['id']}: {batch['complete']}/{batch['total']} - {batch['nextAction']}")
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:

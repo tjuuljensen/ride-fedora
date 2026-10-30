@@ -1353,6 +1353,86 @@
       "distribution": "installed",
       "deploymentId": "local-installed",
       "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.pv",
+      "kind": "package",
+      "name": "PV pipeline progress tool",
+      "group": "shell-tools",
+      "description": "Install the Fedora pv command for pipeline progress display.",
+      "handler": "dnf-package",
+      "packageName": "pv",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "pv",
+      "productUri": "https://www.ivarch.com/programs/pv.shtml",
+      "license": "GPL-3.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/pv/pv/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/pv/pv/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.pv.md"
+    },
+    {
+      "id": "package.strace",
+      "kind": "package",
+      "name": "strace system call tracer",
+      "group": "shell-tools",
+      "description": "Install the Fedora strace command without tracing a process.",
+      "handler": "dnf-package",
+      "packageName": "strace",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "strace",
+      "productUri": "https://strace.io",
+      "license": "Multiple SPDX licenses; see Fedora package metadata",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/strace/strace/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/strace/strace/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.strace.md"
     }
   ]
 }

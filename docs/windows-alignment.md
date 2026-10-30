@@ -199,3 +199,16 @@ shared schema, source-selection fallback, journal, or Windows installer
 contract changed. Recheck product facts and shared behavior if Windows
 adds a matching product, Linux changes deployment semantics, or a release
 candidate is prepared.
+
+### Fedora provider foundation batch 01, 2026-10-30
+
+Compared Linux catalog, profile, and run-state schemas with Windows
+`codex/ride-v3-migration` at `0ff139f` before splitting the v2
+[`Required` and `ShellTools` bundles](migrations/provider-foundation-01.md).
+The Windows branch changed only `docs/MIGRATION-PLAN.md` since the prior
+comparison, adding the shared practical test-effort guidance; its schema and
+runtime contract remain as reviewed for native RPM batch 05. Linux's proposed
+`pv` and `strace` operations use Fedora RPMs and the existing DNF package
+handler. No Windows installer or shared product ID is inferred. Review again
+if the source-selection contract, profile/run-state schemas, or a shared
+product mapping changes, and before release-candidate preparation.

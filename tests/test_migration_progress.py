@@ -63,6 +63,20 @@ class MigrationProgressTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "documented non-operable resolution"):
             self.validate_copy(data)
 
+    def test_replacement_is_resolved_but_not_counted_as_runnable(self):
+        data = copy.deepcopy(self.data)
+        row = next(item for item in data["outcomes"] if item["progress"] == "unresolved")
+        row.update(disposition="replace", progress="resolved", blocker="",
+                   reason="The replacement is described in the migration plan.",
+                   reviewTrigger="Revisit when the replacement behavior changes.",
+                   evidence=["docs/MIGRATION-PLAN.md"])
+        self.validate_copy(data)
+        report = migration_progress.summarize(data)
+        prior = migration_progress.summarize(self.data)
+        self.assertEqual(report["replaced"], prior["replaced"] + 1)
+        self.assertEqual(report["runnable"], prior["runnable"])
+        self.assertEqual(report["requiresAllowCandidate"], prior["requiresAllowCandidate"])
+
     def test_status_does_not_count_unresolved_rows(self):
         data = copy.deepcopy(self.data)
         before = migration_progress.summarize(data)

@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**30/180 complete (16.7%)**: 14 supported, 9 opt-in candidate, 5 retired, 0 private, 2 unsupported; 150 unresolved.
+**32/180 complete (17.8%)**: 15 supported, 9 opt-in candidate, 1 replaced, 5 retired, 0 private, 2 unsupported; 148 unresolved.
 
-Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 24; 9 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -14,7 +14,7 @@ Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix function
 | `native-rpm-03` | Fedora repository packages 03: HexChat, Speedtest CLI, Chromium, and Nautilus resolutions | low 3, medium 2 | 5/5 | [native-rpm-03.md](../../docs/migrations/native-rpm-03.md), [package.hexchat.md](../../docs/acceptance/package.hexchat.md), [package.speedtest-cli.md](../../docs/acceptance/package.speedtest-cli.md), [package.chromium.md](../../docs/acceptance/package.chromium.md) | Complete on Fedora 44 Workstation; proceed to native-rpm-04 and revisit desktop hardening in v3.1. |
 | `native-rpm-04` | Fedora repository packages 04: Dc3dd, Qbittorrent, Thunderbird, Flameshot, GIMP | low 1, medium 4 | 5/5 | [native-rpm-04.md](../../docs/migrations/native-rpm-04.md), [package.dc3dd.md](../../docs/acceptance/package.dc3dd.md), [package.qbittorrent.md](../../docs/acceptance/package.qbittorrent.md), [package.thunderbird.md](../../docs/acceptance/package.thunderbird.md), [package.flameshot.md](../../docs/acceptance/package.flameshot.md), [package.gimp.md](../../docs/acceptance/package.gimp.md) | Complete v3.1 desktop visual and broader recovery checks; retain opt-in candidate status until reviewed. |
 | `native-rpm-05` | Fedora repository packages 05: Dia, Wine, VLC, Libpst, Lynis | low 2, medium 3 | 5/5 | [native-rpm-05.md](../../docs/migrations/native-rpm-05.md), [package.libpst.md](../../docs/acceptance/package.libpst.md), [package.lynis.md](../../docs/acceptance/package.lynis.md), [package.dia.md](../../docs/acceptance/package.dia.md), [package.wine.md](../../docs/acceptance/package.wine.md), [package.vlc.md](../../docs/acceptance/package.vlc.md) | Continue to provider-foundation-01; review desktop and package-driven update effects in v3.1. |
-| `provider-foundation-01` | Provider Foundation 01: Required, ShellTools | medium 2 | 0/2 | — | Assess Required, ShellTools; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `provider-foundation-01` | Provider Foundation 01: Required, ShellTools | medium 2 | 2/2 | [provider-foundation-01.md](../../docs/migrations/provider-foundation-01.md), [provider-shell-tools.md](../../docs/acceptance/provider-shell-tools.md), [package.pv.md](../../docs/acceptance/package.pv.md), [package.strace.md](../../docs/acceptance/package.strace.md) | Continue to RPM Fusion provider batch 02; revisit optional developer tools only on explicit request. |
 | `provider-foundation-02` | Provider Foundation 02: RPMfusionRepos | high 1 | 0/1 | — | Assess RPMfusionRepos; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `provider-foundation-03` | Provider Foundation 03: KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools | medium 5 | 0/5 | — | Assess KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `provider-foundation-04` | Provider Foundation 04: BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap | medium 6 | 0/6 | — | Assess BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap; record v2 behavior, current source, inverse, and risk-based completion criteria. |

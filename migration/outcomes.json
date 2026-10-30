@@ -85,13 +85,17 @@
       "batch": "provider-foundation-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Legacy coreutils, git, gnupg, python, tar, wget, and gcc list is not equivalent to the selected v3 less and openssh-clients baseline; review each legacy package separately.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/provider-foundation-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented optional developer-tool or prerequisite-contract review trigger.",
+      "v31Hardening": [],
+      "reason": "The seven-package v2 global install bundle is replaced by explicit v3 bootstrap and handler prerequisite checks at the point of use; optional compiler/downloader tools are no longer installed by the base profile.",
+      "reviewTrigger": "An explicit request for an opt-in developer-tool profile, or a change to the v3 bootstrap or handler prerequisite contract."
     },
     {
       "key": "workstation:package.ShellTools",
@@ -104,12 +108,20 @@
       "batch": "provider-foundation-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Split into specific repository packages.",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.pv",
+        "package.strace"
+      ],
+      "evidence": [
+        "docs/acceptance/provider-shell-tools.md",
+        "docs/acceptance/package.pv.md",
+        "docs/acceptance/package.strace.md",
+        "docs/migrations/provider-foundation-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck the opt-in shell-tools profile if Fedora packages, target, or DNF handler behavior change.",
       "v31Hardening": []
     },
     {
@@ -3635,8 +3647,13 @@
       "id": "provider-foundation-01",
       "family": "provider-foundation",
       "title": "Provider Foundation 01: Required, ShellTools",
-      "evidence": [],
-      "nextAction": "Assess Required, ShellTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/provider-foundation-01.md",
+        "docs/acceptance/provider-shell-tools.md",
+        "docs/acceptance/package.pv.md",
+        "docs/acceptance/package.strace.md"
+      ],
+      "nextAction": "Continue to RPM Fusion provider batch 02; revisit optional developer tools only on explicit request."
     },
     {
       "id": "provider-foundation-02",

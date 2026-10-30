@@ -16,8 +16,8 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `SetupUserDefaultDirs` | deferred | Review directory ownership and user scope. |
 | `EnableFastDNF` | replaced | DNF5 defaults need current evidence; no legacy config edit. |
 | `UpdateFedora` | deferred | Add explicit non-reversible system update operation after VM acceptance. |
-| `InstallRequired` | deferred | Legacy coreutils, git, gnupg, python, tar, wget, and gcc list is not equivalent to the selected v3 less and openssh-clients baseline; review each legacy package separately. |
-| `InstallShellTools` | deferred | Split into specific repository packages. |
+| `InstallRequired` | replaced | The global seven-package bundle is replaced by bootstrap and handler prerequisite checks. Optional developer tools need a separate requested profile; see [provider foundation batch 01](migrations/provider-foundation-01.md). |
+| `InstallShellTools` | supported | Split into supported `package.pv` and `package.strace` in the opt-in `shell-tools` profile; see [VM acceptance](acceptance/provider-shell-tools.md). |
 | `InstallRPMfusionRepos` | deferred | External repository enablement needs opt-in and trust review. |
 | `InstallKernelTools` | deferred | Kernel-dependent package group requires target checks. |
 | `InstallDNFutils` | replaced | Review current DNF5 commands and plugins. |
@@ -176,10 +176,12 @@ each passed install and inverse checks in the disposable Workstation VM.
 [Native RPM batch 05](migrations/native-rpm-05.md) passed Libpst and Lynis as
 supported and Dia, Wine, and VLC as opt-in candidates. Dia retained named
 GTK2 dependencies; Wine and VLC updated named pre-existing RPMs without
-losing their package identities. The next family is
-[provider-foundation-01](migrations/progress.md), starting with the v2
-`Required` and `ShellTools` bundles. The remaining outcomes stay visible in
-the progress report.
+losing their package identities.
+[Provider foundation batch 01](migrations/provider-foundation-01.md) replaced
+the global `Required` install bundle with explicit prerequisite checks and
+accepted `pv` and `strace` as supported operations in the opt-in
+`shell-tools` profile. The next source batch is RPM Fusion repository
+enablement. The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
@@ -314,8 +316,9 @@ default profile also passed with `package.openssh-clients`.
 
 Scope: `package.openssh-clients` on Fedora 44 x86_64 Workstation only, with the
 default `fedora-rpm` source and system scope. The selected v3 baseline is not
-an equivalent replacement for legacy `InstallRequired`, whose seven-package
-list remains deferred. Fedora's [OpenSSH client package](https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/)
+an equivalent replacement for legacy `InstallRequired`. Its seven-package
+bundle was later resolved as a non-runnable prerequisite-check replacement in
+[provider foundation batch 01](migrations/provider-foundation-01.md). Fedora's [OpenSSH client package](https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/)
 provides `ssh`, `scp`, `sftp`, and client configuration; the catalog records its
 Fedora license expression and repository GPG verification. RIDE owns the
 selection, DNF handler, and run journal, not existing SSH configuration.

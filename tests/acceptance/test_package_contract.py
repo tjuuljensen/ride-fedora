@@ -515,6 +515,43 @@ def test_remaining_native_repository_batch(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_provider_shell_tools_batch_and_profile(vm):
+    packages = ("pv", "strace")
+    native_rpm_batch(vm, packages, inventory_policy="name-arch",
+                     residue_candidates=packages,
+                     installed_probes={package: f"command -v {package}" for package in packages})
+
+    identifiers = tuple(f"package.{package}" for package in packages)
+    planned = vm.ride("plan", "--profile", "shell-tools")
+    assert [line.split("\t", 1)[0] for line in planned.stdout.splitlines()[1:]] == list(identifiers)
+    for identifier in identifiers:
+        row = table_row(planned.stdout, identifier)
+        assert (row["CURRENT"], row["DESIRED"], row["STATUS"]) == (
+            "absent", "installed", catalog_status(identifier))
+    before = set(package_inventory(vm).splitlines())
+    applied = vm.ride("apply", "--profile", "shell-tools", *candidate_args(identifiers[0]))
+    first_id = run_id(applied.stdout)
+    assert [(step["id"], step["result"]) for step in journal(vm, first_id)["steps"]] == [
+        (identifier, "changed") for identifier in identifiers]
+    for package in packages:
+        assert vm.run(f"rpm -q --quiet {package}", check=False).returncode == 0
+    installed = set(package_inventory(vm).splitlines())
+    repeated = vm.ride("apply", "--profile", "shell-tools", *candidate_args(identifiers[0]))
+    assert [step["result"] for step in journal(vm, run_id(repeated.stdout))["steps"]] == [
+        "unchanged", "unchanged"]
+    restored = vm.ride("restore", "--run-id", first_id, *candidate_args(identifiers[0]))
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    for package in packages:
+        assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0
+    after = set(package_inventory(vm).splitlines())
+    def identities(lines):
+        return {(fields[0], fields[4]) for line in lines if (fields := line.split("\t"))}
+    assert identities(before) <= identities(after), "profile restore lost a pre-existing RPM identity"
+    assert identities(after) - identities(before) <= identities(installed) - identities(before), (
+        "profile restore left unrelated RPMs")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_native_cli_tools_supported_profile_smoke(vm):
     identifiers = tuple(f"package.{name}" for name in
                         ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find"))

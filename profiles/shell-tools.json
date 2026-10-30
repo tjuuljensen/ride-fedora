@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "shell-tools",
+  "description": "Opt-in Fedora pipeline and tracing commands migrated from v2",
+  "operations": [
+    {
+      "id": "package.pv",
+      "state": "installed"
+    },
+    {
+      "id": "package.strace",
+      "state": "installed"
+    }
+  ]
+}
