@@ -1,6 +1,9 @@
 # Provider foundation batch 08: Eza source and destination ownership
 
 Status: **Fedora Eza supported; GitHub ZIP source replaced**, 2026-10-30.
+The owner confirmed **keep** for the separate portable Eza path in the v3.0
+fast-track review. Its pinned artifact and owned destination remain to
+implement; the accepted Fedora RPM is a distinct installed deployment.
 The v2 library offers `InstallEza` from Fedora and the active preset instead
 calls `InstallEzaGitHub`, which parses a mutable latest-release API response
 and extracts an unverified ZIP into `/usr/local/bin`. Their common

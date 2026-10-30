@@ -1,6 +1,10 @@
 # Flathub remote ownership and recovery
 
 Status: **unsupported as a runnable v3.0 remote operation**, 2026-10-30.
+The owner confirmed **keep** in the v3.0 fast-track review. Flatpak
+applications may coexist with RPM editions of the same product after
+product-specific conflict review, using separate deployment identities and
+recovery. The Flathub remote has its own scope and inverse.
 The active v2 `InstallFlathub` calls `flatpak remote-add --if-not-exists`
 against a Flathub `.flatpakrepo` URL; `RemoveFlathub` calls `flatpak uninstall
 flathub`, which does not express a safe inverse for a remote created by

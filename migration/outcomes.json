@@ -263,10 +263,11 @@
         "docs/acceptance/package.eza.md"
       ],
       "blocker": "",
-      "nextAction": "Use the supported Fedora Eza operation for installed deployments; reopen portable Eza only after pinned artifact and owned recovery design.",
+      "nextAction": "Owner kept the GitHub/portable Eza path for v3.0 on 2026-10-30. Add a pinned publisher artifact and independently owned portable destination; the accepted Fedora RPM remains a separate installed deployment.",
       "v31Hardening": [],
       "reason": "The active v2 GitHub latest-release ZIP download has no pinned checksum or owned inverse; the supported Fedora RPM supplies the Eza command on Fedora 44 without claiming portable deployment.",
-      "reviewTrigger": "An explicit portable Eza requirement with pinned artifact provenance, destination ownership, coexistence review, and exact-target recovery evidence."
+      "reviewTrigger": "An explicit portable Eza requirement with pinned artifact provenance, destination ownership, coexistence review, and exact-target recovery evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.VersionLock",
@@ -381,10 +382,11 @@
         "docs/migrations/provider-foundation-09.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen for an explicit Flathub use case after fixed-scope remote ownership and exact-target recovery tests.",
+      "nextAction": "Owner kept Flathub for v3.0 on 2026-10-30. Own a fixed-scope remote and safe inverse; enable Flatpak applications as separate deployments that may coexist with RPM editions after product-specific conflict review.",
       "v31Hardening": [],
       "reason": "The active v2 remote-add has no owned remote journal and its inverse is not remote-delete; v3 lacks a scoped Flatpak remote handler and app-preserving inverse.",
-      "reviewTrigger": "An explicit Flathub use case with URL/key detection, ownership-aware system or user remote handler, attached-app refusal, and Fedora 44 Workstation VM acceptance."
+      "reviewTrigger": "An explicit Flathub use case with URL/key detection, ownership-aware system or user remote handler, attached-app refusal, and Fedora 44 Workstation VM acceptance.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.AppImageLauncher",
@@ -2532,10 +2534,11 @@
         "docs/migrations/provider-foundation-07.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional HandBrake for migration on 2026-10-30; accept RPM Fusion trust/recovery, choose CLI or GUI scope, and pass Fedora 44 VM lifecycle.",
+      "nextAction": "Owner kept HandBrake for v3.0 on 2026-10-30. Choose CLI or GUI distribution, establish RPM Fusion trust and recovery, then run a brief Fedora 44 VM package lifecycle.",
       "v31Hardening": [],
       "reason": "The v2 DNF install relies on unaccepted RPM Fusion repository trust; the CLI and GUI RPMs are distinct and no exact-target package happy path was run.",
-      "reviewTrigger": "Accepted RPM Fusion trust and owned recovery plus chosen HandBrake CLI or GUI scope and Fedora 44 Workstation VM acceptance."
+      "reviewTrigger": "Accepted RPM Fusion trust and owned recovery plus chosen HandBrake CLI or GUI scope and Fedora 44 Workstation VM acceptance.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.GnomeTools",
@@ -4531,7 +4534,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-07.md"
       ],
-      "nextAction": "Retain HandBrake for migration; accept RPM Fusion provider trust and recovery, choose CLI or GUI scope, then run exact-target lifecycle checks."
+      "nextAction": "Owner kept HandBrake; choose CLI or GUI distribution, complete RPM Fusion trust/recovery, and run brief Fedora 44 VM lifecycle."
     },
     {
       "id": "provider-foundation-08",
@@ -4541,7 +4544,7 @@
         "docs/migrations/provider-foundation-08.md",
         "docs/acceptance/package.eza.md"
       ],
-      "nextAction": "Continue to provider-foundation-09; reopen portable Eza only on the documented ownership and provenance trigger."
+      "nextAction": "Owner kept portable Eza; design pinned upstream artifact and owned destination beside the accepted Fedora RPM."
     },
     {
       "id": "provider-foundation-09",
@@ -4550,7 +4553,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-09.md"
       ],
-      "nextAction": "Reopen only for an explicit Flathub use case with owned remote and app-preserving recovery."
+      "nextAction": "Owner kept Flathub; implement owned remote lifecycle and separate Flatpak deployments that can coexist with RPM editions after product conflict review."
     },
     {
       "id": "provider-foundation-10",

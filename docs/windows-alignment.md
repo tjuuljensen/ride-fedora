@@ -51,6 +51,7 @@ actually compared.
 | Linux currently requires different RPM names for alternative providers in one deployment slot. | RPM presence alone cannot identify which provider supplied the same package name; provenance-aware observation is still needed. | Adding two repositories or downloads for the same RPM name. |
 | Linux `download` writes an RPM and checksum sidecar while `install` resolves through DNF; neither client has completed the planned offline install-from-retained-artifact workflow. | A bound artifact manifest, offline dependency handling, and recovery need implementation and tests. | First offline install implementation in either repository. |
 | Linux run schema 2 records selected provider and installed deployment; Windows uses platform-specific state records. | Journals must preserve each platform's observable state and restoration method. | Any run-state migration or cross-platform recovery contract change. |
+| Linux plans distinct RPM and Flatpak distributions of one product; current Linux catalog supports only the RPM installed slot. | Coexistence requires separate distribution, deployment, scope, and recovery identities, matching the shared product model without sharing installers. | First Linux Flatpak application operation or a Windows deployed-variant contract change. |
 
 ### Fedora Workstation package batch preflight, 2026-10-30
 

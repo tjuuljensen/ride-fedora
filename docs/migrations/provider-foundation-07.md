@@ -2,7 +2,10 @@
 
 Status: **unsupported on the declared v3.0 target until its provider is
 accepted**, 2026-10-30. The commented v2 pair `InstallHandBrake` and
-`RemoveHandBrake` invokes DNF for `HandBrake`. The
+`RemoveHandBrake` remains in scope: the owner confirmed **keep** in the v3.0
+fast-track review on 2026-10-30. Choose the CLI or GUI distribution and use
+the focused package lifecycle after RPM Fusion trust is established. The v2
+pair invokes DNF for `HandBrake`. The
 [RPM Fusion Fedora 44 x86_64 index](https://download1.rpmfusion.org/free/fedora/updates/44/x86_64/h/)
 lists `HandBrake` 1.11.2 and a separate `HandBrake-gui` RPM. The
 [HandBrake project](https://handbrake.fr/project_information.php) describes

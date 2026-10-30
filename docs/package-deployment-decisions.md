@@ -32,6 +32,10 @@ destination, version, artifact evidence, and recovery. Removing or updating one
 must not mutate another or delete user-created data. Product-only requests that
 cannot identify one deployment must fail instead of choosing one silently.
 Replacing one deployment with another is an explicit migration.
+An RPM and a Flatpak edition of one product are separate installed
+distributions and may coexist under the same rule. Each must have a distinct
+deployment ID, package-manager identity, scope, and recovery record. A
+product-only request must not silently select or remove either edition.
 
 The current Linux engine has only one `installed` deployment slot per package.
 Its alternate provider check is scoped to that slot. It is a temporary guard
