@@ -1717,6 +1717,46 @@
       "acceptanceEvidence": "docs/acceptance/package.unar.md"
     },
     {
+      "id": "package.unrar",
+      "kind": "package",
+      "name": "Unrar-free compatibility command",
+      "group": "archive-tools",
+      "description": "Install Fedora's unrar wrapper for common RAR listing and extraction without changing existing archives.",
+      "handler": "dnf-package",
+      "packageName": "unrar",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "unrar-free",
+      "productUri": "https://gitlab.com/bgermann/unrar-free",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/unrar-free/unrar/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/unrar-free/unrar/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.unrar.md"
+    },
+    {
       "id": "package.nano",
       "kind": "package",
       "name": "GNU nano editor",

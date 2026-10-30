@@ -4,8 +4,10 @@ Status: **PASS; supported replacement package operations** on Fedora 44
 x86_64 Workstation, 2026-10-30. The v2 `InstallPackagingTools` and
 `RemovePackagingTools` bundle selected `p7zip` and `unrar`. Fedora 44 has
 supported `package.7zip` and `package.unar` operations for equivalent archive
-creation/extraction intent, with a changed RAR command. The source outcome is
-counted as a documented replacement, separately from working installs.
+creation/extraction intent, with a changed RAR command. This original
+acceptance counted the source outcome as a documented replacement. The later
+[Fedora unrar wrapper acceptance](package.unrar.md) restores the command name
+and makes the bundle operable through an opt-in profile.
 
 VM evidence: disposable overlay
 `20261030T113943Z-test-provider-archive-replacement-batch-ba654452`;

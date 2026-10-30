@@ -1263,23 +1263,28 @@
       "batch": "provider-foundation-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "replace",
-      "progress": "resolved",
+      "disposition": "migrate",
+      "progress": "supported",
       "v3Ids": [
         "package.7zip",
-        "package.unar"
+        "package.unar",
+        "package.unrar"
       ],
       "evidence": [
         "docs/acceptance/provider-archive-tools.md",
         "docs/acceptance/package.7zip.md",
         "docs/acceptance/package.unar.md",
-        "docs/migrations/provider-foundation-03.md"
+        "docs/migrations/provider-foundation-03.md",
+        "docs/migrations/provider-foundation-03-unrar.md",
+        "docs/acceptance/package.unrar.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept the archive-tool capability for v3.0 on 2026-10-30. Confirm whether the accepted 7zip and unar operations cover the intended use or exact unrar CLI compatibility is needed.",
-      "v31Hardening": [],
-      "reason": "Fedora 44 no longer offers the v2 p7zip package; supported 7zip and unar operations replace archive creation and RAR extraction intent, with a different command from unrar.",
-      "reviewTrigger": "An explicit requirement for the unrar CLI or a change to Fedora archive package availability or RAR behavior.",
+      "nextAction": "Keep the 7zip and unrar opt-in profile; H026 checks less common RAR features beyond the Fedora wrapper package claim.",
+      "v31Hardening": [
+        "H026"
+      ],
+      "reason": "Fedora 44 replaces p7zip with 7zip and provides a signed unrar-free wrapper for /usr/bin/unrar; both package lifecycles passed, while unar remains a separate optional extractor.",
+      "reviewTrigger": "Recheck Fedora archive package availability, wrapper command behavior, or owner-required RAR features beyond listing and extraction.",
       "v30Decision": "keep"
     },
     {
@@ -4616,9 +4621,11 @@
         "docs/migrations/provider-foundation-03.md",
         "docs/acceptance/provider-kernel-tools.md",
         "docs/acceptance/package.python3-pip.md",
-        "docs/acceptance/provider-archive-tools.md"
+        "docs/acceptance/provider-archive-tools.md",
+        "docs/migrations/provider-foundation-03-unrar.md",
+        "docs/acceptance/package.unrar.md"
       ],
-      "nextAction": "Owner deferred the DNFutils replacement decision and kept PackagingTools; confirm archive CLI needs while retaining accepted package evidence."
+      "nextAction": "PackagingTools is operable through 7zip and unrar; owner-deferred DNFutils remains the v3.0 gap. H026 covers wider RAR behavior."
     },
     {
       "id": "provider-foundation-04",
@@ -5700,6 +5707,12 @@
       "id": "H025",
       "title": "UnfURL local UI and wider parser behavior",
       "trigger": "After the Fedora 44 Workstation pinned CLI and entry points pass; test local web UI behavior, diverse URL parsers, and broader failure recovery without exposing a public listener.",
+      "status": "queued"
+    },
+    {
+      "id": "H026",
+      "title": "RAR wrapper feature compatibility",
+      "trigger": "After Fedora 44 unrar-free wrapper package acceptance, test representative RAR versions, encrypted archives, and automation switches needed by owner workflows; keep package-only support distinct.",
       "status": "queued"
     }
   ]

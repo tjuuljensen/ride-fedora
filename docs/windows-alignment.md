@@ -660,3 +660,23 @@ The pinned Fedora 44 Workstation VM lifecycle passed under QEMU TCG. The
 the new opt-in candidate. The [acceptance record](acceptance/package.dfir-unfurl.md)
 shows the exact user-environment recovery. No unexplained Windows contract
 drift was found; the Linux-specific runtime remains a deliberate difference.
+
+### Fedora archive `unrar` preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding Fedora's
+`unrar` wrapper. Windows has a `package.7zip` product selected by its default
+profile, but no `unrar` or `unar` row. Linux retains its existing
+`package.7zip` and `package.unar` IDs and uses a distinct RPM-backed
+`package.unrar` ID to restore the v2 command choice. Its proposed opt-in
+archive profile reflects the small Linux `default` profile. No shared
+schema, installed-deployment identity, source-selection, or run-journal
+behavior changes. Recheck if Windows adds a RAR command or either client
+changes the 7-Zip product contract.
+
+The Fedora 44 Workstation package lifecycle passed under QEMU TCG. The
+`archive-tools` opt-in profile uses the existing profile schema and selects
+only the accepted 7zip and unrar package operations. The
+[acceptance record](acceptance/package.unrar.md) shows complete RPM inventory
+recovery, a passing profile smoke, and preservation of pre-existing 7zip. No
+unexplained shared Windows contract drift was found.

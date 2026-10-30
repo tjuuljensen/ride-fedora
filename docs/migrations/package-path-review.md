@@ -1,11 +1,11 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-133 v2 `package.*` outcomes: 49 mapped to runnable v3 operations, 10 replaced,
+133 v2 `package.*` outcomes: 50 mapped to runnable v3 operations, 9 replaced,
 10 retired, and 64 unsupported. The five path groups below assess the **70
-original unsupported or retired outcomes**; the 10 replacements, 49 existing
-v3 mappings, and six newly scoped server outcomes follow. The 49 mapped
-outcomes have catalog and acceptance evidence. The
+original unsupported or retired outcomes**; the 10 original replacement
+assessments, 50 existing v3 mappings, and six newly scoped server outcomes
+follow. The 50 mapped outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
 disposition, risk, target, evidence, and next action.
 
@@ -133,7 +133,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.Pidgin` | Fedora 44 packages Pidgin and OTR, but combined messaging and key recovery remain unverified. | [Batch review](system-security-27.md) |
 | `workstation:package.Xmind` | Choose the current publisher edition and package identity before pinning an install. | [Batch review](publisher-apps-15.md) |
 
-## Already replaced package outcomes (10)
+## Original replacement assessments (10; nine remain)
 
 These have explicit replacement dispositions in the ledger. EOL applies to
 the named old products where stated; several others are platform or method
@@ -147,15 +147,15 @@ changes and must not be labeled EOL.
 | `workstation:package.VersionLock` | DNF5 exposes versionlock without the v2 plugin package; policy-entry management remains separate. | [Batch review](provider-foundation-04.md) |
 | `workstation:package.Flatpak` | Fedora Workstation supplies Flatpak; the unsafe v2 uninstall-all path is rejected. | [Batch review](provider-foundation-11.md) |
 | `workstation:package.Macvendor` | The maintained standalone lookup script remains outside the v3 install catalog. | [Batch review](forensic-isolated-03.md) |
-| `workstation:package.PackagingTools` | Replace the old p7zip bundle with accepted 7zip and unar operations; CLI identity differs. | [Batch review](../acceptance/provider-archive-tools.md) |
+| `workstation:package.PackagingTools` | Initially replaced by 7zip and unar; the later Fedora unrar wrapper restored the command name and made the kept outcome operable. | [Acceptance](../acceptance/package.unrar.md) |
 | `workstation:package.FirefoxAddons` | The existing policy helper manages repository-owned files outside the v3 catalog. | [Batch review](publisher-apps-04.md) |
 | `workstation:package.YubikeyManager` | The old Manager GUI reached EOL; Yubico Authenticator is a separate product. | [Batch review](publisher-apps-08.md) |
 | `workstation:package.YubikeyPersTool` | The old GUI is archived; Yubico Authenticator and ykman are separate paths. | [Batch review](publisher-apps-14.md) |
 
-## Existing v3 package mappings (47)
+## Existing v3 package mappings (50)
 
-These outcomes already have runnable v3 mappings: 28 supported on their
-declared targets and 19 operable only as opt-in candidates. The linked
+These outcomes already have runnable v3 mappings: 30 supported on their
+declared targets and 20 operable only as opt-in candidates. The linked
 acceptance records and [ledger](../../migration/outcomes.json) state each
 target and limit; this review does not broaden their support matrix.
 
@@ -191,6 +191,7 @@ target and limit; this review does not broaden their support matrix.
 | `workstation:package.NetCommsTools` | `package.minicom`, `package.putty`, `package.remmina` | opt-in candidate | [Acceptance](../acceptance/network-package-bundles.md) |
 | `workstation:package.NetMgrL2TP` | `package.networkmanager-l2tp`, `package.networkmanager-l2tp-gnome` | supported | [Acceptance](../acceptance/system-security-packages.md) |
 | `workstation:package.NetMgrLibreswan` | `package.networkmanager-libreswan`, `package.networkmanager-libreswan-gnome` | supported | [Acceptance](../acceptance/system-security-packages.md) |
+| `workstation:package.PackagingTools` | `package.7zip`, `package.unrar`; `package.unar` optional | supported | [Acceptance](../acceptance/package.unrar.md) |
 | `workstation:package.NetworkTools` | `package.tcpdump`, `package.wireshark`, `package.tftp-server`, `package.nmap`, `package.macchanger`, `package.flow-tools`, `package.nethogs` | opt-in candidate | [Acceptance](../acceptance/network-package-bundles.md) |
 | `workstation:package.Projecteur` | `package.projecteur` | opt-in candidate | [Acceptance](../acceptance/package.projecteur.md) |
 | `workstation:package.PulseAudioEq` | `package.easyeffects` | opt-in candidate | [Acceptance](../acceptance/package.easyeffects.md) |

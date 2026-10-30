@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "archive-tools",
+  "description": "Opt-in Fedora 7-Zip and unrar-free command replacements for the v2 PackagingTools bundle",
+  "operations": [
+    {"id": "package.7zip", "state": "installed"},
+    {"id": "package.unrar", "state": "installed"}
+  ]
+}

@@ -584,6 +584,34 @@ def test_provider_archive_replacement_batch(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_provider_unrar_wrapper_lifecycle(vm):
+    # The accepted 7zip package is already in the pinned image. Preserve it
+    # while adding and removing the Fedora unrar command wrapper.
+    seven_zip = vm.run("rpm -q 7zip").stdout
+    native_rpm_batch(vm, ("unrar",),
+                     installed_probes={"unrar":
+                                       "test -x /usr/bin/unrar && unrar --version"})
+    assert vm.run("rpm -q 7zip").stdout == seven_zip
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_archive_tools_opt_in_profile(vm):
+    baseline = package_inventory(vm)
+    seven_zip = vm.run("rpm -q 7zip").stdout
+    plan = vm.ride("plan", "--profile", "archive-tools").stdout
+    assert table_row(plan, "package.7zip")["CURRENT"] == "installed"
+    assert table_row(plan, "package.unrar")["CURRENT"] == "absent"
+    first = run_id(vm.ride("apply", "--profile", "archive-tools", timeout=900).stdout)
+    assert [step["result"] for step in journal(vm, first)["steps"]] == ["unchanged", "changed"]
+    repeat = run_id(vm.ride("apply", "--profile", "archive-tools").stdout)
+    assert [step["result"] for step in journal(vm, repeat)["steps"]] == ["unchanged", "unchanged"]
+    vm.ride("restore", "--run-id", first, timeout=900)
+    assert vm.run("rpm -q --quiet unrar", check=False).returncode != 0
+    assert vm.run("rpm -q 7zip").stdout == seven_zip
+    assert package_inventory(vm) == baseline
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_provider_editors_and_gnome_utilities_batch(vm):
     vm.run("rpm -q --quiet dnf5")
     vm.run("dnf5 versionlock --help")

@@ -82,7 +82,7 @@ Function coverage: 16 active in a server preset, 3 commented-only, 2 library-onl
 | `package.Fd` | `InstallFd`, `RemoveFd` | `InstallFd`: active, `RemoveFd`: library only | deferred: Candidate native repository package. | `native-rpm-01` / supported |
 | `package.Docker` | `InstallDocker`, `RemoveDocker` | `InstallDocker`: active, `RemoveDocker`: library only | deferred: Generic server role only after provider and repository review. | `system-security-03` / resolved |
 | `package.PythonPip` | `InstallPythonPip`, `RemovePythonPip` | `InstallPythonPip`: active, `RemovePythonPip`: library only | supported: Fedora `python3-pip` passed [VM lifecycle acceptance](acceptance/package.python3-pip.md); omit the v2 global pip self-upgrade. | `provider-foundation-03` / supported |
-| `package.PackagingTools` | `InstallPackagingTools`, `RemovePackagingTools` | `InstallPackagingTools`: active, `RemovePackagingTools`: library only | replaced: Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. | `provider-foundation-03` / resolved |
+| `package.PackagingTools` | `InstallPackagingTools`, `RemovePackagingTools` | `InstallPackagingTools`: active, `RemovePackagingTools`: library only | replaced: Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. | `provider-foundation-03` / supported |
 | `package.BasicEditors` | `InstallBasicEditors`, `RemoveBasicEditors` | `InstallBasicEditors`: active, `RemoveBasicEditors`: library only | supported: Split into Fedora `nano` and `vim-enhanced` package installs with [VM evidence](acceptance/provider-basic-editors.md). | `provider-foundation-04` / supported |
 | `package.CommanderFileMgrs` | `InstallCommanderFileMgrs`, `RemoveCommanderFileMgrs` | `InstallCommanderFileMgrs`: commented, `RemoveCommanderFileMgrs`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `publisher-apps-09` / operable |
 | `package.Terminator` | `InstallTerminator`, `RemoveTerminator` | `InstallTerminator`: active, `RemoveTerminator`: library only | deferred: Optional desktop profile only. | `desktop-user-10` / resolved |
@@ -258,7 +258,6 @@ initial assessment above. The ledger records each reason and review trigger.
 | `workstation:package.Volatility` | `retire` | `forensic-isolated-02` |
 | `workstation:package.Macvendor` | `replace` | `forensic-isolated-03` |
 | `workstation:package.Dumpzilla` | `retire` | `forensic-isolated-03` |
-| `workstation:package.PackagingTools` | `replace` | `provider-foundation-03` |
 | `workstation:package.MicrosoftTeams` | `retire` | `publisher-apps-09` |
 | `workstation:package.AtomEditor` | `retire` | `publisher-apps-10` |
 | `workstation:setting.AtomTelemetry` | `retire` | `resolution-review-01` |

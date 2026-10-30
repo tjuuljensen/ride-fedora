@@ -1,10 +1,12 @@
 # Provider foundation batch 03: kernel, DNF, Python, and archive tools
 
-Status: **complete: kernel and Python packages supported; DNF and archive
-bundles replaced**, 2026-10-30.
+Status: **kernel, Python, and archive packages supported; DNFutils decision
+deferred**, 2026-10-30.
 The owner deferred the v3.0 DNFutils capability decision and kept the
 PackagingTools capability in the fast-track review on 2026-10-30. The accepted
-7zip and unar lifecycles remain valid; exact unrar CLI need is still open.
+7zip and unar lifecycles remain valid; the later
+[unrar wrapper follow-up](provider-foundation-03-unrar.md) restores the
+command choice through a separate supported RPM.
 Four active v2 bundle outcomes remain after moving Flathub remote ownership
 to [its own batch](provider-foundation-09.md).
 
@@ -13,7 +15,7 @@ to [its own batch](provider-foundation-09.md).
 | `KernelTools` | Split `kernel-devel` and `kernel-headers` into exact Fedora RPM operations. They install build files, not a guarantee that they match the running kernel. [kernel-devel](https://packages.fedoraproject.org/pkgs/kernel/kernel-devel/), [kernel-headers](https://packages.fedoraproject.org/pkgs/kernel-headers/kernel-headers/) |
 | `DNFutils` | The v2 `dnf-utils` package is a DNF4-era bundle. Fedora 44 ships [DNF5](https://packages.fedoraproject.org/pkgs/dnf5/dnf5/) and [DNF5 plugins](https://packages.fedoraproject.org/pkgs/dnf5/dnf5-plugins/) on the pinned Workstation image; the required `download` and `config-manager` commands have [current DNF5 documentation](https://dnf5.readthedocs.io/en/stable/dnf5.8.html). Review as a non-runnable replacement, without changing DNF configuration. |
 | `PythonPip` | Replace the v2 `python-pip` RPM and unscoped `pip install --upgrade pip` with Fedora's signed [python3-pip](https://packages.fedoraproject.org/pkgs/python-pip/python3-pip/) RPM. Do not mutate the system Python environment after DNF installation. |
-| `PackagingTools` | Fedora 44 no longer lists a `p7zip` build; select Fedora [7zip](https://packages.fedoraproject.org/pkgs/7zip/7zip/) and [unar](https://packages.fedoraproject.org/pkgs/unar/unar/), a RAR-capable extractor with a different CLI, as the explicit replacement for v2 `p7zip` and `unrar`. The pinned image already has 7zip; this is not universal installation evidence. |
+| `PackagingTools` | Fedora 44 no longer lists a `p7zip` build; Fedora [7zip](https://packages.fedoraproject.org/pkgs/7zip/7zip/) and the [unrar-free wrapper](https://packages.fedoraproject.org/pkgs/unrar-free/unrar/) now provide an operable v3 path for the archive and `unrar` commands. [Unar](https://packages.fedoraproject.org/pkgs/unar/unar/) remains an independent extractor option. |
 
 ## Completion criteria defined before implementation
 
@@ -82,6 +84,8 @@ then passed separate absent package lifecycles, with complete inventory
 recovery. The v2 `PackagingTools` bundle is recorded as a **documented,
 non-runnable replacement** because `unar` changes the `unrar` command and
 Fedora 44 no longer has the selected `p7zip` package. The two new operations
-are individually supported, but the source outcome is not counted as an
-unchanged working v2 install. Review if exact `unrar` CLI compatibility is
-requested or Fedora's archive package set changes.
+are individually supported, but this original batch did not count the source
+outcome as an unchanged working v2 install. The later
+[unrar wrapper acceptance](../acceptance/package.unrar.md) closes that
+command-name gap and makes the source outcome operable through an opt-in
+profile. H026 retains wider RAR feature compatibility checks.
