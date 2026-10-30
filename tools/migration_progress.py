@@ -10,7 +10,7 @@ Inputs: migration/outcomes.json, legacy source names, catalog, and evidence file
 Side effects: --write-docs replaces only docs/migrations/progress.md; other modes read only.
 Prerequisites: Run from any directory with this repository available.
 Owner: RIDE Linux repository. Provenance: local v2 migration inventory.
-Version: 0.1.0.
+Version: 0.2.0.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ else:
 ROOT = Path(__file__).resolve().parent.parent
 LEDGER = ROOT / "migration" / "outcomes.json"
 REPORT = ROOT / "docs" / "migrations" / "progress.md"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 PROGRESS = {"unresolved", "assessed", "implemented", "operable", "supported", "resolved"}
 DISPOSITIONS = {"review", "migrate", "replace", "retire", "private", "unsupported"}
 RISK = {"low", "medium", "high"}
@@ -56,8 +56,8 @@ def source_groups() -> dict[str, list[str]]:
             raise ValueError(f"{source} exclusion missing from source inventory")
         for key, functions in inventory.groups([name for name in names if name not in excluded]):
             result[f"{source}:{key}"] = functions
-    if len(result) != 180:
-        raise ValueError(f"expected 180 scoped outcomes, found {len(result)}")
+    if len(result) != 186:
+        raise ValueError(f"expected 186 scoped outcomes, found {len(result)}")
     return result
 
 
@@ -210,12 +210,31 @@ def summarize(data: dict) -> dict:
     progress = Counter(row["progress"] for row in rows)
     disposition = Counter(row["disposition"] for row in rows if row["progress"] == "resolved")
     complete = sum(progress[item] for item in ("operable", "supported", "resolved"))
+    package_settings = [row for row in rows if ":package." in row["key"] or ":setting." in row["key"]]
+    excluded_packages = set()
+    for item in data["exclusions"]:
+        name = item["sourceFunction"]
+        if item["source"] == "workstation" and name in {"InstallCitrixClient", "RemoveCitrixClient"}:
+            continue
+        if name == "InstallqBittorrentServer":
+            excluded_packages.add((item["source"], "qBittorrentServer"))
+        elif name.startswith(("Install", "Remove")):
+            prefix = "Install" if name.startswith("Install") else "Remove"
+            if name[len(prefix):][:1].isupper():
+                excluded_packages.add((item["source"], name[len(prefix):]))
+    v30_total = len(package_settings) + len(excluded_packages)
+    v30_operable = sum(row["progress"] in {"operable", "supported"} for row in package_settings)
     batches = []
     for batch in data["batches"]:
         members = [row for row in rows if row["batch"] == batch["id"]]
         done = sum(row["progress"] in {"operable", "supported", "resolved"} for row in members)
+        capability_members = [row for row in members if ":package." in row["key"] or ":setting." in row["key"]]
+        capability_operable = sum(row["progress"] in {"operable", "supported"} for row in capability_members)
         batches.append({"id": batch["id"], "family": batch["family"], "title": batch["title"],
                         "total": len(members), "complete": done, "evidence": batch["evidence"],
+                        "v30CapabilityTotal": len(capability_members),
+                        "v30Operable": capability_operable,
+                        "v30Gap": len(capability_members) - capability_operable,
                         "risk": dict(Counter(row["risk"] for row in members)),
                         "nextAction": batch["nextAction"]})
     return {"total": len(rows), "complete": complete, "percent": round(100*complete/len(rows), 1),
@@ -225,6 +244,10 @@ def summarize(data: dict) -> dict:
             "requiresAllowCandidate": progress["operable"],
             "retired": disposition["retire"], "private": disposition["private"],
             "unsupported": disposition["unsupported"], "unresolved": len(rows)-complete,
+            "v30PackageSetting": {"total": v30_total, "ledgered": len(package_settings),
+                                  "excludedPackages": len(excluded_packages),
+                                  "operable": v30_operable, "gap": v30_total-v30_operable,
+                                  "percent": round(100*v30_operable/v30_total, 1)},
             "risk": dict(Counter(row["risk"] for row in rows)), "batches": batches,
             "v31Hardening": data["v31Hardening"]}
 
@@ -234,18 +257,27 @@ def render(data: dict) -> str:
     lines = ["# V2 to v3 migration progress", "",
              "Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.",
              "Source outcomes are counted separately from catalog operations. A disposition is not a working install.", "",
-             f"**{report['complete']}/{report['total']} complete ({report['percent']}%)**: "
+             f"**{report['complete']}/{report['total']} dispositioned ({report['percent']}%)**: "
              f"{report['supported']} supported, {report['operableCandidate']} opt-in candidate, "
              f"{report['replaced']} replaced, {report['retired']} retired, {report['private']} private, "
              f"{report['unsupported']} unsupported; {report['unresolved']} unresolved.", "",
+             f"**v3.0 package/setting coverage: {report['v30PackageSetting']['operable']}/"
+             f"{report['v30PackageSetting']['total']} operable ({report['v30PackageSetting']['percent']}%)**; "
+             f"{report['v30PackageSetting']['gap']} still need a v3.0 path. "
+             f"{report['v30PackageSetting']['ledgered']} are tracked in the ledger; "
+             f"{report['v30PackageSetting']['excludedPackages']} in-scope package outcomes remain unledgered. "
+             "Documented decisions do not count as operable behavior.", "",
+             "For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.", "",
              f"Runnable outcomes: {report['runnable']}; {report['requiresAllowCandidate']} require `--allow-candidate`. "
-             "Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.", "",
-             "| Batch | Family | Risk | Complete | Evidence | Next action |",
-             "| --- | --- | --- | ---: | --- | --- |"]
+             "Owner exclusions: 2 Citrix functions and 7 host-specific server actions, outside the 186 outcomes.", "",
+             "| Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 gap | Evidence | Next action |",
+             "| --- | --- | --- | ---: | ---: | ---: | --- | --- |"]
     for batch in report["batches"]:
         links = ", ".join(f"[{Path(path).name}](../../{path})" for path in batch["evidence"]) or "—"
         risk = ", ".join(f"{level} {count}" for level, count in sorted(batch["risk"].items()))
-        lines.append(f"| `{batch['id']}` | {batch['title']} | {risk} | {batch['complete']}/{batch['total']} | {links} | {batch['nextAction']} |")
+        lines.append(f"| `{batch['id']}` | {batch['title']} | {risk} | {batch['complete']}/{batch['total']} | "
+                     f"{batch['v30Operable']}/{batch['v30CapabilityTotal']} | {batch['v30Gap']} | "
+                     f"{links} | {batch['nextAction']} |")
     lines += ["", "## v3.1 hardening queue", "",
               "These items do not replace v3.0 safety checks for data, storage, encryption, or security behavior.", "",
               "| ID | Item | Trigger | Status |", "| --- | --- | --- | --- |"]
@@ -275,13 +307,19 @@ def main() -> int:
             print(json.dumps(summarize(data), indent=2))
         elif args.summary or not (args.check or args.write_docs):
             report = summarize(data)
-            print(f"v2 outcomes: {report['complete']}/{report['total']} ({report['percent']}%) complete")
+            print(f"v2 outcomes: {report['complete']}/{report['total']} ({report['percent']}%) dispositioned")
             print(f"supported={report['supported']} opt-in-candidate={report['operableCandidate']} "
                   f"replaced={report['replaced']} retired={report['retired']} private={report['private']} "
                   f"unsupported={report['unsupported']} unresolved={report['unresolved']}")
             print(f"runnable={report['runnable']} requires-allow-candidate={report['requiresAllowCandidate']}")
+            coverage = report["v30PackageSetting"]
+            print(f"v3.0 package/setting coverage={coverage['operable']}/{coverage['total']} "
+                  f"({coverage['percent']}%) gap={coverage['gap']} "
+                  f"in-scope-unledgered-packages={coverage['excludedPackages']}")
             for batch in report["batches"]:
-                print(f"{batch['id']}: {batch['complete']}/{batch['total']} - {batch['nextAction']}")
+                print(f"{batch['id']}: dispositioned={batch['complete']}/{batch['total']} "
+                      f"v3.0-operable={batch['v30Operable']}/{batch['v30CapabilityTotal']} "
+                      f"gap={batch['v30Gap']} - {batch['nextAction']}")
     except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
         print(f"Migration progress invalid: {exc}", file=sys.stderr)
         return 1

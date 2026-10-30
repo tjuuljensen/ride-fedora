@@ -1,14 +1,22 @@
 # v3.0 migration release review
 
-Status: **ready for release review**, 2026-10-30. No v3 release tag has been published;
+Status: **coverage review reopened**, 2026-10-30. No v3 release tag has been published;
 `master` remains the release line. The checked-in
 [progress report](migrations/progress.md) is authoritative for current
-counts. At this candidate revision, all 180 scoped v2 outcomes have a
+counts. At the earlier candidate revision, all 180 then-scoped v2 outcomes had a
 decision: 28 supported, 26 operable opt-in candidates, 13 replaced,
 17 retired, and 96 unsupported. Thus 54 source outcomes are runnable; 26
 of those require `--allow-candidate`. The 126 non-runnable decisions do
 not represent working installs. The two Citrix and 13 host-specific server
-exclusions remain outside this denominator.
+exclusions remained outside that historical denominator. The current ledger
+has 186 outcomes and nine exclusions: the six newly scoped generic server
+package outcomes remain unresolved. The owner's later
+[v3.0 capability clarification](migrations/v30-path-reassessment.md) makes
+working package and setting paths part of v3.0 completion. Only 54 of 170
+in-scope package/setting capabilities are currently operable, including
+six server package outcomes now assigned review batches. Citrix remains
+out of scope. This prior release
+review is therefore no longer a release-ready conclusion.
 
 The support matrix is Fedora 44 x86_64 on the edition declared by each
 operation. The small `default` and `server-base` profiles retain their

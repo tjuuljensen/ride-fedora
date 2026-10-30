@@ -306,10 +306,10 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "No v3 install planned for the retired Nautilus extension; review a separately scoped GNOME Files hash action only if requested.",
+      "nextAction": "For v3.0, evaluate an owned GNOME Files checksum script with Fedora 44 behavior and exact recovery; the old extension remains retired.",
       "v31Hardening": [],
       "reason": "The Fedora 44 GtkHash package lacks the v2 Nautilus extension, and the owner approved retiring this exact integration on 2026-10-30; the standalone application or another file-manager extension is not equivalent.",
-      "reviewTrigger": "The owner requests GNOME Files checksum actions and a maintained implementation has Fedora 44 compatibility and recovery evidence."
+      "reviewTrigger": "A GNOME Files checksum action has Fedora 44 behavior and owned-script recovery evidence."
     },
     {
       "key": "workstation:package.NautilusImageTools",
@@ -329,10 +329,10 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "No v3 install planned for the retired Nautilus extension; review a separately scoped GNOME Files image action only if requested.",
+      "nextAction": "For v3.0, evaluate an owned GNOME Files image-action script with non-overwriting output and exact recovery; the old extension remains retired.",
       "v31Hardening": [],
       "reason": "The Fedora nautilus-image-converter package record has only an EPEL 7 release, not a Fedora 44 build; the owner approved retiring this exact GNOME Files integration on 2026-10-30.",
-      "reviewTrigger": "The owner requests GNOME Files image actions and a maintained implementation has Fedora 44 behavior and recovery evidence."
+      "reviewTrigger": "A GNOME Files image action has Fedora 44 behavior, non-overwriting output, and owned-script recovery evidence."
     },
     {
       "key": "workstation:package.Flatpak",
@@ -1649,7 +1649,7 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "Review HexChat's final upstream release, Fedora orphan status, maintained IRC successors, and dependency residue in H007 before broader promotion.",
+      "nextAction": "Evaluate a maintained GUI IRC path for v3.0, starting with Fedora Konversation; keep the existing opt-in HexChat install while H007 covers broader desktop and profile checks.",
       "v31Hardening": [
         "H002",
         "H003",
@@ -1933,7 +1933,7 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "Keep Fedora 44 package-install support; review the archived upstream and choose a maintained bandwidth-test path in H022 before broader promotion.",
+      "nextAction": "Evaluate a pinned LibreSpeed CLI path for v3.0 while retaining the Fedora 44 package-install claim; H022 covers broader network behavior.",
       "v31Hardening": [
         "H022"
       ]
@@ -2317,10 +2317,10 @@
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "No v3 Opera install planned after owner retirement on 2026-10-30; review a new opt-in browser outcome only if explicitly requested.",
+      "nextAction": "For v3.0, select a current Opera channel and owned publisher source with profile-preserving recovery; the v2 method remains retired.",
       "v31Hardening": [],
       "reason": "The owner retired this exact optional Opera outcome on 2026-10-30; the v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust, and no v3 channel was selected.",
-      "reviewTrigger": "The owner requests Opera again with a selected channel, owned repository/key, and profile-preserving Fedora 44 VM inverse."
+      "reviewTrigger": "A current Opera channel has owned publisher repository/key handling and profile-preserving Fedora 44 VM inverse."
     },
     {
       "key": "workstation:package.Edge",
@@ -2496,7 +2496,7 @@
         "docs/migrations/publisher-apps-05.md"
       ],
       "blocker": "",
-      "nextAction": "Keep Fedora 44 package-install support; compare the packaged youtube-dl behavior with maintained yt-dlp and decide any replacement in H023.",
+      "nextAction": "Evaluate Fedora yt-dlp as a v3.0 video-downloader path while retaining the current package-install claim; H023 covers broader site behavior.",
       "v31Hardening": [
         "H023"
       ]
@@ -4279,6 +4279,138 @@
       "v31Hardening": [],
       "reason": "v2 rewrites crontab with VPN jobs without owned schedule or unrelated-job recovery.",
       "reviewTrigger": "An owned timer preserves unrelated crontab, routing, and connection state."
+    },
+    {
+      "key": "server:package.qBittorrentServer",
+      "sourceFunctions": [
+        "InstallqBittorrentServer"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-15",
+      "risk": "medium",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
+      "nextAction": "Install Fedora qbittorrent-nox as a server package; keep service user, firewall, keys, and download state separately owned.",
+      "v31Hardening": [],
+      "reason": "The old server function installs qbittorrent-nox but its neighboring host setup is unowned.",
+      "reviewTrigger": "Install Fedora qbittorrent-nox as a server package; keep service user, firewall, keys, and download state separately owned."
+    },
+    {
+      "key": "server:package.PlexServer",
+      "sourceFunctions": [
+        "InstallPlexServer"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-16",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
+      "nextAction": "Review the current Plex RPM repository, service state, signing key, and seeded media/metadata recovery before a runnable server operation.",
+      "v31Hardening": [],
+      "reason": "The old function adds a publisher repository and enables a service without an inverse.",
+      "reviewTrigger": "Review the current Plex RPM repository, service state, signing key, and seeded media/metadata recovery before a runnable server operation."
+    },
+    {
+      "key": "server:package.PlexAutoUpdate",
+      "sourceFunctions": [
+        "InstallPlexAutoUpdate"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-17",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
+      "nextAction": "Compare a bounded Plex repository update timer with the old third-party updater; preserve existing timers and credentials.",
+      "v31Hardening": [],
+      "reason": "The old function executes a mutable remote installer.",
+      "reviewTrigger": "Compare a bounded Plex repository update timer with the old third-party updater; preserve existing timers and credentials."
+    },
+    {
+      "key": "server:package.AMP",
+      "sourceFunctions": [
+        "InstallAMP"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-18",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
+      "nextAction": "Find a pinned publisher artifact or managed package; keep license, instances, ports, and account data private.",
+      "v31Hardening": [],
+      "reason": "The old function runs a remote shell installer and changes firewall state.",
+      "reviewTrigger": "Find a pinned publisher artifact or managed package; keep license, instances, ports, and account data private."
+    },
+    {
+      "key": "server:package.Ferium",
+      "sourceFunctions": [
+        "InstallFerium"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "generic-server",
+      "batch": "generic-server-19",
+      "risk": "medium",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
+      "nextAction": "Pin a current Ferium Linux release with an owned portable destination and modpack-preserving inverse.",
+      "v31Hardening": [],
+      "reason": "The old function scrapes the latest ZIP and extracts into a shared system bin path.",
+      "reviewTrigger": "Pin a current Ferium Linux release with an owned portable destination and modpack-preserving inverse."
+    },
+    {
+      "key": "server:package.MinecraftServer",
+      "sourceFunctions": [
+        "InstallMinecraftServer"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-20",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
+      "nextAction": "Choose the official Java server artifact and compatible runtime; preserve worlds, EULA state, and service identity.",
+      "v31Hardening": [],
+      "reason": "The old function installs Java 8 and creates a directory but no working server JAR.",
+      "reviewTrigger": "Choose the official Java server artifact and compatible runtime; preserve worlds, EULA state, and service identity."
     }
   ],
   "batches": [
@@ -4314,7 +4446,7 @@
         "docs/acceptance/package.speedtest-cli.md",
         "docs/acceptance/package.chromium.md"
       ],
-      "nextAction": "Complete on Fedora 44 Workstation; proceed to native-rpm-04 and revisit desktop hardening in v3.1."
+      "nextAction": "Evaluate v3.0 GUI IRC and bandwidth CLI successor paths; preserve current package evidence and put wider desktop/network checks in H007/H022."
     },
     {
       "id": "native-rpm-04",
@@ -4565,7 +4697,7 @@
         "docs/acceptance/package.gnome-shell-extension-system-monitor-applet.md",
         "docs/acceptance/package.lm-sensors.md"
       ],
-      "nextAction": "Continue publisher-apps-06; keep monitoring opt-in and complete H012 visual/recovery review in v3.1."
+      "nextAction": "Evaluate Fedora yt-dlp as a v3.0 downloader path; keep monitoring opt-in and complete H012 visual/recovery review in v3.1."
     },
     {
       "id": "publisher-apps-06",
@@ -4625,7 +4757,7 @@
         "docs/acceptance/package.clementine.md",
         "docs/acceptance/package.easyeffects.md"
       ],
-      "nextAction": "Design retained Chrome and Edge publisher trust and Spotify acquisition with profile-safe recovery; keep Opera retired and complete H015/H016 in v3.1."
+      "nextAction": "Design Chrome, Edge, Opera, and Spotify source and profile-safe recovery paths for v3.0; complete H015/H016 broader checks in v3.1."
     },
     {
       "id": "publisher-apps-12",
@@ -5189,6 +5321,60 @@
         "docs/migrations/publisher-apps-17.md"
       ],
       "nextAction": "Reopen only after reviewed GNOME 50 extension IDs, pinned artifacts, and seeded user-extension recovery pass."
+    },
+    {
+      "id": "generic-server-15",
+      "family": "generic-server",
+      "title": "Generic Server 15: qBittorrentServer",
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "nextAction": "Install Fedora qbittorrent-nox as a server package; keep service user, firewall, keys, and download state separately owned."
+    },
+    {
+      "id": "generic-server-16",
+      "family": "generic-server",
+      "title": "Generic Server 16: PlexServer",
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "nextAction": "Review the current Plex RPM repository, service state, signing key, and seeded media/metadata recovery before a runnable server operation."
+    },
+    {
+      "id": "generic-server-17",
+      "family": "generic-server",
+      "title": "Generic Server 17: PlexAutoUpdate",
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "nextAction": "Compare a bounded Plex repository update timer with the old third-party updater; preserve existing timers and credentials."
+    },
+    {
+      "id": "generic-server-18",
+      "family": "generic-server",
+      "title": "Generic Server 18: AMP",
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "nextAction": "Find a pinned publisher artifact or managed package; keep license, instances, ports, and account data private."
+    },
+    {
+      "id": "generic-server-19",
+      "family": "generic-server",
+      "title": "Generic Server 19: Ferium",
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "nextAction": "Pin a current Ferium Linux release with an owned portable destination and modpack-preserving inverse."
+    },
+    {
+      "id": "generic-server-20",
+      "family": "generic-server",
+      "title": "Generic Server 20: MinecraftServer",
+      "evidence": [
+        "docs/migrations/v30-path-reassessment.md"
+      ],
+      "nextAction": "Choose the official Java server artifact and compatible runtime; preserve worlds, EULA state, and service identity."
     }
   ],
   "exclusions": [
@@ -5230,36 +5416,6 @@
     {
       "source": "server",
       "sourceFunction": "CreateqBittorrentUser",
-      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
-    },
-    {
-      "source": "server",
-      "sourceFunction": "InstallAMP",
-      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
-    },
-    {
-      "source": "server",
-      "sourceFunction": "InstallFerium",
-      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
-    },
-    {
-      "source": "server",
-      "sourceFunction": "InstallMinecraftServer",
-      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
-    },
-    {
-      "source": "server",
-      "sourceFunction": "InstallPlexAutoUpdate",
-      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
-    },
-    {
-      "source": "server",
-      "sourceFunction": "InstallPlexServer",
-      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
-    },
-    {
-      "source": "server",
-      "sourceFunction": "InstallqBittorrentServer",
       "reason": "Owner-excluded host-specific server behavior retained in network-devices."
     },
     {
@@ -5307,8 +5463,8 @@
     },
     {
       "id": "H007",
-      "title": "HexChat final release and maintained IRC successor review",
-      "trigger": "Before claiming long-term desktop support or promoting HexChat beyond opt-in candidate",
+      "title": "IRC desktop behavior and profile compatibility after successor selection",
+      "trigger": "After the maintained v3.0 GUI IRC path is selected; inspect visual behavior and existing HexChat profile migration before wider promotion",
       "status": "queued"
     },
     {
@@ -5397,14 +5553,14 @@
     },
     {
       "id": "H022",
-      "title": "Archived speedtest-cli upstream and replacement review",
-      "trigger": "Before broader bandwidth-test support; compare maintained Fedora 44 alternatives and actual network-test behavior while preserving the current package-install claim.",
+      "title": "Bandwidth-test network behavior and server coverage",
+      "trigger": "After a maintained v3.0 CLI path is selected; check additional servers and network behavior beyond the package-install happy path.",
       "status": "queued"
     },
     {
       "id": "H023",
-      "title": "youtube-dl and yt-dlp product-path review",
-      "trigger": "Before claiming current video-site behavior or changing the supported package ID; compare Fedora 44 packages, executable behavior, and any replacement contract.",
+      "title": "Video-downloader site and extractor compatibility",
+      "trigger": "After a maintained v3.0 downloader path is selected; test additional sites and extractors beyond package installation.",
       "status": "queued"
     }
   ]

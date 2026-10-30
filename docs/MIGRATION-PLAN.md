@@ -123,11 +123,14 @@ its `VARIANT_ID=server` and qcow2 digest are pinned in the target matrix.
 
 ## Full scoped v2 migration program
 
-The v3.0 program covers 165 grouped workstation and 15 grouped generic server
-outcomes, including functions absent from active presets. Install/remove and
-analogous state pairs share one outcome. The two owner-excluded Citrix
-functions and 13 host-specific server functions stay visible in the ledger's
-exclusion list, outside the 180-outcome completion denominator. The three
+The original ledger covered 165 grouped workstation and 15 grouped generic
+server outcomes, including functions absent from active presets. The later
+[capability reassessment](migrations/v30-path-reassessment.md) brought six
+additional generic server package outcomes into isolated review batches. The
+current ledger therefore covers 186 outcomes. Install/remove and analogous
+state pairs share one outcome. The two owner-excluded Citrix functions and
+seven host-specific server actions stay visible in the exclusion list, outside
+the 186-outcome denominator. The three
 already supported base package operations remain valid release-envelope
 evidence but do not automatically resolve a v2 outcome with different intent.
 
@@ -333,12 +336,20 @@ their own [security decisions](migrations/system-security-27.md) and
 the combined Pidgin/OTR keep-or-retire choice pending compatibility and
 account/key recovery review.
 
-The current 2026-10-30 ledger result is **180/180 scoped outcomes dispositioned**:
+The earlier 2026-10-30 ledger result was **180/180 scoped outcomes dispositioned**:
 28 supported, 26 operable opt-in candidates, 13 replaced, 17 retired, and
 96 unsupported. Runnable source outcomes total 54; 26 require
-`--allow-candidate`. The 15 owner exclusions are retained outside the
-denominator. These counts are a dated snapshot; use the
+`--allow-candidate`. These counts precede the six server package additions;
+the current ledger has **180/186 dispositioned**, with nine owner exclusions
+outside its denominator. Use the
 [generated progress report](migrations/progress.md) for current status.
+The owner's later [v3.0 capability reassessment](migrations/v30-path-reassessment.md)
+supersedes disposition-only completion for package and setting outcomes. It
+identifies 170 in-scope package/setting capabilities including six formerly
+excluded server package outcomes; only 54 currently have operable v3 mappings.
+Exact old products may be replaced, but useful v2 capabilities stay in v3.0
+scope. Historical "reopen only" review triggers in batch records now describe
+the evidence needed for a v3.0 path, not optional deferrals.
 The [v3.0 review note](release-v3.0-review.md) identifies opt-in candidates
 and remaining release checks. No v3 tag is implied by ledger completion.
 Implementation commit `445810a` passed the
@@ -348,8 +359,8 @@ Local shell, catalog, generated-doc, ledger, mocked and Firefox tests,
 Python compilation, and acceptance collection also passed. The final
 supported VPN-plugin and KeePassXC profiles passed the declared Workstation
 VM without a candidate override; the shared Python pip operation passed
-its Server VM. The ledger is complete and the branch is ready for release
-review, with publication still a separate decision.
+its Server VM. Those checks remain valid for unchanged components, but the
+branch is no longer ready for v3.0 release review under the clarified scope.
 
 The original 99 non-runnable `unsupported` rows have a separate
 [decision triage](migrations/unsupported-triage.md): 10 original retirement
@@ -361,14 +372,14 @@ Xmind, Chrome, Edge, SpotifyClient, HandBrake, PowerShell, and WoeUSB for
 migration. The owner also deferred Vivaldi and Pidgin/OTR and retired the
 scoped Opera outcome.
 The [package path review](migrations/package-path-review.md) evaluates all
-128 scoped package outcomes across existing migrations, replacements,
+134 scoped package outcomes across existing migrations, replacements,
 retirements, and unresolved paths. It distinguishes discontinued products
 from obsolete acquisition methods and records the path required for each
 non-runnable package. A commented v2 selector is never evidence of non-use.
 The review also flags the existing HexChat, Speedtest CLI, and youtube-dl
-package mappings for upstream or successor review in H007, H022, and H023.
-Their exact-target package-install evidence remains valid; application
-behavior and wider promotion require separate evidence.
+package mappings for v3.0 successor paths. H007, H022, and H023 now name only
+the broader v3.1 behavior checks. Their exact-target package-install evidence
+remains valid while those paths are evaluated.
 The retained outcomes require owned state and recovery; their unsafe v2
 methods remain non-runnable. The current 96 unsupported rows comprise 68
 migration-design outcomes, 23 keep-or-drop choices, and five deferred owner
@@ -386,9 +397,11 @@ need a documented reason and review trigger. Keep candidate operations out of
 `default` and `server-base`; add curated opt-in profiles as related operations
 are ready. Manual checks are limited to behavior automation cannot observe.
 
-The full v3.0 migration is ready for release review when all 180 outcomes have
-an operable implementation or documented resolution, supported profiles pass
-their declared targets, relevant CI and generated-doc checks pass, and no
+The full v3.0 migration is ready for release review when every v2 package and
+setting capability has an operable v3 implementation or evidence-backed
+functional replacement, the six newly scoped server package outcomes have
+working paths or evidence-backed functional replacements, supported profiles
+pass their declared targets, relevant CI and generated-doc checks pass, and no
 shared Windows contract drift remains unexplained. A v3 tag and movement of
 the `master` release line are separate publication decisions.
 

@@ -1,10 +1,11 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-128 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 11 replaced,
-12 retired, and 58 unsupported. The five path groups below assess all **70
-unsupported or retired outcomes**; the 11 replacements and 47 existing v3
-mappings follow. The 47 mapped outcomes have catalog and acceptance evidence. The
+134 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 11 replaced,
+12 retired, 58 unsupported, and six newly scoped server outcomes under review.
+The five path groups below assess all **70 unsupported or retired outcomes**;
+the 11 replacements, 47 existing v3 mappings, and six new server reviews
+follow. The 47 mapped outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
 disposition, risk, target, evidence, and next action.
 
@@ -14,6 +15,10 @@ The categories below describe the path from v2, not runnable v3 status.
 A broken installer does not establish product EOL; a retired outcome does
 not necessarily mean its product ended. High-risk data, storage, encryption,
 and security outcomes still need their deeper recovery gate.
+The owner's later [v3.0 capability clarification](v30-path-reassessment.md)
+keeps every v2 package and setting behavior in the v3.0 migration scope;
+earlier retirement labels describe exact old implementations, not completed
+capability coverage.
 
 Source checks: [Atom sunset](https://github.blog/2022-06-08-sunsetting-atom/),
 [Volatility 2 archive](https://github.com/volatilityfoundation/volatility),
@@ -209,27 +214,45 @@ target and limit; this review does not broaden their support matrix.
 
 - `Hexchat`: [upstream announced its final release in 2024](https://hexchat.github.io/news/2.16.2.html),
   and [Fedora 44 lists the package as orphaned](https://packages.fedoraproject.org/pkgs/hexchat/hexchat/).
-  Its VM-proven package install remains an opt-in candidate; H007 reviews a
-  maintained IRC client path before wider promotion.
+  Its VM-proven package install remains an opt-in candidate; a maintained
+  GUI IRC path is now v3.0 work, with wider profile checks in H007.
 - `SpeedtestCLI`: [upstream archived the repository in April 2026](https://github.com/sivel/speedtest-cli),
   while [Fedora 44 still packages it](https://packages.fedoraproject.org/pkgs/speedtest-cli/speedtest-cli/).
-  The signed RPM install remains supported on its declared target; H022 must
-  choose a maintained bandwidth-test path before broader promotion.
+  The signed RPM install remains supported on its declared target; a maintained
+  CLI path is v3.0 work, with wider network checks in H022.
 - `YouTubeDownloader`: the [latest tagged youtube-dl release is from 2021](https://github.com/ytdl-org/youtube-dl/releases),
   though [Fedora 44 packages a later source snapshot](https://packages.fedoraproject.org/pkgs/youtube-dl/youtube-dl/).
   [yt-dlp is also available for Fedora 44](https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/).
-  The current operation proves installation only; H023 compares actual
-  downloader behavior before deciding a replacement. Do not classify
+  The current operation proves installation only; a maintained downloader
+  path is v3.0 work, with wider site checks in H023. Do not classify
   youtube-dl as EOL solely from the old release tag.
+
+## Newly scoped generic server packages (6)
+
+These source functions now have isolated `review` batches in the ledger. Their
+acquisition candidates and ownership boundaries are in the
+[v3.0 reassessment](v30-path-reassessment.md#formerly-excluded-server-package-paths).
+The active source is still `network-devices`; adding a ledger row does not
+transfer runtime ownership or establish a working install.
+
+| Source outcome | Initial path | Evidence |
+| --- | --- | --- |
+| `server:package.qBittorrentServer` | Fedora `qbittorrent-nox` package, with service behavior separate. | [Path review](v30-path-reassessment.md#formerly-excluded-server-package-paths) |
+| `server:package.PlexServer` | Publisher RPM repository with scoped trust and service state. | [Path review](v30-path-reassessment.md#formerly-excluded-server-package-paths) |
+| `server:package.PlexAutoUpdate` | Owned repository plus explicit update policy. | [Path review](v30-path-reassessment.md#formerly-excluded-server-package-paths) |
+| `server:package.AMP` | Reviewed publisher artifact or managed package. | [Path review](v30-path-reassessment.md#formerly-excluded-server-package-paths) |
+| `server:package.Ferium` | Pinned publisher portable binary. | [Path review](v30-path-reassessment.md#formerly-excluded-server-package-paths) |
+| `server:package.MinecraftServer` | Official Java server artifact and owned service path. | [Path review](v30-path-reassessment.md#formerly-excluded-server-package-paths) |
 
 ## Decisions and implementation order
 
-- Keep existing owner-approved retirements. `GnomeExtInstaller` remains
-  unsupported because the owner deferred that exact helper decision.
-  `Opera` is retired by owner choice, not classified as EOL.
-- Do not retire any other package merely because its v2 selector was
-  commented or its v2 acquisition method failed. Verify the five identity
-  cases before making a product-level decision.
+- Keep prior retirement decisions as history about exact v2 implementations.
+  The [v3.0 reassessment](v30-path-reassessment.md) reopens their useful
+  capabilities for a working replacement, including the Opera browser and
+  GNOME Files actions. `GnomeExtInstaller` still lacks a runnable path.
+- Do not close a v3.0 package capability merely because its v2 selector was
+  commented, its installer failed, or the exact old product ended. Verify the
+  five identity cases before selecting the new path.
 - Migrate retained products or successors through source-specific operations. Split
   repositories, bundles, services, settings, and private data by owner.
   Apply the existing risk-based VM gates in the [migration plan](../MIGRATION-PLAN.md).

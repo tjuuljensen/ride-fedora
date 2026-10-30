@@ -1,8 +1,9 @@
 # Workstation and server outcome burndown
 
 This queue covers workstation and generic server migration candidates, including
-functions absent from active presets. Obsolete and host-specific functions excluded
-by the owner remain in the legacy source and server name inventory, outside this queue.
+functions absent from active presets. The owner-excluded Citrix functions and
+host-specific server actions remain in the legacy source and server name inventory,
+outside this queue.
 Install/remove and analogous state pairs share an outcome row. A `deferred` row is
 inventory, not an executable operation or acceptance claim.
 Current progress and batch assignment come from `migration/outcomes.json`; the
@@ -21,10 +22,10 @@ provides the decisions for all active selectors.
 
 Server source: `operations/provisioning/ride/lib-fedora-server.sh` at `network-devices` commit
 `fccc70f6825d13f899ac6fd4e72a1af6360be076`; 28 source functions,
-15 queued functions, 15 outcomes,
-4 outcomes absent from all active server presets. Its three preset inventories
+21 queued functions, 21 outcomes,
+5 outcomes absent from all active server presets. Its three preset inventories
 are stored as names only in `migration/server-inventory.json`; no host values were copied.
-Function coverage: 11 active in a server preset, 3 commented-only, 1 library-only.
+Function coverage: 16 active in a server preset, 3 commented-only, 2 library-only.
 
 ## Workstation library
 
@@ -228,6 +229,12 @@ v3 catalog ID and are not selected by a profile.
 | `package.ExpressVPN` | `InstallExpressVPN` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-09` / resolved |
 | `action.CreateVPNrandomizer` | `CreateVPNrandomizer` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-10` / resolved |
 | `setting.VPNRandomizerPersistent` | `SetVPNRandomizerPersistent` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-11` / resolved |
+| `package.qBittorrentServer` | `InstallqBittorrentServer` | complete, streambox | plexserver | deferred optional server operation; verify current package/source, state and recovery | `generic-server-15` / unresolved |
+| `package.PlexServer` | `InstallPlexServer` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-16` / unresolved |
+| `package.PlexAutoUpdate` | `InstallPlexAutoUpdate` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-17` / unresolved |
+| `package.AMP` | `InstallAMP` | complete | — | deferred optional server operation; verify current package/source, state and recovery | `generic-server-18` / unresolved |
+| `package.Ferium` | `InstallFerium` | — | — | deferred optional server operation; verify current package/source, state and recovery | `generic-server-19` / unresolved |
+| `package.MinecraftServer` | `InstallMinecraftServer` | complete | plexserver, streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-20` / unresolved |
 
 `RequireAdmin`, `PressAnyKeyToContinue` and `Restart` appear as active server preset
 selectors but are controller flow, not server-library outcomes. The commented

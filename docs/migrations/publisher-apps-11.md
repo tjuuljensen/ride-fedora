@@ -41,11 +41,11 @@ and its inverse removes it; no equalizer is installed.
 - **Opera: retired and non-runnable by owner decision on 2026-10-30.**
   [Opera ships a Linux RPM and repository](https://rpm.opera.com/), but v2
   imports a global key, installs a developer-channel package, then removes
-  fixed key IDs and its repo file without proving ownership. No v3 Opera
-  install is planned. Reopen only on a new explicit request for a selected
-  channel with owned repo/key and a VM inverse that preserves profiles and
-  other Opera products. The v2 source and any existing machine state remain
-  untouched.
+  fixed key IDs and its repo file without proving ownership. The exact v2
+  method remains retired. The clarified v3.0 scope requires a browser path:
+  select a current channel and owned repo/key, then verify a VM inverse that
+  preserves profiles and other Opera products. The v2 source and any existing
+  machine state remain untouched.
 - **Edge: unsupported and non-runnable.**
   [Microsoft supports Fedora 39+](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-supported-operating-systems)
   for Edge Linux. The v2 function selects the developer channel from a

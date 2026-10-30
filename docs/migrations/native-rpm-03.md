@@ -13,8 +13,8 @@ Two commented v2 outcomes in this family have a Fedora 44 resolution decision:
 
 | v2 outcome | Decision and evidence | Review trigger |
 | --- | --- | --- |
-| `package.NautilusHash` | **Retired** by individual owner decision on 2026-10-30. The v2 function installs `gtkhash-nautilus`, but the [Fedora GtkHash source package](https://packages.fedoraproject.org/pkgs/gtkhash/) lists only the GtkHash application and Caja, Nemo, and Thunar extensions. Installing the GtkHash application would lose the requested Nautilus context-menu behavior. | Reopen as a separate feature only if GNOME Files checksum actions are requested and a maintained implementation has Fedora 44 compatibility and recovery evidence. |
-| `package.NautilusImageTools` | **Retired** by individual owner decision on 2026-10-30. The v2 function installs ImageMagick and `nautilus-image-converter`, but the [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) has only an EPEL 7 release. A standalone image converter is a different user-visible outcome. | Reopen as a separate feature only if GNOME Files image actions are requested and a maintained implementation has Fedora 44 behavior and recovery evidence. |
+| `package.NautilusHash` | **Retired** by individual owner decision on 2026-10-30. The v2 function installs `gtkhash-nautilus`, but the [Fedora GtkHash source package](https://packages.fedoraproject.org/pkgs/gtkhash/) lists only the GtkHash application and Caja, Nemo, and Thunar extensions. Installing the GtkHash application would lose the requested Nautilus context-menu behavior. | For v3.0, evaluate an owned GNOME Files checksum script with Fedora 44 compatibility and exact recovery; the old extension remains retired. |
+| `package.NautilusImageTools` | **Retired** by individual owner decision on 2026-10-30. The v2 function installs ImageMagick and `nautilus-image-converter`, but the [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) has only an EPEL 7 release. A standalone image converter is a different user-visible outcome. | For v3.0, evaluate an owned GNOME Files image-action script with non-overwriting output and exact recovery; the old extension remains retired. |
 
 ## Completion criteria defined before implementation
 
@@ -83,9 +83,10 @@ package records are the authoritative Fedora sources for this assessment.
 
 The [HexChat upstream](https://hexchat.github.io/news/2.16.2.html) announced
 its final release in 2024, and the Fedora package is now orphaned. The
-existing VM result proves a package lifecycle, while H007 reviews a maintained
-IRC path before any broader promotion. The
+existing VM result proves a package lifecycle. A maintained GUI IRC path is
+now v3.0 work; H007 covers broader profile and visual checks. The
 [Speedtest CLI upstream](https://github.com/sivel/speedtest-cli) archived its
 repository in April 2026; Fedora 44 still supplies the signed RPM. H022
-reviews a maintained bandwidth-test path. Neither finding changes the
+covers broader network behavior after a v3.0 bandwidth-test path is chosen.
+Neither finding changes the
 recorded Fedora 44 package-install result or establishes historical use.

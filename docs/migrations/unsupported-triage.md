@@ -6,7 +6,7 @@ batch. Three have since been approved for retirement; the current ledger has
 96 `unsupported` and 17 `retire` outcomes. These decisions do not add an
 operation, delete v2 code, or run a state-changing test. The
 [migration ledger](../../migration/outcomes.json) and [progress report](progress.md)
-are authoritative for current disposition. The 15 Citrix and host-specific
+are authoritative for current disposition. The nine Citrix and host-specific
 exclusions are outside this review.
 
 The [package path review](package-path-review.md) assesses all 70 currently
@@ -25,19 +25,25 @@ appropriate risk-based recovery checks.
 
 The current 96 unsupported outcomes consist of 68 migration-design outcomes
 (51 original, six retained R2 inverses, and 11 retained U1 applications),
-23 keep-or-drop choices, and five deferred owner decisions. The v3.0 total
-stays 180/180 and the runnable count stays 54. Retaining an outcome does not
+23 keep-or-drop choices, and five deferred owner decisions. The original
+ledger total remained 180/180 after these decisions; the later six server
+package additions make current progress 180/186. The runnable count remains
+54. Retaining an outcome does not
 make its unsafe v2 function runnable; a new owned implementation needs its
 own evidence. Legacy functions and existing v2 machine state remain untouched.
 These review groups do not override the small implementation batches in the
 migration plan.
+The later [v3.0 capability reassessment](v30-path-reassessment.md) requires
+working paths for package and setting behavior. Retirement and unsupported
+labels here record previous exact-method decisions; they no longer establish
+v3.0 capability completion.
 
 ## R1: obsolete or mismatched integrations (3 original; 2 retired)
 
 | Source outcome | Decision | Evidence and review trigger |
 | --- | --- | --- |
-| `workstation:package.NautilusHash` | **Retired** by owner on 2026-10-30. | v2 uses `gtkhash-nautilus`; its own source notes the GNOME 43 break. The [Fedora GtkHash source](https://packages.fedoraproject.org/pkgs/gtkhash/) lists Caja, Nemo, and Thunar extensions, with no Nautilus subpackage. Reopen if GNOME Files hash actions are requested and a maintained implementation has target and recovery evidence. |
-| `workstation:package.NautilusImageTools` | **Retired** by owner on 2026-10-30. | v2 calls `nautilus-image-converter`; its [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) lists only EPEL 7. Retiring that extension does not reject image resizing; Fedora has a separate [imgp](https://packages.fedoraproject.org/pkgs/imgp/imgp/) CLI. Reopen if GNOME Files image actions are requested with target and recovery evidence. |
+| `workstation:package.NautilusHash` | **Retired** by owner on 2026-10-30. | v2 uses `gtkhash-nautilus`; its own source notes the GNOME 43 break. The [Fedora GtkHash source](https://packages.fedoraproject.org/pkgs/gtkhash/) lists Caja, Nemo, and Thunar extensions, with no Nautilus subpackage. The v3.0 capability review now evaluates an owned GNOME Files checksum script. |
+| `workstation:package.NautilusImageTools` | **Retired** by owner on 2026-10-30. | v2 calls `nautilus-image-converter`; its [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) lists only EPEL 7. Retiring that extension does not reject image resizing; Fedora has a separate [imgp](https://packages.fedoraproject.org/pkgs/imgp/imgp/) CLI. The v3.0 capability review now evaluates an owned GNOME Files image script. |
 | `workstation:package.GnomeExtInstaller` | **Decide later**, per owner on 2026-10-30; remains unsupported. | v2 clones the [archived upstream script](https://github.com/brunelli/gnome-shell-extension-installer) and overwrites a system symlink. `workstation:package.GnomeExtensions` remains a separate migration decision. A retained helper would need a maintained installer, pinned acquisition, and owned rollback. |
 
 `workstation:package.BitwardenAppImage` moved to D1a during individual
@@ -91,7 +97,7 @@ user profile unless the operation proves ownership.
 
 - `workstation:package.Vivaldi` (medium risk; **decide later** on 2026-10-30): Vivaldi supports Fedora 43+, but the v2 scraped RPM and publisher-managed repository/key lack an owned inverse in v3. Revisit after source and browser-profile recovery design.
 - `workstation:package.Chrome` (medium risk; **keep for migration** on 2026-10-30): The v2 HTTP Google repository file and name-based inverse have no owned source/key collision contract; v3 has no publisher RPM/repository handler. Design the official source and profile-safe recovery.
-- `workstation:package.Opera` (medium risk; **retired** by owner on 2026-10-30): The v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust; no v3 channel was selected. Reopen only on a new explicit request with owned repository/key and profile recovery.
+- `workstation:package.Opera` (medium risk; **retired** by owner on 2026-10-30): The v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust; no v3 channel was selected. The clarified v3.0 capability scope now requires a current channel with owned repository/key and profile recovery.
 - `workstation:package.Edge` (medium risk; **keep for migration** on 2026-10-30): The v2 mutable developer-channel repository and fixed repo-file inverse do not own the Microsoft key or preserve other Microsoft packages. Choose a channel and prove profile-safe recovery.
 - `workstation:package.SpotifyClient` (medium risk; **keep for migration** on 2026-10-30): The v2 lpf-spotify-client request declares no source; LPF is interactive and a third-party Fedora repackaging is a distinct source with separate terms. Choose an acquisition provider and preserve user state.
 - `workstation:package.HandBrake` (medium risk; **keep for migration** on 2026-10-30): The v2 DNF install relies on unaccepted RPM Fusion repository trust; the CLI and GUI RPMs are distinct and no exact-target package happy path was run. Accept source trust and choose CLI or GUI scope.

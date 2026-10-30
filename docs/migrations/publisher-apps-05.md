@@ -36,8 +36,8 @@ not a claim that a particular site still works.
 The [latest tagged youtube-dl release](https://github.com/ytdl-org/youtube-dl/releases)
 is from 2021, but Fedora 44 packages a later source snapshot and
 [yt-dlp](https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/) separately.
-H023 compares actual behavior and decides whether the v2 product intent
-needs a new operation. This review does not change the accepted package-only
+The maintained downloader path is now v3.0 work; H023 covers wider site
+and extractor behavior. This review does not change the accepted package-only
 support claim.
 
 The SystemMonitor outcome is migrated to the distinct

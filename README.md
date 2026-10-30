@@ -24,7 +24,7 @@ declared Fedora 44 x86_64 editions after disposable VM acceptance. Other
 catalog operations remain candidates and require `--allow-candidate` for a
 real change. System operations need root. Review a plan before applying one:
 
-The [v2 migration progress report](docs/migrations/progress.md) tracks all 180
+The [v2 migration progress report](docs/migrations/progress.md) tracks all 186
 scoped workstation and generic server outcomes separately from the catalog.
 From this checkout as a regular user, run
 `python3 tools/migration_progress.py --summary` for a read-only current view.

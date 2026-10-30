@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
-"""Render the scoped workstation and server outcome queue."""
+"""Render the scoped workstation and server outcome queue.
+
+Purpose: Preserve exact v2 source and preset mappings beside current progress.
+Behavior: Compare pinned function inventories with the migration ledger and
+          render or check the generated Markdown burndown.
+Compatibility: Python 3.11 or newer; no third-party modules.
+Usage: python3 tools/build_burndown.py [--write | --check]
+Inputs: v2 source, pinned server inventory, migration ledger, and plan.
+Side effects: --write replaces only docs/workstation-server-burndown.md.
+Prerequisites: Run from any directory with this repository available.
+Owner: RIDE Linux repository. Provenance: local v2 migration inventory.
+Version: 0.2.0.
+"""
 
 from __future__ import annotations
 
@@ -17,8 +29,8 @@ FUNCTION = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\(\)\s*\{", re.MULTILINE)
 SELECTOR = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\b")
 COMMENTED = re.compile(r"^\s*#\s*([A-Za-z][A-Za-z0-9_]*)\b")
 
-# User-scoped exclusions: obsolete or host-specific functions stay in legacy
-# source and the server name inventory, but are not v3 migration outcomes.
+# Owner-scoped exclusions: Citrix and host-specific server actions stay in the
+# legacy source and server name inventory, outside the public v3 ledger.
 WORKSTATION_OUT_OF_SCOPE = {"InstallCitrixClient", "RemoveCitrixClient"}
 SERVER_OUT_OF_SCOPE_TAIL = (
     "CreateqBittorrentUser",
@@ -34,7 +46,11 @@ SERVER_OUT_OF_SCOPE_TAIL = (
     "InstallFerium",
     "InstallMinecraftServer",
 )
-SERVER_OUT_OF_SCOPE = {"MountNASSMBfolders", *SERVER_OUT_OF_SCOPE_TAIL}
+SERVER_OUT_OF_SCOPE = {
+    "MountNASSMBfolders", "CreateqBittorrentUser", "CreateQbtFirewallRules",
+    "CreateQbtServiceFile", "CreateQbtSSHkeys", "CreatePlexUser",
+    "CreatePlexFirewallRules",
+}
 
 
 def function_names(path: Path) -> list[str]:
@@ -53,6 +69,8 @@ def workstation_selectors(names: set[str]) -> tuple[list[str], list[str]]:
 
 
 def group_key(name: str) -> tuple[str, str]:
+    if name == "InstallqBittorrentServer":
+        return "package", "qBittorrentServer"
     for first, second, kind in (
         ("Install", "Remove", "package"),
         ("Install", "Uninstall", "package"),
@@ -168,8 +186,9 @@ def render() -> str:
         "# Workstation and server outcome burndown",
         "",
         "This queue covers workstation and generic server migration candidates, including",
-        "functions absent from active presets. Obsolete and host-specific functions excluded",
-        "by the owner remain in the legacy source and server name inventory, outside this queue.",
+        "functions absent from active presets. The owner-excluded Citrix functions and",
+        "host-specific server actions remain in the legacy source and server name inventory,",
+        "outside this queue.",
         "Install/remove and analogous state pairs share an outcome row. A `deferred` row is",
         "inventory, not an executable operation or acceptance claim.",
         "Current progress and batch assignment come from `migration/outcomes.json`; the",
