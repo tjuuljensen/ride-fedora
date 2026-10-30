@@ -1259,13 +1259,24 @@
       "batch": "publisher-apps-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.gnome-commander",
+        "package.mc"
+      ],
+      "evidence": [
+        "docs/acceptance/package.gnome-commander.md",
+        "docs/acceptance/package.mc.md",
+        "docs/migrations/publisher-apps-09.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep commander-file-managers opt-in; complete H014 interactive/visual and broader recovery review in v3.1.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H014"
+      ]
     },
     {
       "key": "workstation:package.Terminator",
@@ -1369,13 +1380,17 @@
       "batch": "publisher-apps-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-09.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 function imports a system Microsoft key and a RHEL 7 repository; current Microsoft RPM guidance does not establish Fedora 44 support or an owned inverse.",
+      "reviewTrigger": "A requested Fedora 44 PowerShell deployment has pinned RPM/source, repository/key ownership, and a VM lifecycle that preserves pre-existing Microsoft products."
     },
     {
       "key": "workstation:package.MicrosoftTeams",
@@ -1388,13 +1403,17 @@
       "batch": "publisher-apps-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-09.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "v31Hardening": [],
+      "reason": "Microsoft no longer supports the Linux desktop client; the v2 RPM listing is not a supported acquisition path, while Teams web access remains available.",
+      "reviewTrigger": "Microsoft publishes a supported Fedora desktop client, or a separately requested browser/PWA operation has owned state and VM evidence."
     },
     {
       "key": "workstation:package.WoeUSB",
@@ -1407,13 +1426,17 @@
       "batch": "publisher-apps-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-09.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "v31Hardening": [],
+      "reason": "Fedora WoeUSB is orphaned and has no Fedora 44 package; the v2 DNF name cannot install on the declared target.",
+      "reviewTrigger": "A requested maintained WoeUSB-ng source has license and acquisition review, a safe package inverse, and exact-target VM evidence; USB writing stays user-initiated."
     },
     {
       "key": "workstation:package.BalenaEtcher",
@@ -1426,13 +1449,17 @@
       "batch": "publisher-apps-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-09.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 latest-release scrape is mutable and v3 has no pinned external-RPM acquisition, detection, or inverse handler, despite a current publisher RPM.",
+      "reviewTrigger": "A requested pinned publisher RPM has verified bytes, owned installed identity, collision handling, and a Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.VisualStudioCode",
@@ -1468,13 +1495,17 @@
       "batch": "publisher-apps-10",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-10.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 latest AppImage scrape and filename-glob inverse lack owned destination and collision handling; no v3 portable handler exists.",
+      "reviewTrigger": "A requested pinned Arduino IDE AppImage has verified publisher bytes, collision-safe ownership, and Fedora 44 VM lifecycle."
     },
     {
       "key": "workstation:package.AtomEditor",
@@ -1487,13 +1518,17 @@
       "batch": "publisher-apps-10",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-10.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "GitHub sunset Atom in 2022; v2 disables package signature checks and overwrites user init.coffee.",
+      "reviewTrigger": "A requested maintained editor successor has an independently reviewed source and user-state inverse."
     },
     {
       "key": "workstation:setting.AtomTelemetry",
@@ -1529,13 +1564,17 @@
       "batch": "publisher-apps-10",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-10.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The ten apm plugin commands depend on sunset Atom and their inverse can remove independently installed user plugins.",
+      "reviewTrigger": "A requested maintained editor plugin set has per-user inventory, explicit identities, and safe inverse."
     },
     {
       "key": "workstation:package.PyhtonAutopep8",
@@ -1601,13 +1640,17 @@
       "batch": "publisher-apps-10",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-10.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The publisher offers a Linux RPM, but v2 has no declared Fedora 44 source and v3 lacks a pinned publisher-RPM or owned Flathub handler.",
+      "reviewTrigger": "A requested Discord deployment has verified publisher or Flathub source, preserved user profile, and Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.Pidgin",
@@ -1907,13 +1950,17 @@
       "batch": "publisher-apps-10",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-10.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 moving AppImage and glob inverse lack file ownership; the publisher script cannot be executed by a default v3 profile, and notebooks belong to the user.",
+      "reviewTrigger": "A requested pinned portable Joplin deployment proves notebook-preserving recovery and Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.TecmintMonitorSh",
@@ -1995,13 +2042,17 @@
       "batch": "publisher-apps-10",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-10.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "Vivaldi supports Fedora 43+, but the v2 scraped RPM and publisher-managed repository/key lack an owned inverse in v3.",
+      "reviewTrigger": "A requested exact-version Vivaldi RPM has verified origin, owned repository/key, preserved browser profile, and Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.Chromium",
@@ -3266,11 +3317,22 @@
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
       "progress": "operable",
-      "v3Ids": ["package.solaar", "package.acpi"],
-      "evidence": ["docs/acceptance/package.solaar.md", "docs/acceptance/package.acpi.md", "docs/migrations/publisher-apps-07.md"],
+      "v3Ids": [
+        "package.solaar",
+        "package.acpi"
+      ],
+      "evidence": [
+        "docs/acceptance/package.solaar.md",
+        "docs/acceptance/package.acpi.md",
+        "docs/migrations/publisher-apps-07.md"
+      ],
       "blocker": "",
       "nextAction": "Keep logitech-unifying opt-in; complete H013 receiver pairing and desktop review in v3.1.",
-      "v31Hardening": ["H002", "H003", "H013"]
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H013"
+      ]
     },
     {
       "key": "workstation:package.Projecteur",
@@ -3305,7 +3367,9 @@
       "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
-      "evidence": ["docs/migrations/publisher-apps-07.md"],
+      "evidence": [
+        "docs/migrations/publisher-apps-07.md"
+      ],
       "blocker": "",
       "nextAction": "Reopen for an explicit QEMU or VMware target with absent-package install and owned inverse evidence.",
       "v31Hardening": [],
@@ -3383,13 +3447,17 @@
       "batch": "publisher-apps-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review publisher source and architecture.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-09.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "v31Hardening": [],
+      "reason": "The unofficial controller upstream declares the AppImage project deprecated; v2 downloads a moving release and deletes name-matched files without ownership.",
+      "reviewTrigger": "A requested maintained Sonos client has pinned license/artifact, owned portable destination, and app-data-preserving VM lifecycle."
     },
     {
       "key": "workstation:package.VMwareWorkstation",
@@ -4093,7 +4161,11 @@
       "id": "publisher-apps-07",
       "family": "publisher-apps",
       "title": "Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM",
-      "evidence": ["docs/migrations/publisher-apps-07.md", "docs/acceptance/package.solaar.md", "docs/acceptance/package.acpi.md"],
+      "evidence": [
+        "docs/migrations/publisher-apps-07.md",
+        "docs/acceptance/package.solaar.md",
+        "docs/acceptance/package.acpi.md"
+      ],
       "nextAction": "Keep Solaar/ACPI opt-in, complete H013 hardware review in v3.1, and reopen guest tools only on explicit hypervisor evidence. Continue publisher-apps-09."
     },
     {
@@ -4109,15 +4181,21 @@
       "id": "publisher-apps-09",
       "family": "publisher-apps",
       "title": "Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher",
-      "evidence": [],
-      "nextAction": "Assess SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-09.md",
+        "docs/acceptance/package.gnome-commander.md",
+        "docs/acceptance/package.mc.md"
+      ],
+      "nextAction": "Continue publisher-apps-10; keep the file-manager profile opt-in and complete H014 in v3.1."
     },
     {
       "id": "publisher-apps-10",
       "family": "publisher-apps",
       "title": "Publisher Apps 10: ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi",
-      "evidence": [],
-      "nextAction": "Assess ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-10.md"
+      ],
+      "nextAction": "Continue publisher-apps-11; reopen these optional commented applications only on their specific source and recovery triggers."
     },
     {
       "id": "publisher-apps-11",
@@ -4715,6 +4793,12 @@
       "id": "H013",
       "title": "Solaar receiver pairing and desktop review",
       "trigger": "After the Fedora 44 package and logitech-unifying profile happy paths pass on a VM with receiver passthrough or a controlled disposable hardware host",
+      "status": "queued"
+    },
+    {
+      "id": "H014",
+      "title": "Commander file-manager interactive, visual, and broader recovery review",
+      "trigger": "After Fedora 44 package and commander-file-managers profile happy paths pass",
       "status": "queued"
     }
   ]

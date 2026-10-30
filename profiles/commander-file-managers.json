@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "commander-file-managers",
+  "description": "Opt-in Fedora Workstation twin-panel graphical and terminal file managers",
+  "operations": [
+    {"id": "package.gnome-commander", "state": "installed"},
+    {"id": "package.mc", "state": "installed"}
+  ]
+}

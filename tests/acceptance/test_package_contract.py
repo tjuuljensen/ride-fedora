@@ -714,6 +714,35 @@ def test_logitech_unifying_opt_in_packages_and_profile(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_commander_file_managers_opt_in_packages_and_profile(vm):
+    native_rpm_batch(vm, ("gnome-commander", "mc"), inventory_policy="name-arch",
+                     residue_candidates=("gnome-commander", "mc"),
+                     installed_probes={
+                         "gnome-commander": "test -x /usr/bin/gnome-commander",
+                         "mc": "test -x /usr/bin/mc && TERM=xterm mc --version | grep -q 'GNU Midnight Commander'",
+                     })
+    identifiers = ("package.gnome-commander", "package.mc")
+    planned = vm.ride("plan", "--profile", "commander-file-managers").stdout
+    assert all(table_row(planned, identifier)["STATUS"] == "candidate"
+               for identifier in identifiers)
+    applied = vm.ride("apply", "--profile", "commander-file-managers",
+                      "--allow-candidate", timeout=900)
+    first_id = run_id(applied.stdout)
+    assert [step["result"] for step in journal(vm, first_id)["steps"]] == [
+        "changed", "changed"]
+    vm.run("rpm -q --quiet gnome-commander mc")
+    repeated = vm.ride("apply", "--profile", "commander-file-managers",
+                       "--allow-candidate")
+    assert [step["result"] for step in journal(vm, run_id(repeated.stdout))["steps"]] == [
+        "unchanged", "unchanged"]
+    restored = vm.ride("restore", "--run-id", first_id, "--allow-candidate",
+                       timeout=900)
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    vm.run("! rpm -q --quiet gnome-commander")
+    vm.run("! rpm -q --quiet mc")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_forensic_volatility3_user_environment(vm):
     identifier = "package.volatility3"
     environment = "/home/ride-test/.local/share/ride-fedora/tools/volatility3"

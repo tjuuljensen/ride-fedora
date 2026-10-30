@@ -251,6 +251,17 @@ proved, and document the discontinued YubiKey Manager GUI handoff to
 publisher-supported alternatives. The runnable candidate does not claim
 receiver pairing or battery readings; H013 tracks the desktop and hardware
 review for v3.1.
+[Publisher batch 09](migrations/publisher-apps-09.md) accepts signed Fedora
+GNOME Commander and Midnight Commander as a curated opt-in profile after a
+combined package and profile VM lifecycle. Teams web access replaces the
+unsupported Linux desktop client; the deprecated Sonos AppImage is retired;
+PowerShell, WoeUSB, and Etcher remain non-runnable on their documented
+source/ownership triggers.
+[Publisher batch 10](migrations/publisher-apps-10.md) retires Atom editor
+and its plugin set after upstream sunset, and records Arduino IDE, Discord,
+Joplin, and Vivaldi as non-runnable until their respective portable or
+publisher-RPM acquisition and inverse contracts pass. These were all
+commented preset selections and do not enter base profiles.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse

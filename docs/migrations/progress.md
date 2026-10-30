@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**78/180 complete (43.3%)**: 23 supported, 13 opt-in candidate, 9 replaced, 8 retired, 0 private, 25 unsupported; 102 unresolved.
+**90/180 complete (50.0%)**: 23 supported, 14 opt-in candidate, 10 replaced, 11 retired, 0 private, 32 unsupported; 90 unresolved.
 
-Runnable outcomes: 36; 13 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 37; 14 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -40,8 +40,8 @@ Runnable outcomes: 36; 13 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `publisher-apps-06` | Publisher Apps 06: BitwardenAppImage | high 1 | 1/1 | [publisher-apps-06.md](../../docs/migrations/publisher-apps-06.md) | Reopen only for a verified portable distribution with vault-preserving recovery; continue publisher-apps-07. |
 | `publisher-apps-07` | Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM | medium 2 | 2/2 | [publisher-apps-07.md](../../docs/migrations/publisher-apps-07.md), [package.solaar.md](../../docs/acceptance/package.solaar.md), [package.acpi.md](../../docs/acceptance/package.acpi.md) | Keep Solaar/ACPI opt-in, complete H013 hardware review in v3.1, and reopen guest tools only on explicit hypervisor evidence. Continue publisher-apps-09. |
 | `publisher-apps-08` | Publisher Apps 08: YubikeyManager | high 1 | 1/1 | [publisher-apps-08.md](../../docs/migrations/publisher-apps-08.md) | Reopen only for the publisher-supported successor and credential-safe target evidence; continue publisher-apps-09. |
-| `publisher-apps-09` | Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher | medium 6 | 0/6 | — | Assess SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-10` | Publisher Apps 10: ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi | medium 6 | 0/6 | — | Assess ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `publisher-apps-09` | Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher | medium 6 | 6/6 | [publisher-apps-09.md](../../docs/migrations/publisher-apps-09.md), [package.gnome-commander.md](../../docs/acceptance/package.gnome-commander.md), [package.mc.md](../../docs/acceptance/package.mc.md) | Continue publisher-apps-10; keep the file-manager profile opt-in and complete H014 in v3.1. |
+| `publisher-apps-10` | Publisher Apps 10: ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi | medium 6 | 6/6 | [publisher-apps-10.md](../../docs/migrations/publisher-apps-10.md) | Continue publisher-apps-11; reopen these optional commented applications only on their specific source and recovery triggers. |
 | `publisher-apps-11` | Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq | medium 6 | 0/6 | — | Assess Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-12` | Publisher Apps 12: Bitwarden | high 1 | 0/1 | — | Assess Bitwarden; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-13` | Publisher Apps 13: Projecteur | medium 1 | 0/1 | — | Assess Projecteur; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -123,3 +123,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H011` | Volatility 3 optional plugins and broader user-venv recovery | After the v3.0 core Volatility 3 opt-in candidate passes its pinned-wheel Workstation happy path | queued |
 | `H012` | GNOME System Monitor Next activation, visual, and broader recovery review | After the Fedora 44 package and workstation-monitoring profile happy paths pass | queued |
 | `H013` | Solaar receiver pairing and desktop review | After the Fedora 44 package and logitech-unifying profile happy paths pass on a VM with receiver passthrough or a controlled disposable hardware host | queued |
+| `H014` | Commander file-manager interactive, visual, and broader recovery review | After Fedora 44 package and commander-file-managers profile happy paths pass | queued |

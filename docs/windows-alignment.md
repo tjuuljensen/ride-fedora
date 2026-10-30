@@ -429,3 +429,37 @@ state field. These platform deployments and decisions are intentional; no
 unexplained shared-contract drift was found. Recheck if Windows adds a
 corresponding product, Linux adds portable or hypervisor-specific deployment,
 or release review begins.
+
+### Fedora publisher application batch 09, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[file-manager and publisher review](migrations/publisher-apps-09.md).
+Windows has `package.powershell` for a Windows 11 machine MSI. It shares
+PowerShell 7 product identity with the v2 Linux function, but the Windows
+MSI, machine inventory, and compensating uninstall do not establish an
+owned Fedora RPM repository/key or Fedora support. Linux's PowerShell
+outcome is non-runnable pending that separate deployment evidence. Windows
+has no corresponding GNOME Commander, Midnight Commander, Teams Linux
+client, WoeUSB, Etcher, or Sonos catalog row at this revision. The two
+Linux file-manager candidates use the existing Fedora RPM, DNF, target,
+and run journal contracts; the profile uses schema 1. No shared field or
+product fact was changed, and no unexplained shared-contract drift was
+found. Recheck if either platform adds a corresponding product deployment,
+the PowerShell source contract changes, or release review begins.
+
+### Fedora publisher application batch 10, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[Arduino, Atom, Discord, Joplin, and Vivaldi review](migrations/publisher-apps-10.md).
+Windows has `package.joplin` as a current-user EXE and `package.discord` as
+a pinned current-user EXE. Their product identities and Joplin AGPL or
+Discord proprietary license facts remain aligned, but their Windows
+installers and profile-preserving uninstall evidence do not prove a Linux
+AppImage or publisher RPM inverse. Linux records non-runnable decisions and
+does not share a platform installer. Windows has no matching Arduino IDE,
+Atom, or Vivaldi catalog row in this revision. No Linux catalog, profile, or
+run-state field changes in this batch; no unexplained shared-contract drift
+was found. Recheck if Linux adds an owned portable or publisher RPM handler,
+Windows changes the shared product facts, or release review begins.
