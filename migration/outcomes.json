@@ -3005,10 +3005,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; implement only as an owned shortcut inverse that preserves unowned entries.",
+      "nextAction": "Owner kept shortcut removal capability for v3.0 on 2026-10-30. Make it the exact inverse of RIDE-owned custom shortcut entries and preserve all unowned entries.",
       "v31Hardening": [],
       "reason": "v2 remove-only inverse clears the complete custom-keybindings list and slots, including unowned user entries.",
-      "reviewTrigger": "Reconcile as a scoped inverse of owned custom shortcuts without clearing user entries."
+      "reviewTrigger": "Reconcile as a scoped inverse of owned custom shortcuts without clearing user entries.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.GnomeCustomFavorites",
@@ -3027,10 +3028,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Select current installed desktop IDs and prove user-list preservation and visual/restore behavior.",
+      "nextAction": "Owner kept GNOME favorites for v3.0 on 2026-10-30. Accept a profile-configurable ordered desktop-ID list and journal the complete prior list for exact recovery.",
       "v31Hardening": [],
       "reason": "v2 replaces all user favorites and includes retired Atom desktop ID.",
-      "reviewTrigger": "Select current installed desktop IDs and prove user-list preservation and visual/restore behavior."
+      "reviewTrigger": "Select current installed desktop IDs and prove user-list preservation and visual/restore behavior.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.GnomeDefaultFavorites",
@@ -3193,10 +3195,11 @@
         "docs/migrations/desktop-user-configuration.md"
       ],
       "blocker": "",
-      "nextAction": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target.",
+      "nextAction": "Owner kept the 15-percent battery-policy setting for v3.0 on 2026-10-30. Own the UPower policy fragment and preserve administrator policy with exact prior-state recovery.",
       "v31Hardening": [],
       "reason": "The v2 PowerPercentageLow15 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target."
+      "reviewTrigger": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.PowerPercentageLow20",
@@ -4873,7 +4876,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Owner kept custom keyboard shortcuts; implement owned-entry merge and exact prior-state recovery."
+      "nextAction": "Owner kept owned-shortcut inverse and configurable GNOME favorites; preserve unowned entries and exact prior lists."
     },
     {
       "id": "desktop-user-04",
@@ -4884,7 +4887,7 @@
         "docs/acceptance/gnome-user-boolean.md",
         "docs/migrations/desktop-user-configuration.md"
       ],
-      "nextAction": "Keep passing boolean settings opt-in; reopen string and UPower decisions only on their documented recovery triggers. Complete H018 in v3.1."
+      "nextAction": "Owner kept 15-percent battery policy; design owned UPower fragment and exact prior-state recovery while retaining accepted boolean settings."
     },
     {
       "id": "desktop-user-05",

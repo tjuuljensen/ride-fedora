@@ -5,6 +5,9 @@ Use current policy with exact prior-state recovery rather than the v2 file
 overwrite.
 The owner also kept custom keyboard shortcuts; only RIDE-owned entries may be
 merged or removed, with exact prior list and slot recovery.
+The owner kept the separate remove-only inverse on the same ownership rule.
+GNOME favorites also remain in scope as a profile-configurable ordered list;
+restore the user's prior list exactly.
 
 Status: **v3.0 decisions**, 2026-10-30. This review covers the remaining
 scoped desktop-user batches after the [fixed GNOME boolean handler](desktop-user-boolean.md).
