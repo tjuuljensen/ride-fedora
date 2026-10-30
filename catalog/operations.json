@@ -1831,6 +1831,46 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.eza.md"
+    },
+    {
+      "id": "package.exiftool",
+      "kind": "package",
+      "name": "ExifTool metadata utility",
+      "group": "forensics",
+      "description": "Install Fedora's ExifTool CLI without the v2 source build or global CPAN changes.",
+      "handler": "dnf-package",
+      "packageName": "perl-Image-ExifTool",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "exiftool",
+      "productUri": "https://exiftool.org/",
+      "license": "GPL-1.0-or-later OR Artistic-1.0-Perl",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/perl-Image-ExifTool/perl-Image-ExifTool/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/perl-Image-ExifTool/perl-Image-ExifTool/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.exiftool.md"
     }
   ]
 }

@@ -27,11 +27,11 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallExif` | deferred | Review product identity and official package. |
 | `InstallMd5deep` | deferred | Review current package and forensic use case. |
 | `InstallLibEWF` | replaced | package.ewftools covers EWF utilities; verify library intent separately. |
-| `InstallExifTool` | deferred | Current GitHub source build needs provenance and verification redesign. |
-| `InstallASN` | deferred | Current upstream acquisition needs review. |
-| `InstallUnfURL` | deferred | Current Python package method needs isolation. |
-| `InstallCyberChef` | deferred | Align product facts with Windows catalog; platform package remains local. |
-| `InstallChepy` | deferred | Python tooling needs isolated environment and pins. |
+| `InstallExifTool` | supported | Fedora `perl-Image-ExifTool` passed [VM lifecycle acceptance](acceptance/package.exiftool.md); the v2 GitHub/CPAN build path is not adopted. |
+| `InstallASN` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned owned script and shared-dependency-safe inverse. |
+| `InstallUnfURL` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned isolated Python environment. |
+| `InstallCyberChef` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned offline artifact and owned desktop destination. |
+| `InstallChepy` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned isolated build and owned inverse. |
 | `InstallNetworkMiner` | deferred | Align product identity with Windows; review Linux packaging. |
 | `InstallVeraCrypt` | deferred | Review publisher verification and licensing. |
 | `InstallPwgen` | deferred | Candidate native repository package. |
@@ -41,7 +41,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallRipgrep` | deferred | Candidate native repository package. |
 | `InstallFd` | deferred | Candidate native repository package. |
 | `InstallDocker` | deferred | Generic server role only after provider and repository review. |
-| `InstallVMFStools` | deferred | Legacy active entry is incomplete; no executable v3 handler. |
+| `InstallVMFStools` | retired | The active function only prints URLs; [forensic batch 01](migrations/forensic-isolated-01.md) records the no-op and reopening trigger. |
 | `InstallPythonPip` | supported | Fedora `python3-pip` passed [VM lifecycle acceptance](acceptance/package.python3-pip.md); omit the v2 global pip self-upgrade. |
 | `InstallPackagingTools` | replaced | Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. |
 | `InstallBasicEditors` | supported | Split into Fedora `nano` and `vim-enhanced` package installs with [VM evidence](acceptance/provider-basic-editors.md). |
@@ -210,6 +210,10 @@ replaced the commented Flatpak package pair with Fedora Workstation's
 supplied runtime, without claiming a RIDE install. [Batch 12](migrations/provider-foundation-12.md)
 closed the commented Snapd RPM pair pending service, confinement, and
 seeded-data recovery evidence.
+[Forensic isolated batch 01](migrations/forensic-isolated-01.md) accepted
+Fedora ExifTool with an exact-target RPM lifecycle, retired the no-op VMFS
+placeholder, and recorded four active third-party or Python tool paths as
+non-runnable until their artifact, isolation, and ownership contracts pass.
 The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
@@ -512,4 +516,4 @@ result are recorded. No entry below is part of the v3 default profile.
 | `InstallXplico` / `RemoveXplico` | commented out | Review current upstream maintenance, dependencies, and a trusted package source before adding an operation. |
 | `InstallVolatility` / `RemoveVolatility` | commented out | Treat the older Volatility line separately from Volatility3; check present support and a verifiable source before deciding whether to migrate or retire. |
 | `InstallVolatility3` / `RemoveVolatility3` | commented out | Isolated `package.volatility3` is a v3 candidate; verify the pinned core install, detection, removal, and failure recovery in a disposable VM before support. |
-| `InstallVMFStools` / `RemoveVMFStools` | both commented out in this block; install also active later in the preset | Resolve the duplicate preset intent; evaluate maintained VMFS tools packaging and tested removal. The active legacy function is still only a URL stub. |
+| `InstallVMFStools` / `RemoveVMFStools` | both commented out in this block; install also active later in the preset | [Retired as a no-op](migrations/forensic-isolated-01.md); reopen only for a concrete VMFS access need with licensed source and VM evidence. |

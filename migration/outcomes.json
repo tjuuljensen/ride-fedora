@@ -501,13 +501,17 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Legacy active entry is incomplete; no executable v3 handler.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only for a concrete VMFS access need with licensed source and read-only filesystem evidence.",
+      "v31Hardening": [],
+      "reason": "The active v2 installer only echoes two URLs and its inverse is empty; no working VMFS install exists to migrate.",
+      "reviewTrigger": "A concrete VMFS access use case with licensed verified acquisition, target compatibility, and safe recovery evidence."
     },
     {
       "key": "workstation:package.Volatility",
@@ -800,12 +804,17 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Current GitHub source build needs provenance and verification redesign.",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.exiftool"
+      ],
+      "evidence": [
+        "docs/acceptance/package.exiftool.md",
+        "docs/migrations/forensic-isolated-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck Fedora ExifTool package and target if its RPM or DNF handler changes; do not adopt legacy source-build paths.",
       "v31Hardening": []
     },
     {
@@ -819,13 +828,17 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Current upstream acquisition needs review.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen ASN only on the documented provenance, ownership, and VM acceptance trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 installer fetches an unpinned MIT-licensed script into /usr/bin and removes shared RPM dependencies; v3 has no pinned owned-script handler or safe inverse.",
+      "reviewTrigger": "A concrete ASN lookup use case with pinned script provenance, independent dependency ownership, and Fedora 44 VM acceptance."
     },
     {
       "key": "workstation:package.UnfURL",
@@ -838,13 +851,17 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Current Python package method needs isolation.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen UnfURL only on the documented provenance, ownership, and VM acceptance trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 installer mutates the user global Python environment with unpinned pip dependencies; v3 has no isolated pinned dfir-unfurl environment or VM happy path.",
+      "reviewTrigger": "A concrete UnfURL use case with a hash-pinned isolated environment, owned inverse, and Fedora 44 VM acceptance."
     },
     {
       "key": "workstation:package.CyberChef",
@@ -857,13 +874,17 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Align product facts with Windows catalog; platform package remains local.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen CyberChef only on the documented provenance, ownership, and VM acceptance trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 installer selects a mutable GitHub ZIP, extracts into a system path, and writes a desktop launcher without an owned artifact/notice/recovery contract; Linux v3 has no portable handler.",
+      "reviewTrigger": "A concrete offline CyberChef deployment with pinned release provenance, owned destination and launcher, preserved notices and user data, and Fedora 44 VM acceptance."
     },
     {
       "key": "workstation:package.Chepy",
@@ -876,13 +897,17 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Python tooling needs isolated environment and pins.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen Chepy only on the documented provenance, ownership, and VM acceptance trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 installer clones an unpinned Git branch, globally installs Python packages and PyInstaller, and copies a built binary into /usr/bin without owned recovery.",
+      "reviewTrigger": "A concrete Chepy CLI need with pinned licensed source or wheel, isolated reproducible build, owned inverse, and Fedora 44 VM acceptance."
     },
     {
       "key": "workstation:package.Dumpzilla",
@@ -3857,8 +3882,11 @@
       "id": "forensic-isolated-01",
       "family": "forensic-isolated",
       "title": "Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy",
-      "evidence": [],
-      "nextAction": "Assess VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/forensic-isolated-01.md",
+        "docs/acceptance/package.exiftool.md"
+      ],
+      "nextAction": "Continue forensic-isolated-02; reopen specific scripts or isolated tools only on their documented requirements."
     },
     {
       "id": "forensic-isolated-02",

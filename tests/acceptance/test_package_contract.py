@@ -357,7 +357,7 @@ def test_server_base_profile_smoke(vm):
 
 
 def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None,
-                     residue_candidates=(), inventory_policy="strict"):
+                     residue_candidates=(), inventory_policy="strict", identifiers=None):
     """Check each package in one disposable Workstation overlay."""
     assert inventory_policy in ("strict", "name-arch")
     allowed_residuals = allowed_residuals or {}
@@ -365,11 +365,11 @@ def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
     for package in packages:
         before = set(package_inventory(vm).splitlines())
-        identifier = f"package.{package}"
+        identifier = (identifiers or {}).get(package, f"package.{package}")
         expected_status = catalog_status(identifier)
         assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0, (
             f"{package} is preinstalled; review the removal transaction before retrying")
-        guest_profile = vm.put_json(f"cli-{package}", profile(identifier))
+        guest_profile = vm.put_json(f"cli-{package.lower()}", profile(identifier))
         planned = table_row(vm.ride("plan", "--profile", guest_profile).stdout, identifier)
         assert (planned["CURRENT"], planned["DESIRED"], planned["STATUS"]) == (
             "absent", "installed", expected_status)
@@ -613,6 +613,18 @@ def test_provider_eza_fedora_package(vm):
                      residue_candidates=("eza",),
                      installed_probes={"eza": "test -x /usr/bin/eza && /usr/bin/eza --version"})
     vm.run("test ! -e /usr/local/bin/eza")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_forensic_exiftool_fedora_package(vm):
+    # The RPM deployment must not adopt the source-build path from v2.
+    vm.run("test ! -e /usr/lib/exiftool")
+    native_rpm_batch(vm, ("perl-Image-ExifTool",), inventory_policy="name-arch",
+                     residue_candidates=("perl-Image-ExifTool",),
+                     identifiers={"perl-Image-ExifTool": "package.exiftool"},
+                     installed_probes={"perl-Image-ExifTool":
+                                       "command -v exiftool && exiftool -ver"})
+    vm.run("test ! -e /usr/lib/exiftool")
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")

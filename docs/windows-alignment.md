@@ -297,3 +297,22 @@ The registered source, deployment, and recovery differences remain
 intentional. No unexplained shared-contract drift was found. Recheck if
 either platform adds a remote or package-manager handler, changes ownership
 or recovery semantics, or reaches release review.
+
+### Fedora forensic isolated batch 01, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` before the
+[active forensic tool batch](migrations/forensic-isolated-01.md).
+Windows has a supported `package.cyberchef` offline portable ZIP with
+notice preservation and exact rollback; Linux's v2 ZIP/launcher lacks
+pinned artifact and owned-path handling, so its source outcome is explicitly
+non-runnable in Linux v3.0. This is an intentional platform handler and
+acceptance difference, not a shared product or license disagreement. Windows
+also has `package.exiftool` as an unaccepted pinned Windows x64 portable
+candidate; Linux uses the same `exiftool` product identity with a supported
+Fedora-signed RPM and a separately scoped Workstation VM lifecycle. The
+distribution, provider, destination, and recovery evidence are platform
+specific, as the shared package-deployment decisions require. No Linux
+profile or run-state schema changed; no unexplained shared-contract drift
+was found. Recheck when Linux gains portable artifacts, either product's
+source or license facts change, or before release review.
