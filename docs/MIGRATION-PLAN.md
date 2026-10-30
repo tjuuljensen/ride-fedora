@@ -342,6 +342,14 @@ VM without a candidate override; the shared Python pip operation passed
 its Server VM. The ledger is complete and the branch is ready for release
 review, with publication still a separate decision.
 
+The 99 non-runnable `unsupported` rows have a separate
+[decision triage](migrations/unsupported-triage.md): 11 proposed retirements
+in two approval batches, 38 individual keep-or-drop choices, and 50
+individual migration-design decisions. The retirement batches are proposals
+only; the ledger still records all 99 as unsupported until the owner approves
+specific batches. Approval changes dispositions and generated progress, not
+legacy source code or machine state.
+
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
 failure-injection evidence for an unchanged handler within the batch. For
