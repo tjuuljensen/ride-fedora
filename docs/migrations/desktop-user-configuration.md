@@ -2,6 +2,8 @@
 
 The owner kept the GNOME window-control button layout in the v3.0 fast-track
 review. Implement a typed value with exact prior-state recovery.
+AppmenuClose is a second owner-kept layout choice; profile selections are
+mutually exclusive and both restore the exact prior layout.
 The owner also kept GNOME region selection, with country/region supplied by
 the profile rather than fixed to Denmark. The separate remove-only
 `GnomeRegion` use case remains deferred until that owned setting is designed.

@@ -12,8 +12,8 @@ those exact implementations; this review reopens their capability coverage.
 The current ledger has 133 package and 36 setting outcomes. Only 54 of those
 169 have operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
-**169 in-scope package/setting capabilities, 54 currently operable, six
-owner-retired, one standalone functional replacement, and 108 still needing
+**169 in-scope package/setting capabilities, 54 currently operable, seven
+owner-retired, one standalone functional replacement, and 107 still needing
 a v3.0 decision or path**. The ledger's 179 dispositioned outcomes out of
 185 measure recorded decisions, not this v3.0 capability coverage.
 The two Citrix and two Opera functions remain explicitly out of scope. Host-specific

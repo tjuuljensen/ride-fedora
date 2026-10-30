@@ -11,6 +11,8 @@ restore the user's prior list exactly.
 The owner kept Chrome preferences, Bash aliases, and the ls-to-Eza alias in
 the fast-track review. Each needs an owned file or fragment and seeded exact
 recovery before runnable status.
+The owner also kept the WAN IP alias, retired the old ride-log alias, and kept
+the AppmenuClose button layout as an exclusive alternative to MinMaxClose.
 
 Status: **v3.0 decisions**, 2026-10-30. This review covers the remaining
 scoped desktop-user batches after the [fixed GNOME boolean handler](desktop-user-boolean.md).

@@ -2801,10 +2801,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Add a typed GNOME string handler with default provenance and exact restore.",
+      "nextAction": "Owner kept AppmenuClose layout for v3.0 on 2026-10-30 as an alternative to WindowCtlMinMaxClose. Model mutually exclusive profile values and exact prior-layout recovery.",
       "v31Hardening": [],
       "reason": "v2 writes one GNOME button-layout string without preserving the arbitrary prior user value.",
-      "reviewTrigger": "Add a typed GNOME string handler with default provenance and exact restore."
+      "reviewTrigger": "Add a typed GNOME string handler with default provenance and exact restore.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.WindowCtlLeftClsMinMax",
@@ -3290,10 +3291,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Choose a maintained resolver and owned shell fragment with offline plan, conflict, and restore tests.",
+      "nextAction": "Owner kept WAN IP alias for v3.0 on 2026-10-30. Use an owned shell fragment, maintained resolver, and exact prior-state recovery.",
       "v31Hardening": [],
       "reason": "v2 appends three external-DNS aliases and inverse uses a broad line deletion.",
-      "reviewTrigger": "Choose a maintained resolver and owned shell fragment with offline plan, conflict, and restore tests."
+      "reviewTrigger": "Choose a maintained resolver and owned shell fragment with offline plan, conflict, and restore tests.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.AliasRideLog",
@@ -3313,10 +3315,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen as a read-only v3 run-log command only if users request it.",
+      "nextAction": "Owner retired the old ride-log alias capability from v3.0 on 2026-10-30; keep source only as migration evidence.",
       "v31Hardening": [],
-      "reason": "v2 alias points at obsolete bootstrap-installer logs; inverse edits a different shell file.",
-      "reviewTrigger": "Reopen as a read-only v3 run-log command only if users request it."
+      "reason": "v2 alias points at obsolete bootstrap-installer logs; inverse edits a different shell file. The owner explicitly retired the full alias capability on 2026-10-30.",
+      "reviewTrigger": "A new explicit owner decision to restore the ride-log alias capability to v3 scope.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.Lynis",
@@ -4899,7 +4902,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Owner kept Chrome preferences, Bash aliases, and ls-to-Eza alias; design owned fragments and seeded exact recovery."
+      "nextAction": "Owner kept Chrome preferences, Bash and Eza/WAN IP aliases; retired ride-log alias. Design owned fragments and exact recovery."
     },
     {
       "id": "desktop-user-06",
@@ -4917,7 +4920,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
+      "nextAction": "Owner kept AppmenuClose layout as an alternative to MinMaxClose; implement exclusive profile values and exact prior-layout recovery."
     },
     {
       "id": "desktop-user-08",
