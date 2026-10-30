@@ -1,5 +1,8 @@
 # NetworkMiner publisher artifact and evidence-data ownership
 
+The owner kept NetworkMiner for v3.0 in the fast-track review. A pinned Linux
+artifact and capture-preserving recovery remain implementation work.
+
 Status: **unsupported for v3.0**, 2026-10-30. The active v2
 `InstallNetworkMiner` downloads a mutable ZIP, installs Mono, extracts
 into `/opt/NetworkMiner`, writes a desktop launcher, and changes the

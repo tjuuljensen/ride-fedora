@@ -1,5 +1,8 @@
 # Forensic isolated batch 03: native analyzers and legacy scripts
 
+The owner kept Firefox forensic parsing in the v3.0 fast-track review; the
+old Dumpzilla source remains retired while a maintained replacement is sought.
+
 Status: **complete: two supported RPMs, one retired tool, one standalone
 replacement**, 2026-10-30. This batch owns the v2
 `Binwalk`, `PyhtonAutopep8`, `Dumpzilla`, and `Macvendor` install/remove
@@ -48,13 +51,17 @@ evidence for current Firefox profile data has been accepted. A maintained
 licensed browser forensics tool with an isolated, privacy-preserving install
 would be a new review. No browser profile data is removed by this decision.
 
-`Macvendor` is **replaced by the maintained standalone
-[`mac-vendor.sh`](https://github.com/tjuuljensen/linux-scripts/blob/master/mac-vendor.sh)**
-in the owner's `linux-scripts` repository. The current script handles IEEE
-registries through an XDG cache and can run directly; this is a documented
-replacement, **not a v3 managed install**. The original v2 function fetched
-the mutable `master` script into `/usr/local/bin`, which v3 neither adopts
-nor removes. The source repository has no published license in its metadata;
-adding a v3 managed script operation requires an explicit license, pinned
-artifact, owned destination/cache, and VM inverse. The replacement does not
-count as runnable in the v3 progress report.
+`Macvendor` is **replaced by the owner's standalone
+[`mac-vendor.py`](../../reference/mac-vendor.py) and
+[`mac-vendor.sh`](../../reference/mac-vendor.sh)**, copied from `linux-scripts`
+at the pinned revision in the [reference notes](../../reference/README.md).
+The owner kept both scripts in v3.0 on 2026-10-30. They handle IEEE registries
+through a shared XDG cache and can run directly; this is a functional
+replacement, **not a v3 managed install**. H024 holds managed installation
+and recovery for v3.1. The original v2 function fetched the mutable `master`
+script into `/usr/local/bin`, which v3 neither adopts nor removes. The source
+repository has no published license in its metadata; this same-owner copy
+follows the owner's explicit instruction and does not assert a public reuse
+license. A future managed operation needs pinned acquisition, owned
+destination/cache, and VM inverse. The standalone replacement is reported
+separately from runnable catalog operations.

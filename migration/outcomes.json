@@ -501,10 +501,11 @@
         "docs/migrations/forensic-isolated-02.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen for a concrete desktop case workflow with signed Linux ZIP, Java dependencies, owned launcher, and case-data preservation.",
+      "nextAction": "Owner kept Autopsy for v3.0 on 2026-10-30. Choose current Linux distribution, own Java runtime and launcher, and preserve case data through recovery.",
       "v31Hardening": [],
       "reason": "The v2 pair only prints a URL; publisher Linux ZIP and Java/Sleuth Kit requirements lack a Linux v3 portable handler and case-data-preserving inverse.",
-      "reviewTrigger": "An Autopsy Linux case workflow with publisher signature verification, dependencies, owned deployment, and Fedora 44 Workstation VM recovery."
+      "reviewTrigger": "An Autopsy Linux case workflow with publisher signature verification, dependencies, owned deployment, and Fedora 44 Workstation VM recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Xplico",
@@ -571,10 +572,11 @@
         "docs/migrations/forensic-isolated-02.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only for a concrete Volatility 2 legacy plugin or image need with an isolated tested runtime.",
+      "nextAction": "Owner kept the distinct Volatility 2 capability for v3.0 on 2026-10-30. Find a compatible isolated runtime for legacy plugins and images; keep Volatility 3 separate.",
       "v31Hardening": [],
       "reason": "The v2 function never installed Volatility 2 and its upstream repository is archived; Volatility 3 is a distinct API, not an automatic replacement.",
-      "reviewTrigger": "A specific legacy Volatility 2 plugin or image requirement with licensed isolated installation and Fedora 44 recovery evidence."
+      "reviewTrigger": "A specific legacy Volatility 2 plugin or image requirement with licensed isolated installation and Fedora 44 recovery evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Volatility3",
@@ -644,10 +646,11 @@
         "docs/migrations/forensic-isolated-04.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only when a requested pinned release build has a fully inventoried prefix, source license record, failed-build cleanup, and seeded-data VM recovery.",
+      "nextAction": "Owner kept BulkExtractor for v3.0 on 2026-10-30. Pin a reviewed release and prove build cleanup and seeded case-data preservation.",
       "v31Hardening": [],
       "reason": "The v2 moving-branch source build writes untracked files to /usr/local, removes shared dependencies, and has no owned inverse or seeded forensic-output recovery evidence.",
-      "reviewTrigger": "A requested pinned release build has a fully inventoried prefix, source license record, failed-build cleanup, and seeded-data VM recovery."
+      "reviewTrigger": "A requested pinned release build has a fully inventoried prefix, source license record, failed-build cleanup, and seeded-data VM recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.EmailHeaderAnlzr",
@@ -855,13 +858,19 @@
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/forensic-isolated-03.md"
+        "docs/migrations/forensic-isolated-03.md",
+        "reference/mac-vendor.py",
+        "reference/mac-vendor.sh"
       ],
       "blocker": "",
-      "nextAction": "Use the maintained standalone mac-vendor.sh from linux-scripts directly; reopen v3 integration after licensing and owned-script lifecycle review.",
-      "v31Hardening": [],
+      "nextAction": "Owner kept both mac-vendor.py and mac-vendor.sh for v3.0 on 2026-10-30. Standalone copies live under reference/; defer RIDE-managed installation and recovery to H024 in v3.1.",
+      "v31Hardening": [
+        "H024"
+      ],
       "reason": "The v2 mutable download is replaced by the maintained standalone mac-vendor.sh with local IEEE cache; v3 does not install or manage it.",
-      "reviewTrigger": "A requested v3 managed install has a published license, pinned artifact, owned destination, cache policy, and VM lifecycle evidence."
+      "reviewTrigger": "A requested v3 managed install has a published license, pinned artifact, owned destination, cache policy, and VM lifecycle evidence.",
+      "v30Decision": "keep",
+      "v30Coverage": "replacement"
     },
     {
       "key": "workstation:package.ExifTool",
@@ -1001,10 +1010,11 @@
         "docs/migrations/forensic-isolated-03.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only for a maintained, licensed Firefox forensic parser with safe user-data handling.",
+      "nextAction": "Owner kept Firefox forensic parsing capability for v3.0 on 2026-10-30. Find a maintained licensed parser and preserve user profile data.",
       "v31Hardening": [],
       "reason": "The upstream Dumpzilla repository declares the project discontinued and its original script has no accepted license, pinned artifact, or current Firefox-profile compatibility evidence.",
-      "reviewTrigger": "A maintained licensed source supports current Firefox profiles and passes isolated install, privacy, and removal checks."
+      "reviewTrigger": "A maintained licensed source supports current Firefox profiles and passes isolated install, privacy, and removal checks.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.NetworkMiner",
@@ -1024,10 +1034,11 @@
         "docs/migrations/forensic-isolated-05.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only when a requested Linux deployment has a pinned official ZIP, safe permissions, Mono/GTK evidence, owned program files, and capture-preserving VM inverse.",
+      "nextAction": "Owner kept NetworkMiner for v3.0 on 2026-10-30. Pin an official Linux build and runtime dependencies; preserve capture data through recovery.",
       "v31Hardening": [],
       "reason": "The active v2 mutable ZIP installer makes captures world writable and its inverse deletes the entire capture/output tree; no Linux owned portable handler or seeded-capture recovery exists.",
-      "reviewTrigger": "A requested Linux deployment has a pinned official ZIP, safe permissions, Mono/GTK evidence, owned program files, and capture-preserving VM inverse."
+      "reviewTrigger": "A requested Linux deployment has a pinned official ZIP, safe permissions, Mono/GTK evidence, owned program files, and capture-preserving VM inverse.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Pwgen",
@@ -4609,7 +4620,7 @@
         "docs/migrations/forensic-isolated-02.md",
         "docs/acceptance/package.volatility3.md"
       ],
-      "nextAction": "Owner kept Plaso; choose maintained source and preserve case timelines while retaining existing Volatility 3 evidence."
+      "nextAction": "Owner kept Plaso, Autopsy, and Volatility 2; choose current sources, isolated runtimes, and case-data-preserving recovery."
     },
     {
       "id": "forensic-isolated-03",
@@ -4620,7 +4631,7 @@
         "docs/acceptance/package.binwalk.md",
         "docs/acceptance/package.autopep8.md"
       ],
-      "nextAction": "Continue forensic-isolated-04; revisit Binwalk major-version behavior and script reopens only on their explicit triggers."
+      "nextAction": "Owner kept Dumpzilla and both standalone MAC vendor lookup scripts; implement parser path in v3.0 and defer managed script lifecycle to H024."
     },
     {
       "id": "forensic-isolated-04",
@@ -4629,7 +4640,7 @@
       "evidence": [
         "docs/migrations/forensic-isolated-04.md"
       ],
-      "nextAction": "Reopen only on the documented source, ownership, and exact-target recovery trigger."
+      "nextAction": "Owner kept BulkExtractor and NetworkMiner; pin current Linux releases and prove seeded case/capture recovery."
     },
     {
       "id": "forensic-isolated-05",
@@ -5569,6 +5580,12 @@
       "id": "H023",
       "title": "Video-downloader site and extractor compatibility",
       "trigger": "After a maintained v3.0 downloader path is selected; test additional sites and extractors beyond package installation.",
+      "status": "queued"
+    },
+    {
+      "id": "H024",
+      "title": "RIDE-managed MAC vendor script lifecycle",
+      "trigger": "After standalone mac-vendor.py and mac-vendor.sh are retained for v3.0; decide owned install destination, update, cache, and inverse for both scripts.",
       "status": "queued"
     }
   ]

@@ -1,5 +1,8 @@
 # BulkExtractor source build and forensic output
 
+The owner kept BulkExtractor for v3.0 in the fast-track review. The source,
+build cleanup, and case-data-preserving inverse remain implementation work.
+
 Status: **unsupported for v3.0**, 2026-10-30. This isolated high-risk batch
 maps `InstallBulkExtractor` and `RemoveBulkExtractor`, both commented out of
 the v2 preset. The installer clones an unpinned recursive Git tree into

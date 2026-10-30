@@ -101,13 +101,21 @@ class MigrationProgressTests(unittest.TestCase):
         self.assertEqual(coverage["total"], 169)
         self.assertEqual(coverage["operable"], 54)
         self.assertEqual(coverage["retired"], 2)
-        self.assertEqual(coverage["kept"], 15)
+        self.assertEqual(coverage["kept"], 21)
         self.assertEqual(coverage["deferred"], 4)
-        self.assertEqual(coverage["gap"], 113)
+        self.assertEqual(coverage["replaced"], 1)
+        self.assertEqual(coverage["gap"], 112)
         server_batch = next(batch for batch in report["batches"] if batch["id"] == "generic-server-15")
         self.assertEqual(server_batch["complete"], 0)
         self.assertEqual(server_batch["v30Operable"], 0)
         self.assertEqual(server_batch["v30Gap"], 1)
+
+    def test_standalone_replacement_requires_direct_evidence(self):
+        data = copy.deepcopy(self.data)
+        row = next(item for item in data["outcomes"] if item["key"] == "workstation:package.Macvendor")
+        row["evidence"] = ["docs/migrations/forensic-isolated-03.md"]
+        with self.assertRaisesRegex(ValueError, "replacement lacks direct evidence"):
+            self.validate_copy(data)
 
     def test_status_does_not_count_unresolved_rows(self):
         data = copy.deepcopy(self.data)

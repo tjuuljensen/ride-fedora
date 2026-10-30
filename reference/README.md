@@ -1,4 +1,27 @@
-# Waydroid Fedora Installer Reference
+# Standalone script references
+
+## MAC vendor lookup
+
+`mac-vendor.py` and `mac-vendor.sh` are standalone copies from the owner's
+`linux-scripts` repository at commit `08e58ba3a546f6d2cbd6c250e5012e3ede8a6e54`.
+They are the v3.0 functional replacement for the old mutable `InstallMacvendor`
+download. Run either from the repository root as a regular user. `--offline`
+reads only the shared user cache; `--update` downloads IEEE registry data and
+writes that cache. Neither script installs itself or changes system files.
+If a cache update is unwanted, restore a prior cache backup; both scripts
+can also rebuild the cache on a later update.
+
+```bash
+python3 reference/mac-vendor.py --help
+bash reference/mac-vendor.sh --help
+```
+
+RIDE-managed installation, updates, and removal of these scripts are queued
+for v3.1 as H024. The `linux-scripts` repository remains the authoritative
+source for script changes; this copied revision was verified with its 15
+offline parity tests. No separate public license is asserted here.
+
+## Waydroid Fedora installer
 
 Status: **REFERENCE ONLY - NOT TESTED END TO END**
 

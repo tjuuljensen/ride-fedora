@@ -25,8 +25,9 @@ jobs:
           shellcheck --shell=sh --severity=error docs/bootstrap.sh
           sh docs/bootstrap.sh --help >/dev/null
           sh docs/bootstrap.sh --version
-          bash -n ride.sh lib/v3/*.sh completion/ride.bash tools/check-shell-executable.sh reference/install-waydroid-fedora.sh
-          shellcheck --shell=bash --severity=error ride.sh lib/v3/*.sh completion/ride.bash tools/check-shell-executable.sh reference/install-waydroid-fedora.sh
+          bash -n ride.sh lib/v3/*.sh completion/ride.bash tools/check-shell-executable.sh reference/*.sh
+          shellcheck --shell=bash --severity=error ride.sh lib/v3/*.sh completion/ride.bash tools/check-shell-executable.sh reference/*.sh
+          python3 -m py_compile reference/mac-vendor.py
           bash ride.sh --help >/dev/null
           bash ride.sh --version
           tools/check-shell-executable.sh --help >/dev/null

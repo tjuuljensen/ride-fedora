@@ -18,6 +18,8 @@ in-scope package/setting capabilities are currently operable, including
 six server package outcomes now assigned review batches. Citrix and Opera remain
 out of scope. This prior release
 review is therefore no longer a release-ready conclusion.
+The standalone MAC vendor lookup scripts are a separately counted functional
+replacement; their RIDE-managed lifecycle is in the v3.1 queue.
 
 The support matrix is Fedora 44 x86_64 on the edition declared by each
 operation. The small `default` and `server-base` profiles retain their

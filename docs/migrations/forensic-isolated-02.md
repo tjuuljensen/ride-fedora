@@ -9,6 +9,8 @@ removal. None was a working v2 install. `NetworkMiner` and
 `EmailHeaderAnlzr` require separate data and service ownership review.
 `Plaso` was subsequently kept by the owner in the v3.0 fast-track review;
 its maintained source and case-data-preserving lifecycle remain to implement.
+The owner also kept Autopsy and the distinct Volatility 2 capability; neither
+is satisfied by the accepted Volatility 3 core package.
 
 The existing v3 catalog already has a `package.volatility3` candidate with
 a private user venv, pinned [`volatility3` 2.28.2](https://pypi.org/project/volatility3/2.28.2/)
