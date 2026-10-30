@@ -49,9 +49,9 @@ fallback execution path.
 | --- | --- | --- |
 | `CustomKeyboardShortcut` | **Unsupported.** v2 replaces the complete custom-keybinding list and writes two fixed slots, potentially hiding existing user shortcuts. | Implement merge-by-owned-entry with conflict checks and exact list/slot restoration; verify in a disposable GNOME session. |
 | `CustomKbrdShortcut` | **Unsupported.** The remove-only inverse clears the entire list and both slots, including unowned shortcuts. | Reconcile it as the inverse of owned custom shortcuts without clearing user entries. |
-| `VMKeyboardShortcut` | **Unsupported.** The library-only VM variant writes the same fixed slots as the workstation shortcut set with different bindings, so it can overwrite either user or RIDE data. | Add a distinct opt-in VM shortcut choice with ownership, conflict, and restore evidence. |
+| `VMKeyboardShortcut` | **Decision deferred by owner.** The library-only VM variant writes the same fixed slots as the workstation shortcut set with different bindings, so it can overwrite either user or RIDE data. | Decide whether the VM-specific bindings remain useful; if kept, add an opt-in choice with ownership, conflict, and restore evidence. |
 | `GnomeCustomFavorites` | **Unsupported.** The active v2 array replaces all user favorites and includes `atom.desktop`; Atom was retired in the publisher review. | Select installed Fedora 44 desktop IDs, preserve user favorites, and pass profile/visual and exact-restore checks. |
-| `GnomeDefaultFavorites` | **Retired.** This library-only hard-coded Fedora 37-era favorites snapshot is not the Fedora 44 Workstation default contract. | Reopen only if a current edition-specific default reset is explicitly requested and can preserve the prior user list. |
+| `GnomeDefaultFavorites` | **Kept by owner.** The v2 hard-coded Fedora 37-era snapshot cannot define Fedora 44 defaults. Offer an explicit current-defaults choice in the same favorites setting family as the configurable list; save the exact prior list. | Identify Fedora 44 Workstation defaults, define exclusive profile choices, and verify exact list recovery. |
 | `GnomeMinimalFavorites` | **Unsupported.** The library-only function replaces the complete favorites array without a prior-state snapshot. | Add an opt-in minimal-favorites profile with exact list recovery and a brief visual check. |
 
 The owner retained the `CustomKbrdShortcut` inverse outcome for migration on
@@ -85,7 +85,7 @@ ownership and approval boundary. The helper is not in `default`.
 | Outcome | Decision and reason | Reopen when |
 | --- | --- | --- |
 | `WindowCtlAppmenuClose` | **Unsupported.** v2 writes one hard-coded `button-layout` string with no exact prior-state inverse. | Add the typed GNOME string handler and conflict-aware restore described in [batch 02](desktop-user-configuration.md). |
-| `WindowCtlLeftClsMinMax` | **Unsupported.** v2 writes a different string to the same key, potentially replacing either user or RIDE state. | Model mutually exclusive button-layout choices and exact prior-state recovery in a Workstation VM. |
+| `WindowCtlLeftClsMinMax` | **Kept by owner.** This is a third value in the same window-button-layout setting family as `WindowCtlMinMaxClose` and `WindowCtlAppmenuClose`, rather than a separate simultaneous write. | Model mutually exclusive profile values and exact prior-state recovery in a Workstation VM. |
 
 ## Batch 11: lock and idle settings
 

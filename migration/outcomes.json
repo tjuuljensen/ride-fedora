@@ -2824,10 +2824,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Model exclusive layout choices and exact prior-state restore in a Workstation VM.",
+      "nextAction": "Owner kept this third window-button-layout value alongside MinMaxClose and AppmenuClose; implement one exclusive profile choice with exact prior-layout recovery.",
       "v31Hardening": [],
-      "reason": "v2 writes another value to the same GNOME button-layout key without conflict or inverse handling.",
-      "reviewTrigger": "Model exclusive layout choices and exact prior-state restore in a Workstation VM."
+      "reason": "Owner retained the left-side layout as a configurable choice in the shared GNOME window-button family on 2026-10-30.",
+      "reviewTrigger": "Owner kept this third window-button-layout value alongside MinMaxClose and AppmenuClose; implement one exclusive profile choice with exact prior-layout recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.MiddleButtonPaste",
@@ -2985,10 +2986,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Add an exclusive VM shortcut choice with ownership, conflict, and restore evidence.",
+      "nextAction": "Owner deferred the VM-specific shortcut decision; revisit intended bindings before designing an owned, conflict-safe choice.",
       "v31Hardening": [],
-      "reason": "v2 VM variant reuses fixed custom-keybinding slots and can overwrite user or workstation bindings.",
-      "reviewTrigger": "Add an exclusive VM shortcut choice with ownership, conflict, and restore evidence."
+      "reason": "Owner deferred the VM-specific shortcut capability decision on 2026-10-30.",
+      "reviewTrigger": "Owner deferred the VM-specific shortcut decision; revisit intended bindings before designing an owned, conflict-safe choice.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.CustomKbrdShortcut",
@@ -3046,17 +3048,18 @@
       "batch": "desktop-user-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
+      "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only if a current edition-specific default reset is requested with exact prior-list recovery.",
+      "nextAction": "Owner kept current-default GNOME favorites as a choice alongside configurable favorites; identify Fedora 44 defaults and restore the exact prior list.",
       "v31Hardening": [],
-      "reason": "v2 library-only Fedora 37-era hard-coded favorites snapshot is not the Fedora 44 default contract.",
-      "reviewTrigger": "Reopen only if a current edition-specific default reset is requested with exact prior-list recovery."
+      "reason": "Owner reopened the default-favorites capability on 2026-10-30; the Fedora 37 hard-coded snapshot remains obsolete.",
+      "reviewTrigger": "Owner kept current-default GNOME favorites as a choice alongside configurable favorites; identify Fedora 44 defaults and restore the exact prior list.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.GnomeMinimalFavorites",
@@ -4920,7 +4923,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Owner kept AppmenuClose layout as an alternative to MinMaxClose; implement exclusive profile values and exact prior-layout recovery."
+      "nextAction": "Owner kept three exclusive GNOME window-button-layout choices; implement one configurable profile value and exact prior-layout recovery."
     },
     {
       "id": "desktop-user-08",
@@ -4929,7 +4932,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
+      "nextAction": "Owner deferred VM shortcuts and kept current-default favorites; reconcile default and custom favorites choices with exact prior-list recovery."
     },
     {
       "id": "desktop-user-09",

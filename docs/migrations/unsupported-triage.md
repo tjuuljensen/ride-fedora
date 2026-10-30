@@ -4,7 +4,7 @@ Status: **individual review in progress**, 2026-10-30. This review assigns
 each of the original 99 `unsupported` source outcomes exactly one decision
 batch. Three were approved for retirement, and one of those, Opera, was later
 excluded from v3 scope. Teams desktop capability was also retired in the
-fast-track review. The current ledger has 96 `unsupported` and 17 `retire`
+fast-track review. The current ledger has 97 `unsupported` and 16 `retire`
 outcomes. These decisions do not add an
 operation, delete v2 code, or run a state-changing test. The
 [migration ledger](../../migration/outcomes.json) and [progress report](progress.md)
@@ -25,7 +25,7 @@ appropriate risk-based recovery checks.
 | Keep-or-drop choices, U1a-U3b | 38 | 11 retained, 1 later excluded, 3 deferred, 23 still to decide. |
 | Migration design, D1a-D5a | 51 | Bitwarden AppImage retained; exact ownership, source, state, and recovery remain to design. |
 
-The current 96 unsupported outcomes consist of 68 migration-design outcomes
+At the initial triage point, 96 unsupported outcomes consisted of 68 migration-design outcomes
 (51 original, six retained R2 inverses, and 11 retained U1 applications),
 23 keep-or-drop choices, and five deferred owner decisions. The original
 ledger total remained 180/180 after these decisions; six server package
