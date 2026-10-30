@@ -3,7 +3,8 @@
 #   Apply declared Linux workstation and server operations through RIDE v3.
 #
 # Behavior:
-#   List operations by default; plan without changes; journal explicit changes.
+#   List operations by default; align interactive tables; plan without changes;
+#   journal explicit changes.
 #
 # Compatibility:
 #   Bash on Linux. Catalog targets currently name Fedora 44 x86_64 candidates.
@@ -58,22 +59,43 @@ RIDE Linux $RIDE_VERSION - explicit, catalog-driven setup
 Usage: ./ride.sh <command> [argument] [options]
   list [all|packages|artifacts|settings|profiles|groups]
   search <literal query>
-  show <operation-id>
+  show <operation-id> [--source source-id]
   plan [--profile name-or-path]
   apply [--profile name-or-path]
-  download <package-or-artifact-id> [--destination directory]
-  install <package-id>
+  download <package-or-artifact-id> [--source source-id] [--destination directory]
+  install <package-id> [--source source-id]
   set <setting-id> --state <declared-state>
   unset <setting-id>
-  status [operation-id] [--profile name-or-path]
+  status [operation-id] [--source source-id] [--profile name-or-path]
   restore --run-id <id>
-  remove <package-id> | remove --profile name-or-path
+  remove <package-id> [--source source-id] | remove --profile name-or-path
   completion bash
 
 Options: --dry-run previews state-changing commands; --allow-candidate enables
 development-only operations without VM acceptance. System changes need sudo.
 No command defaults to list. Profiles and catalog are JSON data, never shell.
+Package source selection is explicit; profiles may declare a source per package.
+Download does not install. Installing from a retained local artifact is pending.
+Interactive tables use column when available; redirected output remains TSV.
 HELP
+}
+
+ride_table() {
+  local header=${1:-}
+  if [[ -t 1 ]]; then
+    if command -v column >/dev/null 2>&1; then
+      if [[ -n "$header" ]]; then
+        { printf '%s\n' "$header"; cat; } | column -t -s $'\t'
+      else
+        column -t -s $'\t'
+      fi
+    else
+      [[ -z "$header" ]] || printf '%s\n' "$header"
+      cat
+    fi
+  else
+    cat
+  fi
 }
 
 ride_list() {
@@ -83,12 +105,13 @@ ride_list() {
     for file in "$RIDE_ROOT"/profiles/*.json; do
       [[ -f "$file" ]] || continue
       jq -r '[.id, .description] | @tsv' "$file"
-    done
+    done | ride_table $'ID\tDESCRIPTION'
     return
   fi
   case "$view" in all|packages|artifacts|settings|groups) ;; *) ride_die "unknown list view: $view" ;; esac
   if [[ "$view" == groups ]]; then
-    jq -r '.operations | group_by(.group)[] | [.[0].group, (length | tostring)] | @tsv' "$RIDE_CATALOG"
+    jq -r '.operations | group_by(.group)[] | [.[0].group, (length | tostring)] | @tsv' "$RIDE_CATALOG" |
+      ride_table $'GROUP\tCOUNT'
     return
   fi
   jq -r --arg view "$view" '
@@ -97,7 +120,7 @@ ride_list() {
       ($view == "artifacts" and .kind == "artifact") or
       ($view == "settings" and .kind == "setting")) |
     [.id, .status, .name] | @tsv
-  ' "$RIDE_CATALOG"
+  ' "$RIDE_CATALOG" | ride_table $'ID\tSTATUS\tNAME'
 }
 
 ride_search() {
@@ -107,61 +130,93 @@ ride_search() {
     .operations[] | select(([.id, .name, .description, .group, .productId] |
       map(ascii_downcase) | join(" ") | contains($q | ascii_downcase))) |
     [.id, .name, .description] | @tsv
-  ' "$RIDE_CATALOG"
+  ' "$RIDE_CATALOG" | ride_table $'ID\tNAME\tDESCRIPTION'
 }
 
 ride_show() {
-  local id=${1:-} entry current
+  local id=${1:-} source=${2:-} entry current conflict sources
   [[ -n "$id" ]] || ride_die "show requires an operation ID"
-  entry=$(ride_entry_or_die "$id")
+  entry=$(ride_entry_or_die "$id" "$source")
   if jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
       '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
       <<< "$entry" >/dev/null; then
     current=$(ride_observe "$entry")
+    conflict=$(ride_provider_conflict "$entry")
+    [[ -z "$conflict" ]] || current="conflict:$conflict"
   else
     current=unsupported
   fi
-  jq --arg observed "$current" '. + {observedState:$observed}' <<< "$entry"
+  sources=$(ride_entry "$id" | jq -c 'if .kind == "package" then [.sourceId] + [.sourceProviders[]?.sourceId] else [] end')
+  jq --arg observed "$current" --argjson sources "$sources" \
+    '. + {observedState:$observed, availableSources:$sources}' <<< "$entry"
 }
 
 ride_plan_entry() {
-  local id=$1 desired=$2 entry current status
-  entry=$(ride_entry_or_die "$id")
+  local id=$1 desired=$2 source=${3:-} entry current status conflict
+  entry=$(ride_entry_or_die "$id" "$source")
   ride_require_target "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
   current=$(ride_observe "$entry")
+  conflict=$(ride_provider_conflict "$entry")
+  [[ -z "$conflict" ]] || current="conflict:$conflict"
   status=$(jq -r '.status' <<< "$entry")
-  printf '%s\t%s\t%s\t%s\n' "$id" "$current" "$desired" "$status"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$id" \
+    "$(jq -r '.sourceId // "-"' <<< "$entry")" "$current" "$desired" "$status" \
+    "$(jq -r '.distribution // "-"' <<< "$entry")" \
+    "$(jq -r '.deploymentId // "-"' <<< "$entry")" "$(jq -r '.scope' <<< "$entry")"
 }
 
 ride_plan_profile() {
-  local profile=$1 id desired
+  local profile=$1 id desired source
   ride_validate_profile "$profile"
-  printf 'ID\tCURRENT\tDESIRED\tSTATUS\n'
-  while IFS=$'\t' read -r id desired; do
-    [[ -z "$id" ]] && continue
-    ride_plan_entry "$id" "$desired"
-  done < <(jq -r '.operations[] | [.id, .state] | @tsv' "$profile")
+  {
+    printf 'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE\n'
+    while IFS=$'\t' read -r id desired source; do
+      [[ -z "$id" ]] && continue
+      ride_plan_entry "$id" "$desired" "$source"
+    done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
+  } | ride_table
 }
 
 ride_preflight_change() {
-  local entry=$1 desired=$2 id
+  local entry=$1 desired=$2 id conflict
   id=$(jq -r '.id' <<< "$entry")
   ride_require_target "$entry"
   ride_require_accepted "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
   ride_require_privilege "$entry"
+  if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
+    conflict=$(ride_provider_conflict "$entry")
+    if [[ -n "$conflict" && ( "$desired" == installed || "$(ride_observe "$entry")" != installed ) ]]; then
+      ride_die "another source is installed for $id: $conflict; select that source explicitly before changing this one"
+    fi
+  fi
 }
 
 ride_apply_one() {
-  local entry=$1 desired=$2 id before after step recovery
+  local entry=$1 desired=$2 id before after step recovery source signature conflict distribution deployment scope
   id=$(jq -r '.id' <<< "$entry")
   recovery=$(jq -r '.recovery' <<< "$entry")
+  source=$(jq -r '.sourceId // ""' <<< "$entry")
+  distribution=$(jq -r '.distribution // ""' <<< "$entry")
+  deployment=$(jq -r '.deploymentId // ""' <<< "$entry")
+  scope=$(jq -r '.scope' <<< "$entry")
+  signature=$(ride_source_signature "$entry")
+  if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
+    conflict=$(ride_provider_conflict "$entry")
+    if [[ -n "$conflict" && ( "$desired" == installed || "$(ride_observe "$entry")" != installed ) ]]; then
+      ride_die "another source is installed for $id: $conflict; select that source explicitly before changing this one"
+    fi
+  fi
   before=$(ride_observe "$entry")
   step=$(jq -nc --arg id "$id" --arg before "$before" --arg desired "$desired" --arg recovery "$recovery" \
-    '{id:$id, observedBefore:$before, desired:$desired, recovery:$recovery, result:"pending"}')
+    --arg source "$source" --arg signature "$signature" --arg distribution "$distribution" \
+    --arg deployment "$deployment" --arg scope "$scope" \
+    '{id:$id, distribution:$distribution, deploymentId:$deployment, scope:$scope,
+      sourceId:$source, sourceSignature:$signature, sourceSignatureVersion:2,
+      observedBefore:$before, desired:$desired, recovery:$recovery, result:"pending"}')
   ride_journal_append "$step"
   if [[ "$before" == "$desired" ]]; then
     ride_journal_update_last unchanged "$before"
@@ -197,29 +252,29 @@ ride_apply_one() {
 }
 
 ride_apply_profile() {
-  local profile=$1 id desired entry
+  local profile=$1 id desired source entry
   ride_validate_profile "$profile"
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then ride_plan_profile "$profile"; return; fi
   # Validate every target, desired state and privilege before the first mutation.
-  while IFS=$'\t' read -r id desired; do
+  while IFS=$'\t' read -r id desired source; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id")
+    entry=$(ride_entry_or_die "$id" "$source")
     ride_preflight_change "$entry" "$desired"
-  done < <(jq -r '.operations[] | [.id, .state] | @tsv' "$profile")
+  done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
   ride_journal_create apply
-  while IFS=$'\t' read -r id desired; do
+  while IFS=$'\t' read -r id desired source; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id")
+    entry=$(ride_entry_or_die "$id" "$source")
     ride_apply_one "$entry" "$desired" || return 1
-  done < <(jq -r '.operations[] | [.id, .state] | @tsv' "$profile")
+  done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
   ride_journal_finish complete
 }
 
 ride_apply_single() {
-  local id=$1 desired=$2 entry
-  entry=$(ride_entry_or_die "$id")
+  local id=$1 desired=$2 source=${3:-} entry
+  entry=$(ride_entry_or_die "$id" "$source")
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then
-    ride_plan_entry "$id" "$desired"
+    ride_plan_entry "$id" "$desired" "$source" | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
     return
   fi
   ride_preflight_change "$entry" "$desired"
@@ -228,17 +283,27 @@ ride_apply_single() {
   ride_journal_finish complete
 }
 
+ride_restore_steps() {
+  jq -r '.steps | reverse[] |
+    [.id, .observedBefore, .observedAfter, .result,
+     (if .sourceId == null or .sourceId == "" then "-" else .sourceId end),
+     (.sourceSignature // "-"), (.sourceSignatureVersion // 1)] | @tsv' "$1"
+}
+
 ride_restore() {
-  local original_id=$1 original id before after result entry current recovery
+  local original_id=$1 original id before after result source signature signature_version entry current recovery
   [[ -n "$original_id" ]] || ride_die "restore requires --run-id"
   original=$(ride_journal_by_id "$original_id")
   if ride_journal_has_completed_restore "$original_id"; then
     ride_die "run has already been restored: $original_id"
   fi
   # Refuse a conflicting machine state before restoring any step.
-  while IFS=$'\t' read -r id before after result; do
+  while IFS=$'\t' read -r id before after result source signature signature_version; do
     [[ "$result" == changed ]] || continue
-    entry=$(ride_entry_or_die "$id")
+    [[ "$source" != - ]] || source=
+    entry=$(ride_entry_or_die "$id" "$source")
+    [[ "$signature" == - || "$signature" == "$(ride_source_signature "$entry" "$signature_version")" ]] ||
+      ride_die "source definition changed since run for $id; exact recovery is unavailable"
     recovery=$(jq -r '.recovery' <<< "$entry")
     if [[ "$recovery" == none || ( "$recovery" == remove-new-install && ( "$before" != absent || "$after" != installed ) ) ]]; then
       ride_die "exact recovery is unavailable for $id ($before -> $after)"
@@ -247,69 +312,92 @@ ride_restore() {
     current=$(ride_observe "$entry")
     [[ "$current" == "$after" || "$current" == "$before" ]] ||
       ride_die "restore conflict for $id: expected $after, observed $current"
-  done < <(jq -r '.steps | reverse[] | [.id, .observedBefore, .observedAfter, .result] | @tsv' "$original")
+  done < <(ride_restore_steps "$original")
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then
-    while IFS=$'\t' read -r id before after result; do
-      [[ "$result" == changed ]] || continue
-      ride_plan_entry "$id" "$before"
-    done < <(jq -r '.steps | reverse[] | [.id, .observedBefore, .observedAfter, .result] | @tsv' "$original")
+    {
+      while IFS=$'\t' read -r id before after result source signature signature_version; do
+        [[ "$result" == changed ]] || continue
+        [[ "$source" != - ]] || source=
+        ride_plan_entry "$id" "$before" "$source"
+      done < <(ride_restore_steps "$original")
+    } | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
     return
   fi
   ride_journal_create "restore:$original_id"
-  while IFS=$'\t' read -r id before after result; do
+  while IFS=$'\t' read -r id before after result source signature signature_version; do
     [[ "$result" == changed ]] || continue
-    entry=$(ride_entry_or_die "$id")
+    [[ "$source" != - ]] || source=
+    entry=$(ride_entry_or_die "$id" "$source")
     ride_apply_one "$entry" "$before" || return 1
-  done < <(jq -r '.steps | reverse[] | [.id, .observedBefore, .observedAfter, .result] | @tsv' "$original")
+  done < <(ride_restore_steps "$original")
   ride_journal_finish complete
 }
 
 ride_remove_profile() {
-  local profile=$1 id entry
+  local profile=$1 id source entry
   ride_validate_profile "$profile"
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then
-    while IFS= read -r id; do ride_plan_entry "$id" absent; done < <(jq -r '.operations | reverse[] | .id' "$profile")
+    {
+      while IFS=$'\t' read -r id source; do
+        [[ "$source" != - ]] || source=
+        ride_plan_entry "$id" absent "$source"
+      done < <(jq -r '.operations | reverse[] | [.id, (.source // "-")] | @tsv' "$profile")
+    } | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
     return
   fi
-  while IFS= read -r id; do
+  while IFS=$'\t' read -r id source; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id")
+    [[ "$source" != - ]] || source=
+    entry=$(ride_entry_or_die "$id" "$source")
     ride_preflight_change "$entry" absent
-  done < <(jq -r '.operations | reverse[] | .id' "$profile")
+  done < <(jq -r '.operations | reverse[] | [.id, (.source // "-")] | @tsv' "$profile")
   ride_journal_create remove-profile
-  while IFS= read -r id; do
+  while IFS=$'\t' read -r id source; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id")
+    [[ "$source" != - ]] || source=
+    entry=$(ride_entry_or_die "$id" "$source")
     ride_apply_one "$entry" absent || return 1
-  done < <(jq -r '.operations | reverse[] | .id' "$profile")
+  done < <(jq -r '.operations | reverse[] | [.id, (.source // "-")] | @tsv' "$profile")
   ride_journal_finish complete
 }
 
 ride_status() {
-  local id=${1:-} entry current
-  printf 'ID\tOBSERVED\tSTATUS\n'
-  if [[ -n "$id" ]]; then
-    entry=$(ride_entry_or_die "$id")
-    ride_require_target "$entry"
-    current=$(ride_observe "$entry")
-    printf '%s\t%s\t%s\n' "$id" "$current" "$(jq -r '.status' <<< "$entry")"
-  else
-    while IFS= read -r id; do
-      entry=$(ride_entry_or_die "$id")
-      if jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
-          '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
-          <<< "$entry" >/dev/null; then
-        current=$(ride_observe "$entry")
-      else
-        current=unsupported
-      fi
-      printf '%s\t%s\t%s\n' "$id" "$current" "$(jq -r '.status' <<< "$entry")"
-    done < <(jq -r '.operations[].id' "$RIDE_CATALOG")
-  fi
+  local id=${1:-} source=${2:-} entry current conflict
+  {
+    printf 'ID\tSOURCE\tOBSERVED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE\n'
+    if [[ -n "$id" ]]; then
+      entry=$(ride_entry_or_die "$id" "$source")
+      ride_require_target "$entry"
+      current=$(ride_observe "$entry")
+      conflict=$(ride_provider_conflict "$entry")
+      [[ -z "$conflict" ]] || current="conflict:$conflict"
+      printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$id" \
+        "$(jq -r '.sourceId // "-"' <<< "$entry")" "$current" "$(jq -r '.status' <<< "$entry")" \
+        "$(jq -r '.distribution // "-"' <<< "$entry")" \
+        "$(jq -r '.deploymentId // "-"' <<< "$entry")" "$(jq -r '.scope' <<< "$entry")"
+    else
+      while IFS= read -r id; do
+        entry=$(ride_entry_or_die "$id")
+        if jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
+            '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
+            <<< "$entry" >/dev/null; then
+          current=$(ride_observe "$entry")
+          conflict=$(ride_provider_conflict "$entry")
+          [[ -z "$conflict" ]] || current="conflict:$conflict"
+        else
+          current=unsupported
+        fi
+        printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$id" \
+          "$(jq -r '.sourceId // "-"' <<< "$entry")" "$current" "$(jq -r '.status' <<< "$entry")" \
+          "$(jq -r '.distribution // "-"' <<< "$entry")" \
+          "$(jq -r '.deploymentId // "-"' <<< "$entry")" "$(jq -r '.scope' <<< "$entry")"
+      done < <(jq -r '.operations[].id' "$RIDE_CATALOG")
+    fi
+  } | ride_table
 }
 
 ride_main() {
-  local command=${1:-list} argument= profile=default profile_set=0 desired= run_id= destination=
+  local command=${1:-list} argument= profile=default profile_set=0 desired= run_id= destination= source= source_set=0
   if [[ $# -gt 0 ]]; then shift; fi
   case "$command" in
     -h|--help|help) ride_help; return ;;
@@ -321,6 +409,7 @@ ride_main() {
       --state) [[ $# -ge 2 ]] || ride_die "--state needs a value"; desired=$2; shift 2 ;;
       --run-id) [[ $# -ge 2 ]] || ride_die "--run-id needs a value"; run_id=$2; shift 2 ;;
       --destination) [[ $# -ge 2 ]] || ride_die "--destination needs a value"; destination=$2; shift 2 ;;
+      --source) [[ $# -ge 2 ]] || ride_die "--source needs a value"; source=$2; source_set=1; shift 2 ;;
       --allow-candidate) RIDE_ALLOW_CANDIDATE=1; shift ;;
       --dry-run) RIDE_DRY_RUN=1; shift ;;
       --*) ride_die "unknown option: $1" ;;
@@ -330,16 +419,22 @@ ride_main() {
   ride_require_command jq
   ride_platform
   ride_validate_catalog
+  if [[ "$source_set" == 1 ]]; then
+    case "$command" in
+      show|download|install|status|remove) [[ -n "$argument" ]] || ride_die "--source needs a package ID" ;;
+      *) ride_die "--source is only valid with a direct package command" ;;
+    esac
+  fi
   case "$command" in
     list) ride_list "${argument:-all}" ;;
     search) ride_search "$argument" ;;
-    show) ride_show "$argument" ;;
+    show) ride_show "$argument" "$source" ;;
     plan) [[ -z "$argument" ]] || ride_die "plan takes --profile, not a positional argument"; ride_plan_profile "$(ride_profile_path "$profile")" ;;
     apply) [[ -z "$argument" ]] || ride_die "apply takes --profile, not a positional argument"; ride_apply_profile "$(ride_profile_path "$profile")" ;;
     download)
       [[ -n "$argument" ]] || ride_die "download requires a package ID"
       local entry
-      entry=$(ride_entry_or_die "$argument")
+      entry=$(ride_entry_or_die "$argument" "$source")
       ride_require_target "$entry"
       [[ "$(jq -r '.kind' <<< "$entry")" == package || "$(jq -r '.kind' <<< "$entry")" == artifact ]] ||
         ride_die "download requires a package or artifact operation"
@@ -356,8 +451,8 @@ ride_main() {
       esac
       ;;
     install)
-      [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument")")" == package ]] || ride_die "install requires a package ID"
-      ride_apply_single "$argument" installed
+      [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument" "$source")")" == package ]] || ride_die "install requires a package ID"
+      ride_apply_single "$argument" installed "$source"
       ;;
     set)
       [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument")")" == setting ]] || ride_die "set requires a setting ID"
@@ -373,14 +468,14 @@ ride_main() {
         [[ -z "$argument" ]] || ride_die "status takes an ID or --profile, not both"
         ride_plan_profile "$(ride_profile_path "$profile")"
       else
-        ride_status "$argument"
+        ride_status "$argument" "$source"
       fi
       ;;
     restore) ride_restore "$run_id" ;;
     remove)
       if [[ -n "$argument" ]]; then
-        [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument")")" == package ]] || ride_die "remove requires a package ID"
-        ride_apply_single "$argument" absent
+        [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument" "$source")")" == package ]] || ride_die "remove requires a package ID"
+        ride_apply_single "$argument" absent "$source"
       else
         ride_remove_profile "$(ride_profile_path "$profile")"
       fi

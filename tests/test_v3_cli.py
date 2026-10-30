@@ -1,8 +1,12 @@
 """Mock provider tests for the public v3 command and journal lifecycle."""
 
 import json
+import hashlib
+import errno
 import os
 from pathlib import Path
+import pty
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -16,7 +20,8 @@ def operation(name):
     return {
         "id": f"package.{name}", "kind": "package", "name": name,
         "group": "test", "description": f"Fixture {name}",
-        "handler": "dnf-package", "packageName": name,
+        "handler": "dnf-package", "packageName": name, "sourceId": "fedora-rpm",
+        "distribution": "installed", "deploymentId": "local-installed", "artifactFormat": "rpm",
         "states": ["installed", "absent"], "scope": "user",
         "status": "candidate", "recovery": "remove-new-install",
         "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"]}},
@@ -56,7 +61,7 @@ esac
         os_release = self.root / "os-release"
         os_release.write_text("ID=fedora\nVERSION_ID=44\n")
         catalog = self.root / "catalog.json"
-        catalog.write_text(json.dumps({"schemaVersion": 1, "clientVersion": "3.0.0",
+        catalog.write_text(json.dumps({"schemaVersion": 3, "clientVersion": "3.0.0",
                                        "operations": [operation("alpha"), operation("beta")]}))
         self.profile = self.root / "profile.json"
         self.profile.write_text(json.dumps({"schemaVersion": 1, "id": "test",
@@ -81,15 +86,67 @@ esac
             self.assertNotEqual(completed.returncode, 0, completed.stdout)
         return completed
 
+    def run_ride_pty(self, *args):
+        master, slave = pty.openpty()
+        try:
+            completed = subprocess.run([str(CLI), *args], env=self.env, stdout=slave,
+                                       stderr=subprocess.PIPE, timeout=15, check=False)
+        finally:
+            os.close(slave)
+        chunks = []
+        try:
+            while True:
+                try:
+                    chunk = os.read(master, 65536)
+                except OSError as error:
+                    if error.errno == errno.EIO:
+                        break
+                    raise
+                if not chunk:
+                    break
+                chunks.append(chunk)
+        finally:
+            os.close(master)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode())
+        return b"".join(chunks).decode().replace("\r", "")
+
     def journals(self):
         return [json.loads(path.read_text()) for path in (self.root / "runs").glob("*.json")]
 
     def test_plan_is_read_only_and_candidate_is_gated(self):
-        self.assertIn("package.alpha\tabsent\tinstalled", self.run_ride("plan", "--profile", str(self.profile)).stdout)
+        self.assertIn("package.alpha\tfedora-rpm\tabsent\tinstalled", self.run_ride("plan", "--profile", str(self.profile)).stdout)
         self.assertEqual(self.journals(), [])
         self.run_ride("install", "package.alpha", success=False)
         self.assertEqual(self.journals(), [])
         self.assertFalse((self.root / "packages" / "alpha").exists())
+
+    def test_interactive_tables_align_and_pipes_remain_tsv(self):
+        if shutil.which("column") is None:
+            self.skipTest("column is optional for interactive tables")
+        plan_lines = self.run_ride_pty("plan", "--profile", str(self.profile)).splitlines()
+        self.assertEqual(plan_lines[0].index("CURRENT"), plan_lines[1].index("absent"))
+        self.assertEqual(plan_lines[0].index("DESIRED"), plan_lines[1].index("installed"))
+        catalog = self.root / "catalog.json"
+        data = json.loads(catalog.read_text())
+        data["operations"][1]["id"] = "package.beta-with-long-id"
+        catalog.write_text(json.dumps(data))
+
+        lines = self.run_ride_pty("list").splitlines()
+        self.assertEqual(lines[0].index("STATUS"), lines[1].index("candidate"))
+        self.assertEqual(lines[0].index("STATUS"), lines[2].index("candidate"))
+        self.assertEqual(lines[0].index("NAME"), lines[1].rindex("alpha"))
+        self.assertEqual(lines[0].index("NAME"), lines[2].rindex("beta"))
+
+        status_lines = self.run_ride_pty("status").splitlines()
+        self.assertEqual(status_lines[0].index("OBSERVED"), status_lines[1].index("absent"))
+        self.assertEqual(status_lines[0].index("OBSERVED"), status_lines[2].index("absent"))
+        search_lines = self.run_ride_pty("search", "fixture").splitlines()
+        self.assertEqual(search_lines[0].index("DESCRIPTION"), search_lines[1].index("Fixture alpha"))
+        self.assertEqual(search_lines[0].index("DESCRIPTION"), search_lines[2].index("Fixture beta"))
+
+        piped = self.run_ride("list").stdout
+        self.assertTrue(piped.startswith("package.alpha\tcandidate\talpha\n"))
+        self.assertNotIn("ID\tSTATUS\tNAME", piped)
 
     def test_apply_repeat_restore_once(self):
         self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
@@ -124,6 +181,7 @@ esac
 
     def test_unknown_and_unsupported_targets_fail_closed(self):
         self.run_ride("show", "package.unknown", success=False)
+        self.run_ride("status", "package.unknown", success=False)
         (self.root / "os-release").write_text("ID=debian\nVERSION_ID=13\n")
         self.run_ride("plan", "--profile", str(self.profile), success=False)
 
@@ -136,6 +194,82 @@ esac
         failed = self.run_ride("show", "package.alpha", success=False)
         self.assertIn("invalid v3 operation catalog", failed.stderr)
         self.assertFalse(marker.exists())
+
+    def test_source_selection_conflict_and_journal(self):
+        catalog = self.root / "catalog.json"
+        data = json.loads(catalog.read_text())
+        data["operations"][0]["sourceProviders"] = [{
+            "sourceId": "alternate-rpm", "handler": "dnf-package", "packageName": "alpha-alt",
+            "artifactFormat": "rpm",
+            "status": "candidate", "recovery": "remove-new-install",
+            "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"]}},
+            "sourceUri": "https://example.org/alternate", "verification": "fedora-repository-gpg",
+        }]
+        catalog.write_text(json.dumps(data))
+        shown = json.loads(self.run_ride("show", "package.alpha", "--source", "alternate-rpm").stdout)
+        self.assertEqual(shown["sourceId"], "alternate-rpm")
+        self.assertEqual(shown["availableSources"], ["fedora-rpm", "alternate-rpm"])
+        alternate_profile = json.loads(self.profile.read_text())
+        alternate_profile["operations"] = [{"id": "package.alpha", "state": "installed", "source": "alternate-rpm"}]
+        self.profile.write_text(json.dumps(alternate_profile))
+        self.assertIn("package.alpha\talternate-rpm\tabsent\tinstalled", self.run_ride("plan", "--profile", str(self.profile)).stdout)
+        self.run_ride("install", "package.alpha", "--source", "alternate-rpm", "--allow-candidate")
+        self.assertTrue((self.root / "packages" / "alpha-alt").exists())
+        journal = self.journals()[0]
+        self.assertEqual(journal["schemaVersion"], 2)
+        self.assertEqual(journal["steps"][0]["sourceId"], "alternate-rpm")
+        self.assertEqual(journal["steps"][0]["distribution"], "installed")
+        self.assertEqual(journal["steps"][0]["deploymentId"], "local-installed")
+        self.assertEqual(journal["steps"][0]["sourceSignatureVersion"], 2)
+        self.assertIn("conflict:alternate-rpm", self.run_ride("status", "package.alpha").stdout)
+        refused = self.run_ride("install", "package.alpha", "--allow-candidate", success=False)
+        self.assertIn("another source is installed", refused.stderr)
+        self.assertFalse((self.root / "packages" / "alpha").exists())
+        data["operations"][0]["sourceProviders"][0]["packageName"] = "different-package"
+        catalog.write_text(json.dumps(data))
+        refused = self.run_ride("restore", "--run-id", journal["runId"], "--allow-candidate", success=False)
+        self.assertIn("source definition changed", refused.stderr)
+        data["operations"][0]["sourceProviders"][0]["packageName"] = "alpha-alt"
+        catalog.write_text(json.dumps(data))
+        self.run_ride("restore", "--run-id", journal["runId"], "--allow-candidate")
+        self.assertFalse((self.root / "packages" / "alpha-alt").exists())
+        self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        self.assertTrue((self.root / "packages" / "alpha-alt").exists())
+        self.run_ride("remove", "--profile", str(self.profile), "--allow-candidate")
+        self.assertFalse((self.root / "packages" / "alpha-alt").exists())
+
+        data["operations"][0]["sourceProviders"][0]["packageName"] = "alpha"
+        catalog.write_text(json.dumps(data))
+        refused = self.run_ride("show", "package.alpha", success=False)
+        self.assertIn("invalid v3 operation catalog", refused.stderr)
+
+    def test_schema_one_run_restores_with_earlier_source_signature(self):
+        self.run_ride("install", "package.alpha", "--allow-candidate")
+        journal_path = next((self.root / "runs").glob("*.json"))
+        journal = json.loads(journal_path.read_text())
+        entry = operation("alpha")
+        old_fields = {key: entry.get(key) for key in (
+            "id", "sourceId", "handler", "packageName", "serviceName", "scope",
+            "sourceUri", "verification", "targets", "recovery",
+        )}
+        encoded = (json.dumps(old_fields, sort_keys=True, separators=(",", ":")) + "\n").encode()
+        journal["schemaVersion"] = 1
+        step = journal["steps"][0]
+        step["sourceSignature"] = hashlib.sha256(encoded).hexdigest()
+        step.pop("sourceSignatureVersion")
+        step.pop("distribution")
+        step.pop("deploymentId")
+        step.pop("scope")
+        journal_path.write_text(json.dumps(journal))
+        self.run_ride("restore", "--run-id", journal["runId"], "--allow-candidate")
+        self.assertFalse((self.root / "packages" / "alpha").exists())
+
+    def test_profile_source_and_unknown_source(self):
+        profile = json.loads(self.profile.read_text())
+        profile["operations"][0]["source"] = "not-declared"
+        self.profile.write_text(json.dumps(profile))
+        refused = self.run_ride("plan", "--profile", str(self.profile), success=False)
+        self.assertIn("unknown source", refused.stderr)
 
 
 if __name__ == "__main__":

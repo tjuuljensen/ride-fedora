@@ -22,8 +22,20 @@ references, not a fallback execution path.
 
 - `catalog/operations.json` defines stable operation IDs, supported targets,
   actions, handlers, sources, and verification requirements. Profiles select
-  desired states using those IDs. Generate operation reference documentation
-  from the catalog rather than editing generated output.
+  desired states using those IDs and may select a declared package source.
+  Generate operation reference documentation from the catalog rather than
+  editing generated output.
+- Keep package product, distribution, deployment, acquisition provider,
+  artifact format, scope, and destination distinct. Apply the shared
+  [package deployment decisions](docs/package-deployment-decisions.md) when
+  changing source selection, portable tools, downloads, installation, or
+  recovery. Installed and portable deployments may coexist after product
+  conflict review; do not impose a blanket product-wide exclusion.
+- At each package migration batch and before a release candidate, compare
+  Linux catalog, profile, and run-state schemas and their behavior with the
+  Windows development branch. Record intentional differences, their reasons,
+  and a review trigger in [Windows alignment](docs/windows-alignment.md);
+  resolve unexplained drift before promoting an operation.
 - Keep the engine and public IDs distro-neutral. Place DNF/RPM behavior in the
   Fedora provider; add apt/dpkg providers only with matching VM evidence.
 - Keep host-specific users, shares, secrets, and IP addresses outside this

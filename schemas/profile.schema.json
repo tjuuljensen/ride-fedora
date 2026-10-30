@@ -14,7 +14,8 @@
         "type": "object", "required": ["id", "state"], "additionalProperties": false,
         "properties": {
           "id": {"type": "string", "pattern": "^(package|setting|system)\\.[a-z0-9.-]+$"},
-          "state": {"enum": ["installed", "absent", "enabled", "disabled"]}
+          "state": {"enum": ["installed", "absent", "enabled", "disabled"]},
+          "source": {"type": "string", "pattern": "^[a-z0-9-]+$"}
         }
       }
     }

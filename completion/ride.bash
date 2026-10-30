@@ -45,6 +45,15 @@ _ride_complete() {
       mapfile -t words < <(jq -r --arg id "$id" '.operations[] | select(.id == $id) | .states[]' "$catalog")
       COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
       return ;;
+    --source)
+      id=
+      for token in "${COMP_WORDS[@]:2:COMP_CWORD-2}"; do
+        [[ "$token" == package.* ]] && id=$token
+      done
+      [[ -n "$id" ]] || return
+      mapfile -t words < <(jq -r --arg id "$id" '.operations[] | select(.id == $id and .kind == "package") | .sourceId, .sourceProviders[]?.sourceId' "$catalog")
+      COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      return ;;
   esac
   case "$command" in
     show|install|set|unset|download|remove|status)

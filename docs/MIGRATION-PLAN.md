@@ -104,11 +104,21 @@ verified; catalog operations remain candidates.
 | Stage | Agent work | Owner or runtime input | Completion evidence |
 | --- | --- | --- | --- |
 | Select | Group a small related outcome set; identify catalog IDs and deferred neighbors. | Choose a target and provide a disposable VM when runtime testing begins. | Named scope, target distro/release/CPU, owner, and exclusions in this plan. |
-| Assess | Trace legacy behavior, consumers, upstream source, data ownership, dependencies, detection, and inverse. | Resolve host-specific values only if the selected operation needs them. | Current-to-v3 mapping, risks, and recovery limits. |
+| Assess | Trace legacy behavior, consumers, upstream source, data ownership, dependencies, detection, and inverse. Compare catalog, profile, and run-state fields and their semantics with the Windows development branch. | Resolve host-specific values only if the selected operation needs them. | Current-to-v3 mapping, risks, recovery limits, and any intentional schema or behavior differences recorded in `windows-alignment.md`. |
 | Implement | Prepare catalog, handler, profile, docs, and focused tests; run static and mocked checks. | Review only decisions that cannot be derived from source or established scope. | Reviewable patch and `source-ready` status after relevant CI passes. |
 | Activate | Apply the prepared revision only in a disposable target VM; record exact command and snapshot. | Supply VM access or run the documented commands. | VM log and `deployed-awaiting-verification` status. |
 | Verify | Check plan, apply, repeat apply, status, removal or restore, partial failure, and package or artifact evidence. | Confirm any user-visible desktop behavior that automation cannot observe. | Dated `docs/acceptance/<operation-id>.md` results and `verified` or failed status. |
-| Close or recover | Promote only accepted target rows; otherwise restore the VM snapshot, retain candidate status, and record the failure. | Provide further observations only when a check depends on them. | Updated catalog, migration row, evidence, and concrete next action. |
+| Close or recover | Recheck the shared contract after implementation; promote only accepted target rows. Otherwise restore the VM snapshot, retain candidate status, and record the failure. | Provide further observations only when a check depends on them. | Updated catalog, migration row, Windows alignment review, evidence, and concrete next action. |
+
+Repeat the cross-repository schema and behavior review for every package batch
+and at release-candidate preparation. Compare product identity, distribution,
+deployment, provider selection, artifact evidence, profile selection, run-state
+ownership, and recovery semantics. Alignment is required for shared behavior,
+not for platform-specific syntax or handlers. Record each deliberate difference
+with its reason and next review trigger in
+[Windows alignment](windows-alignment.md). Record the compared branches or
+revisions and review date in the batch evidence; treat an unexplained
+difference as unfinished migration work.
 
 Begin with a Fedora 44 x86_64 Workstation VM package pilot such as
 `package.less` and `package.exfatprogs`. Run CI first, then use `plan`, `apply`,

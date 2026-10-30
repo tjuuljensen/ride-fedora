@@ -34,6 +34,26 @@ def validate() -> dict:
     if len(by_id) != len(entries):
         raise ValueError("duplicate catalog ID")
     for entry in entries:
+        if entry["kind"] == "package":
+            sources = [entry["sourceId"], *(source["sourceId"] for source in entry.get("sourceProviders", []))]
+            if len(sources) != len(set(sources)):
+                raise ValueError(f"{entry['id']} repeats a source ID")
+            package_names = [
+                name for name in [entry.get("packageName"),
+                                  *(source["packageName"] for source in entry.get("sourceProviders", []))]
+                if name is not None
+            ]
+            if len(package_names) != len(set(package_names)):
+                raise ValueError(f"{entry['id']} has RPM sources that cannot be distinguished by observation")
+            for source in entry.get("sourceProviders", []):
+                if source["status"] == "supported":
+                    evidence = source.get("acceptanceEvidence")
+                    expected = f"docs/acceptance/{entry['id']}.{source['sourceId']}.md"
+                    if evidence != expected or not (ROOT / expected).is_file():
+                        raise ValueError(f"{entry['id']}/{source['sourceId']} lacks acceptance evidence")
+                    record = (ROOT / expected).read_text(encoding="utf-8")
+                    if not all(field in record for field in (entry["id"], source["sourceId"], "VM", "PASS")):
+                        raise ValueError(f"{entry['id']}/{source['sourceId']} lacks a passed VM run")
         for dependency in entry.get("dependencies", []):
             if dependency not in by_id:
                 raise ValueError(f"{entry['id']} has unknown dependency {dependency}")
@@ -61,6 +81,13 @@ def validate() -> dict:
                 raise ValueError(f"invalid state for {op_id} in {path.name}")
             if by_id[op_id]["kind"] == "artifact":
                 raise ValueError(f"download-only artifact {op_id} in {path.name}")
+            source = item.get("source")
+            if source is not None:
+                entry = by_id[op_id]
+                if entry["kind"] != "package" or source not in [
+                    entry["sourceId"], *(variant["sourceId"] for variant in entry.get("sourceProviders", []))
+                ]:
+                    raise ValueError(f"unknown source {source} for {op_id} in {path.name}")
     return catalog
 
 
@@ -80,9 +107,20 @@ def render_docs(catalog: dict) -> str:
             for distro, target in entry["targets"].items()
         )
         description = entry["description"].replace("|", "\\|")
+        source_label = (
+            f" (`{entry['sourceId']}`; {entry['distribution']}/"
+            f"{entry['deploymentId']}; {entry['artifactFormat']}; {entry['scope']})"
+            if entry["kind"] == "package" else ""
+        )
+        alternative_sources = ", ".join(
+            f"[{source['sourceId']}]({source['sourceUri']})"
+            for source in entry.get("sourceProviders", [])
+        )
+        if alternative_sources:
+            source_label += f"; alternatives: {alternative_sources}"
         lines.append(
             f"| `{entry['id']}` | {entry['group']} | {description} | {targets} | "
-            f"[{entry['productId']}]({entry['productUri']}) / [source]({entry['sourceUri']}) | "
+            f"[{entry['productId']}]({entry['productUri']}) / [source]({entry['sourceUri']}){source_label} | "
             f"[{entry['license']}]({entry['licenseUri']}) | {entry['verification']} | "
             f"{entry['recovery']} | {entry['status']} |"
         )

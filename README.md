@@ -39,7 +39,16 @@ the first failed operation and records completed steps.
 
 The command vocabulary is `list`, `search`, `show`, `plan`, `apply`, `download`,
 `install`, `set`, `unset`, `status`, `restore`, and `remove`. Use
-`./ride.sh --help` for syntax. Tab completion can be loaded in Bash with:
+`./ride.sh --help` for syntax.
+
+Interactive list, search, plan, and status tables use `column` when available
+to align fields and show headers. Redirected output stays tab-separated for
+scripts; list and search keep their existing headerless TSV format.
+`column` is provided by [util-linux on Fedora](https://packages.fedoraproject.org/pkgs/util-linux/util-linux/)
+and [bsdextrautils on Debian](https://packages.debian.org/trixie/bsdextrautils)
+and [Ubuntu](https://packages.ubuntu.com/noble/bsdextrautils).
+
+Tab completion can be loaded in Bash with:
 
 ```bash
 source completion/ride.bash

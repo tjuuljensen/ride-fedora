@@ -25,11 +25,48 @@ acquisition. `status` reports live state; `restore --run-id` uses a saved
 journal and refuses to overwrite a state changed by something else.
 
 Every operation declares an ID, kind, handler, supported targets, available
-states, privilege, provenance, and verification method. Profiles contain only
-IDs and desired states. The engine validates targets and handlers before
-changing anything. The Fedora provider is the first implementation. Debian
-and Ubuntu need separate apt/dpkg providers and VM acceptance before support
-is advertised.
+states, privilege, provenance, and verification method. Profiles contain IDs,
+desired states, and optional package source IDs. The engine validates targets
+and handlers before changing anything. The Fedora provider is the first
+implementation. Debian and Ubuntu need separate apt/dpkg providers and VM
+acceptance before support is advertised.
+
+## Package sources and installation scope
+
+One stable package ID identifies the product. Distribution (installed or
+portable), provider, artifact format, scope, and destination answer different
+questions. A directly downloaded RPM can still be an installed system package;
+an AppImage can be deployed to a user or system path. Neither "standalone" nor
+"system installer" is a complete package type.
+
+The current catalog names one `installed` distribution and one
+`local-installed` deployment slot per package. Its `sourceId` selects the
+default acquisition provider; optional `sourceProviders` describe alternatives
+for that same slot. A provider cannot change its distribution or scope. Profiles
+may set `source`, and direct package commands accept `--source`; explicit
+choices fail if undeclared. `show`, plan, status, and run journals identify the
+resolved source. Current DNF alternatives must have distinct RPM names so the
+observer can identify a conflicting build; a second repository for the same
+RPM name needs provenance-aware observation before it can be offered.
+
+The approved target follows the Windows [package deployment decision](package-deployment-decisions.md):
+an installed copy, separate portable copies, and acquisition kits can coexist
+under one product ID after product-specific conflict review. Each deployment
+needs its own identity, scope, destination, version, ownership, artifact
+evidence, and recovery. The current alternate-provider guard covers the one
+`local-installed` slot; it is not a product-wide mutual-exclusion rule.
+Windows has individual portable deployments, but independent coexistence and
+kit assembly remain pending there. Linux has no portable handler yet.
+
+Acquisition is separate from installation. `download` does not change package
+presence. A later install from a retained verified artifact must select that
+exact file and run without network fallback; the current Fedora `install`
+command still calls DNF and cannot consume a downloaded RPM. Explicit provider
+selection never falls back. Any future automatic provider fallback is limited
+to approved equivalent artifacts and availability or transport failures;
+integrity or installation failures stop. Flatpak, AppImage, direct local RPM,
+apt/dpkg, and offline install need their own handlers, manifest/state work, and
+disposable-VM acceptance before they are offered.
 
 ## State, cache, and recovery
 

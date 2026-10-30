@@ -3,7 +3,7 @@
 ride_validate_catalog() {
   [[ -r "$RIDE_CATALOG" ]] || ride_die "catalog not readable: $RIDE_CATALOG"
   jq -e '
-    .schemaVersion == 1 and (.operations | type == "array" and length > 0) and
+    .schemaVersion == 3 and (.operations | type == "array" and length > 0) and
     ([.operations[].id] | length == (unique | length)) and
     all(.operations[];
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
@@ -22,9 +22,32 @@ ride_validate_catalog() {
       (.productUri | type == "string" and startswith("https://")) and
       (.sourceUri | type == "string" and startswith("https://")) and
       (.licenseUri | type == "string" and startswith("https://")) and
-      (if .handler == "dnf-package" then (.kind == "package" and (.packageName | type == "string" and test("^[A-Za-z0-9+_.-]+$")))
+      (if .kind == "package" then
+        .distribution == "installed" and .deploymentId == "local-installed" and
+        (.artifactFormat | IN("rpm", "wheel")) and
+        (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
+        (.sourceId as $defaultSource | (.sourceProviders // []) | type == "array" and
+          ([.[].sourceId] | length == (unique | length)) and
+          all(.[];
+            (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
+            .handler == "dnf-package" and
+            .scope == null and
+            .artifactFormat == "rpm" and
+            (.status | IN("candidate", "supported")) and
+            .recovery == "remove-new-install" and
+            (.targets | type == "object" and length > 0) and
+            (.sourceUri | type == "string" and startswith("https://")) and
+            .verification == "fedora-repository-gpg" and
+            (.packageName | type == "string" and test("^[A-Za-z0-9+_.-]+$"))
+          ) and all(.[]; .sourceId != $defaultSource)) and
+        (([.packageName] + [.sourceProviders[]?.packageName] | map(select(. != null))) |
+          length == (unique | length))
+       else .distribution == null and .deploymentId == null and .artifactFormat == null and
+         .sourceId == null and .sourceProviders == null end) and
+      (if .handler == "dnf-package" then (.kind == "package" and .artifactFormat == "rpm" and
+        (.packageName | type == "string" and test("^[A-Za-z0-9+_.-]+$")))
        elif .handler == "systemd-service" then (.kind == "setting" and (.serviceName | type == "string" and test("^[A-Za-z0-9_.@-]+\\.service$")))
-       elif .handler == "python-venv" then (.kind == "package" and .id == "package.volatility3")
+       elif .handler == "python-venv" then (.kind == "package" and .artifactFormat == "wheel" and .id == "package.volatility3")
        else (.kind == "artifact" and (.githubRepository | type == "string" and test("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")) and
              (.assetSuffix | type == "string" and test("^-[A-Za-z0-9_.-]+$")) and
              (.maxBytes | type == "number" and . > 0 and . <= 104857600)) end)
@@ -40,6 +63,12 @@ ride_validate_catalog() {
     [[ "$evidence" == "docs/acceptance/$supported_id.md" && -f "$RIDE_ROOT/$evidence" ]] ||
       ride_die "supported catalog entry lacks acceptance evidence: $supported_id"
   done < <(jq -r '.operations[] | select(.status == "supported") | [.id, (.acceptanceEvidence // "MISSING")] | @tsv' "$RIDE_CATALOG")
+  local source_id
+  while IFS=$'\t' read -r supported_id source_id evidence; do
+    [[ "$evidence" == "docs/acceptance/$supported_id.$source_id.md" && -f "$RIDE_ROOT/$evidence" ]] ||
+      ride_die "supported source lacks acceptance evidence: $supported_id/$source_id"
+  done < <(jq -r '.operations[] | .id as $id | .sourceProviders[]? | select(.status == "supported") |
+    [$id, .sourceId, (.acceptanceEvidence // "MISSING")] | @tsv' "$RIDE_CATALOG")
 }
 
 ride_entry() {
@@ -48,7 +77,52 @@ ride_entry() {
 }
 
 ride_entry_or_die() {
-  ride_entry "$1" || ride_die "unknown catalog ID: $1"
+  local id=$1 requested=${2:-} base selected
+  base=$(ride_entry "$id") || ride_die "unknown catalog ID: $id"
+  if [[ "$(jq -r '.kind' <<< "$base")" != package ]]; then
+    [[ -z "$requested" ]] || ride_die "source selection requires a package: $id"
+    printf '%s\n' "$base"
+    return
+  fi
+  selected=${requested:-$(jq -r '.sourceId' <<< "$base")}
+  if [[ "$selected" == "$(jq -r '.sourceId' <<< "$base")" ]]; then
+    jq -c 'del(.sourceProviders)' <<< "$base"
+    return
+  fi
+  jq -ce --arg selected "$selected" '
+    . as $base | (.sourceProviders[]? | select(.sourceId == $selected)) as $source |
+    ($base | del(.handler, .packageName, .artifactFormat, .status, .recovery,
+                 .targets, .sourceUri, .verification, .sourceProviders)) + $source
+  ' <<< "$base" || ride_die "unknown source $selected for $id"
+}
+
+ride_provider_conflict() {
+  local entry=$1 id selected source alternative observed
+  [[ "$(jq -r '.kind' <<< "$entry")" == package ]] || return 0
+  id=$(jq -r '.id' <<< "$entry")
+  selected=$(jq -r '.sourceId' <<< "$entry")
+  while IFS= read -r source; do
+    [[ "$source" == "$selected" ]] && continue
+    alternative=$(ride_entry_or_die "$id" "$source")
+    if ! jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
+        '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
+        <<< "$alternative" >/dev/null; then
+      continue
+    fi
+    observed=$(ride_observe "$alternative")
+    [[ "$observed" != installed ]] || { printf '%s\n' "$source"; return 0; }
+  done < <(jq -r '.sourceId, .sourceProviders[]?.sourceId' <<< "$(ride_entry "$id")")
+}
+
+ride_source_signature() {
+  local version=${2:-2} fields
+  case "$version" in
+    1) fields='{id, sourceId, handler, packageName, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
+    2) fields='{id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
+    *) ride_die "unsupported source signature version: $version" ;;
+  esac
+  jq -cS "$fields" <<< "$1" |
+    sha256sum | cut -d' ' -f1
 }
 
 ride_profile_path() {
@@ -61,21 +135,22 @@ ride_profile_path() {
 }
 
 ride_validate_profile() {
-  local profile=$1 row id state entry
+  local profile=$1 id state source entry
   [[ -r "$profile" ]] || ride_die "profile not readable: $profile"
   jq -e '
     .schemaVersion == 1 and (.id | type == "string" and test("^[a-z0-9-]+$")) and
     (.operations | type == "array") and
     ([.operations[].id] | length == (unique | length)) and
-    all(.operations[]; (.id | type == "string") and (.state | type == "string"))
+    all(.operations[]; (.id | type == "string") and (.state | type == "string") and
+      (.source == null or (.source | type == "string" and test("^[a-z0-9-]+$"))))
   ' "$profile" >/dev/null || ride_die "invalid v3 profile: $profile"
-  while IFS=$'\t' read -r id state; do
+  while IFS=$'\t' read -r id state source; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id")
+    entry=$(ride_entry_or_die "$id" "$source")
     [[ "$(jq -r '.kind' <<< "$entry")" != artifact ]] || ride_die "download-only artifact cannot appear in a profile: $id"
     jq -e --arg state "$state" '.states | index($state) != null' <<< "$entry" >/dev/null ||
       ride_die "invalid state $state for $id"
-  done < <(jq -r '.operations[] | [.id, .state] | @tsv' "$profile")
+  done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
 }
 
 ride_dependencies_ready() {

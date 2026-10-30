@@ -150,6 +150,15 @@ class CompletionTests(unittest.TestCase):
         self.assertIn("PROFILE:default", result.stdout)
         self.assertIn("ID:package.exfatprogs", result.stdout)
 
+    def test_package_source_ids(self):
+        script = ('source "$RIDE_ROOT/completion/ride.bash"; '
+                  'COMP_WORDS=(./ride.sh install package.exfatprogs --source ""); '
+                  'COMP_CWORD=4; _ride_complete; printf "%s\\n" "${COMPREPLY[@]}"')
+        env = os.environ | {"RIDE_ROOT": str(ROOT)}
+        result = subprocess.run(["bash", "-c", script], env=env, text=True,
+                                capture_output=True, check=True)
+        self.assertIn("fedora-rpm", result.stdout.splitlines())
+
     def test_run_ids_from_client_state_store(self):
         with tempfile.TemporaryDirectory() as temp:
             run_id = "20261014T000000Z-12-34"

@@ -21,7 +21,7 @@ ride_journal_create() {
   id="$(date -u +%Y%m%dT%H%M%SZ)-$$-$RANDOM"
   file="$directory/$id.json"
   jq -n --arg id "$id" --arg action "$action" --arg started "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-    '{schemaVersion:1, runId:$id, action:$action, startedAt:$started, status:"running", steps:[]}' > "$file" ||
+    '{schemaVersion:2, runId:$id, action:$action, startedAt:$started, status:"running", steps:[]}' > "$file" ||
     ride_die "cannot create run journal"
   chmod 600 "$file"
   RIDE_RUN_ID=$id
@@ -61,7 +61,7 @@ ride_journal_by_id() {
   directory=$(ride_state_dir)
   file="$directory/$id.json"
   [[ -f "$file" && ! -L "$file" ]] || ride_die "run not found: $id"
-  jq -e '.schemaVersion == 1 and (.steps | type == "array")' "$file" >/dev/null || ride_die "invalid run journal"
+  jq -e '(.schemaVersion == 1 or .schemaVersion == 2) and (.steps | type == "array")' "$file" >/dev/null || ride_die "invalid run journal"
   printf '%s\n' "$file"
 }
 

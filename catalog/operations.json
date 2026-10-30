@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "clientVersion": "3.0.0",
   "operations": [
     {
@@ -32,7 +32,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/exfatprogs/exfatprogs/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/exfatprogs/exfatprogs/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.less",
@@ -64,7 +68,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/less/less/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/less/less/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.openssh-clients",
@@ -96,7 +104,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.imhex",
@@ -128,7 +140,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/imhex/imhex/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/imhex/imhex/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.yara",
@@ -160,7 +176,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/yara/yara/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/yara/yara/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.ewftools",
@@ -192,7 +212,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/libewf/ewftools/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/libewf/ewftools/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.sleuthkit",
@@ -224,7 +248,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/sleuthkit/sleuthkit/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/sleuthkit/sleuthkit/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.testdisk",
@@ -256,7 +284,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/testdisk/testdisk/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/testdisk/testdisk/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "package.audit",
@@ -288,7 +320,11 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/audit/audit/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/audit/audit/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install"
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     },
     {
       "id": "artifact.capa-linux",
@@ -387,7 +423,11 @@
       "license": "Volatility Software License 1.0",
       "licenseUri": "https://github.com/volatilityfoundation/volatility3/blob/stable/LICENSE.txt",
       "sourceUri": "https://pypi.org/project/volatility3/2.28.2/",
-      "verification": "pypi-pinned-sha256"
+      "verification": "pypi-pinned-sha256",
+      "sourceId": "pypi-venv",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "wheel"
     }
   ]
 }
