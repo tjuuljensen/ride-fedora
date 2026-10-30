@@ -33,3 +33,12 @@ production removal procedure. No manual session was needed.
 
 Reviewer: pending. Before promotion, review the exact source diff and any
 non-disposable run journals with signatures predating the Server target row.
+
+Post-commit source check: after candidate commit `17849c4`, compared all 11
+bundled runtime source files (`ride.sh`, catalog, profiles, `lib/v3`, and
+requirements) in the Server `less` lifecycle and OpenSSH repair overlay
+archives against the committed working files. No bytes differed. The only
+remaining working-tree change was the unrelated deletion of
+`docs/v3-migration.md`, which was not in either runtime bundle. This confirms
+that the pilot ran the same runtime source as the committed candidate; the
+dated metadata still honestly records the working tree as dirty at run time.

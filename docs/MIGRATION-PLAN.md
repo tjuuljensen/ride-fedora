@@ -300,8 +300,20 @@ is promoted. These command-line checks need no manual desktop session.
 
 Status: the Server image and target matrix are pinned. The
 [focused pilot](acceptance/server-base-package-pilot.md) passed for both
-operations and the combined profile on 2026-10-30. Exact-diff review,
-per-operation acceptance records, and promotion are pending.
+operations and the combined profile on 2026-10-30. Acceptance draft review,
+non-disposable run inventory, and promotion are pending.
+
+Candidate milestone `17849c4` records the implementation, target-specific VM
+pilots, and per-operation acceptance drafts. The repository validation gates
+passed: shell syntax and ShellCheck, generated documentation and schema,
+burndown, executable modes, 49 unit tests, and acceptance collection. A
+post-commit byte comparison found all 11 runtime source files in representative
+Server VM archives identical to the committed candidate. The only remaining
+working-tree change is an unrelated user deletion of `docs/v3-migration.md`.
+Local `/var/lib/ride-fedora/runs` was absent. Before promotion, resolve whether
+older non-disposable v3 run journals exist on any other host, then finalize
+the acceptance review and supported target rows. The VM pilots need not be
+repeated for unchanged runtime files.
 
 ## Former CERT forensic repository burndown
 
