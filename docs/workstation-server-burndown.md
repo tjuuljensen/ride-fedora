@@ -260,6 +260,7 @@ initial assessment above. The ledger records each reason and review trigger.
 | `workstation:action.CheckFirefoxAddons` | `replace` | `desktop-user-05` |
 | `workstation:package.FirefoxAddons` | `replace` | `publisher-apps-04` |
 | `workstation:action.FinalizeFirefoxAddonRemoval` | `replace` | `desktop-user-06` |
+| `workstation:package.Opera` | `retire` | `publisher-apps-11` |
 | `workstation:setting.Screensaver` | `retire` | `resolution-review-01` |
 | `workstation:setting.GnomeDefaultFavorites` | `retire` | `desktop-user-08` |
 | `workstation:setting.AliasRideLog` | `retire` | `desktop-user-05` |

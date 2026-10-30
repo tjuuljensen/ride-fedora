@@ -256,18 +256,20 @@ GNOME Commander and Midnight Commander as a curated opt-in profile after a
 combined package and profile VM lifecycle. Teams web access replaces the
 unsupported Linux desktop client; the deprecated Sonos AppImage is retired;
 PowerShell, WoeUSB, and Etcher remain non-runnable on their documented
-source/ownership triggers.
+source/ownership triggers; the owner retained Etcher for migration.
 [Publisher batch 10](migrations/publisher-apps-10.md) retires Atom editor
 and its plugin set after upstream sunset, and records Arduino IDE, Discord,
 Joplin, and Vivaldi as non-runnable until their respective portable or
-publisher-RPM acquisition and inverse contracts pass. These were all
+publisher-RPM acquisition and inverse contracts pass. The owner retained
+Arduino IDE, Discord, and Joplin and deferred Vivaldi. These were all
 commented preset selections and do not enter base profiles.
 [Publisher batch 11](migrations/publisher-apps-11.md) accepts Clementine
 and the PipeWire-compatible EasyEffects replacement for the misleading
 `PulseAudioEq` source as separate opt-in candidates after exact-target RPM
-and profile lifecycles. Chrome, Opera, Edge, and Spotify remain non-runnable
-until their distinct publisher repository, key, LPF, and profile-preserving
-inverse contracts pass.
+and profile lifecycles. Chrome, Edge, and Spotify remain non-runnable until
+their distinct publisher repository, key, LPF, and profile-preserving inverse
+contracts pass. The owner retained Chrome for migration and retired the
+scoped Opera outcome; no v3 Opera install is planned.
 [Publisher batch 12](migrations/publisher-apps-12.md) closes the commented
 Bitwarden desktop RPM until a pinned publisher artifact and vault-safe
 inverse meet the high-risk gate. [Batch 14](migrations/publisher-apps-14.md)
@@ -325,8 +327,8 @@ their own [security decisions](migrations/system-security-27.md) and
 [signature decision](migrations/system-security-28.md).
 
 The current 2026-10-30 ledger result is **180/180 scoped outcomes dispositioned**:
-28 supported, 26 operable opt-in candidates, 13 replaced, 16 retired, and
-97 unsupported. Runnable source outcomes total 54; 26 require
+28 supported, 26 operable opt-in candidates, 13 replaced, 17 retired, and
+96 unsupported. Runnable source outcomes total 54; 26 require
 `--allow-candidate`. The 15 owner exclusions are retained outside the
 denominator. These counts are a dated snapshot; use the
 [generated progress report](migrations/progress.md) for current status.
@@ -348,10 +350,11 @@ proposals, 38 individual keep-or-drop choices, and 51 original migration-design
 decisions. The owner retired NautilusHash and NautilusImageTools; deferred
 GnomeExtInstaller, GnomeRegion, and AppImageLauncher; and retained portable
 Bitwarden, six R2 inverse outcomes, BalenaEtcher, ArduinoIDE, Discord, Joplin,
-and Xmind for migration.
+Xmind, and Chrome for migration. The owner also deferred Vivaldi and retired
+the scoped Opera outcome.
 The retained outcomes require owned state and recovery; their unsafe v2
-methods remain non-runnable. The current 97 unsupported rows comprise 62
-migration-design outcomes, 32 keep-or-drop choices, and three deferred owner
+methods remain non-runnable. The current 96 unsupported rows comprise 63
+migration-design outcomes, 29 keep-or-drop choices, and four deferred owner
 decisions. Owner choices update next actions without changing legacy source
 code or machine state.
 

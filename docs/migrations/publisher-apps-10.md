@@ -78,3 +78,7 @@ alongside Arduino IDE. Their v2 acquisition methods remain non-runnable.
 Choose Discord's owned publisher RPM or Flathub source and prove user-profile
 preservation; pin Joplin's deployment and prove notebook-safe recovery on
 Fedora 44 Workstation.
+
+The owner deferred the Vivaldi keep-or-retire decision on 2026-10-30. Its
+v3.0 disposition remains non-runnable while source and browser-profile
+recovery are clarified.

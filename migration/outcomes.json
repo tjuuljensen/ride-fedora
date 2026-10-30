@@ -2129,7 +2129,7 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner deferred the keep-or-retire decision on 2026-10-30; revisit after current-source and browser-profile recovery design.",
       "v31Hardening": [],
       "reason": "Vivaldi supports Fedora 43+, but the v2 scraped RPM and publisher-managed repository/key lack an owned inverse in v3.",
       "reviewTrigger": "A requested exact-version Vivaldi RPM has verified origin, owned repository/key, preserved browser profile, and Fedora 44 VM happy path."
@@ -2179,10 +2179,10 @@
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "nextAction": "Owner retained optional Chrome for migration on 2026-10-30; design official-source repository/key ownership and profile-preserving Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 HTTP Google repository file and name-based inverse have no owned source/key collision contract; v3 has no publisher RPM/repository handler.",
-      "reviewTrigger": "A requested official Chrome RPM has verified source, owned repository/key, preserved browser profile, and Fedora 44 VM lifecycle."
+      "reviewTrigger": "An official Chrome RPM has verified source, owned repository/key, preserved browser profile, and Fedora 44 VM lifecycle."
     },
     {
       "key": "workstation:setting.ChromePreferences",
@@ -2308,17 +2308,17 @@
       "batch": "publisher-apps-11",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
+      "disposition": "retire",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "nextAction": "No v3 Opera install planned after owner retirement on 2026-10-30; review a new opt-in browser outcome only if explicitly requested.",
       "v31Hardening": [],
-      "reason": "The v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust; stable versus developer channel is not selected in v3.",
-      "reviewTrigger": "A requested Opera channel has owned repository/key and profile-preserving Fedora 44 VM inverse."
+      "reason": "The owner retired this exact optional Opera outcome on 2026-10-30; the v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust, and no v3 channel was selected.",
+      "reviewTrigger": "The owner requests Opera again with a selected channel, owned repository/key, and profile-preserving Fedora 44 VM inverse."
     },
     {
       "key": "workstation:package.Edge",
@@ -4610,7 +4610,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-10.md"
       ],
-      "nextAction": "Design owned lifecycles for retained Arduino IDE, Discord, and Joplin; choose sources and preserve user data. Review remaining optional apps individually."
+      "nextAction": "Design owned lifecycles for retained Arduino IDE, Discord, and Joplin; revisit deferred Vivaldi after source and profile recovery design."
     },
     {
       "id": "publisher-apps-11",
@@ -4621,7 +4621,7 @@
         "docs/acceptance/package.clementine.md",
         "docs/acceptance/package.easyeffects.md"
       ],
-      "nextAction": "Keep music-player and audio-effects opt-in; complete H015/H016 in v3.1 and reopen external apps only on documented source triggers. Continue publisher-apps-12."
+      "nextAction": "Design retained Chrome with owned publisher trust and profile recovery; keep Opera retired, review Edge and Spotify individually, and complete H015/H016 in v3.1."
     },
     {
       "id": "publisher-apps-12",

@@ -1,6 +1,6 @@
 # Browser and media publisher applications
 
-Status: **two opt-in candidates and four non-runnable decisions**, 2026-10-30. This commented-preset batch maps
+Status: **two opt-in candidates, three unsupported decisions, and one owner-approved retirement**, 2026-10-30. This commented-preset batch maps
 `Chrome`, `Opera`, `Edge`, `SpotifyClient`, `ClementinePlayer`, and
 `PulseAudioEq`. The first three add external browser RPM repositories and
 keys with broad removal. Spotify requests `lpf-spotify-client` without
@@ -35,15 +35,17 @@ and its inverse removes it; no equalizer is installed.
   [Google ships a Fedora RPM](https://support.google.com/chrome/answer/95346)
   that adds its own update repository. The v2 function writes an HTTP
   repository URL directly and its inverse removes the repository path
-  without checking ownership. Reopen for a requested official RPM with
+  without checking ownership. Migrate via an official RPM with
   verified publisher source, repository/key collision handling, and
   browser-profile-preserving Fedora VM lifecycle.
-- **Opera: unsupported and non-runnable.**
+- **Opera: retired and non-runnable by owner decision on 2026-10-30.**
   [Opera ships a Linux RPM and repository](https://rpm.opera.com/), but v2
   imports a global key, installs a developer-channel package, then removes
-  fixed key IDs and its repo file without proving ownership. Reopen for a
-  selected stable or developer channel with an owned repo/key and VM inverse
-  that preserves profiles and other Opera products.
+  fixed key IDs and its repo file without proving ownership. No v3 Opera
+  install is planned. Reopen only on a new explicit request for a selected
+  channel with owned repo/key and a VM inverse that preserves profiles and
+  other Opera products. The v2 source and any existing machine state remain
+  untouched.
 - **Edge: unsupported and non-runnable.**
   [Microsoft supports Fedora 39+](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-supported-operating-systems)
   for Edge Linux. The v2 function selects the developer channel from a
@@ -59,6 +61,10 @@ and its inverse removes it; no equalizer is installed.
   is a different source with its own repository and terms. Reopen on an
   explicitly chosen acquisition method with license/terms, owned state,
   unattended-install decision, and profile-preserving VM lifecycle.
+
+The owner retained optional Chrome for migration on 2026-10-30. Its v3.0
+status remains non-runnable until the official source, repository/key
+ownership, and seeded browser-profile recovery pass on Fedora 44 Workstation.
 
 The [Fedora 44 PipeWire PulseAudio implementation](https://packages.fedoraproject.org/pkgs/pipewire/pipewire-pulseaudio/)
 is already present in the pinned Workstation image; `pulseaudio` and
