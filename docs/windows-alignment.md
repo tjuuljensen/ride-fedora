@@ -412,3 +412,20 @@ and adds no handler. No shared product, source resolution, ownership, or
 recovery contract changed, and no unexplained drift was found. Recheck if
 Windows adds a corresponding product, Linux implements user extension
 state, or release review begins.
+
+### Fedora publisher application batches 06-08, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[Bitwarden portable decision](migrations/publisher-apps-06.md),
+[Solaar/ACPI and VM guest tools](migrations/publisher-apps-07.md), and
+[YubiKey Manager handoff](migrations/publisher-apps-08.md). Windows has no
+matching Bitwarden AppImage, Solaar, ACPI, VM guest-tools, or YubiKey Manager
+catalog row in this revision. Linux's Solaar/ACPI rows use the existing
+signed Fedora RPM, system scope, DNF, and journal contracts; its opt-in
+profile uses the existing schema. The two high-risk publisher outcomes and
+the hypervisor-conditional outcome are non-runnable, with no new handler or
+state field. These platform deployments and decisions are intentional; no
+unexplained shared-contract drift was found. Recheck if Windows adds a
+corresponding product, Linux adds portable or hypervisor-specific deployment,
+or release review begins.

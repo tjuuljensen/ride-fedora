@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "logitech-unifying",
+  "description": "Opt-in Fedora Workstation Solaar and ACPI tools; pairing requires an actual Logitech receiver",
+  "operations": [
+    {
+      "id": "package.solaar",
+      "state": "installed"
+    },
+    {
+      "id": "package.acpi",
+      "state": "installed"
+    }
+  ]
+}

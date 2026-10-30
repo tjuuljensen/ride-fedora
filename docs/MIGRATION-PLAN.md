@@ -243,6 +243,14 @@ without counting it as a v3 install.
 curated opt-in package/profile candidate. The broad GNOME extension script
 is a separate [high-risk outcome](migrations/publisher-apps-17.md),
 non-runnable until user-owned extension recovery is proved.
+[Publisher batches 06-08](migrations/publisher-apps-06.md) close the broken
+Bitwarden AppImage path as non-runnable, accept Solaar and ACPI as a curated
+opt-in package/profile candidate after the Fedora 44 VM lifecycle, defer
+conditional VM guest tools until a hypervisor-specific owned inverse is
+proved, and document the discontinued YubiKey Manager GUI handoff to
+publisher-supported alternatives. The runnable candidate does not claim
+receiver pairing or battery readings; H013 tracks the desktop and hardware
+review for v3.1.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse

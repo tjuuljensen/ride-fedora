@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**74/180 complete (41.1%)**: 23 supported, 12 opt-in candidate, 8 replaced, 8 retired, 0 private, 23 unsupported; 106 unresolved.
+**78/180 complete (43.3%)**: 23 supported, 13 opt-in candidate, 9 replaced, 8 retired, 0 private, 25 unsupported; 102 unresolved.
 
-Runnable outcomes: 35; 12 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 36; 13 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -37,9 +37,9 @@ Runnable outcomes: 35; 12 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `publisher-apps-03` | Publisher Apps 03: VisualStudioCode, Brave | medium 2 | 2/2 | [publisher-apps-03.md](../../docs/migrations/publisher-apps-03.md) | Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch. |
 | `publisher-apps-04` | Publisher Apps 04: FirefoxAddons | high 1 | 1/1 | [publisher-apps-04.md](../../docs/migrations/publisher-apps-04.md) | Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch. |
 | `publisher-apps-05` | Publisher Apps 05: YouTubeDownloader and SystemMonitor | low 1, medium 1 | 2/2 | [publisher-apps-05.md](../../docs/migrations/publisher-apps-05.md), [package.youtube-dl.md](../../docs/acceptance/package.youtube-dl.md), [package.gnome-shell-extension-system-monitor-applet.md](../../docs/acceptance/package.gnome-shell-extension-system-monitor-applet.md), [package.lm-sensors.md](../../docs/acceptance/package.lm-sensors.md) | Continue publisher-apps-06; keep monitoring opt-in and complete H012 visual/recovery review in v3.1. |
-| `publisher-apps-06` | Publisher Apps 06: BitwardenAppImage | high 1 | 0/1 | — | Assess BitwardenAppImage; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-07` | Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM | medium 2 | 0/2 | — | Assess UnifyingOnLaptop, VMtoolsOnVM; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-08` | Publisher Apps 08: YubikeyManager | high 1 | 0/1 | — | Assess YubikeyManager; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `publisher-apps-06` | Publisher Apps 06: BitwardenAppImage | high 1 | 1/1 | [publisher-apps-06.md](../../docs/migrations/publisher-apps-06.md) | Reopen only for a verified portable distribution with vault-preserving recovery; continue publisher-apps-07. |
+| `publisher-apps-07` | Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM | medium 2 | 2/2 | [publisher-apps-07.md](../../docs/migrations/publisher-apps-07.md), [package.solaar.md](../../docs/acceptance/package.solaar.md), [package.acpi.md](../../docs/acceptance/package.acpi.md) | Keep Solaar/ACPI opt-in, complete H013 hardware review in v3.1, and reopen guest tools only on explicit hypervisor evidence. Continue publisher-apps-09. |
+| `publisher-apps-08` | Publisher Apps 08: YubikeyManager | high 1 | 1/1 | [publisher-apps-08.md](../../docs/migrations/publisher-apps-08.md) | Reopen only for the publisher-supported successor and credential-safe target evidence; continue publisher-apps-09. |
 | `publisher-apps-09` | Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher | medium 6 | 0/6 | — | Assess SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-10` | Publisher Apps 10: ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi | medium 6 | 0/6 | — | Assess ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-11` | Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq | medium 6 | 0/6 | — | Assess Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -122,3 +122,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H010` | Review removal of pre-installed editor defaults | If explicit removal of a pre-installed editor is requested; inspect DNF dependents and preserve user editor preference | queued |
 | `H011` | Volatility 3 optional plugins and broader user-venv recovery | After the v3.0 core Volatility 3 opt-in candidate passes its pinned-wheel Workstation happy path | queued |
 | `H012` | GNOME System Monitor Next activation, visual, and broader recovery review | After the Fedora 44 package and workstation-monitoring profile happy paths pass | queued |
+| `H013` | Solaar receiver pairing and desktop review | After the Fedora 44 package and logitech-unifying profile happy paths pass on a VM with receiver passthrough or a controlled disposable hardware host | queued |

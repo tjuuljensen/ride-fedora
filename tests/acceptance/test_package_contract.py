@@ -687,6 +687,33 @@ def test_workstation_monitoring_opt_in_profile(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_logitech_unifying_opt_in_packages_and_profile(vm):
+    vm.run("systemd-detect-virt")
+    vm.run("rpm -q spice-vdagent spice-webdavd open-vm-tools", check=False)
+    native_rpm_batch(vm, ("solaar", "acpi"), inventory_policy="name-arch",
+                     residue_candidates=("solaar", "acpi"),
+                     installed_probes={"solaar": "test -x /usr/bin/solaar && solaar --version",
+                                       "acpi": "test -x /usr/bin/acpi && acpi --version | grep -q '^acpi 1\\.8'"})
+    planned = vm.ride("plan", "--profile", "logitech-unifying").stdout
+    assert all(table_row(planned, identifier)["STATUS"] == "candidate"
+               for identifier in ("package.solaar", "package.acpi"))
+    applied = vm.ride("apply", "--profile", "logitech-unifying",
+                      "--allow-candidate", timeout=900)
+    first_id = run_id(applied.stdout)
+    assert [step["result"] for step in journal(vm, first_id)["steps"]] == [
+        "changed", "changed"]
+    repeated = vm.ride("apply", "--profile", "logitech-unifying",
+                       "--allow-candidate")
+    assert [step["result"] for step in journal(vm, run_id(repeated.stdout))["steps"]] == [
+        "unchanged", "unchanged"]
+    restored = vm.ride("restore", "--run-id", first_id, "--allow-candidate",
+                       timeout=900)
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    vm.run("! rpm -q --quiet solaar")
+    vm.run("! rpm -q --quiet acpi")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_forensic_volatility3_user_environment(vm):
     identifier = "package.volatility3"
     environment = "/home/ride-test/.local/share/ride-fedora/tools/volatility3"

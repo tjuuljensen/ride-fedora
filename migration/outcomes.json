@@ -3057,13 +3057,17 @@
       "batch": "publisher-apps-06",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review publisher signature and platform artifact.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-06.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen for a separately owned, pinned Bitwarden portable deployment with vault-preserving VM recovery.",
+      "v31Hardening": [],
+      "reason": "The v2 AppImage function downloads an RPM into Applications and its inverse removes only AppImage names; the source, destination, and encrypted-vault inverse do not match.",
+      "reviewTrigger": "A requested Bitwarden AppImage has publisher-pinned bytes, separate portable identity, ownership and vault-preserving Fedora 44 VM evidence."
     },
     {
       "key": "workstation:action.ImportOpenVPNProfiles",
@@ -3260,13 +3264,13 @@
       "batch": "publisher-apps-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Hardware-dependent operation.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["package.solaar", "package.acpi"],
+      "evidence": ["docs/acceptance/package.solaar.md", "docs/acceptance/package.acpi.md", "docs/migrations/publisher-apps-07.md"],
+      "blocker": "",
+      "nextAction": "Keep logitech-unifying opt-in; complete H013 receiver pairing and desktop review in v3.1.",
+      "v31Hardening": ["H002", "H003", "H013"]
     },
     {
       "key": "workstation:package.Projecteur",
@@ -3298,13 +3302,15 @@
       "batch": "publisher-apps-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: VM-specific provider after detection test.",
-      "v31Hardening": []
+      "evidence": ["docs/migrations/publisher-apps-07.md"],
+      "blocker": "",
+      "nextAction": "Reopen for an explicit QEMU or VMware target with absent-package install and owned inverse evidence.",
+      "v31Hardening": [],
+      "reason": "The v2 hypervisor branches use inconsistent DMI checks and have no QEMU inverse; the pinned KVM image preinstalls all three guest-tool RPMs, so it cannot establish a RIDE-owned install.",
+      "reviewTrigger": "A requested explicit hypervisor target passes absent-package VM apply, repeat/status, and safe recovery for its selected guest tools."
     },
     {
       "key": "workstation:package.YubikeyManager",
@@ -3317,13 +3323,17 @@
       "batch": "publisher-apps-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Hardware-dependent optional package.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-08.md"
+      ],
+      "blocker": "",
+      "nextAction": "Choose Yubico Authenticator or ykman for a new explicit deployment; require pinned source and credential-safe VM evidence.",
+      "v31Hardening": [],
+      "reason": "The v2 YubiKey Manager GUI AppImage is end of life and its mutable download/name-based inverse is unowned; Yubico recommends Authenticator GUI or ykman CLI.",
+      "reviewTrigger": "A requested current Yubico deployment has pinned publisher bytes, owned portable or package identity, and Fedora 44 target/hardware evidence."
     },
     {
       "key": "workstation:package.YubikeyPersTool",
@@ -4074,22 +4084,26 @@
       "id": "publisher-apps-06",
       "family": "publisher-apps",
       "title": "Publisher Apps 06: BitwardenAppImage",
-      "evidence": [],
-      "nextAction": "Assess BitwardenAppImage; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-06.md"
+      ],
+      "nextAction": "Reopen only for a verified portable distribution with vault-preserving recovery; continue publisher-apps-07."
     },
     {
       "id": "publisher-apps-07",
       "family": "publisher-apps",
       "title": "Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM",
-      "evidence": [],
-      "nextAction": "Assess UnifyingOnLaptop, VMtoolsOnVM; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": ["docs/migrations/publisher-apps-07.md", "docs/acceptance/package.solaar.md", "docs/acceptance/package.acpi.md"],
+      "nextAction": "Keep Solaar/ACPI opt-in, complete H013 hardware review in v3.1, and reopen guest tools only on explicit hypervisor evidence. Continue publisher-apps-09."
     },
     {
       "id": "publisher-apps-08",
       "family": "publisher-apps",
       "title": "Publisher Apps 08: YubikeyManager",
-      "evidence": [],
-      "nextAction": "Assess YubikeyManager; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-08.md"
+      ],
+      "nextAction": "Reopen only for the publisher-supported successor and credential-safe target evidence; continue publisher-apps-09."
     },
     {
       "id": "publisher-apps-09",
@@ -4695,6 +4709,12 @@
       "id": "H012",
       "title": "GNOME System Monitor Next activation, visual, and broader recovery review",
       "trigger": "After the Fedora 44 package and workstation-monitoring profile happy paths pass",
+      "status": "queued"
+    },
+    {
+      "id": "H013",
+      "title": "Solaar receiver pairing and desktop review",
+      "trigger": "After the Fedora 44 package and logitech-unifying profile happy paths pass on a VM with receiver passthrough or a controlled disposable hardware host",
       "status": "queued"
     }
   ]

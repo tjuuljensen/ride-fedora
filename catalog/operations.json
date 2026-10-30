@@ -2072,6 +2072,84 @@
       "distribution": "installed",
       "deploymentId": "local-installed",
       "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.solaar",
+      "kind": "package",
+      "name": "Solaar Logitech device manager",
+      "group": "desktop-tools",
+      "description": "Install Fedora Solaar without pairing or configuring a receiver.",
+      "handler": "dnf-package",
+      "packageName": "solaar",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "solaar",
+      "productUri": "https://github.com/pwr-Solaar/Solaar",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/solaar/solaar/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/solaar/solaar/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.acpi",
+      "kind": "package",
+      "name": "ACPI battery and thermal client",
+      "group": "desktop-tools",
+      "description": "Install Fedora acpi without probing or changing battery state.",
+      "handler": "dnf-package",
+      "packageName": "acpi",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "acpi",
+      "productUri": "https://sourceforge.net/projects/acpiclient/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/acpi/acpi/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/acpi/acpi/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     }
   ]
 }
