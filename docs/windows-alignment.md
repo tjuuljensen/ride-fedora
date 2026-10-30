@@ -380,3 +380,19 @@ the registered absent publisher-RPM and portable-deployment handlers remain
 intentional platform gaps. No shared product fact or package contract is
 changed and no unexplained drift was found. Recheck on a publisher handler,
 Windows product addition, or release review.
+
+### Fedora publisher application batches 03-04, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[VS Code/Brave](migrations/publisher-apps-03.md) and
+[Firefox extension policy](migrations/publisher-apps-04.md) outcomes.
+Windows has an accepted `package.vscode` x64 user-setup EXE. It shares
+Visual Studio Code product identity but not Linux's system RPM repository,
+key, scope, or inverse; those deployment differences are intentional.
+Windows has no matching Brave or Firefox extension-policy catalog row in
+this revision. Linux records non-runnable decisions and a direct tool
+handoff, with no new catalog/profile/run-state field or shared contract
+change. No unexplained drift was found. Recheck if Linux adds an external
+repository or policy handler, Windows adds a corresponding product, or
+release review begins.

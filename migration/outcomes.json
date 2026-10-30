@@ -1445,13 +1445,17 @@
       "batch": "publisher-apps-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Align product facts with Windows; Fedora source stays local.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Implement and accept an owned Microsoft repository/key handler before enabling VS Code.",
+      "v31Hardening": [],
+      "reason": "The official Fedora code RPM requires an owned external repository and signing-key lifecycle; v3 has no handler or exact-target VM recovery, and v2 removes a hard-coded potentially shared key.",
+      "reviewTrigger": "An external-repository handler passes publisher-key, conflict, install, and owned inverse checks on Fedora 44 Workstation."
     },
     {
       "key": "workstation:package.ArduinoIDE",
@@ -1968,13 +1972,17 @@
       "batch": "publisher-apps-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Third-party repository and license review.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Implement and accept an owned Brave repository/key handler before enabling the browser.",
+      "v31Hardening": [],
+      "reason": "The official Fedora Brave RPM requires an owned external repository/key lifecycle; v3 has no handler or exact-target VM recovery, and v2 leaves its repository on removal.",
+      "reviewTrigger": "An external-repository handler passes publisher-key, conflict, install, and owned inverse checks on Fedora 44 Workstation."
     },
     {
       "key": "workstation:package.Vivaldi",
@@ -2108,13 +2116,17 @@
       "batch": "publisher-apps-04",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Keep existing verified policy helper; integrate with v3 lifecycle later.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-04.md"
+      ],
+      "blocker": "",
+      "nextAction": "Use the standalone tool for the documented policy workflow; add v3 integration only after the high-risk gate passes.",
+      "v31Hardening": [],
+      "reason": "The current maintained manage-firefox-extensions.py tool directly manages repository-owned Firefox policy; it is not integrated into the v3 catalog/run envelope.",
+      "reviewTrigger": "A v3 policy handler records exact manifest ownership and passes seeded administrator-policy and profile recovery in Fedora 44 Workstation."
     },
     {
       "key": "workstation:action.FinalizeFirefoxAddonRemoval",
@@ -4012,15 +4024,19 @@
       "id": "publisher-apps-03",
       "family": "publisher-apps",
       "title": "Publisher Apps 03: VisualStudioCode, Brave",
-      "evidence": [],
-      "nextAction": "Assess VisualStudioCode, Brave; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-03.md"
+      ],
+      "nextAction": "Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch."
     },
     {
       "id": "publisher-apps-04",
       "family": "publisher-apps",
       "title": "Publisher Apps 04: FirefoxAddons",
-      "evidence": [],
-      "nextAction": "Assess FirefoxAddons; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-04.md"
+      ],
+      "nextAction": "Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch."
     },
     {
       "id": "publisher-apps-05",

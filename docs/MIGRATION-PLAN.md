@@ -233,6 +233,11 @@ The first [publisher application](migrations/publisher-apps-01.md) and
 active AppImageLauncher and VeraCrypt v2 source outcomes as non-runnable in
 v3.0 until publisher artifact, owned destination, and user-data recovery
 evidence meet their stated gates.
+[Publisher batch 03](migrations/publisher-apps-03.md) records VS Code and
+Brave as non-runnable until an owned external-repository/key handler has a
+Fedora 44 VM happy path. [Batch 04](migrations/publisher-apps-04.md) records
+the existing Firefox extension policy tool as a standalone replacement,
+without counting it as a v3 install.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
