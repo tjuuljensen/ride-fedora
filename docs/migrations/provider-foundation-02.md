@@ -1,6 +1,9 @@
 # Provider foundation batch 02: RPM Fusion repository enablement
 
 Status: **unsupported as a runnable v3.0 repository operation**, 2026-10-30.
+The owner chose **keep** in the v3.0 fast-track review on 2026-10-30. The
+repository capability remains in scope; the trust and recovery checks below
+are its implementation work, not an optional reopening trigger.
 The active v2 preset calls `InstallRPMfusionRepos`, which installs the free
 and nonfree Fedora release RPMs from RPM Fusion mirror URLs. Its inverse
 deletes every `/etc/yum.repos.d/rpmfusion*` path and removes every installed

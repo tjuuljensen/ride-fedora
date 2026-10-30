@@ -145,7 +145,7 @@ def validate() -> dict:
             raise ValueError(f"invalid risk or progress for {key}")
         if row.get("disposition") not in DISPOSITIONS:
             raise ValueError(f"invalid disposition for {key}")
-        if row.get("v30Decision") not in {None, "retire", "defer"}:
+        if row.get("v30Decision") not in {None, "keep", "retire", "defer"}:
             raise ValueError(f"invalid v3.0 owner decision for {key}")
         if row.get("v30Decision") == "retire" and (row["disposition"], row["progress"]) != ("retire", "resolved"):
             raise ValueError(f"v3.0 retirement disagrees with disposition for {key}")
@@ -232,6 +232,7 @@ def summarize(data: dict) -> dict:
     v30_operable = sum(row["progress"] in {"operable", "supported"} for row in package_settings)
     v30_retired = sum(row.get("v30Decision") == "retire" for row in package_settings)
     v30_deferred = sum(row.get("v30Decision") == "defer" for row in package_settings)
+    v30_kept = sum(row.get("v30Decision") == "keep" for row in package_settings)
     batches = []
     for batch in data["batches"]:
         members = [row for row in rows if row["batch"] == batch["id"]]
@@ -257,7 +258,7 @@ def summarize(data: dict) -> dict:
             "v30PackageSetting": {"total": v30_total, "ledgered": len(package_settings),
                                   "excludedPackages": len(excluded_packages),
                                   "operable": v30_operable, "retired": v30_retired,
-                                  "deferred": v30_deferred,
+                                  "deferred": v30_deferred, "kept": v30_kept,
                                   "gap": v30_total-v30_operable-v30_retired,
                                   "percent": round(100*v30_operable/v30_total, 1)},
             "risk": dict(Counter(row["risk"] for row in rows)), "batches": batches,
@@ -277,7 +278,8 @@ def render(data: dict) -> str:
              f"{report['v30PackageSetting']['total']} operable ({report['v30PackageSetting']['percent']}%)**; "
              f"{report['v30PackageSetting']['retired']} owner-retired capabilities; "
              f"{report['v30PackageSetting']['gap']} still need a v3.0 decision or path "
-             f"({report['v30PackageSetting']['deferred']} explicitly deferred). "
+             f"({report['v30PackageSetting']['kept']} kept for work, "
+             f"{report['v30PackageSetting']['deferred']} explicitly deferred). "
              f"{report['v30PackageSetting']['ledgered']} are tracked in the ledger; "
              f"{report['v30PackageSetting']['excludedPackages']} in-scope package outcomes remain unledgered. "
              "Documented decisions do not count as operable behavior.", "",
@@ -329,7 +331,7 @@ def main() -> int:
             coverage = report["v30PackageSetting"]
             print(f"v3.0 package/setting coverage={coverage['operable']}/{coverage['total']} "
                   f"({coverage['percent']}%) retired={coverage['retired']} "
-                  f"deferred={coverage['deferred']} gap={coverage['gap']} "
+                  f"kept={coverage['kept']} deferred={coverage['deferred']} gap={coverage['gap']} "
                   f"in-scope-unledgered-packages={coverage['excludedPackages']}")
             for batch in report["batches"]:
                 print(f"{batch['id']}: dispositioned={batch['complete']}/{batch['total']} "

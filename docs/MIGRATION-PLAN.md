@@ -350,9 +350,11 @@ identifies 169 in-scope package/setting capabilities including six formerly
 excluded server package outcomes; only 54 currently have operable v3 mappings.
 Exact old products may be replaced, and the owner may explicitly retire a
 capability through the fast-track review. The owner retired both GNOME Files
-context actions and deferred the Required bundle choice. Historical
-"reopen only" review triggers in batch records now describe
-the evidence needed for a v3.0 path, not optional deferrals.
+context actions and deferred the Required bundle choice. The owner also kept
+RPM Fusion and archive-tool capabilities and deferred the DNFutils replacement
+decision in the next fast-track group. Historical "reopen only" review triggers
+in batch records now describe the evidence needed for a v3.0 path, not
+optional deferrals.
 The [v3.0 review note](release-v3.0-review.md) identifies opt-in candidates
 and remaining release checks. No v3 tag is implied by ledger completion.
 Implementation commit `445810a` passed the

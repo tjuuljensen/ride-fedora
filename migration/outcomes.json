@@ -159,10 +159,11 @@
         "docs/migrations/provider-foundation-02.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only for a concrete RPM Fusion application after independent trust, owned repository recovery, and Fedora 44 VM evidence.",
+      "nextAction": "Owner kept the RPM Fusion repository capability for v3.0 on 2026-10-30. Design independent trust verification, owned repository recovery, and Fedora 44 VM acceptance for a concrete consumer.",
       "v31Hardening": [],
       "reason": "The v2 free/nonfree release-RPM install changes host package trust and its wildcard inverse deletes unowned repositories; v3 has no authenticated ownership-aware repository handler or safety/recovery evidence.",
-      "reviewTrigger": "A concrete RPM Fusion application request plus pinned independent signing-key fingerprints, release-RPM verification, owned inverse, and exact-target VM tests."
+      "reviewTrigger": "A concrete RPM Fusion application request plus pinned independent signing-key fingerprints, release-RPM verification, owned inverse, and exact-target VM tests.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.KernelTools",
@@ -212,10 +213,11 @@
         "docs/migrations/provider-foundation-03.md"
       ],
       "blocker": "",
-      "nextAction": "Recheck DNF5 command availability on any new target or provider contract change.",
+      "nextAction": "Owner deferred deciding whether the observed DNF5 command replacement fully covers the v2 DNFutils capability on 2026-10-30.",
       "v31Hardening": [],
       "reason": "The v2 dnf-utils bundle is replaced by Fedora 44 DNF5 and DNF5 plugins; their config-manager and download commands were observed in a disposable Workstation VM, and the v3 client uses current DNF behavior.",
-      "reviewTrigger": "The Fedora target, DNF5 plugin availability, or the v3 package-provider command contract changes."
+      "reviewTrigger": "The Fedora target, DNF5 plugin availability, or the v3 package-provider command contract changes.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.Eza",
@@ -1236,10 +1238,11 @@
         "docs/migrations/provider-foundation-03.md"
       ],
       "blocker": "",
-      "nextAction": "Revisit only if exact unrar CLI compatibility or Fedora archive source availability changes.",
+      "nextAction": "Owner kept the archive-tool capability for v3.0 on 2026-10-30. Confirm whether the accepted 7zip and unar operations cover the intended use or exact unrar CLI compatibility is needed.",
       "v31Hardening": [],
       "reason": "Fedora 44 no longer offers the v2 p7zip package; supported 7zip and unar operations replace archive creation and RAR extraction intent, with a different command from unrar.",
-      "reviewTrigger": "An explicit requirement for the unrar CLI or a change to Fedora archive package availability or RAR behavior."
+      "reviewTrigger": "An explicit requirement for the unrar CLI or a change to Fedora archive package availability or RAR behavior.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.BasicEditors",
@@ -4475,7 +4478,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-02.md"
       ],
-      "nextAction": "Reopen only for a concrete RPM Fusion dependency with independent trust and owned recovery evidence."
+      "nextAction": "Owner kept RPM Fusion capability; identify a concrete consumer and design independent trust, owned repository recovery, and Fedora 44 VM acceptance."
     },
     {
       "id": "provider-foundation-03",
@@ -4487,7 +4490,7 @@
         "docs/acceptance/package.python3-pip.md",
         "docs/acceptance/provider-archive-tools.md"
       ],
-      "nextAction": "Continue provider-foundation-04; review kernel build matching and package-driven updates in v3.1."
+      "nextAction": "Owner deferred the DNFutils replacement decision and kept PackagingTools; confirm archive CLI needs while retaining accepted package evidence."
     },
     {
       "id": "provider-foundation-04",

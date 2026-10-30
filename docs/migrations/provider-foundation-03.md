@@ -2,6 +2,9 @@
 
 Status: **complete: kernel and Python packages supported; DNF and archive
 bundles replaced**, 2026-10-30.
+The owner deferred the v3.0 DNFutils capability decision and kept the
+PackagingTools capability in the fast-track review on 2026-10-30. The accepted
+7zip and unar lifecycles remain valid; exact unrar CLI need is still open.
 Four active v2 bundle outcomes remain after moving Flathub remote ownership
 to [its own batch](provider-foundation-09.md).
 
