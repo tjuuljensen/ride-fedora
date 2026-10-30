@@ -343,6 +343,15 @@ catalog only in their edition target declarations; the edition gate and
 current Server pilots cover those additions. Owner acceptance and other-host
 run inventory remain the promotion gates.
 
+Candidate commit `31c6729` was pushed to `codex/ride-v3-migration` on
+2026-10-30. The remote [v3 validation workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025412704)
+and [shell executable-mode workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025412750)
+both completed successfully for that commit. The v3 job passed shell syntax
+and ShellCheck, catalog and generated documentation, mocked CLI/cache/
+completion/Firefox tests, and acceptance test collection. These static gates
+complement the disposable VM evidence above; they do not substitute for the
+pending owner acceptance and other-host journal inventory.
+
 ## Former CERT forensic repository burndown
 
 `default.preset` labels these entries “CERT Forensic Repo — THESE ARE EMPTY”. The
