@@ -357,8 +357,9 @@ def test_server_base_profile_smoke(vm):
 
 
 def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None,
-                     residue_candidates=()):
+                     residue_candidates=(), inventory_policy="strict"):
     """Check each package in one disposable Workstation overlay."""
+    assert inventory_policy in ("strict", "name-arch")
     allowed_residuals = allowed_residuals or {}
     installed_probes = installed_probes or {}
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
@@ -384,6 +385,26 @@ def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None
 
         def recovered():
             after = set(package_inventory(vm).splitlines())
+            if inventory_policy == "name-arch":
+                def identity(line):
+                    fields = line.split("\t")
+                    return (fields[0], fields[4])
+
+                before_names = {identity(line) for line in before}
+                after_names = {identity(line) for line in after}
+                assert before_names <= after_names, (
+                    f"pre-existing RPM identities lost: {sorted(before_names - after_names)}")
+                residue_names = after_names - before_names
+                introduced_names = {identity(line) for line in introduced}
+                if package in residue_candidates:
+                    assert residue_names <= introduced_names, (
+                        f"unrelated RPM residue: {sorted(residue_names - introduced_names)}")
+                else:
+                    assert {name for name, _ in residue_names} == set(allowed_residuals.get(package, ()))
+                changed = {identity(line) for line in before - after} & after_names
+                print(f"{package} retained dependencies: {sorted(residue_names)}; "
+                      f"updated RPMs: {sorted(changed)}")
+                return
             assert not (before - after), f"pre-existing RPMs lost or changed: {sorted(before - after)}"
             residue = after - before
             if package in residue_candidates:
@@ -460,11 +481,37 @@ def test_native_forensic_and_desktop_applications_batch(vm):
     vm.run("sudo dnf -y upgrade --refresh", timeout=1800)
     native_rpm_batch(vm, ("dc3dd", "qbittorrent", "thunderbird", "flameshot", "gimp"),
                      installed_probes={"dc3dd": "dc3dd --version",
-                                       "qbittorrent": "qbittorrent --version",
-                                       "thunderbird": "thunderbird --version",
-                                       "flameshot": "flameshot --version",
-                                       "gimp": "gimp --version"},
+                                       **desktop_launcher_probes()},
                      residue_candidates=("qbittorrent", "thunderbird", "flameshot", "gimp"))
+
+
+def desktop_launcher_probes():
+    return {package: f"rpm -ql {package} | grep -qE '/usr/share/applications/.*\\.desktop$'"
+            for package in ("qbittorrent", "thunderbird", "flameshot", "gimp")}
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_desktop_applications_lifecycle(vm):
+    # The preceding dc3dd checks passed; graphical apps use Fedora launcher
+    # files as their package happy-path probe without requiring a GUI session.
+    vm.run("sudo dnf -y upgrade --refresh", timeout=1800)
+    native_rpm_batch(vm, ("qbittorrent", "thunderbird", "flameshot", "gimp"),
+                     installed_probes=desktop_launcher_probes(),
+                     residue_candidates=("qbittorrent", "thunderbird", "flameshot", "gimp"))
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_remaining_native_repository_batch(vm):
+    # DNF may update signed system RPMs while installing a new package. This
+    # batch records those updates and gates the declared named-package inverse.
+    packages = ("libpst", "lynis", "dia", "wine", "vlc")
+    launcher = "rpm -ql {package} | grep -qE '/usr/share/applications/.*\\.desktop$'"
+    native_rpm_batch(vm, packages, inventory_policy="name-arch", residue_candidates=packages,
+                     installed_probes={"libpst": "command -v readpst",
+                                       "lynis": "command -v lynis",
+                                       "dia": launcher.format(package="dia"),
+                                       "wine": "command -v wine",
+                                       "vlc": launcher.format(package="vlc")})
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")

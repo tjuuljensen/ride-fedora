@@ -974,7 +974,7 @@
         "absent"
       ],
       "scope": "system",
-      "status": "candidate",
+      "status": "supported",
       "targets": {
         "fedora": {
           "releases": [
@@ -998,7 +998,8 @@
       "sourceId": "fedora-rpm",
       "distribution": "installed",
       "deploymentId": "local-installed",
-      "artifactFormat": "rpm"
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.dc3dd.md"
     },
     {
       "id": "package.qbittorrent",
@@ -1149,6 +1150,203 @@
       "license": "LGPL-3.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later AND BSD-3-Clause AND CC-BY-SA-3.0 AND CC-BY-SA-4.0 AND CC0-1.0",
       "licenseUri": "https://packages.fedoraproject.org/pkgs/gimp/gimp/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/gimp/gimp/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.libpst",
+      "kind": "package",
+      "name": "libpst PST utilities",
+      "group": "forensics",
+      "description": "Install Fedora PST conversion utilities without converting user files.",
+      "handler": "dnf-package",
+      "packageName": "libpst",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "libpst",
+      "productUri": "https://packages.fedoraproject.org/pkgs/libpst/libpst/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/libpst/libpst/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/libpst/libpst/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.libpst.md"
+    },
+    {
+      "id": "package.lynis",
+      "kind": "package",
+      "name": "Lynis audit tool",
+      "group": "security-tools",
+      "description": "Install the Fedora Lynis tool without running an audit or applying hardening.",
+      "handler": "dnf-package",
+      "packageName": "lynis",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "lynis",
+      "productUri": "https://cisofy.com/lynis/",
+      "license": "GPL-3.0-only",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/lynis/lynis/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/lynis/lynis/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.lynis.md"
+    },
+    {
+      "id": "package.dia",
+      "kind": "package",
+      "name": "Dia diagram editor",
+      "group": "desktop-apps",
+      "description": "Install the Fedora Dia editor without modifying user diagrams.",
+      "handler": "dnf-package",
+      "packageName": "dia",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "dia",
+      "productUri": "https://wiki.gnome.org/Apps/Dia",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/dia/dia/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/dia/dia/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.wine",
+      "kind": "package",
+      "name": "Wine compatibility layer",
+      "group": "desktop-apps",
+      "description": "Install the Fedora Wine meta-package without starting Wine or creating a user prefix.",
+      "handler": "dnf-package",
+      "packageName": "wine",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "wine",
+      "productUri": "https://www.winehq.org/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/wine/wine/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/wine/wine/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.vlc",
+      "kind": "package",
+      "name": "VLC media player",
+      "group": "desktop-apps",
+      "description": "Install the Fedora VLC player with the codec set supplied by Fedora.",
+      "handler": "dnf-package",
+      "packageName": "vlc",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "vlc",
+      "productUri": "https://www.videolan.org/",
+      "license": "GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/vlc/vlc/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/vlc/vlc/",
       "verification": "fedora-repository-gpg",
       "recovery": "remove-new-install",
       "sourceId": "fedora-rpm",

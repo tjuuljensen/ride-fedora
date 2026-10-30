@@ -185,3 +185,17 @@ batches before promotion. No Windows installer is inferred from these Linux
 product facts, and no shared schema, source-selection, or journal behavior
 changed. Review again if Windows gains one of these product IDs or package
 semantics change, and before release-candidate preparation.
+
+### Fedora repository package batch 05, 2026-10-30
+
+Compared Linux catalog, profile, and run-state schemas with Windows
+`codex/ride-v3-migration` at `17f9cef` before implementing the five
+[native RPM batch 05](migrations/native-rpm-05.md) candidates. Fedora's
+`vlc` source supplies the player; additional codec sources remain separate.
+Wine, Dia, libpst, and Lynis use Fedora installed deployments without
+running the applications or touching user data. HandBrake, Eza, ClamAV, and
+KeePassXC were moved to source-ownership or safety-specific batches. No
+shared schema, source-selection fallback, journal, or Windows installer
+contract changed. Recheck product facts and shared behavior if Windows
+adds a matching product, Linux changes deployment semantics, or a release
+candidate is prepared.

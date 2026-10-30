@@ -166,12 +166,20 @@ retires information-only, placeholder, and obsolete behavior without claiming
 those outcomes as installs. [Native RPM batch 02](migrations/native-rpm-02.md)
 passed four more exact-target packages. Its investigated `alien` recovery
 retains one named DNF dependency without losing or changing pre-existing RPMs;
-that cleanup question is in the v3.1 queue. The next ordinary package batch
-is [native-rpm-04](migrations/native-rpm-04.md). The preceding
-[native-rpm-03](migrations/native-rpm-03.md) batch closed its two unavailable
+that cleanup question is in the v3.1 queue.
+[Native RPM batch 03](migrations/native-rpm-03.md) closed its two unavailable
 Nautilus integrations as unsupported, accepted Speedtest CLI as supported,
 and recorded HexChat and Chromium as operable opt-in candidates with desktop
-hardening in v3.1. The remaining outcomes stay visible in the progress report.
+hardening in v3.1. [Native RPM batch 04](migrations/native-rpm-04.md) passed
+`dc3dd` as supported and four desktop RPMs as operable opt-in candidates;
+each passed install and inverse checks in the disposable Workstation VM.
+[Native RPM batch 05](migrations/native-rpm-05.md) passed Libpst and Lynis as
+supported and Dia, Wine, and VLC as opt-in candidates. Dia retained named
+GTK2 dependencies; Wine and VLC updated named pre-existing RPMs without
+losing their package identities. The next family is
+[provider-foundation-01](migrations/progress.md), starting with the v2
+`Required` and `ShellTools` bundles. The remaining outcomes stay visible in
+the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
