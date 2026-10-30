@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "workstation-monitoring",
+  "description": "Opt-in GNOME System Monitor Next applet and hardware sensor tools for Fedora Workstation; enable the applet separately in the desktop",
+  "operations": [
+    {
+      "id": "package.gnome-shell-extension-system-monitor-applet",
+      "state": "installed"
+    },
+    {
+      "id": "package.lm-sensors",
+      "state": "installed"
+    }
+  ]
+}

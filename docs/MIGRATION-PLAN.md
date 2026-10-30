@@ -238,6 +238,11 @@ Brave as non-runnable until an owned external-repository/key handler has a
 Fedora 44 VM happy path. [Batch 04](migrations/publisher-apps-04.md) records
 the existing Firefox extension policy tool as a standalone replacement,
 without counting it as a v3 install.
+[Publisher batch 05](migrations/publisher-apps-05.md) supports the Fedora
+`youtube-dl` RPM and accepts System Monitor Next plus hardware sensors as a
+curated opt-in package/profile candidate. The broad GNOME extension script
+is a separate [high-risk outcome](migrations/publisher-apps-17.md),
+non-runnable until user-owned extension recovery is proved.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse

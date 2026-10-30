@@ -2301,14 +2301,19 @@
       "selectorCoverage": "active",
       "family": "publisher-apps",
       "batch": "publisher-apps-05",
-      "risk": "medium",
+      "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replaced: Review maintained yt-dlp packaging instead of legacy youtube-dl.",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.youtube-dl"
+      ],
+      "evidence": [
+        "docs/acceptance/package.youtube-dl.md",
+        "docs/migrations/publisher-apps-05.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck Fedora youtube-dl package and exact target if the RPM or DNF handler changes; website behavior is outside package acceptance.",
       "v31Hardening": []
     },
     {
@@ -2403,13 +2408,24 @@
       "batch": "publisher-apps-05",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current GNOME extension support.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.gnome-shell-extension-system-monitor-applet",
+        "package.lm-sensors"
+      ],
+      "evidence": [
+        "docs/acceptance/package.gnome-shell-extension-system-monitor-applet.md",
+        "docs/acceptance/package.lm-sensors.md",
+        "docs/migrations/publisher-apps-05.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the monitoring profile opt-in and complete H012 GNOME activation, visual, and broader recovery checks.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H012"
+      ]
     },
     {
       "key": "workstation:package.GnomeExtensions",
@@ -2419,16 +2435,20 @@
       ],
       "selectorCoverage": "active",
       "family": "publisher-apps",
-      "batch": "publisher-apps-05",
-      "risk": "medium",
+      "batch": "publisher-apps-17",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current GNOME extension IDs and API.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-17.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen after extension IDs and GNOME 50 compatibility are reviewed with pinned acquisition and seeded-user inverse.",
+      "v31Hardening": [],
+      "reason": "The v2 bundle downloads user extensions through a mutable script and removes named user directories without ownership; native management RPMs alone do not reproduce the outcome.",
+      "reviewTrigger": "Reviewed GNOME 50 extension IDs, pinned acquisition, per-user ownership, and seeded-extension recovery pass a Fedora 44 Workstation VM happy path and failure checks."
     },
     {
       "key": "workstation:setting.ScreenSaver",
@@ -4041,9 +4061,14 @@
     {
       "id": "publisher-apps-05",
       "family": "publisher-apps",
-      "title": "Publisher Apps 05: YouTubeDownloader, SystemMonitor, GnomeExtensions",
-      "evidence": [],
-      "nextAction": "Assess YouTubeDownloader, SystemMonitor, GnomeExtensions; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Publisher Apps 05: YouTubeDownloader and SystemMonitor",
+      "evidence": [
+        "docs/migrations/publisher-apps-05.md",
+        "docs/acceptance/package.youtube-dl.md",
+        "docs/acceptance/package.gnome-shell-extension-system-monitor-applet.md",
+        "docs/acceptance/package.lm-sensors.md"
+      ],
+      "nextAction": "Continue publisher-apps-06; keep monitoring opt-in and complete H012 visual/recovery review in v3.1."
     },
     {
       "id": "publisher-apps-06",
@@ -4511,6 +4536,15 @@
         "docs/migrations/resolution-decisions.md"
       ],
       "nextAction": "Review the conflicting screensaver settings; Galleta, Xplico, Atom telemetry, and TecmintMonitorSh are retired."
+    },
+    {
+      "id": "publisher-apps-17",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 17: GNOME user extension bundle",
+      "evidence": [
+        "docs/migrations/publisher-apps-17.md"
+      ],
+      "nextAction": "Reopen only after reviewed GNOME 50 extension IDs, pinned artifacts, and seeded user-extension recovery pass."
     }
   ],
   "exclusions": [
@@ -4655,6 +4689,12 @@
       "id": "H011",
       "title": "Volatility 3 optional plugins and broader user-venv recovery",
       "trigger": "After the v3.0 core Volatility 3 opt-in candidate passes its pinned-wheel Workstation happy path",
+      "status": "queued"
+    },
+    {
+      "id": "H012",
+      "title": "GNOME System Monitor Next activation, visual, and broader recovery review",
+      "trigger": "After the Fedora 44 package and workstation-monitoring profile happy paths pass",
       "status": "queued"
     }
   ]

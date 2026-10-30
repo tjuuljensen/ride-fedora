@@ -644,6 +644,49 @@ def test_forensic_binwalk_and_autopep8_fedora_packages(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_publisher_native_video_and_monitor_packages(vm):
+    native_rpm_batch(vm, ("youtube-dl", "gnome-shell-extension-system-monitor-applet",
+                          "lm_sensors"), inventory_policy="name-arch",
+                     residue_candidates=("youtube-dl",
+                                         "gnome-shell-extension-system-monitor-applet",
+                                         "lm_sensors"),
+                     identifiers={"gnome-shell-extension-system-monitor-applet":
+                                  "package.gnome-shell-extension-system-monitor-applet",
+                                  "lm_sensors": "package.lm-sensors"},
+                     installed_probes={
+                         "youtube-dl": "test -x /usr/bin/youtube-dl && youtube-dl --version",
+                         "gnome-shell-extension-system-monitor-applet":
+                             "rpm -ql gnome-shell-extension-system-monitor-applet | "
+                             "grep -q '/gnome-shell/extensions/.*/metadata.json$'",
+                         "lm_sensors": "test -x /usr/bin/sensors && sensors --version",
+                     })
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_workstation_monitoring_opt_in_profile(vm):
+    identifiers = ("package.gnome-shell-extension-system-monitor-applet",
+                   "package.lm-sensors")
+    planned = vm.ride("plan", "--profile", "workstation-monitoring").stdout
+    assert all(table_row(planned, identifier)["STATUS"] == "candidate"
+               for identifier in identifiers)
+    applied = vm.ride("apply", "--profile", "workstation-monitoring",
+                      "--allow-candidate", timeout=900)
+    first_id = run_id(applied.stdout)
+    assert [(step["id"], step["result"]) for step in journal(vm, first_id)["steps"]] == [
+        (identifier, "changed") for identifier in identifiers]
+    vm.run("rpm -q --quiet gnome-shell-extension-system-monitor-applet lm_sensors")
+    repeated = vm.ride("apply", "--profile", "workstation-monitoring",
+                       "--allow-candidate")
+    assert [step["result"] for step in journal(vm, run_id(repeated.stdout))["steps"]] == [
+        "unchanged", "unchanged"]
+    restored = vm.ride("restore", "--run-id", first_id, "--allow-candidate",
+                       timeout=900)
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    vm.run("! rpm -q --quiet gnome-shell-extension-system-monitor-applet")
+    vm.run("! rpm -q --quiet lm_sensors")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_forensic_volatility3_user_environment(vm):
     identifier = "package.volatility3"
     environment = "/home/ride-test/.local/share/ride-fedora/tools/volatility3"

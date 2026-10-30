@@ -396,3 +396,19 @@ handoff, with no new catalog/profile/run-state field or shared contract
 change. No unexplained drift was found. Recheck if Linux adds an external
 repository or policy handler, Windows adds a corresponding product, or
 release review begins.
+
+### Fedora publisher application batch 05, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[video downloader and GNOME monitoring batch](migrations/publisher-apps-05.md)
+and the isolated [GNOME user-extension decision](migrations/publisher-apps-17.md).
+Windows has no corresponding `youtube-dl`, GNOME applet, hardware sensors,
+or GNOME user-extension operation in this revision. Linux's three new
+catalog rows use the existing Fedora RPM source, installed deployment,
+DNF handler, and run journal; the opt-in monitoring profile uses the
+existing profile schema. The broad GNOME extension source is non-runnable
+and adds no handler. No shared product, source resolution, ownership, or
+recovery contract changed, and no unexplained drift was found. Recheck if
+Windows adds a corresponding product, Linux implements user extension
+state, or release review begins.

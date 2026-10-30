@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**71/180 complete (39.4%)**: 22 supported, 11 opt-in candidate, 8 replaced, 8 retired, 0 private, 22 unsupported; 109 unresolved.
+**74/180 complete (41.1%)**: 23 supported, 12 opt-in candidate, 8 replaced, 8 retired, 0 private, 23 unsupported; 106 unresolved.
 
-Runnable outcomes: 33; 11 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 35; 12 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -36,7 +36,7 @@ Runnable outcomes: 33; 11 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `publisher-apps-02` | Publisher Apps 02: VeraCrypt | high 1 | 1/1 | [publisher-apps-02.md](../../docs/migrations/publisher-apps-02.md) | Reopen only on its documented artifact, target, and user-data recovery trigger; continue publisher-apps-03. |
 | `publisher-apps-03` | Publisher Apps 03: VisualStudioCode, Brave | medium 2 | 2/2 | [publisher-apps-03.md](../../docs/migrations/publisher-apps-03.md) | Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch. |
 | `publisher-apps-04` | Publisher Apps 04: FirefoxAddons | high 1 | 1/1 | [publisher-apps-04.md](../../docs/migrations/publisher-apps-04.md) | Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch. |
-| `publisher-apps-05` | Publisher Apps 05: YouTubeDownloader, SystemMonitor, GnomeExtensions | medium 3 | 0/3 | — | Assess YouTubeDownloader, SystemMonitor, GnomeExtensions; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `publisher-apps-05` | Publisher Apps 05: YouTubeDownloader and SystemMonitor | low 1, medium 1 | 2/2 | [publisher-apps-05.md](../../docs/migrations/publisher-apps-05.md), [package.youtube-dl.md](../../docs/acceptance/package.youtube-dl.md), [package.gnome-shell-extension-system-monitor-applet.md](../../docs/acceptance/package.gnome-shell-extension-system-monitor-applet.md), [package.lm-sensors.md](../../docs/acceptance/package.lm-sensors.md) | Continue publisher-apps-06; keep monitoring opt-in and complete H012 visual/recovery review in v3.1. |
 | `publisher-apps-06` | Publisher Apps 06: BitwardenAppImage | high 1 | 0/1 | — | Assess BitwardenAppImage; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-07` | Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM | medium 2 | 0/2 | — | Assess UnifyingOnLaptop, VMtoolsOnVM; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-08` | Publisher Apps 08: YubikeyManager | high 1 | 0/1 | — | Assess YubikeyManager; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -102,6 +102,7 @@ Runnable outcomes: 33; 11 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `generic-server-13` | Generic Server 13: GenerateSSHkeysRSA | high 1 | 0/1 | — | Assess GenerateSSHkeysRSA; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `generic-server-14` | Generic Server 14: Tailscale | high 1 | 0/1 | — | Assess Tailscale; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `resolution-review-01` | Resolution Review 01: TecmintMonitorSh, ScreenSaver, Screensaver, Galleta, Xplico, AtomTelemetry | medium 6 | 4/6 | [resolution-decisions.md](../../docs/migrations/resolution-decisions.md) | Review the conflicting screensaver settings; Galleta, Xplico, Atom telemetry, and TecmintMonitorSh are retired. |
+| `publisher-apps-17` | Publisher Apps 17: GNOME user extension bundle | high 1 | 1/1 | [publisher-apps-17.md](../../docs/migrations/publisher-apps-17.md) | Reopen only after reviewed GNOME 50 extension IDs, pinned artifacts, and seeded user-extension recovery pass. |
 
 ## v3.1 hardening queue
 
@@ -120,3 +121,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H009` | Review kernel-devel match for module builds | If module building is requested after the package-only v3.0 install acceptance; verify running-kernel and development-package compatibility | queued |
 | `H010` | Review removal of pre-installed editor defaults | If explicit removal of a pre-installed editor is requested; inspect DNF dependents and preserve user editor preference | queued |
 | `H011` | Volatility 3 optional plugins and broader user-venv recovery | After the v3.0 core Volatility 3 opt-in candidate passes its pinned-wheel Workstation happy path | queued |
+| `H012` | GNOME System Monitor Next activation, visual, and broader recovery review | After the Fedora 44 package and workstation-monitoring profile happy paths pass | queued |

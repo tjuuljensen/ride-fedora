@@ -1954,6 +1954,124 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.autopep8.md"
+    },
+    {
+      "id": "package.youtube-dl",
+      "kind": "package",
+      "name": "YouTube downloader",
+      "group": "media",
+      "description": "Install the Fedora youtube-dl CLI without downloading user media.",
+      "handler": "dnf-package",
+      "packageName": "youtube-dl",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "youtube-dl",
+      "productUri": "https://github.com/ytdl-org/youtube-dl",
+      "license": "Unlicense",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/youtube-dl/youtube-dl/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/youtube-dl/youtube-dl/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.youtube-dl.md"
+    },
+    {
+      "id": "package.gnome-shell-extension-system-monitor-applet",
+      "kind": "package",
+      "name": "GNOME System Monitor Next applet",
+      "group": "desktop-tools",
+      "description": "Install the Fedora GNOME Shell monitoring extension without enabling it for a user.",
+      "handler": "dnf-package",
+      "packageName": "gnome-shell-extension-system-monitor-applet",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gnome-system-monitor-next",
+      "productUri": "https://extensions.gnome.org/extension/3010/system-monitor-next/",
+      "license": "GPL-3.0-or-later AND BSD-3-Clause",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gnome-shell-extension-system-monitor-applet/gnome-shell-extension-system-monitor-applet/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/gnome-shell-extension-system-monitor-applet/gnome-shell-extension-system-monitor-applet/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.lm-sensors",
+      "kind": "package",
+      "name": "Hardware sensor tools",
+      "group": "desktop-tools",
+      "description": "Install Fedora hardware sensor readers without running privileged detection.",
+      "handler": "dnf-package",
+      "packageName": "lm_sensors",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "lm-sensors",
+      "productUri": "https://github.com/lm-sensors/lm-sensors",
+      "license": "GPL-2.0-or-later AND Linux-man-pages-copyleft-var AND Linux-man-pages-copyleft AND MIT",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/lm_sensors/lm_sensors/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/lm_sensors/lm_sensors/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     }
   ]
 }
