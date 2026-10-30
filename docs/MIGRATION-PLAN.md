@@ -228,6 +228,12 @@ tree, and email-header service as non-runnable in v3.0; each has a specific
 source, ownership, and recovery trigger for reconsideration.
 The remaining outcomes stay visible in the progress report.
 
+The first [publisher application](migrations/publisher-apps-01.md) and
+[encryption application](migrations/publisher-apps-02.md) reviews close the
+active AppImageLauncher and VeraCrypt v2 source outcomes as non-runnable in
+v3.0 until publisher artifact, owned destination, and user-data recovery
+evidence meet their stated gates.
+
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
 failure-injection evidence for an unchanged handler within the batch. For

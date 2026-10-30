@@ -367,3 +367,16 @@ Linux operation, profile, or run-state field. The platform deployment and
 evidence difference is intentional, and no unexplained shared-contract
 drift was found. Recheck at first Linux portable/service implementation,
 product fact change, or release review.
+
+### Fedora publisher application batches 01-02, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` before the
+[AppImageLauncher](migrations/publisher-apps-01.md) and
+[VeraCrypt](migrations/publisher-apps-02.md) resolutions. Windows has no
+matching catalog operation for these products at this revision. The Linux
+source outcomes add no new operation, profile selection, or run-state field;
+the registered absent publisher-RPM and portable-deployment handlers remain
+intentional platform gaps. No shared product fact or package contract is
+changed and no unexplained drift was found. Recheck on a publisher handler,
+Windows product addition, or release review.

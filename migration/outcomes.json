@@ -375,13 +375,17 @@
       "batch": "publisher-apps-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review maintained source and current desktop integration.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-01.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only when a pinned publisher RPM passes Fedora 44 Workstation VM install, integration, conflict, and seeded user-AppImage recovery.",
+      "v31Hardening": [],
+      "reason": "v2 selects a mutable beta publisher RPM and creates a user Applications directory without owned AppImage integration or safe inverse.",
+      "reviewTrigger": "A pinned publisher RPM passes Fedora 44 Workstation VM install, integration, conflict, and seeded user-AppImage recovery."
     },
     {
       "key": "workstation:package.Snap",
@@ -582,13 +586,17 @@
       "batch": "publisher-apps-02",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review publisher verification and licensing.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only when an exact signed Fedora 44 GUI or console RPM passes trust, interrupted install, mounted/unmounted seeded-volume, and removal evidence.",
+      "v31Hardening": [],
+      "reason": "v2 silently runs a scraped setup script; v3 has no verified publisher-RPM trust handler or seeded encrypted-volume recovery.",
+      "reviewTrigger": "An exact signed Fedora 44 GUI or console RPM passes trust, interrupted install, mounted/unmounted seeded-volume, and removal evidence."
     },
     {
       "key": "workstation:package.BulkExtractor",
@@ -3986,15 +3994,19 @@
       "id": "publisher-apps-01",
       "family": "publisher-apps",
       "title": "Publisher Apps 01: AppImageLauncher",
-      "evidence": [],
-      "nextAction": "Assess AppImageLauncher; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-01.md"
+      ],
+      "nextAction": "Reopen only on its documented artifact, target, and user-data recovery trigger; continue publisher-apps-03."
     },
     {
       "id": "publisher-apps-02",
       "family": "publisher-apps",
       "title": "Publisher Apps 02: VeraCrypt",
-      "evidence": [],
-      "nextAction": "Assess VeraCrypt; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-02.md"
+      ],
+      "nextAction": "Reopen only on its documented artifact, target, and user-data recovery trigger; continue publisher-apps-03."
     },
     {
       "id": "publisher-apps-03",
