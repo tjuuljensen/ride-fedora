@@ -17,3 +17,16 @@ plan, apply, signed RPM and files, `python3 -m pip --version`, status,
 unchanged repeat, restore, and explicit remove. Both inverse paths returned
 the full RPM inventory to baseline. The [batch review](../migrations/provider-foundation-03.md)
 records the intentional Python 3 and DNF-owned replacement.
+
+Status: **PASS; supported** on Fedora 44 x86_64 Server, 2026-10-30.
+Pinned Server image SHA-256
+`efb75956d6dbde0801059fdac4a8a1451f06ecc843344ecdb71bb3e8d247af90`;
+disposable overlay
+`20261030T135447Z-test-server-python3-pip-lifecycle-737577dd`;
+catalog SHA-256
+`3b196d14641540c8c89d2e9d20d732da68cd7e438bde417ea25ed647cfb7fcb2`.
+The test passed absent plan, signed RPM apply, repeat, status, pip version,
+restore preview and execution, explicit install/remove, and preservation of
+pre-existing packages. Preparation removed a preinstalled `python3-pip` RPM
+only in the disposable overlay. No global pip self-upgrade occurred. The
+unchanged DNF handler's mocked failure tests are reused.

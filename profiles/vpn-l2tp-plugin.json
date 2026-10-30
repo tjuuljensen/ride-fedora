@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "vpn-l2tp-plugin",
+  "description": "Opt-in Fedora 44 Workstation package-only deployment; no user or connection configuration",
+  "operations": [
+    {
+      "id": "package.networkmanager-l2tp",
+      "state": "installed"
+    },
+    {
+      "id": "package.networkmanager-l2tp-gnome",
+      "state": "installed"
+    }
+  ]
+}

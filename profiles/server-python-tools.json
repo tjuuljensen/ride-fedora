@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "server-python-tools",
+  "description": "Opt-in Fedora Server Python 3 pip package without a global pip self-upgrade",
+  "operations": [
+    {"id": "package.python3-pip", "state": "installed"}
+  ]
+}

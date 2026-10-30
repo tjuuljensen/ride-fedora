@@ -530,3 +530,79 @@ files, and iBus bindings are Linux user-state ownership questions, not
 Windows installer behavior. No unexplained shared-contract drift was found.
 Recheck if either client adds a shared browser preference or user-state
 recovery contract, and before release review.
+
+### Fedora core system decisions, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for
+[host identity, DNF tuning, update, and Docker](migrations/system-security-core.md).
+These Linux decisions add no runnable operation or shared field. Windows
+package and machine-setting records do not provide Fedora DNF configuration,
+Linux host naming, or Docker repository and volume recovery. Host identity
+remains private input on both platforms. No unexplained shared-contract drift
+was found. Recheck if a cross-platform update action, Docker product model,
+or parameterized host-setting contract is added, and before release review.
+
+### Fedora network package bundle preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[network package split](migrations/system-security-network-tools.md). Both
+catalogs identify Wireshark and PuTTY as the same products. Windows Wireshark
+is a pinned machine MSI candidate without bundled Npcap enrollment; Linux
+selects Fedora's signed RPM and does not enable capture privileges or start
+a capture. Windows PuTTY is an accepted standalone portable file; Linux uses
+Fedora's installed RPM. Their deployment, artifact, destination, and inverse
+contracts are intentionally platform-specific. Other network tools have no
+matching Windows catalog row in this revision. Linux adds no shared schema,
+source fallback, or journal field. Recheck if either product's shared facts
+or source contract changes, or before release review.
+
+### High-risk Linux system disposition preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[VPN, storage, virtualization, and sudo review](migrations/system-security-risk-decisions.md).
+The Linux decisions add no runnable handler or shared field. Windows has a
+Docker Desktop candidate, which is a different product and service/data
+contract from Linux Docker Engine; no Linux Docker operation is inferred.
+The Linux v2 ExpressVPN, WireGuard, OpenVPN profile, VMware module, LUKS,
+and sudoers functions have platform-specific private state or destructive
+inverses. Neither Windows package acceptance nor shared command vocabulary
+proves their Linux recovery. No unexplained shared-contract drift was found.
+Recheck if a shared product identity or private-state contract is proposed,
+or before release review.
+
+### Generic Server and resolution decisions, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[generic Server decisions](migrations/generic-server-decisions.md),
+[shared Python pip package](migrations/generic-server-python.md), and
+[screensaver resolution](migrations/resolution-decisions.md). Fedora's
+`python3-pip` package adds only the Server edition target to the existing
+Linux DNF operation; it does not add a shared installer or journal field.
+The server service, VPN, SSH, lock setting, and host identity decisions add
+no runnable row. Windows package and machine-setting behavior cannot stand
+in for Linux DNF5, systemd, GNOME, or server policy recovery. The Windows
+product, package-source, profile, and saved-run schemas do not require a
+change for these Linux decisions. Recheck if a cross-platform product or
+state contract is proposed, and at release review.
+
+### Package-only security batch and final v3.0 alignment, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `4c90577` for the
+[VPN-plugin and KeePassXC package review](migrations/system-security-packages.md)
+and [SmartMonTools failure](migrations/system-security-smartmontools.md).
+The Windows branch advanced from `0ff139f` only with read-only public-IP
+and MAC-vendor scripts, their tests, and docs; its catalog, profile, and
+saved-run contracts did not change. Windows has no matching catalog product
+for these five Fedora RPM operations. Linux's signed RPM source, package-only
+scope, Workstation target, and DNF journal stay platform-specific. Linux
+neither shares a VPN credential or encrypted-vault state contract with
+Windows nor exposes smartd as an accepted package-only operation. The
+remaining v2 source decisions add no shared contract fields. No unexplained
+catalog, profile, or run-state drift was found at this comparison. Recheck
+before a v3 tag if the Windows branch advances or a shared product or state
+contract is proposed.

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "remote-comms-tools",
+  "description": "Opt-in serial, terminal, and remote desktop clients; no connection profiles",
+  "operations": [
+    {"id": "package.minicom", "state": "installed"},
+    {"id": "package.putty", "state": "installed"},
+    {"id": "package.remmina", "state": "installed"}
+  ]
+}

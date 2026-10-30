@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "network-analysis-tools",
+  "description": "Opt-in network inspection RPMs; no capture, server activation, or interface changes",
+  "operations": [
+    {"id": "package.tcpdump", "state": "installed"},
+    {"id": "package.wireshark", "state": "installed"},
+    {"id": "package.tftp-server", "state": "installed"},
+    {"id": "package.nmap", "state": "installed"},
+    {"id": "package.macchanger", "state": "installed"},
+    {"id": "package.flow-tools", "state": "installed"},
+    {"id": "package.nethogs", "state": "installed"}
+  ]
+}

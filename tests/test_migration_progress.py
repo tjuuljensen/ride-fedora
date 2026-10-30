@@ -71,8 +71,9 @@ class MigrationProgressTests(unittest.TestCase):
 
     def test_replacement_is_resolved_but_not_counted_as_runnable(self):
         data = copy.deepcopy(self.data)
-        row = next(item for item in data["outcomes"] if item["progress"] == "unresolved")
-        row.update(disposition="replace", progress="resolved", blocker="",
+        row = next(item for item in data["outcomes"] if item["key"] == "workstation:package.Pwgen")
+        row.update(disposition="replace", progress="resolved", blocker="", v3Ids=[],
+                   v31Hardening=[],
                    reason="The replacement is described in the migration plan.",
                    reviewTrigger="Revisit when the replacement behavior changes.",
                    evidence=["docs/MIGRATION-PLAN.md"])
@@ -80,18 +81,18 @@ class MigrationProgressTests(unittest.TestCase):
         report = migration_progress.summarize(data)
         prior = migration_progress.summarize(self.data)
         self.assertEqual(report["replaced"], prior["replaced"] + 1)
-        self.assertEqual(report["runnable"], prior["runnable"])
+        self.assertEqual(report["runnable"], prior["runnable"] - 1)
         self.assertEqual(report["requiresAllowCandidate"], prior["requiresAllowCandidate"])
 
     def test_status_does_not_count_unresolved_rows(self):
         data = copy.deepcopy(self.data)
         before = migration_progress.summarize(data)
-        row = next(item for item in data["outcomes"] if item["progress"] == "unresolved")
-        row.update(disposition="migrate", progress="assessed")
+        row = next(item for item in data["outcomes"] if item["key"] == "workstation:package.Pwgen")
+        row.update(disposition="migrate", progress="assessed", blocker="Assessment is pending")
         after = migration_progress.summarize(data)
         self.assertEqual(before["total"], 180)
-        self.assertEqual(before["complete"], after["complete"])
-        self.assertEqual(before["unresolved"], after["unresolved"])
+        self.assertEqual(after["complete"], before["complete"] - 1)
+        self.assertEqual(after["unresolved"], before["unresolved"] + 1)
 
 
 if __name__ == "__main__":

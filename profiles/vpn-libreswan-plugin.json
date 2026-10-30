@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "vpn-libreswan-plugin",
+  "description": "Opt-in Fedora 44 Workstation package-only deployment; no user or connection configuration",
+  "operations": [
+    {
+      "id": "package.networkmanager-libreswan",
+      "state": "installed"
+    },
+    {
+      "id": "package.networkmanager-libreswan-gnome",
+      "state": "installed"
+    }
+  ]
+}

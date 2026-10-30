@@ -34,13 +34,17 @@
       "batch": "system-security-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Host-specific value belongs in private profile.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-core.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add a site-private or parameterized hostname operation with validated input and prior-name VM recovery.",
+      "v31Hardening": [],
+      "reason": "Interactive v2 hostname has no declared profile value or exact prior-name restore.",
+      "reviewTrigger": "Add a site-private or parameterized hostname operation with validated input and prior-name VM recovery."
     },
     {
       "key": "workstation:setting.FastDNF",
@@ -53,13 +57,17 @@
       "batch": "system-security-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replaced: DNF5 defaults need current evidence; no legacy config edit.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-core.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add an owned DNF5 override or exact-file recovery and pass Fedora 44 conflict/restore checks.",
+      "v31Hardening": [],
+      "reason": "v2 rewrites administrator DNF config; DNF5 defaults do not reproduce its 15-download tuning and inverse loses prior values.",
+      "reviewTrigger": "Add an owned DNF5 override or exact-file recovery and pass Fedora 44 conflict/restore checks."
     },
     {
       "key": "workstation:action.UpdateFedora",
@@ -71,13 +79,17 @@
       "batch": "system-security-02",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Add explicit non-reversible system update operation after VM acceptance.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-core.md"
+      ],
+      "blocker": "",
+      "nextAction": "Define a bounded non-reversible update action with inventory, failure/reboot reporting, and disposable VM evidence.",
+      "v31Hardening": [],
+      "reason": "v2 runs an unbounded system update with no repeat-state observation, transaction inventory, or recovery.",
+      "reviewTrigger": "Define a bounded non-reversible update action with inventory, failure/reboot reporting, and disposable VM evidence."
     },
     {
       "key": "workstation:package.Required",
@@ -1161,13 +1173,17 @@
       "batch": "system-security-03",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Generic server role only after provider and repository review.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-core.md"
+      ],
+      "blocker": "",
+      "nextAction": "Accept pinned publisher source, owned repo/service boundary, and seeded-volume recovery in a Workstation VM.",
+      "v31Hardening": [],
+      "reason": "v2 adds an external repo, installs packages, and starts a service; removal does not preserve repo ownership or container volumes.",
+      "reviewTrigger": "Accept pinned publisher source, owned repo/service boundary, and seeded-volume recovery in a Workstation VM."
     },
     {
       "key": "workstation:package.PythonPip",
@@ -1342,13 +1358,17 @@
       "batch": "system-security-26",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "Review smartd service, configuration ownership, and storage monitoring behavior before migrating the RPM.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-smartmontools.md"
+      ],
+      "blocker": "",
+      "nextAction": "Build a smartd-aware operation only after exact prior-service and configuration recovery passes.",
+      "v31Hardening": [],
+      "reason": "Fedora RPM installation enabled smartd.service in the disposable VM; the generic package handler cannot recover prior service state.",
+      "reviewTrigger": "A dedicated smartd-aware operation preserves prior enable/active state, administrator config, and device selection through failure and restore."
     },
     {
       "key": "workstation:package.Qbittorrent",
@@ -1671,15 +1691,17 @@
       "batch": "system-security-27",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/system-security-27.md"
       ],
-      "blocker": "OTR plugin behavior, security claims, user data, and recovery need isolated evidence.",
-      "nextAction": "Review Pidgin plus OTR compatibility and security-sensitive lifecycle before a runnable operation.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 installs Pidgin and OTR but has no account, key, plugin activation, encrypted-message, or user-data recovery contract.",
+      "reviewTrigger": "A requested Pidgin/OTR deployment passes current source and license review, two-party message test, and seeded-profile recovery."
     },
     {
       "key": "workstation:package.Thunderbird",
@@ -1719,13 +1741,17 @@
       "batch": "system-security-06",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add line-scoped resolver ownership and exact file/DNS-order recovery.",
+      "v31Hardening": [],
+      "reason": "v2 rewrites nsswitch hosts lines without an owned inverse.",
+      "reviewTrigger": "Add line-scoped resolver ownership and exact file/DNS-order recovery."
     },
     {
       "key": "workstation:package.NetworkTools",
@@ -1738,13 +1764,26 @@
       "batch": "system-security-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Split broad network bundle into focused packages.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.tcpdump",
+        "package.wireshark",
+        "package.tftp-server",
+        "package.nmap",
+        "package.macchanger",
+        "package.flow-tools",
+        "package.nethogs"
+      ],
+      "evidence": [
+        "docs/migrations/system-security-network-tools.md",
+        "docs/acceptance/network-package-bundles.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep both profiles opt-in; review actual capture, connection, and desktop behavior in H019.",
+      "v31Hardening": [
+        "H019"
+      ]
     },
     {
       "key": "workstation:package.NetCommsTools",
@@ -1757,13 +1796,22 @@
       "batch": "system-security-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Split broad communications bundle.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.minicom",
+        "package.putty",
+        "package.remmina"
+      ],
+      "evidence": [
+        "docs/migrations/system-security-network-tools.md",
+        "docs/acceptance/network-package-bundles.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep both profiles opt-in; review actual capture, connection, and desktop behavior in H019.",
+      "v31Hardening": [
+        "H019"
+      ]
     },
     {
       "key": "workstation:package.NetMgrL2TP",
@@ -1776,13 +1824,21 @@
       "batch": "system-security-07",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.networkmanager-l2tp",
+        "package.networkmanager-l2tp-gnome"
+      ],
+      "evidence": [
+        "docs/acceptance/system-security-packages.md",
+        "docs/migrations/system-security-packages.md"
+      ],
+      "blocker": "",
+      "nextAction": "Package-only supported on Fedora 44 Workstation; keep profile opt-in and complete named v3.1 application review.",
+      "v31Hardening": [
+        "H020"
+      ]
     },
     {
       "key": "workstation:package.NetMgrLibreswan",
@@ -1795,13 +1851,21 @@
       "batch": "system-security-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Optional VPN role.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.networkmanager-libreswan",
+        "package.networkmanager-libreswan-gnome"
+      ],
+      "evidence": [
+        "docs/acceptance/system-security-packages.md",
+        "docs/migrations/system-security-packages.md"
+      ],
+      "blocker": "",
+      "nextAction": "Package-only supported on Fedora 44 Workstation; keep profile opt-in and complete named v3.1 application review.",
+      "v31Hardening": [
+        "H020"
+      ]
     },
     {
       "key": "workstation:package.Wireguard",
@@ -1814,13 +1878,17 @@
       "batch": "system-security-19",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Separate RPM and private key ownership; prove seeded-key and connection recovery.",
+      "v31Hardening": [],
+      "reason": "v2 creates private keys and inverse recursively deletes /etc/wireguard, including unowned secrets.",
+      "reviewTrigger": "Separate RPM and private key ownership; prove seeded-key and connection recovery."
     },
     {
       "key": "workstation:package.OpenconnectVPN",
@@ -1832,13 +1900,17 @@
       "batch": "system-security-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Use a reviewed package and test profile, service, and removal behavior.",
+      "v31Hardening": [],
+      "reason": "v2 builds moving Git source into /usr with no provenance or inverse.",
+      "reviewTrigger": "Use a reviewed package and test profile, service, and removal behavior."
     },
     {
       "key": "workstation:package.SpeedtestCLI",
@@ -2569,13 +2641,17 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "retired: Conflicts with DisableScreensaver in the same legacy preset; review one desired state.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 sets three lock/idle values without an exact inverse or rollback for partial failure.",
+      "reviewTrigger": "One atomic lock and idle operation passes baseline, partial-failure rollback, and user-session restore."
     },
     {
       "key": "workstation:setting.Screensaver",
@@ -2587,13 +2663,17 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "retired: Conflicts with EnableScreenSaver in the same legacy preset; review a single desired state later.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "The active preset later enables screen lock, overwriting this earlier lock-disable action; selecting it silently would weaken lock policy.",
+      "reviewTrigger": "An explicit request for lock-disabled state with reviewed session safety and atomic prior-state recovery."
     },
     {
       "key": "workstation:setting.DateInTaskbar",
@@ -3230,15 +3310,17 @@
       "batch": "system-security-28",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/system-security-28.md"
       ],
-      "blocker": "Signature download and database ownership/recovery need isolated safety evidence.",
-      "nextAction": "Review package and freshclam state, then define high-risk VM failure/recovery criteria.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 runs freshclam after RPM installation; signature database ownership, freshness, failure, and recovery are undefined.",
+      "reviewTrigger": "A bounded signature acquisition policy and seeded-database recovery pass on Fedora 44 Workstation."
     },
     {
       "key": "workstation:package.KeepassXC",
@@ -3251,15 +3333,20 @@
       "batch": "system-security-29",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/system-security-29.md"
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.keepassxc"
       ],
-      "blocker": "Encrypted vault and user configuration preservation need isolated evidence.",
-      "nextAction": "Review package effects and prove vault data remains untouched before implementation.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/acceptance/system-security-packages.md",
+        "docs/migrations/system-security-packages.md"
+      ],
+      "blocker": "",
+      "nextAction": "Package-only supported on Fedora 44 Workstation; keep profile opt-in and complete named v3.1 application review.",
+      "v31Hardening": [
+        "H021"
+      ]
     },
     {
       "key": "workstation:package.Bitwarden",
@@ -3317,13 +3404,17 @@
       "batch": "system-security-09",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Choose explicit private input and prove name/UUID conflict, secret, and exact rollback behavior.",
+      "v31Hardening": [],
+      "reason": "v2 imports implicit local .ovpn files and credentials into NetworkManager without owned UUIDs.",
+      "reviewTrigger": "Choose explicit private input and prove name/UUID conflict, secret, and exact rollback behavior."
     },
     {
       "key": "workstation:package.VPNProfiles",
@@ -3335,13 +3426,17 @@
       "batch": "system-security-20",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Limit removal to recorded RIDE-owned UUIDs and preserve seeded unrelated profiles.",
+      "v31Hardening": [],
+      "reason": "v2 remove-only function deletes every NetworkManager VPN connection.",
+      "reviewTrigger": "Limit removal to recorded RIDE-owned UUIDs and preserve seeded unrelated profiles."
     },
     {
       "key": "workstation:package.ExpressVPNProfiles",
@@ -3353,13 +3448,17 @@
       "batch": "system-security-21",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Bind exact owned UUIDs to a private deployment and restore seeded user connections.",
+      "v31Hardening": [],
+      "reason": "v2 remove-only function deletes name-matched NetworkManager connections without ownership proof.",
+      "reviewTrigger": "Bind exact owned UUIDs to a private deployment and restore seeded user connections."
     },
     {
       "key": "workstation:package.ExpressVPN",
@@ -3372,13 +3471,17 @@
       "batch": "system-security-10",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Pin and verify a licensed publisher build and prove private activation/profile-safe recovery.",
+      "v31Hardening": [],
+      "reason": "v2 scrapes a moving RPM and prompts for activation while inverse leaves account and connection state.",
+      "reviewTrigger": "Pin and verify a licensed publisher build and prove private activation/profile-safe recovery."
     },
     {
       "key": "workstation:action.StartExpressVPNafterBoot",
@@ -3390,13 +3493,17 @@
       "batch": "system-security-11",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Use an owned service/timer after accepting the VPN deployment and pass crontab recovery.",
+      "v31Hardening": [],
+      "reason": "v2 appends an unowned crontab reboot job.",
+      "reviewTrigger": "Use an owned service/timer after accepting the VPN deployment and pass crontab recovery."
     },
     {
       "key": "workstation:package.ExpressVPNafterBoot",
@@ -3408,13 +3515,17 @@
       "batch": "system-security-22",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reconcile as inverse of an owned boot connection schedule.",
+      "v31Hardening": [],
+      "reason": "v2 remove-only function filters a matching crontab string without origin proof.",
+      "reviewTrigger": "Reconcile as inverse of an owned boot connection schedule."
     },
     {
       "key": "workstation:action.CreateExpVPNrandomizer",
@@ -3426,13 +3537,17 @@
       "batch": "system-security-12",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Define reviewed owned script with bounded VPN choice and private-state recovery.",
+      "v31Hardening": [],
+      "reason": "v2 appends executable script text without provenance, idempotence, or inverse.",
+      "reviewTrigger": "Define reviewed owned script with bounded VPN choice and private-state recovery."
     },
     {
       "key": "workstation:action.ScheduleRandomExpVPNChange",
@@ -3444,13 +3559,17 @@
       "batch": "system-security-23",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Accept VPN/script first, then add owned schedule with exact crontab preservation.",
+      "v31Hardening": [],
+      "reason": "v2 inserts an unowned recurring crontab job.",
+      "reviewTrigger": "Accept VPN/script first, then add owned schedule with exact crontab preservation."
     },
     {
       "key": "workstation:package.ScheduleExpVPNChange",
@@ -3462,13 +3581,17 @@
       "batch": "system-security-24",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen as scoped inverse of an owned schedule.",
+      "v31Hardening": [],
+      "reason": "v2 remove-only inverse deletes matching crontab lines without ownership proof.",
+      "reviewTrigger": "Reopen as scoped inverse of an owned schedule."
     },
     {
       "key": "workstation:package.Cheat",
@@ -3677,13 +3800,17 @@
       "batch": "system-security-13",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Pin licensed publisher build and prove VM inventory/module recovery on disposable host.",
+      "v31Hardening": [],
+      "reason": "v2 follows a moving publisher installer redirect and uses host-specific serial data without pinned provenance or full recovery.",
+      "reviewTrigger": "Pin licensed publisher build and prove VM inventory/module recovery on disposable host."
     },
     {
       "key": "workstation:action.PatchVMwareModules",
@@ -3695,13 +3822,17 @@
       "batch": "system-security-14",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Pin licensed source and exact kernel/VMware pair, then test boot/service recovery.",
+      "v31Hardening": [],
+      "reason": "v2 pulls moving third-party kernel module source, stops service, and lacks module rollback.",
+      "reviewTrigger": "Pin licensed source and exact kernel/VMware pair, then test boot/service recovery."
     },
     {
       "key": "workstation:action.AddExtraLUKSpasswords",
@@ -3713,13 +3844,17 @@
       "batch": "system-security-15",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Choose explicit disposable device/private secret and prove header/slot recovery.",
+      "v31Hardening": [],
+      "reason": "v2 adds keys to all detected LUKS devices without explicit target or key-slot journal.",
+      "reviewTrigger": "Choose explicit disposable device/private secret and prove header/slot recovery."
     },
     {
       "key": "workstation:action.EncryptUnpartitionedDisks",
@@ -3731,13 +3866,17 @@
       "batch": "system-security-16",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Require allowlist, backup, destructive VM disk test, and recovery procedure.",
+      "v31Hardening": [],
+      "reason": "v2 heuristic disk scan can erase and encrypt a disk without an exact device plan or rollback.",
+      "reviewTrigger": "Require allowlist, backup, destructive VM disk test, and recovery procedure."
     },
     {
       "key": "workstation:action.ReclaimEncryptDWUnmntPrt",
@@ -3749,13 +3888,17 @@
       "batch": "system-security-17",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Require explicit device map, backup, owned crypttab/mounts, and destructive recovery evidence.",
+      "v31Hardening": [],
+      "reason": "v2 heuristic unmounted-partition scan can reclaim data and alter mount/encryption state without inverse.",
+      "reviewTrigger": "Require explicit device map, backup, owned crypttab/mounts, and destructive recovery evidence."
     },
     {
       "key": "workstation:package.KeyfileMounts",
@@ -3767,13 +3910,17 @@
       "batch": "system-security-25",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Scope to individually owned mappings and prove boot plus unrelated-mount preservation.",
+      "v31Hardening": [],
+      "reason": "v2 remove-only inverse broadly deletes crypttab/fstab lines while encrypted volumes remain.",
+      "reviewTrigger": "Scope to individually owned mappings and prove boot plus unrelated-mount preservation."
     },
     {
       "key": "workstation:setting.SSHreboot",
@@ -3786,13 +3933,17 @@
       "batch": "system-security-18",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Use private principal, visudo and ownership checks, and seeded-policy recovery.",
+      "v31Hardening": [],
+      "reason": "v2 writes user-specific passwordless sudoers and deletes it without validation or prior ownership.",
+      "reviewTrigger": "Use private principal, visudo and ownership checks, and seeded-policy recovery."
     },
     {
       "key": "server:action.UpdateFedora",
@@ -3804,13 +3955,17 @@
       "batch": "generic-server-01",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred generic server baseline; split package/update/timer behavior and record recovery limits",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 performs a broad DNF update without a bounded planned transaction or rollback.",
+      "reviewTrigger": "A bounded update action records packages, failures, reboot need, and Server recovery evidence."
     },
     {
       "key": "server:package.Required",
@@ -3822,13 +3977,17 @@
       "batch": "generic-server-02",
       "risk": "medium",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred generic server baseline; split package/update/timer behavior and record recovery limits",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "The 11-package v2 bundle mixes VM tools, firewall, Samba, cron, and editors without role ownership or inverse.",
+      "reviewTrigger": "A requested Server role has individually owned packages and an exact profile/VM lifecycle."
     },
     {
       "key": "server:package.AutoUpdate",
@@ -3840,13 +3999,17 @@
       "batch": "generic-server-03",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred generic server baseline; split package/update/timer behavior and record recovery limits",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 enables an update timer and edits administrator DNF config without journaling prior state; its timer edit does not persist.",
+      "reviewTrigger": "An owned DNF5 timer/config operation passes seeded config and timer recovery."
     },
     {
       "key": "server:action.ViewIPaddress",
@@ -3880,13 +4043,17 @@
       "batch": "generic-server-05",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "private overlay for host values or key material; extract generic behavior only after ownership review",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "Interactive host identity has no declared private value or prior-name recovery.",
+      "reviewTrigger": "A validated private hostname input and exact Server VM restore exist."
     },
     {
       "key": "server:package.Docker",
@@ -3898,13 +4065,17 @@
       "batch": "generic-server-06",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred optional server operation; verify current package/source, state and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "External repository, docker group, daemon, images, and volumes have no owned inverse in v2.",
+      "reviewTrigger": "Publisher trust and seeded repo/group/service/volume preservation pass on Server."
     },
     {
       "key": "server:package.Tailscale",
@@ -3916,13 +4087,17 @@
       "batch": "generic-server-14",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred optional server operation; verify current package/source, state and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 executes an unpinned remote shell installer without trust, node identity, or inverse.",
+      "reviewTrigger": "A verified package source and node/service recovery boundary pass on Server."
     },
     {
       "key": "server:package.Glances",
@@ -3932,15 +4107,19 @@
       "selectorCoverage": "active",
       "family": "generic-server",
       "batch": "generic-server-07",
-      "risk": "medium",
+      "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred optional server operation; verify current package/source, state and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 overwrites /opt/glances and a systemd unit, opens a firewall port, starts a web service, and defines no inverse.",
+      "reviewTrigger": "A pinned environment and owned unit/firewall/service recovery pass on Server."
     },
     {
       "key": "server:package.PythonPip",
@@ -3952,12 +4131,17 @@
       "batch": "generic-server-12",
       "risk": "medium",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replace global Python installation with isolated, pinned per-tool environment",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.python3-pip"
+      ],
+      "evidence": [
+        "docs/acceptance/package.python3-pip.md",
+        "docs/migrations/generic-server-python.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Server; keep the global pip self-upgrade excluded and revisit only if the target or package contract changes.",
       "v31Hardening": []
     },
     {
@@ -3970,13 +4154,17 @@
       "batch": "generic-server-12",
       "risk": "medium",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replace global Python installation with isolated, pinned per-tool environment",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "Global unpinned pip install has no isolated environment, browser/driver target, or inverse.",
+      "reviewTrigger": "A requested browser/driver target and pinned isolated install pass exact Server removal."
     },
     {
       "key": "server:setting.NoRootLogin",
@@ -3988,13 +4176,17 @@
       "batch": "generic-server-08",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred SSH policy setting; preserve existing file content and test exact restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 edits administrator sshd_config in place without backup, syntax check, or inverse.",
+      "reviewTrigger": "An owned drop-in passes sshd -t, session preservation, and exact restore."
     },
     {
       "key": "server:action.GenerateSSHkeysRSA",
@@ -4006,13 +4198,17 @@
       "batch": "generic-server-13",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "private overlay for host values or key material; extract generic behavior only after ownership review",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 interactively generates private keys in user home with weak .ssh directory mode and no existing-key recovery.",
+      "reviewTrigger": "A private key owner and secure permissions preserve seeded keys without logging secrets."
     },
     {
       "key": "server:package.ExpressVPN",
@@ -4024,13 +4220,17 @@
       "batch": "generic-server-09",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred opt-in VPN profile; keep provider account and host routing private",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "Moving publisher RPM URL and activation prompt have no credential, profile, or service inverse.",
+      "reviewTrigger": "A pinned licensed artifact and private activation pass service/profile/credential recovery."
     },
     {
       "key": "server:action.CreateVPNrandomizer",
@@ -4042,13 +4242,17 @@
       "batch": "generic-server-10",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred opt-in VPN profile; keep provider account and host routing private",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 appends unverified shell text to /usr/sbin with no bounded selection or inverse.",
+      "reviewTrigger": "An accepted VPN client and owned deterministic script pass previous-file restore."
     },
     {
       "key": "server:setting.VPNRandomizerPersistent",
@@ -4060,13 +4264,17 @@
       "batch": "generic-server-11",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred opt-in VPN profile; keep provider account and host routing private",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "v31Hardening": [],
+      "reason": "v2 rewrites crontab with VPN jobs without owned schedule or unrelated-job recovery.",
+      "reviewTrigger": "An owned timer preserves unrelated crontab, routing, and connection state."
     }
   ],
   "batches": [
@@ -4571,183 +4779,238 @@
       "id": "system-security-01",
       "family": "system-security",
       "title": "System Security 01: Hostname, FastDNF",
-      "evidence": [],
-      "nextAction": "Assess Hostname, FastDNF; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-core.md"
+      ],
+      "nextAction": "Reopen only on the documented state, ownership, and exact-target recovery trigger."
     },
     {
       "id": "system-security-02",
       "family": "system-security",
       "title": "System Security 02: UpdateFedora",
-      "evidence": [],
-      "nextAction": "Assess UpdateFedora; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-core.md"
+      ],
+      "nextAction": "Reopen only on the documented state, ownership, and exact-target recovery trigger."
     },
     {
       "id": "system-security-03",
       "family": "system-security",
       "title": "System Security 03: Docker",
-      "evidence": [],
-      "nextAction": "Assess Docker; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-core.md"
+      ],
+      "nextAction": "Reopen only on the documented state, ownership, and exact-target recovery trigger."
     },
     {
       "id": "system-security-04",
       "family": "system-security",
       "title": "System Security 04: NetworkTools, NetCommsTools",
-      "evidence": [],
-      "nextAction": "Assess NetworkTools, NetCommsTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-network-tools.md",
+        "docs/acceptance/network-package-bundles.md"
+      ],
+      "nextAction": "Keep package bundles opt-in; complete H019 application and broader recovery review in v3.1."
     },
     {
       "id": "system-security-05",
       "family": "system-security",
       "title": "System Security 05: NetMgrLibreswan",
-      "evidence": [],
-      "nextAction": "Assess NetMgrLibreswan; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/acceptance/system-security-packages.md",
+        "docs/migrations/system-security-packages.md"
+      ],
+      "nextAction": "Keep package-only profile opt-in; complete the named v3.1 VPN or vault review before extending behavior."
     },
     {
       "id": "system-security-06",
       "family": "system-security",
       "title": "System Security 06: MulticastDNS",
-      "evidence": [],
-      "nextAction": "Assess MulticastDNS; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-07",
       "family": "system-security",
       "title": "System Security 07: NetMgrL2TP",
-      "evidence": [],
-      "nextAction": "Assess NetMgrL2TP; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/acceptance/system-security-packages.md",
+        "docs/migrations/system-security-packages.md"
+      ],
+      "nextAction": "Keep package-only profile opt-in; complete the named v3.1 VPN or vault review before extending behavior."
     },
     {
       "id": "system-security-08",
       "family": "system-security",
       "title": "System Security 08: OpenconnectVPN",
-      "evidence": [],
-      "nextAction": "Assess OpenconnectVPN; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-09",
       "family": "system-security",
       "title": "System Security 09: ImportOpenVPNProfiles",
-      "evidence": [],
-      "nextAction": "Assess ImportOpenVPNProfiles; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-10",
       "family": "system-security",
       "title": "System Security 10: ExpressVPN",
-      "evidence": [],
-      "nextAction": "Assess ExpressVPN; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-11",
       "family": "system-security",
       "title": "System Security 11: StartExpressVPNafterBoot",
-      "evidence": [],
-      "nextAction": "Assess StartExpressVPNafterBoot; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-12",
       "family": "system-security",
       "title": "System Security 12: CreateExpVPNrandomizer",
-      "evidence": [],
-      "nextAction": "Assess CreateExpVPNrandomizer; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-13",
       "family": "system-security",
       "title": "System Security 13: VMwareWorkstation",
-      "evidence": [],
-      "nextAction": "Assess VMwareWorkstation; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-14",
       "family": "system-security",
       "title": "System Security 14: PatchVMwareModules",
-      "evidence": [],
-      "nextAction": "Assess PatchVMwareModules; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-15",
       "family": "system-security",
       "title": "System Security 15: AddExtraLUKSpasswords",
-      "evidence": [],
-      "nextAction": "Assess AddExtraLUKSpasswords; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-16",
       "family": "system-security",
       "title": "System Security 16: EncryptUnpartitionedDisks",
-      "evidence": [],
-      "nextAction": "Assess EncryptUnpartitionedDisks; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-17",
       "family": "system-security",
       "title": "System Security 17: ReclaimEncryptDWUnmntPrt",
-      "evidence": [],
-      "nextAction": "Assess ReclaimEncryptDWUnmntPrt; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-18",
       "family": "system-security",
       "title": "System Security 18: SSHreboot",
-      "evidence": [],
-      "nextAction": "Assess SSHreboot; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-19",
       "family": "system-security",
       "title": "System Security 19: Wireguard",
-      "evidence": [],
-      "nextAction": "Assess Wireguard; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-20",
       "family": "system-security",
       "title": "System Security 20: VPNProfiles",
-      "evidence": [],
-      "nextAction": "Assess VPNProfiles; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-21",
       "family": "system-security",
       "title": "System Security 21: ExpressVPNProfiles",
-      "evidence": [],
-      "nextAction": "Assess ExpressVPNProfiles; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-22",
       "family": "system-security",
       "title": "System Security 22: ExpressVPNafterBoot",
-      "evidence": [],
-      "nextAction": "Assess ExpressVPNafterBoot; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-23",
       "family": "system-security",
       "title": "System Security 23: ScheduleRandomExpVPNChange",
-      "evidence": [],
-      "nextAction": "Assess ScheduleRandomExpVPNChange; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-24",
       "family": "system-security",
       "title": "System Security 24: ScheduleExpVPNChange",
-      "evidence": [],
-      "nextAction": "Assess ScheduleExpVPNChange; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-25",
       "family": "system-security",
       "title": "System Security 25: KeyfileMounts",
-      "evidence": [],
-      "nextAction": "Assess KeyfileMounts; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md"
+      ],
+      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
     },
     {
       "id": "system-security-26",
       "family": "system-security",
       "title": "smartmontools storage monitoring",
-      "evidence": [],
-      "nextAction": "Assess RPM, smartd service, configuration ownership, and storage safety in an isolated batch."
+      "evidence": [
+        "docs/migrations/system-security-smartmontools.md"
+      ],
+      "nextAction": "Reopen only after smartd-aware service and configuration recovery evidence."
     },
     {
       "id": "system-security-27",
@@ -4756,7 +5019,7 @@
       "evidence": [
         "docs/migrations/system-security-27.md"
       ],
-      "nextAction": "Assess encrypted messaging plugin compatibility and recovery in isolation."
+      "nextAction": "Reopen OTR only after two-party encrypted messaging and seeded-profile recovery evidence."
     },
     {
       "id": "system-security-28",
@@ -4765,37 +5028,44 @@
       "evidence": [
         "docs/migrations/system-security-28.md"
       ],
-      "nextAction": "Define isolated signature database and failure/recovery evidence."
+      "nextAction": "Reopen ClamAV after signature database ownership and recovery evidence."
     },
     {
       "id": "system-security-29",
       "family": "system-security",
       "title": "KeePassXC package and vault safety",
       "evidence": [
-        "docs/migrations/system-security-29.md"
+        "docs/acceptance/system-security-packages.md",
+        "docs/migrations/system-security-packages.md"
       ],
-      "nextAction": "Prove encrypted user vaults stay outside RIDE ownership."
+      "nextAction": "Keep package-only profile opt-in; complete the named v3.1 VPN or vault review before extending behavior."
     },
     {
       "id": "generic-server-01",
       "family": "generic-server",
       "title": "Generic Server 01: UpdateFedora",
-      "evidence": [],
-      "nextAction": "Assess UpdateFedora; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-02",
       "family": "generic-server",
       "title": "Generic Server 02: Required",
-      "evidence": [],
-      "nextAction": "Assess Required; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-03",
       "family": "generic-server",
       "title": "Generic Server 03: AutoUpdate",
-      "evidence": [],
-      "nextAction": "Assess AutoUpdate; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-04",
@@ -4810,71 +5080,93 @@
       "id": "generic-server-05",
       "family": "generic-server",
       "title": "Generic Server 05: Hostname",
-      "evidence": [],
-      "nextAction": "Assess Hostname; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-06",
       "family": "generic-server",
       "title": "Generic Server 06: Docker",
-      "evidence": [],
-      "nextAction": "Assess Docker; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-07",
       "family": "generic-server",
       "title": "Generic Server 07: Glances",
-      "evidence": [],
-      "nextAction": "Assess Glances; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-08",
       "family": "generic-server",
       "title": "Generic Server 08: NoRootLogin",
-      "evidence": [],
-      "nextAction": "Assess NoRootLogin; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-09",
       "family": "generic-server",
       "title": "Generic Server 09: ExpressVPN",
-      "evidence": [],
-      "nextAction": "Assess ExpressVPN; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-10",
       "family": "generic-server",
       "title": "Generic Server 10: CreateVPNrandomizer",
-      "evidence": [],
-      "nextAction": "Assess CreateVPNrandomizer; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-11",
       "family": "generic-server",
       "title": "Generic Server 11: VPNRandomizerPersistent",
-      "evidence": [],
-      "nextAction": "Assess VPNRandomizerPersistent; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-12",
       "family": "generic-server",
       "title": "Generic Server 12: PythonPip, Selenium",
-      "evidence": [],
-      "nextAction": "Assess PythonPip, Selenium; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-python.md",
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-13",
       "family": "generic-server",
       "title": "Generic Server 13: GenerateSSHkeysRSA",
-      "evidence": [],
-      "nextAction": "Assess GenerateSSHkeysRSA; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "generic-server-14",
       "family": "generic-server",
       "title": "Generic Server 14: Tailscale",
-      "evidence": [],
-      "nextAction": "Assess Tailscale; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/generic-server-decisions.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
     },
     {
       "id": "resolution-review-01",
@@ -4883,7 +5175,7 @@
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
-      "nextAction": "Review the conflicting screensaver settings; Galleta, Xplico, Atom telemetry, and TecmintMonitorSh are retired."
+      "nextAction": "All six outcomes have explicit decisions; reopen lock state only on atomic user-session recovery evidence."
     },
     {
       "id": "publisher-apps-17",
@@ -5079,6 +5371,24 @@
       "id": "H018",
       "title": "GNOME boolean setting visual behavior and implicit-default recovery",
       "trigger": "After the five fixed GNOME boolean keys pass their Fedora 44 Workstation headless user-session happy path; inspect UI behavior and preserve unset-vs-explicit dconf provenance before support promotion.",
+      "status": "queued"
+    },
+    {
+      "id": "H019",
+      "title": "Network analysis and remote communication application behavior",
+      "trigger": "After the ten Fedora 44 package lifecycles and both opt-in profiles pass; review capture privileges, TFTP activation requests, serial devices, remote connection profiles, desktop visuals, and broader recovery on disposable targets.",
+      "status": "queued"
+    },
+    {
+      "id": "H020",
+      "title": "NetworkManager VPN plugin connection, credential, and GUI behavior",
+      "trigger": "After Fedora 44 package-only lifecycles pass; test protocol setup, credentials, pre-existing connection preservation, and GNOME controls on disposable targets.",
+      "status": "queued"
+    },
+    {
+      "id": "H021",
+      "title": "KeePassXC vault workflow, GUI, and seeded encrypted-data recovery",
+      "trigger": "After the Fedora 44 package-only lifecycle preserves a seeded file; test real vault interaction and GUI recovery before adding any vault-managed operation.",
       "status": "queued"
     }
   ]

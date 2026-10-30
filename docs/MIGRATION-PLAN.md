@@ -14,7 +14,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | --- | --- | --- |
 | `DisableScreensaver` | retired | Conflicts with EnableScreenSaver in the same legacy preset; review a single desired state later. |
 | `SetupUserDefaultDirs` | deferred | Review directory ownership and user scope. |
-| `EnableFastDNF` | replaced | DNF5 defaults need current evidence; no legacy config edit. |
+| `EnableFastDNF` | unsupported | DNF5 still defaults to three parallel downloads; the v2 file edit has no owned inverse. See the [system review](migrations/system-security-core.md). |
 | `UpdateFedora` | deferred | Add explicit non-reversible system update operation after VM acceptance. |
 | `InstallRequired` | replaced | The global seven-package bundle is replaced by bootstrap and handler prerequisite checks. Optional developer tools need a separate requested profile; see [provider foundation batch 01](migrations/provider-foundation-01.md). |
 | `InstallShellTools` | supported | Split into supported `package.pv` and `package.strace` in the opt-in `shell-tools` profile; see [VM acceptance](acceptance/provider-shell-tools.md). |
@@ -295,6 +295,44 @@ was 113/180 scoped outcomes at that handler milestone. The
 separate high-risk lock and idle batch. The generated report is authoritative
 as later batches change it.
 
+The [core system review](migrations/system-security-core.md) closes the
+active hostname prompt, DNF tuning, unbounded update, and Docker composite
+as non-runnable pending their distinct state and recovery contracts. DNF5
+does not silently replace the old 15-download tuning.
+The [high-risk system review](migrations/system-security-risk-decisions.md)
+records source-specific non-runnable decisions for VPN connections and
+credentials, destructive disk and LUKS behavior, VMware kernel modules,
+network name resolution, and passwordless reboot policy. These stay outside
+the v3.0 executable catalog until their owner and safety gates pass.
+
+The [network package bundle](migrations/system-security-network-tools.md)
+passed a disposable Workstation VM check and remains opt-in candidate while
+application behavior stays in H019. The
+[Server Python pip package](migrations/generic-server-python.md) passed on the
+pinned Server edition, reusing the existing signed Fedora handler. The
+[remaining generic Server review](migrations/generic-server-decisions.md)
+keeps `network-devices` source ownership and closes its other scoped
+outcomes with individual non-runnable reasons and triggers. The
+[screensaver resolution](migrations/resolution-decisions.md) closes the
+conflicting v2 preset actions without selecting a lock policy silently.
+The [package-only security batch](migrations/system-security-packages.md)
+passed scoped VPN-plugin and KeePassXC package lifecycles plus a targeted
+partial-failure restore; vault and connection behavior stay outside those
+operations. The [SmartMonTools probe](migrations/system-security-smartmontools.md)
+found that the RPM enabled `smartd`, so that outcome remains non-runnable
+until a service-aware inverse exists. Pidgin/OTR and ClamAV signatures have
+their own [security decisions](migrations/system-security-27.md) and
+[signature decision](migrations/system-security-28.md).
+
+The 2026-10-30 ledger result is **180/180 scoped outcomes dispositioned**:
+28 supported, 26 operable opt-in candidates, 13 replaced, 14 retired, and
+99 unsupported. Runnable source outcomes total 54; 26 require
+`--allow-candidate`. The 15 owner exclusions are retained outside the
+denominator. These counts are a dated snapshot; use the
+[generated progress report](migrations/progress.md) for current status.
+The [v3.0 review note](release-v3.0-review.md) identifies opt-in candidates
+and remaining release checks. No v3 tag is implied by ledger completion.
+
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
 failure-injection evidence for an unchanged handler within the batch. For
@@ -329,8 +367,8 @@ operation IDs or legacy outcomes, source owner, target VM, dependencies,
 expected prior and final state, recovery limit, acceptance checks, status,
 revision, dated evidence, and exact next action. Keep source readiness separate
 from runtime activation and verified behavior. The three base package
-operations are verified on their declared editions; optional operations remain
-candidates.
+operations are verified on their declared editions; optional source outcomes
+have supported, candidate, or non-runnable decisions in the ledger.
 
 | Stage | Agent work | Owner or runtime input | Completion evidence |
 | --- | --- | --- | --- |

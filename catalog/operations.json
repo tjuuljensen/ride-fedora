@@ -1540,7 +1540,8 @@
             "x86_64"
           ],
           "variantIds": [
-            "workstation"
+            "workstation",
+            "server"
           ]
         }
       },
@@ -2555,6 +2556,596 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
       "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
       "verification": "local-gsettings-state"
+    },
+    {
+      "id": "package.tcpdump",
+      "kind": "package",
+      "name": "tcpdump",
+      "group": "network-tools",
+      "description": "Capture utility package; does not start a capture.",
+      "handler": "dnf-package",
+      "packageName": "tcpdump",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "tcpdump",
+      "productUri": "https://packages.fedoraproject.org/pkgs/tcpdump/tcpdump/",
+      "license": "BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND BSD-4-Clause-UC AND ISC AND NTP",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/tcpdump/tcpdump/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/tcpdump/tcpdump/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.wireshark",
+      "kind": "package",
+      "name": "wireshark",
+      "group": "network-tools",
+      "description": "Network protocol analyzer package; does not change capture permissions.",
+      "handler": "dnf-package",
+      "packageName": "wireshark",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "wireshark",
+      "productUri": "https://www.wireshark.org/",
+      "license": "BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-or-later AND LGPL-2.0-or-later AND Zlib AND ISC AND (BSD-3-Clause OR GPL-2.0-only) AND (GPL-2.0-or-later AND Zlib)",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/wireshark/wireshark/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/wireshark/wireshark/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.tftp-server",
+      "kind": "package",
+      "name": "tftp-server",
+      "group": "network-tools",
+      "description": "TFTP server package; does not enable its socket or serve files.",
+      "handler": "dnf-package",
+      "packageName": "tftp-server",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "tftp-server",
+      "productUri": "https://packages.fedoraproject.org/pkgs/tftp/tftp-server/",
+      "license": "BSD-4-Clause-UC",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/tftp/tftp-server/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/tftp/tftp-server/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.nmap",
+      "kind": "package",
+      "name": "nmap",
+      "group": "network-tools",
+      "description": "Network scanner package; does not scan any target.",
+      "handler": "dnf-package",
+      "packageName": "nmap",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "nmap",
+      "productUri": "https://packages.fedoraproject.org/pkgs/nmap/nmap/",
+      "license": "LicenseRef-Nmap",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/nmap/nmap/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/nmap/nmap/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.macchanger",
+      "kind": "package",
+      "name": "macchanger",
+      "group": "network-tools",
+      "description": "MAC address tool package; does not change an interface.",
+      "handler": "dnf-package",
+      "packageName": "macchanger",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "macchanger",
+      "productUri": "https://packages.fedoraproject.org/pkgs/macchanger/macchanger/",
+      "license": "GPL-3.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/macchanger/macchanger/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/macchanger/macchanger/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.flow-tools",
+      "kind": "package",
+      "name": "flow-tools",
+      "group": "network-tools",
+      "description": "NetFlow utility package; does not collect traffic.",
+      "handler": "dnf-package",
+      "packageName": "flow-tools",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "flow-tools",
+      "productUri": "https://packages.fedoraproject.org/pkgs/flow-tools/flow-tools/",
+      "license": "LicenseRef-Callaway-BSD",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/flow-tools/flow-tools/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/flow-tools/flow-tools/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.nethogs",
+      "kind": "package",
+      "name": "nethogs",
+      "group": "network-tools",
+      "description": "Per-process network monitor package; does not capture traffic.",
+      "handler": "dnf-package",
+      "packageName": "nethogs",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "nethogs",
+      "productUri": "https://packages.fedoraproject.org/pkgs/nethogs/nethogs/",
+      "license": "GPL-1.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/nethogs/nethogs/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/nethogs/nethogs/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.minicom",
+      "kind": "package",
+      "name": "minicom",
+      "group": "network-tools",
+      "description": "Serial terminal package; does not access a device.",
+      "handler": "dnf-package",
+      "packageName": "minicom",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "minicom",
+      "productUri": "https://packages.fedoraproject.org/pkgs/minicom/minicom/",
+      "license": "GPL-2.0-or-later AND LGPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/minicom/minicom/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/minicom/minicom/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.putty",
+      "kind": "package",
+      "name": "putty",
+      "group": "network-tools",
+      "description": "Remote terminal client package; does not create a connection.",
+      "handler": "dnf-package",
+      "packageName": "putty",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "putty",
+      "productUri": "https://www.chiark.greenend.org.uk/~sgtatham/putty/",
+      "license": "MIT",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/putty/putty/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/putty/putty/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.remmina",
+      "kind": "package",
+      "name": "remmina",
+      "group": "network-tools",
+      "description": "Remote desktop client package; does not create user connection profiles.",
+      "handler": "dnf-package",
+      "packageName": "remmina",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "remmina",
+      "productUri": "https://packages.fedoraproject.org/pkgs/remmina/remmina/",
+      "license": "GPL-2.0-or-later AND MIT",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/remmina/remmina/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/remmina/remmina/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.networkmanager-libreswan",
+      "kind": "package",
+      "name": "NetworkManager Libreswan",
+      "group": "vpn-package",
+      "description": "Install IPsec NetworkManager plugin without a VPN connection.",
+      "handler": "dnf-package",
+      "packageName": "NetworkManager-libreswan",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "networkmanager-libreswan",
+      "productUri": "https://gitlab.gnome.org/GNOME/NetworkManager-libreswan",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-libreswan/NetworkManager-libreswan/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-libreswan/NetworkManager-libreswan/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.networkmanager-libreswan.md"
+    },
+    {
+      "id": "package.networkmanager-libreswan-gnome",
+      "kind": "package",
+      "name": "NetworkManager Libreswan GNOME",
+      "group": "vpn-package",
+      "description": "Install GNOME IPsec plugin files without a VPN connection.",
+      "handler": "dnf-package",
+      "packageName": "NetworkManager-libreswan-gnome",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "networkmanager-libreswan",
+      "productUri": "https://gitlab.gnome.org/GNOME/NetworkManager-libreswan",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-libreswan/NetworkManager-libreswan-gnome/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-libreswan/NetworkManager-libreswan-gnome/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.networkmanager-libreswan-gnome.md"
+    },
+    {
+      "id": "package.networkmanager-l2tp",
+      "kind": "package",
+      "name": "NetworkManager L2TP",
+      "group": "vpn-package",
+      "description": "Install L2TP NetworkManager plugin without a VPN connection.",
+      "handler": "dnf-package",
+      "packageName": "NetworkManager-l2tp",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "networkmanager-l2tp",
+      "productUri": "https://github.com/nm-l2tp/NetworkManager-l2tp",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-l2tp/NetworkManager-l2tp/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-l2tp/NetworkManager-l2tp/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.networkmanager-l2tp.md"
+    },
+    {
+      "id": "package.networkmanager-l2tp-gnome",
+      "kind": "package",
+      "name": "NetworkManager L2TP GNOME",
+      "group": "vpn-package",
+      "description": "Install GNOME L2TP plugin files without a VPN connection.",
+      "handler": "dnf-package",
+      "packageName": "NetworkManager-l2tp-gnome",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "networkmanager-l2tp",
+      "productUri": "https://github.com/nm-l2tp/NetworkManager-l2tp",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-l2tp/NetworkManager-l2tp-gnome/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/NetworkManager-l2tp/NetworkManager-l2tp-gnome/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.networkmanager-l2tp-gnome.md"
+    },
+    {
+      "id": "package.keepassxc",
+      "kind": "package",
+      "name": "KeePassXC",
+      "group": "password-manager",
+      "description": "Install KeePassXC without opening or managing encrypted vaults.",
+      "handler": "dnf-package",
+      "packageName": "keepassxc",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "keepassxc",
+      "productUri": "https://keepassxc.org/",
+      "license": "GPL-2.0-or-later AND BSD-2-Clause AND MIT AND CC0-1.0 AND Apache-2.0 AND LGPL-2.0-only AND LGPL-2.1-only",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/keepassxc/keepassxc/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/keepassxc/keepassxc/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.keepassxc.md"
     }
   ]
 }

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "keepassxc",
+  "description": "Opt-in Fedora 44 Workstation package-only deployment; no user or connection configuration",
+  "operations": [
+    {
+      "id": "package.keepassxc",
+      "state": "installed"
+    }
+  ]
+}
