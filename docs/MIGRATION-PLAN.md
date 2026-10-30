@@ -222,6 +222,10 @@ non-runnable pending their separate Linux package and data contracts.
 Fedora Binwalk and autopep8 after a shared exact-target RPM lifecycle,
 retired the discontinued Dumpzilla script, and documented the maintained
 standalone MAC vendor lookup as a non-runnable replacement.
+[Isolated forensic decisions 04-06](migrations/forensic-isolated-04.md)
+close the BulkExtractor source build, NetworkMiner capture-bearing portable
+tree, and email-header service as non-runnable in v3.0; each has a specific
+source, ownership, and recovery trigger for reconsideration.
 The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,

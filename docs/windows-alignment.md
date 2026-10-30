@@ -349,3 +349,21 @@ shared package source resolution, recovery, catalog, profile, or run-state
 contract changed, and no unexplained drift was found. Recheck if Windows
 adds any of these products, Linux adds owned script deployment, either
 schema/handler changes, or release review begins.
+
+### Fedora forensic isolated decisions 04-06, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` before the isolated
+[BulkExtractor](migrations/forensic-isolated-04.md),
+[NetworkMiner](migrations/forensic-isolated-05.md), and
+[email-header analyzer](migrations/forensic-isolated-06.md) decisions.
+Windows has a reviewed `package.networkminer` portable ZIP, with the same
+product identity and GPL-2.0 source fact but Windows-specific runtime,
+destination, and capture-preserving recovery. Linux has no equivalent
+portable handler or data inverse, so its active v2 outcome remains
+non-runnable in v3.0. Windows has no corresponding BulkExtractor or email
+header analyzer catalog operation in this revision. These decisions add no
+Linux operation, profile, or run-state field. The platform deployment and
+evidence difference is intentional, and no unexplained shared-contract
+drift was found. Recheck at first Linux portable/service implementation,
+product fact change, or release review.

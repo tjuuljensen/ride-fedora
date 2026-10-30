@@ -601,15 +601,17 @@
       "batch": "forensic-isolated-04",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/forensic-isolated-04.md"
       ],
-      "blocker": "Current source artifact, owned build destination, and safe inverse need review.",
-      "nextAction": "Assess upstream source, license, build artifact, ownership, and recovery before any runnable operation.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only when a requested pinned release build has a fully inventoried prefix, source license record, failed-build cleanup, and seeded-data VM recovery.",
+      "v31Hardening": [],
+      "reason": "The v2 moving-branch source build writes untracked files to /usr/local, removes shared dependencies, and has no owned inverse or seeded forensic-output recovery evidence.",
+      "reviewTrigger": "A requested pinned release build has a fully inventoried prefix, source license record, failed-build cleanup, and seeded-data VM recovery."
     },
     {
       "key": "workstation:package.EmailHeaderAnlzr",
@@ -622,15 +624,17 @@
       "batch": "forensic-isolated-06",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/forensic-isolated-06.md"
       ],
-      "blocker": "Publisher, data, service, and owned recovery require isolated review before a runnable operation.",
-      "nextAction": "Review the isolated source, data and security contract; implement with exact-target evidence or record a reasoned v3.0 disposition.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only when a requested local analyzer has a licensed pinned source, isolated dependencies, loopback service, and seeded-data start/failure/removal VM evidence.",
+      "v31Hardening": [],
+      "reason": "The v2 clone and global pip steps create an unpinned persistent Flask service; service identity, bind scope, unit ownership, and Python/data inverse are unproven.",
+      "reviewTrigger": "A requested local analyzer has a licensed pinned source, isolated dependencies, loopback service, and seeded-data start/failure/removal VM evidence."
     },
     {
       "key": "workstation:package.LibEWF",
@@ -972,15 +976,17 @@
       "batch": "forensic-isolated-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/forensic-isolated-05.md"
       ],
-      "blocker": "Publisher, data, service, and owned recovery require isolated review before a runnable operation.",
-      "nextAction": "Review the isolated source, data and security contract; implement with exact-target evidence or record a reasoned v3.0 disposition.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only when a requested Linux deployment has a pinned official ZIP, safe permissions, Mono/GTK evidence, owned program files, and capture-preserving VM inverse.",
+      "v31Hardening": [],
+      "reason": "The active v2 mutable ZIP installer makes captures world writable and its inverse deletes the entire capture/output tree; no Linux owned portable handler or seeded-capture recovery exists.",
+      "reviewTrigger": "A requested Linux deployment has a pinned official ZIP, safe permissions, Mono/GTK evidence, owned program files, and capture-preserving VM inverse."
     },
     {
       "key": "workstation:package.Pwgen",
@@ -3956,7 +3962,7 @@
       "evidence": [
         "docs/migrations/forensic-isolated-04.md"
       ],
-      "nextAction": "Assess acquisition, license, build, detection, and safe recovery."
+      "nextAction": "Reopen only on the documented source, ownership, and exact-target recovery trigger."
     },
     {
       "id": "forensic-isolated-05",
@@ -3965,7 +3971,7 @@
       "evidence": [
         "docs/migrations/forensic-isolated-05.md"
       ],
-      "nextAction": "Review official Linux runtime, licensed artifact, capture-data preservation, and owned inverse."
+      "nextAction": "Reopen only on the documented source, ownership, and exact-target recovery trigger."
     },
     {
       "id": "forensic-isolated-06",
@@ -3974,7 +3980,7 @@
       "evidence": [
         "docs/migrations/forensic-isolated-06.md"
       ],
-      "nextAction": "Review current service source, bind scope, isolated Python environment, and safe recovery."
+      "nextAction": "Reopen only on the documented source, ownership, and exact-target recovery trigger."
     },
     {
       "id": "publisher-apps-01",
