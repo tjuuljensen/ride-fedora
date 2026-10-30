@@ -212,3 +212,26 @@ runtime contract remain as reviewed for native RPM batch 05. Linux's proposed
 handler. No Windows installer or shared product ID is inferred. Review again
 if the source-selection contract, profile/run-state schemas, or a shared
 product mapping changes, and before release-candidate preparation.
+
+### RPM Fusion provider assessment, 2026-10-30
+
+Compared Linux catalog, profile, and run-state schemas with Windows
+`codex/ride-v3-migration` at `0ff139f` while assessing
+[provider foundation batch 02](migrations/provider-foundation-02.md). No
+Linux catalog operation or shared schema was added: the current Fedora DNF
+handler does not establish RPM Fusion key trust or owned repository recovery.
+This remains an unresolved, high-risk Linux provider decision. Review again
+when a trust-pinned provider is designed, when Windows changes shared source
+selection, and before release-candidate preparation.
+
+### Fedora provider foundation batch 03, 2026-10-30
+
+Compared Linux catalog, profile, and run-state schemas with Windows
+`codex/ride-v3-migration` at `0ff139f` before adding the
+[kernel and Python package candidates](migrations/provider-foundation-03.md).
+These use Fedora RPMs and the unchanged DNF installed deployment. DNF5
+utility and archive-tool replacements are recorded separately from working
+install status. Flathub was isolated as a remote-ownership batch. No shared
+schema, journal, source fallback, or Windows installer changed. Recheck if
+either platform changes package identity or source-selection semantics, and
+before release-candidate preparation.

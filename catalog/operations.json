@@ -1433,6 +1433,206 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.strace.md"
+    },
+    {
+      "id": "package.kernel-devel",
+      "kind": "package",
+      "name": "Kernel development files",
+      "group": "kernel-tools",
+      "description": "Install Fedora kernel development files; compatibility with the running kernel is a separate check.",
+      "handler": "dnf-package",
+      "packageName": "kernel-devel",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "kernel-devel",
+      "productUri": "https://www.kernel.org/",
+      "license": "Multiple SPDX licenses; see Fedora package metadata",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/kernel/kernel-devel/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/kernel/kernel-devel/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.kernel-devel.md"
+    },
+    {
+      "id": "package.kernel-headers",
+      "kind": "package",
+      "name": "Kernel userspace headers",
+      "group": "kernel-tools",
+      "description": "Install Fedora userspace kernel headers for development.",
+      "handler": "dnf-package",
+      "packageName": "kernel-headers",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "kernel-headers",
+      "productUri": "https://www.kernel.org/",
+      "license": "Multiple SPDX licenses; see Fedora package metadata",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/kernel-headers/kernel-headers/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/kernel-headers/kernel-headers/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.kernel-headers.md"
+    },
+    {
+      "id": "package.python3-pip",
+      "kind": "package",
+      "name": "Python 3 pip",
+      "group": "python-tools",
+      "description": "Install Fedora python3-pip without upgrading pip outside DNF.",
+      "handler": "dnf-package",
+      "packageName": "python3-pip",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "python3-pip",
+      "productUri": "https://pip.pypa.io/",
+      "license": "MIT AND Python-2.0.1 AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MPL-2.0 AND (Apache-2.0 OR BSD-2-Clause)",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/python-pip/python3-pip/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/python-pip/python3-pip/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.python3-pip.md"
+    },
+    {
+      "id": "package.7zip",
+      "kind": "package",
+      "name": "7-Zip archive tool",
+      "group": "archive-tools",
+      "description": "Install Fedora 7zip for archive creation and extraction.",
+      "handler": "dnf-package",
+      "packageName": "7zip",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "7zip",
+      "productUri": "https://7-zip.org",
+      "license": "LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-Fedora-Public-Domain",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/7zip/7zip/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/7zip/7zip/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.7zip.md"
+    },
+    {
+      "id": "package.unar",
+      "kind": "package",
+      "name": "Unar archive extractor",
+      "group": "archive-tools",
+      "description": "Install Fedora unar for multi-format and RAR extraction; this is not an unrar command.",
+      "handler": "dnf-package",
+      "packageName": "unar",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "unar",
+      "productUri": "https://theunarchiver.com/command-line",
+      "license": "LicenseRef-Callaway-LGPLv2+",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/unar/unar/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/unar/unar/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.unar.md"
     }
   ]
 }

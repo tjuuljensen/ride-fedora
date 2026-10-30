@@ -552,6 +552,37 @@ def test_provider_shell_tools_batch_and_profile(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_provider_kernel_and_python_packages_batch(vm):
+    # DNF5 and its plugins replace the old dnf-utils bundle. Verify actual
+    # commands on the declared VM without changing repository configuration.
+    vm.run("rpm -q --quiet dnf5 dnf5-plugins")
+    vm.run("dnf5 config-manager --help")
+    vm.run("dnf5 download --help")
+    packages = ("kernel-devel", "kernel-headers", "python3-pip")
+    native_rpm_batch(vm, packages, inventory_policy="name-arch",
+                     residue_candidates=packages,
+                     installed_probes={"kernel-devel": "uname -r && rpm -q kernel-devel",
+                                       "kernel-headers": "rpm -q kernel-headers",
+                                       "python3-pip": "python3 -m pip --version"})
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_provider_archive_replacement_batch(vm):
+    # The pinned Workstation image includes 7zip. Create an absent baseline
+    # only after proving the preparation removes no other pre-existing RPM.
+    before = set(package_inventory(vm).splitlines())
+    assert vm.run("rpm -q --quiet 7zip", check=False).returncode == 0
+    vm.run("sudo dnf remove -y 7zip", timeout=900)
+    after = set(package_inventory(vm).splitlines())
+    assert {line.split("\t", 1)[0] for line in before - after} == {"7zip"}
+    assert not (after - before), "preparation changed unrelated RPMs"
+    native_rpm_batch(vm, ("7zip", "unar"), inventory_policy="name-arch",
+                     residue_candidates=("7zip", "unar"),
+                     installed_probes={"7zip": "command -v 7z",
+                                       "unar": "command -v unar"})
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_native_cli_tools_supported_profile_smoke(vm):
     identifiers = tuple(f"package.{name}" for name in
                         ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find"))

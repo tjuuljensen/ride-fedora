@@ -135,12 +135,14 @@
       "batch": "provider-foundation-02",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "migrate",
+      "progress": "assessed",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: External repository enablement needs opt-in and trust review.",
+      "evidence": [
+        "docs/migrations/provider-foundation-02.md"
+      ],
+      "blocker": "Independent signing-key trust and owned repository-file/key recovery are not established; the existing DNF handler does not cover this provider.",
+      "nextAction": "Implement and test a trust-pinned, ownership-aware repository provider, or close as unsupported for v3.0 with a review trigger.",
       "v31Hardening": []
     },
     {
@@ -154,13 +156,24 @@
       "batch": "provider-foundation-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Kernel-dependent package group requires target checks.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.kernel-devel",
+        "package.kernel-headers"
+      ],
+      "evidence": [
+        "docs/acceptance/provider-kernel-tools.md",
+        "docs/acceptance/package.kernel-devel.md",
+        "docs/acceptance/package.kernel-headers.md",
+        "docs/migrations/provider-foundation-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Review package-driven system RPM updates and module-build version matching in v3.1; do not infer build compatibility from package installation.",
+      "v31Hardening": [
+        "H008",
+        "H009"
+      ]
     },
     {
       "key": "workstation:package.DNFutils",
@@ -173,13 +186,17 @@
       "batch": "provider-foundation-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replaced: Review current DNF5 commands and plugins.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/provider-foundation-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck DNF5 command availability on any new target or provider contract change.",
+      "v31Hardening": [],
+      "reason": "The v2 dnf-utils bundle is replaced by Fedora 44 DNF5 and DNF5 plugins; their config-manager and download commands were observed in a disposable Workstation VM, and the v3 client uses current DNF behavior.",
+      "reviewTrigger": "The Fedora target, DNF5 plugin availability, or the v3 package-provider command contract changes."
     },
     {
       "key": "workstation:package.Eza",
@@ -314,15 +331,15 @@
       ],
       "selectorCoverage": "active",
       "family": "provider-foundation",
-      "batch": "provider-foundation-03",
+      "batch": "provider-foundation-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: External Flatpak remote remains opt-in.",
+      "blocker": "Flathub remote ownership, signature trust, pre-existing remote state, and safe inverse are not yet assessed.",
+      "nextAction": "Assess a separate Flatpak remote handler and owned inverse before any runnable operation.",
       "v31Hardening": []
     },
     {
@@ -1057,12 +1074,17 @@
       "batch": "provider-foundation-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replaced: Use per-operation isolated Python installs, not global pip.",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.python3-pip"
+      ],
+      "evidence": [
+        "docs/acceptance/package.python3-pip.md",
+        "docs/migrations/provider-foundation-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck if Fedora Python package policy or the DNF handler changes; no system-wide pip self-upgrade is planned.",
       "v31Hardening": []
     },
     {
@@ -1076,13 +1098,23 @@
       "batch": "provider-foundation-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Split package list by use case.",
-      "v31Hardening": []
+      "disposition": "replace",
+      "progress": "resolved",
+      "v3Ids": [
+        "package.7zip",
+        "package.unar"
+      ],
+      "evidence": [
+        "docs/acceptance/provider-archive-tools.md",
+        "docs/acceptance/package.7zip.md",
+        "docs/acceptance/package.unar.md",
+        "docs/migrations/provider-foundation-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Revisit only if exact unrar CLI compatibility or Fedora archive source availability changes.",
+      "v31Hardening": [],
+      "reason": "Fedora 44 no longer offers the v2 p7zip package; supported 7zip and unar operations replace archive creation and RAR extraction intent, with a different command from unrar.",
+      "reviewTrigger": "An explicit requirement for the unrar CLI or a change to Fedora archive package availability or RAR behavior."
     },
     {
       "key": "workstation:package.BasicEditors",
@@ -3659,15 +3691,22 @@
       "id": "provider-foundation-02",
       "family": "provider-foundation",
       "title": "Provider Foundation 02: RPMfusionRepos",
-      "evidence": [],
-      "nextAction": "Assess RPMfusionRepos; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/provider-foundation-02.md"
+      ],
+      "nextAction": "Resolve signing-key trust, repository ownership, and safe inverse before any runnable operation."
     },
     {
       "id": "provider-foundation-03",
       "family": "provider-foundation",
-      "title": "Provider Foundation 03: KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools",
-      "evidence": [],
-      "nextAction": "Assess KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Provider Foundation 03: KernelTools, DNFutils, PythonPip, PackagingTools",
+      "evidence": [
+        "docs/migrations/provider-foundation-03.md",
+        "docs/acceptance/provider-kernel-tools.md",
+        "docs/acceptance/package.python3-pip.md",
+        "docs/acceptance/provider-archive-tools.md"
+      ],
+      "nextAction": "Continue provider-foundation-04; review kernel build matching and package-driven updates in v3.1."
     },
     {
       "id": "provider-foundation-04",
@@ -3709,6 +3748,15 @@
         "docs/migrations/provider-foundation-08.md"
       ],
       "nextAction": "Resolve installed/portable source selection and owned inverse."
+    },
+    {
+      "id": "provider-foundation-09",
+      "family": "provider-foundation",
+      "title": "Flathub remote ownership and recovery",
+      "evidence": [
+        "docs/migrations/provider-foundation-09.md"
+      ],
+      "nextAction": "Define a scoped Flatpak remote handler, trust check, and inverse before acceptance."
     },
     {
       "id": "forensic-isolated-01",
@@ -4367,6 +4415,12 @@
       "id": "H008",
       "title": "Review package-driven updates to pre-existing RPMs",
       "trigger": "After broad Fedora package VM happy paths; document package upgrade impact without unsafe downgrades",
+      "status": "queued"
+    },
+    {
+      "id": "H009",
+      "title": "Review kernel-devel match for module builds",
+      "trigger": "If module building is requested after the package-only v3.0 install acceptance; verify running-kernel and development-package compatibility",
       "status": "queued"
     }
   ]

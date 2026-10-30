@@ -18,11 +18,11 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `UpdateFedora` | deferred | Add explicit non-reversible system update operation after VM acceptance. |
 | `InstallRequired` | replaced | The global seven-package bundle is replaced by bootstrap and handler prerequisite checks. Optional developer tools need a separate requested profile; see [provider foundation batch 01](migrations/provider-foundation-01.md). |
 | `InstallShellTools` | supported | Split into supported `package.pv` and `package.strace` in the opt-in `shell-tools` profile; see [VM acceptance](acceptance/provider-shell-tools.md). |
-| `InstallRPMfusionRepos` | deferred | External repository enablement needs opt-in and trust review. |
-| `InstallKernelTools` | deferred | Kernel-dependent package group requires target checks. |
-| `InstallDNFutils` | replaced | Review current DNF5 commands and plugins. |
+| `InstallRPMfusionRepos` | deferred | [Provider batch 02](migrations/provider-foundation-02.md) records the signing-key and owned-recovery work required before a runnable operation. |
+| `InstallKernelTools` | supported | Split into signed Fedora `kernel-devel` and `kernel-headers` package installs; [VM evidence](acceptance/provider-kernel-tools.md) does not establish a matching module-build environment. |
+| `InstallDNFutils` | replaced | Fedora 44 Workstation has DNF5 and plugins; current `config-manager` and `download` commands passed the disposable-VM check. See [provider foundation batch 03](migrations/provider-foundation-03.md). |
 | `InstallEzaGitHub` | replaced | Prefer Fedora repository package after verification. |
-| `InstallFlathub` | deferred | External Flatpak remote remains opt-in. |
+| `InstallFlathub` | deferred | [Flathub remote ownership](migrations/provider-foundation-09.md) needs scoped trust, detection, and inverse review. |
 | `InstallAppImageLauncher` | deferred | Review maintained source and current desktop integration. |
 | `InstallExif` | deferred | Review product identity and official package. |
 | `InstallMd5deep` | deferred | Review current package and forensic use case. |
@@ -42,8 +42,8 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallFd` | deferred | Candidate native repository package. |
 | `InstallDocker` | deferred | Generic server role only after provider and repository review. |
 | `InstallVMFStools` | deferred | Legacy active entry is incomplete; no executable v3 handler. |
-| `InstallPythonPip` | replaced | Use per-operation isolated Python installs, not global pip. |
-| `InstallPackagingTools` | deferred | Split package list by use case. |
+| `InstallPythonPip` | supported | Fedora `python3-pip` passed [VM lifecycle acceptance](acceptance/package.python3-pip.md); omit the v2 global pip self-upgrade. |
+| `InstallPackagingTools` | replaced | Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. |
 | `InstallBasicEditors` | deferred | Candidate native repository packages. |
 | `InstallTerminator` | deferred | Optional desktop profile only. |
 | `InstallAlien` | deferred | Review relevance and support. |
@@ -180,8 +180,15 @@ losing their package identities.
 [Provider foundation batch 01](migrations/provider-foundation-01.md) replaced
 the global `Required` install bundle with explicit prerequisite checks and
 accepted `pv` and `strace` as supported operations in the opt-in
-`shell-tools` profile. The next source batch is RPM Fusion repository
-enablement. The remaining outcomes stay visible in the progress report.
+`shell-tools` profile. [RPM Fusion provider batch 02](migrations/provider-foundation-02.md)
+is assessed and remains blocked on trust and owned recovery.
+[Provider foundation batch 03](migrations/provider-foundation-03.md) accepted
+kernel development and Python pip RPM installs, documented DNF5 as the
+replacement for `dnf-utils`, and accepted Fedora 7zip/unar package operations
+as a changed-CLI archive replacement. Flathub is isolated for remote
+ownership review. The next ordinary provider batch is
+`provider-foundation-04`. The remaining outcomes stay visible in the
+progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
