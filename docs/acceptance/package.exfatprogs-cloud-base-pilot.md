@@ -7,10 +7,10 @@ This is package-handler evidence, not Fedora Workstation or Server acceptance.
 | --- | --- |
 | Target | Fedora 44 Cloud Base, x86_64; `fedora-44-cloud-x86_64` |
 | Image | `Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2`; SHA-256 `28680fe5b371a5a82ebf43a31926e086a168e59949d03969c5093e7071f90b7f` |
-| Source | `f67a502c88fe90b327fbab410734b4b5469f9691` plus uncommitted VM seed and acceptance assertion fixes; catalog SHA-256 `3d01f975860b02f7f87b4ec06bb6824c3b8df269eaab8bdfb0ca90a564a72dd0` |
+| Source | Clean commit `9cc641644f46efe329dd63634ea14ec94c4f5598`; catalog SHA-256 `3d01f975860b02f7f87b4ec06bb6824c3b8df269eaab8bdfb0ca90a564a72dd0` |
 | Profile | Disposable `acceptance` profile selecting `package.exfatprogs` as `installed`, default `fedora-rpm` source |
 | Runner | `pytest tests/acceptance -v -p no:cacheprovider --rootdir=. --vm-target fedora-44-cloud-x86_64 --vm-image <verified-local-image> --vm-output /tmp/ride-acceptance-runs`; the local image path is omitted from this public record |
-| Result | Two tests passed; JUnit: `/tmp/ride-acceptance-runs/fedora-44-cloud-updated-results.xml` |
+| Result | Two tests passed in 79.86 seconds; JUnit: `/tmp/ride-acceptance-runs/fedora-44-cloud-9cc6416-results.xml` |
 | Review | Automated assertions passed; owner review and edition-specific acceptance remain pending |
 
 The lifecycle scenario began with `exfatprogs` absent. Read-only `plan` left it
@@ -29,14 +29,14 @@ baseline. Both guests reported `cloud-init status --wait` exit 0 after the seed
 stopped requesting an early hostname change.
 
 Retained overlay IDs are
-`20261030T062416Z-test-package-apply-repeat-status-restore-and-remove-f08dbf49`
+`20261030T062811Z-test-package-apply-repeat-status-restore-and-remove-f31836dc`
 and
-`20261030T062445Z-test-partial-failure-records-completed-step-and-can-restore-9dc80c48`.
+`20261030T062837Z-test-partial-failure-records-completed-step-and-can-restore-3ce67639`.
 Their `metadata.json` and `transcript.jsonl` files are under
 `/tmp/ride-acceptance-runs/fedora-44-cloud-x86_64/`; the directory contains
 disposable SSH private keys and must be reviewed before sharing. The test
 runner stopped both VM processes and retained their overlays.
 
-Next: repeat the package pilot on Fedora 44 x86_64 Workstation, review the
-current Windows schema and package behavior for this batch, and record a
-reproducible committed revision before considering any supported target row.
+Next: repeat the package pilot on Fedora 44 x86_64 Workstation and review the
+current Windows schema and package behavior for this batch before considering
+any supported target row.

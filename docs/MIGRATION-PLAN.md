@@ -132,10 +132,10 @@ The [disposable VM harness](acceptance/VM-HARNESS.md) now provides a Fedora 44
 Cloud Base pilot for `package.exfatprogs`, including partial failure. Its Cloud
 result can inform the package handler review; Workstation and Server edition
 acceptance remain separate release gates. The [2026-10-30 Cloud Base pilot](acceptance/package.exfatprogs-cloud-base-pilot.md)
-passed both lifecycle and partial-failure scenarios against an uncommitted
-runner revision. `package.exfatprogs` remains `candidate`; repeat the pilot on
-a committed revision, run the Fedora 44 x86_64 Workstation batch, and update
-the Windows schema and behavior comparison before considering promotion.
+passed both lifecycle and partial-failure scenarios on clean commit `9cc6416`.
+`package.exfatprogs` remains `candidate`; run the Fedora 44 x86_64 Workstation
+batch and update the Windows schema and behavior comparison before considering
+promotion.
 
 ## Former CERT forensic repository burndown
 
