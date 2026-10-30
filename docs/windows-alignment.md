@@ -136,3 +136,16 @@ The Windows development branch remained at `17f9cef` when checked before this
 promotion. No shared catalog, profile, or run-state contract changed, and no
 new Windows product fact was inferred. Recheck both branches at release
 candidate preparation or when a package contract changes.
+
+### Fedora CLI package batch 01, 2026-10-30
+
+Compared Linux `codex/ride-v3-migration` with Windows
+`codex/ride-v3-migration` at `17f9cef` before adding the six v2 CLI package
+replacements in [native RPM batch 01](migrations/native-rpm-01.md). Windows has
+no corresponding `pwgen`, `htop`, `bat`, `ncdu`, `ripgrep`, or `fd-find` catalog
+operation. Linux adds candidate rows using the existing installed Fedora RPM
+deployment, explicit `fedora-rpm` source, profile schema 1 selectors, and run
+schema 2 journal. No shared schema, source fallback, artifact, or recovery
+contract changes. Recheck if these products enter the Windows catalog, if
+Linux changes package deployment behavior, and before release-candidate
+promotion.

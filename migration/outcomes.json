@@ -1,0 +1,4071 @@
+{
+  "schemaVersion": 1,
+  "scope": "Fedora 44 x86_64 workstation and generic server v2 outcomes",
+  "outcomes": [
+    {
+      "key": "workstation:action.SetupUserDefaultDirs",
+      "sourceFunctions": [
+        "SetupUserDefaultDirs"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-01",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review directory ownership and user scope.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.Hostname",
+      "sourceFunctions": [
+        "SetHostname"
+      ],
+      "selectorCoverage": "active",
+      "family": "system-security",
+      "batch": "system-security-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Host-specific value belongs in private profile.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.FastDNF",
+      "sourceFunctions": [
+        "EnableFastDNF",
+        "DisableFastDNF"
+      ],
+      "selectorCoverage": "active",
+      "family": "system-security",
+      "batch": "system-security-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replaced: DNF5 defaults need current evidence; no legacy config edit.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.UpdateFedora",
+      "sourceFunctions": [
+        "UpdateFedora"
+      ],
+      "selectorCoverage": "active",
+      "family": "system-security",
+      "batch": "system-security-02",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Add explicit non-reversible system update operation after VM acceptance.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Required",
+      "sourceFunctions": [
+        "InstallRequired"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Legacy coreutils, git, gnupg, python, tar, wget, and gcc list is not equivalent to the selected v3 less and openssh-clients baseline; review each legacy package separately.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ShellTools",
+      "sourceFunctions": [
+        "InstallShellTools",
+        "RemoveShellTools"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Split into specific repository packages.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.RPMfusionRepos",
+      "sourceFunctions": [
+        "InstallRPMfusionRepos",
+        "RemoveRPMfusionRepos"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-02",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: External repository enablement needs opt-in and trust review.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.KernelTools",
+      "sourceFunctions": [
+        "InstallKernelTools",
+        "RemoveKernelTools"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Kernel-dependent package group requires target checks.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.DNFutils",
+      "sourceFunctions": [
+        "InstallDNFutils",
+        "RemoveDNFutils"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replaced: Review current DNF5 commands and plugins.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Eza",
+      "sourceFunctions": [
+        "InstallEza",
+        "RemoveEza"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "native-rpm",
+      "batch": "native-rpm-06",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.EzaGitHub",
+      "sourceFunctions": [
+        "InstallEzaGitHub"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replaced: Prefer Fedora repository package after verification.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VersionLock",
+      "sourceFunctions": [
+        "InstallVersionLock",
+        "RemoveVersionLock"
+      ],
+      "selectorCoverage": "commented",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.NautilusHash",
+      "sourceFunctions": [
+        "InstallNautilusHash",
+        "RemoveNautilusHash"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-03",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.NautilusImageTools",
+      "sourceFunctions": [
+        "InstallNautilusImageTools",
+        "RemoveNautilusImageTools"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-03",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Flatpak",
+      "sourceFunctions": [
+        "InstallFlatpak",
+        "RemoveFlatpak"
+      ],
+      "selectorCoverage": "commented",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Flathub",
+      "sourceFunctions": [
+        "InstallFlathub",
+        "RemoveFlathub"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: External Flatpak remote remains opt-in.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.AppImageLauncher",
+      "sourceFunctions": [
+        "InstallAppImageLauncher",
+        "RemoveAppImageLauncher"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review maintained source and current desktop integration.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Snap",
+      "sourceFunctions": [
+        "InstallSnap",
+        "RemoveSnap"
+      ],
+      "selectorCoverage": "commented",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Galleta",
+      "sourceFunctions": [
+        "InstallGalleta",
+        "RemoveGalleta"
+      ],
+      "selectorCoverage": "commented",
+      "family": "resolution-review",
+      "batch": "resolution-review-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred incomplete legacy stub; source and current package need review",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Plaso",
+      "sourceFunctions": [
+        "InstallPlaso",
+        "RemovePlaso"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred candidate; opt-in COPR and removal need VM evidence",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Autopsy",
+      "sourceFunctions": [
+        "InstallAutopsy",
+        "RemoveAutopsy"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred candidate; upstream Linux setup and removal need VM evidence",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Xplico",
+      "sourceFunctions": [
+        "InstallXplico",
+        "RemoveXplico"
+      ],
+      "selectorCoverage": "commented",
+      "family": "resolution-review",
+      "batch": "resolution-review-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred incomplete legacy stub; source and current package need review",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VMFStools",
+      "sourceFunctions": [
+        "InstallVMFStools",
+        "RemoveVMFStools"
+      ],
+      "selectorCoverage": "active",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Legacy active entry is incomplete; no executable v3 handler.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Volatility",
+      "sourceFunctions": [
+        "InstallVolatility",
+        "RemoveVolatility"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Volatility3",
+      "sourceFunctions": [
+        "InstallVolatility3",
+        "RemoveVolatility3"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [
+        "package.volatility3"
+      ],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "implemented candidate `package.volatility3`; isolated pinned core, VM acceptance pending",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VeraCrypt",
+      "sourceFunctions": [
+        "InstallVeraCrypt",
+        "UninstallVeraCrypt"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-02",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review publisher verification and licensing.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.BulkExtractor",
+      "sourceFunctions": [
+        "InstallBulkExtractor",
+        "RemoveBulkExtractor"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-04",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.EmailHeaderAnlzr",
+      "sourceFunctions": [
+        "InstallEmailHeaderAnlzr",
+        "RemoveEmailHeaderAnlzr"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.LibEWF",
+      "sourceFunctions": [
+        "InstallLibEWF",
+        "RemoveLibEWF"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-02",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replaced: package.ewftools covers EWF utilities; verify library intent separately.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.SecurityLab",
+      "sourceFunctions": [
+        "InstallSecurityLab",
+        "RemoveSecurityLab"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-04",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Dc3dd",
+      "sourceFunctions": [
+        "InstallDc3dd",
+        "RemoveDc3dd"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-04",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Exif",
+      "sourceFunctions": [
+        "InstallExif",
+        "RemoveExif"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-02",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review product identity and official package.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Binwalk",
+      "sourceFunctions": [
+        "InstallBinwalk",
+        "RemoveBinwalk"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Md5deep",
+      "sourceFunctions": [
+        "InstallMd5deep",
+        "RemoveMd5deep"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-02",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current package and forensic use case.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Libpst",
+      "sourceFunctions": [
+        "InstallLibpst",
+        "RemoveLibpst"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "native-rpm",
+      "batch": "native-rpm-06",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Macvendor",
+      "sourceFunctions": [
+        "InstallMacvendor",
+        "RemoveMacvendor"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ExifTool",
+      "sourceFunctions": [
+        "InstallExifTool",
+        "RemoveExifTool"
+      ],
+      "selectorCoverage": "active",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Current GitHub source build needs provenance and verification redesign.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ASN",
+      "sourceFunctions": [
+        "InstallASN",
+        "RemoveASN"
+      ],
+      "selectorCoverage": "active",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Current upstream acquisition needs review.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.UnfURL",
+      "sourceFunctions": [
+        "InstallUnfURL",
+        "RemoveUnfURL"
+      ],
+      "selectorCoverage": "active",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Current Python package method needs isolation.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.CyberChef",
+      "sourceFunctions": [
+        "InstallCyberChef",
+        "RemoveCyberChef"
+      ],
+      "selectorCoverage": "active",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Align product facts with Windows catalog; platform package remains local.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Chepy",
+      "sourceFunctions": [
+        "InstallChepy",
+        "RemoveChepy"
+      ],
+      "selectorCoverage": "active",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Python tooling needs isolated environment and pins.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Dumpzilla",
+      "sourceFunctions": [
+        "InstallDumpzilla",
+        "RemoveDumpzilla"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.NetworkMiner",
+      "sourceFunctions": [
+        "InstallNetworkMiner",
+        "RemoveNetworkMiner"
+      ],
+      "selectorCoverage": "active",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Align product identity with Windows; review Linux packaging.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Pwgen",
+      "sourceFunctions": [
+        "InstallPwgen",
+        "RemovePwgen"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-01",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.pwgen"
+      ],
+      "evidence": [
+        "docs/acceptance/package.pwgen.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation; review only when target or package contract changes.",
+      "v31Hardening": [
+        "H001"
+      ]
+    },
+    {
+      "key": "workstation:package.Htop",
+      "sourceFunctions": [
+        "InstallHtop",
+        "RemoveHtop"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-01",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.htop"
+      ],
+      "evidence": [
+        "docs/acceptance/package.htop.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation; review only when target or package contract changes.",
+      "v31Hardening": [
+        "H001"
+      ]
+    },
+    {
+      "key": "workstation:package.Bat",
+      "sourceFunctions": [
+        "InstallBat",
+        "RemoveBat"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-01",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.bat"
+      ],
+      "evidence": [
+        "docs/acceptance/package.bat.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation; review only when target or package contract changes.",
+      "v31Hardening": [
+        "H001"
+      ]
+    },
+    {
+      "key": "workstation:package.Ncdu",
+      "sourceFunctions": [
+        "InstallNcdu",
+        "RemoveNcdu"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-01",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.ncdu"
+      ],
+      "evidence": [
+        "docs/acceptance/package.ncdu.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation; review only when target or package contract changes.",
+      "v31Hardening": [
+        "H001"
+      ]
+    },
+    {
+      "key": "workstation:package.Ripgrep",
+      "sourceFunctions": [
+        "InstallRipgrep",
+        "RemoveRipgrep"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-01",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.ripgrep"
+      ],
+      "evidence": [
+        "docs/acceptance/package.ripgrep.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation; review only when target or package contract changes.",
+      "v31Hardening": [
+        "H001"
+      ]
+    },
+    {
+      "key": "workstation:package.Fd",
+      "sourceFunctions": [
+        "InstallFd",
+        "RemoveFd"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-01",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.fd-find"
+      ],
+      "evidence": [
+        "docs/acceptance/package.fd-find.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation; review only when target or package contract changes.",
+      "v31Hardening": [
+        "H001"
+      ]
+    },
+    {
+      "key": "workstation:package.Docker",
+      "sourceFunctions": [
+        "InstallDocker",
+        "RemoveDocker"
+      ],
+      "selectorCoverage": "active",
+      "family": "system-security",
+      "batch": "system-security-03",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Generic server role only after provider and repository review.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.PythonPip",
+      "sourceFunctions": [
+        "InstallPythonPip",
+        "RemovePythonPip"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replaced: Use per-operation isolated Python installs, not global pip.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.PackagingTools",
+      "sourceFunctions": [
+        "InstallPackagingTools",
+        "RemovePackagingTools"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Split package list by use case.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.BasicEditors",
+      "sourceFunctions": [
+        "InstallBasicEditors",
+        "RemoveBasicEditors"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Candidate native repository packages.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.CommanderFileMgrs",
+      "sourceFunctions": [
+        "InstallCommanderFileMgrs",
+        "RemoveCommanderFileMgrs"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Terminator",
+      "sourceFunctions": [
+        "InstallTerminator",
+        "RemoveTerminator"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-02",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Optional desktop profile only.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Alien",
+      "sourceFunctions": [
+        "InstallAlien",
+        "RemoveAlien"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-02",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review relevance and support.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.SmartMonTools",
+      "sourceFunctions": [
+        "InstallSmartMonTools",
+        "RemoveSmartMonTools"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-02",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Optional system tools profile.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Qbittorrent",
+      "sourceFunctions": [
+        "InstallQbittorrent",
+        "RemoveQbittorrent"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-04",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.PowerShell",
+      "sourceFunctions": [
+        "InstallPowerShell",
+        "RemovePowerShell"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.MicrosoftTeams",
+      "sourceFunctions": [
+        "InstallMicrosoftTeams",
+        "RemoveMicrosoftTeams"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.WoeUSB",
+      "sourceFunctions": [
+        "InstallWoeUSB",
+        "RemoveWoeUSB"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.BalenaEtcher",
+      "sourceFunctions": [
+        "InstallBalenaEtcher",
+        "RemoveBalenaEtcher"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VisualStudioCode",
+      "sourceFunctions": [
+        "InstallVisualStudioCode",
+        "RemoveVisualStudioCode"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Align product facts with Windows; Fedora source stays local.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ArduinoIDE",
+      "sourceFunctions": [
+        "InstallArduinoIDE",
+        "RemoveArduinoIDE"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-10",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.AtomEditor",
+      "sourceFunctions": [
+        "InstallAtomEditor",
+        "RemoveAtomEditor"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-10",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.AtomTelemetry",
+      "sourceFunctions": [
+        "DisableAtomTelemetry",
+        "EnableAtomTelemetry"
+      ],
+      "selectorCoverage": "commented",
+      "family": "resolution-review",
+      "batch": "resolution-review-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.AtomPlugins",
+      "sourceFunctions": [
+        "InstallAtomPlugins",
+        "RemoveAtomPlugins"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-10",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.PyhtonAutopep8",
+      "sourceFunctions": [
+        "InstallPyhtonAutopep8",
+        "RemovePyhtonAutopep8"
+      ],
+      "selectorCoverage": "commented",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Hexchat",
+      "sourceFunctions": [
+        "InstallHexchat",
+        "RemoveHexchat"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-03",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review upstream maintenance before reintroduction.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Discord",
+      "sourceFunctions": [
+        "InstallDiscord",
+        "RemoveDiscord"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-10",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Pidgin",
+      "sourceFunctions": [
+        "InstallPidgin",
+        "RemovePidgin"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-04",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Thunderbird",
+      "sourceFunctions": [
+        "InstallThunderbird",
+        "RemoveThunderbird"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-04",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.MulticastDNS",
+      "sourceFunctions": [
+        "DisableMulticastDNS",
+        "EnableMulticastDNS"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-06",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.NetworkTools",
+      "sourceFunctions": [
+        "InstallNetworkTools",
+        "RemoveNetworkTools"
+      ],
+      "selectorCoverage": "active",
+      "family": "system-security",
+      "batch": "system-security-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Split broad network bundle into focused packages.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.NetCommsTools",
+      "sourceFunctions": [
+        "InstallNetCommsTools",
+        "RemoveNetCommsTools"
+      ],
+      "selectorCoverage": "active",
+      "family": "system-security",
+      "batch": "system-security-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Split broad communications bundle.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.NetMgrL2TP",
+      "sourceFunctions": [
+        "InstallNetMgrL2TP",
+        "RemoveNetMgrL2TP"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-07",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.NetMgrLibreswan",
+      "sourceFunctions": [
+        "InstallNetMgrLibreswan",
+        "RemoveNetMgrLibreswan"
+      ],
+      "selectorCoverage": "active",
+      "family": "system-security",
+      "batch": "system-security-05",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Optional VPN role.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Wireguard",
+      "sourceFunctions": [
+        "InstallWireguard",
+        "RemoveWireguard"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "system-security",
+      "batch": "system-security-19",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.OpenconnectVPN",
+      "sourceFunctions": [
+        "InstallOpenconnectVPN"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-08",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.SpeedtestCLI",
+      "sourceFunctions": [
+        "InstallSpeedtestCLI",
+        "RemoveSpeedtestCLI"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-03",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current upstream and source.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Flameshot",
+      "sourceFunctions": [
+        "InstallFlameshot",
+        "RemoveFlameshot"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-05",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Dia",
+      "sourceFunctions": [
+        "InstallDia",
+        "RemoveDia"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-05",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Wine",
+      "sourceFunctions": [
+        "InstallWine",
+        "RemoveWine"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-05",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Joplin",
+      "sourceFunctions": [
+        "InstallJoplin",
+        "RemoveJoplin"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-10",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.TecmintMonitorSh",
+      "sourceFunctions": [
+        "InstallTecmintMonitorSh",
+        "RemoveTecmintMonitorSh"
+      ],
+      "selectorCoverage": "active",
+      "family": "resolution-review",
+      "batch": "resolution-review-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "retire",
+      "progress": "resolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Monitor the review trigger; no v3 install operation is planned.",
+      "v31Hardening": [],
+      "reason": "The v2 function fetches an unverified HTTP script into /usr/local/bin; no maintained verified acquisition path is established.",
+      "reviewTrigger": "Reopen if a maintained verified artifact and explicit monitoring requirement are available."
+    },
+    {
+      "key": "workstation:package.GnomeExtInstaller",
+      "sourceFunctions": [
+        "InstallGnomeExtInstaller",
+        "RemoveGnomeExtInstaller"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current GNOME extension lifecycle.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Brave",
+      "sourceFunctions": [
+        "InstallBrave",
+        "RemoveBrave"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-03",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Third-party repository and license review.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Vivaldi",
+      "sourceFunctions": [
+        "InstallVivaldi",
+        "RemoveVivaldi"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-10",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Chromium",
+      "sourceFunctions": [
+        "InstallChromium",
+        "RemoveChromium"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-03",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Candidate distro repository package.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Chrome",
+      "sourceFunctions": [
+        "InstallChrome",
+        "RemoveChrome"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-11",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.ChromePreferences",
+      "sourceFunctions": [
+        "SetChromePreferences",
+        "UnsetChromePreferences"
+      ],
+      "selectorCoverage": "commented",
+      "family": "desktop-user",
+      "batch": "desktop-user-05",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.FirefoxPreferences",
+      "sourceFunctions": [
+        "SetFirefoxPreferences",
+        "UnsetFirefoxPreferences"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-01",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replaced: Review settings against current Firefox policy; avoid legacy file overwrite.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.CheckFirefoxAddons",
+      "sourceFunctions": [
+        "CheckFirefoxAddons"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-05",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred v3 integration; existing policy helper remains tested separately",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.FirefoxAddons",
+      "sourceFunctions": [
+        "InstallFirefoxAddons",
+        "RemoveFirefoxAddons"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-04",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Keep existing verified policy helper; integrate with v3 lifecycle later.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.FinalizeFirefoxAddonRemoval",
+      "sourceFunctions": [
+        "FinalizeFirefoxAddonRemoval"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-06",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred v3 integration; restart-dependent policy lifecycle needs journal ownership",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Opera",
+      "sourceFunctions": [
+        "InstallOpera",
+        "RemoveOpera"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-11",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Edge",
+      "sourceFunctions": [
+        "InstallEdge",
+        "RemoveEdge"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-11",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Codecs",
+      "sourceFunctions": [
+        "InstallCodecs",
+        "RemoveCodecs"
+      ],
+      "selectorCoverage": "commented",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-05",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.SpotifyClient",
+      "sourceFunctions": [
+        "InstallSpotifyClient",
+        "RemoveSpotifyClient"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-11",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VLCPlayer",
+      "sourceFunctions": [
+        "InstallVLCPlayer",
+        "RemoveVLCPlayer"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-05",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ClementinePlayer",
+      "sourceFunctions": [
+        "InstallClementinePlayer",
+        "RemoveClementinePlayer"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-11",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.PulseAudioEq",
+      "sourceFunctions": [
+        "InstallPulseAudioEq",
+        "RemovePulseAudioEq"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-11",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.YouTubeDownloader",
+      "sourceFunctions": [
+        "InstallYouTubeDownloader",
+        "RemoveYouTubeDownloader"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-05",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replaced: Review maintained yt-dlp packaging instead of legacy youtube-dl.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.GIMP",
+      "sourceFunctions": [
+        "InstallGIMP",
+        "RemoveGIMP"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-05",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.HandBrake",
+      "sourceFunctions": [
+        "InstallHandBrake",
+        "RemoveHandBrake"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-05",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.GnomeTools",
+      "sourceFunctions": [
+        "InstallGnomeTools",
+        "RemoveGnomeTools"
+      ],
+      "selectorCoverage": "active",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Split GNOME package bundle.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.SystemMonitor",
+      "sourceFunctions": [
+        "InstallSystemMonitor",
+        "RemoveSystemMonitor"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-05",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current GNOME extension support.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.GnomeExtensions",
+      "sourceFunctions": [
+        "InstallGnomeExtensions",
+        "RemoveGnomeExtensions"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-05",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current GNOME extension IDs and API.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.ScreenSaver",
+      "sourceFunctions": [
+        "EnableScreenSaver"
+      ],
+      "selectorCoverage": "active",
+      "family": "resolution-review",
+      "batch": "resolution-review-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "retired: Conflicts with DisableScreensaver in the same legacy preset; review one desired state.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.Screensaver",
+      "sourceFunctions": [
+        "DisableScreensaver"
+      ],
+      "selectorCoverage": "active",
+      "family": "resolution-review",
+      "batch": "resolution-review-01",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "retired: Conflicts with EnableScreenSaver in the same legacy preset; review a single desired state later.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.DateInTaskbar",
+      "sourceFunctions": [
+        "ShowDateInTaskbar",
+        "HideDateInTaskbar"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Setting handler needs baseline and restore.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.WeekNumbersInTaskbar",
+      "sourceFunctions": [
+        "ShowWeekNumbersInTaskbar",
+        "HideWeekNumbersInTaskbar"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Setting handler needs baseline and restore.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.WindowCtlMinMaxClose",
+      "sourceFunctions": [
+        "SetWindowCtlMinMaxClose"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Setting handler needs baseline and restore.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.WindowCtlAppmenuClose",
+      "sourceFunctions": [
+        "SetWindowCtlAppmenuClose"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-07",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.WindowCtlLeftClsMinMax",
+      "sourceFunctions": [
+        "SetWindowCtlLeftClsMinMax"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-07",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.MiddleButtonPaste",
+      "sourceFunctions": [
+        "EnableMiddleButtonPaste",
+        "DisableMiddleButtonPaste"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Setting handler needs baseline and restore.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnomeRegionDaDK",
+      "sourceFunctions": [
+        "SetGnomeRegionDaDK"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: User locale must be explicit profile data.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.GnomeRegion",
+      "sourceFunctions": [
+        "RemoveGnomeRegion"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-05",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.ScreensaverSlp10Lgn5",
+      "sourceFunctions": [
+        "SetScreensaverSlp10Lgn5"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-02",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Resolve conflict with other screensaver operations.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.ScreensaverSlp15Lgn5",
+      "sourceFunctions": [
+        "SetScreensaverSlp15Lgn5"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-07",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.CustomKeyboardShortcut",
+      "sourceFunctions": [
+        "SetCustomKeyboardShortcut"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-03",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: User-owned shortcut state needs exact restore.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.VMKeyboardShortcut",
+      "sourceFunctions": [
+        "SetVMKeyboardShortcut"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-08",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.CustomKbrdShortcut",
+      "sourceFunctions": [
+        "RemoveCustomKbrdShortcut"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-05",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnomeCustomFavorites",
+      "sourceFunctions": [
+        "SetGnomeCustomFavorites"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-03",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: User-specific favorites need profile data.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnomeDefaultFavorites",
+      "sourceFunctions": [
+        "SetGnomeDefaultFavorites"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-08",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnomeMinimalFavorites",
+      "sourceFunctions": [
+        "SetGnomeMinimalFavorites"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-08",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnmLocationServiceOff",
+      "sourceFunctions": [
+        "SetGnmLocationServiceOff"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current GNOME setting and scope.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnmLocationServiceOn",
+      "sourceFunctions": [
+        "SetGnmLocationServiceOn"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnmAutoProblemRptOff",
+      "sourceFunctions": [
+        "SetGnmAutoProblemRptOff"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current GNOME setting and scope.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.GnmAutoProblemRptOn",
+      "sourceFunctions": [
+        "SetGnmAutoProblemRptOn"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.PowerPercentageLow15",
+      "sourceFunctions": [
+        "SetPowerPercentageLow15"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-04",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current power setting and support.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.PowerPercentageLow20",
+      "sourceFunctions": [
+        "SetPowerPercentageLow20"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "desktop-user",
+      "batch": "desktop-user-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.BashAliases",
+      "sourceFunctions": [
+        "EnableBashAliases",
+        "DisableBashAliases"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-05",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: User shell configuration must preserve unowned content.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.AliasLsEza",
+      "sourceFunctions": [
+        "SetAliasLsEza",
+        "UnsetAliasLsEza"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-05",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: User shell configuration must preserve unowned content.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.AliasWanIP",
+      "sourceFunctions": [
+        "SetAliasWanIP",
+        "UnsetAliasWanIP"
+      ],
+      "selectorCoverage": "active",
+      "family": "desktop-user",
+      "batch": "desktop-user-05",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: User shell configuration must preserve unowned content.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.AliasRideLog",
+      "sourceFunctions": [
+        "SetAliasRideLog",
+        "UnsetAliasRideLog"
+      ],
+      "selectorCoverage": "commented",
+      "family": "desktop-user",
+      "batch": "desktop-user-05",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Lynis",
+      "sourceFunctions": [
+        "InstallLynis",
+        "RemoveLynis"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-06",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ClamAV",
+      "sourceFunctions": [
+        "InstallClamAV",
+        "RemoveClamAV"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-06",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.KeepassXC",
+      "sourceFunctions": [
+        "InstallKeepassXC",
+        "RemoveKeepassXC"
+      ],
+      "selectorCoverage": "commented",
+      "family": "native-rpm",
+      "batch": "native-rpm-06",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Bitwarden",
+      "sourceFunctions": [
+        "InstallBitwarden",
+        "RemoveBitwarden"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-12",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.BitwardenAppImage",
+      "sourceFunctions": [
+        "InstallBitwardenAppImage",
+        "RemoveBitwardenAppImage"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-06",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review publisher signature and platform artifact.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.ImportOpenVPNProfiles",
+      "sourceFunctions": [
+        "ImportOpenVPNProfiles"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-09",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VPNProfiles",
+      "sourceFunctions": [
+        "RemoveVPNProfiles"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "system-security",
+      "batch": "system-security-20",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ExpressVPNProfiles",
+      "sourceFunctions": [
+        "RemoveExpressVPNProfiles"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "system-security",
+      "batch": "system-security-21",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ExpressVPN",
+      "sourceFunctions": [
+        "InstallExpressVPN",
+        "RemoveExpressVPN"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-10",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.StartExpressVPNafterBoot",
+      "sourceFunctions": [
+        "StartExpressVPNafterBoot"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-11",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ExpressVPNafterBoot",
+      "sourceFunctions": [
+        "RemoveExpressVPNafterBoot"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "system-security",
+      "batch": "system-security-22",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.CreateExpVPNrandomizer",
+      "sourceFunctions": [
+        "CreateExpVPNrandomizer"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-12",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.ScheduleRandomExpVPNChange",
+      "sourceFunctions": [
+        "ScheduleRandomExpVPNChange"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "system-security",
+      "batch": "system-security-23",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.ScheduleExpVPNChange",
+      "sourceFunctions": [
+        "RemoveScheduleExpVPNChange"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "system-security",
+      "batch": "system-security-24",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Cheat",
+      "sourceFunctions": [
+        "InstallCheat",
+        "RemoveCheat"
+      ],
+      "selectorCoverage": "active",
+      "family": "native-rpm",
+      "batch": "native-rpm-03",
+      "risk": "low",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review current upstream and source.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.UnifyingOnLaptop",
+      "sourceFunctions": [
+        "InstallUnifyingOnLaptop",
+        "RemoveUnifyingOnLaptop"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-07",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Hardware-dependent operation.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Projecteur",
+      "sourceFunctions": [
+        "InstallProjecteur",
+        "RemoveProjecteur"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-13",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VMtoolsOnVM",
+      "sourceFunctions": [
+        "InstallVMtoolsOnVM",
+        "RemoveVMtoolsOnVM"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-07",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: VM-specific provider after detection test.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.YubikeyManager",
+      "sourceFunctions": [
+        "InstallYubikeyManager",
+        "RemoveYubikeyManager"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-08",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Hardware-dependent optional package.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.YubikeyPersTool",
+      "sourceFunctions": [
+        "InstallYubikeyPersTool"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-14",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.Xmind",
+      "sourceFunctions": [
+        "InstallXmind",
+        "RemoveXmind"
+      ],
+      "selectorCoverage": "commented",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-15",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.SonosPlayer",
+      "sourceFunctions": [
+        "InstallSonosPlayer",
+        "RemoveSonosPlayer"
+      ],
+      "selectorCoverage": "active",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-09",
+      "risk": "medium",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred: Review publisher source and architecture.",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.VMwareWorkstation",
+      "sourceFunctions": [
+        "InstallVMwareWorkstation",
+        "RemoveVMwareWorkstation"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-13",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.PatchVMwareModules",
+      "sourceFunctions": [
+        "PatchVMwareModules"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-14",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.AddExtraLUKSpasswords",
+      "sourceFunctions": [
+        "AddExtraLUKSpasswords"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-15",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.EncryptUnpartitionedDisks",
+      "sourceFunctions": [
+        "EncryptUnpartitionedDisks"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-16",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:action.ReclaimEncryptDWUnmntPrt",
+      "sourceFunctions": [
+        "ReclaimEncryptDWUnmntPrt"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-17",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; classify as explicit operation, private value, CLI utility or retired behavior",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:package.KeyfileMounts",
+      "sourceFunctions": [
+        "RemoveKeyfileMounts"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "system-security",
+      "batch": "system-security-25",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "workstation:setting.SSHreboot",
+      "sourceFunctions": [
+        "EnableSSHreboot",
+        "DisableSSHreboot"
+      ],
+      "selectorCoverage": "commented",
+      "family": "system-security",
+      "batch": "system-security-18",
+      "risk": "high",
+      "target": "fedora-44-workstation-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:action.UpdateFedora",
+      "sourceFunctions": [
+        "UpdateFedora"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-01",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred generic server baseline; split package/update/timer behavior and record recovery limits",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.Required",
+      "sourceFunctions": [
+        "InstallRequired"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-02",
+      "risk": "medium",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred generic server baseline; split package/update/timer behavior and record recovery limits",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.AutoUpdate",
+      "sourceFunctions": [
+        "InstallAutoUpdate"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-03",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred generic server baseline; split package/update/timer behavior and record recovery limits",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:action.ViewIPaddress",
+      "sourceFunctions": [
+        "ViewIPaddress"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-04",
+      "risk": "medium",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "retire",
+      "progress": "resolved",
+      "v3Ids": [],
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Monitor the review trigger; no v3 install operation is planned.",
+      "v31Hardening": [],
+      "reason": "The v2 function only prints IPv4 addresses and establishes no desired state.",
+      "reviewTrigger": "Reopen if v3 needs an IP discovery view or server ownership changes."
+    },
+    {
+      "key": "server:setting.Hostname",
+      "sourceFunctions": [
+        "SetHostname"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-05",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "private overlay for host values or key material; extract generic behavior only after ownership review",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.Docker",
+      "sourceFunctions": [
+        "InstallDocker"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-06",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred optional server operation; verify current package/source, state and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.Tailscale",
+      "sourceFunctions": [
+        "InstallTailscale"
+      ],
+      "selectorCoverage": "library-only",
+      "family": "generic-server",
+      "batch": "generic-server-14",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred optional server operation; verify current package/source, state and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.Glances",
+      "sourceFunctions": [
+        "InstallGlances"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-07",
+      "risk": "medium",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred optional server operation; verify current package/source, state and recovery",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.PythonPip",
+      "sourceFunctions": [
+        "InstallPythonPip"
+      ],
+      "selectorCoverage": "commented",
+      "family": "generic-server",
+      "batch": "generic-server-12",
+      "risk": "medium",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replace global Python installation with isolated, pinned per-tool environment",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.Selenium",
+      "sourceFunctions": [
+        "InstallSelenium"
+      ],
+      "selectorCoverage": "commented",
+      "family": "generic-server",
+      "batch": "generic-server-12",
+      "risk": "medium",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "replace global Python installation with isolated, pinned per-tool environment",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:setting.NoRootLogin",
+      "sourceFunctions": [
+        "SetNoRootLogin"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-08",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred SSH policy setting; preserve existing file content and test exact restore",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:action.GenerateSSHkeysRSA",
+      "sourceFunctions": [
+        "GenerateSSHkeysRSA"
+      ],
+      "selectorCoverage": "commented",
+      "family": "generic-server",
+      "batch": "generic-server-13",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "private overlay for host values or key material; extract generic behavior only after ownership review",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:package.ExpressVPN",
+      "sourceFunctions": [
+        "InstallExpressVPN"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-09",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred opt-in VPN profile; keep provider account and host routing private",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:action.CreateVPNrandomizer",
+      "sourceFunctions": [
+        "CreateVPNrandomizer"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-10",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred opt-in VPN profile; keep provider account and host routing private",
+      "v31Hardening": []
+    },
+    {
+      "key": "server:setting.VPNRandomizerPersistent",
+      "sourceFunctions": [
+        "SetVPNRandomizerPersistent"
+      ],
+      "selectorCoverage": "active",
+      "family": "generic-server",
+      "batch": "generic-server-11",
+      "risk": "high",
+      "target": "fedora-44-server-x86_64",
+      "disposition": "review",
+      "progress": "unresolved",
+      "v3Ids": [],
+      "evidence": [],
+      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
+      "nextAction": "deferred opt-in VPN profile; keep provider account and host routing private",
+      "v31Hardening": []
+    }
+  ],
+  "batches": [
+    {
+      "id": "native-rpm-01",
+      "family": "native-rpm",
+      "title": "Fedora CLI packages: pwgen, htop, bat, ncdu, ripgrep, fd",
+      "evidence": [
+        "docs/migrations/native-rpm-01.md"
+      ],
+      "nextAction": "Complete on Fedora 44 Workstation; start native-rpm-02 and recheck this batch if its target or package contract changes."
+    },
+    {
+      "id": "native-rpm-02",
+      "family": "native-rpm",
+      "title": "Native Rpm 02: LibEWF, Exif, Md5deep, Terminator, Alien, SmartMonTools",
+      "evidence": [],
+      "nextAction": "Assess LibEWF, Exif, Md5deep, Terminator, Alien, SmartMonTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "native-rpm-03",
+      "family": "native-rpm",
+      "title": "Native Rpm 03: Hexchat, SpeedtestCLI, Chromium, Cheat, NautilusHash, NautilusImageTools",
+      "evidence": [],
+      "nextAction": "Assess Hexchat, SpeedtestCLI, Chromium, Cheat, NautilusHash, NautilusImageTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "native-rpm-04",
+      "family": "native-rpm",
+      "title": "Native Rpm 04: BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird",
+      "evidence": [],
+      "nextAction": "Assess BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "native-rpm-05",
+      "family": "native-rpm",
+      "title": "Native Rpm 05: Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake",
+      "evidence": [],
+      "nextAction": "Assess Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "native-rpm-06",
+      "family": "native-rpm",
+      "title": "Native Rpm 06: Lynis, ClamAV, KeepassXC, Eza, Libpst",
+      "evidence": [],
+      "nextAction": "Assess Lynis, ClamAV, KeepassXC, Eza, Libpst; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "provider-foundation-01",
+      "family": "provider-foundation",
+      "title": "Provider Foundation 01: Required, ShellTools",
+      "evidence": [],
+      "nextAction": "Assess Required, ShellTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "provider-foundation-02",
+      "family": "provider-foundation",
+      "title": "Provider Foundation 02: RPMfusionRepos",
+      "evidence": [],
+      "nextAction": "Assess RPMfusionRepos; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "provider-foundation-03",
+      "family": "provider-foundation",
+      "title": "Provider Foundation 03: KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools",
+      "evidence": [],
+      "nextAction": "Assess KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "provider-foundation-04",
+      "family": "provider-foundation",
+      "title": "Provider Foundation 04: BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap",
+      "evidence": [],
+      "nextAction": "Assess BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "provider-foundation-05",
+      "family": "provider-foundation",
+      "title": "Provider Foundation 05: Codecs, GnomeRegion, CustomKbrdShortcut",
+      "evidence": [],
+      "nextAction": "Assess Codecs, GnomeRegion, CustomKbrdShortcut; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "forensic-isolated-01",
+      "family": "forensic-isolated",
+      "title": "Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy",
+      "evidence": [],
+      "nextAction": "Assess VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "forensic-isolated-02",
+      "family": "forensic-isolated",
+      "title": "Forensic Isolated 02: NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr",
+      "evidence": [],
+      "nextAction": "Assess NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "forensic-isolated-03",
+      "family": "forensic-isolated",
+      "title": "Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor",
+      "evidence": [],
+      "nextAction": "Assess Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-01",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 01: AppImageLauncher",
+      "evidence": [],
+      "nextAction": "Assess AppImageLauncher; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-02",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 02: VeraCrypt",
+      "evidence": [],
+      "nextAction": "Assess VeraCrypt; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-03",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 03: VisualStudioCode, Brave",
+      "evidence": [],
+      "nextAction": "Assess VisualStudioCode, Brave; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-04",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 04: FirefoxAddons",
+      "evidence": [],
+      "nextAction": "Assess FirefoxAddons; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-05",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 05: YouTubeDownloader, SystemMonitor, GnomeExtensions",
+      "evidence": [],
+      "nextAction": "Assess YouTubeDownloader, SystemMonitor, GnomeExtensions; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-06",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 06: BitwardenAppImage",
+      "evidence": [],
+      "nextAction": "Assess BitwardenAppImage; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-07",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM",
+      "evidence": [],
+      "nextAction": "Assess UnifyingOnLaptop, VMtoolsOnVM; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-08",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 08: YubikeyManager",
+      "evidence": [],
+      "nextAction": "Assess YubikeyManager; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-09",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher",
+      "evidence": [],
+      "nextAction": "Assess SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-10",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 10: ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi",
+      "evidence": [],
+      "nextAction": "Assess ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-11",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq",
+      "evidence": [],
+      "nextAction": "Assess Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-12",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 12: Bitwarden",
+      "evidence": [],
+      "nextAction": "Assess Bitwarden; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-13",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 13: Projecteur",
+      "evidence": [],
+      "nextAction": "Assess Projecteur; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-14",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 14: YubikeyPersTool",
+      "evidence": [],
+      "nextAction": "Assess YubikeyPersTool; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "publisher-apps-15",
+      "family": "publisher-apps",
+      "title": "Publisher Apps 15: Xmind",
+      "evidence": [],
+      "nextAction": "Assess Xmind; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "desktop-user-01",
+      "family": "desktop-user",
+      "title": "Desktop and user state 01: SetupUserDefaultDirs, FirefoxPreferences",
+      "evidence": [],
+      "nextAction": "Assess SetupUserDefaultDirs, FirefoxPreferences; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-02",
+      "family": "desktop-user",
+      "title": "Desktop and user state 02: DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5",
+      "evidence": [],
+      "nextAction": "Assess DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-03",
+      "family": "desktop-user",
+      "title": "Desktop and user state 03: CustomKeyboardShortcut, GnomeCustomFavorites",
+      "evidence": [],
+      "nextAction": "Assess CustomKeyboardShortcut, GnomeCustomFavorites; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-04",
+      "family": "desktop-user",
+      "title": "Desktop and user state 04: GnmLocationServiceOff, GnmAutoProblemRptOff, PowerPercentageLow15",
+      "evidence": [],
+      "nextAction": "Assess GnmLocationServiceOff, GnmAutoProblemRptOff, PowerPercentageLow15; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-05",
+      "family": "desktop-user",
+      "title": "Desktop and user state 05: BashAliases, AliasLsEza, AliasWanIP, ChromePreferences, AliasRideLog, CheckFirefoxAddons",
+      "evidence": [],
+      "nextAction": "Assess BashAliases, AliasLsEza, AliasWanIP, ChromePreferences, AliasRideLog, CheckFirefoxAddons; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-06",
+      "family": "desktop-user",
+      "title": "Desktop and user state 06: FinalizeFirefoxAddonRemoval",
+      "evidence": [],
+      "nextAction": "Assess FinalizeFirefoxAddonRemoval; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-07",
+      "family": "desktop-user",
+      "title": "Desktop and user state 07: WindowCtlAppmenuClose, WindowCtlLeftClsMinMax, ScreensaverSlp15Lgn5",
+      "evidence": [],
+      "nextAction": "Assess WindowCtlAppmenuClose, WindowCtlLeftClsMinMax, ScreensaverSlp15Lgn5; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-08",
+      "family": "desktop-user",
+      "title": "Desktop and user state 08: VMKeyboardShortcut, GnomeDefaultFavorites, GnomeMinimalFavorites",
+      "evidence": [],
+      "nextAction": "Assess VMKeyboardShortcut, GnomeDefaultFavorites, GnomeMinimalFavorites; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-09",
+      "family": "desktop-user",
+      "title": "Desktop and user state 09: GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20",
+      "evidence": [],
+      "nextAction": "Assess GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "system-security-01",
+      "family": "system-security",
+      "title": "System Security 01: Hostname, FastDNF",
+      "evidence": [],
+      "nextAction": "Assess Hostname, FastDNF; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-02",
+      "family": "system-security",
+      "title": "System Security 02: UpdateFedora",
+      "evidence": [],
+      "nextAction": "Assess UpdateFedora; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-03",
+      "family": "system-security",
+      "title": "System Security 03: Docker",
+      "evidence": [],
+      "nextAction": "Assess Docker; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-04",
+      "family": "system-security",
+      "title": "System Security 04: NetworkTools, NetCommsTools",
+      "evidence": [],
+      "nextAction": "Assess NetworkTools, NetCommsTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-05",
+      "family": "system-security",
+      "title": "System Security 05: NetMgrLibreswan",
+      "evidence": [],
+      "nextAction": "Assess NetMgrLibreswan; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-06",
+      "family": "system-security",
+      "title": "System Security 06: MulticastDNS",
+      "evidence": [],
+      "nextAction": "Assess MulticastDNS; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-07",
+      "family": "system-security",
+      "title": "System Security 07: NetMgrL2TP",
+      "evidence": [],
+      "nextAction": "Assess NetMgrL2TP; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-08",
+      "family": "system-security",
+      "title": "System Security 08: OpenconnectVPN",
+      "evidence": [],
+      "nextAction": "Assess OpenconnectVPN; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-09",
+      "family": "system-security",
+      "title": "System Security 09: ImportOpenVPNProfiles",
+      "evidence": [],
+      "nextAction": "Assess ImportOpenVPNProfiles; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-10",
+      "family": "system-security",
+      "title": "System Security 10: ExpressVPN",
+      "evidence": [],
+      "nextAction": "Assess ExpressVPN; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-11",
+      "family": "system-security",
+      "title": "System Security 11: StartExpressVPNafterBoot",
+      "evidence": [],
+      "nextAction": "Assess StartExpressVPNafterBoot; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-12",
+      "family": "system-security",
+      "title": "System Security 12: CreateExpVPNrandomizer",
+      "evidence": [],
+      "nextAction": "Assess CreateExpVPNrandomizer; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-13",
+      "family": "system-security",
+      "title": "System Security 13: VMwareWorkstation",
+      "evidence": [],
+      "nextAction": "Assess VMwareWorkstation; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-14",
+      "family": "system-security",
+      "title": "System Security 14: PatchVMwareModules",
+      "evidence": [],
+      "nextAction": "Assess PatchVMwareModules; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-15",
+      "family": "system-security",
+      "title": "System Security 15: AddExtraLUKSpasswords",
+      "evidence": [],
+      "nextAction": "Assess AddExtraLUKSpasswords; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-16",
+      "family": "system-security",
+      "title": "System Security 16: EncryptUnpartitionedDisks",
+      "evidence": [],
+      "nextAction": "Assess EncryptUnpartitionedDisks; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-17",
+      "family": "system-security",
+      "title": "System Security 17: ReclaimEncryptDWUnmntPrt",
+      "evidence": [],
+      "nextAction": "Assess ReclaimEncryptDWUnmntPrt; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-18",
+      "family": "system-security",
+      "title": "System Security 18: SSHreboot",
+      "evidence": [],
+      "nextAction": "Assess SSHreboot; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-19",
+      "family": "system-security",
+      "title": "System Security 19: Wireguard",
+      "evidence": [],
+      "nextAction": "Assess Wireguard; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-20",
+      "family": "system-security",
+      "title": "System Security 20: VPNProfiles",
+      "evidence": [],
+      "nextAction": "Assess VPNProfiles; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-21",
+      "family": "system-security",
+      "title": "System Security 21: ExpressVPNProfiles",
+      "evidence": [],
+      "nextAction": "Assess ExpressVPNProfiles; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-22",
+      "family": "system-security",
+      "title": "System Security 22: ExpressVPNafterBoot",
+      "evidence": [],
+      "nextAction": "Assess ExpressVPNafterBoot; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-23",
+      "family": "system-security",
+      "title": "System Security 23: ScheduleRandomExpVPNChange",
+      "evidence": [],
+      "nextAction": "Assess ScheduleRandomExpVPNChange; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-24",
+      "family": "system-security",
+      "title": "System Security 24: ScheduleExpVPNChange",
+      "evidence": [],
+      "nextAction": "Assess ScheduleExpVPNChange; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "system-security-25",
+      "family": "system-security",
+      "title": "System Security 25: KeyfileMounts",
+      "evidence": [],
+      "nextAction": "Assess KeyfileMounts; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-01",
+      "family": "generic-server",
+      "title": "Generic Server 01: UpdateFedora",
+      "evidence": [],
+      "nextAction": "Assess UpdateFedora; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-02",
+      "family": "generic-server",
+      "title": "Generic Server 02: Required",
+      "evidence": [],
+      "nextAction": "Assess Required; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-03",
+      "family": "generic-server",
+      "title": "Generic Server 03: AutoUpdate",
+      "evidence": [],
+      "nextAction": "Assess AutoUpdate; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-04",
+      "family": "generic-server",
+      "title": "Generic Server 04: ViewIPaddress",
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "nextAction": "Closed as information-only behavior; reopen only if a v3 IP discovery view is requested."
+    },
+    {
+      "id": "generic-server-05",
+      "family": "generic-server",
+      "title": "Generic Server 05: Hostname",
+      "evidence": [],
+      "nextAction": "Assess Hostname; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-06",
+      "family": "generic-server",
+      "title": "Generic Server 06: Docker",
+      "evidence": [],
+      "nextAction": "Assess Docker; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-07",
+      "family": "generic-server",
+      "title": "Generic Server 07: Glances",
+      "evidence": [],
+      "nextAction": "Assess Glances; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-08",
+      "family": "generic-server",
+      "title": "Generic Server 08: NoRootLogin",
+      "evidence": [],
+      "nextAction": "Assess NoRootLogin; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-09",
+      "family": "generic-server",
+      "title": "Generic Server 09: ExpressVPN",
+      "evidence": [],
+      "nextAction": "Assess ExpressVPN; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-10",
+      "family": "generic-server",
+      "title": "Generic Server 10: CreateVPNrandomizer",
+      "evidence": [],
+      "nextAction": "Assess CreateVPNrandomizer; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-11",
+      "family": "generic-server",
+      "title": "Generic Server 11: VPNRandomizerPersistent",
+      "evidence": [],
+      "nextAction": "Assess VPNRandomizerPersistent; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-12",
+      "family": "generic-server",
+      "title": "Generic Server 12: PythonPip, Selenium",
+      "evidence": [],
+      "nextAction": "Assess PythonPip, Selenium; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-13",
+      "family": "generic-server",
+      "title": "Generic Server 13: GenerateSSHkeysRSA",
+      "evidence": [],
+      "nextAction": "Assess GenerateSSHkeysRSA; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "generic-server-14",
+      "family": "generic-server",
+      "title": "Generic Server 14: Tailscale",
+      "evidence": [],
+      "nextAction": "Assess Tailscale; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "resolution-review-01",
+      "family": "resolution-review",
+      "title": "Resolution Review 01: TecmintMonitorSh, ScreenSaver, Screensaver, Galleta, Xplico, AtomTelemetry",
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "nextAction": "Review the remaining stub and conflicting setting outcomes; TecmintMonitorSh is retired."
+    }
+  ],
+  "exclusions": [
+    {
+      "source": "workstation",
+      "sourceFunction": "InstallCitrixClient",
+      "reason": "Owner-excluded Citrix client behavior; keep in legacy source until ownership and current acquisition are reconsidered."
+    },
+    {
+      "source": "workstation",
+      "sourceFunction": "RemoveCitrixClient",
+      "reason": "Owner-excluded Citrix client behavior; keep in legacy source until ownership and current acquisition are reconsidered."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "CreatePlexFirewallRules",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "CreatePlexUser",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "CreateQbtFirewallRules",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "CreateQbtSSHkeys",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "CreateQbtServiceFile",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "CreateqBittorrentUser",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "InstallAMP",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "InstallFerium",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "InstallMinecraftServer",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "InstallPlexAutoUpdate",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "InstallPlexServer",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "InstallqBittorrentServer",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    },
+    {
+      "source": "server",
+      "sourceFunction": "MountNASSMBfolders",
+      "reason": "Owner-excluded host-specific server behavior retained in network-devices."
+    }
+  ],
+  "v31Hardening": [
+    {
+      "id": "H001",
+      "title": "Broader Fedora target coverage",
+      "trigger": "After v3.0 target matrix is accepted",
+      "status": "queued"
+    },
+    {
+      "id": "H002",
+      "title": "Extended failure and recovery matrix for opt-in candidate applications",
+      "trigger": "After each candidate has its v3.0 happy-path evidence",
+      "status": "queued"
+    },
+    {
+      "id": "H003",
+      "title": "Desktop visual and accessibility review",
+      "trigger": "After desktop operations are operable in disposable Workstation VMs",
+      "status": "queued"
+    },
+    {
+      "id": "H004",
+      "title": "Retained artifact offline installation and provider fallback",
+      "trigger": "After artifact provenance and dependency behavior are designed",
+      "status": "queued"
+    }
+  ]
+}

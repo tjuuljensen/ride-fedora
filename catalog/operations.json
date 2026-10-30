@@ -442,6 +442,246 @@
       "distribution": "installed",
       "deploymentId": "local-installed",
       "artifactFormat": "wheel"
+    },
+    {
+      "id": "package.pwgen",
+      "kind": "package",
+      "name": "Password generator",
+      "group": "cli-tools",
+      "description": "Generate passwords with the Fedora pwgen utility.",
+      "handler": "dnf-package",
+      "packageName": "pwgen",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "pwgen",
+      "productUri": "https://sourceforge.net/projects/pwgen/",
+      "license": "GPL-1.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/pwgen/pwgen/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/pwgen/pwgen/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.pwgen.md"
+    },
+    {
+      "id": "package.htop",
+      "kind": "package",
+      "name": "htop process viewer",
+      "group": "cli-tools",
+      "description": "Install the interactive process viewer.",
+      "handler": "dnf-package",
+      "packageName": "htop",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "htop",
+      "productUri": "https://htop.dev/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/htop/htop/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/htop/htop/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.htop.md"
+    },
+    {
+      "id": "package.bat",
+      "kind": "package",
+      "name": "bat file viewer",
+      "group": "cli-tools",
+      "description": "Install the syntax-highlighting file viewer.",
+      "handler": "dnf-package",
+      "packageName": "bat",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "bat",
+      "productUri": "https://github.com/sharkdp/bat",
+      "license": "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-SA-3.0 AND LGPL-3.0-or-later AND GPL-2.0-only WITH GCC-exception-2.0 AND MIT AND Unicode-3.0 AND Unicode-DFS-2016 AND Unlicense AND WTFPL AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (MIT OR Apache-2.0 OR Zlib) AND (Unlicense OR MIT)",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/rust-bat/bat/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/rust-bat/bat/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.bat.md"
+    },
+    {
+      "id": "package.ncdu",
+      "kind": "package",
+      "name": "ncdu disk usage viewer",
+      "group": "cli-tools",
+      "description": "Install the terminal disk usage viewer.",
+      "handler": "dnf-package",
+      "packageName": "ncdu",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "ncdu",
+      "productUri": "https://dev.yorhel.nl/ncdu",
+      "license": "MIT",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/ncdu/ncdu/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/ncdu/ncdu/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.ncdu.md"
+    },
+    {
+      "id": "package.ripgrep",
+      "kind": "package",
+      "name": "ripgrep search tool",
+      "group": "cli-tools",
+      "description": "Install the recursive text search tool.",
+      "handler": "dnf-package",
+      "packageName": "ripgrep",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "ripgrep",
+      "productUri": "https://github.com/BurntSushi/ripgrep",
+      "license": "(Unlicense OR MIT) AND BSD-3-Clause AND MIT AND Unicode-DFS-2016 AND (MIT OR Apache-2.0)",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/rust-ripgrep/ripgrep/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/rust-ripgrep/ripgrep/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.ripgrep.md"
+    },
+    {
+      "id": "package.fd-find",
+      "kind": "package",
+      "name": "fd file finder",
+      "group": "cli-tools",
+      "description": "Install the fast file finder from the fd-find RPM.",
+      "handler": "dnf-package",
+      "packageName": "fd-find",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "fd-find",
+      "productUri": "https://github.com/sharkdp/fd",
+      "license": "MIT AND Unicode-DFS-2016 AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/rust-fd-find/fd-find/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/rust-fd-find/fd-find/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.fd-find.md"
     }
   ]
 }

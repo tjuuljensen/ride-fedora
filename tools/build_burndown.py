@@ -11,6 +11,7 @@ import re
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "docs" / "workstation-server-burndown.md"
+PROGRESS_LEDGER = ROOT / "migration" / "outcomes.json"
 WAYDROID_REFERENCE = ROOT / "reference" / "install-waydroid-fedora.sh"
 FUNCTION = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\(\)\s*\{", re.MULTILINE)
 SELECTOR = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\b")
@@ -152,6 +153,12 @@ def render() -> str:
     server_names = [name for name in server_source_names if name not in SERVER_OUT_OF_SCOPE]
     workstation_groups = groups(workstation_names)
     server_groups = groups(server_names)
+    progress_rows = json.loads(PROGRESS_LEDGER.read_text(encoding="utf-8"))["outcomes"]
+    progress = {row["key"]: row for row in progress_rows}
+    expected_progress = ({f"workstation:{key}" for key, _ in workstation_groups}
+                         | {f"server:{key}" for key, _ in server_groups})
+    if len(progress) != len(progress_rows) or set(progress) != expected_progress:
+        raise ValueError("migration progress ledger does not cover the source outcome queue")
     inactive_workstation = sum(not any(name in active for name in members) for _, members in workstation_groups)
     server_active = {name for preset in inventory["presets"].values() for name in preset["active"]}
     server_commented = {name for preset in inventory["presets"].values() for name in preset["commented"]}
@@ -165,6 +172,8 @@ def render() -> str:
         "by the owner remain in the legacy source and server name inventory, outside this queue.",
         "Install/remove and analogous state pairs share an outcome row. A `deferred` row is",
         "inventory, not an executable operation or acceptance claim.",
+        "Current progress and batch assignment come from `migration/outcomes.json`; the",
+        "older disposition text records the initial migration assessment.",
         "",
         f"Workstation source: `lib-fedora.sh` at Fedora commit `43ba467`; {len(workstation_source_names)} source functions,",
         f"{len(workstation_names)} queued functions,",
@@ -187,8 +196,8 @@ def render() -> str:
         "",
         "## Workstation library",
         "",
-        "| Outcome key | Exact source functions | Selector coverage | v3 disposition / next review |",
-        "| --- | --- | --- | --- |",
+        "| Outcome key | Exact source functions | Selector coverage | Initial disposition / review rationale | Batch / current progress |",
+        "| --- | --- | --- | --- | --- |",
     ]
     for key, members in workstation_groups:
         selection = ", ".join(
@@ -196,7 +205,9 @@ def render() -> str:
             for name in members
         )
         decision = workstation_disposition(members, active, ledger)
-        lines.append(f"| `{key}` | {', '.join(f'`{name}`' for name in members)} | {selection} | {decision} |")
+        current = progress[f"workstation:{key}"]
+        lines.append(f"| `{key}` | {', '.join(f'`{name}`' for name in members)} | {selection} | {decision} | "
+                     f"`{current['batch']}` / {current['progress']} |")
     lines += [
         "",
         "`PressAnyKeyToContinue` and `Restart` are active default selectors but live outside",
@@ -220,18 +231,19 @@ def render() -> str:
         "",
         "## Server library and presets",
         "",
-        "| Outcome key | Exact source functions | Active presets | Commented presets | v3 disposition / next review |",
-        "| --- | --- | --- | --- | --- |",
+        "| Outcome key | Exact source functions | Active presets | Commented presets | Initial disposition / review rationale | Batch / current progress |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for key, members in server_groups:
         active_presets = [name.removesuffix(".preset") for name, preset in inventory["presets"].items()
                           if any(member in preset["active"] for member in members)]
         commented_presets = [name.removesuffix(".preset") for name, preset in inventory["presets"].items()
                              if any(member in preset["commented"] for member in members)]
+        current = progress[f"server:{key}"]
         lines.append(
             f"| `{key}` | {', '.join(f'`{name}`' for name in members)} | "
             f"{', '.join(active_presets) or '—'} | {', '.join(commented_presets) or '—'} | "
-            f"{server_disposition(members)} |"
+            f"{server_disposition(members)} | `{current['batch']}` / {current['progress']} |"
         )
     lines += [
         "",
@@ -242,8 +254,9 @@ def render() -> str:
         "",
         "## Closeout rules",
         "",
-        "1. Mark an outcome migrated only when its user-visible behavior and supported target",
-        "   have an accepted v3 operation and VM evidence. Keep partial replacements explicit.",
+        "1. Count an outcome as operable only with a mapped v3 operation and focused",
+        "   automated evidence. Only a target-specific VM pass permits supported status.",
+        "   Keep candidate, supported, and non-operable resolutions distinct.",
         "2. Mark a retired outcome only with a concrete reason. Do not turn an old no-op",
         "   function into a successful v3 operation.",
         "3. Reconcile server consumers in `complete`, `plexserver`, and `streambox` before",

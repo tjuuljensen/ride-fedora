@@ -120,6 +120,41 @@ esac
         self.assertEqual(self.journals(), [])
         self.assertFalse((self.root / "packages" / "alpha").exists())
 
+    def test_native_cli_tools_profile_uses_candidate_gate_and_dnf_lifecycle(self):
+        identifiers = ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find")
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        for entry in catalog["operations"]:
+            if entry["id"] in {f"package.{name}" for name in identifiers}:
+                entry["scope"] = "user"  # Test-only catalog permits mocked, unelevated DNF.
+                entry["status"] = "candidate"
+                entry.pop("acceptanceEvidence", None)
+        guest_catalog = self.root / "native-cli-catalog.json"
+        guest_catalog.write_text(json.dumps(catalog))
+        self.env["RIDE_CATALOG_PATH"] = str(guest_catalog)
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        profile = str(ROOT / "profiles" / "cli-tools.json")
+        planned = self.run_ride("plan", "--profile", profile).stdout
+        for name in identifiers:
+            self.assertIn(f"package.{name}\tfedora-rpm\tabsent\tinstalled\tcandidate", planned)
+        self.assertEqual(self.journals(), [])
+        self.run_ride("apply", "--profile", profile, success=False)
+        self.assertFalse(any((self.root / "packages" / name).exists() for name in identifiers))
+
+        self.run_ride("apply", "--profile", profile, "--allow-candidate")
+        first = self.journals()[0]
+        self.assertEqual([(step["id"], step["result"]) for step in first["steps"]],
+                         [(f"package.{name}", "changed") for name in identifiers])
+        self.assertTrue(all((self.root / "packages" / name).exists() for name in identifiers))
+        self.run_ride("apply", "--profile", profile, "--allow-candidate")
+        repeat = next(run for run in self.journals() if run["runId"] != first["runId"])
+        self.assertEqual([step["result"] for step in repeat["steps"]],
+                         ["unchanged"] * len(identifiers))
+        self.run_ride("restore", "--run-id", first["runId"], "--allow-candidate")
+        self.assertFalse(any((self.root / "packages" / name).exists() for name in identifiers))
+
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=server\n")
+        self.run_ride("plan", "--profile", profile, success=False)
+
     def test_interactive_tables_align_and_pipes_remain_tsv(self):
         if shutil.which("column") is None:
             self.skipTest("column is optional for interactive tables")

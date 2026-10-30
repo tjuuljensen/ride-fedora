@@ -354,3 +354,80 @@ def test_workstation_default_profile_smoke(vm):
 @pytest.mark.vm_target("fedora-44-server-x86_64")
 def test_server_base_profile_smoke(vm):
     profile_smoke(vm, "server-base", ("package.less", "package.openssh-clients"))
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_cli_tools_batch(vm):
+    """Run six v2 CLI replacements in one disposable Workstation overlay."""
+    packages = ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find")
+    baseline = package_inventory(vm)
+    assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
+    for package in packages:
+        identifier = f"package.{package}"
+        expected_status = catalog_status(identifier)
+        assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0, (
+            f"{package} is preinstalled; review the removal transaction before retrying")
+        guest_profile = vm.put_json(f"cli-{package}", profile(identifier))
+        planned = table_row(vm.ride("plan", "--profile", guest_profile).stdout, identifier)
+        assert (planned["CURRENT"], planned["DESIRED"], planned["STATUS"]) == (
+            "absent", "installed", expected_status)
+        assert package_inventory(vm) == baseline
+
+        applied = vm.ride("apply", "--profile", guest_profile, *candidate_args(identifier), timeout=900)
+        first_id = run_id(applied.stdout)
+        record = journal(vm, first_id)
+        assert record["status"] == "complete"
+        assert [(step["id"], step["result"]) for step in record["steps"]] == [(identifier, "changed")]
+        assert vm.run(f"rpm -q --quiet {package}", check=False).returncode == 0
+        signatures = vm.run(
+            f"rpm -q --qf '%{{SIGPGP:pgpsig}}\\n%{{RSAHEADER:pgpsig}}\\n' {package}"
+        ).stdout.splitlines()
+        assert any(value.strip() not in ("", "(none)") for value in signatures), signatures
+        vm.run(f"rpm -V {package}")
+        status = table_row(vm.ride("status", identifier).stdout, identifier)
+        assert (status["OBSERVED"], status["STATUS"]) == ("installed", expected_status)
+
+        repeated = vm.ride("apply", "--profile", guest_profile, *candidate_args(identifier))
+        assert journal(vm, run_id(repeated.stdout))["steps"][0]["result"] == "unchanged"
+        restored = vm.ride("restore", "--run-id", first_id, *candidate_args(identifier), timeout=900)
+        assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+        assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0
+        assert package_inventory(vm) == baseline
+
+        installed = vm.ride("install", identifier, *candidate_args(identifier), timeout=900)
+        assert journal(vm, run_id(installed.stdout))["status"] == "complete"
+        removed = vm.ride("remove", identifier, *candidate_args(identifier), timeout=900)
+        assert journal(vm, run_id(removed.stdout))["status"] == "complete"
+        assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0
+        assert package_inventory(vm) == baseline
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_cli_tools_supported_profile_smoke(vm):
+    identifiers = tuple(f"package.{name}" for name in
+                        ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find"))
+    assert all(catalog_status(identifier) == "supported" for identifier in identifiers)
+    baseline = package_inventory(vm)
+    plan = vm.ride("plan", "--profile", "cli-tools")
+    assert [line.split("\t", 1)[0] for line in plan.stdout.splitlines()[1:]] == list(identifiers)
+    for identifier in identifiers:
+        row = table_row(plan.stdout, identifier)
+        assert (row["CURRENT"], row["DESIRED"], row["STATUS"]) == (
+            "absent", "installed", "supported")
+    assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
+
+    applied = vm.ride("apply", "--profile", "cli-tools", timeout=900)
+    first_id = run_id(applied.stdout)
+    record = journal(vm, first_id)
+    assert record["status"] == "complete"
+    assert [(step["id"], step["result"]) for step in record["steps"]] == [
+        (identifier, "changed") for identifier in identifiers]
+    repeat = vm.ride("apply", "--profile", "cli-tools", timeout=900)
+    assert [step["result"] for step in journal(vm, run_id(repeat.stdout))["steps"]] == [
+        "unchanged"] * len(identifiers)
+    for identifier in identifiers:
+        row = table_row(vm.ride("status", identifier).stdout, identifier)
+        assert (row["OBSERVED"], row["STATUS"]) == ("installed", "supported")
+    restored = vm.ride("restore", "--run-id", first_id, timeout=900)
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    assert package_inventory(vm) == baseline

@@ -20,10 +20,11 @@ copy of the shared models.
 | Windows RIDE | `ride-windows` development branch | Shared command and GitHub behavior contract | Reconcile product identity and protocol behavior; keep PowerShell and Bash installers native to their platforms. |
 | Reference scripts | `reference/` | Burndown inputs only | A reference script is not a supported catalog operation or a default-profile action. |
 
-The catalog currently declares Fedora 44 x86_64 candidates. Their presence is
-source readiness, not VM-verified support. Debian and Ubuntu remain future
-providers. Do not infer supported platforms from the bootstrapper's ability to
-download source on them.
+The catalog supports three base package operations on their declared Fedora 44
+x86_64 editions; other entries remain candidates. The scoped v2 outcome ledger
+tracks migration progress separately from catalog support. Debian and Ubuntu
+remain future providers. Do not infer supported platforms from the
+bootstrapper's ability to download source on them.
 
 ## Documentation and migration records
 
@@ -44,9 +45,11 @@ side effects, validation, and recovery for copy-ready procedures. Use `bash`
 or `sh` fence labels accurately. Static syntax checks do not establish runtime
 health or distro support.
 
-`docs/MIGRATION-PLAN.md` owns active legacy disposition and batch handoff.
-`docs/workstation-server-burndown.md` is a generated, scoped queue; owner
-exclusions stay out. `docs/acceptance/` holds dated VM evidence. A row moves
+`docs/MIGRATION-PLAN.md` owns the active legacy disposition and batch handoff.
+`migration/outcomes.json` owns current progress for all scoped v2 outcomes;
+the workstation/server burndown and progress report are generated views. Owner
+exclusions remain visible outside the 180-outcome denominator.
+`docs/acceptance/` holds dated VM evidence. A row moves
 from planned to source-ready only after implementation and static checks;
 activation and verified behavior require separate evidence. Keep unresolved
 consumers and recovery material until closure.

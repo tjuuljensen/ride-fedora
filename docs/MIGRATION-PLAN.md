@@ -1,6 +1,10 @@
 # Legacy Fedora default migration ledger
 
-Source: `default.preset` on `master` at `43ba467`. All 76 active lines are dispositioned below. The v3 default profile is intentionally small; deferred items are not silently executed. These decisions describe the development branch, not VM acceptance.
+Source: `default.preset` on `master` at `43ba467`. All 76 active lines have an
+initial disposition below. The v3 default profile is intentionally small;
+deferred items are not silently executed. Current progress for the full scoped
+v2 inventory is authoritative in `migration/outcomes.json` and its
+[generated report](migrations/progress.md), not in these initial decisions.
 
 The [scoped workstation and server burndown](workstation-server-burndown.md)
 also covers non-active library functions and the three server presets, apart
@@ -117,9 +121,74 @@ The [Server image build](acceptance/fedora-44-server-image.md) also uses the
 verified Everything installer and a separate Kickstart environment selection;
 its `VARIANT_ID=server` and qcow2 digest are pinned in the target matrix.
 
+## Full scoped v2 migration program
+
+The v3.0 program covers 165 grouped workstation and 15 grouped generic server
+outcomes, including functions absent from active presets. Install/remove and
+analogous state pairs share one outcome. The two owner-excluded Citrix
+functions and 13 host-specific server functions stay visible in the ledger's
+exclusion list, outside the 180-outcome completion denominator. The three
+already supported base package operations remain valid release-envelope
+evidence but do not automatically resolve a v2 outcome with different intent.
+
+`migration/outcomes.json` assigns every outcome exactly one small batch, a
+planned Fedora 44 x86_64 target, risk, source function mapping, current
+disposition and progress, v3 operation IDs, evidence, blocker, and next action.
+The generated [burndown](workstation-server-burndown.md) keeps the initial
+legacy assessment alongside its current batch and progress. Process active
+selectors first within each family. Ordinary batches contain at most six
+related outcomes; security, storage, encryption, and difficult recovery
+changes are isolated, while related user-state checks may share a batch. The family order is Fedora
+repository packages, package-source foundations, forensic and isolated tools,
+publisher applications, desktop and user state, system/network/security,
+generic server, and explicit resolution decisions.
+
+From the repository root as a regular user, these commands read the ledger,
+source inventory, catalog, and evidence without changing the host or writing
+files. No recovery is needed. CI runs `--check` on every migration-branch push.
+
+```bash
+python3 tools/migration_progress.py --summary
+python3 tools/migration_progress.py --json
+python3 tools/migration_progress.py --check
+```
+
+The percentage counts supported operations, evidence-backed opt-in candidates,
+and documented non-operable resolutions separately; the report never presents
+a retirement, private handoff, or unsupported decision as an install. An
+unreviewed or merely implemented candidate stays unresolved. The linked
+v3.1 hardening queue records broader coverage without weakening v3.0 safety.
+
+The first [native RPM batch](migrations/native-rpm-01.md) passed on 2026-10-30:
+six v2 CLI package outcomes are supported on Fedora 44 x86_64 Workstation in
+the opt-in `cli-tools` profile. The [resolution record](migrations/resolution-decisions.md)
+retires the information-only server IP display and the unverified Tecmint
+script without claiming either as an install. The next ordinary package batch
+is `native-rpm-02`; the remaining outcomes stay visible in the progress report.
+
+For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
+signature/files, and declared remove/restore check on each exact target; reuse
+failure-injection evidence for an unchanged handler within the batch. For
+third-party or desktop behavior, a VM happy path and focused mocked checks may
+establish an opt-in candidate, with broader coverage in v3.1. Data, storage,
+encryption, security policy, and difficult recovery require deeper safety and
+inverse evidence before becoming runnable. Unsupported or private decisions
+need a documented reason and review trigger. Keep candidate operations out of
+`default` and `server-base`; add curated opt-in profiles as related operations
+are ready. Manual checks are limited to behavior automation cannot observe.
+
+The full v3.0 migration is ready for release review when all 180 outcomes have
+an operable implementation or documented resolution, supported profiles pass
+their declared targets, relevant CI and generated-doc checks pass, and no
+shared Windows contract drift remains unexplained. A v3 tag and movement of
+the `master` release line are separate publication decisions.
+
 ## Release gates
 
-- Every implemented candidate remains blocked by default until a disposable Fedora VM run records apply, repeat apply, status, remove or restore where applicable, and failure behavior.
+- Candidates remain blocked by default and require `--allow-candidate` for an
+  explicit change. An implemented outcome counts as operable only after its
+  risk-appropriate focused evidence; support still requires a passing VM on
+  the exact declared target.
 - The Firefox extension manager remains maintained and tested, but its v3 catalog lifecycle is pending. Its legacy direct function call is not reused.
 - Generic server actions remain in `network-devices` until source, consumers, ownership, and rollback are reconciled. No host-specific preset is moved into this repository.
 - Debian and Ubuntu adapters remain outside the supported target matrix until their own VM checks pass.

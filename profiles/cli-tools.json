@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "cli-tools",
+  "description": "Opt-in Fedora command-line tools migrated from v2",
+  "operations": [
+    {
+      "id": "package.pwgen",
+      "state": "installed"
+    },
+    {
+      "id": "package.htop",
+      "state": "installed"
+    },
+    {
+      "id": "package.bat",
+      "state": "installed"
+    },
+    {
+      "id": "package.ncdu",
+      "state": "installed"
+    },
+    {
+      "id": "package.ripgrep",
+      "state": "installed"
+    },
+    {
+      "id": "package.fd-find",
+      "state": "installed"
+    }
+  ]
+}
