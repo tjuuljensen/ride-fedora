@@ -1791,6 +1791,46 @@
       "distribution": "installed",
       "deploymentId": "local-installed",
       "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.eza",
+      "kind": "package",
+      "name": "Eza directory listing utility",
+      "group": "shell-tools",
+      "description": "Install the Fedora Eza RPM without touching a portable Eza binary in /usr/local/bin.",
+      "handler": "dnf-package",
+      "packageName": "eza",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "eza",
+      "productUri": "https://github.com/eza-community/eza",
+      "license": "EUPL-1.2",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/rust-eza/eza/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/rust-eza/eza/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.eza.md"
     }
   ]
 }

@@ -248,3 +248,20 @@ excluded. GNOME extension installer, Flatpak runtime, and snapd were
 separated for their own acquisition, data, and security gates. No shared
 schema, source fallback, journal, or Windows installer changed. Recheck on
 shared product or package-contract changes and before release review.
+
+### Fedora provider foundation batches 05 and 08, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f`. The
+[codec bundle](migrations/provider-foundation-05.md) is a non-runnable
+Linux-only resolution; it adds no catalog or profile row. The
+[Eza source batch](migrations/provider-foundation-08.md) adds one installed
+Fedora RPM operation with the existing DNF handler and Workstation target.
+The legacy GitHub portable download is a separately counted replacement,
+not a second provider or a Windows installer fact. Windows has no Eza catalog
+row in this revision. The Linux change does not alter the shared product,
+source-selection, deployment, profile, journal, or recovery contract. The
+existing platform-specific representation and portable-handler differences
+remain intentional as registered above. Recheck if either platform adds Eza
+or portable coexistence, changes source fallback or run-state semantics, or
+before release review. No unexplained shared-contract drift was found.

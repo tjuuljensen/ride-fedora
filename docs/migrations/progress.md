@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**40/180 complete (22.2%)**: 18 supported, 10 opt-in candidate, 4 replaced, 5 retired, 0 private, 3 unsupported; 140 unresolved.
+**43/180 complete (23.9%)**: 19 supported, 10 opt-in candidate, 5 replaced, 5 retired, 0 private, 4 unsupported; 137 unresolved.
 
-Runnable outcomes: 28; 10 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 29; 10 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -18,10 +18,10 @@ Runnable outcomes: 28; 10 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `provider-foundation-02` | Provider Foundation 02: RPMfusionRepos | high 1 | 0/1 | [provider-foundation-02.md](../../docs/migrations/provider-foundation-02.md) | Resolve signing-key trust, repository ownership, and safe inverse before any runnable operation. |
 | `provider-foundation-03` | Provider Foundation 03: KernelTools, DNFutils, PythonPip, PackagingTools | medium 4 | 4/4 | [provider-foundation-03.md](../../docs/migrations/provider-foundation-03.md), [provider-kernel-tools.md](../../docs/acceptance/provider-kernel-tools.md), [package.python3-pip.md](../../docs/acceptance/package.python3-pip.md), [provider-archive-tools.md](../../docs/acceptance/provider-archive-tools.md) | Continue provider-foundation-04; review kernel build matching and package-driven updates in v3.1. |
 | `provider-foundation-04` | Provider Foundation 04: BasicEditors, GnomeTools, VersionLock | medium 3 | 3/3 | [provider-foundation-04.md](../../docs/migrations/provider-foundation-04.md), [provider-basic-editors.md](../../docs/acceptance/provider-basic-editors.md), [provider-gnome-tools.md](../../docs/acceptance/provider-gnome-tools.md) | Continue provider-foundation-05 codec review; defer desktop visual and pre-installed editor removal hardening to v3.1. |
-| `provider-foundation-05` | Codec source and broad Multimedia group resolution | high 1 | 0/1 | [provider-foundation-05.md](../../docs/migrations/provider-foundation-05.md) | Split broad codec globs and Multimedia group by signed source and owned package outcome. |
+| `provider-foundation-05` | Codec source and broad Multimedia group resolution | high 1 | 1/1 | [provider-foundation-05.md](../../docs/migrations/provider-foundation-05.md) | Reopen only for a concrete codec requirement with trusted acquisition and tested package-specific recovery. |
 | `provider-foundation-06` | Split Security Lab DNF group | medium 1 | 0/1 | [provider-foundation-06.md](../../docs/migrations/provider-foundation-06.md) | Inspect group membership and map each retained tool to owned operations. |
 | `provider-foundation-07` | HandBrake RPM Fusion source and package split | medium 1 | 0/1 | [provider-foundation-07.md](../../docs/migrations/provider-foundation-07.md) | Review trusted repository source, CLI/GUI package split, and recovery. |
-| `provider-foundation-08` | Eza Fedora and GitHub source ownership | medium 2 | 0/2 | [provider-foundation-08.md](../../docs/migrations/provider-foundation-08.md) | Resolve installed/portable source selection and owned inverse. |
+| `provider-foundation-08` | Eza Fedora and GitHub source ownership | medium 2 | 2/2 | [provider-foundation-08.md](../../docs/migrations/provider-foundation-08.md), [package.eza.md](../../docs/acceptance/package.eza.md) | Continue to provider-foundation-09; reopen portable Eza only on the documented ownership and provenance trigger. |
 | `provider-foundation-09` | Flathub remote ownership and recovery | medium 1 | 0/1 | [provider-foundation-09.md](../../docs/migrations/provider-foundation-09.md) | Define a scoped Flatpak remote handler, trust check, and inverse before acceptance. |
 | `provider-foundation-10` | GNOME extension installer acquisition and owned path | medium 1 | 1/1 | [provider-foundation-10.md](../../docs/migrations/provider-foundation-10.md) | Reopen only if a maintained licensed GNOME-compatible installer with owned recovery becomes available. |
 | `provider-foundation-11` | Flatpak runtime and application-preserving inverse | high 1 | 0/1 | [provider-foundation-11.md](../../docs/migrations/provider-foundation-11.md) | Prove preservation of seeded Flatpak apps, remote, and data before runnable support or a v3.0 disposition. |

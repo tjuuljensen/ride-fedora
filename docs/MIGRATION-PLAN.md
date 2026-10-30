@@ -21,7 +21,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallRPMfusionRepos` | deferred | [Provider batch 02](migrations/provider-foundation-02.md) records the signing-key and owned-recovery work required before a runnable operation. |
 | `InstallKernelTools` | supported | Split into signed Fedora `kernel-devel` and `kernel-headers` package installs; [VM evidence](acceptance/provider-kernel-tools.md) does not establish a matching module-build environment. |
 | `InstallDNFutils` | replaced | Fedora 44 Workstation has DNF5 and plugins; current `config-manager` and `download` commands passed the disposable-VM check. See [provider foundation batch 03](migrations/provider-foundation-03.md). |
-| `InstallEzaGitHub` | replaced | Prefer Fedora repository package after verification. |
+| `InstallEzaGitHub` | replaced | The unpinned ZIP path is a [non-runnable replacement](migrations/provider-foundation-08.md); Fedora `package.eza` passed [VM acceptance](acceptance/package.eza.md) for an installed Eza. |
 | `InstallFlathub` | deferred | [Flathub remote ownership](migrations/provider-foundation-09.md) needs scoped trust, detection, and inverse review. |
 | `InstallAppImageLauncher` | deferred | Review maintained source and current desktop integration. |
 | `InstallExif` | deferred | Review product identity and official package. |
@@ -189,8 +189,13 @@ as a changed-CLI archive replacement.
 [Provider foundation batch 04](migrations/provider-foundation-04.md) accepted
 the editor RPMs as supported, the GNOME utility RPMs as opt-in candidates,
 and DNF5 versionlock as a non-runnable replacement. The archived GNOME
-extension installer was resolved as unsupported. Flathub, snapd, and the
-broad codec group remain isolated for their data, service, and source gates.
+extension installer was resolved as unsupported. Flathub and snapd remain
+isolated for their data, service, and source gates.
+[Provider foundation batch 05](migrations/provider-foundation-05.md) resolved
+the commented broad codec bundle as unsupported for v3.0 because its wildcard
+and optional group transactions lack a safe owned inverse. [Batch 08](migrations/provider-foundation-08.md)
+accepted the Fedora Eza RPM while documenting the active GitHub ZIP path as
+a non-runnable replacement. Neither decision adds to the base profiles.
 The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,

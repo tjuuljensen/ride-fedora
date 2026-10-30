@@ -209,14 +209,17 @@
       "batch": "provider-foundation-08",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.eza"
+      ],
       "evidence": [
+        "docs/acceptance/package.eza.md",
         "docs/migrations/provider-foundation-08.md"
       ],
-      "blocker": "Fedora and GitHub sources, destination ownership, and inverse conflict need review.",
-      "nextAction": "Resolve source selection and owned removal for installed and portable Eza deployments.",
+      "blocker": "",
+      "nextAction": "Recheck Fedora package identity and exact target if the RPM or DNF handler changes.",
       "v31Hardening": []
     },
     {
@@ -229,15 +232,20 @@
       "batch": "provider-foundation-08",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/provider-foundation-08.md"
+      "disposition": "replace",
+      "progress": "resolved",
+      "v3Ids": [
+        "package.eza"
       ],
-      "blocker": "Fedora and GitHub sources, destination ownership, and inverse conflict need review.",
-      "nextAction": "Resolve source selection and owned removal for installed and portable Eza deployments.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/provider-foundation-08.md",
+        "docs/acceptance/package.eza.md"
+      ],
+      "blocker": "",
+      "nextAction": "Use the supported Fedora Eza operation for installed deployments; reopen portable Eza only after pinned artifact and owned recovery design.",
+      "v31Hardening": [],
+      "reason": "The active v2 GitHub latest-release ZIP download has no pinned checksum or owned inverse; the supported Fedora RPM supplies the Eza command on Fedora 44 without claiming portable deployment.",
+      "reviewTrigger": "An explicit portable Eza requirement with pinned artifact provenance, destination ownership, coexistence review, and exact-target recovery evidence."
     },
     {
       "key": "workstation:package.VersionLock",
@@ -2082,15 +2090,17 @@
       "batch": "provider-foundation-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "migrate",
-      "progress": "assessed",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/provider-foundation-05.md"
       ],
-      "blocker": "Exact codec products, source trust, and safe inverse are unestablished; v2 globs and group upgrade are broader than RIDE ownership.",
-      "nextAction": "Enumerate exact Fedora and approved third-party codecs, then implement owned package outcomes or record a reasoned v3.0 non-runnable disposition.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only for a concrete codec requirement with fixed package identities, trusted sources, and a tested owned inverse.",
+      "v31Hardening": [],
+      "reason": "The legacy wildcard installs and optional Multimedia group upgrade have a changing package set and no complete owned inverse; RPM Fusion source trust is also unresolved.",
+      "reviewTrigger": "A concrete Fedora 44 codec requirement, accepted RPM Fusion trust if needed, and a fixed package and data-preserving recovery design."
     },
     {
       "key": "workstation:package.SpotifyClient",
@@ -3761,7 +3771,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-05.md"
       ],
-      "nextAction": "Split broad codec globs and Multimedia group by signed source and owned package outcome."
+      "nextAction": "Reopen only for a concrete codec requirement with trusted acquisition and tested package-specific recovery."
     },
     {
       "id": "provider-foundation-06",
@@ -3786,9 +3796,10 @@
       "family": "provider-foundation",
       "title": "Eza Fedora and GitHub source ownership",
       "evidence": [
-        "docs/migrations/provider-foundation-08.md"
+        "docs/migrations/provider-foundation-08.md",
+        "docs/acceptance/package.eza.md"
       ],
-      "nextAction": "Resolve installed/portable source selection and owned inverse."
+      "nextAction": "Continue to provider-foundation-09; reopen portable Eza only on the documented ownership and provenance trigger."
     },
     {
       "id": "provider-foundation-09",

@@ -605,6 +605,17 @@ def test_provider_editors_and_gnome_utilities_batch(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_provider_eza_fedora_package(vm):
+    # The v2 GitHub ZIP uses /usr/local/bin; the Fedora RPM must leave that
+    # destination outside its install and inverse contract.
+    vm.run("test ! -e /usr/local/bin/eza")
+    native_rpm_batch(vm, ("eza",), inventory_policy="name-arch",
+                     residue_candidates=("eza",),
+                     installed_probes={"eza": "test -x /usr/bin/eza && /usr/bin/eza --version"})
+    vm.run("test ! -e /usr/local/bin/eza")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_native_cli_tools_supported_profile_smoke(vm):
     identifiers = tuple(f"package.{name}" for name in
                         ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find"))
