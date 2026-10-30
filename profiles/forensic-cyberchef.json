@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "forensic-cyberchef",
+  "description": "Opt-in offline CyberChef desktop application on Fedora Workstation",
+  "operations": [
+    {"id": "package.cyberchef", "state": "installed"}
+  ]
+}

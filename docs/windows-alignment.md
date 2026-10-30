@@ -702,3 +702,25 @@ and user profiles, exact script and notice hashes, and owned user inverse.
 The profile and run-state formats did not change. No unexplained shared
 Windows contract drift was found; the Linux-specific RPM and script paths
 remain deliberate differences.
+
+### Fedora CyberChef offline archive preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding Linux
+`package.cyberchef`. Both clients use the `cyberchef` product identity and
+install the official offline ZIP, retain bundled notices, preserve user
+recipes, and do not launch a browser during apply. Windows declares a
+machine-scoped `portable` variant selected from the latest release API;
+Linux pins v11.5.0 and its release API digest, then owns a system desktop
+integration under the current `installed`/`local-installed` slot. The
+distribution and acquisition difference is intentional because Linux has
+no portable deployment selector yet. It does not change the shared run
+schema or product behavior contract. Recheck when either platform changes
+CyberChef source selection, adds a second deployment, or shares saved-run
+identity across platforms.
+
+The pinned Fedora 44 Workstation VM lifecycle passed under QEMU TCG. The
+[acceptance record](acceptance/package.cyberchef.md) covers ZIP and notice
+verification, headless offline browser startup, the desktop link, and owned
+recovery. Linux's installed deployment remains a deliberate platform
+difference; no unexplained shared Windows contract drift was found.

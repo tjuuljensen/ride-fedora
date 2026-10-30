@@ -9,11 +9,11 @@ can be retired as an implementation once its intended capability has a v3.0
 path. Earlier individual retirement choices remain historical decisions about
 those exact implementations; this review reopens their capability coverage.
 
-The current ledger has 133 package and 36 setting outcomes. Only 58 of those
+The current ledger has 133 package and 36 setting outcomes. Only 59 of those
 169 have operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
-**169 in-scope package/setting capabilities, 58 currently operable, nine
-owner-retired, one standalone functional replacement, and 101 still needing
+**169 in-scope package/setting capabilities, 59 currently operable, nine
+owner-retired, one standalone functional replacement, and 100 still needing
 an operable v3.0 path**. The ledger's 185 dispositioned outcomes out of
 185 include the now-supported Server qBittorrent package; this
 measure records reviewed decisions, not v3.0 capability coverage.
@@ -32,7 +32,7 @@ declared behavior and a safe inverse.
 
 ## Audit of the named v3.1 queue
 
-The [generated queue](progress.md#v31-hardening-queue) has 24 items. Three
+The [generated queue](progress.md#v31-hardening-queue) has 25 items. Three
 include source or successor decisions that must be made as v3.0 migration
 work; their remaining broader behavior checks may stay in v3.1.
 
@@ -62,6 +62,7 @@ work; their remaining broader behavior checks may stay in v3.1.
 | H022 | Choose a maintained bandwidth-test CLI path now; existing Fedora speedtest-cli install evidence remains valid. | Wider network/server behavior. |
 | H023 | Fedora yt-dlp is now a supported opt-in package path; existing youtube-dl install evidence remains valid. | Wider extractor and site compatibility. |
 | H027 | The pinned ASN script and Fedora prerequisites have a passing opt-in Workstation lifecycle. | Live lookup accuracy, upstream failures, and any separately reviewed server mode. |
+| H028 | The pinned CyberChef offline ZIP and owned desktop launcher have a passing opt-in Workstation lifecycle. | Representative recipes, browser compatibility, visuals, and a version-update path. |
 
 ## First source and replacement paths
 

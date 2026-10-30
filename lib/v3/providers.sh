@@ -20,6 +20,7 @@ ride_observe() {
       ;;
     github-asset) printf 'not-applicable\n' ;;
     pinned-script) ride_observe_asn "$entry" ;;
+    pinned-zip) ride_observe_cyberchef "$entry" ;;
     python-venv)
       case "$(jq -r '.id' <<< "$entry")" in
         package.volatility3)
@@ -86,6 +87,10 @@ ride_change() {
     pinned-script)
       [[ "$(jq -r '.id' <<< "$entry")" == package.asn ]] || ride_die "unknown pinned script operation"
       ride_change_asn "$entry" "$state"
+      ;;
+    pinned-zip)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.cyberchef ]] || ride_die "unknown pinned ZIP operation"
+      ride_change_cyberchef "$entry" "$state"
       ;;
     gsettings-boolean)
       local schema key value writable
@@ -233,6 +238,137 @@ ride_change_asn() {
       fi
       ;;
     *) ride_die "invalid ASN state: $state" ;;
+  esac
+}
+
+ride_cyberchef_environment() {
+  printf '%s\n' /opt/ride-fedora/cyberchef
+}
+
+ride_cyberchef_link() {
+  printf '%s\n' /usr/share/applications/ride-cyberchef.desktop
+}
+
+ride_cyberchef_owned_contents() {
+  local environment=$1
+  [[ "$(find "$environment" -mindepth 1 -maxdepth 1 -printf '%f\n' | LC_ALL=C sort)" == \
+    $'.ride-owned\nmanifest.json\npayload' ]]
+}
+
+ride_observe_cyberchef() {
+  local entry=$1 environment link archive_sha license_sha marker
+  environment=$(ride_cyberchef_environment)
+  link=$(ride_cyberchef_link)
+  archive_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  license_sha=$(jq -r '.licenseSha256' <<< "$entry")
+  marker="ride-fedora package.cyberchef 11.5.0 $archive_sha"
+  if [[ -d "$environment" && ! -L "$environment" ]] &&
+     ride_cyberchef_owned_contents "$environment" &&
+     [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+        "$(cat "$environment/.ride-owned")" == "$marker" &&
+        -d "$environment/payload" && ! -L "$environment/payload" &&
+        -f "$environment/manifest.json" && ! -L "$environment/manifest.json" &&
+        -L "$link" && "$(readlink -- "$link")" == "$environment/payload/ride-cyberchef.desktop" &&
+        "$(sha256sum -- "$environment/payload/LICENSE" | cut -d' ' -f1)" == "$license_sha" ]] &&
+     python3 "$RIDE_ROOT/lib/v3/cyberchef_archive.py" verify "$environment/payload" "$environment/manifest.json" >/dev/null 2>&1; then
+    printf 'installed\n'
+  else
+    printf 'absent\n'
+  fi
+}
+
+ride_change_cyberchef() {
+  local entry=$1 state=$2 environment link base temporary source_uri license_uri archive_sha license_sha marker
+  environment=$(ride_cyberchef_environment)
+  link=$(ride_cyberchef_link)
+  base=$(dirname "$environment")
+  source_uri=$(jq -r '.sourceUri' <<< "$entry")
+  license_uri=$(jq -r '.licenseUri' <<< "$entry")
+  archive_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  license_sha=$(jq -r '.licenseSha256' <<< "$entry")
+  marker="ride-fedora package.cyberchef 11.5.0 $archive_sha"
+  case "$state" in
+    installed)
+      ride_require_command curl
+      ride_require_command python3
+      ride_require_command sha256sum
+      ride_require_command firefox
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        ride_die "CyberChef destination already exists; refusing to overwrite"
+      fi
+      umask 022
+      mkdir -p "$base"
+      temporary=$(mktemp -d "$base/.cyberchef.XXXXXXXX") || ride_die "cannot stage CyberChef"
+      if ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 300 --max-filesize 90000000 \
+          "$source_uri" -o "$temporary/release.zip" ||
+         ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 60 --max-filesize 20000 \
+          "$license_uri" -o "$temporary/LICENSE"; then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      if [[ "$(sha256sum -- "$temporary/release.zip" | cut -d' ' -f1)" != "$archive_sha" ||
+            "$(sha256sum -- "$temporary/LICENSE" | cut -d' ' -f1)" != "$license_sha" ]]; then
+        rm -rf -- "$temporary"
+        ride_error "CyberChef release or license digest verification failed"
+        return 1
+      fi
+      if ! python3 "$RIDE_ROOT/lib/v3/cyberchef_archive.py" extract \
+          "$temporary/release.zip" "$temporary/payload"; then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      if ! mv -- "$temporary/LICENSE" "$temporary/payload/LICENSE"; then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      if ! cat > "$temporary/payload/ride-cyberchef.desktop" <<'DESKTOP'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CyberChef
+Comment=Offline CyberChef analysis in Firefox
+Icon=/opt/ride-fedora/cyberchef/payload/images/cyberchef-128x128.png
+Exec=firefox file:///opt/ride-fedora/cyberchef/payload/CyberChef_v11.5.0.html
+Categories=Network;Utility;
+Terminal=false
+DESKTOP
+      then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      if ! python3 "$RIDE_ROOT/lib/v3/cyberchef_archive.py" manifest \
+          "$temporary/payload" "$temporary/manifest.json"; then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      printf '%s\n' "$marker" > "$temporary/.ride-owned"
+      rm -- "$temporary/release.zip"
+      chmod 0755 "$temporary"
+      if ! mv -T -- "$temporary" "$environment"; then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      if ! ln -s -- "$environment/payload/ride-cyberchef.desktop" "$link"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      ;;
+    absent)
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        if ! { [[ -d "$environment" && ! -L "$environment" ]] &&
+               ride_cyberchef_owned_contents "$environment" &&
+               [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+                  "$(cat "$environment/.ride-owned")" == "$marker" &&
+                  -L "$link" && "$(readlink -- "$link")" == "$environment/payload/ride-cyberchef.desktop" &&
+                  "$(sha256sum -- "$environment/payload/LICENSE" | cut -d' ' -f1)" == "$license_sha" ]] &&
+               python3 "$RIDE_ROOT/lib/v3/cyberchef_archive.py" verify "$environment/payload" "$environment/manifest.json"; }; then
+          ride_die "refusing to remove modified or unowned CyberChef files"
+        fi
+        rm -- "$link"
+        rm -rf -- "$environment"
+      fi
+      ;;
+    *) ride_die "invalid CyberChef state: $state" ;;
   esac
 }
 

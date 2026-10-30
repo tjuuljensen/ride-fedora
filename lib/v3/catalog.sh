@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "gsettings-boolean")) and
+      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean")) and
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
@@ -33,7 +33,7 @@ ride_validate_catalog() {
       (.licenseUri | type == "string" and startswith("https://")) and
       (if .kind == "package" then
         .distribution == "installed" and .deploymentId == "local-installed" and
-        (.artifactFormat | IN("rpm", "wheel", "script")) and
+        (.artifactFormat | IN("rpm", "wheel", "script", "zip")) and
         (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
         (.sourceId as $defaultSource | (.sourceProviders // []) | type == "array" and
           ([.[].sourceId] | length == (unique | length)) and
@@ -69,6 +69,13 @@ ride_validate_catalog() {
          (.sourceUri | split("/")[5]) == (.licenseUri | split("/")[5]) and
          (.sourceSha256 | type == "string" and test("^[0-9a-f]{64}$")) and
          (.licenseSha256 | type == "string" and test("^[0-9a-f]{64}$")))
+       elif .handler == "pinned-zip" then (.kind == "package" and .id == "package.cyberchef" and
+         .scope == "system" and .artifactFormat == "zip" and
+         .sourceId == "github-release-pinned" and .verification == "github-release-api-sha256" and
+         .sourceUri == "https://github.com/gchq/CyberChef/releases/download/v11.5.0/CyberChef_8cd426dd4f40f1423912d5fad91b578a86a65112.zip" and
+         .licenseUri == "https://raw.githubusercontent.com/gchq/CyberChef/v11.5.0/LICENSE" and
+         .sourceSha256 == "f6478925d3eaa16ec08626a85f5b85eed10d531a5e18700615fed7ecb024cccf" and
+         .licenseSha256 == "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd")
        else (.kind == "artifact" and (.githubRepository | type == "string" and test("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")) and
              (.assetSuffix | type == "string" and test("^-[A-Za-z0-9_.-]+$")) and
              (.maxBytes | type == "number" and . > 0 and . <= 104857600)) end)
@@ -137,7 +144,7 @@ ride_source_signature() {
   local version=${2:-2} fields
   case "$version" in
     1) fields='{id, sourceId, handler, packageName, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
-    2) fields='if .handler == "pinned-script" then
+    2) fields='if (.handler | IN("pinned-script", "pinned-zip")) then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
           scope, sourceUri, sourceSha256, licenseUri, licenseSha256, verification, targets, recovery}
        else

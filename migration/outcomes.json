@@ -987,17 +987,25 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.cyberchef"
+      ],
       "evidence": [
-        "docs/migrations/forensic-isolated-01.md"
+        "docs/migrations/forensic-isolated-01.md",
+        "docs/migrations/forensic-isolated-01-cyberchef.md",
+        "docs/acceptance/package.cyberchef.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept CyberChef for v3.0 on 2026-10-30. Pin a verified offline artifact, own its desktop destination, and test apply and removal while preserving user data.",
-      "v31Hardening": [],
-      "reason": "The v2 installer selects a mutable GitHub ZIP, extracts into a system path, and writes a desktop launcher without an owned artifact/notice/recovery contract; Linux v3 has no portable handler.",
-      "reviewTrigger": "A concrete offline CyberChef deployment with pinned release provenance, owned destination and launcher, preserved notices and user data, and Fedora 44 VM acceptance.",
+      "nextAction": "Keep CyberChef opt-in with --allow-candidate; H028 covers visual interaction, browser compatibility, and update behavior.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H028"
+      ],
+      "reason": "The official v11.5.0 offline ZIP and tagged Apache license are hash-checked, deployed to an owned system path with a desktop link, and passed a Fedora 44 Workstation lifecycle.",
+      "reviewTrigger": "Recheck release digest, bundled notices, browser file-URI behavior, manifest verification, and owned recovery when upstream or Fedora target changes.",
       "v30Decision": "keep"
     },
     {
@@ -4737,9 +4745,13 @@
         "docs/migrations/forensic-isolated-01.md",
         "docs/acceptance/package.exiftool.md",
         "docs/migrations/forensic-isolated-01-unfurl.md",
-        "docs/acceptance/package.dfir-unfurl.md"
+        "docs/acceptance/package.dfir-unfurl.md",
+        "docs/migrations/forensic-isolated-01-asn.md",
+        "docs/acceptance/package.asn.md",
+        "docs/migrations/forensic-isolated-01-cyberchef.md",
+        "docs/acceptance/package.cyberchef.md"
       ],
-      "nextAction": "UnfURL is operable opt-in; continue VMFS access, ASN, CyberChef, and Chepy with separate source and recovery paths."
+      "nextAction": "ASN, UnfURL, and CyberChef are operable opt-in; migrate Chepy in an isolated environment and find a working VMFS reader path."
     },
     {
       "id": "forensic-isolated-02",
@@ -5737,6 +5749,12 @@
       "id": "H027",
       "title": "ASN live lookup and optional server behavior",
       "trigger": "After pinned Fedora 44 Workstation script and prerequisite lifecycle acceptance, test representative live lookups, upstream service failures, and any explicitly requested server mode with its separate exposure and recovery review.",
+      "status": "queued"
+    },
+    {
+      "id": "H028",
+      "title": "CyberChef offline browser behavior and updates",
+      "trigger": "After Fedora 44 Workstation offline ZIP lifecycle acceptance, test representative recipe interactions, browser compatibility, visual behavior, and a version-update path that preserves user data.",
       "status": "queued"
     }
   ]

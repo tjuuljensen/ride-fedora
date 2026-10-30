@@ -1,11 +1,11 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-133 v2 `package.*` outcomes: 51 mapped to runnable v3 operations, 9 replaced,
-10 retired, and 63 unsupported. The five path groups below assess the **70
+133 v2 `package.*` outcomes: 52 mapped to runnable v3 operations, 9 replaced,
+10 retired, and 62 unsupported. The five path groups below assess the **70
 original unsupported or retired outcomes**; the 10 original replacement
-assessments, 51 existing v3 mappings, and six newly scoped server outcomes
-follow. The 51 mapped outcomes have catalog and acceptance evidence. The
+assessments, 52 existing v3 mappings, and six newly scoped server outcomes
+follow. The 52 mapped outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
 disposition, risk, target, evidence, and next action.
 
@@ -79,7 +79,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.BulkExtractor` | Use a pinned current release and preserve forensic output. | [Batch review](forensic-isolated-04.md) |
 | `workstation:package.Chepy` | Build or install in a pinned isolated environment, not global pip. | [Batch review](forensic-isolated-01.md) |
 | `workstation:package.Chrome` | Use an owned official package source and preserve browser profile data. | [Batch review](publisher-apps-11.md) |
-| `workstation:package.CyberChef` | Pin the offline artifact, notices, desktop entry, and owned destination. | [Batch review](forensic-isolated-01.md) |
+| `workstation:package.CyberChef` | The pinned official ZIP, tagged license, bundled notices, and owned desktop launcher now pass an opt-in lifecycle. | [Acceptance](../acceptance/package.cyberchef.md) |
 | `workstation:package.Discord` | Choose verified publisher RPM or owned Flatpak source; preserve profile data. | [Batch review](publisher-apps-10.md) |
 | `workstation:package.Edge` | Choose channel and own Microsoft repository/key without affecting other products. | [Batch review](publisher-apps-11.md) |
 | `workstation:package.HandBrake` | Accept RPM Fusion trust, then choose CLI or GUI package scope. | [Batch review](provider-foundation-07.md) |
@@ -152,10 +152,10 @@ changes and must not be labeled EOL.
 | `workstation:package.YubikeyManager` | The old Manager GUI reached EOL; Yubico Authenticator is a separate product. | [Batch review](publisher-apps-08.md) |
 | `workstation:package.YubikeyPersTool` | The old GUI is archived; Yubico Authenticator and ykman are separate paths. | [Batch review](publisher-apps-14.md) |
 
-## Existing v3 package mappings (51)
+## Existing v3 package mappings (52)
 
 These outcomes already have runnable v3 mappings: 30 supported on their
-declared targets and 21 operable only as opt-in candidates. The linked
+declared targets and 22 operable only as opt-in candidates. The linked
 acceptance records and [ledger](../../migration/outcomes.json) state each
 target and limit; this review does not broaden their support matrix.
 
@@ -169,6 +169,7 @@ target and limit; this review does not broaden their support matrix.
 | `workstation:package.Binwalk` | `package.binwalk` | supported | [Acceptance](../acceptance/package.binwalk.md) |
 | `workstation:package.Cheat` | `package.cheat` | supported | [Acceptance](../acceptance/package.cheat.md) |
 | `workstation:package.Chromium` | `package.chromium` | opt-in candidate | [Acceptance](../acceptance/package.chromium.md) |
+| `workstation:package.CyberChef` | `package.cyberchef` | opt-in candidate | [Acceptance](../acceptance/package.cyberchef.md) |
 | `workstation:package.ClementinePlayer` | `package.clementine` | opt-in candidate | [Acceptance](../acceptance/package.clementine.md) |
 | `workstation:package.CommanderFileMgrs` | `package.gnome-commander`, `package.mc` | opt-in candidate | [Acceptance](../acceptance/package.gnome-commander.md) |
 | `workstation:package.Dc3dd` | `package.dc3dd` | supported | [Acceptance](../acceptance/package.dc3dd.md) |

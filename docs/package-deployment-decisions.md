@@ -20,7 +20,7 @@ drift blocks promotion of a package operation.
 | Distribution | Installed application or portable files | `installed` |
 | Deployment | One owned instance of that distribution | `local-installed` |
 | Provider | Approved route to an exact artifact/build | `fedora-rpm` |
-| Artifact format | Bytes acquired or installed | `rpm`, `wheel` |
+| Artifact format | Bytes acquired or installed | `rpm`, `wheel`, `script`, `zip` |
 | Scope | System or intended user | `system` for DNF, `user` for Volatility3 |
 | Destination | Package-manager identity or owned path | RPM name or Volatility3 environment |
 
@@ -43,6 +43,10 @@ against ambiguous provider/build state, not a rule that portable and installed
 editions are mutually exclusive. Portable deployments and kit assembly require
 their own identifiers, destination selection, manifests, handlers, state
 migration, and VM evidence before the runtime can allow coexistence.
+
+CyberChef's pinned ZIP is deployed as an owned system application with a
+desktop entry under this single `installed` slot. A future separate portable
+instance needs its own deployment identity and coexistence evidence.
 
 ## Acquisition and installation
 

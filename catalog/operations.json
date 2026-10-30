@@ -538,6 +538,47 @@
       "acceptanceEvidence": "docs/acceptance/package.asn.md"
     },
     {
+      "id": "package.cyberchef",
+      "kind": "package",
+      "name": "CyberChef offline desktop app",
+      "group": "forensics",
+      "description": "Install the pinned CyberChef offline web app and an owned Firefox desktop launcher without changing browser profiles.",
+      "handler": "pinned-zip",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "cyberchef",
+      "productUri": "https://github.com/gchq/CyberChef",
+      "license": "Apache-2.0",
+      "licenseUri": "https://raw.githubusercontent.com/gchq/CyberChef/v11.5.0/LICENSE",
+      "licenseSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "sourceUri": "https://github.com/gchq/CyberChef/releases/download/v11.5.0/CyberChef_8cd426dd4f40f1423912d5fad91b578a86a65112.zip",
+      "sourceSha256": "f6478925d3eaa16ec08626a85f5b85eed10d531a5e18700615fed7ecb024cccf",
+      "verification": "github-release-api-sha256",
+      "sourceId": "github-release-pinned",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "zip",
+      "acceptanceEvidence": "docs/acceptance/package.cyberchef.md"
+    },
+    {
       "id": "package.pwgen",
       "kind": "package",
       "name": "Password generator",
