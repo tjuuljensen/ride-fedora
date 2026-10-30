@@ -1048,20 +1048,21 @@
       ],
       "selectorCoverage": "commented",
       "family": "forensic-isolated",
-      "batch": "forensic-isolated-03",
-      "risk": "medium",
+      "batch": "forensic-isolated-08",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
+      "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/forensic-isolated-03.md"
+        "docs/migrations/forensic-isolated-03.md",
+        "docs/migrations/forensic-isolated-08-firefox.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept Firefox forensic parsing capability for v3.0 on 2026-10-30. Find a maintained licensed parser and preserve user profile data.",
+      "nextAction": "Probe pinned Apache-2.0 browser-forensic on Fedora 44 with a seeded disposable Firefox profile, read-only input hashes, explicit secret handling, and owned install/recovery; keep Plaso as a narrower shared timeline path.",
       "v31Hardening": [],
-      "reason": "The upstream Dumpzilla repository declares the project discontinued and its original script has no accepted license, pinned artifact, or current Firefox-profile compatibility evidence.",
-      "reviewTrigger": "A maintained licensed source supports current Firefox profiles and passes isolated install, privacy, and removal checks.",
+      "reason": "The original Dumpzilla script is discontinued and has no accepted current Firefox compatibility or owned inverse. The owner kept Firefox forensic analysis, and no replacement has yet passed seeded-profile, secret-handling, and recovery checks.",
+      "reviewTrigger": "A licensed pinned successor covers representative Firefox artifacts on a seeded profile, preserves inputs and secrets, and passes owned Fedora 44 lifecycle checks.",
       "v30Decision": "keep"
     },
     {
@@ -4785,13 +4786,22 @@
     {
       "id": "forensic-isolated-03",
       "family": "forensic-isolated",
-      "title": "Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor",
+      "title": "Forensic Isolated 03: Binwalk, PyhtonAutopep8, Macvendor",
       "evidence": [
         "docs/migrations/forensic-isolated-03.md",
         "docs/acceptance/package.binwalk.md",
         "docs/acceptance/package.autopep8.md"
       ],
-      "nextAction": "Owner kept Dumpzilla and both standalone MAC vendor lookup scripts; implement parser path in v3.0 and defer managed script lifecycle to H024."
+      "nextAction": "Binwalk and autopep8 are supported; the two MAC vendor scripts are standalone replacements, with managed install deferred to H024. Firefox parsing has its own high-risk batch."
+    },
+    {
+      "id": "forensic-isolated-08",
+      "family": "forensic-isolated",
+      "title": "Forensic Isolated 08: Firefox profile analysis successor",
+      "evidence": [
+        "docs/migrations/forensic-isolated-08-firefox.md"
+      ],
+      "nextAction": "Pin and probe browser-forensic against a seeded Firefox profile, then add an owned opt-in path if read-only data and secret recovery gates pass."
     },
     {
       "id": "forensic-isolated-04",

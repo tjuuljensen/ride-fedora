@@ -72,7 +72,7 @@ Function coverage: 16 active in a server preset, 3 commented-only, 2 library-onl
 | `package.UnfURL` | `InstallUnfURL`, `RemoveUnfURL` | `InstallUnfURL`: active, `RemoveUnfURL`: library only | unsupported: [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned isolated Python environment. | `forensic-isolated-01` / operable |
 | `package.CyberChef` | `InstallCyberChef`, `RemoveCyberChef` | `InstallCyberChef`: active, `RemoveCyberChef`: library only | unsupported: [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned offline artifact and owned desktop destination. | `forensic-isolated-01` / operable |
 | `package.Chepy` | `InstallChepy`, `RemoveChepy` | `InstallChepy`: active, `RemoveChepy`: library only | unsupported: [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned isolated build and owned inverse. | `forensic-isolated-01` / operable |
-| `package.Dumpzilla` | `InstallDumpzilla`, `RemoveDumpzilla` | `InstallDumpzilla`: commented, `RemoveDumpzilla`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `forensic-isolated-03` / resolved |
+| `package.Dumpzilla` | `InstallDumpzilla`, `RemoveDumpzilla` | `InstallDumpzilla`: commented, `RemoveDumpzilla`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `forensic-isolated-08` / resolved |
 | `package.NetworkMiner` | `InstallNetworkMiner`, `RemoveNetworkMiner` | `InstallNetworkMiner`: active, `RemoveNetworkMiner`: library only | deferred: Align product identity with Windows; review Linux packaging. | `forensic-isolated-05` / resolved |
 | `package.Pwgen` | `InstallPwgen`, `RemovePwgen` | `InstallPwgen`: active, `RemovePwgen`: library only | deferred: Candidate native repository package. | `native-rpm-01` / supported |
 | `package.Htop` | `InstallHtop`, `RemoveHtop` | `InstallHtop`: active, `RemoveHtop`: library only | deferred: Candidate native repository package. | `native-rpm-01` / supported |
@@ -256,7 +256,6 @@ initial assessment above. The ledger records each reason and review trigger.
 | `workstation:package.Flatpak` | `replace` | `provider-foundation-11` |
 | `workstation:package.Volatility` | `retire` | `forensic-isolated-02` |
 | `workstation:package.Macvendor` | `replace` | `forensic-isolated-03` |
-| `workstation:package.Dumpzilla` | `retire` | `forensic-isolated-03` |
 | `workstation:package.MicrosoftTeams` | `retire` | `publisher-apps-09` |
 | `workstation:package.AtomEditor` | `retire` | `publisher-apps-10` |
 | `workstation:setting.AtomTelemetry` | `retire` | `resolution-review-01` |

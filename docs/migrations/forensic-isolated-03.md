@@ -1,18 +1,19 @@
-# Forensic isolated batch 03: native analyzers and legacy scripts
+# Forensic isolated batch 03: native analyzers and MAC vendor scripts
 
-The owner kept Firefox forensic parsing in the v3.0 fast-track review; the
-old Dumpzilla source remains retired while a maintained replacement is sought.
+Firefox profile analysis moved into a separate high-risk
+[successor batch](forensic-isolated-08-firefox.md). The old Dumpzilla
+script is discontinued; its capability remains kept for v3.0.
 
-Status: **complete: two supported RPMs, one retired tool, one standalone
+Status: **complete: two supported RPMs and one standalone
 replacement**, 2026-10-30. This batch owns the v2
-`Binwalk`, `PyhtonAutopep8`, `Dumpzilla`, and `Macvendor` install/remove
-outcomes, including the misspelled Python selector. The first two were RPM
-and user-global pip installs; the latter two fetched mutable scripts into
+`Binwalk`, `PyhtonAutopep8`, and `Macvendor` install/remove outcomes,
+including the misspelled Python selector. The first two were RPM and
+user-global pip installs; Macvendor fetched a mutable script into
 `/usr/local/bin` without verifying content. They are not one bundle.
 
 ## Completion criteria defined before implementation
 
-- Preserve the four v2 mappings and verify current publisher, license,
+- Preserve the three v2 mappings and verify current publisher, license,
   acquisition, and detection. Use Fedora 44 signed RPMs for Binwalk and
   autopep8 if the exact Workstation package and executable are available.
   Their package states must be reversible without touching firmware samples,
@@ -22,11 +23,12 @@ and user-global pip installs; the latter two fetched mutable scripts into
   unchanged repeat, status, restore, and explicit remove. Check RPM inventory
   before and after, including dependencies. Reuse the unchanged DNF handler's
   mocked failure evidence. Promote only passing targets to supported.
-- For Dumpzilla and Macvendor, require a current licensed source, pinned
-  artifact, owned destination, no overwrite of unowned scripts, a safe
-  inverse, focused mocked tests, and one disposable-VM happy path before an
-  opt-in candidate is counted operable. Otherwise record a non-runnable
-  v3.0 decision with a concrete reopen trigger.
+- For Macvendor, require a current licensed source, pinned artifact, owned
+  destination, no overwrite of unowned scripts, a safe inverse, focused
+  mocked tests, and one disposable-VM happy path before a managed opt-in
+  candidate is counted operable. Otherwise keep the standalone replacement
+  distinct from a catalog install. Dumpzilla's broader profile and secret
+  handling checks belong to its high-risk batch.
 - Compare Windows catalog/profile/run-state behavior, update the outcome
   ledger, evidence, generated reports, and migration plan. Investigate a
   failed VM run before retrying.
@@ -44,12 +46,9 @@ its old Python plugin behavior is not included in the install claim. Neither
 operation reads a firmware sample or formats a user file. The v2 global pip
 environment is outside autopep8's new RPM ownership.
 
-`Dumpzilla` is **retired**. The [upstream repository](https://github.com/Busindre/dumpzilla)
-itself says the project is discontinued; the v2 function fetched a mutable
-script into `/usr/local/bin`. No license, pinned artifact, or compatibility
-evidence for current Firefox profile data has been accepted. A maintained
-licensed browser forensics tool with an isolated, privacy-preserving install
-would be a new review. No browser profile data is removed by this decision.
+`Dumpzilla` itself is discontinued. The owner kept the Firefox analysis
+capability, now tracked in the separate
+[high-risk successor batch](forensic-isolated-08-firefox.md).
 
 `Macvendor` is **replaced by the owner's standalone
 [`mac-vendor.py`](../../reference/mac-vendor.py) and

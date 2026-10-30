@@ -753,3 +753,14 @@ profile, or shared data contract changed. A future Linux image reader would
 be a platform-specific acquisition and storage-safety path. Recheck
 Windows product identity and shared run-state behavior before adding it
 to the Linux catalog or claiming cross-platform alignment.
+
+### Fedora Firefox forensic successor preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` while separating the kept
+Firefox analysis capability from the discontinued Dumpzilla script.
+Windows has no matching Dumpzilla or browser-forensic operation. This
+review changes no executable Linux catalog, profile, or run contract.
+A future successor must preserve seeded browser data and keep secret
+output explicit; revisit product identity and shared recovery behavior
+before adding it to either platform.

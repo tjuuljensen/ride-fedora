@@ -44,7 +44,7 @@ assessment, not an automatic retirement decision.
 | --- | --- | --- |
 | `workstation:package.AtomEditor` | GitHub sunset Atom; owner retired the full editor capability from this migration. | [Batch review](publisher-apps-10.md) |
 | `workstation:package.AtomPlugins` | Depends on sunset Atom; owner retired the plugin capability from this migration. | [Batch review](publisher-apps-10.md) |
-| `workstation:package.Dumpzilla` | Upstream declares the script discontinued; a new Firefox forensic tool is separate. | [Batch review](forensic-isolated-03.md) |
+| `workstation:package.Dumpzilla` | Upstream declares the script discontinued, but Firefox profile analysis remains kept; compare pinned browser-forensic with the narrower shared Plaso path and prove seeded-data recovery. | [Batch review](forensic-isolated-08-firefox.md) |
 | `workstation:package.GnomeExtInstaller` | The exact upstream helper is archived; owner deferred retirement, while GNOME extension management needs a new path. | [Batch review](provider-foundation-10.md) |
 | `workstation:package.NautilusHash` | The exact GtkHash Nautilus integration is absent on Fedora 44; owner retired the full checksum context-action capability. | [Batch review](native-rpm-03.md) |
 | `workstation:package.NautilusImageTools` | The old Nautilus image converter lacks a Fedora 44 build; owner retired the full image context-action capability. | [Batch review](native-rpm-03.md) |

@@ -218,17 +218,18 @@ supplied runtime, without claiming a RIDE install. [Batch 12](migrations/provide
 closed the commented Snapd RPM pair pending service, confinement, and
 seeded-data recovery evidence.
 [Forensic isolated batch 01](migrations/forensic-isolated-01.md) accepted
-Fedora ExifTool with an exact-target RPM lifecycle, retired the no-op VMFS
-placeholder, and recorded four active third-party or Python tool paths as
-non-runnable until their artifact, isolation, and ownership contracts pass.
+Fedora ExifTool and four opt-in forensic tools. The old VMFS no-op is
+retired, while [its kept access capability](migrations/forensic-isolated-07-vmfs.md)
+remains a high-risk v3.0 gap pending a genuine VMFS6 fixture.
 [Forensic isolated batch 02](migrations/forensic-isolated-02.md) passed a
 non-root, hash-pinned Volatility 3 core venv as an opt-in candidate, retired
 the archived Volatility 2 line, and recorded Plaso and Autopsy as
 non-runnable pending their separate Linux package and data contracts.
 [Forensic isolated batch 03](migrations/forensic-isolated-03.md) promoted
-Fedora Binwalk and autopep8 after a shared exact-target RPM lifecycle,
-retired the discontinued Dumpzilla script, and documented the maintained
-standalone MAC vendor lookup as a non-runnable replacement.
+Fedora Binwalk and autopep8 after a shared exact-target RPM lifecycle and
+documented standalone MAC vendor lookup as a non-runnable replacement.
+The old Dumpzilla script is discontinued, while the kept Firefox analysis
+capability has a separate [high-risk successor batch](migrations/forensic-isolated-08-firefox.md).
 [Isolated forensic decisions 04-06](migrations/forensic-isolated-04.md)
 close the BulkExtractor source build, NetworkMiner capture-bearing portable
 tree, and email-header service as non-runnable in v3.0; each has a specific
