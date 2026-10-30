@@ -529,10 +529,10 @@
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept Xplico; find a current robust installation path or alternative, then review license, deployment, detection, and owned inverse.",
+      "nextAction": "Owner kept Xplico; upstream has no listed Fedora build beyond Fedora 29. Compare a pinned isolated source build with Fedora 44 Zeek Core for the requested extraction workflow, then verify license, detection, output, and inverse.",
       "v31Hardening": [],
       "reason": "Owner kept the Xplico capability for v3.0 on 2026-10-30; the v2 link-only pair is not an implementation.",
-      "reviewTrigger": "Owner kept Xplico; find a current robust installation path or alternative, then review license, deployment, detection, and owned inverse.",
+      "reviewTrigger": "Owner kept Xplico; upstream has no listed Fedora build beyond Fedora 29. Compare a pinned isolated source build with Fedora 44 Zeek Core for the requested extraction workflow, then verify license, detection, output, and inverse.",
       "v30Decision": "keep"
     },
     {
@@ -2116,10 +2116,10 @@
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept host monitoring; review a maintained replacement and verified acquisition with owned destination, detection, and recovery rather than the v2 HTTP script.",
+      "nextAction": "Owner kept resource monitoring; compare the old one-shot health output with Fedora 44 Glances, then choose a native RPM operation where behavior matches and preserve user configuration.",
       "v31Hardening": [],
       "reason": "Owner kept the monitoring capability behind TecmintMonitorSh for v3.0 on 2026-10-30; the unverified v2 HTTP script remains retired.",
-      "reviewTrigger": "Owner kept host monitoring; review a maintained replacement and verified acquisition with owned destination, detection, and recovery rather than the v2 HTTP script.",
+      "reviewTrigger": "Owner kept resource monitoring; compare the old one-shot health output with Fedora 44 Glances, then choose a native RPM operation where behavior matches and preserve user configuration.",
       "v30Decision": "keep"
     },
     {
@@ -5408,7 +5408,7 @@
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
-      "nextAction": "Owner kept Xplico and monitoring, deferred Galleta and two screensaver outcomes, and retired AtomTelemetry; review replacements and shared lock timing."
+      "nextAction": "Owner kept Xplico and monitoring; compare pinned Xplico or Zeek paths and Fedora Glances, while deferred Galleta and screensaver choices remain open."
     },
     {
       "id": "publisher-apps-17",
