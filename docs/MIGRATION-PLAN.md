@@ -22,7 +22,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallKernelTools` | supported | Split into signed Fedora `kernel-devel` and `kernel-headers` package installs; [VM evidence](acceptance/provider-kernel-tools.md) does not establish a matching module-build environment. |
 | `InstallDNFutils` | replaced | Fedora 44 Workstation has DNF5 and plugins; current `config-manager` and `download` commands passed the disposable-VM check. See [provider foundation batch 03](migrations/provider-foundation-03.md). |
 | `InstallEzaGitHub` | replaced | The unpinned ZIP path is a [non-runnable replacement](migrations/provider-foundation-08.md); Fedora `package.eza` passed [VM acceptance](acceptance/package.eza.md) for an installed Eza. |
-| `InstallFlathub` | deferred | [Flathub remote ownership](migrations/provider-foundation-09.md) needs scoped trust, detection, and inverse review. |
+| `InstallFlathub` | unsupported | [Flathub remote ownership](migrations/provider-foundation-09.md) needs a scoped handler, app preservation, and inverse evidence before it is runnable. |
 | `InstallAppImageLauncher` | deferred | Review maintained source and current desktop integration. |
 | `InstallExif` | deferred | Review product identity and official package. |
 | `InstallMd5deep` | deferred | Review current package and forensic use case. |
@@ -204,6 +204,12 @@ and closed that broad group operation without changing individual tool
 outcomes. [Batch 07](migrations/provider-foundation-07.md) closed the
 commented HandBrake RPM path pending the RPM Fusion provider and a chosen
 CLI or GUI deployment. These are documented non-runnable dispositions.
+[Provider batch 09](migrations/provider-foundation-09.md) closed the active
+Flathub remote until an ownership-aware handler is tested. [Batch 11](migrations/provider-foundation-11.md)
+replaced the commented Flatpak package pair with Fedora Workstation's
+supplied runtime, without claiming a RIDE install. [Batch 12](migrations/provider-foundation-12.md)
+closed the commented Snapd RPM pair pending service, confinement, and
+seeded-data recovery evidence.
 The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,

@@ -3,7 +3,7 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**46/180 complete (25.6%)**: 19 supported, 10 opt-in candidate, 5 replaced, 5 retired, 0 private, 7 unsupported; 134 unresolved.
+**49/180 complete (27.2%)**: 19 supported, 10 opt-in candidate, 6 replaced, 5 retired, 0 private, 9 unsupported; 131 unresolved.
 
 Runnable outcomes: 29; 10 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
@@ -22,10 +22,10 @@ Runnable outcomes: 29; 10 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `provider-foundation-06` | Split Security Lab DNF group | medium 1 | 1/1 | [provider-foundation-06.md](../../docs/migrations/provider-foundation-06.md) | Reopen only for a bounded individually reviewed tool set; continue separate forensic migrations. |
 | `provider-foundation-07` | HandBrake RPM Fusion source and package split | medium 1 | 1/1 | [provider-foundation-07.md](../../docs/migrations/provider-foundation-07.md) | Reopen after accepted RPM Fusion provider trust and a requested HandBrake CLI or GUI deployment. |
 | `provider-foundation-08` | Eza Fedora and GitHub source ownership | medium 2 | 2/2 | [provider-foundation-08.md](../../docs/migrations/provider-foundation-08.md), [package.eza.md](../../docs/acceptance/package.eza.md) | Continue to provider-foundation-09; reopen portable Eza only on the documented ownership and provenance trigger. |
-| `provider-foundation-09` | Flathub remote ownership and recovery | medium 1 | 0/1 | [provider-foundation-09.md](../../docs/migrations/provider-foundation-09.md) | Define a scoped Flatpak remote handler, trust check, and inverse before acceptance. |
+| `provider-foundation-09` | Flathub remote ownership and recovery | medium 1 | 1/1 | [provider-foundation-09.md](../../docs/migrations/provider-foundation-09.md) | Reopen only for an explicit Flathub use case with owned remote and app-preserving recovery. |
 | `provider-foundation-10` | GNOME extension installer acquisition and owned path | medium 1 | 1/1 | [provider-foundation-10.md](../../docs/migrations/provider-foundation-10.md) | Reopen only if a maintained licensed GNOME-compatible installer with owned recovery becomes available. |
-| `provider-foundation-11` | Flatpak runtime and application-preserving inverse | high 1 | 0/1 | [provider-foundation-11.md](../../docs/migrations/provider-foundation-11.md) | Prove preservation of seeded Flatpak apps, remote, and data before runnable support or a v3.0 disposition. |
-| `provider-foundation-12` | Snapd service and package-manager ownership | high 1 | 0/1 | [provider-foundation-12.md](../../docs/migrations/provider-foundation-12.md) | Define privileged service, confinement, installed snap data, and safe inverse before runnable support. |
+| `provider-foundation-11` | Flatpak runtime and application-preserving inverse | high 1 | 1/1 | [provider-foundation-11.md](../../docs/migrations/provider-foundation-11.md) | Reopen only if RIDE must repair an absent Fedora Workstation Flatpak runtime with data-preserving recovery. |
+| `provider-foundation-12` | Snapd service and package-manager ownership | high 1 | 1/1 | [provider-foundation-12.md](../../docs/migrations/provider-foundation-12.md) | Reopen only for an explicit Snap use case with service, confinement, and seeded-data recovery evidence. |
 | `forensic-isolated-01` | Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy | medium 6 | 0/6 | — | Assess VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `forensic-isolated-02` | Forensic Isolated 02: NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr | medium 6 | 0/6 | — | Assess NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `forensic-isolated-03` | Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor | medium 4 | 0/4 | — | Assess Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor; record v2 behavior, current source, inverse, and risk-based completion criteria. |

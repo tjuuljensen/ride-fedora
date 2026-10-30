@@ -329,15 +329,17 @@
       "batch": "provider-foundation-11",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "migrate",
-      "progress": "assessed",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/provider-foundation-11.md"
       ],
-      "blocker": "The v2 inverse deletes all Flatpak applications and the runtime is pre-installed in the pinned image; a data-preserving v3 contract is unproved.",
-      "nextAction": "Design an installed-only or ownership-aware Flatpak runtime operation and prove seeded app/data preservation in a disposable VM.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Use Fedora Workstation supplied Flatpak runtime; reopen only if RIDE repair of an absent runtime is required.",
+      "v31Hardening": [],
+      "reason": "Fedora Workstation supplies Flatpak by default and the pinned target has it; the v2 uninstall-all inverse would delete unowned apps and no RIDE lifecycle is accepted.",
+      "reviewTrigger": "A declared Workstation host needs RIDE to repair absent Flatpak while preserving seeded apps, remotes, and data through failure and recovery."
     },
     {
       "key": "workstation:package.Flathub",
@@ -350,13 +352,17 @@
       "batch": "provider-foundation-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Flathub remote ownership, signature trust, pre-existing remote state, and safe inverse are not yet assessed.",
-      "nextAction": "Assess a separate Flatpak remote handler and owned inverse before any runnable operation.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/provider-foundation-09.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen for an explicit Flathub use case after fixed-scope remote ownership and exact-target recovery tests.",
+      "v31Hardening": [],
+      "reason": "The active v2 remote-add has no owned remote journal and its inverse is not remote-delete; v3 lacks a scoped Flatpak remote handler and app-preserving inverse.",
+      "reviewTrigger": "An explicit Flathub use case with URL/key detection, ownership-aware system or user remote handler, attached-app refusal, and Fedora 44 Workstation VM acceptance."
     },
     {
       "key": "workstation:package.AppImageLauncher",
@@ -388,13 +394,17 @@
       "batch": "provider-foundation-12",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "snapd is a privileged package manager; package install alone does not prove safe service activation, confinement, app-data preservation, or inverse.",
-      "nextAction": "Define snapd service and data ownership, then run isolated security/recovery acceptance or close non-runnable.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/provider-foundation-12.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only for a concrete Snap use case with confinement, service, app-data, and recovery requirements.",
+      "v31Hardening": [],
+      "reason": "The v2 RPM-only pair does not establish usable Snapd, service/confined operation, or preservation of pre-existing snap apps and data; no high-risk recovery evidence exists.",
+      "reviewTrigger": "An explicit Snap application requirement with documented confinement mode and seeded-state Fedora 44 VM acceptance for install and safe inverse."
     },
     {
       "key": "workstation:package.Galleta",
@@ -3814,7 +3824,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-09.md"
       ],
-      "nextAction": "Define a scoped Flatpak remote handler, trust check, and inverse before acceptance."
+      "nextAction": "Reopen only for an explicit Flathub use case with owned remote and app-preserving recovery."
     },
     {
       "id": "provider-foundation-10",
@@ -3832,7 +3842,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-11.md"
       ],
-      "nextAction": "Prove preservation of seeded Flatpak apps, remote, and data before runnable support or a v3.0 disposition."
+      "nextAction": "Reopen only if RIDE must repair an absent Fedora Workstation Flatpak runtime with data-preserving recovery."
     },
     {
       "id": "provider-foundation-12",
@@ -3841,7 +3851,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-12.md"
       ],
-      "nextAction": "Define privileged service, confinement, installed snap data, and safe inverse before runnable support."
+      "nextAction": "Reopen only for an explicit Snap use case with service, confinement, and seeded-data recovery evidence."
     },
     {
       "id": "forensic-isolated-01",

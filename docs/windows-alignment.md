@@ -281,3 +281,19 @@ Linux-only decisions. The registered representation and deployment
 differences remain intentional; no unexplained shared-contract drift was
 found. Recheck if a repository or group handler is introduced, a shared
 product/source contract changes, or a release candidate is prepared.
+
+### Fedora provider foundation batches 09, 11, and 12, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` before resolving the
+[Flathub remote](migrations/provider-foundation-09.md),
+[Flatpak runtime](migrations/provider-foundation-11.md), and
+[Snapd](migrations/provider-foundation-12.md) source outcomes. None adds a
+Linux catalog operation, profile selection, or run-state change in v3.0.
+Fedora Workstation's existing Flatpak runtime is recorded as a non-runnable
+replacement of the old package pair; it is not a shared Windows product
+fact. Windows has no matching Flathub or Snapd catalog row in this revision.
+The registered source, deployment, and recovery differences remain
+intentional. No unexplained shared-contract drift was found. Recheck if
+either platform adds a remote or package-manager handler, changes ownership
+or recovery semantics, or reaches release review.
