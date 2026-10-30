@@ -4,6 +4,7 @@ import copy
 import json
 from pathlib import Path
 import re
+import shlex
 
 import pytest
 
@@ -625,6 +626,50 @@ def test_forensic_exiftool_fedora_package(vm):
                      installed_probes={"perl-Image-ExifTool":
                                        "command -v exiftool && exiftool -ver"})
     vm.run("test ! -e /usr/lib/exiftool")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_forensic_volatility3_user_environment(vm):
+    identifier = "package.volatility3"
+    environment = "/home/ride-test/.local/share/ride-fedora/tools/volatility3"
+    journal_dir = "/home/ride-test/.local/state/ride-fedora/runs"
+    sibling = "/home/ride-test/.local/share/ride-fedora/tools/keep.txt"
+
+    def user_ride(*args, timeout=120):
+        return vm.run(shlex.join((f"{vm.repo}/ride.sh", *args)), timeout=timeout)
+
+    def user_journal(run):
+        return json.loads(vm.run(f"cat {journal_dir}/{run}.json").stdout)
+
+    vm.run(f"test ! -e {environment} && test ! -e {journal_dir}")
+    vm.run(f"mkdir -p {environment.rsplit('/', 1)[0]} && printf keep > {sibling}")
+    guest_profile = vm.put_json("forensic-volatility3", profile(identifier))
+    planned = table_row(user_ride("plan", "--profile", guest_profile).stdout, identifier)
+    assert (planned["CURRENT"], planned["DESIRED"], planned["STATUS"], planned["SCOPE"]) == (
+        "absent", "installed", "candidate", "user")
+
+    applied = user_ride("apply", "--profile", guest_profile, "--allow-candidate", timeout=900)
+    first_id = run_id(applied.stdout)
+    assert user_journal(first_id)["steps"][0]["result"] == "changed"
+    vm.run(f"test -f {environment}/.ride-owned")
+    vm.run(f"{environment}/bin/python -c 'import importlib.metadata as m; "
+           "assert m.version(\"volatility3\") == \"2.28.2\"; "
+           "assert m.version(\"pefile\") == \"2024.8.26\"'")
+    vm.run(f"{environment}/bin/vol --help", timeout=120)
+    observed = table_row(user_ride("status", identifier).stdout, identifier)
+    assert (observed["OBSERVED"], observed["STATUS"]) == ("installed", "candidate")
+    repeated = user_ride("apply", "--profile", guest_profile, "--allow-candidate")
+    assert user_journal(run_id(repeated.stdout))["steps"][0]["result"] == "unchanged"
+
+    restored = user_ride("restore", "--run-id", first_id, "--allow-candidate")
+    assert user_journal(run_id(restored.stdout))["status"] == "complete"
+    vm.run(f"test ! -e {environment} && test \"$(cat {sibling})\" = keep")
+
+    installed = user_ride("install", identifier, "--allow-candidate", timeout=900)
+    assert user_journal(run_id(installed.stdout))["status"] == "complete"
+    removed = user_ride("remove", identifier, "--allow-candidate")
+    assert user_journal(run_id(removed.stdout))["status"] == "complete"
+    vm.run(f"test ! -e {environment} && test \"$(cat {sibling})\" = keep")
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")

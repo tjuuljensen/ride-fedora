@@ -429,6 +429,9 @@
           ],
           "architectures": [
             "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
           ]
         }
       },

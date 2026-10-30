@@ -214,6 +214,10 @@ seeded-data recovery evidence.
 Fedora ExifTool with an exact-target RPM lifecycle, retired the no-op VMFS
 placeholder, and recorded four active third-party or Python tool paths as
 non-runnable until their artifact, isolation, and ownership contracts pass.
+[Forensic isolated batch 02](migrations/forensic-isolated-02.md) passed a
+non-root, hash-pinned Volatility 3 core venv as an opt-in candidate, retired
+the archived Volatility 2 line, and recorded Plaso and Autopsy as
+non-runnable pending their separate Linux package and data contracts.
 The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
@@ -511,9 +515,9 @@ result are recorded. No entry below is part of the v3 default profile.
 | Preset install/remove pair | Preset state | v3 burndown item |
 | --- | --- | --- |
 | `InstallGalleta` / `RemoveGalleta` | commented out | Find maintained Fedora packaging or a verifiable upstream release; define real install and removal. |
-| `InstallPlaso` / `RemovePlaso` | commented out | Evaluate the documented opt-in Fedora COPR in a disposable VM; retain as deferred if install/removal cannot pass. |
-| `InstallAutopsy` / `RemoveAutopsy` | commented out | Evaluate upstream Linux setup and dependency ownership in a disposable VM; retain as deferred if recovery is unreliable. |
+| `InstallPlaso` / `RemovePlaso` | commented out | [Unsupported for v3.0](migrations/forensic-isolated-02.md) pending a chosen packaged source, isolated dependencies, and VM inverse. |
+| `InstallAutopsy` / `RemoveAutopsy` | commented out | [Unsupported for v3.0](migrations/forensic-isolated-02.md) pending signed Linux ZIP, Java dependencies, case-data recovery, and VM evidence. |
 | `InstallXplico` / `RemoveXplico` | commented out | Review current upstream maintenance, dependencies, and a trusted package source before adding an operation. |
-| `InstallVolatility` / `RemoveVolatility` | commented out | Treat the older Volatility line separately from Volatility3; check present support and a verifiable source before deciding whether to migrate or retire. |
-| `InstallVolatility3` / `RemoveVolatility3` | commented out | Isolated `package.volatility3` is a v3 candidate; verify the pinned core install, detection, removal, and failure recovery in a disposable VM before support. |
+| `InstallVolatility` / `RemoveVolatility` | commented out | [Retired](migrations/forensic-isolated-02.md): the v2 pair was a no-op and upstream Volatility 2 is archived; reopen for a concrete legacy need. |
+| `InstallVolatility3` / `RemoveVolatility3` | commented out | Isolated `package.volatility3` passed a [non-root VM happy path](acceptance/package.volatility3.md) as an opt-in core candidate; plugin and broader recovery work is queued for v3.1. |
 | `InstallVMFStools` / `RemoveVMFStools` | both commented out in this block; install also active later in the preset | [Retired as a no-op](migrations/forensic-isolated-01.md); reopen only for a concrete VMFS access need with licensed source and VM evidence. |

@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**55/180 complete (30.6%)**: 20 supported, 10 opt-in candidate, 6 replaced, 6 retired, 0 private, 13 unsupported; 125 unresolved.
+**59/180 complete (32.8%)**: 20 supported, 11 opt-in candidate, 6 replaced, 7 retired, 0 private, 15 unsupported; 121 unresolved.
 
-Runnable outcomes: 30; 10 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 31; 11 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -27,9 +27,11 @@ Runnable outcomes: 30; 10 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `provider-foundation-11` | Flatpak runtime and application-preserving inverse | high 1 | 1/1 | [provider-foundation-11.md](../../docs/migrations/provider-foundation-11.md) | Reopen only if RIDE must repair an absent Fedora Workstation Flatpak runtime with data-preserving recovery. |
 | `provider-foundation-12` | Snapd service and package-manager ownership | high 1 | 1/1 | [provider-foundation-12.md](../../docs/migrations/provider-foundation-12.md) | Reopen only for an explicit Snap use case with service, confinement, and seeded-data recovery evidence. |
 | `forensic-isolated-01` | Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy | medium 6 | 6/6 | [forensic-isolated-01.md](../../docs/migrations/forensic-isolated-01.md), [package.exiftool.md](../../docs/acceptance/package.exiftool.md) | Continue forensic-isolated-02; reopen specific scripts or isolated tools only on their documented requirements. |
-| `forensic-isolated-02` | Forensic Isolated 02: NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr | medium 6 | 0/6 | — | Assess NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `forensic-isolated-02` | Former CERT placeholders and isolated Volatility 3 | medium 4 | 4/4 | [forensic-isolated-02.md](../../docs/migrations/forensic-isolated-02.md), [package.volatility3.md](../../docs/acceptance/package.volatility3.md) | Continue forensic-isolated-03; keep Volatility 3 opt-in and complete named v3.1 plugin/recovery checks. |
 | `forensic-isolated-03` | Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor | medium 4 | 0/4 | — | Assess Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `forensic-isolated-04` | BulkExtractor source build and owned artifact | high 1 | 0/1 | [forensic-isolated-04.md](../../docs/migrations/forensic-isolated-04.md) | Assess acquisition, license, build, detection, and safe recovery. |
+| `forensic-isolated-05` | NetworkMiner publisher artifact and evidence data | high 1 | 0/1 | [forensic-isolated-05.md](../../docs/migrations/forensic-isolated-05.md) | Review official Linux runtime, licensed artifact, capture-data preservation, and owned inverse. |
+| `forensic-isolated-06` | Email header analyzer service and Python environment | high 1 | 0/1 | [forensic-isolated-06.md](../../docs/migrations/forensic-isolated-06.md) | Review current service source, bind scope, isolated Python environment, and safe recovery. |
 | `publisher-apps-01` | Publisher Apps 01: AppImageLauncher | medium 1 | 0/1 | — | Assess AppImageLauncher; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-02` | Publisher Apps 02: VeraCrypt | high 1 | 0/1 | — | Assess VeraCrypt; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-03` | Publisher Apps 03: VisualStudioCode, Brave | medium 2 | 0/2 | — | Assess VisualStudioCode, Brave; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -117,3 +119,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H008` | Review package-driven updates to pre-existing RPMs | After broad Fedora package VM happy paths; document package upgrade impact without unsafe downgrades | queued |
 | `H009` | Review kernel-devel match for module builds | If module building is requested after the package-only v3.0 install acceptance; verify running-kernel and development-package compatibility | queued |
 | `H010` | Review removal of pre-installed editor defaults | If explicit removal of a pre-installed editor is requested; inspect DNF dependents and preserve user editor preference | queued |
+| `H011` | Volatility 3 optional plugins and broader user-venv recovery | After the v3.0 core Volatility 3 opt-in candidate passes its pinned-wheel Workstation happy path | queued |

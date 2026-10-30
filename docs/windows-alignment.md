@@ -316,3 +316,21 @@ specific, as the shared package-deployment decisions require. No Linux
 profile or run-state schema changed; no unexplained shared-contract drift
 was found. Recheck when Linux gains portable artifacts, either product's
 source or license facts change, or before release review.
+
+### Fedora forensic isolated batch 02, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[Volatility and former CERT batch](migrations/forensic-isolated-02.md).
+Linux narrowed the existing `package.volatility3` candidate to the
+Workstation edition; this changes its source signature. The owner previously
+confirmed no non-disposable v3 runs, and the disposable VM pilot used the
+new target declaration. Windows has no Volatility 3 catalog operation in
+this revision, so no shared installer fact is inferred. Windows has an
+accepted `package.autopsy` MSI lifecycle; Linux's publisher-signed ZIP and
+Java dependencies are a separate, unaccepted deployment. This is an
+intentional platform source, handler, and evidence difference, not a
+product-identity conflict. No profile or run-state schema changed and no
+unexplained shared-contract drift was found. Recheck if Linux adds a
+portable Autopsy handler, Windows adds Volatility 3, shared product facts
+change, or release review begins.

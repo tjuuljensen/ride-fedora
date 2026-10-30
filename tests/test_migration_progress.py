@@ -41,9 +41,15 @@ class MigrationProgressTests(unittest.TestCase):
         data = copy.deepcopy(self.data)
         row = next(item for item in data["outcomes"] if item["key"] == "workstation:package.Volatility3")
         row.update(disposition="migrate", progress="operable", blocker="",
-                   evidence=["docs/acceptance/package.exfatprogs.md"], v31Hardening=["H002"])
+                   v3Ids=["package.exfatprogs"],
+                   evidence=["docs/acceptance/package.volatility3.md"], v31Hardening=["H002"])
         with self.assertRaisesRegex(ValueError, "catalog status or target disagrees"):
             self.validate_copy(data)
+        row["v3Ids"] = ["package.volatility3"]
+        row["evidence"] = ["docs/acceptance/package.exfatprogs.md"]
+        with self.assertRaisesRegex(ValueError, "lacks passing VM acceptance evidence"):
+            self.validate_copy(data)
+        row["evidence"] = ["docs/acceptance/package.volatility3.md"]
         row["progress"] = "supported"
         with self.assertRaisesRegex(ValueError, "catalog status or target disagrees"):
             self.validate_copy(data)

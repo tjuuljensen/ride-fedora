@@ -440,13 +440,17 @@
       "batch": "forensic-isolated-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred candidate; opt-in COPR and removal need VM evidence",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen for a concrete timeline need with selected packaged source, pinned dependencies, and VM inverse.",
+      "v31Hardening": [],
+      "reason": "The v2 pair only prints a URL; current Plaso has a broad Python dependency set and no pinned isolated Fedora 44 handler or lifecycle acceptance.",
+      "reviewTrigger": "A concrete Plaso timeline use case with licensed packaged source, isolated dependencies, owned inverse, and Fedora 44 VM evidence."
     },
     {
       "key": "workstation:package.Autopsy",
@@ -459,13 +463,17 @@
       "batch": "forensic-isolated-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred candidate; upstream Linux setup and removal need VM evidence",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen for a concrete desktop case workflow with signed Linux ZIP, Java dependencies, owned launcher, and case-data preservation.",
+      "v31Hardening": [],
+      "reason": "The v2 pair only prints a URL; publisher Linux ZIP and Java/Sleuth Kit requirements lack a Linux v3 portable handler and case-data-preserving inverse.",
+      "reviewTrigger": "An Autopsy Linux case workflow with publisher signature verification, dependencies, owned deployment, and Fedora 44 Workstation VM recovery."
     },
     {
       "key": "workstation:package.Xplico",
@@ -524,13 +532,17 @@
       "batch": "forensic-isolated-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only for a concrete Volatility 2 legacy plugin or image need with an isolated tested runtime.",
+      "v31Hardening": [],
+      "reason": "The v2 function never installed Volatility 2 and its upstream repository is archived; Volatility 3 is a distinct API, not an automatic replacement.",
+      "reviewTrigger": "A specific legacy Volatility 2 plugin or image requirement with licensed isolated installation and Fedora 44 recovery evidence."
     },
     {
       "key": "workstation:package.Volatility3",
@@ -543,15 +555,21 @@
       "batch": "forensic-isolated-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "migrate",
+      "progress": "operable",
       "v3Ids": [
         "package.volatility3"
       ],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "implemented candidate `package.volatility3`; isolated pinned core, VM acceptance pending",
-      "v31Hardening": []
+      "evidence": [
+        "docs/acceptance/package.volatility3.md",
+        "docs/migrations/forensic-isolated-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the core venv opt-in; finish optional plugin and broader failure/recovery evidence in v3.1.",
+      "v31Hardening": [
+        "H002",
+        "H011"
+      ]
     },
     {
       "key": "workstation:package.VeraCrypt",
@@ -601,15 +619,17 @@
       ],
       "selectorCoverage": "commented",
       "family": "forensic-isolated",
-      "batch": "forensic-isolated-02",
-      "risk": "medium",
+      "batch": "forensic-isolated-06",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "evidence": [
+        "docs/migrations/forensic-isolated-06.md"
+      ],
+      "blocker": "Publisher, data, service, and owned recovery require isolated review before a runnable operation.",
+      "nextAction": "Review the isolated source, data and security contract; implement with exact-target evidence or record a reasoned v3.0 disposition.",
       "v31Hardening": []
     },
     {
@@ -936,15 +956,17 @@
       ],
       "selectorCoverage": "active",
       "family": "forensic-isolated",
-      "batch": "forensic-isolated-02",
-      "risk": "medium",
+      "batch": "forensic-isolated-05",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Align product identity with Windows; review Linux packaging.",
+      "evidence": [
+        "docs/migrations/forensic-isolated-05.md"
+      ],
+      "blocker": "Publisher, data, service, and owned recovery require isolated review before a runnable operation.",
+      "nextAction": "Review the isolated source, data and security contract; implement with exact-target evidence or record a reasoned v3.0 disposition.",
       "v31Hardening": []
     },
     {
@@ -3891,9 +3913,12 @@
     {
       "id": "forensic-isolated-02",
       "family": "forensic-isolated",
-      "title": "Forensic Isolated 02: NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr",
-      "evidence": [],
-      "nextAction": "Assess NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Former CERT placeholders and isolated Volatility 3",
+      "evidence": [
+        "docs/migrations/forensic-isolated-02.md",
+        "docs/acceptance/package.volatility3.md"
+      ],
+      "nextAction": "Continue forensic-isolated-03; keep Volatility 3 opt-in and complete named v3.1 plugin/recovery checks."
     },
     {
       "id": "forensic-isolated-03",
@@ -3910,6 +3935,24 @@
         "docs/migrations/forensic-isolated-04.md"
       ],
       "nextAction": "Assess acquisition, license, build, detection, and safe recovery."
+    },
+    {
+      "id": "forensic-isolated-05",
+      "family": "forensic-isolated",
+      "title": "NetworkMiner publisher artifact and evidence data",
+      "evidence": [
+        "docs/migrations/forensic-isolated-05.md"
+      ],
+      "nextAction": "Review official Linux runtime, licensed artifact, capture-data preservation, and owned inverse."
+    },
+    {
+      "id": "forensic-isolated-06",
+      "family": "forensic-isolated",
+      "title": "Email header analyzer service and Python environment",
+      "evidence": [
+        "docs/migrations/forensic-isolated-06.md"
+      ],
+      "nextAction": "Review current service source, bind scope, isolated Python environment, and safe recovery."
     },
     {
       "id": "publisher-apps-01",
@@ -4550,6 +4593,12 @@
       "id": "H010",
       "title": "Review removal of pre-installed editor defaults",
       "trigger": "If explicit removal of a pre-installed editor is requested; inspect DNF dependents and preserve user editor preference",
+      "status": "queued"
+    },
+    {
+      "id": "H011",
+      "title": "Volatility 3 optional plugins and broader user-venv recovery",
+      "trigger": "After the v3.0 core Volatility 3 opt-in candidate passes its pinned-wheel Workstation happy path",
       "status": "queued"
     }
   ]
