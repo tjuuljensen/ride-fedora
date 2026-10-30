@@ -173,3 +173,15 @@ schema, product identity, source fallback, or journal behavior changes. The
 Windows branch has no corresponding Fedora installer. Recheck if Chromium or
 another product gains a shared identity contract, if either platform changes
 profile or run-state behavior, and before release-candidate preparation.
+
+### Fedora workstation package batch 04, 2026-10-30
+
+Compared the Linux catalog, profile, and run-state schemas with Windows
+`codex/ride-v3-migration` at `17f9cef` before adding the five
+[native RPM batch 04](migrations/native-rpm-04.md) candidates. These rows only
+install Fedora packages; `dc3dd` is never run against a device. The
+source-built, broad-group, and OTR security outcomes were moved to separate
+batches before promotion. No Windows installer is inferred from these Linux
+product facts, and no shared schema, source-selection, or journal behavior
+changed. Review again if Windows gains one of these product IDs or package
+semantics change, and before release-candidate preparation.

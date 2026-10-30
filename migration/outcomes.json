@@ -516,16 +516,18 @@
         "RemoveBulkExtractor"
       ],
       "selectorCoverage": "commented",
-      "family": "native-rpm",
-      "batch": "native-rpm-04",
-      "risk": "low",
+      "family": "forensic-isolated",
+      "batch": "forensic-isolated-04",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "evidence": [
+        "docs/migrations/forensic-isolated-04.md"
+      ],
+      "blocker": "Current source artifact, owned build destination, and safe inverse need review.",
+      "nextAction": "Assess upstream source, license, build artifact, ownership, and recovery before any runnable operation.",
       "v31Hardening": []
     },
     {
@@ -578,16 +580,18 @@
         "RemoveSecurityLab"
       ],
       "selectorCoverage": "commented",
-      "family": "native-rpm",
-      "batch": "native-rpm-04",
-      "risk": "low",
+      "family": "provider-foundation",
+      "batch": "provider-foundation-06",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "evidence": [
+        "docs/migrations/provider-foundation-06.md"
+      ],
+      "blocker": "Current group membership and per-tool ownership are unreviewed.",
+      "nextAction": "Inspect Fedora 44 group membership and split retained tools into owned operations.",
       "v31Hardening": []
     },
     {
@@ -601,12 +605,16 @@
       "batch": "native-rpm-04",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.dc3dd"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-04.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-04 package lifecycle on the pinned Workstation VM and record acceptance.",
       "v31Hardening": []
     },
     {
@@ -1165,14 +1173,18 @@
       "selectorCoverage": "commented",
       "family": "native-rpm",
       "batch": "native-rpm-04",
-      "risk": "low",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.qbittorrent"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-04.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-04 package lifecycle on the pinned Workstation VM and record acceptance.",
       "v31Hardening": []
     },
     {
@@ -1381,16 +1393,22 @@
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "operable",
       "v3Ids": [
         "package.hexchat"
       ],
       "evidence": [
+        "docs/acceptance/package.hexchat.md",
         "docs/migrations/native-rpm-03.md"
       ],
-      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
-      "nextAction": "Run native-rpm-03 focused checks, then record exact-target acceptance and status.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Review Fedora package maintenance and dependency residue in v3.1.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H006",
+        "H007"
+      ]
     },
     {
       "key": "workstation:package.Discord",
@@ -1418,16 +1436,18 @@
         "RemovePidgin"
       ],
       "selectorCoverage": "commented",
-      "family": "native-rpm",
-      "batch": "native-rpm-04",
-      "risk": "low",
+      "family": "system-security",
+      "batch": "system-security-27",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "evidence": [
+        "docs/migrations/system-security-27.md"
+      ],
+      "blocker": "OTR plugin behavior, security claims, user data, and recovery need isolated evidence.",
+      "nextAction": "Review Pidgin plus OTR compatibility and security-sensitive lifecycle before a runnable operation.",
       "v31Hardening": []
     },
     {
@@ -1439,14 +1459,18 @@
       "selectorCoverage": "commented",
       "family": "native-rpm",
       "batch": "native-rpm-04",
-      "risk": "low",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.thunderbird"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-04.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-04 package lifecycle on the pinned Workstation VM and record acceptance.",
       "v31Hardening": []
     },
     {
@@ -1593,15 +1617,16 @@
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "supported",
       "v3Ids": [
         "package.speedtest-cli"
       ],
       "evidence": [
+        "docs/acceptance/package.speedtest-cli.md",
         "docs/migrations/native-rpm-03.md"
       ],
-      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
-      "nextAction": "Run native-rpm-03 focused checks, then record exact-target acceptance and status.",
+      "blocker": "",
+      "nextAction": "Recheck the Fedora package and target if its provider contract changes.",
       "v31Hardening": []
     },
     {
@@ -1612,15 +1637,19 @@
       ],
       "selectorCoverage": "commented",
       "family": "native-rpm",
-      "batch": "native-rpm-05",
-      "risk": "low",
+      "batch": "native-rpm-04",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.flameshot"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-04.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-04 package lifecycle on the pinned Workstation VM and record acceptance.",
       "v31Hardening": []
     },
     {
@@ -1772,16 +1801,20 @@
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "operable",
       "v3Ids": [
         "package.chromium"
       ],
       "evidence": [
+        "docs/acceptance/package.chromium.md",
         "docs/migrations/native-rpm-03.md"
       ],
-      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
-      "nextAction": "Run native-rpm-03 focused checks, then record exact-target acceptance and status.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Run broader desktop failure, recovery, visual, and accessibility checks in v3.1.",
+      "v31Hardening": [
+        "H002",
+        "H003"
+      ]
     },
     {
       "key": "workstation:package.Chrome",
@@ -2055,15 +2088,19 @@
       ],
       "selectorCoverage": "commented",
       "family": "native-rpm",
-      "batch": "native-rpm-05",
-      "risk": "low",
+      "batch": "native-rpm-04",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.gimp"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-04.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-04 package lifecycle on the pinned Workstation VM and record acceptance.",
       "v31Hardening": []
     },
     {
@@ -3495,23 +3532,28 @@
       "family": "native-rpm",
       "title": "Fedora repository packages 03: HexChat, Speedtest CLI, Chromium, and Nautilus resolutions",
       "evidence": [
-        "docs/migrations/native-rpm-03.md"
+        "docs/migrations/native-rpm-03.md",
+        "docs/acceptance/package.hexchat.md",
+        "docs/acceptance/package.speedtest-cli.md",
+        "docs/acceptance/package.chromium.md"
       ],
-      "nextAction": "Implement three assessed active preset RPM outcomes; record VM evidence and resolve their declared status."
+      "nextAction": "Complete on Fedora 44 Workstation; proceed to native-rpm-04 and revisit desktop hardening in v3.1."
     },
     {
       "id": "native-rpm-04",
       "family": "native-rpm",
-      "title": "Native Rpm 04: BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird",
-      "evidence": [],
-      "nextAction": "Assess BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Fedora repository packages 04: Dc3dd, Qbittorrent, Thunderbird, Flameshot, GIMP",
+      "evidence": [
+        "docs/migrations/native-rpm-04.md"
+      ],
+      "nextAction": "Implement five assessed RPM outcomes and run exact-target Workstation acceptance."
     },
     {
       "id": "native-rpm-05",
       "family": "native-rpm",
-      "title": "Native Rpm 05: Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake",
+      "title": "Fedora repository packages 05: Dia, Wine, VLC, HandBrake",
       "evidence": [],
-      "nextAction": "Assess Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "nextAction": "Assess Dia, Wine, VLCPlayer, HandBrake with source and recovery criteria."
     },
     {
       "id": "native-rpm-06",
@@ -3556,6 +3598,15 @@
       "nextAction": "Assess Codecs, GnomeRegion, CustomKbrdShortcut; record v2 behavior, current source, inverse, and risk-based completion criteria."
     },
     {
+      "id": "provider-foundation-06",
+      "family": "provider-foundation",
+      "title": "Split Security Lab DNF group",
+      "evidence": [
+        "docs/migrations/provider-foundation-06.md"
+      ],
+      "nextAction": "Inspect group membership and map each retained tool to owned operations."
+    },
+    {
       "id": "forensic-isolated-01",
       "family": "forensic-isolated",
       "title": "Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy",
@@ -3575,6 +3626,15 @@
       "title": "Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor",
       "evidence": [],
       "nextAction": "Assess Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor; record v2 behavior, current source, inverse, and risk-based completion criteria."
+    },
+    {
+      "id": "forensic-isolated-04",
+      "family": "forensic-isolated",
+      "title": "BulkExtractor source build and owned artifact",
+      "evidence": [
+        "docs/migrations/forensic-isolated-04.md"
+      ],
+      "nextAction": "Assess acquisition, license, build, detection, and safe recovery."
     },
     {
       "id": "publisher-apps-01",
@@ -3943,6 +4003,15 @@
       "nextAction": "Assess RPM, smartd service, configuration ownership, and storage safety in an isolated batch."
     },
     {
+      "id": "system-security-27",
+      "family": "system-security",
+      "title": "Pidgin and OTR security plugin",
+      "evidence": [
+        "docs/migrations/system-security-27.md"
+      ],
+      "nextAction": "Assess encrypted messaging plugin compatibility and recovery in isolation."
+    },
+    {
       "id": "generic-server-01",
       "family": "generic-server",
       "title": "Generic Server 01: UpdateFedora",
@@ -4158,6 +4227,18 @@
       "id": "H005",
       "title": "Review DNF dependency residue after alien removal",
       "trigger": "After v3.0 package lifecycle acceptance; preserve unowned RPMs during cleanup design",
+      "status": "queued"
+    },
+    {
+      "id": "H006",
+      "title": "Review retained desktop RPM dependencies",
+      "trigger": "After desktop package VM happy paths; avoid removing unowned dependencies",
+      "status": "queued"
+    },
+    {
+      "id": "H007",
+      "title": "Review orphaned HexChat package maintenance",
+      "trigger": "Before claiming long-term desktop support or promoting HexChat beyond opt-in candidate",
       "status": "queued"
     }
   ]

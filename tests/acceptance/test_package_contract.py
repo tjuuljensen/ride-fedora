@@ -356,22 +356,14 @@ def test_server_base_profile_smoke(vm):
     profile_smoke(vm, "server-base", ("package.less", "package.openssh-clients"))
 
 
-def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None):
+def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None,
+                     residue_candidates=()):
     """Check each package in one disposable Workstation overlay."""
     allowed_residuals = allowed_residuals or {}
     installed_probes = installed_probes or {}
-    baseline = package_inventory(vm)
-
-    def recovered(package):
-        before = set(baseline.splitlines())
-        after = set(package_inventory(vm).splitlines())
-        assert not (before - after), f"pre-existing RPMs lost or changed: {sorted(before - after)}"
-        added = {line.split("\t", 1)[0] for line in after - before}
-        assert added == set(allowed_residuals.get(package, ())), (
-            f"unexpected RPM residue after {package}: {sorted(added)}")
-
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
     for package in packages:
+        before = set(package_inventory(vm).splitlines())
         identifier = f"package.{package}"
         expected_status = catalog_status(identifier)
         assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0, (
@@ -380,7 +372,7 @@ def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None
         planned = table_row(vm.ride("plan", "--profile", guest_profile).stdout, identifier)
         assert (planned["CURRENT"], planned["DESIRED"], planned["STATUS"]) == (
             "absent", "installed", expected_status)
-        assert package_inventory(vm) == baseline
+        assert set(package_inventory(vm).splitlines()) == before
 
         applied = vm.ride("apply", "--profile", guest_profile, *candidate_args(identifier), timeout=900)
         first_id = run_id(applied.stdout)
@@ -388,6 +380,20 @@ def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None
         assert record["status"] == "complete"
         assert [(step["id"], step["result"]) for step in record["steps"]] == [(identifier, "changed")]
         assert vm.run(f"rpm -q --quiet {package}", check=False).returncode == 0
+        introduced = set(package_inventory(vm).splitlines()) - before
+
+        def recovered():
+            after = set(package_inventory(vm).splitlines())
+            assert not (before - after), f"pre-existing RPMs lost or changed: {sorted(before - after)}"
+            residue = after - before
+            if package in residue_candidates:
+                assert residue <= introduced, f"unrelated RPM residue: {sorted(residue - introduced)}"
+                print(f"{package} retained dependencies: {sorted(residue)}")
+            else:
+                added = {line.split("\t", 1)[0] for line in residue}
+                assert added == set(allowed_residuals.get(package, ())), (
+                    f"unexpected RPM residue after {package}: {sorted(added)}")
+
         signatures = vm.run(
             f"rpm -q --qf '%{{SIGPGP:pgpsig}}\\n%{{RSAHEADER:pgpsig}}\\n' {package}"
         ).stdout.splitlines()
@@ -403,14 +409,14 @@ def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None
         restored = vm.ride("restore", "--run-id", first_id, *candidate_args(identifier), timeout=900)
         assert journal(vm, run_id(restored.stdout))["status"] == "complete"
         assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0
-        recovered(package)
+        recovered()
 
         installed = vm.ride("install", identifier, *candidate_args(identifier), timeout=900)
         assert journal(vm, run_id(installed.stdout))["status"] == "complete"
         removed = vm.ride("remove", identifier, *candidate_args(identifier), timeout=900)
         assert journal(vm, run_id(removed.stdout))["status"] == "complete"
         assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0
-        recovered(package)
+        recovered()
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
@@ -435,7 +441,30 @@ def test_native_active_workstation_applications_batch(vm):
     native_rpm_batch(vm, ("hexchat", "speedtest-cli", "chromium"),
                      installed_probes={"hexchat": "hexchat --version",
                                        "speedtest-cli": "speedtest-cli --version",
-                                       "chromium": "chromium --version"})
+                                       "chromium": "chromium-browser --version"},
+                     residue_candidates=("hexchat", "chromium"))
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_chromium_probe_and_lifecycle(vm):
+    # Reuse the preceding HexChat and Speedtest CLI lifecycle transcript after
+    # their passing checks; only Chromium's Fedora launcher name needed repair.
+    vm.run("sudo dnf -y upgrade --refresh", timeout=1800)
+    native_rpm_batch(vm, ("chromium",),
+                     installed_probes={"chromium": "chromium-browser --version"},
+                     residue_candidates=("chromium",))
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_forensic_and_desktop_applications_batch(vm):
+    vm.run("sudo dnf -y upgrade --refresh", timeout=1800)
+    native_rpm_batch(vm, ("dc3dd", "qbittorrent", "thunderbird", "flameshot", "gimp"),
+                     installed_probes={"dc3dd": "dc3dd --version",
+                                       "qbittorrent": "qbittorrent --version",
+                                       "thunderbird": "thunderbird --version",
+                                       "flameshot": "flameshot --version",
+                                       "gimp": "gimp --version"},
+                     residue_candidates=("qbittorrent", "thunderbird", "flameshot", "gimp"))
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")

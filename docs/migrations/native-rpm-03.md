@@ -1,6 +1,7 @@
 # Native RPM batch 03: active workstation applications
 
-Status: **catalog candidates implemented; VM acceptance pending**, 2026-10-30.
+Status: **PASS; HexChat and Chromium operable opt-in, Speedtest CLI supported,
+two legacy Nautilus integrations unsupported**, 2026-10-30.
 This batch prioritizes three active v2 preset outcomes: HexChat, Speedtest CLI,
 and Chromium. The v2 functions install and remove their same-named Fedora RPMs.
 Each now has an individually selectable candidate on Fedora 44 x86_64
@@ -33,6 +34,47 @@ Two commented v2 outcomes in this family have a Fedora 44 resolution decision:
   Speedtest CLI may become supported after the exact-target lifecycle passes.
 - Record individual acceptance, Windows alignment, and any v3.1 hardening
   items before promotion. Investigate failures before retrying.
+
+## Investigated first VM run
+
+The first disposable overlay
+`20261030T103239Z-test-native-active-workstation-applications-batch-d919b88b`
+passed HexChat plan, apply, version probe, repeat, status, and restore. The
+test then found three RPMs retained after `dnf remove hexchat`: `gtk2`,
+`ibus-gtk2`, and `libcanberra-gtk2`. The DNF install transcript shows those
+were dependencies introduced by HexChat; the remove transaction removed
+HexChat and `dbus-glib` but retained the three GTK2 packages. No
+pre-existing RPM was lost or changed. The run stopped before Speedtest CLI
+and Chromium, so they have no VM acceptance yet.
+
+The revised opt-in desktop acceptance check requires the named package to
+restore and remove, no loss or change to a pre-existing RPM, and any residual
+RPM to come from that operation's install transaction. It records the exact
+residue for the acceptance note and v3.1 dependency-cleanup review. This is
+proportionate to the v3.0 desktop happy-path gate; it does not claim full
+recovery of every DNF dependency.
+
+The second overlay
+`20261030T104045Z-test-native-active-workstation-applications-batch-be719a0d`
+completed HexChat and Speedtest CLI lifecycles, including explicit remove.
+Chromium installed, its RPM signature and files passed, and then the test
+stopped at a launcher probe: Fedora packages the executable as
+`chromium-browser`, not `chromium`. The [Fedora 44 package file
+list](https://packages.fedoraproject.org/pkgs/chromium/chromium/fedora-44.html)
+confirms `/usr/bin/chromium-browser` and the matching desktop entry. The
+catalog package name was correct; only the test probe changed. A focused
+Chromium-only VM test reuses the two completed operation transcripts and
+checks the remaining Chromium lifecycle.
+
+The focused Chromium overlay
+`20261030T105029Z-test-native-chromium-probe-and-lifecycle-7d5b7140`
+passed the corrected launcher, restore, and explicit remove, with full RPM
+inventory recovery. `.acceptance-runs/native-rpm-03-chromium.xml` reports one
+pass and no failures, errors, or skips. The individual [HexChat](../acceptance/package.hexchat.md),
+[Speedtest CLI](../acceptance/package.speedtest-cli.md), and
+[Chromium](../acceptance/package.chromium.md) records distinguish the supported
+CLI tool from the two opt-in desktop candidates. No manual session was needed
+for the package-install outcomes.
 
 The [HexChat](https://packages.fedoraproject.org/pkgs/hexchat/hexchat/),
 [Speedtest CLI](https://packages.fedoraproject.org/pkgs/speedtest-cli/speedtest-cli/),

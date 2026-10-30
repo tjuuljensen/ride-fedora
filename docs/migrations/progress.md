@@ -3,7 +3,7 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**17/180 complete (9.4%)**: 10 supported, 0 opt-in candidate, 5 retired, 0 private, 2 unsupported; 163 unresolved.
+**20/180 complete (11.1%)**: 11 supported, 2 opt-in candidate, 5 retired, 0 private, 2 unsupported; 160 unresolved.
 
 Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
@@ -11,18 +11,20 @@ Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix function
 | --- | --- | --- | ---: | --- | --- |
 | `native-rpm-01` | Fedora CLI packages: pwgen, htop, bat, ncdu, ripgrep, fd | low 6 | 6/6 | [native-rpm-01.md](../../docs/migrations/native-rpm-01.md) | Complete on Fedora 44 Workstation; start native-rpm-02 and recheck this batch if its target or package contract changes. |
 | `native-rpm-02` | Fedora repository packages 02: LibEWF, Exif, Md5deep, Alien | low 4 | 4/4 | [native-rpm-02.md](../../docs/migrations/native-rpm-02.md), [package.libewf.md](../../docs/acceptance/package.libewf.md), [package.exif.md](../../docs/acceptance/package.exif.md), [package.md5deep.md](../../docs/acceptance/package.md5deep.md), [package.alien.md](../../docs/acceptance/package.alien.md) | Complete on Fedora 44 Workstation; start native-rpm-03 and review alien dependency residue in v3.1. |
-| `native-rpm-03` | Fedora repository packages 03: HexChat, Speedtest CLI, Chromium, and Nautilus resolutions | low 3, medium 2 | 2/5 | [native-rpm-03.md](../../docs/migrations/native-rpm-03.md) | Implement three assessed active preset RPM outcomes; record VM evidence and resolve their declared status. |
-| `native-rpm-04` | Native Rpm 04: BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird | low 6 | 0/6 | — | Assess BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `native-rpm-05` | Native Rpm 05: Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake | low 6 | 0/6 | — | Assess Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `native-rpm-03` | Fedora repository packages 03: HexChat, Speedtest CLI, Chromium, and Nautilus resolutions | low 3, medium 2 | 5/5 | [native-rpm-03.md](../../docs/migrations/native-rpm-03.md), [package.hexchat.md](../../docs/acceptance/package.hexchat.md), [package.speedtest-cli.md](../../docs/acceptance/package.speedtest-cli.md), [package.chromium.md](../../docs/acceptance/package.chromium.md) | Complete on Fedora 44 Workstation; proceed to native-rpm-04 and revisit desktop hardening in v3.1. |
+| `native-rpm-04` | Fedora repository packages 04: Dc3dd, Qbittorrent, Thunderbird, Flameshot, GIMP | low 1, medium 4 | 0/5 | [native-rpm-04.md](../../docs/migrations/native-rpm-04.md) | Implement five assessed RPM outcomes and run exact-target Workstation acceptance. |
+| `native-rpm-05` | Fedora repository packages 05: Dia, Wine, VLC, HandBrake | low 4 | 0/4 | — | Assess Dia, Wine, VLCPlayer, HandBrake with source and recovery criteria. |
 | `native-rpm-06` | Native Rpm 06: Lynis, ClamAV, KeepassXC, Eza, Libpst | low 5 | 0/5 | — | Assess Lynis, ClamAV, KeepassXC, Eza, Libpst; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `provider-foundation-01` | Provider Foundation 01: Required, ShellTools | medium 2 | 0/2 | — | Assess Required, ShellTools; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `provider-foundation-02` | Provider Foundation 02: RPMfusionRepos | high 1 | 0/1 | — | Assess RPMfusionRepos; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `provider-foundation-03` | Provider Foundation 03: KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools | medium 6 | 0/6 | — | Assess KernelTools, DNFutils, EzaGitHub, Flathub, PythonPip, PackagingTools; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `provider-foundation-04` | Provider Foundation 04: BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap | medium 6 | 0/6 | — | Assess BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `provider-foundation-05` | Provider Foundation 05: Codecs, GnomeRegion, CustomKbrdShortcut | medium 3 | 0/3 | — | Assess Codecs, GnomeRegion, CustomKbrdShortcut; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `provider-foundation-06` | Split Security Lab DNF group | medium 1 | 0/1 | [provider-foundation-06.md](../../docs/migrations/provider-foundation-06.md) | Inspect group membership and map each retained tool to owned operations. |
 | `forensic-isolated-01` | Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy | medium 6 | 0/6 | — | Assess VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `forensic-isolated-02` | Forensic Isolated 02: NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr | medium 6 | 0/6 | — | Assess NetworkMiner, Plaso, Autopsy, Volatility, Volatility3, EmailHeaderAnlzr; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `forensic-isolated-03` | Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor | medium 4 | 0/4 | — | Assess Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `forensic-isolated-04` | BulkExtractor source build and owned artifact | high 1 | 0/1 | [forensic-isolated-04.md](../../docs/migrations/forensic-isolated-04.md) | Assess acquisition, license, build, detection, and safe recovery. |
 | `publisher-apps-01` | Publisher Apps 01: AppImageLauncher | medium 1 | 0/1 | — | Assess AppImageLauncher; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-02` | Publisher Apps 02: VeraCrypt | high 1 | 0/1 | — | Assess VeraCrypt; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-03` | Publisher Apps 03: VisualStudioCode, Brave | medium 2 | 0/2 | — | Assess VisualStudioCode, Brave; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -75,6 +77,7 @@ Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix function
 | `system-security-24` | System Security 24: ScheduleExpVPNChange | high 1 | 0/1 | — | Assess ScheduleExpVPNChange; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `system-security-25` | System Security 25: KeyfileMounts | high 1 | 0/1 | — | Assess KeyfileMounts; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `system-security-26` | smartmontools storage monitoring | high 1 | 0/1 | — | Assess RPM, smartd service, configuration ownership, and storage safety in an isolated batch. |
+| `system-security-27` | Pidgin and OTR security plugin | high 1 | 0/1 | [system-security-27.md](../../docs/migrations/system-security-27.md) | Assess encrypted messaging plugin compatibility and recovery in isolation. |
 | `generic-server-01` | Generic Server 01: UpdateFedora | high 1 | 0/1 | — | Assess UpdateFedora; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `generic-server-02` | Generic Server 02: Required | medium 1 | 0/1 | — | Assess Required; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `generic-server-03` | Generic Server 03: AutoUpdate | high 1 | 0/1 | — | Assess AutoUpdate; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -102,3 +105,5 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H003` | Desktop visual and accessibility review | After desktop operations are operable in disposable Workstation VMs | queued |
 | `H004` | Retained artifact offline installation and provider fallback | After artifact provenance and dependency behavior are designed | queued |
 | `H005` | Review DNF dependency residue after alien removal | After v3.0 package lifecycle acceptance; preserve unowned RPMs during cleanup design | queued |
+| `H006` | Review retained desktop RPM dependencies | After desktop package VM happy paths; avoid removing unowned dependencies | queued |
+| `H007` | Review orphaned HexChat package maintenance | Before claiming long-term desktop support or promoting HexChat beyond opt-in candidate | queued |

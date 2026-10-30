@@ -167,7 +167,11 @@ those outcomes as installs. [Native RPM batch 02](migrations/native-rpm-02.md)
 passed four more exact-target packages. Its investigated `alien` recovery
 retains one named DNF dependency without losing or changing pre-existing RPMs;
 that cleanup question is in the v3.1 queue. The next ordinary package batch
-is `native-rpm-03`; the remaining outcomes stay visible in the progress report.
+is [native-rpm-04](migrations/native-rpm-04.md). The preceding
+[native-rpm-03](migrations/native-rpm-03.md) batch closed its two unavailable
+Nautilus integrations as unsupported, accepted Speedtest CLI as supported,
+and recorded HexChat and Chromium as operable opt-in candidates with desktop
+hardening in v3.1. The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
