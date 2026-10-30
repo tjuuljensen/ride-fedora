@@ -4,7 +4,7 @@ Status: **individual review in progress**, 2026-10-30. This review assigns
 each of the original 99 `unsupported` source outcomes exactly one decision
 batch. Three were approved for retirement, and one of those, Opera, was later
 excluded from v3 scope. Teams desktop capability was also retired in the
-fast-track review. The current ledger has 97 `unsupported` and 16 `retire`
+fast-track review. The current ledger has 106 `unsupported` and 13 `retire`
 outcomes. These decisions do not add an
 operation, delete v2 code, or run a state-changing test. The
 [migration ledger](../../migration/outcomes.json) and [progress report](progress.md)

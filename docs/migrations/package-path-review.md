@@ -2,10 +2,10 @@
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
 133 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 10 replaced,
-12 retired, 58 unsupported, and six newly scoped server outcomes under review.
-The five path groups below assess all **70 unsupported or retired outcomes**;
-the 10 replacements, 47 existing v3 mappings, and six new server reviews
-follow. The 47 mapped outcomes have catalog and acceptance evidence. The
+10 retired and 66 unsupported. The five path groups below assess the **70
+original unsupported or retired outcomes**; the 10 replacements, 47 existing
+v3 mappings, and six newly scoped server outcomes follow. The 47 mapped
+outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
 disposition, risk, target, evidence, and next action.
 
@@ -51,17 +51,18 @@ assessment, not an automatic retirement decision.
 | `workstation:package.SonosPlayer` | This unofficial controller declares itself deprecated; owner retired the player capability from this migration. | [Batch review](publisher-apps-09.md) |
 | `workstation:package.Volatility` | Volatility 2 is archived; Volatility 3 is distinct and already tracked separately. | [Batch review](forensic-isolated-02.md) |
 
-## Retired for a reason other than product EOL (5)
+## Old implementation retired for a reason other than product EOL (6)
 
 | Source outcome | Path assessment | Evidence |
 | --- | --- | --- |
-| `workstation:package.Galleta` | The v2 pair only printed links; retirement does not establish that the product ended. | [Batch review](resolution-decisions.md) |
-| `workstation:package.Xplico` | The v2 pair only printed links; retirement does not establish that the product ended. | [Batch review](resolution-decisions.md) |
+| `workstation:package.Galleta` | The v2 pair only printed links; owner deferred the capability decision while reviewing legacy IE cookies versus modern browser forensics. | [Batch review](resolution-decisions.md) |
+| `workstation:package.Xplico` | The v2 pair only printed links; owner kept the capability and requested a current installation path or alternative. | [Batch review](resolution-decisions.md) |
 | `workstation:package.VMFStools` | The v2 pair only printed links; no working install path existed to migrate. | [Batch review](forensic-isolated-01.md) |
-| `workstation:package.TecmintMonitorSh` | The unverified HTTP script path was retired; a monitoring requirement needs its own source review. | [Batch review](resolution-decisions.md) |
+| `workstation:package.TecmintMonitorSh` | The unverified HTTP script path was retired; owner kept monitoring capability for a maintained replacement review. | [Batch review](resolution-decisions.md) |
 | `workstation:package.MicrosoftTeams` | Owner retired Linux Teams desktop capability; the web service remains outside RIDE installation. | [Batch review](publisher-apps-09.md) |
+| `workstation:package.VMwareWorkstation` | Owner retired the full VMware Workstation capability; the v2 installer and module recovery remain migration history. | [Batch review](system-security-risk-decisions.md) |
 
-## New acquisition or deployment path (28)
+## New acquisition or deployment path (27)
 
 | Source outcome | Path assessment | Evidence |
 | --- | --- | --- |
@@ -91,7 +92,6 @@ assessment, not an automatic retirement decision.
 | `workstation:package.VeraCrypt` | Verify publisher artifact and license; preserve encrypted volumes. | [Batch review](publisher-apps-02.md) |
 | `workstation:package.VisualStudioCode` | Own publisher repository/key and preserve user workspace and settings. | [Batch review](publisher-apps-03.md) |
 | `workstation:package.Vivaldi` | Choose an exact publisher source and recover repository/key and browser profile. | [Batch review](publisher-apps-10.md) |
-| `workstation:package.VMwareWorkstation` | Use licensed pinned publisher acquisition and module/VM recovery. | [Batch review](system-security-risk-decisions.md) |
 | `workstation:package.WoeUSB` | The old Fedora RPM path is gone; review WoeUSB-ng as a successor. | [Batch review](publisher-apps-09.md) |
 
 ## Split bundle or add an owned state handler (24)

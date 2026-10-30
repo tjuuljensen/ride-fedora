@@ -1,6 +1,6 @@
 # GNOME user extension bundle
 
-Status: **unsupported for v3.0**, 2026-10-30. This isolated high-risk
+Status: **decision deferred by owner; unsupported for v3.0**, 2026-10-30. This isolated high-risk
 active-preset outcome maps `InstallGnomeExtensions` and
 `RemoveGnomeExtensions`. The v2 function installs GNOME management packages,
 then uses a mutable third-party script to fetch ten extension IDs and
@@ -27,6 +27,7 @@ and [`gnome-browser-connector`](https://packages.fedoraproject.org/pkgs/gnome-br
 but those RPMs do not reproduce the ten user add-ons. RIDE v3 has no
 extension acquisition or per-user ownership handler, and the v2 inverse
 could delete pre-existing user data. This source outcome is **non-runnable
-unsupported in v3.0**. Reopen when the extension list and exact-target
+unsupported in v3.0**. The owner deferred the capability decision on
+2026-10-30. Reopen when the extension list and exact-target
 seeded-data inverse meet the criteria above; a package-manager UI alone is
 not counted as this bundle.

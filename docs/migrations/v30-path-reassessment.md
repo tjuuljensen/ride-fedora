@@ -12,9 +12,9 @@ those exact implementations; this review reopens their capability coverage.
 The current ledger has 133 package and 36 setting outcomes. Only 54 of those
 169 have operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
-**169 in-scope package/setting capabilities, 54 currently operable, seven
-owner-retired, one standalone functional replacement, and 107 still needing
-a v3.0 decision or path**. The ledger's 179 dispositioned outcomes out of
+**169 in-scope package/setting capabilities, 54 currently operable, nine
+owner-retired, one standalone functional replacement, and 105 still needing
+an operable v3.0 path**. The ledger's 185 dispositioned outcomes out of
 185 measure recorded decisions, not this v3.0 capability coverage.
 The two Citrix and two Opera functions remain explicitly out of scope. Host-specific
 users, shares, secrets, and IP values remain outside the public catalog;
@@ -85,12 +85,12 @@ behavior. The old preset selectors do not establish actual installation.
 
 | Source function | v3.0 package path to investigate | Ownership boundary |
 | --- | --- | --- |
-| `InstallqBittorrentServer` | Fedora 44 [`qbittorrent-nox`](https://packages.fedoraproject.org/pkgs/qbittorrent/qbittorrent-nox/). | Package first; service user, firewall, SSH keys, and downloads require separate owned operations. |
-| `InstallPlexServer` | [Plex's RPM repository](https://support.plex.tv/articles/235974187-enable-repository-updating-for-supported-linux-server-distributions/) with scoped signing key and service state. | Preserve media, metadata, accounts, and pre-existing repository files. |
-| `InstallPlexAutoUpdate` | Prefer the owned Plex repository plus a bounded update policy; compare the old third-party updater only if it provides distinct requested behavior. | Never execute its mutable remote installer; preserve existing timers and credentials. |
-| `InstallAMP` | Obtain a reviewed publisher artifact or managed package before catalog execution. | [AMP is licensed](https://cubecoders.com/AMP/Corvid19); keep keys, instances, ports, and users private. The v2 remote script is not an accepted method. |
-| `InstallFerium` | Pin the current publisher Linux release and install a user or system portable binary with an owned manifest. | [Current Ferium releases](https://github.com/gorilla-devs/ferium/releases); preserve modpacks and profiles. |
-| `InstallMinecraftServer` | Choose the [official Java server JAR](https://www.minecraft.net/en-us/download/server) and compatible Java runtime, then own a versioned service path. | The v2 function installed Java 8 and made a directory, but did not install a server JAR. Preserve worlds and EULA state. |
+| `InstallqBittorrentServer` | **Kept by owner.** Fedora 44 [`qbittorrent-nox`](https://packages.fedoraproject.org/pkgs/qbittorrent/qbittorrent-nox/). | Package first; service user, firewall, SSH keys, and downloads require separate owned operations. |
+| `InstallPlexServer` | **Kept by owner.** [Plex's RPM repository](https://support.plex.tv/articles/235974187-enable-repository-updating-for-supported-linux-server-distributions/) with scoped signing key and service state. | Preserve media, metadata, accounts, and pre-existing repository files. |
+| `InstallPlexAutoUpdate` | **Update capability kept; separate updater under review.** Plex documents public release updates through its RPM repository and DNF. Reconcile this with server AutoUpdate and Cockpit settings before adding a separate timer. | Never execute the old mutable remote installer; preserve existing timers and credentials. |
+| `InstallAMP` | **Kept by owner.** Obtain a reviewed publisher artifact or managed package before catalog execution. | [AMP is licensed](https://cubecoders.com/AMP/Corvid19); keep keys, instances, ports, and users private. The v2 remote script is not an accepted method. |
+| `InstallFerium` | **Kept by owner.** Pin the current publisher Linux release and install a user or system portable binary with an owned manifest. | [Current Ferium releases](https://github.com/gorilla-devs/ferium/releases); preserve modpacks and profiles. |
+| `InstallMinecraftServer` | **Kept by owner.** Choose the [official Java server JAR](https://www.minecraft.net/en-us/download/server) and compatible Java runtime, then own a versioned service path. | The v2 function installed Java 8 and made a directory, but did not install a server JAR. Preserve worlds and EULA state. |
 
 ## Next implementation slices
 

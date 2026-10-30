@@ -1,6 +1,6 @@
 # SmartMonTools storage-monitoring decision
 
-Status: **unsupported for v3.0**, 2026-10-30. The active v2 pair only
+Status: **decision deferred by owner; unsupported for v3.0**, 2026-10-30. The active v2 pair only
 installs and removes the signed Fedora [`smartmontools` RPM](https://packages.fedoraproject.org/pkgs/smartmontools/smartmontools/).
 The package also supplies `smartd`, so its service state must be observed
 before treating a package-only lifecycle as safe. No storage device is
@@ -22,3 +22,6 @@ state, preserve administrator configuration and device selection, and pass
 apply, partial failure, remove, and restore on the disposable target.
 Hardware SMART polling remains a separate opt-in review. This failure was
 investigated; no unchanged VM retry was made.
+
+The owner deferred the v3.0 capability decision in the fast-track review on
+2026-10-30. The service-state evidence above remains the reopening gate.

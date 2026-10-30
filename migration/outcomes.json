@@ -41,10 +41,11 @@
         "docs/migrations/system-security-core.md"
       ],
       "blocker": "",
-      "nextAction": "Add a site-private or parameterized hostname operation with validated input and prior-name VM recovery.",
+      "nextAction": "Owner kept hostname management; add a validated site-private or parameterized value with prior-name journal and disposable-VM apply and restore evidence.",
       "v31Hardening": [],
-      "reason": "Interactive v2 hostname has no declared profile value or exact prior-name restore.",
-      "reviewTrigger": "Add a site-private or parameterized hostname operation with validated input and prior-name VM recovery."
+      "reason": "Owner kept hostname management for v3.0 on 2026-10-30; public profiles must not contain host identities.",
+      "reviewTrigger": "Owner kept hostname management; add a validated site-private or parameterized value with prior-name journal and disposable-VM apply and restore evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.FastDNF",
@@ -64,10 +65,11 @@
         "docs/migrations/system-security-core.md"
       ],
       "blocker": "",
-      "nextAction": "Add an owned DNF5 override or exact-file recovery and pass Fedora 44 conflict/restore checks.",
+      "nextAction": "Replace v2 edits with supported DNF5 tuning in an owned override or exact-file recovery; prove Fedora 44 conflict and restore behavior.",
       "v31Hardening": [],
-      "reason": "v2 rewrites administrator DNF config; DNF5 defaults do not reproduce its 15-download tuning and inverse loses prior values.",
-      "reviewTrigger": "Add an owned DNF5 override or exact-file recovery and pass Fedora 44 conflict/restore checks."
+      "reason": "Owner kept FastDNF on 2026-10-30 and requested a DNF5 replacement for the legacy configuration edit.",
+      "reviewTrigger": "Replace v2 edits with supported DNF5 tuning in an owned override or exact-file recovery; prove Fedora 44 conflict and restore behavior.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:action.UpdateFedora",
@@ -448,17 +450,18 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
+      "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only if the stated product installation review trigger occurs.",
+      "nextAction": "Owner deferred Galleta; decide whether legacy Internet Explorer cookie parsing is needed or modern browser-cookie forensics via Hindsight covers the intent.",
       "v31Hardening": [],
-      "reason": "The v2 Galleta install/remove pair only prints URLs or an empty line and never installs or removes software.",
-      "reviewTrigger": "Explicit demand for Galleta installation with a current source, license, detection, and inverse review."
+      "reason": "Owner deferred Galleta on 2026-10-30. The v2 pair is link-only; Galleta parses legacy IE cookies, while Hindsight covers modern Chromium and Firefox cookies without proven old-IE format parity.",
+      "reviewTrigger": "Owner deferred Galleta; decide whether legacy Internet Explorer cookie parsing is needed or modern browser-cookie forensics via Hindsight covers the intent.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.Plaso",
@@ -519,17 +522,18 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
+      "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only if the stated product installation review trigger occurs.",
+      "nextAction": "Owner kept Xplico; find a current robust installation path or alternative, then review license, deployment, detection, and owned inverse.",
       "v31Hardening": [],
-      "reason": "The v2 Xplico install/remove pair only prints URLs or an empty line and never installs or removes software.",
-      "reviewTrigger": "Explicit demand for Xplico installation with a current source, license, detection, and inverse review."
+      "reason": "Owner kept the Xplico capability for v3.0 on 2026-10-30; the v2 link-only pair is not an implementation.",
+      "reviewTrigger": "Owner kept Xplico; find a current robust installation path or alternative, then review license, deployment, detection, and owned inverse.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.VMFStools",
@@ -1211,10 +1215,11 @@
         "docs/migrations/system-security-core.md"
       ],
       "blocker": "",
-      "nextAction": "Accept pinned publisher source, owned repo/service boundary, and seeded-volume recovery in a Workstation VM.",
+      "nextAction": "Owner kept Docker; review publisher repository and key, separate service and data ownership, and prove seeded image and volume preservation in a Workstation VM.",
       "v31Hardening": [],
-      "reason": "v2 adds an external repo, installs packages, and starts a service; removal does not preserve repo ownership or container volumes.",
-      "reviewTrigger": "Accept pinned publisher source, owned repo/service boundary, and seeded-volume recovery in a Workstation VM."
+      "reason": "Owner kept Docker for v3.0 on 2026-10-30; existing images, volumes, and service state must be preserved.",
+      "reviewTrigger": "Owner kept Docker; review publisher repository and key, separate service and data ownership, and prove seeded image and volume preservation in a Workstation VM.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.PythonPip",
@@ -1348,10 +1353,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Split RPM and optional hotkey operations and pass both package and exact user-setting recovery in a Workstation VM.",
+      "nextAction": "Owner kept Terminator; split the Fedora RPM from the optional per-user iBus hotkey and verify package lifecycle and exact prior-hotkey recovery on Fedora 44 Workstation.",
       "v31Hardening": [],
-      "reason": "v2 combines a Fedora RPM with a user iBus hotkey; inverse hard-codes a default instead of restoring the prior hotkey.",
-      "reviewTrigger": "Split RPM and optional hotkey operations and pass both package and exact user-setting recovery in a Workstation VM."
+      "reason": "Owner kept Terminator for v3.0 on 2026-10-30; the v2 combined package and hotkey method remains unsafe.",
+      "reviewTrigger": "Owner kept Terminator; split the Fedora RPM from the optional per-user iBus hotkey and verify package lifecycle and exact prior-hotkey recovery on Fedora 44 Workstation.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Alien",
@@ -1397,10 +1403,11 @@
         "docs/migrations/system-security-smartmontools.md"
       ],
       "blocker": "",
-      "nextAction": "Build a smartd-aware operation only after exact prior-service and configuration recovery passes.",
+      "nextAction": "Owner deferred SmartMonTools; revisit after a smartd-aware operation proves exact prior-service, configuration, and device-selection recovery.",
       "v31Hardening": [],
-      "reason": "Fedora RPM installation enabled smartd.service in the disposable VM; the generic package handler cannot recover prior service state.",
-      "reviewTrigger": "A dedicated smartd-aware operation preserves prior enable/active state, administrator config, and device selection through failure and restore."
+      "reason": "Owner deferred SmartMonTools in the fast-track review on 2026-10-30; the observed smartd enablement remains a migration blocker.",
+      "reviewTrigger": "Owner deferred SmartMonTools; revisit after a smartd-aware operation proves exact prior-service, configuration, and device-selection recovery.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.Qbittorrent",
@@ -1615,10 +1622,11 @@
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only if the maintained-editor and safe user-file recovery trigger occurs.",
+      "nextAction": "Owner retired AtomTelemetry with the Atom editor capability on 2026-10-30; retain the v2 mapping as historical evidence.",
       "v31Hardening": [],
-      "reason": "The archived Atom editor has no maintained telemetry contract, and the v2 enable function deletes a user-owned init.coffee file without safe recovery.",
-      "reviewTrigger": "A maintained Atom-compatible editor with equivalent telemetry settings, explicit user demand, and tested user-file backup and restoration."
+      "reason": "Owner retired the full AtomTelemetry capability on 2026-10-30 together with Atom; no maintained telemetry setting is needed.",
+      "reviewTrigger": "Owner retired AtomTelemetry with the Atom editor capability on 2026-10-30; retain the v2 mapping as historical evidence.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.AtomPlugins",
@@ -1739,10 +1747,11 @@
         "docs/migrations/system-security-27.md"
       ],
       "blocker": "",
-      "nextAction": "Owner deferred the combined Pidgin/OTR keep-or-retire decision on 2026-10-30; revisit after plugin compatibility and account/key recovery are reviewed.",
+      "nextAction": "Owner deferred the combined Pidgin/OTR capability; revisit current plugin compatibility, two-party messaging, and seeded account/key recovery.",
       "v31Hardening": [],
-      "reason": "v2 installs Pidgin and OTR but has no account, key, plugin activation, encrypted-message, or user-data recovery contract.",
-      "reviewTrigger": "A requested Pidgin/OTR deployment passes current source and license review, two-party message test, and seeded-profile recovery."
+      "reason": "Owner reaffirmed deferral of the combined Pidgin/OTR capability on 2026-10-30; package availability alone does not prove secure messaging or profile recovery.",
+      "reviewTrigger": "Owner deferred the combined Pidgin/OTR capability; revisit current plugin compatibility, two-party messaging, and seeded account/key recovery.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.Thunderbird",
@@ -1789,10 +1798,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Add line-scoped resolver ownership and exact file/DNS-order recovery.",
+      "nextAction": "Owner kept MulticastDNS control; implement line-scoped resolver ownership with exact prior-file and DNS-order recovery.",
       "v31Hardening": [],
-      "reason": "v2 rewrites nsswitch hosts lines without an owned inverse.",
-      "reviewTrigger": "Add line-scoped resolver ownership and exact file/DNS-order recovery."
+      "reason": "Owner kept MulticastDNS control for v3.0 on 2026-10-30; the broad v2 nsswitch rewrite remains unsafe.",
+      "reviewTrigger": "Owner kept MulticastDNS control; implement line-scoped resolver ownership with exact prior-file and DNS-order recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.NetworkTools",
@@ -1926,10 +1936,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Separate RPM and private key ownership; prove seeded-key and connection recovery.",
+      "nextAction": "Owner kept WireGuard; separate the signed RPM from private key and connection state, and prove seeded-key preservation before making the operation runnable.",
       "v31Hardening": [],
-      "reason": "v2 creates private keys and inverse recursively deletes /etc/wireguard, including unowned secrets.",
-      "reviewTrigger": "Separate RPM and private key ownership; prove seeded-key and connection recovery."
+      "reason": "Owner kept WireGuard for v3.0 on 2026-10-30; the v2 recursive key-directory removal remains unsafe.",
+      "reviewTrigger": "Owner kept WireGuard; separate the signed RPM from private key and connection state, and prove seeded-key preservation before making the operation runnable.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.OpenconnectVPN",
@@ -1948,10 +1959,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Use a reviewed package and test profile, service, and removal behavior.",
+      "nextAction": "Owner kept OpenconnectVPN; choose a reviewed package source and verify profile, service, and removal behavior without the moving v2 source build.",
       "v31Hardening": [],
-      "reason": "v2 builds moving Git source into /usr with no provenance or inverse.",
-      "reviewTrigger": "Use a reviewed package and test profile, service, and removal behavior."
+      "reason": "Owner kept OpenconnectVPN for v3.0 on 2026-10-30; the unpinned source build remains unsuitable.",
+      "reviewTrigger": "Owner kept OpenconnectVPN; choose a reviewed package source and verify profile, service, and removal behavior without the moving v2 source build.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.SpeedtestCLI",
@@ -2097,17 +2109,18 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
+      "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Monitor the review trigger; no v3 install operation is planned.",
+      "nextAction": "Owner kept host monitoring; review a maintained replacement and verified acquisition with owned destination, detection, and recovery rather than the v2 HTTP script.",
       "v31Hardening": [],
-      "reason": "The v2 function fetches an unverified HTTP script into /usr/local/bin; no maintained verified acquisition path is established.",
-      "reviewTrigger": "Reopen if a maintained verified artifact and explicit monitoring requirement are available."
+      "reason": "Owner kept the monitoring capability behind TecmintMonitorSh for v3.0 on 2026-10-30; the unverified v2 HTTP script remains retired.",
+      "reviewTrigger": "Owner kept host monitoring; review a maintained replacement and verified acquisition with owned destination, detection, and recovery rather than the v2 HTTP script.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.GnomeExtInstaller",
@@ -2660,10 +2673,11 @@
         "docs/migrations/publisher-apps-17.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen after extension IDs and GNOME 50 compatibility are reviewed with pinned acquisition and seeded-user inverse.",
+      "nextAction": "Owner deferred the GNOME extension bundle; review extension IDs, GNOME 50 compatibility, pinned acquisition, and seeded per-user recovery.",
       "v31Hardening": [],
-      "reason": "The v2 bundle downloads user extensions through a mutable script and removes named user directories without ownership; native management RPMs alone do not reproduce the outcome.",
-      "reviewTrigger": "Reviewed GNOME 50 extension IDs, pinned acquisition, per-user ownership, and seeded-extension recovery pass a Fedora 44 Workstation VM happy path and failure checks."
+      "reason": "Owner deferred the GNOME extension bundle on 2026-10-30 pending extension inventory and compatibility review.",
+      "reviewTrigger": "Owner deferred the GNOME extension bundle; review extension IDs, GNOME 50 compatibility, pinned acquisition, and seeded per-user recovery.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:setting.ScreenSaver",
@@ -2682,10 +2696,11 @@
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner deferred ScreenSaver; determine whether the kept configurable lock-timing setting covers the enabled state with atomic prior-value and partial-failure recovery.",
       "v31Hardening": [],
-      "reason": "v2 sets three lock/idle values without an exact inverse or rollback for partial failure.",
-      "reviewTrigger": "One atomic lock and idle operation passes baseline, partial-failure rollback, and user-session restore."
+      "reason": "Owner deferred a separate ScreenSaver capability on 2026-10-30 pending reconciliation with configurable lock timing.",
+      "reviewTrigger": "Owner deferred ScreenSaver; determine whether the kept configurable lock-timing setting covers the enabled state with atomic prior-value and partial-failure recovery.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:setting.Screensaver",
@@ -2697,17 +2712,18 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
+      "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner deferred Screensaver; decide whether an explicit lock-disabled state is needed within the configurable lock policy, subject to session-safety review and atomic recovery.",
       "v31Hardening": [],
-      "reason": "The active preset later enables screen lock, overwriting this earlier lock-disable action; selecting it silently would weaken lock policy.",
-      "reviewTrigger": "An explicit request for lock-disabled state with reviewed session safety and atomic prior-state recovery."
+      "reason": "Owner deferred the lock-disabled Screensaver capability on 2026-10-30; it must not be selected silently.",
+      "reviewTrigger": "Owner deferred Screensaver; decide whether an explicit lock-disabled state is needed within the configurable lock policy, subject to session-safety review and atomic recovery.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:setting.DateInTaskbar",
@@ -2919,10 +2935,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Add a lock-safe atomic operation with partial-failure recovery and disposable VM session evidence.",
+      "nextAction": "Owner kept the 10-minute lock-timing capability and prefers one optional configurable setting; implement validated values with atomic prior-state and partial-failure recovery, then test a disposable Workstation session.",
       "v31Hardening": [],
-      "reason": "v2 writes four lock and idle GNOME keys without prior values, atomicity, or inverse.",
-      "reviewTrigger": "Add a lock-safe atomic operation with partial-failure recovery and disposable VM session evidence."
+      "reason": "Owner kept the 10-minute lock-timing capability on 2026-10-30 and preferred an optional configurable setting; the v2 multi-key write remains unsafe.",
+      "reviewTrigger": "Owner kept the 10-minute lock-timing capability and prefers one optional configurable setting; implement validated values with atomic prior-state and partial-failure recovery, then test a disposable Workstation session.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.ScreensaverSlp15Lgn5",
@@ -2941,10 +2958,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen as an exclusive lock-safe profile choice after the deeper recovery gate.",
+      "nextAction": "Owner kept the 15-minute variant as a value of the optional configurable lock-timing setting; verify exclusive selection, atomic recovery, and session safety.",
       "v31Hardening": [],
-      "reason": "v2 library-only lock variant conflicts with the 10-minute choice and has no exact inverse.",
-      "reviewTrigger": "Reopen as an exclusive lock-safe profile choice after the deeper recovery gate."
+      "reason": "Owner kept the 15-minute lock-timing variant on 2026-10-30; it must use the shared reversible setting rather than a conflicting independent write.",
+      "reviewTrigger": "Owner kept the 15-minute variant as a value of the optional configurable lock-timing setting; verify exclusive selection, atomic recovery, and session safety.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.CustomKeyboardShortcut",
@@ -3078,10 +3096,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Add opt-in minimal favorites with exact list recovery and a brief visual check.",
+      "nextAction": "Owner deferred the fixed minimal favorites preset; decide whether the preferred configurable list covers its intent, with exact prior-list recovery.",
       "v31Hardening": [],
-      "reason": "v2 replaces the full user favorites list without snapshot or inverse.",
-      "reviewTrigger": "Add opt-in minimal favorites with exact list recovery and a brief visual check."
+      "reason": "Owner preferred the configurable favorites list and deferred a separate fixed minimal preset on 2026-10-30.",
+      "reviewTrigger": "Owner deferred the fixed minimal favorites preset; decide whether the preferred configurable list covers its intent, with exact prior-list recovery.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:setting.GnmLocationServiceOff",
@@ -3223,10 +3242,11 @@
         "docs/migrations/desktop-user-configuration.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen with the 15-percent variant after an owned, conflict-safe UPower policy handler and battery target exist.",
+      "nextAction": "Owner kept the 20-percent battery threshold; implement it as an optional validated value of one owned UPower setting shared with the 15-percent outcome, with exact prior-policy recovery.",
       "v31Hardening": [],
-      "reason": "The v2 PowerPercentageLow20 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Reopen with the 15-percent variant after an owned, conflict-safe UPower policy handler and battery target exist."
+      "reason": "Owner kept the 20-percent capability on 2026-10-30, preferring a configurable optional threshold over separate fixed edits.",
+      "reviewTrigger": "Owner kept the 20-percent battery threshold; implement it as an optional validated value of one owned UPower setting shared with the 15-percent outcome, with exact prior-policy recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.BashAliases",
@@ -3366,10 +3386,11 @@
         "docs/migrations/system-security-28.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept ClamAV; separate signed RPM installation from bounded signature updates and prove seeded signature database, service, and scan-state recovery.",
       "v31Hardening": [],
-      "reason": "v2 runs freshclam after RPM installation; signature database ownership, freshness, failure, and recovery are undefined.",
-      "reviewTrigger": "A bounded signature acquisition policy and seeded-database recovery pass on Fedora 44 Workstation."
+      "reason": "Owner kept ClamAV for v3.0 on 2026-10-30; signature freshness and database ownership remain to design.",
+      "reviewTrigger": "Owner kept ClamAV; separate signed RPM installation from bounded signature updates and prove seeded signature database, service, and scan-state recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.KeepassXC",
@@ -3484,10 +3505,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; design removal by recorded RIDE-owned UUID and prove unrelated-profile preservation.",
+      "nextAction": "Owner deferred a separate VPNProfiles inverse decision; determine whether owned VPN deployment inverses cover it, preserving all unrelated connection UUIDs.",
       "v31Hardening": [],
-      "reason": "v2 remove-only function deletes every NetworkManager VPN connection.",
-      "reviewTrigger": "Limit removal to recorded RIDE-owned UUIDs and preserve seeded unrelated profiles."
+      "reason": "Owner deferred the standalone VPNProfiles inverse capability on 2026-10-30; the v2 broad deletion remains prohibited.",
+      "reviewTrigger": "Owner deferred a separate VPNProfiles inverse decision; determine whether owned VPN deployment inverses cover it, preserving all unrelated connection UUIDs.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.ExpressVPNProfiles",
@@ -3506,10 +3528,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; bind exact UUIDs to an owned private deployment and prove connection recovery.",
+      "nextAction": "Owner deferred a separate ExpressVPNProfiles inverse; determine whether the kept private ExpressVPN deployment owns the needed UUID-scoped removal, preserving unrelated connections.",
       "v31Hardening": [],
-      "reason": "v2 remove-only function deletes name-matched NetworkManager connections without ownership proof.",
-      "reviewTrigger": "Bind exact owned UUIDs to a private deployment and restore seeded user connections."
+      "reason": "Owner deferred a separate ExpressVPNProfiles inverse decision on 2026-10-30; the v2 name-based deletion remains prohibited.",
+      "reviewTrigger": "Owner deferred a separate ExpressVPNProfiles inverse; determine whether the kept private ExpressVPN deployment owns the needed UUID-scoped removal, preserving unrelated connections.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.ExpressVPN",
@@ -3529,10 +3552,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Pin and verify a licensed publisher build and prove private activation/profile-safe recovery.",
+      "nextAction": "Owner kept ExpressVPN; pin a licensed publisher build, keep activation private, and prove profile-safe recovery.",
       "v31Hardening": [],
-      "reason": "v2 scrapes a moving RPM and prompts for activation while inverse leaves account and connection state.",
-      "reviewTrigger": "Pin and verify a licensed publisher build and prove private activation/profile-safe recovery."
+      "reason": "Owner kept ExpressVPN for v3.0 on 2026-10-30; activation and connection state remain private.",
+      "reviewTrigger": "Owner kept ExpressVPN; pin a licensed publisher build, keep activation private, and prove profile-safe recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:action.StartExpressVPNafterBoot",
@@ -3573,10 +3597,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; design an owned boot schedule with exact prior-state recovery.",
+      "nextAction": "Owner kept the boot connection schedule inverse; tie it to a reviewed owned schedule and prove exact prior-state and unrelated-job recovery.",
       "v31Hardening": [],
-      "reason": "v2 remove-only function filters a matching crontab string without origin proof.",
-      "reviewTrigger": "Reconcile as inverse of an owned boot connection schedule."
+      "reason": "Owner kept ExpressVPNafterBoot for v3.0 on 2026-10-30; the v2 crontab text filter remains unsafe.",
+      "reviewTrigger": "Owner kept the boot connection schedule inverse; tie it to a reviewed owned schedule and prove exact prior-state and unrelated-job recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:action.CreateExpVPNrandomizer",
@@ -3639,10 +3664,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; design a scoped owned schedule inverse that preserves unrelated jobs.",
+      "nextAction": "Owner kept the VPN change schedule inverse; review current intended behavior, rewrite as needed, and preserve unrelated jobs with exact owned-schedule recovery.",
       "v31Hardening": [],
-      "reason": "v2 remove-only inverse deletes matching crontab lines without ownership proof.",
-      "reviewTrigger": "Reopen as scoped inverse of an owned schedule."
+      "reason": "Owner kept ScheduleExpVPNChange for v3.0 on 2026-10-30, subject to behavior review and rewrite; the v2 broad crontab deletion remains unsafe.",
+      "reviewTrigger": "Owner kept the VPN change schedule inverse; review current intended behavior, rewrite as needed, and preserve unrelated jobs with exact owned-schedule recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Cheat",
@@ -3856,17 +3882,18 @@
       "batch": "system-security-13",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
+      "disposition": "retire",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Pin licensed publisher build and prove VM inventory/module recovery on disposable host.",
+      "nextAction": "Owner retired the VMware Workstation capability from v3 scope on 2026-10-30; retain the v2 mapping and review if explicitly requested again.",
       "v31Hardening": [],
-      "reason": "v2 follows a moving publisher installer redirect and uses host-specific serial data without pinned provenance or full recovery.",
-      "reviewTrigger": "Pin licensed publisher build and prove VM inventory/module recovery on disposable host."
+      "reason": "Owner retired the full VMware Workstation capability on 2026-10-30; no v3 implementation is required.",
+      "reviewTrigger": "Owner retired the VMware Workstation capability from v3 scope on 2026-10-30; retain the v2 mapping and review if explicitly requested again.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:action.PatchVMwareModules",
@@ -3973,10 +4000,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; isolate each owned mapping and prove backup, boot recovery, and unrelated-mount preservation before runnable status.",
+      "nextAction": "Owner deferred a separate KeyfileMounts inverse decision; determine whether individually owned encrypted-mount operations cover it, with boot and unrelated-mount preservation.",
       "v31Hardening": [],
-      "reason": "v2 remove-only inverse broadly deletes crypttab/fstab lines while encrypted volumes remain.",
-      "reviewTrigger": "Scope to individually owned mappings and prove boot plus unrelated-mount preservation."
+      "reason": "Owner deferred the separate KeyfileMounts inverse capability on 2026-10-30; the v2 broad crypttab/fstab deletion remains prohibited.",
+      "reviewTrigger": "Owner deferred a separate KeyfileMounts inverse decision; determine whether individually owned encrypted-mount operations cover it, with boot and unrelated-mount preservation.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:setting.SSHreboot",
@@ -3996,10 +4024,11 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Use private principal, visudo and ownership checks, and seeded-policy recovery.",
+      "nextAction": "Owner kept SSH reboot policy; use a private principal, validated scoped sudoers rule, and exact seeded-policy recovery.",
       "v31Hardening": [],
-      "reason": "v2 writes user-specific passwordless sudoers and deletes it without validation or prior ownership.",
-      "reviewTrigger": "Use private principal, visudo and ownership checks, and seeded-policy recovery."
+      "reason": "Owner kept SSH reboot policy for v3.0 on 2026-10-30; the broad v2 passwordless sudoers edit remains unsafe.",
+      "reviewTrigger": "Owner kept SSH reboot policy; use a private principal, validated scoped sudoers rule, and exact seeded-policy recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:action.UpdateFedora",
@@ -4040,10 +4069,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept the generic server Required capability; split the mixed RPM bundle into role-owned operations with exact Fedora 44 Server profile lifecycles.",
       "v31Hardening": [],
-      "reason": "The 11-package v2 bundle mixes VM tools, firewall, Samba, cron, and editors without role ownership or inverse.",
-      "reviewTrigger": "A requested Server role has individually owned packages and an exact profile/VM lifecycle."
+      "reason": "Owner kept the generic server Required capability for v3.0 on 2026-10-30; the 11-package v2 bundle requires role ownership.",
+      "reviewTrigger": "Owner kept the generic server Required capability; split the mixed RPM bundle into role-owned operations with exact Fedora 44 Server profile lifecycles.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.AutoUpdate",
@@ -4062,10 +4092,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept server AutoUpdate; reconcile update policy and timer ownership with Cockpit settings, then prove DNF5 scheduling and exact seeded-config recovery on Fedora 44 Server.",
       "v31Hardening": [],
-      "reason": "v2 enables an update timer and edits administrator DNF config without journaling prior state; its timer edit does not persist.",
-      "reviewTrigger": "An owned DNF5 timer/config operation passes seeded config and timer recovery."
+      "reason": "Owner kept server AutoUpdate for v3.0 on 2026-10-30 and requested reconciliation with Cockpit settings; v2 timer/config edits remain unsafe.",
+      "reviewTrigger": "Owner kept server AutoUpdate; reconcile update policy and timer ownership with Cockpit settings, then prove DNF5 scheduling and exact seeded-config recovery on Fedora 44 Server.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:action.ViewIPaddress",
@@ -4106,10 +4137,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept server Hostname; reuse the workstation hostname operation if its validated private value, state, and recovery contract match, then prove exact Fedora 44 Server restore.",
       "v31Hardening": [],
-      "reason": "Interactive host identity has no declared private value or prior-name recovery.",
-      "reviewTrigger": "A validated private hostname input and exact Server VM restore exist."
+      "reason": "Owner kept server Hostname on 2026-10-30 and requested reconciliation with the workstation hostname capability.",
+      "reviewTrigger": "Owner kept server Hostname; reuse the workstation hostname operation if its validated private value, state, and recovery contract match, then prove exact Fedora 44 Server restore.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.Docker",
@@ -4128,10 +4160,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept server Docker; reuse shared package behavior where valid, reconcile Server runtime user and service ownership, and prove seeded repo, group, image, and volume preservation.",
       "v31Hardening": [],
-      "reason": "External repository, docker group, daemon, images, and volumes have no owned inverse in v2.",
-      "reviewTrigger": "Publisher trust and seeded repo/group/service/volume preservation pass on Server."
+      "reason": "Owner kept server Docker for v3.0 on 2026-10-30; Server ownership and data recovery need distinct evidence.",
+      "reviewTrigger": "Owner kept server Docker; reuse shared package behavior where valid, reconcile Server runtime user and service ownership, and prove seeded repo, group, image, and volume preservation.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.Tailscale",
@@ -4150,10 +4183,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept server Tailscale; use a verified publisher package source and preserve node identity, tailnet state, and prior service state.",
       "v31Hardening": [],
-      "reason": "v2 executes an unpinned remote shell installer without trust, node identity, or inverse.",
-      "reviewTrigger": "A verified package source and node/service recovery boundary pass on Server."
+      "reason": "Owner kept server Tailscale for v3.0 on 2026-10-30; the v2 remote-script path remains unsuitable.",
+      "reviewTrigger": "Owner kept server Tailscale; use a verified publisher package source and preserve node identity, tailnet state, and prior service state.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.Glances",
@@ -4172,10 +4206,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept server Glances; pin its environment and own unit, firewall, port, service, and configuration state with exact recovery on Fedora 44 Server.",
       "v31Hardening": [],
-      "reason": "v2 overwrites /opt/glances and a systemd unit, opens a firewall port, starts a web service, and defines no inverse.",
-      "reviewTrigger": "A pinned environment and owned unit/firewall/service recovery pass on Server."
+      "reason": "Owner kept server Glances for v3.0 on 2026-10-30; the v2 moving environment and unowned service edits remain unsafe.",
+      "reviewTrigger": "Owner kept server Glances; pin its environment and own unit, firewall, port, service, and configuration state with exact recovery on Fedora 44 Server.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.PythonPip",
@@ -4217,10 +4252,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept server Selenium; choose a requested browser and driver target, pin an isolated environment, and prove exact Fedora 44 Server removal.",
       "v31Hardening": [],
-      "reason": "Global unpinned pip install has no isolated environment, browser/driver target, or inverse.",
-      "reviewTrigger": "A requested browser/driver target and pinned isolated install pass exact Server removal."
+      "reason": "Owner kept server Selenium for v3.0 on 2026-10-30; the v2 global unpinned pip install remains unsuitable.",
+      "reviewTrigger": "Owner kept server Selenium; choose a requested browser and driver target, pin an isolated environment, and prove exact Fedora 44 Server removal.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:setting.NoRootLogin",
@@ -4239,10 +4275,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept NoRootLogin; implement a scoped owned SSH drop-in, pass sshd syntax and active-session checks, and prove exact prior-policy recovery on Fedora 44 Server.",
       "v31Hardening": [],
-      "reason": "v2 edits administrator sshd_config in place without backup, syntax check, or inverse.",
-      "reviewTrigger": "An owned drop-in passes sshd -t, session preservation, and exact restore."
+      "reason": "Owner kept server NoRootLogin for v3.0 on 2026-10-30; the in-place v2 edit remains unsafe.",
+      "reviewTrigger": "Owner kept NoRootLogin; implement a scoped owned SSH drop-in, pass sshd syntax and active-session checks, and prove exact prior-policy recovery on Fedora 44 Server.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:action.GenerateSSHkeysRSA",
@@ -4283,10 +4320,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept server ExpressVPN; reuse the workstation package path where behavior matches, keep activation private, and prove Server service, profile, and credential recovery.",
       "v31Hardening": [],
-      "reason": "Moving publisher RPM URL and activation prompt have no credential, profile, or service inverse.",
-      "reviewTrigger": "A pinned licensed artifact and private activation pass service/profile/credential recovery."
+      "reason": "Owner kept server ExpressVPN for v3.0 on 2026-10-30; server-specific activation and service state need evidence.",
+      "reviewTrigger": "Owner kept server ExpressVPN; reuse the workstation package path where behavior matches, keep activation private, and prove Server service, profile, and credential recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:action.CreateVPNrandomizer",
@@ -4327,10 +4365,11 @@
         "docs/migrations/generic-server-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner kept persistent VPN randomization; design an owned timer with private connection state and prove unrelated crontab, routing, and VPN recovery on Fedora 44 Server.",
       "v31Hardening": [],
-      "reason": "v2 rewrites crontab with VPN jobs without owned schedule or unrelated-job recovery.",
-      "reviewTrigger": "An owned timer preserves unrelated crontab, routing, and connection state."
+      "reason": "Owner kept server VPNRandomizerPersistent for v3.0 on 2026-10-30; the v2 broad crontab rewrite remains unsafe.",
+      "reviewTrigger": "Owner kept persistent VPN randomization; design an owned timer with private connection state and prove unrelated crontab, routing, and VPN recovery on Fedora 44 Server.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.qBittorrentServer",
@@ -4342,17 +4381,18 @@
       "batch": "generic-server-15",
       "risk": "medium",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
-      "nextAction": "Install Fedora qbittorrent-nox as a server package; keep service user, firewall, keys, and download state separately owned.",
+      "blocker": "",
+      "nextAction": "Owner kept server qBittorrent; install Fedora qbittorrent-nox as a package, then own service user and preserve firewall, credentials, settings, and downloads.",
       "v31Hardening": [],
-      "reason": "The old server function installs qbittorrent-nox but its neighboring host setup is unowned.",
-      "reviewTrigger": "Install Fedora qbittorrent-nox as a server package; keep service user, firewall, keys, and download state separately owned."
+      "reason": "Owner kept qBittorrentServer for v3.0 on 2026-10-30; the native RPM and adjacent server state need separate ownership.",
+      "reviewTrigger": "Owner kept server qBittorrent; install Fedora qbittorrent-nox as a package, then own service user and preserve firewall, credentials, settings, and downloads.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.PlexServer",
@@ -4364,17 +4404,18 @@
       "batch": "generic-server-16",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
-      "nextAction": "Review the current Plex RPM repository, service state, signing key, and seeded media/metadata recovery before a runnable server operation.",
+      "blocker": "",
+      "nextAction": "Owner kept Plex Server; review its current signed RPM repository and service, then prove seeded media and metadata recovery on Fedora 44 Server.",
       "v31Hardening": [],
-      "reason": "The old function adds a publisher repository and enables a service without an inverse.",
-      "reviewTrigger": "Review the current Plex RPM repository, service state, signing key, and seeded media/metadata recovery before a runnable server operation."
+      "reason": "Owner kept PlexServer for v3.0 on 2026-10-30; existing media, metadata, account, and repository state must be preserved.",
+      "reviewTrigger": "Owner kept Plex Server; review its current signed RPM repository and service, then prove seeded media and metadata recovery on Fedora 44 Server.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.PlexAutoUpdate",
@@ -4386,17 +4427,18 @@
       "batch": "generic-server-17",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
-      "nextAction": "Compare a bounded Plex repository update timer with the old third-party updater; preserve existing timers and credentials.",
+      "blocker": "",
+      "nextAction": "Owner kept Plex update capability but asked whether a separate updater is needed; reconcile official RPM repository updates with server AutoUpdate and Cockpit before designing any timer.",
       "v31Hardening": [],
-      "reason": "The old function executes a mutable remote installer.",
-      "reviewTrigger": "Compare a bounded Plex repository update timer with the old third-party updater; preserve existing timers and credentials."
+      "reason": "Owner kept PlexAutoUpdate capability on 2026-10-30 pending necessity review; Plex documents public releases through its RPM repository and DNF updates, so the old remote updater is not a required installation method.",
+      "reviewTrigger": "Owner kept Plex update capability but asked whether a separate updater is needed; reconcile official RPM repository updates with server AutoUpdate and Cockpit before designing any timer.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.AMP",
@@ -4408,17 +4450,18 @@
       "batch": "generic-server-18",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
-      "nextAction": "Find a pinned publisher artifact or managed package; keep license, instances, ports, and account data private.",
+      "blocker": "",
+      "nextAction": "Owner kept AMP; find a pinned publisher artifact or managed package and preserve private license, instances, ports, users, and account data.",
       "v31Hardening": [],
-      "reason": "The old function runs a remote shell installer and changes firewall state.",
-      "reviewTrigger": "Find a pinned publisher artifact or managed package; keep license, instances, ports, and account data private."
+      "reason": "Owner kept AMP for v3.0 on 2026-10-30; the v2 remote shell installer and firewall mutation remain unsuitable.",
+      "reviewTrigger": "Owner kept AMP; find a pinned publisher artifact or managed package and preserve private license, instances, ports, users, and account data.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.Ferium",
@@ -4430,17 +4473,18 @@
       "batch": "generic-server-19",
       "risk": "medium",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
-      "nextAction": "Pin a current Ferium Linux release with an owned portable destination and modpack-preserving inverse.",
+      "blocker": "",
+      "nextAction": "Owner kept Ferium; pin a current Linux release in an owned portable destination and preserve modpacks and profiles on inverse.",
       "v31Hardening": [],
-      "reason": "The old function scrapes the latest ZIP and extracts into a shared system bin path.",
-      "reviewTrigger": "Pin a current Ferium Linux release with an owned portable destination and modpack-preserving inverse."
+      "reason": "Owner kept Ferium for v3.0 on 2026-10-30; the v2 latest-ZIP scrape and shared-bin extraction remain unsuitable.",
+      "reviewTrigger": "Owner kept Ferium; pin a current Linux release in an owned portable destination and preserve modpacks and profiles on inverse.",
+      "v30Decision": "keep"
     },
     {
       "key": "server:package.MinecraftServer",
@@ -4452,17 +4496,18 @@
       "batch": "generic-server-20",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "blocker": "Current source, ownership, and Fedora 44 server lifecycle evidence are pending.",
-      "nextAction": "Choose the official Java server artifact and compatible runtime; preserve worlds, EULA state, and service identity.",
+      "blocker": "",
+      "nextAction": "Owner kept MinecraftServer; use the official Java server artifact and compatible runtime, then preserve worlds, EULA state, service identity, and prior files.",
       "v31Hardening": [],
-      "reason": "The old function installs Java 8 and creates a directory but no working server JAR.",
-      "reviewTrigger": "Choose the official Java server artifact and compatible runtime; preserve worlds, EULA state, and service identity."
+      "reason": "Owner kept MinecraftServer for v3.0 on 2026-10-30; the v2 Java 8/directory stub does not install a working server.",
+      "reviewTrigger": "Owner kept MinecraftServer; use the official Java server artifact and compatible runtime, then preserve worlds, EULA state, service identity, and prior files.",
+      "v30Decision": "keep"
     }
   ],
   "batches": [
@@ -4932,7 +4977,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Owner deferred VM shortcuts and kept current-default favorites; reconcile default and custom favorites choices with exact prior-list recovery."
+      "nextAction": "Owner deferred VM shortcuts and a fixed minimal favorites preset, and kept current-default favorites; reconcile the preferred configurable list with exact recovery."
     },
     {
       "id": "desktop-user-09",
@@ -4943,7 +4988,7 @@
         "docs/acceptance/gnome-user-boolean.md",
         "docs/migrations/desktop-user-configuration.md"
       ],
-      "nextAction": "Keep passing boolean settings opt-in; reopen string and UPower decisions only on their documented recovery triggers. Complete H018 in v3.1."
+      "nextAction": "Owner kept the 20-percent battery variant; design one optional configurable UPower threshold shared with 15-percent, preserving prior policy. Complete H018 in v3.1."
     },
     {
       "id": "desktop-user-10",
@@ -4952,7 +4997,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
+      "nextAction": "Owner kept Terminator; split the Fedora RPM from the optional iBus hotkey and verify each lifecycle on Fedora 44 Workstation."
     },
     {
       "id": "desktop-user-11",
@@ -4961,7 +5006,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Keep both lock-setting variants non-runnable until atomic prior-state, partial-failure, and session-safety evidence passes."
+      "nextAction": "Owner kept both lock-timing variants as optional values of one configurable setting; require atomic prior-state, partial-failure, and session-safety evidence."
     },
     {
       "id": "system-security-01",
@@ -4970,7 +5015,7 @@
       "evidence": [
         "docs/migrations/system-security-core.md"
       ],
-      "nextAction": "Reopen only on the documented state, ownership, and exact-target recovery trigger."
+      "nextAction": "Owner kept hostname management and DNF5 FastDNF tuning; design validated parameters and exact prior-state recovery."
     },
     {
       "id": "system-security-02",
@@ -4988,7 +5033,7 @@
       "evidence": [
         "docs/migrations/system-security-core.md"
       ],
-      "nextAction": "Reopen only on the documented state, ownership, and exact-target recovery trigger."
+      "nextAction": "Owner kept Docker; review publisher source and prove owned repository, service, image, and volume recovery."
     },
     {
       "id": "system-security-04",
@@ -5017,7 +5062,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Owner kept MulticastDNS control; design line-scoped resolver ownership and exact DNS-order recovery."
     },
     {
       "id": "system-security-07",
@@ -5036,7 +5081,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Owner kept OpenconnectVPN; choose a reviewed package and prove profile, service, and removal behavior."
     },
     {
       "id": "system-security-09",
@@ -5054,7 +5099,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Owner kept ExpressVPN; pin licensed publisher acquisition and prove private activation and profile-safe recovery."
     },
     {
       "id": "system-security-11",
@@ -5081,7 +5126,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Owner retired the VMware Workstation capability; retain the v2 mapping and review only on explicit request."
     },
     {
       "id": "system-security-14",
@@ -5126,7 +5171,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Owner kept SSH reboot policy; design private principal, scoped sudoers validation, and seeded-policy recovery."
     },
     {
       "id": "system-security-19",
@@ -5135,7 +5180,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Owner kept WireGuard; separate RPM from private keys and prove seeded-key and connection recovery."
     },
     {
       "id": "system-security-20",
@@ -5144,7 +5189,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Design owner-retained VPNProfiles removal by journaled UUID; prove unrelated NetworkManager profiles survive."
+      "nextAction": "Owner deferred a separate VPNProfiles inverse; determine whether owned deployment inverses cover it while preserving unrelated profiles."
     },
     {
       "id": "system-security-21",
@@ -5153,7 +5198,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Design owner-retained ExpressVPNProfiles removal for a private owned deployment and prove seeded connection recovery."
+      "nextAction": "Owner deferred a separate ExpressVPNProfiles inverse; determine whether the kept deployment covers UUID-scoped removal."
     },
     {
       "id": "system-security-22",
@@ -5162,7 +5207,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Design owner-retained ExpressVPNafterBoot as an exact inverse of an owned boot schedule."
+      "nextAction": "Owner kept ExpressVPNafterBoot; design an exact inverse of an owned boot schedule that preserves unrelated jobs."
     },
     {
       "id": "system-security-23",
@@ -5180,7 +5225,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Design owner-retained ScheduleExpVPNChange as a scoped schedule inverse that preserves unrelated jobs."
+      "nextAction": "Owner kept ScheduleExpVPNChange; review and rewrite current behavior as an owned schedule with a scoped inverse."
     },
     {
       "id": "system-security-25",
@@ -5189,7 +5234,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; isolate owner-retained KeyfileMounts mapping recovery and prove boot plus unrelated-mount preservation before promotion."
+      "nextAction": "Owner deferred a separate KeyfileMounts inverse; determine whether owned mount mappings cover it and preserve bootability."
     },
     {
       "id": "system-security-26",
@@ -5198,7 +5243,7 @@
       "evidence": [
         "docs/migrations/system-security-smartmontools.md"
       ],
-      "nextAction": "Reopen only after smartd-aware service and configuration recovery evidence."
+      "nextAction": "Owner deferred SmartMonTools; retain failed smartd service-state evidence and reopen on exact recovery."
     },
     {
       "id": "system-security-27",
@@ -5207,7 +5252,7 @@
       "evidence": [
         "docs/migrations/system-security-27.md"
       ],
-      "nextAction": "Revisit the deferred combined Pidgin/OTR decision after plugin compatibility, two-party messaging, and seeded-profile recovery review."
+      "nextAction": "Owner reaffirmed deferral of combined Pidgin/OTR; review plugin compatibility, message behavior, and account/key recovery."
     },
     {
       "id": "system-security-28",
@@ -5216,7 +5261,7 @@
       "evidence": [
         "docs/migrations/system-security-28.md"
       ],
-      "nextAction": "Reopen ClamAV after signature database ownership and recovery evidence."
+      "nextAction": "Owner kept ClamAV; separate RPM and signature updates and prove seeded database and service recovery."
     },
     {
       "id": "system-security-29",
@@ -5244,7 +5289,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept server Required; split mixed RPMs into role-owned operations and verify Fedora 44 Server lifecycles."
     },
     {
       "id": "generic-server-03",
@@ -5253,7 +5298,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept AutoUpdate; reconcile Cockpit settings and ownership before implementing DNF5 timer/config recovery."
     },
     {
       "id": "generic-server-04",
@@ -5271,7 +5316,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept Server Hostname; reuse shared validated input and prior-name recovery if behavior matches, then prove Server target."
     },
     {
       "id": "generic-server-06",
@@ -5280,7 +5325,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept Server Docker; reuse shared package behavior and prove Server user, service, group, image, and volume recovery."
     },
     {
       "id": "generic-server-07",
@@ -5289,7 +5334,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept Server Glances; pin environment and own service, unit, firewall, port, and configuration recovery."
     },
     {
       "id": "generic-server-08",
@@ -5298,7 +5343,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept NoRootLogin; own SSH drop-in and prove syntax, session safety, and exact prior-policy recovery."
     },
     {
       "id": "generic-server-09",
@@ -5308,7 +5353,7 @@
         "docs/migrations/system-security-risk-decisions.md",
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept Server ExpressVPN; reuse shared package path and prove private activation, service, and profile recovery."
     },
     {
       "id": "generic-server-10",
@@ -5326,7 +5371,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept VPNRandomizerPersistent; use an owned timer and prove routing, connection, and unrelated-job preservation."
     },
     {
       "id": "generic-server-12",
@@ -5336,7 +5381,7 @@
         "docs/migrations/generic-server-python.md",
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept Selenium; pin an isolated browser and driver environment and prove Server removal."
     },
     {
       "id": "generic-server-13",
@@ -5354,7 +5399,7 @@
       "evidence": [
         "docs/migrations/generic-server-decisions.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen only on the documented owner and exact-target recovery trigger."
+      "nextAction": "Owner kept Tailscale; verify publisher package source and preserve node identity, tailnet, and service state."
     },
     {
       "id": "resolution-review-01",
@@ -5363,7 +5408,7 @@
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
-      "nextAction": "All six outcomes have explicit decisions; reopen lock state only on atomic user-session recovery evidence."
+      "nextAction": "Owner kept Xplico and monitoring, deferred Galleta and two screensaver outcomes, and retired AtomTelemetry; review replacements and shared lock timing."
     },
     {
       "id": "publisher-apps-17",
@@ -5372,7 +5417,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-17.md"
       ],
-      "nextAction": "Reopen only after reviewed GNOME 50 extension IDs, pinned artifacts, and seeded user-extension recovery pass."
+      "nextAction": "Owner deferred GNOME Extensions; review IDs, GNOME 50 compatibility, pinned artifacts, and seeded user-extension recovery."
     },
     {
       "id": "generic-server-15",
@@ -5381,7 +5426,7 @@
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "nextAction": "Install Fedora qbittorrent-nox as a server package; keep service user, firewall, keys, and download state separately owned."
+      "nextAction": "Owner kept qBittorrentServer; install native RPM and separately own service user, firewall, settings, and downloads."
     },
     {
       "id": "generic-server-16",
@@ -5390,7 +5435,7 @@
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "nextAction": "Review the current Plex RPM repository, service state, signing key, and seeded media/metadata recovery before a runnable server operation."
+      "nextAction": "Owner kept PlexServer; review signed publisher RPM and prove media, metadata, account, and service recovery."
     },
     {
       "id": "generic-server-17",
@@ -5399,7 +5444,7 @@
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "nextAction": "Compare a bounded Plex repository update timer with the old third-party updater; preserve existing timers and credentials."
+      "nextAction": "Owner kept Plex update capability; first reconcile official repository updates with server AutoUpdate and Cockpit settings."
     },
     {
       "id": "generic-server-18",
@@ -5408,7 +5453,7 @@
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "nextAction": "Find a pinned publisher artifact or managed package; keep license, instances, ports, and account data private."
+      "nextAction": "Owner kept AMP; find pinned licensed source and preserve private license, instances, ports, users, and data."
     },
     {
       "id": "generic-server-19",
@@ -5417,7 +5462,7 @@
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "nextAction": "Pin a current Ferium Linux release with an owned portable destination and modpack-preserving inverse."
+      "nextAction": "Owner kept Ferium; pin portable Linux artifact and preserve modpacks and profiles."
     },
     {
       "id": "generic-server-20",
@@ -5426,7 +5471,7 @@
       "evidence": [
         "docs/migrations/v30-path-reassessment.md"
       ],
-      "nextAction": "Choose the official Java server artifact and compatible runtime; preserve worlds, EULA state, and service identity."
+      "nextAction": "Owner kept MinecraftServer; choose official artifact/runtime and prove world, EULA, service, and file recovery."
     }
   ],
   "exclusions": [

@@ -52,7 +52,7 @@ fallback execution path.
 | `VMKeyboardShortcut` | **Decision deferred by owner.** The library-only VM variant writes the same fixed slots as the workstation shortcut set with different bindings, so it can overwrite either user or RIDE data. | Decide whether the VM-specific bindings remain useful; if kept, add an opt-in choice with ownership, conflict, and restore evidence. |
 | `GnomeCustomFavorites` | **Unsupported.** The active v2 array replaces all user favorites and includes `atom.desktop`; Atom was retired in the publisher review. | Select installed Fedora 44 desktop IDs, preserve user favorites, and pass profile/visual and exact-restore checks. |
 | `GnomeDefaultFavorites` | **Kept by owner.** The v2 hard-coded Fedora 37-era snapshot cannot define Fedora 44 defaults. Offer an explicit current-defaults choice in the same favorites setting family as the configurable list; save the exact prior list. | Identify Fedora 44 Workstation defaults, define exclusive profile choices, and verify exact list recovery. |
-| `GnomeMinimalFavorites` | **Unsupported.** The library-only function replaces the complete favorites array without a prior-state snapshot. | Add an opt-in minimal-favorites profile with exact list recovery and a brief visual check. |
+| `GnomeMinimalFavorites` | **Decision deferred by owner.** A configurable favorites list is preferred over another fixed minimal preset. The v2 function replaces the complete list without a prior-state snapshot. | Decide whether the configurable favorites choice already covers this outcome; preserve and restore the exact prior list. |
 
 The owner retained the `CustomKbrdShortcut` inverse outcome for migration on
 2026-10-30. Its v2 list-clearing behavior remains non-runnable; the next
@@ -91,18 +91,18 @@ ownership and approval boundary. The helper is not in `default`.
 
 | Outcome | Decision and reason | Reopen when |
 | --- | --- | --- |
-| `ScreensaverSlp10Lgn5` | **Unsupported.** The active v2 function writes four GNOME session and screensaver keys, including lock enable and delay, without recording the prior values or an inverse. | Add one atomic, per-user policy operation with prior-value and default provenance, partial-failure restore, lock-session safety, and a brief visual confirmation on a disposable Workstation. |
-| `ScreensaverSlp15Lgn5` | **Unsupported.** This library-only variant writes the same four keys with a different idle delay and can conflict with the 10-minute choice. | Reopen as an exclusive profile choice under the same lock-safe, reversible handler. |
+| `ScreensaverSlp10Lgn5` | **Kept by owner.** The active v2 function writes four GNOME session and screensaver keys, including lock enable and delay, without recording the prior values or an inverse. Prefer one optional configurable timing setting. | Add one atomic, per-user policy operation with validated timing values, prior-value and default provenance, partial-failure restore, lock-session safety, and a brief visual confirmation on a disposable Workstation. |
+| `ScreensaverSlp15Lgn5` | **Kept by owner.** This library-only variant writes the same four keys with a different idle delay. Treat it as a value of the optional configurable timing setting, not a simultaneous independent write. | Verify both 10- and 15-minute values through the same lock-safe, reversible handler. |
 
 Lock settings are security behavior. They remain non-runnable in v3.0 until
 the deeper gate passes; a candidate switch is not a substitute.
 
 ## Batch 10: Terminator composite
 
-`Terminator` is **unsupported** as a v3.0 source outcome. The active v2
+The owner kept `Terminator` for v3.0; it remains **unsupported** until migrated. The active v2
 install/remove pair changes both the Fedora `terminator` RPM and the current
 user's iBus emoji hotkey. Removal writes a hard-coded hotkey instead of the
 prior value. Installing the RPM alone would omit a user-visible side effect,
-so this review does not count the composite as a working install. Reopen by
+so this review does not count the composite as a working install. Migrate by
 separating the signed Fedora package from an optional, exact-restorable
 per-user hotkey operation, then test both on the declared Workstation VM.

@@ -7,8 +7,10 @@ mutually exclusive and both restore the exact prior layout.
 The owner also kept GNOME region selection, with country/region supplied by
 the profile rather than fixed to Denmark. The separate remove-only
 `GnomeRegion` use case remains deferred until that owned setting is designed.
-The owner kept the 15-percent UPower threshold outcome; its implementation
-must preserve any administrator-owned policy and exact prior state.
+The owner kept the 15- and 20-percent UPower threshold outcomes. Prefer one
+optional, configurable threshold with validated values rather than two
+independent file edits. Its implementation must preserve any
+administrator-owned policy and exact prior state.
 
 Status: **non-runnable v3.0 decisions**, 2026-10-30, for the remaining
 desktop-user-02, desktop-user-04, and desktop-user-09 outcomes. These are
@@ -36,7 +38,7 @@ separate from the [operable boolean settings](desktop-user-boolean.md).
 | `GnomeRegionDaDK` | **Unsupported.** `SetGnomeRegionDaDK` sets `org.gnome.system.locale region` to `da_DK.UTF-8` for the login user. That localized value must be explicit opt-in profile data, with exact prior-region recovery. | Add validated locale selection and a string-state journal, then verify the target locale and restore on Fedora 44 Workstation. |
 | `GnomeRegion` | **Unsupported.** `RemoveGnomeRegion` is a remove-only v2 function that writes an empty string. It cannot restore the previous locale and has no standalone desired install. | Reconcile it as the inverse of an owned region operation once exact prior-state and default recovery are available. |
 | `PowerPercentageLow15` | **Unsupported.** The active v2 function rewrites every matching `PercentageLow=` line in `/etc/UPower/UPower.conf` with `sed -i` and has no inverse or ownership check. | Review the current UPower drop-in contract, preserve an existing administrator policy, and pass battery-policy and restore checks on a disposable target. |
-| `PowerPercentageLow20` | **Unsupported.** The library-only variant performs the same broad file rewrite to `20.0`, with the same inverse and ownership gap. | Reopen together with the 15-percent variant after a conflict-safe, owned UPower policy handler and battery target exist. |
+| `PowerPercentageLow20` | **Kept by owner.** The library-only variant performs the same broad file rewrite to `20.0`, with the same inverse and ownership gap. Prefer an optional validated threshold shared with the 15-percent outcome. | Implement one conflict-safe, owned UPower policy setting, then prove battery behavior and exact recovery on a disposable target. |
 
 The owner deferred the separate `GnomeRegion` retire-or-keep choice on
 2026-10-30. It remains non-runnable while an owned region setting and exact
