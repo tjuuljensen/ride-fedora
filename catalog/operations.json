@@ -682,6 +682,283 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.fd-find.md"
+    },
+    {
+      "id": "package.libewf",
+      "kind": "package",
+      "name": "libewf EWF library",
+      "group": "forensics",
+      "description": "Install the Expert Witness Format library.",
+      "handler": "dnf-package",
+      "packageName": "libewf",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "libewf",
+      "productUri": "https://github.com/libyal/libewf",
+      "license": "LGPL-3.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/libewf/libewf/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/libewf/libewf/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.libewf.md"
+    },
+    {
+      "id": "package.exif",
+      "kind": "package",
+      "name": "EXIF utility",
+      "group": "forensics",
+      "description": "Install the command-line JPEG EXIF viewer.",
+      "handler": "dnf-package",
+      "packageName": "exif",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "exif",
+      "productUri": "https://packages.fedoraproject.org/pkgs/exif/exif/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/exif/exif/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/exif/exif/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.exif.md"
+    },
+    {
+      "id": "package.md5deep",
+      "kind": "package",
+      "name": "md5deep hash tools",
+      "group": "forensics",
+      "description": "Install recursive file hashing tools.",
+      "handler": "dnf-package",
+      "packageName": "md5deep",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "md5deep",
+      "productUri": "https://sourceforge.net/projects/md5deep/",
+      "license": "GPL-2.0-only",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/md5deep/md5deep/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/md5deep/md5deep/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.md5deep.md"
+    },
+    {
+      "id": "package.alien",
+      "kind": "package",
+      "name": "alien package converter",
+      "group": "package-tools",
+      "description": "Install the package format conversion tool without using it.",
+      "handler": "dnf-package",
+      "packageName": "alien",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "alien",
+      "productUri": "https://sourceforge.net/projects/alien-pkg-convert/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/alien/alien/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/alien/alien/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.alien.md"
+    },
+    {
+      "id": "package.hexchat",
+      "kind": "package",
+      "name": "HexChat IRC client",
+      "group": "communication",
+      "description": "Install the Fedora HexChat IRC client.",
+      "handler": "dnf-package",
+      "packageName": "hexchat",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "hexchat",
+      "productUri": "https://hexchat.github.io/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/hexchat/hexchat/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/hexchat/hexchat/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.speedtest-cli",
+      "kind": "package",
+      "name": "Speedtest CLI",
+      "group": "network-tools",
+      "description": "Install the command-line bandwidth test tool; RIDE does not run a speed test.",
+      "handler": "dnf-package",
+      "packageName": "speedtest-cli",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "speedtest-cli",
+      "productUri": "https://github.com/sivel/speedtest-cli",
+      "license": "Apache-2.0",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/speedtest-cli/speedtest-cli/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/speedtest-cli/speedtest-cli/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.chromium",
+      "kind": "package",
+      "name": "Chromium browser",
+      "group": "browser",
+      "description": "Install the Fedora Chromium browser without changing browser profiles or defaults.",
+      "handler": "dnf-package",
+      "packageName": "chromium",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "chromium",
+      "productUri": "https://www.chromium.org/",
+      "license": "BSD-3-Clause AND LGPL-2.1-or-later AND Apache-2.0 AND IJG AND MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.0-only)",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/chromium/chromium/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/chromium/chromium/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     }
   ]
 }

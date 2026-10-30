@@ -162,9 +162,12 @@ v3.1 hardening queue records broader coverage without weakening v3.0 safety.
 The first [native RPM batch](migrations/native-rpm-01.md) passed on 2026-10-30:
 six v2 CLI package outcomes are supported on Fedora 44 x86_64 Workstation in
 the opt-in `cli-tools` profile. The [resolution record](migrations/resolution-decisions.md)
-retires the information-only server IP display and the unverified Tecmint
-script without claiming either as an install. The next ordinary package batch
-is `native-rpm-02`; the remaining outcomes stay visible in the progress report.
+retires information-only, placeholder, and obsolete behavior without claiming
+those outcomes as installs. [Native RPM batch 02](migrations/native-rpm-02.md)
+passed four more exact-target packages. Its investigated `alien` recovery
+retains one named DNF dependency without losing or changing pre-existing RPMs;
+that cleanup question is in the v3.1 queue. The next ordinary package batch
+is `native-rpm-03`; the remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse

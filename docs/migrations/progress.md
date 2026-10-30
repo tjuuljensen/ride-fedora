@@ -3,15 +3,15 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**8/180 complete (4.4%)**: 6 supported, 0 opt-in candidate, 2 retired, 0 private, 0 unsupported; 172 unresolved.
+**17/180 complete (9.4%)**: 10 supported, 0 opt-in candidate, 5 retired, 0 private, 2 unsupported; 163 unresolved.
 
 Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
 | `native-rpm-01` | Fedora CLI packages: pwgen, htop, bat, ncdu, ripgrep, fd | low 6 | 6/6 | [native-rpm-01.md](../../docs/migrations/native-rpm-01.md) | Complete on Fedora 44 Workstation; start native-rpm-02 and recheck this batch if its target or package contract changes. |
-| `native-rpm-02` | Native Rpm 02: LibEWF, Exif, Md5deep, Terminator, Alien, SmartMonTools | low 6 | 0/6 | — | Assess LibEWF, Exif, Md5deep, Terminator, Alien, SmartMonTools; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `native-rpm-03` | Native Rpm 03: Hexchat, SpeedtestCLI, Chromium, Cheat, NautilusHash, NautilusImageTools | low 6 | 0/6 | — | Assess Hexchat, SpeedtestCLI, Chromium, Cheat, NautilusHash, NautilusImageTools; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `native-rpm-02` | Fedora repository packages 02: LibEWF, Exif, Md5deep, Alien | low 4 | 4/4 | [native-rpm-02.md](../../docs/migrations/native-rpm-02.md), [package.libewf.md](../../docs/acceptance/package.libewf.md), [package.exif.md](../../docs/acceptance/package.exif.md), [package.md5deep.md](../../docs/acceptance/package.md5deep.md), [package.alien.md](../../docs/acceptance/package.alien.md) | Complete on Fedora 44 Workstation; start native-rpm-03 and review alien dependency residue in v3.1. |
+| `native-rpm-03` | Fedora repository packages 03: HexChat, Speedtest CLI, Chromium, and Nautilus resolutions | low 3, medium 2 | 2/5 | [native-rpm-03.md](../../docs/migrations/native-rpm-03.md) | Implement three assessed active preset RPM outcomes; record VM evidence and resolve their declared status. |
 | `native-rpm-04` | Native Rpm 04: BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird | low 6 | 0/6 | — | Assess BulkExtractor, SecurityLab, Dc3dd, Qbittorrent, Pidgin, Thunderbird; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `native-rpm-05` | Native Rpm 05: Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake | low 6 | 0/6 | — | Assess Flameshot, Dia, Wine, VLCPlayer, GIMP, HandBrake; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `native-rpm-06` | Native Rpm 06: Lynis, ClamAV, KeepassXC, Eza, Libpst | low 5 | 0/5 | — | Assess Lynis, ClamAV, KeepassXC, Eza, Libpst; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -38,6 +38,7 @@ Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix function
 | `publisher-apps-13` | Publisher Apps 13: Projecteur | medium 1 | 0/1 | — | Assess Projecteur; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-14` | Publisher Apps 14: YubikeyPersTool | high 1 | 0/1 | — | Assess YubikeyPersTool; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `publisher-apps-15` | Publisher Apps 15: Xmind | medium 1 | 0/1 | — | Assess Xmind; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `publisher-apps-16` | Publisher release binary: Cheat | medium 1 | 0/1 | [publisher-apps-16.md](../../docs/migrations/publisher-apps-16.md) | Assess release provenance, owned destination, inverse, and exact-target VM acceptance. |
 | `desktop-user-01` | Desktop and user state 01: SetupUserDefaultDirs, FirefoxPreferences | high 2 | 0/2 | — | Assess SetupUserDefaultDirs, FirefoxPreferences; record user-owned data, exact prior state, inverse, and VM criteria. |
 | `desktop-user-02` | Desktop and user state 02: DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5 | medium 6 | 0/6 | — | Assess DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5; record user-owned data, exact prior state, inverse, and VM criteria. |
 | `desktop-user-03` | Desktop and user state 03: CustomKeyboardShortcut, GnomeCustomFavorites | high 2 | 0/2 | — | Assess CustomKeyboardShortcut, GnomeCustomFavorites; record user-owned data, exact prior state, inverse, and VM criteria. |
@@ -47,6 +48,7 @@ Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix function
 | `desktop-user-07` | Desktop and user state 07: WindowCtlAppmenuClose, WindowCtlLeftClsMinMax, ScreensaverSlp15Lgn5 | medium 3 | 0/3 | — | Assess WindowCtlAppmenuClose, WindowCtlLeftClsMinMax, ScreensaverSlp15Lgn5; record user-owned data, exact prior state, inverse, and VM criteria. |
 | `desktop-user-08` | Desktop and user state 08: VMKeyboardShortcut, GnomeDefaultFavorites, GnomeMinimalFavorites | high 3 | 0/3 | — | Assess VMKeyboardShortcut, GnomeDefaultFavorites, GnomeMinimalFavorites; record user-owned data, exact prior state, inverse, and VM criteria. |
 | `desktop-user-09` | Desktop and user state 09: GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20 | medium 3 | 0/3 | — | Assess GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20; record user-owned data, exact prior state, inverse, and VM criteria. |
+| `desktop-user-10` | Terminator and user iBus hotkey | high 1 | 0/1 | — | Assess the package and exact user-owned hotkey baseline before implementing a reversible setting. |
 | `system-security-01` | System Security 01: Hostname, FastDNF | medium 2 | 0/2 | — | Assess Hostname, FastDNF; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `system-security-02` | System Security 02: UpdateFedora | high 1 | 0/1 | — | Assess UpdateFedora; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `system-security-03` | System Security 03: Docker | high 1 | 0/1 | — | Assess Docker; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -72,6 +74,7 @@ Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix function
 | `system-security-23` | System Security 23: ScheduleRandomExpVPNChange | high 1 | 0/1 | — | Assess ScheduleRandomExpVPNChange; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `system-security-24` | System Security 24: ScheduleExpVPNChange | high 1 | 0/1 | — | Assess ScheduleExpVPNChange; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `system-security-25` | System Security 25: KeyfileMounts | high 1 | 0/1 | — | Assess KeyfileMounts; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `system-security-26` | smartmontools storage monitoring | high 1 | 0/1 | — | Assess RPM, smartd service, configuration ownership, and storage safety in an isolated batch. |
 | `generic-server-01` | Generic Server 01: UpdateFedora | high 1 | 0/1 | — | Assess UpdateFedora; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `generic-server-02` | Generic Server 02: Required | medium 1 | 0/1 | — | Assess Required; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `generic-server-03` | Generic Server 03: AutoUpdate | high 1 | 0/1 | — | Assess AutoUpdate; record v2 behavior, current source, inverse, and risk-based completion criteria. |
@@ -86,7 +89,7 @@ Replacements with an operable v3 mapping: 0. Owner exclusions: 2 Citrix function
 | `generic-server-12` | Generic Server 12: PythonPip, Selenium | medium 2 | 0/2 | — | Assess PythonPip, Selenium; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `generic-server-13` | Generic Server 13: GenerateSSHkeysRSA | high 1 | 0/1 | — | Assess GenerateSSHkeysRSA; record v2 behavior, current source, inverse, and risk-based completion criteria. |
 | `generic-server-14` | Generic Server 14: Tailscale | high 1 | 0/1 | — | Assess Tailscale; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `resolution-review-01` | Resolution Review 01: TecmintMonitorSh, ScreenSaver, Screensaver, Galleta, Xplico, AtomTelemetry | medium 6 | 1/6 | [resolution-decisions.md](../../docs/migrations/resolution-decisions.md) | Review the remaining stub and conflicting setting outcomes; TecmintMonitorSh is retired. |
+| `resolution-review-01` | Resolution Review 01: TecmintMonitorSh, ScreenSaver, Screensaver, Galleta, Xplico, AtomTelemetry | medium 6 | 4/6 | [resolution-decisions.md](../../docs/migrations/resolution-decisions.md) | Review the conflicting screensaver settings; Galleta, Xplico, Atom telemetry, and TecmintMonitorSh are retired. |
 
 ## v3.1 hardening queue
 
@@ -98,3 +101,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H002` | Extended failure and recovery matrix for opt-in candidate applications | After each candidate has its v3.0 happy-path evidence | queued |
 | `H003` | Desktop visual and accessibility review | After desktop operations are operable in disposable Workstation VMs | queued |
 | `H004` | Retained artifact offline installation and provider fallback | After artifact provenance and dependency behavior are designed | queued |
+| `H005` | Review DNF dependency residue after alien removal | After v3.0 package lifecycle acceptance; preserve unowned RPMs during cleanup design | queued |

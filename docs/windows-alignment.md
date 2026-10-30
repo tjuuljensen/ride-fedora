@@ -149,3 +149,27 @@ schema 2 journal. No shared schema, source fallback, artifact, or recovery
 contract changes. Recheck if these products enter the Windows catalog, if
 Linux changes package deployment behavior, and before release-candidate
 promotion.
+
+### Fedora RPM package batch 02, 2026-10-30
+
+Compared Linux `codex/ride-v3-migration` with Windows
+`codex/ride-v3-migration` at `17f9cef` for the four scoped v2 outcomes in
+[native RPM batch 02](migrations/native-rpm-02.md). Windows has no shared
+Fedora installer for `libewf`, `exif`, `md5deep`, or `alien`. Linux uses the
+existing installed `fedora-rpm` deployment, explicit source, and run schema 2
+journal without changing shared package, profile, or recovery semantics.
+`libewf` and `ewftools` remain separate Linux packages; no product-wide
+exclusion is inferred. Recheck at release-candidate preparation or if a
+shared product identity or deployment contract changes.
+
+### Fedora workstation package batch 03, 2026-10-30
+
+Compared the Linux catalog, profile selectors, and run-state contract with
+Windows `codex/ride-v3-migration` at `17f9cef` before implementing
+[native RPM batch 03](migrations/native-rpm-03.md). The three Linux operations
+select Fedora RPMs through the existing `fedora-rpm` installed deployment;
+the two Nautilus resolution decisions add no runnable operation. No shared
+schema, product identity, source fallback, or journal behavior changes. The
+Windows branch has no corresponding Fedora installer. Recheck if Chromium or
+another product gains a shared identity contract, if either platform changes
+profile or run-state behavior, and before release-candidate preparation.

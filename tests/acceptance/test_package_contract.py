@@ -356,11 +356,20 @@ def test_server_base_profile_smoke(vm):
     profile_smoke(vm, "server-base", ("package.less", "package.openssh-clients"))
 
 
-@pytest.mark.vm_target("fedora-44-workstation-x86_64")
-def test_native_cli_tools_batch(vm):
-    """Run six v2 CLI replacements in one disposable Workstation overlay."""
-    packages = ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find")
+def native_rpm_batch(vm, packages, allowed_residuals=None, installed_probes=None):
+    """Check each package in one disposable Workstation overlay."""
+    allowed_residuals = allowed_residuals or {}
+    installed_probes = installed_probes or {}
     baseline = package_inventory(vm)
+
+    def recovered(package):
+        before = set(baseline.splitlines())
+        after = set(package_inventory(vm).splitlines())
+        assert not (before - after), f"pre-existing RPMs lost or changed: {sorted(before - after)}"
+        added = {line.split("\t", 1)[0] for line in after - before}
+        assert added == set(allowed_residuals.get(package, ())), (
+            f"unexpected RPM residue after {package}: {sorted(added)}")
+
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
     for package in packages:
         identifier = f"package.{package}"
@@ -384,6 +393,8 @@ def test_native_cli_tools_batch(vm):
         ).stdout.splitlines()
         assert any(value.strip() not in ("", "(none)") for value in signatures), signatures
         vm.run(f"rpm -V {package}")
+        if package in installed_probes:
+            vm.run(installed_probes[package])
         status = table_row(vm.ride("status", identifier).stdout, identifier)
         assert (status["OBSERVED"], status["STATUS"]) == ("installed", expected_status)
 
@@ -392,14 +403,39 @@ def test_native_cli_tools_batch(vm):
         restored = vm.ride("restore", "--run-id", first_id, *candidate_args(identifier), timeout=900)
         assert journal(vm, run_id(restored.stdout))["status"] == "complete"
         assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0
-        assert package_inventory(vm) == baseline
+        recovered(package)
 
         installed = vm.ride("install", identifier, *candidate_args(identifier), timeout=900)
         assert journal(vm, run_id(installed.stdout))["status"] == "complete"
         removed = vm.ride("remove", identifier, *candidate_args(identifier), timeout=900)
         assert journal(vm, run_id(removed.stdout))["status"] == "complete"
         assert vm.run(f"rpm -q --quiet {package}", check=False).returncode != 0
-        assert package_inventory(vm) == baseline
+        recovered(package)
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_cli_tools_batch(vm):
+    native_rpm_batch(vm, ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find"))
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_forensic_and_package_tools_batch(vm):
+    # The pinned image predates Fedora 44 RPM updates required by alien. Refresh
+    # only this disposable overlay before taking the recovery inventory baseline.
+    vm.run("sudo dnf -y upgrade --refresh", timeout=1800)
+    native_rpm_batch(vm, ("libewf", "exif", "md5deep", "alien"),
+                     {"alien": ("systemd-rpm-macros",)})
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_native_active_workstation_applications_batch(vm):
+    # Compare recovery against the same refreshed package baseline used for
+    # the dependency-heavy publisher RPM in the preceding native batch.
+    vm.run("sudo dnf -y upgrade --refresh", timeout=1800)
+    native_rpm_batch(vm, ("hexchat", "speedtest-cli", "chromium"),
+                     installed_probes={"hexchat": "hexchat --version",
+                                       "speedtest-cli": "speedtest-cli --version",
+                                       "chromium": "chromium --version"})
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")

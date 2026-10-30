@@ -236,13 +236,17 @@
       "batch": "native-rpm-03",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/native-rpm-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Review at the stated Fedora 44 extension availability trigger.",
+      "v31Hardening": [],
+      "reason": "The Fedora 44 GtkHash package lacks the Nautilus extension requested by v2; the application or another file-manager extension is not equivalent.",
+      "reviewTrigger": "A maintained Fedora 44 GNOME Files hash extension is packaged and its compatibility and recovery are demonstrated."
     },
     {
       "key": "workstation:package.NautilusImageTools",
@@ -255,13 +259,17 @@
       "batch": "native-rpm-03",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/native-rpm-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Review at the stated Fedora 44 extension availability trigger.",
+      "v31Hardening": [],
+      "reason": "The Fedora nautilus-image-converter package record has only an EPEL 7 release, not a Fedora 44 build of the v2 GNOME Files extension.",
+      "reviewTrigger": "A maintained Fedora 44 GNOME Files image-resize extension is packaged and its behavior and recovery are demonstrated."
     },
     {
       "key": "workstation:package.Flatpak",
@@ -350,13 +358,17 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred incomplete legacy stub; source and current package need review",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only if the stated product installation review trigger occurs.",
+      "v31Hardening": [],
+      "reason": "The v2 Galleta install/remove pair only prints URLs or an empty line and never installs or removes software.",
+      "reviewTrigger": "Explicit demand for Galleta installation with a current source, license, detection, and inverse review."
     },
     {
       "key": "workstation:package.Plaso",
@@ -407,13 +419,17 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred incomplete legacy stub; source and current package need review",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only if the stated product installation review trigger occurs.",
+      "v31Hardening": [],
+      "reason": "The v2 Xplico install/remove pair only prints URLs or an empty line and never installs or removes software.",
+      "reviewTrigger": "Explicit demand for Xplico installation with a current source, license, detection, and inverse review."
     },
     {
       "key": "workstation:package.VMFStools",
@@ -542,12 +558,17 @@
       "batch": "native-rpm-02",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replaced: package.ewftools covers EWF utilities; verify library intent separately.",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.libewf"
+      ],
+      "evidence": [
+        "docs/acceptance/package.libewf.md",
+        "docs/migrations/native-rpm-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck the exact target and recovery if the Fedora RPM or provider contract changes.",
       "v31Hardening": []
     },
     {
@@ -599,12 +620,17 @@
       "batch": "native-rpm-02",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review product identity and official package.",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.exif"
+      ],
+      "evidence": [
+        "docs/acceptance/package.exif.md",
+        "docs/migrations/native-rpm-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck the exact target and recovery if the Fedora RPM or provider contract changes.",
       "v31Hardening": []
     },
     {
@@ -637,12 +663,17 @@
       "batch": "native-rpm-02",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current package and forensic use case.",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.md5deep"
+      ],
+      "evidence": [
+        "docs/acceptance/package.md5deep.md",
+        "docs/migrations/native-rpm-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck the exact target and recovery if the Fedora RPM or provider contract changes.",
       "v31Hardening": []
     },
     {
@@ -1068,16 +1099,16 @@
         "RemoveTerminator"
       ],
       "selectorCoverage": "active",
-      "family": "native-rpm",
-      "batch": "native-rpm-02",
-      "risk": "low",
+      "family": "desktop-user",
+      "batch": "desktop-user-10",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [],
       "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Optional desktop profile only.",
+      "nextAction": "Review the v2 package install and owned iBus hotkey change; preserve the original user setting before migration.",
       "v31Hardening": []
     },
     {
@@ -1091,13 +1122,20 @@
       "batch": "native-rpm-02",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review relevance and support.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.alien"
+      ],
+      "evidence": [
+        "docs/acceptance/package.alien.md",
+        "docs/migrations/native-rpm-02.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck the exact target and recovery if the Fedora RPM or provider contract changes.",
+      "v31Hardening": [
+        "H005"
+      ]
     },
     {
       "key": "workstation:package.SmartMonTools",
@@ -1106,16 +1144,16 @@
         "RemoveSmartMonTools"
       ],
       "selectorCoverage": "active",
-      "family": "native-rpm",
-      "batch": "native-rpm-02",
-      "risk": "low",
+      "family": "system-security",
+      "batch": "system-security-26",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [],
       "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Optional system tools profile.",
+      "nextAction": "Review smartd service, configuration ownership, and storage monitoring behavior before migrating the RPM.",
       "v31Hardening": []
     },
     {
@@ -1281,13 +1319,17 @@
       "batch": "resolution-review-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/resolution-decisions.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only if the maintained-editor and safe user-file recovery trigger occurs.",
+      "v31Hardening": [],
+      "reason": "The archived Atom editor has no maintained telemetry contract, and the v2 enable function deletes a user-owned init.coffee file without safe recovery.",
+      "reviewTrigger": "A maintained Atom-compatible editor with equivalent telemetry settings, explicit user demand, and tested user-file backup and restoration."
     },
     {
       "key": "workstation:package.AtomPlugins",
@@ -1336,14 +1378,18 @@
       "selectorCoverage": "active",
       "family": "native-rpm",
       "batch": "native-rpm-03",
-      "risk": "low",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review upstream maintenance before reintroduction.",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.hexchat"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-03.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-03 focused checks, then record exact-target acceptance and status.",
       "v31Hardening": []
     },
     {
@@ -1546,12 +1592,16 @@
       "batch": "native-rpm-03",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current upstream and source.",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.speedtest-cli"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-03.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-03 focused checks, then record exact-target acceptance and status.",
       "v31Hardening": []
     },
     {
@@ -1719,14 +1769,18 @@
       "selectorCoverage": "active",
       "family": "native-rpm",
       "batch": "native-rpm-03",
-      "risk": "low",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Candidate distro repository package.",
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.chromium"
+      ],
+      "evidence": [
+        "docs/migrations/native-rpm-03.md"
+      ],
+      "blocker": "Focused mocked lifecycle and Fedora 44 Workstation happy-path acceptance are pending.",
+      "nextAction": "Run native-rpm-03 focused checks, then record exact-target acceptance and status.",
       "v31Hardening": []
     },
     {
@@ -2864,16 +2918,18 @@
         "RemoveCheat"
       ],
       "selectorCoverage": "active",
-      "family": "native-rpm",
-      "batch": "native-rpm-03",
-      "risk": "low",
+      "family": "publisher-apps",
+      "batch": "publisher-apps-16",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current upstream and source.",
+      "evidence": [
+        "docs/migrations/publisher-apps-16.md"
+      ],
+      "blocker": "Current release provenance, owned destination, detection, inverse, and VM behavior need review.",
+      "nextAction": "Assess the current publisher artifact and define a safe opt-in acquisition operation.",
       "v31Hardening": []
     },
     {
@@ -3424,16 +3480,24 @@
     {
       "id": "native-rpm-02",
       "family": "native-rpm",
-      "title": "Native Rpm 02: LibEWF, Exif, Md5deep, Terminator, Alien, SmartMonTools",
-      "evidence": [],
-      "nextAction": "Assess LibEWF, Exif, Md5deep, Terminator, Alien, SmartMonTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Fedora repository packages 02: LibEWF, Exif, Md5deep, Alien",
+      "evidence": [
+        "docs/migrations/native-rpm-02.md",
+        "docs/acceptance/package.libewf.md",
+        "docs/acceptance/package.exif.md",
+        "docs/acceptance/package.md5deep.md",
+        "docs/acceptance/package.alien.md"
+      ],
+      "nextAction": "Complete on Fedora 44 Workstation; start native-rpm-03 and review alien dependency residue in v3.1."
     },
     {
       "id": "native-rpm-03",
       "family": "native-rpm",
-      "title": "Native Rpm 03: Hexchat, SpeedtestCLI, Chromium, Cheat, NautilusHash, NautilusImageTools",
-      "evidence": [],
-      "nextAction": "Assess Hexchat, SpeedtestCLI, Chromium, Cheat, NautilusHash, NautilusImageTools; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Fedora repository packages 03: HexChat, Speedtest CLI, Chromium, and Nautilus resolutions",
+      "evidence": [
+        "docs/migrations/native-rpm-03.md"
+      ],
+      "nextAction": "Implement three assessed active preset RPM outcomes; record VM evidence and resolve their declared status."
     },
     {
       "id": "native-rpm-04",
@@ -3618,6 +3682,15 @@
       "nextAction": "Assess Xmind; record v2 behavior, current source, inverse, and risk-based completion criteria."
     },
     {
+      "id": "publisher-apps-16",
+      "family": "publisher-apps",
+      "title": "Publisher release binary: Cheat",
+      "evidence": [
+        "docs/migrations/publisher-apps-16.md"
+      ],
+      "nextAction": "Assess release provenance, owned destination, inverse, and exact-target VM acceptance."
+    },
+    {
       "id": "desktop-user-01",
       "family": "desktop-user",
       "title": "Desktop and user state 01: SetupUserDefaultDirs, FirefoxPreferences",
@@ -3679,6 +3752,13 @@
       "title": "Desktop and user state 09: GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20",
       "evidence": [],
       "nextAction": "Assess GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20; record user-owned data, exact prior state, inverse, and VM criteria."
+    },
+    {
+      "id": "desktop-user-10",
+      "family": "desktop-user",
+      "title": "Terminator and user iBus hotkey",
+      "evidence": [],
+      "nextAction": "Assess the package and exact user-owned hotkey baseline before implementing a reversible setting."
     },
     {
       "id": "system-security-01",
@@ -3856,6 +3936,13 @@
       "nextAction": "Assess KeyfileMounts; record v2 behavior, current source, inverse, and risk-based completion criteria."
     },
     {
+      "id": "system-security-26",
+      "family": "system-security",
+      "title": "smartmontools storage monitoring",
+      "evidence": [],
+      "nextAction": "Assess RPM, smartd service, configuration ownership, and storage safety in an isolated batch."
+    },
+    {
       "id": "generic-server-01",
       "family": "generic-server",
       "title": "Generic Server 01: UpdateFedora",
@@ -3962,7 +4049,7 @@
       "evidence": [
         "docs/migrations/resolution-decisions.md"
       ],
-      "nextAction": "Review the remaining stub and conflicting setting outcomes; TecmintMonitorSh is retired."
+      "nextAction": "Review the conflicting screensaver settings; Galleta, Xplico, Atom telemetry, and TecmintMonitorSh are retired."
     }
   ],
   "exclusions": [
@@ -4065,6 +4152,12 @@
       "id": "H004",
       "title": "Retained artifact offline installation and provider fallback",
       "trigger": "After artifact provenance and dependency behavior are designed",
+      "status": "queued"
+    },
+    {
+      "id": "H005",
+      "title": "Review DNF dependency residue after alien removal",
+      "trigger": "After v3.0 package lifecycle acceptance; preserve unowned RPMs during cleanup design",
       "status": "queued"
     }
   ]

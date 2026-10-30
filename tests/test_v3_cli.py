@@ -155,6 +155,33 @@ esac
         (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=server\n")
         self.run_ride("plan", "--profile", profile, success=False)
 
+    def test_second_native_rpm_batch_maps_exact_v2_package_names(self):
+        names = ("libewf", "exif", "md5deep", "alien")
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        selected = {f"package.{name}": name for name in names}
+        for entry in catalog["operations"]:
+            if entry["id"] in selected:
+                self.assertEqual(entry["packageName"], selected[entry["id"]])
+                entry["scope"] = "user"  # Test-only, unelevated mocked provider.
+        path = self.root / "native-rpm-02-catalog.json"
+        path.write_text(json.dumps(catalog))
+        self.env["RIDE_CATALOG_PATH"] = str(path)
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        profile = self.root / "native-rpm-02-profile.json"
+        profile.write_text(json.dumps({"schemaVersion": 1, "id": "native-rpm-02",
+                                       "description": "Test-only package selection",
+                                       "operations": [{"id": identifier, "state": "installed"}
+                                                      for identifier in selected]}))
+        self.run_ride("plan", "--profile", str(profile))
+        self.run_ride("apply", "--profile", str(profile))
+        first = self.journals()[0]
+        self.assertEqual([step["result"] for step in first["steps"]], ["changed"] * len(names))
+        self.run_ride("apply", "--profile", str(profile))
+        repeat = next(run for run in self.journals() if run["runId"] != first["runId"])
+        self.assertEqual([step["result"] for step in repeat["steps"]], ["unchanged"] * len(names))
+        self.run_ride("restore", "--run-id", first["runId"])
+        self.assertFalse(any((self.root / "packages" / name).exists() for name in names))
+
     def test_interactive_tables_align_and_pipes_remain_tsv(self):
         if shutil.which("column") is None:
             self.skipTest("column is optional for interactive tables")
