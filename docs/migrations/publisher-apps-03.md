@@ -6,6 +6,8 @@ and `InstallBrave` / `RemoveBrave` as separate product outcomes. Both v2
 installers add a publisher repository and an RPM. VS Code's inverse also
 removes a hard-coded global GPG key ID, which may be shared; Brave's inverse
 leaves its repository behind.
+The owner kept Visual Studio Code in the v3.0 fast-track review. Its owned
+publisher repository and package lifecycle remain to implement.
 
 ## Completion criteria defined before implementation
 

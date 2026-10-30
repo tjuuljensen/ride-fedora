@@ -1,6 +1,9 @@
 # Firefox extension policy tool handoff
 
 Status: **documented non-runnable replacement for v3.0**, 2026-10-30.
+The owner kept v3-managed Firefox add-on policy capability in the fast-track
+review. Integrate the existing standalone tool after the high-risk owned-policy
+and recovery gate passes.
 This isolated active-preset outcome maps `InstallFirefoxAddons` and
 `RemoveFirefoxAddons`. The current v2 functions already delegate to the
 repository's maintained [`manage-firefox-extensions.py`](../../tools/manage-firefox-extensions.py).

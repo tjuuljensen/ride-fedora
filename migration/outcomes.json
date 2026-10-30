@@ -1539,10 +1539,11 @@
         "docs/migrations/publisher-apps-03.md"
       ],
       "blocker": "",
-      "nextAction": "Implement and accept an owned Microsoft repository/key handler before enabling VS Code.",
+      "nextAction": "Owner kept Visual Studio Code for v3.0 on 2026-10-30. Implement an owned Microsoft repository/key lifecycle and a brief Fedora 44 package acceptance check.",
       "v31Hardening": [],
       "reason": "The official Fedora code RPM requires an owned external repository and signing-key lifecycle; v3 has no handler or exact-target VM recovery, and v2 removes a hard-coded potentially shared key.",
-      "reviewTrigger": "An external-repository handler passes publisher-key, conflict, install, and owned inverse checks on Fedora 44 Workstation."
+      "reviewTrigger": "An external-repository handler passes publisher-key, conflict, install, and owned inverse checks on Fedora 44 Workstation.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.ArduinoIDE",
@@ -2141,10 +2142,11 @@
         "docs/migrations/publisher-apps-03.md"
       ],
       "blocker": "",
-      "nextAction": "Implement and accept an owned Brave repository/key handler before enabling the browser.",
+      "nextAction": "Owner kept Brave for v3.0 on 2026-10-30. Implement owned publisher repository/key lifecycle and a brief Fedora 44 browser package acceptance check.",
       "v31Hardening": [],
       "reason": "The official Fedora Brave RPM requires an owned external repository/key lifecycle; v3 has no handler or exact-target VM recovery, and v2 leaves its repository on removal.",
-      "reviewTrigger": "An external-repository handler passes publisher-key, conflict, install, and owned inverse checks on Fedora 44 Workstation."
+      "reviewTrigger": "An external-repository handler passes publisher-key, conflict, install, and owned inverse checks on Fedora 44 Workstation.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Vivaldi",
@@ -2305,10 +2307,11 @@
         "docs/migrations/publisher-apps-04.md"
       ],
       "blocker": "",
-      "nextAction": "Use the standalone tool for the documented policy workflow; add v3 integration only after the high-risk gate passes.",
+      "nextAction": "Owner kept v3-managed Firefox add-on policy capability for v3.0 on 2026-10-30. Integrate the existing standalone policy tool only after high-risk ownership, browser-policy recovery, and exact-target evidence.",
       "v31Hardening": [],
       "reason": "The current maintained manage-firefox-extensions.py tool directly manages repository-owned Firefox policy; it is not integrated into the v3 catalog/run envelope.",
-      "reviewTrigger": "A v3 policy handler records exact manifest ownership and passes seeded administrator-policy and profile recovery in Fedora 44 Workstation."
+      "reviewTrigger": "A v3 policy handler records exact manifest ownership and passes seeded administrator-policy and profile recovery in Fedora 44 Workstation.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:action.FinalizeFirefoxAddonRemoval",
@@ -4688,7 +4691,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-03.md"
       ],
-      "nextAction": "Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch."
+      "nextAction": "Owner kept Visual Studio Code and Brave; implement owned publisher repositories/keys and Fedora 44 package acceptance."
     },
     {
       "id": "publisher-apps-04",
@@ -4697,7 +4700,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-04.md"
       ],
-      "nextAction": "Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch."
+      "nextAction": "Owner kept v3-managed Firefox add-on policy; integrate the standalone tool after high-risk ownership and recovery evidence."
     },
     {
       "id": "publisher-apps-05",
