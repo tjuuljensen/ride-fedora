@@ -1675,10 +1675,10 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner retained optional Discord for migration on 2026-10-30; choose an owned publisher RPM or Flathub source and prove profile-preserving Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The publisher offers a Linux RPM, but v2 has no declared Fedora 44 source and v3 lacks a pinned publisher-RPM or owned Flathub handler.",
-      "reviewTrigger": "A requested Discord deployment has verified publisher or Flathub source, preserved user profile, and Fedora 44 VM happy path."
+      "reviewTrigger": "A chosen Discord deployment has verified publisher or Flathub source, preserved user profile, and Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.Pidgin",
@@ -2037,10 +2037,10 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner retained optional Joplin for migration on 2026-10-30; design pinned owned deployment and prove notebook-preserving Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 moving AppImage and glob inverse lack file ownership; the publisher script cannot be executed by a default v3 profile, and notebooks belong to the user.",
-      "reviewTrigger": "A requested pinned portable Joplin deployment proves notebook-preserving recovery and Fedora 44 VM happy path."
+      "reviewTrigger": "A chosen pinned Joplin deployment proves notebook-preserving recovery and Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.TecmintMonitorSh",
@@ -3761,10 +3761,10 @@
         "docs/migrations/publisher-apps-15.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner retained optional Xmind for migration on 2026-10-30; choose the current edition and exact artifact, then prove document-preserving Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 old Zen RPM scrape does not identify the current publisher edition or package; its xmind-vana inverse lacks ownership and user-document recovery.",
-      "reviewTrigger": "A requested Xmind edition has exact publisher RPM and terms, owned installed identity, preserved documents, and Fedora 44 VM happy path."
+      "reviewTrigger": "A chosen Xmind edition has exact publisher RPM and terms, owned installed identity, preserved documents, and Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.SonosPlayer",
@@ -4610,7 +4610,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-10.md"
       ],
-      "nextAction": "Choose the retained Arduino IDE deployment form and verify its owned lifecycle; review the other optional applications individually and continue publisher-apps-11."
+      "nextAction": "Design owned lifecycles for retained Arduino IDE, Discord, and Joplin; choose sources and preserve user data. Review remaining optional apps individually."
     },
     {
       "id": "publisher-apps-11",
@@ -4658,7 +4658,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-15.md"
       ],
-      "nextAction": "Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch."
+      "nextAction": "Choose the owner-retained Xmind edition and verified publisher RPM, then prove document-safe Fedora 44 recovery before runnable status."
     },
     {
       "id": "publisher-apps-16",

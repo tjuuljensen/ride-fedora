@@ -50,7 +50,7 @@ inverse deletes matching names.
 - **balenaEtcher: unsupported and non-runnable in v3.0.** The publisher
   [does ship a versioned x86_64 RPM with a SHA-256](https://github.com/balena-io/etcher/releases),
   but v2 selects a moving GitHub release URL and the v3 catalog has no
-  pinned external-RPM acquisition handler. Reopen for a requested pinned
+  pinned external-RPM acquisition handler. Choose a pinned
   publisher RPM with verified bytes, installed-package detection, collision
   handling, and disposable-VM happy path. Flashing media is separate from
   installing the application and must be user-initiated.

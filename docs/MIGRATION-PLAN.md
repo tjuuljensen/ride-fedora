@@ -347,10 +347,11 @@ The original 99 non-runnable `unsupported` rows have a separate
 proposals, 38 individual keep-or-drop choices, and 51 original migration-design
 decisions. The owner retired NautilusHash and NautilusImageTools; deferred
 GnomeExtInstaller, GnomeRegion, and AppImageLauncher; and retained portable
-Bitwarden, six R2 inverse outcomes, BalenaEtcher, and ArduinoIDE for migration.
+Bitwarden, six R2 inverse outcomes, BalenaEtcher, ArduinoIDE, Discord, Joplin,
+and Xmind for migration.
 The retained outcomes require owned state and recovery; their unsafe v2
-methods remain non-runnable. The current 97 unsupported rows comprise 59
-migration-design outcomes, 35 keep-or-drop choices, and three deferred owner
+methods remain non-runnable. The current 97 unsupported rows comprise 62
+migration-design outcomes, 32 keep-or-drop choices, and three deferred owner
 decisions. Owner choices update next actions without changing legacy source
 code or machine state.
 

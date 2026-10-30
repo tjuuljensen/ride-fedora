@@ -38,8 +38,8 @@ Windows installer evidence to the Linux deployment.
 - **ArduinoIDE: unsupported, non-runnable.** The publisher's
   [current Linux AppImage release](https://github.com/arduino/arduino-ide/releases)
   includes a versioned asset and SHA-256, but the v2 `latest` scrape and
-  name-glob removal do not establish file ownership. Reopen for a requested
-  pinned AppImage operation with collision-safe storage and Fedora 44 VM
+  name-glob removal do not establish file ownership. Choose a pinned
+  deployment with collision-safe storage and Fedora 44 VM
   lifecycle. Hardware upload is separate from the application install.
 
   The owner retained Arduino IDE as an optional v3 outcome on 2026-10-30.
@@ -57,8 +57,8 @@ Windows installer evidence to the Linux deployment.
 - **Discord: unsupported, non-runnable.** The
   [publisher offers a Linux RPM](https://discord.com/download), but the v2
   `dnf install discord` request has no declared Fedora 44 source in v3, and
-  v3 has no pinned publisher-RPM handler. Reopen for a
-  requested RPM or an owned Flathub deployment with verified bytes/source,
+  v3 has no pinned publisher-RPM handler. Choose a
+  publisher RPM or an owned Flathub deployment with verified bytes/source,
   preserved user profile, and disposable-VM happy path.
 - **Joplin: unsupported, non-runnable.** The
   [publisher's Linux guidance](https://joplinapp.org/help/install/) uses a
@@ -72,3 +72,9 @@ Windows installer evidence to the Linux deployment.
   inverse. Reopen for a requested exact-version RPM with verified publisher
   origin, repository/key ownership, preserved browser profile, and VM
   happy path.
+
+The owner retained optional Discord and Joplin for migration on 2026-10-30,
+alongside Arduino IDE. Their v2 acquisition methods remain non-runnable.
+Choose Discord's owned publisher RPM or Flathub source and prove user-profile
+preservation; pin Joplin's deployment and prove notebook-safe recovery on
+Fedora 44 Workstation.

@@ -19,5 +19,10 @@ inverse. Mind maps and application settings are user data.
   happy path may remain opt-in candidate while visual checks move to v3.1.
 
 The current catalog has no pinned publisher-RPM acquisition and recovery
-handler. Reopen for a requested Xmind edition with verified artifact,
+handler. Choose an Xmind edition with verified artifact,
 owned install, and VM happy path.
+
+The owner retained Xmind as an optional v3 outcome on 2026-10-30. Choose the
+current edition and exact publisher artifact, then prove document-preserving
+Fedora 44 recovery. The v2 Zen scrape and name-based inverse remain
+non-runnable.
