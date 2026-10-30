@@ -308,8 +308,9 @@ pilots, and per-operation acceptance drafts. The repository validation gates
 passed: shell syntax and ShellCheck, generated documentation and schema,
 burndown, executable modes, 49 unit tests, and acceptance collection. A
 post-commit byte comparison found all 11 runtime source files in representative
-Server VM archives identical to the committed candidate. The only remaining
-working-tree change is an unrelated user deletion of `docs/v3-migration.md`.
+Server VM archives identical to the committed candidate. At that milestone,
+the only remaining working-tree change was an unrelated user deletion of
+`docs/v3-migration.md`.
 Local `/var/lib/ride-fedora/runs` was absent. Before promotion, resolve whether
 older non-disposable v3 run journals exist on any other host, then finalize
 the acceptance review and supported target rows. The VM pilots need not be
@@ -332,6 +333,15 @@ The 2026-10-30 local result was `journals=0 review=0`; six focused audit
 unit tests passed, including failed, orphaned, and symlinked journal handling. Other
 machines still need their own inventory before the candidate target rows are
 promoted.
+
+The per-operation evidence drafts now include a 2026-10-30 technical review
+of the Fedora package records, archived JUnit results, and source equivalence.
+Across the Cloud Base, Workstation, and Server pilots, the archived Fedora
+package handler and journal module are byte identical to candidate commit
+`81f604f`. The older Workstation operation rows differ from the current
+catalog only in their edition target declarations; the edition gate and
+current Server pilots cover those additions. Owner acceptance and other-host
+run inventory remain the promotion gates.
 
 ## Former CERT forensic repository burndown
 

@@ -32,5 +32,13 @@ Workstation catalog SHA-256 was
 Server catalog SHA-256 was
 `27e2a8310a56123488a25a3c9dd74631365e4acbe8085e542247d9280f4d6bf5`.
 Source was uncommitted during both runs. Each overlay retains `metadata.json`
-and `transcript.jsonl`. Reviewer: pending. Local non-disposable run directory
-was absent; other hosts have not yet been inventoried.
+and `transcript.jsonl`. Technical review on 2026-10-30: Codex checked the
+Fedora [subpackage record](https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/)
+against the catalog product, Fedora 44 build, upstream link, and license;
+the cited Workstation and Server JUnit suites have no failures. The archived
+`lib/v3/providers.sh` and `lib/v3/state.sh` match commit `81f604f` byte for
+byte. Relative to the Workstation installed-only archive, this operation
+changed only its target list to add Server; the Server suite ran the current
+row and both edition gates covered target selection. Owner acceptance and
+other-host run inventory remain pending. The local non-disposable run
+directory was absent.

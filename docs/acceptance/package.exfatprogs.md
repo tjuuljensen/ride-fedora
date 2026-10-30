@@ -24,6 +24,13 @@ Workstation lifecycle catalog SHA-256 was
 the edition gate used
 `884bcf10405caabee27b8d8ae32a66a06f309680a20339f64d6b6e50c5f6b3b0`.
 The Workstation source was uncommitted during both runs; each overlay retains
-`metadata.json` and `transcript.jsonl` with exact bundle hashes. Reviewer:
-pending. Local non-disposable run directory was absent; other hosts have not
-yet been inventoried.
+`metadata.json` and `transcript.jsonl` with exact bundle hashes. Technical
+review on 2026-10-30: Codex checked the Fedora
+[package record](https://packages.fedoraproject.org/pkgs/exfatprogs/exfatprogs/)
+against the catalog product, Fedora 44 build, upstream link, and license;
+the cited Cloud Base and Workstation JUnit suites have no failures. The
+archived `lib/v3/providers.sh` and `lib/v3/state.sh` match commit `81f604f`
+byte for byte. Relative to the Workstation lifecycle archive, this operation
+changed only its target declaration; the later Cloud Base and Workstation
+edition gate covered that change. Owner acceptance and other-host run
+inventory remain pending. The local non-disposable run directory was absent.

@@ -28,6 +28,14 @@ the Server pilot used
 The later Server target addition changes this operation's source signature;
 the old Workstation overlay is behavior evidence, and its journal must be
 recovered with its original catalog. Each overlay's `metadata.json` and
-`transcript.jsonl` retain commands and exact source bundle hashes. Reviewer:
-pending. Local non-disposable run directory was absent; other hosts have not
-yet been inventoried.
+`transcript.jsonl` retain commands and exact source bundle hashes. Technical
+review on 2026-10-30: Codex checked the Fedora
+[package record](https://packages.fedoraproject.org/pkgs/less/less/)
+against the catalog product, Fedora 44 build, upstream link, and license;
+the cited Workstation and Server JUnit suites have no failures. The archived
+`lib/v3/providers.sh` and `lib/v3/state.sh` match commit `81f604f` byte for
+byte. Relative to the Workstation lifecycle archive, this operation changed
+only its target declaration; the Server lifecycle ran the current row, and
+the edition gates covered the declared target set. Owner acceptance and
+other-host run inventory remain pending. The local non-disposable run
+directory was absent.
