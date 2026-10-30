@@ -3,13 +3,13 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**180/186 dispositioned (96.8%)**: 28 supported, 26 opt-in candidate, 13 replaced, 17 retired, 0 private, 96 unsupported; 6 unresolved.
+**179/185 dispositioned (96.8%)**: 28 supported, 26 opt-in candidate, 13 replaced, 16 retired, 0 private, 96 unsupported; 6 unresolved.
 
-**v3.0 package/setting coverage: 54/170 operable (31.8%)**; 116 still need a v3.0 path. 170 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
+**v3.0 package/setting coverage: 54/169 operable (32.0%)**; 115 still need a v3.0 path. 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
 
 For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.
 
-Runnable outcomes: 54; 26 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 7 host-specific server actions, outside the 186 outcomes.
+Runnable outcomes: 54; 26 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
 
 | Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 gap | Evidence | Next action |
 | --- | --- | --- | ---: | ---: | ---: | --- | --- |
@@ -46,7 +46,7 @@ Runnable outcomes: 54; 26 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `publisher-apps-08` | Publisher Apps 08: YubikeyManager | high 1 | 1/1 | 0/1 | 1 | [publisher-apps-08.md](../../docs/migrations/publisher-apps-08.md) | Reopen only for the publisher-supported successor and credential-safe target evidence; continue publisher-apps-09. |
 | `publisher-apps-09` | Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher | medium 6 | 6/6 | 1/6 | 5 | [publisher-apps-09.md](../../docs/migrations/publisher-apps-09.md), [package.gnome-commander.md](../../docs/acceptance/package.gnome-commander.md), [package.mc.md](../../docs/acceptance/package.mc.md) | Design retained PowerShell source, WoeUSB-ng acquisition, and balenaEtcher RPM lifecycles; keep file managers opt-in and complete H014 in v3.1. |
 | `publisher-apps-10` | Publisher Apps 10: ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi | medium 6 | 6/6 | 0/6 | 6 | [publisher-apps-10.md](../../docs/migrations/publisher-apps-10.md) | Design owned lifecycles for retained Arduino IDE, Discord, and Joplin; revisit deferred Vivaldi after source and profile recovery design. |
-| `publisher-apps-11` | Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq | medium 6 | 6/6 | 2/6 | 4 | [publisher-apps-11.md](../../docs/migrations/publisher-apps-11.md), [package.clementine.md](../../docs/acceptance/package.clementine.md), [package.easyeffects.md](../../docs/acceptance/package.easyeffects.md) | Design Chrome, Edge, Opera, and Spotify source and profile-safe recovery paths for v3.0; complete H015/H016 broader checks in v3.1. |
+| `publisher-apps-11` | Publisher Apps 11: Chrome, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq | medium 5 | 5/5 | 2/5 | 3 | [publisher-apps-11.md](../../docs/migrations/publisher-apps-11.md), [package.clementine.md](../../docs/acceptance/package.clementine.md), [package.easyeffects.md](../../docs/acceptance/package.easyeffects.md) | Design Chrome, Edge, and Spotify source and profile-safe recovery paths for v3.0; complete H015/H016 broader checks in v3.1. |
 | `publisher-apps-12` | Publisher Apps 12: Bitwarden | high 1 | 1/1 | 0/1 | 1 | [publisher-apps-12.md](../../docs/migrations/publisher-apps-12.md) | Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch. |
 | `publisher-apps-13` | Publisher Apps 13: Projecteur | medium 1 | 1/1 | 1/1 | 0 | [publisher-apps-13.md](../../docs/migrations/publisher-apps-13.md), [package.projecteur.md](../../docs/acceptance/package.projecteur.md) | Keep spotlight-pointer opt-in; complete H017 hardware/visual review in v3.1 and continue publisher-apps-14. |
 | `publisher-apps-14` | Publisher Apps 14: YubikeyPersTool | high 1 | 1/1 | 0/1 | 1 | [publisher-apps-14.md](../../docs/migrations/publisher-apps-14.md) | Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch. |

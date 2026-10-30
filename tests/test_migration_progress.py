@@ -24,18 +24,20 @@ class MigrationProgressTests(unittest.TestCase):
 
     def test_pinned_source_and_exclusions_are_covered(self):
         data = self.validate_copy(copy.deepcopy(self.data))
-        self.assertEqual(len(data["outcomes"]), 186)
-        self.assertEqual(len(data["exclusions"]), 9)
+        self.assertEqual(len(data["outcomes"]), 185)
+        self.assertEqual(len(data["exclusions"]), 11)
         self.assertNotIn("workstation:package.CitrixClient",
+                         {row["key"] for row in data["outcomes"]})
+        self.assertNotIn("workstation:package.Opera",
                          {row["key"] for row in data["outcomes"]})
         self.assertEqual(
             {item["sourceFunction"] for item in data["exclusions"] if item["source"] == "workstation"},
-            {"InstallCitrixClient", "RemoveCitrixClient"})
+            {"InstallCitrixClient", "RemoveCitrixClient", "InstallOpera", "RemoveOpera"})
 
     def test_missing_or_duplicate_outcome_is_rejected(self):
         data = copy.deepcopy(self.data)
         data["outcomes"].pop()
-        with self.assertRaisesRegex(ValueError, "exactly 186"):
+        with self.assertRaisesRegex(ValueError, "exactly 185"):
             self.validate_copy(data)
         data = copy.deepcopy(self.data)
         data["outcomes"][1] = copy.deepcopy(data["outcomes"][0])
@@ -94,11 +96,11 @@ class MigrationProgressTests(unittest.TestCase):
     def test_v30_package_setting_coverage_tracks_all_scoped_packages(self):
         report = migration_progress.summarize(self.data)
         coverage = report["v30PackageSetting"]
-        self.assertEqual(coverage["ledgered"], 170)
+        self.assertEqual(coverage["ledgered"], 169)
         self.assertEqual(coverage["excludedPackages"], 0)
-        self.assertEqual(coverage["total"], 170)
+        self.assertEqual(coverage["total"], 169)
         self.assertEqual(coverage["operable"], 54)
-        self.assertEqual(coverage["gap"], 116)
+        self.assertEqual(coverage["gap"], 115)
         server_batch = next(batch for batch in report["batches"] if batch["id"] == "generic-server-15")
         self.assertEqual(server_batch["complete"], 0)
         self.assertEqual(server_batch["v30Operable"], 0)
@@ -110,7 +112,7 @@ class MigrationProgressTests(unittest.TestCase):
         row = next(item for item in data["outcomes"] if item["key"] == "workstation:package.Pwgen")
         row.update(disposition="migrate", progress="assessed", blocker="Assessment is pending")
         after = migration_progress.summarize(data)
-        self.assertEqual(before["total"], 186)
+        self.assertEqual(before["total"], 185)
         self.assertEqual(after["complete"], before["complete"] - 1)
         self.assertEqual(after["unresolved"], before["unresolved"] + 1)
 

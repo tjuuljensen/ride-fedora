@@ -2300,29 +2300,6 @@
       "reviewTrigger": "Model the two-stage browser policy lifecycle and recovery before catalog inclusion."
     },
     {
-      "key": "workstation:package.Opera",
-      "sourceFunctions": [
-        "InstallOpera",
-        "RemoveOpera"
-      ],
-      "selectorCoverage": "commented",
-      "family": "publisher-apps",
-      "batch": "publisher-apps-11",
-      "risk": "medium",
-      "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
-      "progress": "resolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/publisher-apps-11.md"
-      ],
-      "blocker": "",
-      "nextAction": "For v3.0, select a current Opera channel and owned publisher source with profile-preserving recovery; the v2 method remains retired.",
-      "v31Hardening": [],
-      "reason": "The owner retired this exact optional Opera outcome on 2026-10-30; the v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust, and no v3 channel was selected.",
-      "reviewTrigger": "A current Opera channel has owned publisher repository/key handling and profile-preserving Fedora 44 VM inverse."
-    },
-    {
       "key": "workstation:package.Edge",
       "sourceFunctions": [
         "InstallEdge",
@@ -4751,13 +4728,13 @@
     {
       "id": "publisher-apps-11",
       "family": "publisher-apps",
-      "title": "Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq",
+      "title": "Publisher Apps 11: Chrome, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq",
       "evidence": [
         "docs/migrations/publisher-apps-11.md",
         "docs/acceptance/package.clementine.md",
         "docs/acceptance/package.easyeffects.md"
       ],
-      "nextAction": "Design Chrome, Edge, Opera, and Spotify source and profile-safe recovery paths for v3.0; complete H015/H016 broader checks in v3.1."
+      "nextAction": "Design Chrome, Edge, and Spotify source and profile-safe recovery paths for v3.0; complete H015/H016 broader checks in v3.1."
     },
     {
       "id": "publisher-apps-12",
@@ -5387,6 +5364,16 @@
       "source": "workstation",
       "sourceFunction": "RemoveCitrixClient",
       "reason": "Owner-excluded Citrix client behavior; keep in legacy source until ownership and current acquisition are reconsidered."
+    },
+    {
+      "source": "workstation",
+      "sourceFunction": "InstallOpera",
+      "reason": "Owner explicitly excluded Opera from the v3 migration on 2026-10-30 because of vendor ownership concerns; retain the legacy source without a v3 install path."
+    },
+    {
+      "source": "workstation",
+      "sourceFunction": "RemoveOpera",
+      "reason": "Owner explicitly excluded Opera from the v3 migration on 2026-10-30 because of vendor ownership concerns; retain the legacy source without a v3 install path."
     },
     {
       "source": "server",

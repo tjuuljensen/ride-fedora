@@ -10,7 +10,7 @@ Inputs: migration/outcomes.json, legacy source names, catalog, and evidence file
 Side effects: --write-docs replaces only docs/migrations/progress.md; other modes read only.
 Prerequisites: Run from any directory with this repository available.
 Owner: RIDE Linux repository. Provenance: local v2 migration inventory.
-Version: 0.2.0.
+Version: 0.2.1.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ else:
 ROOT = Path(__file__).resolve().parent.parent
 LEDGER = ROOT / "migration" / "outcomes.json"
 REPORT = ROOT / "docs" / "migrations" / "progress.md"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 PROGRESS = {"unresolved", "assessed", "implemented", "operable", "supported", "resolved"}
 DISPOSITIONS = {"review", "migrate", "replace", "retire", "private", "unsupported"}
 RISK = {"low", "medium", "high"}
@@ -56,8 +56,8 @@ def source_groups() -> dict[str, list[str]]:
             raise ValueError(f"{source} exclusion missing from source inventory")
         for key, functions in inventory.groups([name for name in names if name not in excluded]):
             result[f"{source}:{key}"] = functions
-    if len(result) != 186:
-        raise ValueError(f"expected 186 scoped outcomes, found {len(result)}")
+    if len(result) != 185:
+        raise ValueError(f"expected 185 scoped outcomes, found {len(result)}")
     return result
 
 
@@ -214,7 +214,9 @@ def summarize(data: dict) -> dict:
     excluded_packages = set()
     for item in data["exclusions"]:
         name = item["sourceFunction"]
-        if item["source"] == "workstation" and name in {"InstallCitrixClient", "RemoveCitrixClient"}:
+        if item["source"] == "workstation" and name in {
+            "InstallCitrixClient", "RemoveCitrixClient", "InstallOpera", "RemoveOpera"
+        }:
             continue
         if name == "InstallqBittorrentServer":
             excluded_packages.add((item["source"], "qBittorrentServer"))
@@ -269,7 +271,7 @@ def render(data: dict) -> str:
              "Documented decisions do not count as operable behavior.", "",
              "For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.", "",
              f"Runnable outcomes: {report['runnable']}; {report['requiresAllowCandidate']} require `--allow-candidate`. "
-             "Owner exclusions: 2 Citrix functions and 7 host-specific server actions, outside the 186 outcomes.", "",
+             "Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.", "",
              "| Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 gap | Evidence | Next action |",
              "| --- | --- | --- | ---: | ---: | ---: | --- | --- |"]
     for batch in report["batches"]:

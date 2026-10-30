@@ -1,7 +1,7 @@
 # v3.0 capability and v3.1 hardening reassessment
 
 Status: **migration-path analysis in progress**, 2026-10-30. The owner clarified
-that v2 packages and settings remain in scope for v3.0 because their behavior
+that scoped v2 packages and settings remain in scope for v3.0 because their behavior
 has proved useful. An obsolete product or unsafe v2 installer calls for a
 working successor or a safer owned method, not a package/setting outcome
 silently closed by a retirement or unsupported label. An exact legacy product
@@ -9,13 +9,13 @@ can be retired as an implementation once its intended capability has a v3.0
 path. Earlier individual retirement choices remain historical decisions about
 those exact implementations; this review reopens their capability coverage.
 
-The current ledger has 134 package and 36 setting outcomes. Only 54 of those
-170 have operable v3 catalog mappings. Six server `Install...` package outcomes
+The current ledger has 133 package and 36 setting outcomes. Only 54 of those
+169 have operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
-**170 in-scope package/setting capabilities, 54 currently operable, and 116
+**169 in-scope package/setting capabilities, 54 currently operable, and 115
 still needing a v3.0 path**. The ledger's 180 dispositioned outcomes out of
-186 measure recorded decisions, not this v3.0 capability coverage.
-The two Citrix functions remain explicitly out of scope. Host-specific
+185 measure recorded decisions, not this v3.0 capability coverage.
+The two Citrix and two Opera functions remain explicitly out of scope. Host-specific
 users, shares, secrets, and IP values remain outside the public catalog;
 generic package behavior can be modeled without publishing them.
 
@@ -74,7 +74,6 @@ copy a v2 download script or run a remote installer during apply.
 | Bandwidth-test CLI | Evaluate the publisher's pinned `librespeed-cli` Linux artifact as a portable operation. | [LibreSpeed releases](https://github.com/librespeed/speedtest-cli/releases) and [LGPL-3.0 license](https://github.com/librespeed/speedtest-cli). It uses LibreSpeed servers rather than the old speedtest.net service, so this is a product-level choice. |
 | GNOME Files checksum and image actions | Own two user Nautilus Scripts, one invoking a Fedora checksum utility and one invoking Fedora ImageMagick with non-overwriting output. | [GNOME Scripts location and context menu](https://help.gnome.org/gnome-help/nautilus-behavior.html), [Fedora ImageMagick](https://packages.fedoraproject.org/pkgs/ImageMagick/ImageMagick/). Check selected-file handling, output collision, and exact script inverse. |
 | GNOME extension installer/management | Use Fedora's `gnome-extensions` CLI and Extensions app, with explicit extension IDs and per-user ownership. | [Fedora GNOME Shell CLI](https://packages.fedoraproject.org/pkgs/gnome-shell/gnome-shell/fedora-44.html), [Extensions app](https://packages.fedoraproject.org/pkgs/gnome-extensions-app/gnome-extensions-app/). The old archived helper is unnecessary if the native path passes. |
-| Opera browser | Reopen the scoped browser capability using Opera's current RPM or its repository, with owned trust and profile-preserving removal. | [Opera Linux RPM download](https://www.opera.com/download), [publisher RPM repository](https://rpm.opera.com/). The previous retirement was a choice about the v2 outcome, not product EOL. |
 
 ## Formerly excluded server package paths
 

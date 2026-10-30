@@ -2,7 +2,7 @@
 
 Source: [sanderu/bootstrap `ride-functions.sh` at 3831965](https://github.com/sanderu/bootstrap/blob/383196551bc24ee89d869d3698ee43adfd5d1f07/ride-functions.sh). This inventory records 185 function definitions. The author has communicated MIT intent; no source code is copied here. An exact legacy name is only a search lead, not a claim of equivalent behavior.
 
-Status is a v3 disposition: **implemented candidate** means cataloged but not VM-certified; **deferred** means no executable v3 operation; **not ported** means the original behavior should not be copied. The 25 active Sander preset entries are marked `yes`.
+Status is a v3 disposition: **implemented candidate** means cataloged but not VM-certified; **deferred** means no executable v3 operation; **not ported** means the original behavior should not be copied; **out of scope** means the owner excluded the product. The 25 active Sander preset entries are marked `yes`.
 
 | Section | Sander function | Active | Existing exact name | v3 target / disposition |
 | --- | --- | --- | --- | --- |
@@ -145,8 +145,8 @@ Status is a v3 disposition: **implemented candidate** means cataloged but not VM
 | Supporting scripts | `UnsetFirefoxESRPreferences` | no | none | deferred: legacy UnsetFirefoxPreferences (not equivalent) |
 | Supporting scripts | `InstallFirefoxLatest` | no | none | deferred: outside focused v3 scope |
 | Supporting scripts | `RemoveFirefoxLatest` | no | none | deferred: outside focused v3 scope |
-| Supporting scripts | `InstallOpera` | no | Fedora legacy | deferred: compare legacy behavior before migration |
-| Supporting scripts | `RemoveOpera` | no | Fedora legacy | deferred: compare legacy behavior before migration |
+| Supporting scripts | `InstallOpera` | no | Fedora legacy | out of scope: owner-excluded Opera |
+| Supporting scripts | `RemoveOpera` | no | Fedora legacy | out of scope: owner-excluded Opera |
 | Supporting scripts | `InstallVivaldi` | no | Fedora legacy | deferred: compare legacy behavior before migration |
 | Supporting scripts | `RemoveVivaldi` | no | Fedora legacy | deferred: compare legacy behavior before migration |
 | Supporting scripts | `InstallSpotifyClient` | no | Fedora legacy | deferred: compare legacy behavior before migration |

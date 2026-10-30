@@ -127,10 +127,10 @@ The original ledger covered 165 grouped workstation and 15 grouped generic
 server outcomes, including functions absent from active presets. The later
 [capability reassessment](migrations/v30-path-reassessment.md) brought six
 additional generic server package outcomes into isolated review batches. The
-current ledger therefore covers 186 outcomes. Install/remove and analogous
-state pairs share one outcome. The two owner-excluded Citrix functions and
-seven host-specific server actions stay visible in the exclusion list, outside
-the 186-outcome denominator. The three
+owner later excluded Opera, leaving 185 scoped outcomes. Install/remove and
+analogous state pairs share one outcome. The two Citrix functions, two Opera
+functions, and seven host-specific server actions stay visible in the
+exclusion list, outside the 185-outcome denominator. The three
 already supported base package operations remain valid release-envelope
 evidence but do not automatically resolve a v2 outcome with different intent.
 
@@ -277,7 +277,7 @@ and the PipeWire-compatible EasyEffects replacement for the misleading
 and profile lifecycles. Chrome, Edge, and Spotify remain non-runnable until
 their distinct publisher repository, key, LPF, and profile-preserving inverse
 contracts pass. The owner retained Chrome, Edge, and Spotify for migration
-and retired the scoped Opera outcome; no v3 Opera install is planned.
+and excluded Opera from the v3 migration; no v3 Opera install is planned.
 [Publisher batch 12](migrations/publisher-apps-12.md) closes the commented
 Bitwarden desktop RPM until a pinned publisher artifact and vault-safe
 inverse meet the high-risk gate. [Batch 14](migrations/publisher-apps-14.md)
@@ -339,16 +339,18 @@ account/key recovery review.
 The earlier 2026-10-30 ledger result was **180/180 scoped outcomes dispositioned**:
 28 supported, 26 operable opt-in candidates, 13 replaced, 17 retired, and
 96 unsupported. Runnable source outcomes total 54; 26 require
-`--allow-candidate`. These counts precede the six server package additions;
-the current ledger has **180/186 dispositioned**, with nine owner exclusions
+`--allow-candidate`. These counts precede the six server package additions
+and the Opera exclusion; the current ledger has **179/185 dispositioned**, with
+eleven owner exclusions
 outside its denominator. Use the
 [generated progress report](migrations/progress.md) for current status.
 The owner's later [v3.0 capability reassessment](migrations/v30-path-reassessment.md)
 supersedes disposition-only completion for package and setting outcomes. It
-identifies 170 in-scope package/setting capabilities including six formerly
+identifies 169 in-scope package/setting capabilities including six formerly
 excluded server package outcomes; only 54 currently have operable v3 mappings.
 Exact old products may be replaced, but useful v2 capabilities stay in v3.0
-scope. Historical "reopen only" review triggers in batch records now describe
+scope, except the owner-excluded Citrix and Opera functions. Historical
+"reopen only" review triggers in batch records now describe
 the evidence needed for a v3.0 path, not optional deferrals.
 The [v3.0 review note](release-v3.0-review.md) identifies opt-in candidates
 and remaining release checks. No v3 tag is implied by ledger completion.
@@ -370,9 +372,9 @@ GnomeExtInstaller, GnomeRegion, and AppImageLauncher; and retained portable
 Bitwarden, six R2 inverse outcomes, BalenaEtcher, ArduinoIDE, Discord, Joplin,
 Xmind, Chrome, Edge, SpotifyClient, HandBrake, PowerShell, and WoeUSB for
 migration. The owner also deferred Vivaldi and Pidgin/OTR and retired the
-scoped Opera outcome.
+scoped Opera outcome, and later excluded Opera from the v3 migration.
 The [package path review](migrations/package-path-review.md) evaluates all
-134 scoped package outcomes across existing migrations, replacements,
+133 scoped package outcomes across existing migrations, replacements,
 retirements, and unresolved paths. It distinguishes discontinued products
 from obsolete acquisition methods and records the path required for each
 non-runnable package. A commented v2 selector is never evidence of non-use.
@@ -397,7 +399,7 @@ need a documented reason and review trigger. Keep candidate operations out of
 `default` and `server-base`; add curated opt-in profiles as related operations
 are ready. Manual checks are limited to behavior automation cannot observe.
 
-The full v3.0 migration is ready for release review when every v2 package and
+The full v3.0 migration is ready for release review when every scoped v2 package and
 setting capability has an operable v3 implementation or evidence-backed
 functional replacement, the six newly scoped server package outcomes have
 working paths or evidence-backed functional replacements, supported profiles

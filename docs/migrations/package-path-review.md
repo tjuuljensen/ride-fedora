@@ -1,9 +1,9 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-134 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 11 replaced,
-12 retired, 58 unsupported, and six newly scoped server outcomes under review.
-The five path groups below assess all **70 unsupported or retired outcomes**;
+133 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 11 replaced,
+11 retired, 58 unsupported, and six newly scoped server outcomes under review.
+The five path groups below assess all **69 unsupported or retired outcomes**;
 the 11 replacements, 47 existing v3 mappings, and six new server reviews
 follow. The 47 mapped outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
@@ -16,9 +16,9 @@ A broken installer does not establish product EOL; a retired outcome does
 not necessarily mean its product ended. High-risk data, storage, encryption,
 and security outcomes still need their deeper recovery gate.
 The owner's later [v3.0 capability clarification](v30-path-reassessment.md)
-keeps every v2 package and setting behavior in the v3.0 migration scope;
+keeps every scoped v2 package and setting behavior in the v3.0 migration scope;
 earlier retirement labels describe exact old implementations, not completed
-capability coverage.
+capability coverage. Citrix and Opera are explicit owner exclusions.
 
 Source checks: [Atom sunset](https://github.blog/2022-06-08-sunsetting-atom/),
 [Volatility 2 archive](https://github.com/volatilityfoundation/volatility),
@@ -51,7 +51,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.SonosPlayer` | This unofficial controller declares itself deprecated; a new controller is a separate product. | [Batch review](publisher-apps-09.md) |
 | `workstation:package.Volatility` | Volatility 2 is archived; Volatility 3 is distinct and already tracked separately. | [Batch review](forensic-isolated-02.md) |
 
-## Retired for a reason other than product EOL (5)
+## Retired for a reason other than product EOL (4)
 
 | Source outcome | Path assessment | Evidence |
 | --- | --- | --- |
@@ -59,7 +59,6 @@ assessment, not an automatic retirement decision.
 | `workstation:package.Xplico` | The v2 pair only printed links; retirement does not establish that the product ended. | [Batch review](resolution-decisions.md) |
 | `workstation:package.VMFStools` | The v2 pair only printed links; no working install path existed to migrate. | [Batch review](forensic-isolated-01.md) |
 | `workstation:package.TecmintMonitorSh` | The unverified HTTP script path was retired; a monitoring requirement needs its own source review. | [Batch review](resolution-decisions.md) |
-| `workstation:package.Opera` | The owner retired the scoped outcome; Opera itself was not classified as EOL. | [Batch review](publisher-apps-11.md) |
 
 ## New acquisition or deployment path (28)
 
@@ -248,8 +247,9 @@ transfer runtime ownership or establish a working install.
 
 - Keep prior retirement decisions as history about exact v2 implementations.
   The [v3.0 reassessment](v30-path-reassessment.md) reopens their useful
-  capabilities for a working replacement, including the Opera browser and
-  GNOME Files actions. `GnomeExtInstaller` still lacks a runnable path.
+  capabilities for a working replacement, including GNOME Files actions.
+  `GnomeExtInstaller` still lacks a runnable path. Opera is out of scope by
+  explicit owner decision.
 - Do not close a v3.0 package capability merely because its v2 selector was
   commented, its installer failed, or the exact old product ended. Verify the
   five identity cases before selecting the new path.

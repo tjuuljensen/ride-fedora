@@ -1,7 +1,7 @@
 # Workstation and server outcome burndown
 
 This queue covers workstation and generic server migration candidates, including
-functions absent from active presets. The owner-excluded Citrix functions and
+functions absent from active presets. The owner-excluded Citrix and Opera functions and
 host-specific server actions remain in the legacy source and server name inventory,
 outside this queue.
 Install/remove and analogous state pairs share an outcome row. A `deferred` row is
@@ -13,9 +13,9 @@ a priority rule. Active, commented, and library-only packages receive the same
 source and product review; risk and dependencies determine batch order.
 
 Workstation source: `lib-fedora.sh` at Fedora commit `43ba467`; 289 source functions,
-287 queued functions,
-165 grouped outcomes, 91 outcomes with no active default selector.
-Function coverage: 74 active, 68 commented-only, 145 library-only.
+285 queued functions,
+164 grouped outcomes, 90 outcomes with no active default selector.
+Function coverage: 74 active, 67 commented-only, 144 library-only.
 Default preset: 76 active selectors and 71 commented selectors
 that name a defined function or controller action. The [active migration ledger](MIGRATION-PLAN.md)
 provides the decisions for all active selectors.
@@ -126,7 +126,6 @@ Function coverage: 16 active in a server preset, 3 commented-only, 2 library-onl
 | `action.CheckFirefoxAddons` | `CheckFirefoxAddons` | `CheckFirefoxAddons`: library only | deferred v3 integration; existing policy helper remains tested separately | `desktop-user-05` / resolved |
 | `package.FirefoxAddons` | `InstallFirefoxAddons`, `RemoveFirefoxAddons` | `InstallFirefoxAddons`: active, `RemoveFirefoxAddons`: library only | deferred: Keep existing verified policy helper; integrate with v3 lifecycle later. | `publisher-apps-04` / resolved |
 | `action.FinalizeFirefoxAddonRemoval` | `FinalizeFirefoxAddonRemoval` | `FinalizeFirefoxAddonRemoval`: library only | deferred v3 integration; restart-dependent policy lifecycle needs journal ownership | `desktop-user-06` / resolved |
-| `package.Opera` | `InstallOpera`, `RemoveOpera` | `InstallOpera`: commented, `RemoveOpera`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `publisher-apps-11` / resolved |
 | `package.Edge` | `InstallEdge`, `RemoveEdge` | `InstallEdge`: commented, `RemoveEdge`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `publisher-apps-11` / resolved |
 | `package.Codecs` | `InstallCodecs`, `RemoveCodecs` | `InstallCodecs`: commented, `RemoveCodecs`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `provider-foundation-05` / resolved |
 | `package.SpotifyClient` | `InstallSpotifyClient`, `RemoveSpotifyClient` | `InstallSpotifyClient`: commented, `RemoveSpotifyClient`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `publisher-apps-11` / resolved |
@@ -270,7 +269,6 @@ initial assessment above. The ledger records each reason and review trigger.
 | `workstation:action.CheckFirefoxAddons` | `replace` | `desktop-user-05` |
 | `workstation:package.FirefoxAddons` | `replace` | `publisher-apps-04` |
 | `workstation:action.FinalizeFirefoxAddonRemoval` | `replace` | `desktop-user-06` |
-| `workstation:package.Opera` | `retire` | `publisher-apps-11` |
 | `workstation:setting.Screensaver` | `retire` | `resolution-review-01` |
 | `workstation:setting.GnomeDefaultFavorites` | `retire` | `desktop-user-08` |
 | `workstation:setting.AliasRideLog` | `retire` | `desktop-user-05` |

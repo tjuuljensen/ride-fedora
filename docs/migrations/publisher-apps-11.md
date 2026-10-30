@@ -1,8 +1,8 @@
 # Browser and media publisher applications
 
-Status: **two opt-in candidates, three unsupported decisions, and one owner-approved retirement**, 2026-10-30. This v2 source batch maps
+Status: **two opt-in candidates, three unsupported decisions, and one owner exclusion**, 2026-10-30. The v2 source family includes
 `Chrome`, `Opera`, `Edge`, `SpotifyClient`, `ClementinePlayer`, and
-`PulseAudioEq`. The first three add external browser RPM repositories and
+`PulseAudioEq`; Opera is outside the current five-outcome batch. The first three add external browser RPM repositories and
 keys with broad removal. Spotify requests `lpf-spotify-client` without
 declaring its source. Clementine installs a Fedora RPM. The purported
 PulseAudio equalizer function installs the entire `pulseaudio` sound server
@@ -15,7 +15,7 @@ and its inverse removes it; no equalizer is installed.
   RPM signature/files and executable, repeat, status, restore, explicit
   remove, and profile smoke. Reuse mocked DNF failure evidence; leave
   music-library interaction and desktop visual behavior to v3.1.
-- For third-party browsers and Spotify, require current publisher method,
+- For scoped third-party browsers and Spotify, require current publisher method,
   license/terms, source trust, owned repository/key or LPF state, detection,
   inverse, and one disposable-VM happy path before runnable status. Avoid
   modifying browser profiles, playback data, or unrelated repositories.
@@ -38,14 +38,13 @@ and its inverse removes it; no equalizer is installed.
   without checking ownership. Migrate via an official RPM with
   verified publisher source, repository/key collision handling, and
   browser-profile-preserving Fedora VM lifecycle.
-- **Opera: retired and non-runnable by owner decision on 2026-10-30.**
+- **Opera: excluded from v3 by owner decision on 2026-10-30.**
   [Opera ships a Linux RPM and repository](https://rpm.opera.com/), but v2
   imports a global key, installs a developer-channel package, then removes
-  fixed key IDs and its repo file without proving ownership. The exact v2
-  method remains retired. The clarified v3.0 scope requires a browser path:
-  select a current channel and owned repo/key, then verify a VM inverse that
-  preserves profiles and other Opera products. The v2 source and any existing
-  machine state remain untouched.
+  fixed key IDs and its repo file without proving ownership. The owner later
+  excluded Opera due to vendor ownership concerns. No v3 operation or
+  acquisition path is planned. The v2 source and existing machine state remain
+  untouched.
 - **Edge: unsupported and non-runnable.**
   [Microsoft supports Fedora 39+](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-supported-operating-systems)
   for Edge Linux. The v2 function selects the developer channel from a

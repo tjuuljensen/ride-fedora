@@ -480,6 +480,8 @@ contracts; each curated profile uses schema 1. The publisher browser and
 Spotify outcomes add no handler. No unexplained shared-contract drift was
 found. Recheck if Linux adds external repository support, Windows changes
 the Chrome product facts, or release review begins.
+Opera was subsequently excluded from the Linux v3 scope by owner decision;
+this historical comparison does not reopen it.
 
 ### Fedora publisher application batches 12-16, 2026-10-30
 

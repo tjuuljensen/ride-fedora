@@ -9,12 +9,12 @@ decision: 28 supported, 26 operable opt-in candidates, 13 replaced,
 of those require `--allow-candidate`. The 126 non-runnable decisions do
 not represent working installs. The two Citrix and 13 host-specific server
 exclusions remained outside that historical denominator. The current ledger
-has 186 outcomes and nine exclusions: the six newly scoped generic server
+has 185 outcomes and eleven exclusions: the six newly scoped generic server
 package outcomes remain unresolved. The owner's later
 [v3.0 capability clarification](migrations/v30-path-reassessment.md) makes
-working package and setting paths part of v3.0 completion. Only 54 of 170
+working package and setting paths part of v3.0 completion. Only 54 of 169
 in-scope package/setting capabilities are currently operable, including
-six server package outcomes now assigned review batches. Citrix remains
+six server package outcomes now assigned review batches. Citrix and Opera remain
 out of scope. This prior release
 review is therefore no longer a release-ready conclusion.
 

@@ -10,7 +10,7 @@ Inputs: v2 source, pinned server inventory, migration ledger, and plan.
 Side effects: --write replaces only docs/workstation-server-burndown.md.
 Prerequisites: Run from any directory with this repository available.
 Owner: RIDE Linux repository. Provenance: local v2 migration inventory.
-Version: 0.2.0.
+Version: 0.2.1.
 """
 
 from __future__ import annotations
@@ -29,9 +29,9 @@ FUNCTION = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\(\)\s*\{", re.MULTILINE)
 SELECTOR = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\b")
 COMMENTED = re.compile(r"^\s*#\s*([A-Za-z][A-Za-z0-9_]*)\b")
 
-# Owner-scoped exclusions: Citrix and host-specific server actions stay in the
+# Owner-scoped exclusions: Citrix, Opera, and host-specific server actions stay in the
 # legacy source and server name inventory, outside the public v3 ledger.
-WORKSTATION_OUT_OF_SCOPE = {"InstallCitrixClient", "RemoveCitrixClient"}
+WORKSTATION_OUT_OF_SCOPE = {"InstallCitrixClient", "RemoveCitrixClient", "InstallOpera", "RemoveOpera"}
 SERVER_OUT_OF_SCOPE_TAIL = (
     "CreateqBittorrentUser",
     "InstallqBittorrentServer",
@@ -186,7 +186,7 @@ def render() -> str:
         "# Workstation and server outcome burndown",
         "",
         "This queue covers workstation and generic server migration candidates, including",
-        "functions absent from active presets. The owner-excluded Citrix functions and",
+        "functions absent from active presets. The owner-excluded Citrix and Opera functions and",
         "host-specific server actions remain in the legacy source and server name inventory,",
         "outside this queue.",
         "Install/remove and analogous state pairs share an outcome row. A `deferred` row is",
