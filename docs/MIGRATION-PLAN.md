@@ -344,12 +344,14 @@ review, with publication still a separate decision.
 
 The original 99 non-runnable `unsupported` rows have a separate
 [decision triage](migrations/unsupported-triage.md): 10 original retirement
-proposals, 38 individual keep-or-drop choices, and 51 individual migration-design
-decisions. The owner requested individual review of both retirement groups,
-approved retirement of NautilusHash and NautilusImageTools, deferred
-GnomeExtInstaller, and retained the portable Bitwarden AppImage for migration.
-The remaining eight retirement proposals await decisions. An approval changes
-disposition and generated progress, not legacy source code or machine state.
+proposals, 38 individual keep-or-drop choices, and 51 original migration-design
+decisions. The owner retired NautilusHash and NautilusImageTools, deferred
+GnomeExtInstaller and GnomeRegion, and retained portable Bitwarden plus six
+R2 inverse outcomes for migration. The retained inverses require owned state
+and recovery; their unsafe v2 functions remain non-runnable. The current 97
+unsupported rows comprise 57 migration-design outcomes, 38 keep-or-drop
+choices, and two deferred retirement decisions. Owner choices update next
+actions without changing legacy source code or machine state.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse

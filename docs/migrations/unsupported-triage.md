@@ -1,4 +1,4 @@
-# Unsupported outcome triage and retirement approval
+# Unsupported outcome triage and owner decisions
 
 Status: **individual review in progress**, 2026-10-30. This review assigns
 each of the original 99 `unsupported` source outcomes exactly one decision
@@ -9,19 +9,19 @@ operation, delete v2 code, or run a state-changing test. The
 are authoritative for current disposition. The 15 Citrix and host-specific
 exclusions are outside this review.
 
-| Decision lane | Outcomes | What happens next |
+| Original decision lane | Outcomes | Owner decisions so far |
 | --- | ---: | --- |
-| Retirement proposals, R1-R2 | 10 original; 2 approved, 8 pending | Owner requested an individual decision for each row. |
-| Keep-or-drop choices, U1a-U3b | 38 | Decide each feature or value individually before migration work. |
-| Migration design, D1a-D5a | 51 | Decide the exact owner, source, state, and recovery for each outcome. |
+| Retirement proposals, R1-R2 | 10 | 2 retired, 6 retained for migration, 2 deferred. |
+| Keep-or-drop choices, U1a-U3b | 38 | Individual decisions remain. |
+| Migration design, D1a-D5a | 51 | Bitwarden AppImage retained; exact ownership, source, state, and recovery remain to design. |
 
-Approving the eight remaining retirement proposals would change only their
-ledger rows from `unsupported` to `retire` with documented reasons and review
-triggers. The v3.0 total stays 180/180 and the runnable count stays 54; the
-category counts would become 89 unsupported and 24 retired. Legacy functions
-and existing v2 machine state remain untouched. Future behavior may return as
-a separately reviewed v3 operation with its own evidence. These review groups
-do not override the small implementation batches in the migration plan.
+The current 97 unsupported outcomes consist of 57 migration-design outcomes
+(51 original plus six retained R2 inverses), 38 keep-or-drop choices, and two
+deferred retirement decisions. The v3.0 total stays 180/180 and the runnable
+count stays 54. Retaining an outcome does not make its unsafe v2 function
+runnable: a new owned implementation needs its own evidence. Legacy functions
+and existing v2 machine state remain untouched. These review groups do not
+override the small implementation batches in the migration plan.
 
 ## R1: obsolete or mismatched integrations (3 original; 2 retired)
 
@@ -37,22 +37,23 @@ review. Its v2 function downloads an RPM into `~/Applications`, but
 The owner chose to **keep the portable AppImage outcome** on 2026-10-30.
 It needs a verified AppImage and vault-safe lifecycle before runnable status.
 
-## R2: unsafe standalone cleanup functions (7)
+## R2: unsafe standalone cleanup functions (7 original; 6 retained)
 
-Each row is a library-only remove path. Retirement removes it from the v3
-migration queue as a standalone action. It does not authorize running it on
-an existing v2 machine. Historical v2 recovery remains a separate operator
-concern; a future v3 inverse must act only on journaled, RIDE-owned state.
+Each row is a library-only remove path. The owner retained six desired inverse
+outcomes for migration on 2026-10-30 and deferred GnomeRegion. This does not
+authorize running a v2 removal on an existing machine. Historical v2 recovery
+remains a separate operator concern; a future v3 inverse must act only on
+journaled, RIDE-owned state.
 
-| Source outcome | What its v2 function removes or changes | Reopen only if |
-| --- | --- | --- |
-| `workstation:package.GnomeRegion` | `RemoveGnomeRegion` writes an empty region, not the user's prior value. | It is the exact inverse of an owned GNOME region operation. |
-| `workstation:package.CustomKbrdShortcut` | `RemoveCustomKbrdShortcut` clears the complete custom shortcut list and fixed slots, including unowned entries. | It is scoped to shortcuts created and journaled by v3. |
-| `workstation:package.VPNProfiles` | `RemoveVPNProfiles` deletes every NetworkManager VPN connection. | It deletes only recorded RIDE-owned UUIDs and preserves unrelated connections. |
-| `workstation:package.ExpressVPNProfiles` | `RemoveExpressVPNProfiles` deletes name-matched connections without proving ownership. | It is tied to an accepted client and exact owned UUIDs. |
-| `workstation:package.ExpressVPNafterBoot` | `RemoveExpressVPNafterBoot` filters the user crontab by matching text. | An owned timer or schedule has an exact inverse. |
-| `workstation:package.ScheduleExpVPNChange` | `RemoveScheduleExpVPNChange` similarly filters matching crontab lines without origin proof. | A future owned randomizer schedule records and restores prior state. |
-| `workstation:package.KeyfileMounts` | `RemoveKeyfileMounts` broadly deletes matching crypttab/fstab lines while encrypted volumes remain. | Each encrypted mapping has a named owner, backup, and tested mount/boot recovery. |
+| Source outcome | Owner decision | Unsafe v2 behavior | Migration requirement |
+| --- | --- | --- | --- |
+| `workstation:package.GnomeRegion` | **Decide later** | `RemoveGnomeRegion` writes an empty region, not the user's prior value. | Revisit after the owned GNOME region operation is designed. |
+| `workstation:package.CustomKbrdShortcut` | **Keep for migration** | `RemoveCustomKbrdShortcut` clears the complete custom shortcut list and fixed slots, including unowned entries. | Scope the inverse to shortcuts created and journaled by v3. |
+| `workstation:package.VPNProfiles` | **Keep for migration** | `RemoveVPNProfiles` deletes every NetworkManager VPN connection. | Delete only recorded RIDE-owned UUIDs and preserve unrelated connections. |
+| `workstation:package.ExpressVPNProfiles` | **Keep for migration** | `RemoveExpressVPNProfiles` deletes name-matched connections without proving ownership. | Tie removal to an accepted private client deployment and exact owned UUIDs. |
+| `workstation:package.ExpressVPNafterBoot` | **Keep for migration** | `RemoveExpressVPNafterBoot` filters the user crontab by matching text. | Give an owned boot timer or schedule an exact inverse. |
+| `workstation:package.ScheduleExpVPNChange` | **Keep for migration** | `RemoveScheduleExpVPNChange` filters matching crontab lines without origin proof. | Record and restore an owned randomizer schedule without deleting unrelated jobs. |
+| `workstation:package.KeyfileMounts` | **Keep for migration** | `RemoveKeyfileMounts` broadly deletes matching crypttab/fstab lines while encrypted volumes remain. | Name each owned mapping and prove backup, boot recovery, and unrelated-mount preservation. |
 
 ## Later individual decisions: keep or drop (38)
 
@@ -259,9 +260,10 @@ broken. An obsolete v2
 acquisition method alone is insufficient to retire PowerShell,
 [WoeUSB-ng](https://github.com/WoeUSB/WoeUSB-ng),
 [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher), or
-another product. No VM session is needed to
-approve a non-runnable ledger disposition. After an R1 or R2 approval, update
-only the approved rows, regenerate the progress report and burndown, run
-ledger/CI checks, and record the approved batch in the migration plan.
-Then review the remaining outcomes individually, starting with active v2
-selectors and the owner choices in U1-U3.
+another product. No VM session is needed to record a non-runnable owner
+decision. After an individual decision, update its ledger row and batch next
+action, regenerate the progress report and burndown, run ledger/CI checks,
+and record the decision in the migration plan. Review the remaining U1-U3
+outcomes individually, starting with active v2 selectors. Revisit the two
+deferred R1/R2 decisions when their related design work makes the choice
+concrete.

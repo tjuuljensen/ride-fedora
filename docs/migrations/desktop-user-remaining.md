@@ -40,6 +40,11 @@ fallback execution path.
 | `GnomeDefaultFavorites` | **Retired.** This library-only hard-coded Fedora 37-era favorites snapshot is not the Fedora 44 Workstation default contract. | Reopen only if a current edition-specific default reset is explicitly requested and can preserve the prior user list. |
 | `GnomeMinimalFavorites` | **Unsupported.** The library-only function replaces the complete favorites array without a prior-state snapshot. | Add an opt-in minimal-favorites profile with exact list recovery and a brief visual check. |
 
+The owner retained the `CustomKbrdShortcut` inverse outcome for migration on
+2026-10-30. Its v2 list-clearing behavior remains non-runnable; the next
+implementation must remove only journaled RIDE-owned shortcuts and preserve
+seeded user entries.
+
 [GNOME's shortcut UI](https://help.gnome.org/gnome-help/keyboard-shortcuts-set)
 and [favorites administration guide](https://help.gnome.org/system-admin-guide/desktop-favorite-applications.html)
 provide the current user-facing interfaces. Neither authorizes overwriting

@@ -2858,7 +2858,7 @@
         "docs/migrations/desktop-user-configuration.md"
       ],
       "blocker": "",
-      "nextAction": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available.",
+      "nextAction": "Owner deferred the retire-or-keep decision on 2026-10-30; review this remove-only outcome individually after the owned region setting is designed.",
       "v31Hardening": [],
       "reason": "The v2 GnomeRegion behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
       "reviewTrigger": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available."
@@ -2968,7 +2968,7 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Reconcile as a scoped inverse of owned custom shortcuts without clearing user entries.",
+      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; implement only as an owned shortcut inverse that preserves unowned entries.",
       "v31Hardening": [],
       "reason": "v2 remove-only inverse clears the complete custom-keybindings list and slots, including unowned user entries.",
       "reviewTrigger": "Reconcile as a scoped inverse of owned custom shortcuts without clearing user entries."
@@ -3433,7 +3433,7 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Limit removal to recorded RIDE-owned UUIDs and preserve seeded unrelated profiles.",
+      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; design removal by recorded RIDE-owned UUID and prove unrelated-profile preservation.",
       "v31Hardening": [],
       "reason": "v2 remove-only function deletes every NetworkManager VPN connection.",
       "reviewTrigger": "Limit removal to recorded RIDE-owned UUIDs and preserve seeded unrelated profiles."
@@ -3455,7 +3455,7 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Bind exact owned UUIDs to a private deployment and restore seeded user connections.",
+      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; bind exact UUIDs to an owned private deployment and prove connection recovery.",
       "v31Hardening": [],
       "reason": "v2 remove-only function deletes name-matched NetworkManager connections without ownership proof.",
       "reviewTrigger": "Bind exact owned UUIDs to a private deployment and restore seeded user connections."
@@ -3522,7 +3522,7 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reconcile as inverse of an owned boot connection schedule.",
+      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; design an owned boot schedule with exact prior-state recovery.",
       "v31Hardening": [],
       "reason": "v2 remove-only function filters a matching crontab string without origin proof.",
       "reviewTrigger": "Reconcile as inverse of an owned boot connection schedule."
@@ -3588,7 +3588,7 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen as scoped inverse of an owned schedule.",
+      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; design a scoped owned schedule inverse that preserves unrelated jobs.",
       "v31Hardening": [],
       "reason": "v2 remove-only inverse deletes matching crontab lines without ownership proof.",
       "reviewTrigger": "Reopen as scoped inverse of an owned schedule."
@@ -3917,7 +3917,7 @@
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Scope to individually owned mappings and prove boot plus unrelated-mount preservation.",
+      "nextAction": "Owner retained this inverse outcome for migration on 2026-10-30; isolate each owned mapping and prove backup, boot recovery, and unrelated-mount preservation before runnable status.",
       "v31Hardening": [],
       "reason": "v2 remove-only inverse broadly deletes crypttab/fstab lines while encrypted volumes remain.",
       "reviewTrigger": "Scope to individually owned mappings and prove boot plus unrelated-mount preservation."
@@ -4688,7 +4688,7 @@
         "docs/acceptance/gnome-user-boolean.md",
         "docs/migrations/desktop-user-configuration.md"
       ],
-      "nextAction": "Keep passing boolean settings opt-in; reopen string and UPower decisions only on their documented recovery triggers. Complete H018 in v3.1."
+      "nextAction": "Keep passing boolean settings opt-in; revisit the deferred GnomeRegion decision after an owned string-setting design. Complete H018 in v3.1."
     },
     {
       "id": "desktop-user-03",
@@ -4697,7 +4697,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
+      "nextAction": "Design the owner-retained CustomKbrdShortcut outcome as a scoped inverse; preserve seeded user shortcuts and prove exact restore."
     },
     {
       "id": "desktop-user-04",
@@ -4956,7 +4956,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Design owner-retained VPNProfiles removal by journaled UUID; prove unrelated NetworkManager profiles survive."
     },
     {
       "id": "system-security-21",
@@ -4965,7 +4965,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Design owner-retained ExpressVPNProfiles removal for a private owned deployment and prove seeded connection recovery."
     },
     {
       "id": "system-security-22",
@@ -4974,7 +4974,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Design owner-retained ExpressVPNafterBoot as an exact inverse of an owned boot schedule."
     },
     {
       "id": "system-security-23",
@@ -4992,7 +4992,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Design owner-retained ScheduleExpVPNChange as a scoped schedule inverse that preserves unrelated jobs."
     },
     {
       "id": "system-security-25",
@@ -5001,7 +5001,7 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Keep non-runnable; isolate owner-retained KeyfileMounts mapping recovery and prove boot plus unrelated-mount preservation before promotion."
     },
     {
       "id": "system-security-26",

@@ -28,6 +28,10 @@ separate from the [operable boolean settings](desktop-user-boolean.md).
 | `PowerPercentageLow15` | **Unsupported.** The active v2 function rewrites every matching `PercentageLow=` line in `/etc/UPower/UPower.conf` with `sed -i` and has no inverse or ownership check. | Review the current UPower drop-in contract, preserve an existing administrator policy, and pass battery-policy and restore checks on a disposable target. |
 | `PowerPercentageLow20` | **Unsupported.** The library-only variant performs the same broad file rewrite to `20.0`, with the same inverse and ownership gap. | Reopen together with the 15-percent variant after a conflict-safe, owned UPower policy handler and battery target exist. |
 
+The owner deferred the separate `GnomeRegion` retire-or-keep choice on
+2026-10-30. It remains non-runnable while an owned region setting and exact
+prior-state recovery are designed.
+
 [GNOME's user-settings guide](https://help.gnome.org/system-admin-guide/dconf.html)
 describes dconf's user database and default layers. The
 [UPower project](https://upower.freedesktop.org/) describes system power

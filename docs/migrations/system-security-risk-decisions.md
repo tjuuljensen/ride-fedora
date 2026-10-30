@@ -54,6 +54,14 @@ application batches remain separate for exact-target review.
 | `KeyfileMounts` | **Unsupported.** The remove-only function deletes every matching keyfile line from `/etc/crypttab` and related `/etc/fstab` lines while leaving encrypted volumes in place. | Reconcile as the inverse of individually owned mappings, preserving unrelated mounts and bootability. |
 | `SSHreboot` | **Unsupported.** v2 writes a user-specific sudoers file granting passwordless reboot and removal deletes it without prior-owner checks or validation. | Add a private principal, file-ownership and `visudo` checks, scoped command semantics, and recovery from a seeded sudoers policy. |
 
+On 2026-10-30 the owner retained the desired inverse outcomes for
+`VPNProfiles`, `ExpressVPNProfiles`, `ExpressVPNafterBoot`,
+`ScheduleExpVPNChange`, and `KeyfileMounts`. They remain non-runnable for v3.0.
+Migration must implement the owned UUID, schedule, or encrypted mapping
+recovery specified above; retaining them does not approve the broad v2
+deletion functions. Keyfile mounts require isolated disposable-disk and boot
+recovery evidence before promotion.
+
 No state-changing acceptance was run for these non-runnable decisions. The
 v2 source in `lib-fedora.sh` supplies the observed mutation and inverse
 facts. A later implementation must perform its own current upstream,
