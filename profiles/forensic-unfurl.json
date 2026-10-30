@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "forensic-unfurl",
+  "description": "Opt-in pinned UnfURL user environment with CLI and local web-app entry points",
+  "operations": [
+    {"id": "package.dfir-unfurl", "state": "installed"}
+  ]
+}

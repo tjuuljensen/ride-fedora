@@ -3,13 +3,13 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**185/185 dispositioned (100.0%)**: 29 supported, 26 opt-in candidate, 12 replaced, 13 retired, 0 private, 105 unsupported; 0 unresolved.
+**185/185 dispositioned (100.0%)**: 29 supported, 27 opt-in candidate, 12 replaced, 13 retired, 0 private, 104 unsupported; 0 unresolved.
 
-**v3.0 package/setting coverage: 55/169 operable (32.5%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 104 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
+**v3.0 package/setting coverage: 56/169 operable (33.1%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 103 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
 
 For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.
 
-Runnable outcomes: 55; 26 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
+Runnable outcomes: 56; 27 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
 
 | Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 retired | v3.0 replaced | v3.0 gap | Evidence | Next action |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -30,7 +30,7 @@ Runnable outcomes: 55; 26 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `provider-foundation-10` | GNOME extension installer acquisition and owned path | medium 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-10.md](../../docs/migrations/provider-foundation-10.md) | Owner deferred the GNOME extension helper decision; compare the archived helper with current GNOME extension management. |
 | `provider-foundation-11` | Flatpak runtime and application-preserving inverse | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-11.md](../../docs/migrations/provider-foundation-11.md) | Owner kept Flatpak runtime capability, separate from Flathub; design optional absent-runtime repair preserving apps, remotes, and data. |
 | `provider-foundation-12` | Snapd service and package-manager ownership | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-12.md](../../docs/migrations/provider-foundation-12.md) | Owner kept optional Snap enablement for occasional user-selected installs; design daemon/runtime lifecycle and preserve existing snaps and data. |
-| `forensic-isolated-01` | Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy | medium 6 | 6/6 | 1/6 | 0 | 0 | 5 | [forensic-isolated-01.md](../../docs/migrations/forensic-isolated-01.md), [package.exiftool.md](../../docs/acceptance/package.exiftool.md) | Owner kept VMFS access, ASN, UnfURL, CyberChef, and Chepy; review current sources and use owned, focused Fedora 44 lifecycles. |
+| `forensic-isolated-01` | Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy | medium 6 | 6/6 | 2/6 | 0 | 0 | 4 | [forensic-isolated-01.md](../../docs/migrations/forensic-isolated-01.md), [package.exiftool.md](../../docs/acceptance/package.exiftool.md), [forensic-isolated-01-unfurl.md](../../docs/migrations/forensic-isolated-01-unfurl.md), [package.dfir-unfurl.md](../../docs/acceptance/package.dfir-unfurl.md) | UnfURL is operable opt-in; continue VMFS access, ASN, CyberChef, and Chepy with separate source and recovery paths. |
 | `forensic-isolated-02` | Former CERT placeholders and isolated Volatility 3 | medium 4 | 4/4 | 1/4 | 0 | 0 | 3 | [forensic-isolated-02.md](../../docs/migrations/forensic-isolated-02.md), [package.volatility3.md](../../docs/acceptance/package.volatility3.md) | Owner kept Plaso, Autopsy, and Volatility 2; choose current sources, isolated runtimes, and case-data-preserving recovery. |
 | `forensic-isolated-03` | Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor | low 2, medium 2 | 4/4 | 2/4 | 0 | 1 | 1 | [forensic-isolated-03.md](../../docs/migrations/forensic-isolated-03.md), [package.binwalk.md](../../docs/acceptance/package.binwalk.md), [package.autopep8.md](../../docs/acceptance/package.autopep8.md) | Owner kept Dumpzilla and both standalone MAC vendor lookup scripts; implement parser path in v3.0 and defer managed script lifecycle to H024. |
 | `forensic-isolated-04` | BulkExtractor source build and owned artifact | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [forensic-isolated-04.md](../../docs/migrations/forensic-isolated-04.md) | Owner kept BulkExtractor and NetworkMiner; pin current Linux releases and prove seeded case/capture recovery. |
@@ -145,3 +145,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H022` | Bandwidth-test network behavior and server coverage | After a maintained v3.0 CLI path is selected; check additional servers and network behavior beyond the package-install happy path. | queued |
 | `H023` | Video-downloader site and extractor compatibility | The Fedora yt-dlp path is supported for package installation; test additional sites and extractors without changing its package-only claim. | queued |
 | `H024` | RIDE-managed MAC vendor script lifecycle | After standalone mac-vendor.py and mac-vendor.sh are retained for v3.0; decide owned install destination, update, cache, and inverse for both scripts. | queued |
+| `H025` | UnfURL local UI and wider parser behavior | After the Fedora 44 Workstation pinned CLI and entry points pass; test local web UI behavior, diverse URL parsers, and broader failure recovery without exposing a public listener. | queued |

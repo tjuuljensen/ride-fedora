@@ -447,6 +447,44 @@
       "artifactFormat": "wheel"
     },
     {
+      "id": "package.dfir-unfurl",
+      "kind": "package",
+      "name": "UnfURL forensic URL parser",
+      "group": "forensics",
+      "description": "Install pinned UnfURL CLI and local web-app entry points in a private user virtual environment without starting a service.",
+      "handler": "python-venv",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "dfir-unfurl",
+      "productUri": "https://github.com/RyanDFIR/unfurl",
+      "license": "Apache-2.0",
+      "licenseUri": "https://pypi.org/project/dfir-unfurl/20261007/",
+      "sourceUri": "https://pypi.org/project/dfir-unfurl/20261007/",
+      "verification": "pypi-pinned-sha256",
+      "sourceId": "pypi-venv",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "wheel"
+    },
+    {
       "id": "package.pwgen",
       "kind": "package",
       "name": "Password generator",

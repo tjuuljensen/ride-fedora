@@ -642,3 +642,21 @@ source, installed deployment, and run journal. `package.youtube-dl` remains
 a separate published ID. No schema or shared state behavior changes; recheck
 if either platform introduces downloader variants, changes package source
 selection, or changes run-state identity.
+
+### Fedora UnfURL isolated Python preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding the UnfURL
+user environment. Windows has no corresponding UnfURL product row. Linux
+reuses its existing `python-venv` handler class and `pypi-venv` source, with
+an allowlisted operation ID and a separate owned destination. No shared
+catalog, profile, or run-state field changes. The Linux user venv, Python
+wheel hashes, and exact owned inverse are platform-specific. Recheck if
+Windows adds UnfURL or either client changes installed-deployment identity,
+source selection, or run-journal recovery semantics.
+
+The pinned Fedora 44 Workstation VM lifecycle passed under QEMU TCG. The
+`forensic-unfurl` profile uses the existing profile schema and selects only
+the new opt-in candidate. The [acceptance record](acceptance/package.dfir-unfurl.md)
+shows the exact user-environment recovery. No unexplained Windows contract
+drift was found; the Linux-specific runtime remains a deliberate difference.

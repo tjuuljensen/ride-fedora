@@ -4,15 +4,15 @@ Status: **individual review in progress**, 2026-10-30. This review assigns
 each of the original 99 `unsupported` source outcomes exactly one decision
 batch. Three were approved for retirement, and one of those, Opera, was later
 excluded from v3 scope. Teams desktop capability was also retired in the
-fast-track review. The current ledger has 105 `unsupported` and 13 `retire`
+fast-track review. The current ledger has 104 `unsupported` and 13 `retire`
 outcomes. These decisions do not add an
 operation, delete v2 code, or run a state-changing test. The
 [migration ledger](../../migration/outcomes.json) and [progress report](progress.md)
 are authoritative for current disposition. The eleven Citrix, Opera, and host-specific
 exclusions are outside this review.
 
-The [package path review](package-path-review.md) assesses all 69 currently
-unsupported or retired `package.*` outcomes by product status, source, and
+The [package path review](package-path-review.md) assesses the original
+unsupported or retired `package.*` paths by product status, source, and
 required v3 path. A v2 selector being active, commented, or absent does not
 show whether that package was used on a machine. Selector coverage remains in
 the ledger for traceability only and does not rank decisions or set a weaker
@@ -180,7 +180,7 @@ If retained, choose a verified provider, owned key/repository or extension state
 If retained, choose pinned artifacts or isolated environments and preserve analysis output.
 
 - `workstation:package.ASN` (medium risk): The v2 installer fetches an unpinned MIT-licensed script into /usr/bin and removes shared RPM dependencies; v3 has no pinned owned-script handler or safe inverse.
-- `workstation:package.UnfURL` (medium risk): The v2 installer mutates the user global Python environment with unpinned pip dependencies; v3 has no isolated pinned dfir-unfurl environment or VM happy path.
+- `workstation:package.UnfURL` (medium risk): The v2 installer mutates the user global Python environment with unpinned pip dependencies. A [pinned opt-in user venv](../acceptance/package.dfir-unfurl.md) now has a Fedora 44 VM happy path; this original triage entry remains for decision history.
 - `workstation:package.CyberChef` (medium risk): The v2 installer selects a mutable GitHub ZIP, extracts into a system path, and writes a desktop launcher without an owned artifact/notice/recovery contract; Linux v3 has no portable handler.
 - `workstation:package.Chepy` (medium risk): The v2 installer clones an unpinned Git branch, globally installs Python packages and PyInstaller, and copies a built binary into /usr/bin without owned recovery.
 - `workstation:package.NetworkMiner` (high risk): The v2 mutable ZIP installer makes captures world writable and its inverse deletes the entire capture/output tree; no Linux owned portable handler or seeded-capture recovery exists.

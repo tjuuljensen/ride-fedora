@@ -1,10 +1,10 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-133 v2 `package.*` outcomes: 48 mapped to runnable v3 operations, 10 replaced,
-10 retired, and 65 unsupported. The five path groups below assess the **70
-original unsupported or retired outcomes**; the 10 replacements, 48 existing
-v3 mappings, and six newly scoped server outcomes follow. The 47 mapped
+133 v2 `package.*` outcomes: 49 mapped to runnable v3 operations, 10 replaced,
+10 retired, and 64 unsupported. The five path groups below assess the **70
+original unsupported or retired outcomes**; the 10 replacements, 49 existing
+v3 mappings, and six newly scoped server outcomes follow. The 49 mapped
 outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
 disposition, risk, target, evidence, and next action.
@@ -88,7 +88,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.Plaso` | Use a current packaged or isolated release, not the v2 URL-only stub. | [Batch review](forensic-isolated-02.md) |
 | `workstation:package.PowerShell` | Choose a current publisher RPM/source with owned trust and Fedora 44 evidence. | [Batch review](publisher-apps-09.md) |
 | `workstation:package.SpotifyClient` | Choose LPF or another reviewed provider and preserve profile state. | [Batch review](publisher-apps-11.md) |
-| `workstation:package.UnfURL` | Install a pinned isolated Python environment, not user-global pip. | [Batch review](forensic-isolated-01.md) |
+| `workstation:package.UnfURL` | A pinned isolated user environment is now an operable opt-in candidate; no user-global pip change. | [Acceptance](../acceptance/package.dfir-unfurl.md) |
 | `workstation:package.VeraCrypt` | Verify publisher artifact and license; preserve encrypted volumes. | [Batch review](publisher-apps-02.md) |
 | `workstation:package.VisualStudioCode` | Own publisher repository/key and preserve user workspace and settings. | [Batch review](publisher-apps-03.md) |
 | `workstation:package.Vivaldi` | Choose an exact publisher source and recover repository/key and browser profile. | [Batch review](publisher-apps-10.md) |
@@ -204,6 +204,7 @@ target and limit; this review does not broaden their support matrix.
 | `workstation:package.SystemMonitor` | `package.gnome-shell-extension-system-monitor-applet`, `package.lm-sensors` | opt-in candidate | [Acceptance](../acceptance/package.gnome-shell-extension-system-monitor-applet.md) |
 | `workstation:package.Thunderbird` | `package.thunderbird` | opt-in candidate | [Acceptance](../acceptance/package.thunderbird.md) |
 | `workstation:package.UnifyingOnLaptop` | `package.solaar`, `package.acpi` | opt-in candidate | [Acceptance](../acceptance/package.solaar.md) |
+| `workstation:package.UnfURL` | `package.dfir-unfurl` | opt-in candidate | [Acceptance](../acceptance/package.dfir-unfurl.md) |
 | `workstation:package.VLCPlayer` | `package.vlc` | opt-in candidate | [Acceptance](../acceptance/package.vlc.md) |
 | `workstation:package.Volatility3` | `package.volatility3` | opt-in candidate | [Acceptance](../acceptance/package.volatility3.md) |
 | `workstation:package.Wine` | `package.wine` | opt-in candidate | [Acceptance](../acceptance/package.wine.md) |

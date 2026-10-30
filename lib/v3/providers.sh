@@ -20,15 +20,23 @@ ride_observe() {
       ;;
     github-asset) printf 'not-applicable\n' ;;
     python-venv)
-      local environment
-      environment=$(ride_volatility_environment)
-      if [[ -f "$environment/.ride-owned" && ! -L "$environment" &&
-            -x "$environment/bin/python" ]] &&
-         "$environment/bin/python" -c 'import importlib.metadata as m; assert m.version("volatility3") == "2.28.2"; assert m.version("pefile") == "2024.8.26"' >/dev/null 2>&1; then
-        printf 'installed\n'
-      else
-        printf 'absent\n'
-      fi
+      case "$(jq -r '.id' <<< "$entry")" in
+        package.volatility3)
+          local environment
+          environment=$(ride_volatility_environment)
+          if [[ -f "$environment/.ride-owned" && ! -L "$environment" &&
+                -x "$environment/bin/python" ]] &&
+             "$environment/bin/python" -c 'import importlib.metadata as m; assert m.version("volatility3") == "2.28.2"; assert m.version("pefile") == "2024.8.26"' >/dev/null 2>&1; then
+            printf 'installed\n'
+          else
+            printf 'absent\n'
+          fi
+          ;;
+        package.dfir-unfurl)
+          ride_observe_unfurl
+          ;;
+        *) ride_die "unknown isolated Python operation" ;;
+      esac
       ;;
     gsettings-boolean)
       local schema key value
@@ -68,8 +76,11 @@ ride_change() {
       esac
       ;;
     python-venv)
-      [[ "$(jq -r '.id' <<< "$entry")" == package.volatility3 ]] || ride_die "unknown isolated Python operation"
-      ride_change_volatility "$state"
+      case "$(jq -r '.id' <<< "$entry")" in
+        package.volatility3) ride_change_volatility "$state" ;;
+        package.dfir-unfurl) ride_change_unfurl "$state" ;;
+        *) ride_die "unknown isolated Python operation" ;;
+      esac
       ;;
     gsettings-boolean)
       local schema key value writable
@@ -112,6 +123,63 @@ ride_gsettings() {
 
 ride_volatility_environment() {
   printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/volatility3"
+}
+
+ride_unfurl_environment() {
+  printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/dfir-unfurl"
+}
+
+ride_observe_unfurl() {
+  local environment
+  environment=$(ride_unfurl_environment)
+  if [[ -f "$environment/.ride-owned" && ! -L "$environment" &&
+        "$(cat "$environment/.ride-owned")" == 'ride-fedora package.dfir-unfurl 20261007' &&
+        -x "$environment/bin/python" && -x "$environment/bin/unfurl" &&
+        -x "$environment/bin/unfurl_app" ]] &&
+     "$environment/bin/python" -c 'import importlib.metadata as m; assert m.version("dfir-unfurl") == "20261007"' >/dev/null 2>&1; then
+    printf 'installed\n'
+  else
+    printf 'absent\n'
+  fi
+}
+
+ride_change_unfurl() {
+  local state=$1 environment base
+  environment=$(ride_unfurl_environment)
+  base=$(dirname "$environment")
+  case "$state" in
+    installed)
+      ride_require_command python3
+      if [[ -e "$environment" || -L "$environment" ]]; then
+        ride_die "isolated UnfURL path already exists; refusing to overwrite: $environment"
+      fi
+      umask 077
+      mkdir -p "$base"
+      python3 -m venv "$environment" || { rm -rf -- "$environment"; return 1; }
+      if ! "$environment/bin/python" -m pip --isolated install --disable-pip-version-check \
+          --index-url https://pypi.org/simple --require-hashes --only-binary=:all: \
+          -r "$RIDE_ROOT/requirements/unfurl.txt"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      if [[ ! -x "$environment/bin/unfurl" || ! -x "$environment/bin/unfurl_app" ]] ||
+         ! "$environment/bin/python" -c 'import importlib.metadata as m; assert m.version("dfir-unfurl") == "20261007"'; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      printf 'ride-fedora package.dfir-unfurl 20261007\n' > "$environment/.ride-owned"
+      ;;
+    absent)
+      if [[ -e "$environment" || -L "$environment" ]]; then
+        [[ -d "$environment" && ! -L "$environment" && -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" ]] ||
+          ride_die "refusing to remove unowned UnfURL path: $environment"
+        [[ "$(cat "$environment/.ride-owned")" == 'ride-fedora package.dfir-unfurl 20261007' ]] ||
+          ride_die "UnfURL ownership marker differs"
+        rm -rf -- "$environment"
+      fi
+      ;;
+    *) ride_die "invalid isolated Python state: $state" ;;
+  esac
 }
 
 ride_change_volatility() {

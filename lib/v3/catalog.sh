@@ -59,7 +59,8 @@ ride_validate_catalog() {
        elif .handler == "gsettings-boolean" then (.kind == "setting" and .scope == "user" and
          .states == ["enabled", "disabled"] and
          (.id | IN("setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting")))
-       elif .handler == "python-venv" then (.kind == "package" and .artifactFormat == "wheel" and .id == "package.volatility3")
+       elif .handler == "python-venv" then (.kind == "package" and .artifactFormat == "wheel" and
+         (.id | IN("package.volatility3", "package.dfir-unfurl")))
        else (.kind == "artifact" and (.githubRepository | type == "string" and test("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")) and
              (.assetSuffix | type == "string" and test("^-[A-Za-z0-9_.-]+$")) and
              (.maxBytes | type == "number" and . > 0 and . <= 104857600)) end)

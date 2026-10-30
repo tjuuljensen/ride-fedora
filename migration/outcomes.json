@@ -938,17 +938,24 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.dfir-unfurl"
+      ],
       "evidence": [
-        "docs/migrations/forensic-isolated-01.md"
+        "docs/migrations/forensic-isolated-01.md",
+        "docs/migrations/forensic-isolated-01-unfurl.md",
+        "docs/acceptance/package.dfir-unfurl.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept UnfURL for v3.0 on 2026-10-30. Pin an isolated Python environment and prove owned recovery with a focused Fedora 44 lifecycle.",
-      "v31Hardening": [],
-      "reason": "The v2 installer mutates the user global Python environment with unpinned pip dependencies; v3 has no isolated pinned dfir-unfurl environment or VM happy path.",
-      "reviewTrigger": "A concrete UnfURL use case with a hash-pinned isolated environment, owned inverse, and Fedora 44 VM acceptance.",
+      "nextAction": "Keep UnfURL opt-in with --allow-candidate; H025 covers UI and wider parser behavior before broader promotion.",
+      "v31Hardening": [
+        "H002",
+        "H025"
+      ],
+      "reason": "The v3 user environment replaces the v2 global pip install with 37 hash-pinned wheels and an exact owned inverse; the Fedora 44 Workstation happy path passed.",
+      "reviewTrigger": "Recheck wheel hashes, Python compatibility, UI behavior, and owned recovery if upstream or Fedora target changes.",
       "v30Decision": "keep"
     },
     {
@@ -4703,9 +4710,11 @@
       "title": "Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy",
       "evidence": [
         "docs/migrations/forensic-isolated-01.md",
-        "docs/acceptance/package.exiftool.md"
+        "docs/acceptance/package.exiftool.md",
+        "docs/migrations/forensic-isolated-01-unfurl.md",
+        "docs/acceptance/package.dfir-unfurl.md"
       ],
-      "nextAction": "Owner kept VMFS access, ASN, UnfURL, CyberChef, and Chepy; review current sources and use owned, focused Fedora 44 lifecycles."
+      "nextAction": "UnfURL is operable opt-in; continue VMFS access, ASN, CyberChef, and Chepy with separate source and recovery paths."
     },
     {
       "id": "forensic-isolated-02",
@@ -5685,6 +5694,12 @@
       "id": "H024",
       "title": "RIDE-managed MAC vendor script lifecycle",
       "trigger": "After standalone mac-vendor.py and mac-vendor.sh are retained for v3.0; decide owned install destination, update, cache, and inverse for both scripts.",
+      "status": "queued"
+    },
+    {
+      "id": "H025",
+      "title": "UnfURL local UI and wider parser behavior",
+      "trigger": "After the Fedora 44 Workstation pinned CLI and entry points pass; test local web UI behavior, diverse URL parsers, and broader failure recovery without exposing a public listener.",
       "status": "queued"
     }
   ]

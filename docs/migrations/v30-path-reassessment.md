@@ -9,11 +9,11 @@ can be retired as an implementation once its intended capability has a v3.0
 path. Earlier individual retirement choices remain historical decisions about
 those exact implementations; this review reopens their capability coverage.
 
-The current ledger has 133 package and 36 setting outcomes. Only 55 of those
+The current ledger has 133 package and 36 setting outcomes. Only 56 of those
 169 have operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
-**169 in-scope package/setting capabilities, 55 currently operable, nine
-owner-retired, one standalone functional replacement, and 104 still needing
+**169 in-scope package/setting capabilities, 56 currently operable, nine
+owner-retired, one standalone functional replacement, and 103 still needing
 an operable v3.0 path**. The ledger's 185 dispositioned outcomes out of
 185 include the now-supported Server qBittorrent package; this
 measure records reviewed decisions, not v3.0 capability coverage.
