@@ -1633,6 +1633,164 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.unar.md"
+    },
+    {
+      "id": "package.nano",
+      "kind": "package",
+      "name": "GNU nano editor",
+      "group": "editors",
+      "description": "Install Fedora nano without changing editor preferences.",
+      "handler": "dnf-package",
+      "packageName": "nano",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "nano",
+      "productUri": "https://www.nano-editor.org/",
+      "license": "GPL-3.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/nano/nano/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/nano/nano/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.nano.md"
+    },
+    {
+      "id": "package.vim-enhanced",
+      "kind": "package",
+      "name": "Vim enhanced editor",
+      "group": "editors",
+      "description": "Install Fedora vim-enhanced for the vim command without changing editor preferences.",
+      "handler": "dnf-package",
+      "packageName": "vim-enhanced",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "vim",
+      "productUri": "https://www.vim.org/",
+      "license": "Multiple SPDX licenses; see Fedora package metadata",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/vim/vim-enhanced/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/vim/vim-enhanced/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.vim-enhanced.md"
+    },
+    {
+      "id": "package.system-config-printer",
+      "kind": "package",
+      "name": "Printer configuration UI",
+      "group": "desktop-tools",
+      "description": "Install Fedora system-config-printer without changing printer configuration.",
+      "handler": "dnf-package",
+      "packageName": "system-config-printer",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "system-config-printer",
+      "productUri": "https://github.com/OpenPrinting/system-config-printer",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/system-config-printer/system-config-printer/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/system-config-printer/system-config-printer/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.gnome-tweaks",
+      "kind": "package",
+      "name": "GNOME Tweaks",
+      "group": "desktop-tools",
+      "description": "Install Fedora GNOME Tweaks without changing GNOME settings.",
+      "handler": "dnf-package",
+      "packageName": "gnome-tweaks",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gnome-tweaks",
+      "productUri": "https://wiki.gnome.org/Apps/Tweaks",
+      "license": "GPL-3.0-or-later AND CC0-1.0",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gnome-tweaks/gnome-tweaks/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/gnome-tweaks/gnome-tweaks/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
     }
   ]
 }

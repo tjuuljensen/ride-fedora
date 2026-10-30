@@ -44,7 +44,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallVMFStools` | deferred | Legacy active entry is incomplete; no executable v3 handler. |
 | `InstallPythonPip` | supported | Fedora `python3-pip` passed [VM lifecycle acceptance](acceptance/package.python3-pip.md); omit the v2 global pip self-upgrade. |
 | `InstallPackagingTools` | replaced | Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. |
-| `InstallBasicEditors` | deferred | Candidate native repository packages. |
+| `InstallBasicEditors` | supported | Split into Fedora `nano` and `vim-enhanced` package installs with [VM evidence](acceptance/provider-basic-editors.md). |
 | `InstallTerminator` | deferred | Optional desktop profile only. |
 | `InstallAlien` | deferred | Review relevance and support. |
 | `InstallSmartMonTools` | deferred | Optional system tools profile. |
@@ -55,13 +55,13 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallNetMgrLibreswan` | deferred | Optional VPN role. |
 | `InstallSpeedtestCLI` | deferred | Review current upstream and source. |
 | `InstallTecmintMonitorSh` | retired | Default profile must not fetch and execute remote scripts. |
-| `InstallGnomeExtInstaller` | deferred | Review current GNOME extension lifecycle. |
+| `InstallGnomeExtInstaller` | unsupported | [Archived upstream](migrations/provider-foundation-10.md), unpinned clone, and unowned path removal lack Fedora 44 compatibility and safe recovery. |
 | `InstallBrave` | deferred | Third-party repository and license review. |
 | `InstallChromium` | deferred | Candidate distro repository package. |
 | `SetFirefoxPreferences` | replaced | Review settings against current Firefox policy; avoid legacy file overwrite. |
 | `InstallFirefoxAddons` | deferred | Keep existing verified policy helper; integrate with v3 lifecycle later. |
 | `InstallYouTubeDownloader` | replaced | Review maintained yt-dlp packaging instead of legacy youtube-dl. |
-| `InstallGnomeTools` | deferred | Split GNOME package bundle. |
+| `InstallGnomeTools` | opt-in candidate | Fedora printer UI and GNOME Tweaks passed [package VM acceptance](acceptance/provider-gnome-tools.md); visual checks remain v3.1, and v2's unowned `gparted` removal is excluded. |
 | `InstallSystemMonitor` | deferred | Review current GNOME extension support. |
 | `InstallGnomeExtensions` | deferred | Review current GNOME extension IDs and API. |
 | `ShowDateInTaskbar` | deferred | Setting handler needs baseline and restore. |
@@ -185,10 +185,13 @@ is assessed and remains blocked on trust and owned recovery.
 [Provider foundation batch 03](migrations/provider-foundation-03.md) accepted
 kernel development and Python pip RPM installs, documented DNF5 as the
 replacement for `dnf-utils`, and accepted Fedora 7zip/unar package operations
-as a changed-CLI archive replacement. Flathub is isolated for remote
-ownership review. The next ordinary provider batch is
-`provider-foundation-04`. The remaining outcomes stay visible in the
-progress report.
+as a changed-CLI archive replacement.
+[Provider foundation batch 04](migrations/provider-foundation-04.md) accepted
+the editor RPMs as supported, the GNOME utility RPMs as opt-in candidates,
+and DNF5 versionlock as a non-runnable replacement. The archived GNOME
+extension installer was resolved as unsupported. Flathub, snapd, and the
+broad codec group remain isolated for their data, service, and source gates.
+The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse

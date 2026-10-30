@@ -583,6 +583,28 @@ def test_provider_archive_replacement_batch(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_provider_editors_and_gnome_utilities_batch(vm):
+    vm.run("rpm -q --quiet dnf5")
+    vm.run("dnf5 versionlock --help")
+    before = set(package_inventory(vm).splitlines())
+    assert vm.run("rpm -q --quiet nano", check=False).returncode == 0
+    vm.run("sudo dnf remove -y nano", timeout=900)
+    after = set(package_inventory(vm).splitlines())
+    assert {line.split("\t", 1)[0] for line in before - after} == {
+        "nano", "nano-default-editor", "default-editor"}
+    assert not (after - before), "editor preparation changed unrelated RPMs"
+
+    packages = ("nano", "vim-enhanced", "system-config-printer", "gnome-tweaks")
+    launcher = "rpm -ql {package} | grep -qE '/usr/share/applications/.*\\.desktop$'"
+    native_rpm_batch(vm, packages, inventory_policy="name-arch",
+                     residue_candidates=packages,
+                     installed_probes={"nano": "command -v nano",
+                                       "vim-enhanced": "command -v vim",
+                                       "system-config-printer": launcher.format(package="system-config-printer"),
+                                       "gnome-tweaks": launcher.format(package="gnome-tweaks")})
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_native_cli_tools_supported_profile_smoke(vm):
     identifiers = tuple(f"package.{name}" for name in
                         ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find"))

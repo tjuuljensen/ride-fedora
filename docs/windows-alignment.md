@@ -235,3 +235,16 @@ install status. Flathub was isolated as a remote-ownership batch. No shared
 schema, journal, source fallback, or Windows installer changed. Recheck if
 either platform changes package identity or source-selection semantics, and
 before release-candidate preparation.
+
+### Fedora provider foundation batch 04, 2026-10-30
+
+Compared Linux catalog, profile, and run-state schemas with Windows
+`codex/ride-v3-migration` at `0ff139f` before splitting the
+[editor and GNOME utility packages](migrations/provider-foundation-04.md).
+The four proposed Linux rows use Fedora RPMs, the unchanged DNF handler,
+and exact Workstation target scope. DNF5 versionlock is a documented
+replacement, not a new policy handler. The unowned v2 `gparted` removal is
+excluded. GNOME extension installer, Flatpak runtime, and snapd were
+separated for their own acquisition, data, and security gates. No shared
+schema, source fallback, journal, or Windows installer changed. Recheck on
+shared product or package-contract changes and before release review.

@@ -250,13 +250,17 @@
       "batch": "provider-foundation-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/provider-foundation-04.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck DNF5 versionlock on new targets; policy-entry management is separate work.",
+      "v31Hardening": [],
+      "reason": "Fedora 44 DNF5 exposes the versionlock command without the v2 python3-dnf-plugin-versionlock package; its availability passed a read-only Workstation VM check.",
+      "reviewTrigger": "DNF5 versionlock availability or the declared Fedora target changes, or a user requests managed lock policy entries."
     },
     {
       "key": "workstation:package.NautilusHash",
@@ -312,15 +316,17 @@
       ],
       "selectorCoverage": "commented",
       "family": "provider-foundation",
-      "batch": "provider-foundation-04",
-      "risk": "medium",
+      "batch": "provider-foundation-11",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "migrate",
+      "progress": "assessed",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "evidence": [
+        "docs/migrations/provider-foundation-11.md"
+      ],
+      "blocker": "The v2 inverse deletes all Flatpak applications and the runtime is pre-installed in the pinned image; a data-preserving v3 contract is unproved.",
+      "nextAction": "Design an installed-only or ownership-aware Flatpak runtime operation and prove seeded app/data preservation in a disposable VM.",
       "v31Hardening": []
     },
     {
@@ -369,15 +375,15 @@
       ],
       "selectorCoverage": "commented",
       "family": "provider-foundation",
-      "batch": "provider-foundation-04",
-      "risk": "medium",
+      "batch": "provider-foundation-12",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "blocker": "snapd is a privileged package manager; package install alone does not prove safe service activation, confinement, app-data preservation, or inverse.",
+      "nextAction": "Define snapd service and data ownership, then run isolated security/recovery acceptance or close non-runnable.",
       "v31Hardening": []
     },
     {
@@ -1127,13 +1133,24 @@
       "batch": "provider-foundation-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Candidate native repository packages.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.nano",
+        "package.vim-enhanced"
+      ],
+      "evidence": [
+        "docs/acceptance/provider-basic-editors.md",
+        "docs/acceptance/package.nano.md",
+        "docs/acceptance/package.vim-enhanced.md",
+        "docs/migrations/provider-foundation-04.md"
+      ],
+      "blocker": "",
+      "nextAction": "Review Vim package-driven updates and explicit removal of pre-installed editor defaults in v3.1.",
+      "v31Hardening": [
+        "H008",
+        "H010"
+      ]
     },
     {
       "key": "workstation:package.CommanderFileMgrs",
@@ -1824,16 +1841,20 @@
       ],
       "selectorCoverage": "active",
       "family": "provider-foundation",
-      "batch": "provider-foundation-04",
+      "batch": "provider-foundation-10",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current GNOME extension lifecycle.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/provider-foundation-10.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on the documented maintained-tool and safe-recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 installer clones mutable unpinned code and overwrites a system symlink; upstream is GPL-2.0 licensed but archived since 2023, without Fedora 44 GNOME compatibility or owned-path recovery evidence.",
+      "reviewTrigger": "A maintained licensed tool supports the declared Fedora/GNOME target with pinned acquisition and ownership-aware rollback."
     },
     {
       "key": "workstation:package.Brave",
@@ -2059,14 +2080,16 @@
       "selectorCoverage": "commented",
       "family": "provider-foundation",
       "batch": "provider-foundation-05",
-      "risk": "medium",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "migrate",
+      "progress": "assessed",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "evidence": [
+        "docs/migrations/provider-foundation-05.md"
+      ],
+      "blocker": "Exact codec products, source trust, and safe inverse are unestablished; v2 globs and group upgrade are broader than RIDE ownership.",
+      "nextAction": "Enumerate exact Fedora and approved third-party codecs, then implement owned package outcomes or record a reasoned v3.0 non-runnable disposition.",
       "v31Hardening": []
     },
     {
@@ -2232,13 +2255,25 @@
       "batch": "provider-foundation-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Split GNOME package bundle.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.system-config-printer",
+        "package.gnome-tweaks"
+      ],
+      "evidence": [
+        "docs/acceptance/provider-gnome-tools.md",
+        "docs/acceptance/package.system-config-printer.md",
+        "docs/acceptance/package.gnome-tweaks.md",
+        "docs/migrations/provider-foundation-04.md"
+      ],
+      "blocker": "",
+      "nextAction": "Review graphical use, broader recovery, and printer RPM updates in v3.1; keep gparted outside the inverse.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H008"
+      ]
     },
     {
       "key": "workstation:package.SystemMonitor",
@@ -2449,16 +2484,16 @@
         "RemoveGnomeRegion"
       ],
       "selectorCoverage": "library-only",
-      "family": "provider-foundation",
-      "batch": "provider-foundation-05",
+      "family": "desktop-user",
+      "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "blocker": "This is the unpaired legacy inverse of SetGnomeRegionDaDK; user-scope GNOME setting and recovery need review together.",
+      "nextAction": "Review with SetGnomeRegionDaDK and preserve prior user locale state during restore.",
       "v31Hardening": []
     },
     {
@@ -2468,7 +2503,7 @@
       ],
       "selectorCoverage": "active",
       "family": "desktop-user",
-      "batch": "desktop-user-02",
+      "batch": "desktop-user-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
@@ -2539,16 +2574,16 @@
         "RemoveCustomKbrdShortcut"
       ],
       "selectorCoverage": "library-only",
-      "family": "provider-foundation",
-      "batch": "provider-foundation-05",
+      "family": "desktop-user",
+      "batch": "desktop-user-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "review",
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "blocker": "This is the broad legacy inverse of SetCustomKeyboardShortcut and clears all custom keybindings; ownership and recovery need review together.",
+      "nextAction": "Review with SetCustomKeyboardShortcut and preserve unrelated user shortcuts.",
       "v31Hardening": []
     },
     {
@@ -3711,16 +3746,22 @@
     {
       "id": "provider-foundation-04",
       "family": "provider-foundation",
-      "title": "Provider Foundation 04: BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap",
-      "evidence": [],
-      "nextAction": "Assess BasicEditors, GnomeExtInstaller, GnomeTools, VersionLock, Flatpak, Snap; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Provider Foundation 04: BasicEditors, GnomeTools, VersionLock",
+      "evidence": [
+        "docs/migrations/provider-foundation-04.md",
+        "docs/acceptance/provider-basic-editors.md",
+        "docs/acceptance/provider-gnome-tools.md"
+      ],
+      "nextAction": "Continue provider-foundation-05 codec review; defer desktop visual and pre-installed editor removal hardening to v3.1."
     },
     {
       "id": "provider-foundation-05",
       "family": "provider-foundation",
-      "title": "Provider Foundation 05: Codecs, GnomeRegion, CustomKbrdShortcut",
-      "evidence": [],
-      "nextAction": "Assess Codecs, GnomeRegion, CustomKbrdShortcut; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "title": "Codec source and broad Multimedia group resolution",
+      "evidence": [
+        "docs/migrations/provider-foundation-05.md"
+      ],
+      "nextAction": "Split broad codec globs and Multimedia group by signed source and owned package outcome."
     },
     {
       "id": "provider-foundation-06",
@@ -3757,6 +3798,33 @@
         "docs/migrations/provider-foundation-09.md"
       ],
       "nextAction": "Define a scoped Flatpak remote handler, trust check, and inverse before acceptance."
+    },
+    {
+      "id": "provider-foundation-10",
+      "family": "provider-foundation",
+      "title": "GNOME extension installer acquisition and owned path",
+      "evidence": [
+        "docs/migrations/provider-foundation-10.md"
+      ],
+      "nextAction": "Reopen only if a maintained licensed GNOME-compatible installer with owned recovery becomes available."
+    },
+    {
+      "id": "provider-foundation-11",
+      "family": "provider-foundation",
+      "title": "Flatpak runtime and application-preserving inverse",
+      "evidence": [
+        "docs/migrations/provider-foundation-11.md"
+      ],
+      "nextAction": "Prove preservation of seeded Flatpak apps, remote, and data before runnable support or a v3.0 disposition."
+    },
+    {
+      "id": "provider-foundation-12",
+      "family": "provider-foundation",
+      "title": "Snapd service and package-manager ownership",
+      "evidence": [
+        "docs/migrations/provider-foundation-12.md"
+      ],
+      "nextAction": "Define privileged service, confinement, installed snap data, and safe inverse before runnable support."
     },
     {
       "id": "forensic-isolated-01",
@@ -3912,14 +3980,14 @@
     {
       "id": "desktop-user-02",
       "family": "desktop-user",
-      "title": "Desktop and user state 02: DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5",
+      "title": "Desktop and user state 02: GNOME region and shell settings",
       "evidence": [],
       "nextAction": "Assess DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5; record user-owned data, exact prior state, inverse, and VM criteria."
     },
     {
       "id": "desktop-user-03",
       "family": "desktop-user",
-      "title": "Desktop and user state 03: CustomKeyboardShortcut, GnomeCustomFavorites",
+      "title": "Desktop and user state 03: custom shortcuts and favorites with safe inverse",
       "evidence": [],
       "nextAction": "Assess CustomKeyboardShortcut, GnomeCustomFavorites; record user-owned data, exact prior state, inverse, and VM criteria."
     },
@@ -3947,7 +4015,7 @@
     {
       "id": "desktop-user-07",
       "family": "desktop-user",
-      "title": "Desktop and user state 07: WindowCtlAppmenuClose, WindowCtlLeftClsMinMax, ScreensaverSlp15Lgn5",
+      "title": "Desktop and user state 07: window controls and screensaver variants",
       "evidence": [],
       "nextAction": "Assess WindowCtlAppmenuClose, WindowCtlLeftClsMinMax, ScreensaverSlp15Lgn5; record user-owned data, exact prior state, inverse, and VM criteria."
     },
@@ -4421,6 +4489,12 @@
       "id": "H009",
       "title": "Review kernel-devel match for module builds",
       "trigger": "If module building is requested after the package-only v3.0 install acceptance; verify running-kernel and development-package compatibility",
+      "status": "queued"
+    },
+    {
+      "id": "H010",
+      "title": "Review removal of pre-installed editor defaults",
+      "trigger": "If explicit removal of a pre-installed editor is requested; inspect DNF dependents and preserve user editor preference",
       "status": "queued"
     }
   ]
