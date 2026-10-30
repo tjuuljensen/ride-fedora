@@ -3937,6 +3937,40 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.keepassxc.md"
+    },
+    {
+      "id": "setting.upower-percentage-low",
+      "kind": "setting",
+      "name": "UPower low-battery warning threshold",
+      "group": "desktop-user",
+      "description": "Set a selected low-battery percentage in an owned UPower drop-in.",
+      "handler": "upower-threshold",
+      "states": [
+        "configured"
+      ],
+      "valueKind": "percentage-low",
+      "scope": "system",
+      "status": "candidate",
+      "recovery": "exact-state",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "upower",
+      "productUri": "https://upower.freedesktop.org/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/upower/upower/",
+      "sourceUri": "https://cgit.freedesktop.org/upower/",
+      "verification": "local-upower-config"
     }
   ]
 }

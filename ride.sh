@@ -156,8 +156,8 @@ ride_plan_entry() {
   ride_require_target "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
-  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string && -z "$value" ]]; then
-    ride_die "string setting requires --value or a profile value: $id"
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]] && [[ -z "$value" ]]; then
+    ride_die "configurable setting requires --value or a profile value: $id"
   fi
   current=$(ride_observe "$entry")
   conflict=$(ride_provider_conflict "$entry")
@@ -192,11 +192,14 @@ ride_preflight_change() {
   ride_require_accepted "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
-  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string ]]; then
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
     [[ -n "$(jq -r '.selectedValue // ""' <<< "$entry")" ]] ||
-      ride_die "string setting requires --value or a profile value: $id"
+      ride_die "configurable setting requires --value or a profile value: $id"
   fi
   ride_require_privilege "$entry"
+  if [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+    ride_upower_guard "$(jq -r '.selectedValue' <<< "$entry")"
+  fi
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")
     if [[ -n "$conflict" && ( "$desired" == installed || "$(ride_observe "$entry")" != installed ) ]]; then
@@ -248,7 +251,7 @@ ride_apply_one() {
     return 1
   fi
   if ! after=$(ride_observe "$entry"); then
-    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string ]]; then
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
       ride_change "$entry" "$before" || ride_error "user setting rollback failed after observation error"
     fi
     ride_journal_update_last failed unknown
@@ -257,7 +260,7 @@ ride_apply_one() {
     return 1
   fi
   if [[ "$after" != "$desired" ]]; then
-    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string ]]; then
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
       ride_change "$entry" "$before" || ride_error "user setting rollback failed after state mismatch"
     fi
     ride_journal_update_last failed "$after"
@@ -315,10 +318,10 @@ ride_restore_steps() {
 ride_restore_entry() {
   local id=$1 source=$2 original=$3 entry value
   entry=$(ride_entry_or_die "$id" "$source")
-  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string ]]; then
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
     value=$(jq -er --arg id "$id" '[.steps[] | select(.id == $id) | .selectedValue] |
       if length == 1 and .[0] != null then .[0] else empty end' "$original") ||
-      ride_die "run lacks selected string value for $id"
+      ride_die "run lacks selected configurable value for $id"
     ride_entry_or_die "$id" "$source" "$value"
   else
     printf '%s\n' "$entry"
@@ -343,8 +346,12 @@ ride_restore() {
     if [[ "$recovery" == none || ( "$recovery" == remove-new-install && ( "$before" != absent || "$after" != installed ) ) ]]; then
       ride_die "exact recovery is unavailable for $id ($before -> $after)"
     fi
-    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string ]]; then
-      ride_gsettings_valid_snapshot "$before" || ride_die "invalid saved user setting state"
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+      if [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+        ride_upower_valid_snapshot "$before" || ride_die "invalid saved UPower setting state"
+      else
+        ride_gsettings_valid_snapshot "$before" || ride_die "invalid saved user setting state"
+      fi
       if [[ "$RIDE_DRY_RUN" != 1 ]]; then
         ride_require_target "$entry"
         ride_require_accepted "$entry"
@@ -363,9 +370,9 @@ ride_restore() {
         [[ "$result" == changed ]] || continue
         [[ "$source" != - ]] || source=
         entry=$(ride_restore_entry "$id" "$source" "$original")
-        if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string ]]; then
-          printf '%s\t-\t%s\t%s\t%s\t-\t-\tuser\n' \
-            "$id" "$(ride_observe "$entry")" "$before" "$(jq -r '.status' <<< "$entry")"
+        if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+          printf '%s\t-\t%s\t%s\t%s\t-\t-\t%s\n' \
+            "$id" "$(ride_observe "$entry")" "$before" "$(jq -r '.status' <<< "$entry")" "$(jq -r '.scope' <<< "$entry")"
         else
           ride_plan_entry "$id" "$before" "$source"
         fi

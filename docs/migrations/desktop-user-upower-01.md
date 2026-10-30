@@ -1,6 +1,6 @@
 # UPower low-battery threshold
 
-Status: **design and completion checks defined; implementation pending**,
+Status: **both kept outcomes operable as opt-in candidates**,
 2026-10-30. The owner kept both v2 threshold outcomes for v3.0 and preferred
 one optional configurable setting. `SetPowerPercentageLow15` and
 `SetPowerPercentageLow20` rewrite every `PercentageLow=` line in
@@ -43,3 +43,27 @@ is not acceptance evidence for the declared disposable Workstation target.
 The main configuration remains administrator/package-owned. This batch owns
 only its exact drop-in path and must avoid masking another explicit
 administrator policy.
+
+## Fedora 44 Workstation result
+
+The [shared VM acceptance](../acceptance/setting.upower-percentage-low.md)
+passed the owned configuration lifecycle for both 15 and 20 on the exact
+declared target. `setting.upower-percentage-low` accepts selected values from
+6 through 50, requires percentage-based UPower policy, and refuses a
+critical/action threshold at or above the requested low threshold. An
+existing unowned RIDE path or another drop-in setting `PercentageLow` is a
+conflict. It writes a fixed, root-owned numbered file and leaves the main
+UPower configuration unchanged. The selected value is bound to the run
+signature; a restore needs the recorded value and refuses changed current
+content.
+
+Both source outcomes are **operable opt-in candidates**. The headless VM
+could not test a physical low-battery warning transition; H030 retains that
+behavioral check in v3.1. The accepted scope is configuration and exact
+recovery on Fedora 44 x86_64 Workstation, with no base-profile selection.
+
+The first harness attempt stopped before boot because its local loopback
+socket was sandbox-denied. The identical scenario then passed with local VM
+permission. After adding a root-ownership check for the managed file, the
+final-code scenario passed again in a new disposable overlay; no failed guest
+mutation was retried blindly.

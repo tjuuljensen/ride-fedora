@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string")) and
+      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "upower-threshold")) and
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
@@ -69,6 +69,10 @@ ride_validate_catalog() {
           elif .id == "setting.gnome-window-buttons" then .valueKind == "window-buttons" and
             .allowedValues == [":minimize,maximize,close", ":appmenu:close", "close,minimize,maximize:"]
           else false end))
+       elif .handler == "upower-threshold" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.upower-percentage-low" and .states == ["configured"] and
+         .valueKind == "percentage-low" and .recovery == "exact-state" and
+         .verification == "local-upower-config")
        elif .handler == "python-venv" then (.kind == "package" and
          (if .id == "package.chepy" then
            .scope == "user" and .artifactFormat == "sdist" and .sourceId == "pypi-sdist-venv" and
@@ -125,7 +129,8 @@ ride_entry_or_die() {
   if [[ "$(jq -r '.kind' <<< "$base")" != package ]]; then
     [[ -z "$requested" ]] || ride_die "source selection requires a package: $id"
     if [[ -n "$value" ]]; then
-      [[ "$(jq -r '.handler' <<< "$base")" == gsettings-string ]] || ride_die "value selection requires a string setting: $id"
+      [[ "$(jq -r '.handler' <<< "$base")" == gsettings-string || "$(jq -r '.handler' <<< "$base")" == upower-threshold ]] ||
+        ride_die "value selection requires a configurable setting: $id"
       ride_setting_value_valid "$base" "$value" || ride_die "invalid value for $id: $value"
       jq -c --arg value "$value" '. + {selectedValue:$value}' <<< "$base"
       return
@@ -133,7 +138,7 @@ ride_entry_or_die() {
     printf '%s\n' "$base"
     return
   fi
-  [[ -z "$value" ]] || ride_die "value selection requires a string setting: $id"
+  [[ -z "$value" ]] || ride_die "value selection requires a configurable setting: $id"
   selected=${requested:-$(jq -r '.sourceId' <<< "$base")}
   if [[ "$selected" == "$(jq -r '.sourceId' <<< "$base")" ]]; then
     jq -c 'del(.sourceProviders)' <<< "$base"
@@ -154,6 +159,9 @@ ride_setting_value_valid() {
       ;;
     setting.gnome-window-buttons)
       jq -e --arg value "$value" '.allowedValues | index($value) != null' <<< "$entry" >/dev/null
+      ;;
+    setting.upower-percentage-low)
+      [[ "$value" =~ ^([6-9]|[1-4][0-9]|50)$ ]]
       ;;
     *) return 1 ;;
   esac
@@ -179,7 +187,7 @@ ride_source_signature() {
   local version=${2:-2} fields
   case "$version" in
     1) fields='{id, sourceId, handler, packageName, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
-    2) fields='if .handler == "gsettings-string" then
+    2) fields='if (.handler | IN("gsettings-string", "upower-threshold")) then
          {id, handler, scope, sourceUri, verification, targets, recovery, valueKind, allowedValues, selectedValue}
        elif (.handler | IN("pinned-script", "pinned-zip")) or .id == "package.chepy" then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
@@ -223,8 +231,8 @@ ride_validate_profile() {
     jq -e --arg state "$state" '.states | index($state) != null' <<< "$entry" >/dev/null ||
       ride_die "invalid state $state for $id"
     handler=$(jq -r '.handler' <<< "$entry")
-    if [[ "$handler" == gsettings-string ]]; then
-      [[ -n "$value" ]] || ride_die "string setting requires a profile value: $id"
+    if [[ "$handler" == gsettings-string || "$handler" == upower-threshold ]]; then
+      [[ -n "$value" ]] || ride_die "configurable setting requires a profile value: $id"
     else
       [[ -z "$value" ]] || ride_die "profile value is not valid for $id"
     fi

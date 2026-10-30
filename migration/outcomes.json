@@ -3259,18 +3259,21 @@
       "batch": "desktop-user-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.upower-percentage-low"
+      ],
       "evidence": [
         "docs/migrations/desktop-user-configuration.md",
-        "docs/migrations/desktop-user-upower-01.md"
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
       "blocker": "",
-      "nextAction": "Implement the validated, opt-in UPower drop-in shared with the 20-percent outcome; prove exact recovery on the pinned Workstation VM before candidate promotion.",
-      "v31Hardening": [],
-      "reason": "The v2 PowerPercentageLow15 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target.",
+      "nextAction": "Keep the owned 15-percent UPower profile opt-in; verify physical warning behavior in H030 before support promotion.",
+      "v31Hardening": [
+        "H030"
+      ],
       "v30Decision": "keep"
     },
     {
@@ -3283,18 +3286,21 @@
       "batch": "desktop-user-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.upower-percentage-low"
+      ],
       "evidence": [
         "docs/migrations/desktop-user-configuration.md",
-        "docs/migrations/desktop-user-upower-01.md"
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
       "blocker": "",
-      "nextAction": "Implement the same opt-in UPower drop-in with 20 as a selected value and exact prior-policy recovery; keep physical battery warning checks in H030.",
-      "v31Hardening": [],
-      "reason": "Owner kept the 20-percent capability on 2026-10-30, preferring a configurable optional threshold over separate fixed edits.",
-      "reviewTrigger": "Owner kept the 20-percent battery threshold; implement it as an optional validated value of one owned UPower setting shared with the 15-percent outcome, with exact prior-policy recovery.",
+      "nextAction": "Keep the owned 20-percent UPower profile opt-in; verify physical warning behavior in H030 before support promotion.",
+      "v31Hardening": [
+        "H030"
+      ],
       "v30Decision": "keep"
     },
     {
@@ -5025,9 +5031,10 @@
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
         "docs/migrations/desktop-user-configuration.md",
-        "docs/migrations/desktop-user-upower-01.md"
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
-      "nextAction": "Implement the shared opt-in UPower threshold handler and prove the 15-percent selection and exact drop-in recovery on Fedora 44 Workstation."
+      "nextAction": "All three settings are operable; keep UPower opt-in and complete H030 battery behavior in v3.1."
     },
     {
       "id": "desktop-user-05",
@@ -5075,9 +5082,10 @@
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
         "docs/migrations/desktop-user-configuration.md",
-        "docs/migrations/desktop-user-upower-01.md"
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
-      "nextAction": "Implement the shared opt-in UPower threshold handler and prove the 20-percent selection and exact drop-in recovery on Fedora 44 Workstation; H030 retains battery behavior."
+      "nextAction": "All three settings are operable; keep UPower opt-in and complete H030 battery behavior in v3.1."
     },
     {
       "id": "desktop-user-10",

@@ -55,6 +55,7 @@ ride_observe() {
       ;;
     ibus-emoji-hotkey) ride_ibus_hotkey_observe ;;
     gsettings-string) ride_gsettings_string_observe "$entry" ;;
+    upower-threshold) ride_upower_observe "$entry" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -112,8 +113,146 @@ ride_change() {
       ;;
     ibus-emoji-hotkey) ride_ibus_hotkey_change "$state" ;;
     gsettings-string) ride_gsettings_string_change "$entry" "$state" ;;
+    upower-threshold) ride_upower_change "$entry" "$state" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
+}
+
+ride_upower_dir() {
+  printf '/etc/UPower/UPower.conf.d\n'
+}
+
+ride_upower_main() {
+  printf '/etc/UPower/UPower.conf\n'
+}
+
+ride_upower_path() {
+  printf '%s/70-ride-percentage-low.conf\n' "$(ride_upower_dir)"
+}
+
+ride_upower_content() {
+  printf '# RIDE v3 managed: setting.upower-percentage-low\n[UPower]\nPercentageLow=%s.0\n' "$1"
+}
+
+ride_upower_valid_snapshot() {
+  [[ "$1" == absent || "$1" =~ ^owned:([6-9]|[1-4][0-9]|50)$ ]]
+}
+
+ride_upower_file_state() {
+  local path value
+  path=$(ride_upower_path)
+  if [[ ! -e "$path" && ! -L "$path" ]]; then printf 'absent\n'; return; fi
+  [[ -f "$path" && ! -L "$path" && "$(stat -c %u "$path")" == 0 ]] ||
+    { printf 'unowned\n'; return; }
+  value=$(sed -n 's/^PercentageLow=\([0-9][0-9]*\)\.0$/\1/p' "$path") || return 1
+  if [[ "$value" =~ ^([6-9]|[1-4][0-9]|50)$ ]] &&
+      cmp -s "$path" <(ride_upower_content "$value"); then
+    printf 'owned:%s\n' "$value"
+  else
+    printf 'unowned\n'
+  fi
+}
+
+ride_upower_observe() {
+  local entry=$1 selected current
+  selected=$(jq -r '.selectedValue // ""' <<< "$entry")
+  current=$(ride_upower_file_state) || ride_die "cannot read UPower drop-in"
+  if [[ "$current" == "owned:$selected" && -n "$selected" ]]; then
+    printf 'configured\n'
+  else
+    printf '%s\n' "$current"
+  fi
+}
+
+ride_upower_guard() {
+  local threshold=$1 dir path main file key value critical action percent_policy
+  dir=$(ride_upower_dir)
+  path=$(ride_upower_path)
+  main=$(ride_upower_main)
+  [[ -d "$dir" && ! -L "$dir" && -f "$main" ]] ||
+    ride_die "UPower configuration directory or main file is unavailable"
+  [[ "$(stat -c %u "$dir")" == 0 ]] || ride_die "UPower configuration directory is not root-owned"
+  ride_require_command rpm
+  ride_require_command systemctl
+  rpm -q --quiet upower || ride_die "UPower is not installed"
+  [[ "$(ride_upower_file_state)" != unowned ]] || ride_die "UPower RIDE path is not owned by RIDE"
+  local -a files=("$main")
+  while IFS= read -r -d '' file; do
+    [[ -f "$file" && ! -L "$file" ]] || ride_die "UPower drop-in is not a regular file: $file"
+    if [[ "$file" != "$path" ]] && grep -Eq '^[[:space:]]*PercentageLow[[:space:]]*=' "$file"; then
+      ride_die "another UPower drop-in selects PercentageLow: $file"
+    fi
+    files+=("$file")
+  done < <(find "$dir" -maxdepth 1 -name '[0-9][0-9]-*.conf' -print0 | LC_ALL=C sort -z)
+  for key in UsePercentageForPolicy PercentageCritical PercentageAction; do
+    value=$(awk -F= -v wanted="$key" '
+      /^[[:space:]]*\[UPower\][[:space:]]*$/ { section=1; next }
+      /^[[:space:]]*\[/ { section=0 }
+      section && $1 ~ "^[[:space:]]*" wanted "[[:space:]]*$" {
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); result=$2
+      }
+      END { print result }
+    ' "${files[@]}") || ride_die "cannot parse UPower policy"
+    case "$key" in
+      UsePercentageForPolicy) percent_policy=$value ;;
+      PercentageCritical) critical=$value ;;
+      PercentageAction) action=$value ;;
+    esac
+  done
+  [[ "$percent_policy" == true && "$critical" =~ ^[0-9]+([.][0-9]+)?$ &&
+     "$action" =~ ^[0-9]+([.][0-9]+)?$ ]] || ride_die "UPower percentage policy is unavailable"
+  awk -v low="$threshold" -v critical="$critical" -v action="$action" \
+    'BEGIN { exit !(low > critical && critical > action && action >= 0) }' ||
+    ride_die "UPower low threshold must exceed critical and action thresholds"
+}
+
+ride_upower_write() {
+  local state=$1 dir path temp value
+  dir=$(ride_upower_dir)
+  path=$(ride_upower_path)
+  case "$state" in
+    absent) rm -f -- "$path" ;;
+    owned:*)
+      ride_upower_valid_snapshot "$state" || ride_die "invalid UPower snapshot"
+      value=${state#owned:}
+      temp=$(mktemp "$dir/.ride-upower.XXXXXXXX") || return 1
+      if ! ride_upower_content "$value" > "$temp" || ! chmod 0644 "$temp" || ! mv -T -- "$temp" "$path"; then
+        rm -f -- "$temp"
+        return 1
+      fi
+      ;;
+    *) ride_die "invalid UPower write state" ;;
+  esac
+}
+
+ride_upower_change() {
+  local entry=$1 state=$2 selected target before after
+  selected=$(jq -r '.selectedValue // ""' <<< "$entry")
+  [[ "$selected" =~ ^([6-9]|[1-4][0-9]|50)$ ]] || ride_die "invalid selected UPower threshold"
+  case "$state" in
+    configured) target="owned:$selected" ;;
+    absent|owned:*) ride_upower_valid_snapshot "$state" || ride_die "invalid saved UPower state"; target=$state ;;
+    *) ride_die "invalid UPower state" ;;
+  esac
+  if [[ "$target" == absent ]]; then
+    ride_upower_guard "$selected"
+  else
+    ride_upower_guard "${target#owned:}"
+  fi
+  before=$(ride_upower_file_state) || ride_die "cannot observe UPower drop-in"
+  ride_upower_valid_snapshot "$before" || ride_die "UPower drop-in is not owned by RIDE"
+  if ! ride_upower_write "$target" || ! systemctl try-restart upower.service; then
+    ride_upower_write "$before" && systemctl try-restart upower.service ||
+      ride_error "UPower rollback failed after write or reload error"
+    return 1
+  fi
+  after=$(ride_upower_observe "$entry") || after=unknown
+  if [[ "$after" != "$state" ]]; then
+    ride_upower_write "$before" && systemctl try-restart upower.service ||
+      ride_error "UPower rollback failed after verification error"
+    ride_error "UPower threshold verification failed"
+    return 1
+  fi
 }
 
 ride_ibus_hotkey_schema() {

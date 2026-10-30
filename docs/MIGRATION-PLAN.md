@@ -74,7 +74,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `SetGnomeCustomFavorites` | deferred | User-specific favorites need profile data. |
 | `SetGnmLocationServiceOff` | deferred | Review current GNOME setting and scope. |
 | `SetGnmAutoProblemRptOff` | deferred | Review current GNOME setting and scope. |
-| `SetPowerPercentageLow15` | deferred | Review current power setting and support. |
+| `SetPowerPercentageLow15` | opt-in candidate | The [shared UPower threshold operation](migrations/desktop-user-upower-01.md) selects 15 or 20 through an owned drop-in and exact restore; [Workstation VM evidence](acceptance/setting.upower-percentage-low.md). |
 | `EnableBashAliases` | deferred | User shell configuration must preserve unowned content. |
 | `SetAliasLsEza` | deferred | User shell configuration must preserve unowned content. |
 | `SetAliasWanIP` | deferred | User shell configuration must preserve unowned content. |

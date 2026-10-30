@@ -796,3 +796,18 @@ from the recorded selection. The optional Linux field and dconf user override
 are intentional platform details. Recheck when either profile or run schema
 changes, Windows adds a comparable configured setting, or a release
 candidate is prepared.
+
+### Fedora UPower threshold batch preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding the kept 15-
+and 20-percent UPower settings. Windows has no UPower operation or equivalent
+Linux battery-policy file. Linux reuses its optional profile `value` field
+and selected-value run signature from the GNOME string batch, then adds a
+fixed, system-scoped UPower drop-in handler. The operation ID, desired state,
+selected value, observed prior state, and exact restore remain explicit data;
+the numbered `/etc/UPower/UPower.conf.d` destination is platform-specific.
+No Windows catalog, profile, or run-state behavior is changed, and no
+unexplained shared contract drift was found. Recheck if either platform adds
+battery-policy management, changes selected-value journaling, or prepares a
+release candidate.

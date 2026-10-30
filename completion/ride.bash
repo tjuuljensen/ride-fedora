@@ -51,7 +51,11 @@ _ride_complete() {
         [[ "$token" == setting.* ]] && id=$token
       done
       [[ -n "$id" ]] || return
-      mapfile -t words < <(jq -r --arg id "$id" '.operations[] | select(.id == $id and .handler == "gsettings-string") | .allowedValues[]?' "$catalog")
+      mapfile -t words < <(jq -r --arg id "$id" '
+        .operations[] | select(.id == $id) |
+        if .handler == "upower-threshold" then "15", "20"
+        elif .handler == "gsettings-string" then .allowedValues[]?
+        else empty end' "$catalog")
       COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
       return ;;
     --source)

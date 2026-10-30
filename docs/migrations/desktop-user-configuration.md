@@ -12,7 +12,8 @@ administrator-owned policy and exact prior state. The
 [UPower batch](desktop-user-upower-01.md) now defines completion checks and
 records Fedora 44's supported drop-in format before implementation.
 
-Status: **GNOME strings operable; UPower thresholds non-runnable**, 2026-10-30.
+Status: **GNOME strings and UPower thresholds operable as opt-in candidates**,
+2026-10-30.
 The [boolean settings](desktop-user-boolean.md) are separately operable.
 
 ## Completion criteria defined for this review
@@ -36,8 +37,8 @@ The [boolean settings](desktop-user-boolean.md) are separately operable.
 | `WindowCtlMinMaxClose` | **Operable opt-in candidate.** v2 wrote one fixed layout with no exact inverse; v3 selects that value through `setting.gnome-window-buttons` and restores the prior override. | [VM acceptance](../acceptance/setting.gnome-string-values.md); complete H003 visual review in v3.1. |
 | `GnomeRegionDaDK` | **Operable opt-in candidate.** `gnome-region-da-dk` explicitly selects an available locale through `setting.gnome-region`; another installed locale can be chosen through a validated profile value. | [VM acceptance](../acceptance/setting.gnome-string-values.md); complete H003 region-format review in v3.1. |
 | `GnomeRegion` | **Owner-deferred.** `RemoveGnomeRegion` wrote an empty string without a distinct desired install or prior-state journal. The configurable v3 region setting does not imply an explicit reset-to-default request. | Decide whether reset-to-default is a separate use case; if kept, add an owned action with exact recovery. |
-| `PowerPercentageLow15` | **Unsupported.** The active v2 function rewrites every matching `PercentageLow=` line in `/etc/UPower/UPower.conf` with `sed -i` and has no inverse or ownership check. | Review the current UPower drop-in contract, preserve an existing administrator policy, and pass battery-policy and restore checks on a disposable target. |
-| `PowerPercentageLow20` | **Kept by owner.** The library-only variant performs the same broad file rewrite to `20.0`, with the same inverse and ownership gap. Prefer an optional validated threshold shared with the 15-percent outcome. | Implement one conflict-safe, owned UPower policy setting, then prove battery behavior and exact recovery on a disposable target. |
+| `PowerPercentageLow15` | **Operable opt-in candidate.** The active v2 function rewrote the main config without recovery; `upower-low-15` now selects 15 through an owned drop-in with [VM acceptance](../acceptance/setting.upower-percentage-low.md). | H030 tests the user-visible warning on battery hardware in v3.1. |
+| `PowerPercentageLow20` | **Operable opt-in candidate.** The library-only v2 variant had the same unsafe edit; `upower-low-20` selects 20 through the same owned operation. | H030 tests the user-visible warning on battery hardware in v3.1. |
 
 The owner deferred the separate `GnomeRegion` retire-or-keep choice on
 2026-10-30. The configurable setting is now operable, so this remove-only
