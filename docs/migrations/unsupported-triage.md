@@ -12,16 +12,17 @@ exclusions are outside this review.
 | Original decision lane | Outcomes | Owner decisions so far |
 | --- | ---: | --- |
 | Retirement proposals, R1-R2 | 10 | 2 retired, 6 retained for migration, 2 deferred. |
-| Keep-or-drop choices, U1a-U3b | 38 | Individual decisions remain. |
+| Keep-or-drop choices, U1a-U3b | 38 | 2 retained, 1 deferred, 35 still to decide. |
 | Migration design, D1a-D5a | 51 | Bitwarden AppImage retained; exact ownership, source, state, and recovery remain to design. |
 
-The current 97 unsupported outcomes consist of 57 migration-design outcomes
-(51 original plus six retained R2 inverses), 38 keep-or-drop choices, and two
-deferred retirement decisions. The v3.0 total stays 180/180 and the runnable
-count stays 54. Retaining an outcome does not make its unsafe v2 function
-runnable: a new owned implementation needs its own evidence. Legacy functions
-and existing v2 machine state remain untouched. These review groups do not
-override the small implementation batches in the migration plan.
+The current 97 unsupported outcomes consist of 59 migration-design outcomes
+(51 original, six retained R2 inverses, and two retained U1a applications),
+35 keep-or-drop choices, and three deferred owner decisions. The v3.0 total
+stays 180/180 and the runnable count stays 54. Retaining an outcome does not
+make its unsafe v2 function runnable; a new owned implementation needs its
+own evidence. Legacy functions and existing v2 machine state remain untouched.
+These review groups do not override the small implementation batches in the
+migration plan.
 
 ## R1: obsolete or mismatched integrations (3 original; 2 retired)
 
@@ -67,9 +68,9 @@ prepare an individual retirement reason and review trigger.
 
 Choose each product and deployment form before source or handler work.
 
-- `workstation:package.AppImageLauncher` (active; medium risk): v2 selects a mutable beta publisher RPM and creates a user Applications directory without owned AppImage integration or safe inverse.
-- `workstation:package.BalenaEtcher` (commented; medium risk): The v2 latest-release scrape is mutable and v3 has no pinned external-RPM acquisition, detection, or inverse handler, despite a current publisher RPM.
-- `workstation:package.ArduinoIDE` (commented; medium risk): The v2 latest AppImage scrape and filename-glob inverse lack owned destination and collision handling; no v3 portable handler exists.
+- `workstation:package.AppImageLauncher` (active; medium risk; **decide later** on 2026-10-30): v2 selects a mutable beta publisher RPM and creates a user Applications directory without owned AppImage integration or safe inverse. Revisit after its source and recovery design is clearer.
+- `workstation:package.BalenaEtcher` (commented; medium risk; **keep for migration** on 2026-10-30): The v2 latest-release scrape is mutable and v3 has no pinned external-RPM acquisition, detection, or inverse handler, despite a current publisher RPM. Plan a pinned, owned optional application lifecycle.
+- `workstation:package.ArduinoIDE` (commented; medium risk; **keep for migration** on 2026-10-30): The v2 latest AppImage scrape and filename-glob inverse lack owned destination and collision handling; no v3 portable handler exists. Choose the deployment form and prove its owned inverse.
 - `workstation:package.Discord` (commented; medium risk): The publisher offers a Linux RPM, but v2 has no declared Fedora 44 source and v3 lacks a pinned publisher-RPM or owned Flathub handler.
 - `workstation:package.Joplin` (commented; medium risk): The v2 moving AppImage and glob inverse lack file ownership; the publisher script cannot be executed by a default v3 profile, and notebooks belong to the user.
 - `workstation:package.Xmind` (commented; medium risk): The v2 old Zen RPM scrape does not identify the current publisher edition or package; its xmind-vana inverse lacks ownership and user-document recovery.
@@ -264,6 +265,5 @@ another product. No VM session is needed to record a non-runnable owner
 decision. After an individual decision, update its ledger row and batch next
 action, regenerate the progress report and burndown, run ledger/CI checks,
 and record the decision in the migration plan. Review the remaining U1-U3
-outcomes individually, starting with active v2 selectors. Revisit the two
-deferred R1/R2 decisions when their related design work makes the choice
-concrete.
+outcomes individually, starting with active v2 selectors. Revisit the three
+deferred choices when their related design work makes the choice concrete.

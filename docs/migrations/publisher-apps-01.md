@@ -29,3 +29,7 @@ outcome is **non-runnable unsupported in v3.0**. Reopen when a pinned,
 licensed release has Fedora 44 VM evidence for both package and seeded
 user-AppImage recovery. Existing user AppImages and `~/Applications` remain
 outside RIDE v3 ownership.
+
+The owner deferred the AppImageLauncher keep-or-retire choice on 2026-10-30.
+Its v3.0 disposition remains non-runnable while current-source and
+user-AppImage recovery design make that decision concrete.

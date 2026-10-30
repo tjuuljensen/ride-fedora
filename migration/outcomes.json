@@ -398,7 +398,7 @@
         "docs/migrations/publisher-apps-01.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only when a pinned publisher RPM passes Fedora 44 Workstation VM install, integration, conflict, and seeded user-AppImage recovery.",
+      "nextAction": "Owner deferred the keep-or-retire decision on 2026-10-30; revisit after current-source and owned user-AppImage recovery design.",
       "v31Hardening": [],
       "reason": "v2 selects a mutable beta publisher RPM and creates a user Applications directory without owned AppImage integration or safe inverse.",
       "reviewTrigger": "A pinned publisher RPM passes Fedora 44 Workstation VM install, integration, conflict, and seeded user-AppImage recovery."
@@ -1484,10 +1484,10 @@
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "nextAction": "Owner retained this optional USB imaging application for migration on 2026-10-30; design pinned publisher RPM acquisition and an owned Fedora 44 lifecycle.",
       "v31Hardening": [],
       "reason": "The v2 latest-release scrape is mutable and v3 has no pinned external-RPM acquisition, detection, or inverse handler, despite a current publisher RPM.",
-      "reviewTrigger": "A requested pinned publisher RPM has verified bytes, owned installed identity, collision handling, and a Fedora 44 VM happy path."
+      "reviewTrigger": "A pinned publisher RPM has verified bytes, owned installed identity, collision handling, and a Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.VisualStudioCode",
@@ -1530,10 +1530,10 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner retained optional Arduino IDE for migration on 2026-10-30; choose its deployment form and prove pinned acquisition, collision-safe ownership, and Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 latest AppImage scrape and filename-glob inverse lack owned destination and collision handling; no v3 portable handler exists.",
-      "reviewTrigger": "A requested pinned Arduino IDE AppImage has verified publisher bytes, collision-safe ownership, and Fedora 44 VM lifecycle."
+      "reviewTrigger": "A chosen Arduino IDE deployment has verified publisher bytes, collision-safe ownership, and Fedora 44 VM lifecycle."
     },
     {
       "key": "workstation:package.AtomEditor",
@@ -4522,7 +4522,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-01.md"
       ],
-      "nextAction": "Reopen only on its documented artifact, target, and user-data recovery trigger; continue publisher-apps-03."
+      "nextAction": "Revisit the deferred AppImageLauncher choice after current-source and user-AppImage recovery design; continue publisher-apps-03."
     },
     {
       "id": "publisher-apps-02",
@@ -4601,7 +4601,7 @@
         "docs/acceptance/package.gnome-commander.md",
         "docs/acceptance/package.mc.md"
       ],
-      "nextAction": "Continue publisher-apps-10; keep the file-manager profile opt-in and complete H014 in v3.1."
+      "nextAction": "Design the retained balenaEtcher publisher RPM lifecycle; keep file managers opt-in, complete H014 in v3.1, and continue publisher-apps-10."
     },
     {
       "id": "publisher-apps-10",
@@ -4610,7 +4610,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-10.md"
       ],
-      "nextAction": "Continue publisher-apps-11; reopen these optional commented applications only on their specific source and recovery triggers."
+      "nextAction": "Choose the retained Arduino IDE deployment form and verify its owned lifecycle; review the other optional applications individually and continue publisher-apps-11."
     },
     {
       "id": "publisher-apps-11",

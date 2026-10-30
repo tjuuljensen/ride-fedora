@@ -54,6 +54,11 @@ inverse deletes matching names.
   publisher RPM with verified bytes, installed-package detection, collision
   handling, and disposable-VM happy path. Flashing media is separate from
   installing the application and must be user-initiated.
+
+  The owner retained this optional USB imaging application for migration on
+  2026-10-30. The next implementation batch should pin the publisher RPM and
+  prove installed identity, collision handling, and Fedora 44 recovery;
+  retaining the product does not authorize the v2 moving-release scrape.
 - **SonosPlayer: retired and non-runnable.** The source
   [declares the unofficial controller deprecated](https://github.com/pascalopitz/unoffical-sonos-controller-for-linux)
   and its latest release is an AppImage-only release candidate. The v2

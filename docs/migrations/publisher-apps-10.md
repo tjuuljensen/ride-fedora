@@ -41,6 +41,10 @@ Windows installer evidence to the Linux deployment.
   name-glob removal do not establish file ownership. Reopen for a requested
   pinned AppImage operation with collision-safe storage and Fedora 44 VM
   lifecycle. Hardware upload is separate from the application install.
+
+  The owner retained Arduino IDE as an optional v3 outcome on 2026-10-30.
+  Choose the deployment form during migration and test its pinned acquisition,
+  ownership, and inverse. The v2 moving AppImage path remains non-runnable.
 - **AtomEditor: retired, non-runnable.** GitHub
   [sunset and archived Atom](https://github.blog/2022-06-08-sunsetting-atom/)
   in 2022. v2 also disables RPM package signature checks and overwrites a
