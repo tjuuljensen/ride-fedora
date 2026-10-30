@@ -315,6 +315,24 @@ older non-disposable v3 run journals exist on any other host, then finalize
 the acceptance review and supported target rows. The VM pilots need not be
 repeated for unchanged runtime files.
 
+On each non-disposable machine where v3 may have run, start in this repository
+root as a regular user and run the following read-only inventory. Use `sudo`
+only if the private run directory denies read access. It prints run IDs,
+status, and changed operation IDs, but not saved state values; it writes
+nothing and needs no recovery. A `review` row needs an original-catalog
+recovery decision before using a newer catalog. An `invalid` row makes the
+command exit 2 and also needs inspection. A zero-journal result confirms only
+that machine, so record the machine list separately.
+
+```bash
+python3 tools/audit_v3_runs.py
+```
+
+The 2026-10-30 local result was `journals=0 review=0`; six focused audit
+unit tests passed, including failed, orphaned, and symlinked journal handling. Other
+machines still need their own inventory before the candidate target rows are
+promoted.
+
 ## Former CERT forensic repository burndown
 
 `default.preset` labels these entries “CERT Forensic Repo — THESE ARE EMPTY”. The

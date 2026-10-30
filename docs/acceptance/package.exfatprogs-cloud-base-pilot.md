@@ -37,6 +37,8 @@ Their `metadata.json` and `transcript.jsonl` files are under
 disposable SSH private keys and must be reviewed before sharing. The test
 runner stopped both VM processes and retained their overlays.
 
-Next: repeat the package pilot on Fedora 44 x86_64 Workstation and review the
-current Windows schema and package behavior for this batch before considering
-any supported target row.
+The later [Workstation pilot](workstation-package-batch-1-pilot.md) and
+[Windows comparison](../windows-alignment.md#fedora-workstation-package-batch-preflight-2026-10-30)
+completed those next checks. The [per-operation acceptance draft](package.exfatprogs.md)
+collects both edition results. Promotion remains pending the acceptance review
+and non-disposable run inventory.
