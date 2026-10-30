@@ -8,6 +8,9 @@ merged or removed, with exact prior list and slot recovery.
 The owner kept the separate remove-only inverse on the same ownership rule.
 GNOME favorites also remain in scope as a profile-configurable ordered list;
 restore the user's prior list exactly.
+The owner kept Chrome preferences, Bash aliases, and the ls-to-Eza alias in
+the fast-track review. Each needs an owned file or fragment and seeded exact
+recovery before runnable status.
 
 Status: **v3.0 decisions**, 2026-10-30. This review covers the remaining
 scoped desktop-user batches after the [fixed GNOME boolean handler](desktop-user-boolean.md).

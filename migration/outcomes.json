@@ -2250,10 +2250,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Accept an owned Chrome deployment, choose initial preferences or policy, and prove existing-file and browser-profile recovery.",
+      "nextAction": "Owner kept Chrome preference capability for v3.0 on 2026-10-30. Use owned policy or preference files with seeded Chrome profile and exact prior-state recovery.",
       "v31Hardening": [],
       "reason": "v2 overwrites legacy master_preferences and has a broken inverse; Chrome deployment itself remains unowned.",
-      "reviewTrigger": "Accept an owned Chrome deployment, choose initial preferences or policy, and prove existing-file and browser-profile recovery."
+      "reviewTrigger": "Accept an owned Chrome deployment, choose initial preferences or policy, and prove existing-file and browser-profile recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.FirefoxPreferences",
@@ -3241,10 +3242,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Implement an owned shell block or fragment with seeded-file and exact rollback tests.",
+      "nextAction": "Owner kept Bash alias capability for v3.0 on 2026-10-30. Use an owned shell fragment or block and restore exact prior files without changing unowned content.",
       "v31Hardening": [],
       "reason": "v2 appends to .bashrc and inverse deletes all .bash_aliases lines, including user content.",
-      "reviewTrigger": "Implement an owned shell block or fragment with seeded-file and exact rollback tests."
+      "reviewTrigger": "Implement an owned shell block or fragment with seeded-file and exact rollback tests.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.AliasLsEza",
@@ -3264,10 +3266,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Add an owned alias entry with existing-ls conflict and exact-file restore checks.",
+      "nextAction": "Owner kept the ls-to-Eza alias for v3.0 on 2026-10-30. Add only the owned alias entry, detect existing ls conflicts, and restore prior shell state exactly.",
       "v31Hardening": [],
       "reason": "v2 appends ls=eza to .bash_aliases but inverse removes ride-log lines instead.",
-      "reviewTrigger": "Add an owned alias entry with existing-ls conflict and exact-file restore checks."
+      "reviewTrigger": "Add an owned alias entry with existing-ls conflict and exact-file restore checks.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.AliasWanIP",
@@ -4896,7 +4899,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
+      "nextAction": "Owner kept Chrome preferences, Bash aliases, and ls-to-Eza alias; design owned fragments and seeded exact recovery."
     },
     {
       "id": "desktop-user-06",
