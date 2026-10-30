@@ -1,9 +1,9 @@
-# Native RPM batch 03: active workstation applications
+# Native RPM batch 03: workstation applications
 
 Status: **PASS; HexChat and Chromium operable opt-in, Speedtest CLI supported,
 two legacy Nautilus integrations retired by owner decision**, 2026-10-30.
-This batch prioritizes three active v2 preset outcomes: HexChat, Speedtest CLI,
-and Chromium. The v2 functions install and remove their same-named Fedora RPMs.
+This batch covers the HexChat, Speedtest CLI, and Chromium v2 outcomes.
+The v2 functions install and remove their same-named Fedora RPMs.
 Each now has an individually selectable candidate on Fedora 44 x86_64
 Workstation. The Fedora DNF handler, run journal, and inverse are unchanged.
 The v2 `Cheat` function downloads a GitHub release binary into `/bin`; it is
@@ -80,3 +80,12 @@ The [HexChat](https://packages.fedoraproject.org/pkgs/hexchat/hexchat/),
 [Speedtest CLI](https://packages.fedoraproject.org/pkgs/speedtest-cli/speedtest-cli/),
 and [Chromium](https://packages.fedoraproject.org/pkgs/chromium/chromium/)
 package records are the authoritative Fedora sources for this assessment.
+
+The [HexChat upstream](https://hexchat.github.io/news/2.16.2.html) announced
+its final release in 2024, and the Fedora package is now orphaned. The
+existing VM result proves a package lifecycle, while H007 reviews a maintained
+IRC path before any broader promotion. The
+[Speedtest CLI upstream](https://github.com/sivel/speedtest-cli) archived its
+repository in April 2026; Fedora 44 still supplies the signed RPM. H022
+reviews a maintained bandwidth-test path. Neither finding changes the
+recorded Fedora 44 package-install result or establishes historical use.

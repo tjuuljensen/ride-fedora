@@ -1649,7 +1649,7 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "Review Fedora package maintenance and dependency residue in v3.1.",
+      "nextAction": "Review HexChat's final upstream release, Fedora orphan status, maintained IRC successors, and dependency residue in H007 before broader promotion.",
       "v31Hardening": [
         "H002",
         "H003",
@@ -1933,8 +1933,10 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "Recheck the Fedora package and target if its provider contract changes.",
-      "v31Hardening": []
+      "nextAction": "Keep Fedora 44 package-install support; review the archived upstream and choose a maintained bandwidth-test path in H022 before broader promotion.",
+      "v31Hardening": [
+        "H022"
+      ]
     },
     {
       "key": "workstation:package.Flameshot",
@@ -2494,8 +2496,10 @@
         "docs/migrations/publisher-apps-05.md"
       ],
       "blocker": "",
-      "nextAction": "Recheck Fedora youtube-dl package and exact target if the RPM or DNF handler changes; website behavior is outside package acceptance.",
-      "v31Hardening": []
+      "nextAction": "Keep Fedora 44 package-install support; compare the packaged youtube-dl behavior with maintained yt-dlp and decide any replacement in H023.",
+      "v31Hardening": [
+        "H023"
+      ]
     },
     {
       "key": "workstation:package.GIMP",
@@ -5303,7 +5307,7 @@
     },
     {
       "id": "H007",
-      "title": "Review orphaned HexChat package maintenance",
+      "title": "HexChat final release and maintained IRC successor review",
       "trigger": "Before claiming long-term desktop support or promoting HexChat beyond opt-in candidate",
       "status": "queued"
     },
@@ -5389,6 +5393,18 @@
       "id": "H021",
       "title": "KeePassXC vault workflow, GUI, and seeded encrypted-data recovery",
       "trigger": "After the Fedora 44 package-only lifecycle preserves a seeded file; test real vault interaction and GUI recovery before adding any vault-managed operation.",
+      "status": "queued"
+    },
+    {
+      "id": "H022",
+      "title": "Archived speedtest-cli upstream and replacement review",
+      "trigger": "Before broader bandwidth-test support; compare maintained Fedora 44 alternatives and actual network-test behavior while preserving the current package-install claim.",
+      "status": "queued"
+    },
+    {
+      "id": "H023",
+      "title": "youtube-dl and yt-dlp product-path review",
+      "trigger": "Before claiming current video-site behavior or changing the supported package ID; compare Fedora 44 packages, executable behavior, and any replacement contract.",
       "status": "queued"
     }
   ]

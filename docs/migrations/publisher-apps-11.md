@@ -1,6 +1,6 @@
 # Browser and media publisher applications
 
-Status: **two opt-in candidates, three unsupported decisions, and one owner-approved retirement**, 2026-10-30. This commented-preset batch maps
+Status: **two opt-in candidates, three unsupported decisions, and one owner-approved retirement**, 2026-10-30. This v2 source batch maps
 `Chrome`, `Opera`, `Edge`, `SpotifyClient`, `ClementinePlayer`, and
 `PulseAudioEq`. The first three add external browser RPM repositories and
 keys with broad removal. Spotify requests `lpf-spotify-client` without

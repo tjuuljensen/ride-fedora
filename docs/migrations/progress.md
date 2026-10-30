@@ -117,7 +117,7 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H004` | Retained artifact offline installation and provider fallback | After artifact provenance and dependency behavior are designed | queued |
 | `H005` | Review DNF dependency residue after alien removal | After v3.0 package lifecycle acceptance; preserve unowned RPMs during cleanup design | queued |
 | `H006` | Review retained desktop RPM dependencies | After desktop package VM happy paths; avoid removing unowned dependencies | queued |
-| `H007` | Review orphaned HexChat package maintenance | Before claiming long-term desktop support or promoting HexChat beyond opt-in candidate | queued |
+| `H007` | HexChat final release and maintained IRC successor review | Before claiming long-term desktop support or promoting HexChat beyond opt-in candidate | queued |
 | `H008` | Review package-driven updates to pre-existing RPMs | After broad Fedora package VM happy paths; document package upgrade impact without unsafe downgrades | queued |
 | `H009` | Review kernel-devel match for module builds | If module building is requested after the package-only v3.0 install acceptance; verify running-kernel and development-package compatibility | queued |
 | `H010` | Review removal of pre-installed editor defaults | If explicit removal of a pre-installed editor is requested; inspect DNF dependents and preserve user editor preference | queued |
@@ -132,3 +132,5 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H019` | Network analysis and remote communication application behavior | After the ten Fedora 44 package lifecycles and both opt-in profiles pass; review capture privileges, TFTP activation requests, serial devices, remote connection profiles, desktop visuals, and broader recovery on disposable targets. | queued |
 | `H020` | NetworkManager VPN plugin connection, credential, and GUI behavior | After Fedora 44 package-only lifecycles pass; test protocol setup, credentials, pre-existing connection preservation, and GNOME controls on disposable targets. | queued |
 | `H021` | KeePassXC vault workflow, GUI, and seeded encrypted-data recovery | After the Fedora 44 package-only lifecycle preserves a seeded file; test real vault interaction and GUI recovery before adding any vault-managed operation. | queued |
+| `H022` | Archived speedtest-cli upstream and replacement review | Before broader bandwidth-test support; compare maintained Fedora 44 alternatives and actual network-test behavior while preserving the current package-install claim. | queued |
+| `H023` | youtube-dl and yt-dlp product-path review | Before claiming current video-site behavior or changing the supported package ID; compare Fedora 44 packages, executable behavior, and any replacement contract. | queued |

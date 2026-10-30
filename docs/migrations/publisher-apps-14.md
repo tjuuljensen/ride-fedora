@@ -1,7 +1,7 @@
 # YubiKey Personalization GUI handoff
 
 Status: **documented non-runnable replacement for v3.0**, 2026-10-30.
-This isolated high-risk commented-preset outcome maps only
+This isolated high-risk v2 source outcome maps only
 `InstallYubikeyPersTool`; v2 clones an unpinned source into `/opt`, installs
 Qt4 and YubiKey development dependencies, and builds without a matching
 remove function. The [publisher repository](https://github.com/Yubico/yubikey-personalization-gui)

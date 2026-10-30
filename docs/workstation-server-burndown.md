@@ -7,6 +7,9 @@ Install/remove and analogous state pairs share an outcome row. A `deferred` row 
 inventory, not an executable operation or acceptance claim.
 Current progress and batch assignment come from `migration/outcomes.json`; the
 older disposition text records the initial migration assessment.
+Selector coverage records v2 preset references, not actual installations or
+a priority rule. Active, commented, and library-only packages receive the same
+source and product review; risk and dependencies determine batch order.
 
 Workstation source: `lib-fedora.sh` at Fedora commit `43ba467`; 289 source functions,
 287 queued functions,

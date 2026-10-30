@@ -135,8 +135,11 @@ evidence but do not automatically resolve a v2 outcome with different intent.
 planned Fedora 44 x86_64 target, risk, source function mapping, current
 disposition and progress, v3 operation IDs, evidence, blocker, and next action.
 The generated [burndown](workstation-server-burndown.md) keeps the initial
-legacy assessment alongside its current batch and progress. Process active
-selectors first within each family. Ordinary batches contain at most six
+legacy assessment alongside its current batch and progress. The v2 presets
+show which functions were selectable, not which packages anyone installed;
+active, commented, and library-only packages get the same source and product
+review. Choose batch order by source viability, dependencies, and risk rather
+than selector coverage. Ordinary batches contain at most six
 related outcomes; security, storage, encryption, and difficult recovery
 changes are isolated, while related user-state checks may share a batch. The family order is Fedora
 repository packages, package-source foundations, forensic and isolated tools,
@@ -262,8 +265,9 @@ source/ownership triggers; the owner retained all three for migration.
 and its plugin set after upstream sunset, and records Arduino IDE, Discord,
 Joplin, and Vivaldi as non-runnable until their respective portable or
 publisher-RPM acquisition and inverse contracts pass. The owner retained
-Arduino IDE, Discord, and Joplin and deferred Vivaldi. These were all
-commented preset selections and do not enter base profiles.
+Arduino IDE, Discord, and Joplin and deferred Vivaldi. These remain outside
+the small v3 base profiles; their v2 selector state does not establish whether
+they were used.
 [Publisher batch 11](migrations/publisher-apps-11.md) accepts Clementine
 and the PipeWire-compatible EasyEffects replacement for the misleading
 `PulseAudioEq` source as separate opt-in candidates after exact-target RPM
@@ -356,6 +360,15 @@ Bitwarden, six R2 inverse outcomes, BalenaEtcher, ArduinoIDE, Discord, Joplin,
 Xmind, Chrome, Edge, SpotifyClient, HandBrake, PowerShell, and WoeUSB for
 migration. The owner also deferred Vivaldi and Pidgin/OTR and retired the
 scoped Opera outcome.
+The [package path review](migrations/package-path-review.md) evaluates all
+128 scoped package outcomes across existing migrations, replacements,
+retirements, and unresolved paths. It distinguishes discontinued products
+from obsolete acquisition methods and records the path required for each
+non-runnable package. A commented v2 selector is never evidence of non-use.
+The review also flags the existing HexChat, Speedtest CLI, and youtube-dl
+package mappings for upstream or successor review in H007, H022, and H023.
+Their exact-target package-install evidence remains valid; application
+behavior and wider promotion require separate evidence.
 The retained outcomes require owned state and recovery; their unsafe v2
 methods remain non-runnable. The current 96 unsupported rows comprise 68
 migration-design outcomes, 23 keep-or-drop choices, and five deferred owner

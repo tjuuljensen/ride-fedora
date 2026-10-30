@@ -1,6 +1,6 @@
 # Legacy editor, portable IDE, and communication applications
 
-Status: **in review**, 2026-10-30. This commented-preset batch maps
+Status: **in review**, 2026-10-30. This v2 source batch maps
 `ArduinoIDE`, `AtomEditor`, `AtomPlugins`, `Discord`, `Joplin`, and
 `Vivaldi`. v2 downloads moving Arduino/Joplin AppImages to
 `~/Applications`; adds an Atom repository with package signature checks
@@ -21,7 +21,8 @@ download page.
   configuration and user data out of package removal.
 - Retire discontinued upstream paths with a concrete replacement or reopen
   trigger. Compare Windows schema/behavior, update ledger and generated
-  docs. Optional commented entries do not block base profiles.
+  docs. Keep these applications outside the small v3 base profiles until
+  their declared deployment and recovery checks pass.
 
 ## Source decisions
 

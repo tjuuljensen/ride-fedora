@@ -1,7 +1,7 @@
 # Bitwarden desktop RPM outcome
 
 Status: **unsupported and non-runnable in v3.0**, 2026-10-30. This
-isolated high-risk commented-preset outcome maps `InstallBitwarden` and
+isolated high-risk v2 source outcome maps `InstallBitwarden` and
 `RemoveBitwarden`. v2 scrapes the latest GitHub release for the first RPM
 URL and passes it directly to DNF; its inverse removes `bitwarden` by name.
 The publisher [offers Linux desktop distributions](https://bitwarden.com/download/);

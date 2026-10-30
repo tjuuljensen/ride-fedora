@@ -1,7 +1,7 @@
 # Video downloader and GNOME monitoring packages
 
 Status: **complete: one supported RPM and one operable opt-in package pair**,
-2026-10-30. This active-preset batch covers `YouTubeDownloader` and
+2026-10-30. This v2 source batch covers `YouTubeDownloader` and
 `SystemMonitor`, preserving their v2 function mappings. The first is one
 Fedora RPM. The v2 SystemMonitor function installs the GNOME System Monitor
 Next extension, hardware sensors, and two build development packages; it
@@ -32,6 +32,13 @@ Fedora-signed RPM plan/apply/repeat/status/restore/remove contract and is
 **supported on Fedora 44 x86_64 Workstation**. Its CLI started, but no media
 was downloaded; the user-visible operation remains the v2 package install,
 not a claim that a particular site still works.
+
+The [latest tagged youtube-dl release](https://github.com/ytdl-org/youtube-dl/releases)
+is from 2021, but Fedora 44 packages a later source snapshot and
+[yt-dlp](https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/) separately.
+H023 compares actual behavior and decides whether the v2 product intent
+needs a new operation. This review does not change the accepted package-only
+support claim.
 
 The SystemMonitor outcome is migrated to the distinct
 [`package.gnome-shell-extension-system-monitor-applet`](../acceptance/package.gnome-shell-extension-system-monitor-applet.md)

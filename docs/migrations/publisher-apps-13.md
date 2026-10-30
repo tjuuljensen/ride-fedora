@@ -1,6 +1,6 @@
 # Projecteur Logitech Spotlight outcome
 
-Status: **operable opt-in candidate**, 2026-10-30. This commented-preset outcome maps
+Status: **operable opt-in candidate**, 2026-10-30. This v2 source outcome maps
 `InstallProjecteur` and `RemoveProjecteur`. v2 scrapes a moving Fedora RPM
 from a third-party download page; its inverse removes `projecteur` by name.
 [Fedora 44 now ships `projecteur`](https://packages.fedoraproject.org/pkgs/projecteur/projecteur/)

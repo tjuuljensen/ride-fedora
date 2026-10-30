@@ -1,7 +1,7 @@
 # Xmind desktop RPM outcome
 
 Status: **unsupported and non-runnable in v3.0**, 2026-10-30. This
-commented-preset outcome maps `InstallXmind` and `RemoveXmind`. v2 scrapes
+v2 source outcome maps `InstallXmind` and `RemoveXmind`. v2 scrapes
 an old `/zen/download/linux_rpm/` endpoint, passes every extracted link to
 DNF, then removes `xmind-vana` by name. The
 [publisher still offers a Linux RPM](https://xmind.app/xmind2024/) under its
