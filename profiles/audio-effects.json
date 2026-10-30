@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "audio-effects",
+  "description": "Opt-in Fedora Workstation EasyEffects for PipeWire; audio presets remain user-owned",
+  "operations": [
+    {"id": "package.easyeffects", "state": "installed"}
+  ]
+}

@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**90/180 complete (50.0%)**: 23 supported, 14 opt-in candidate, 10 replaced, 11 retired, 0 private, 32 unsupported; 90 unresolved.
+**101/180 complete (56.1%)**: 24 supported, 17 opt-in candidate, 11 replaced, 11 retired, 0 private, 38 unsupported; 79 unresolved.
 
-Runnable outcomes: 37; 14 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 41; 17 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -42,12 +42,12 @@ Runnable outcomes: 37; 14 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `publisher-apps-08` | Publisher Apps 08: YubikeyManager | high 1 | 1/1 | [publisher-apps-08.md](../../docs/migrations/publisher-apps-08.md) | Reopen only for the publisher-supported successor and credential-safe target evidence; continue publisher-apps-09. |
 | `publisher-apps-09` | Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher | medium 6 | 6/6 | [publisher-apps-09.md](../../docs/migrations/publisher-apps-09.md), [package.gnome-commander.md](../../docs/acceptance/package.gnome-commander.md), [package.mc.md](../../docs/acceptance/package.mc.md) | Continue publisher-apps-10; keep the file-manager profile opt-in and complete H014 in v3.1. |
 | `publisher-apps-10` | Publisher Apps 10: ArduinoIDE, AtomEditor, AtomPlugins, Discord, Joplin, Vivaldi | medium 6 | 6/6 | [publisher-apps-10.md](../../docs/migrations/publisher-apps-10.md) | Continue publisher-apps-11; reopen these optional commented applications only on their specific source and recovery triggers. |
-| `publisher-apps-11` | Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq | medium 6 | 0/6 | — | Assess Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-12` | Publisher Apps 12: Bitwarden | high 1 | 0/1 | — | Assess Bitwarden; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-13` | Publisher Apps 13: Projecteur | medium 1 | 0/1 | — | Assess Projecteur; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-14` | Publisher Apps 14: YubikeyPersTool | high 1 | 0/1 | — | Assess YubikeyPersTool; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-15` | Publisher Apps 15: Xmind | medium 1 | 0/1 | — | Assess Xmind; record v2 behavior, current source, inverse, and risk-based completion criteria. |
-| `publisher-apps-16` | Publisher release binary: Cheat | medium 1 | 0/1 | [publisher-apps-16.md](../../docs/migrations/publisher-apps-16.md) | Assess release provenance, owned destination, inverse, and exact-target VM acceptance. |
+| `publisher-apps-11` | Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq | medium 6 | 6/6 | [publisher-apps-11.md](../../docs/migrations/publisher-apps-11.md), [package.clementine.md](../../docs/acceptance/package.clementine.md), [package.easyeffects.md](../../docs/acceptance/package.easyeffects.md) | Keep music-player and audio-effects opt-in; complete H015/H016 in v3.1 and reopen external apps only on documented source triggers. Continue publisher-apps-12. |
+| `publisher-apps-12` | Publisher Apps 12: Bitwarden | high 1 | 1/1 | [publisher-apps-12.md](../../docs/migrations/publisher-apps-12.md) | Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch. |
+| `publisher-apps-13` | Publisher Apps 13: Projecteur | medium 1 | 1/1 | [publisher-apps-13.md](../../docs/migrations/publisher-apps-13.md), [package.projecteur.md](../../docs/acceptance/package.projecteur.md) | Keep spotlight-pointer opt-in; complete H017 hardware/visual review in v3.1 and continue publisher-apps-14. |
+| `publisher-apps-14` | Publisher Apps 14: YubikeyPersTool | high 1 | 1/1 | [publisher-apps-14.md](../../docs/migrations/publisher-apps-14.md) | Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch. |
+| `publisher-apps-15` | Publisher Apps 15: Xmind | medium 1 | 1/1 | [publisher-apps-15.md](../../docs/migrations/publisher-apps-15.md) | Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch. |
+| `publisher-apps-16` | Publisher release binary: Cheat | medium 1 | 1/1 | [publisher-apps-16.md](../../docs/migrations/publisher-apps-16.md), [package.cheat.md](../../docs/acceptance/package.cheat.md) | Supported on Fedora 44 Workstation; review optional CLI profile selection, then proceed to desktop-user batches. |
 | `desktop-user-01` | Desktop and user state 01: SetupUserDefaultDirs, FirefoxPreferences | high 2 | 0/2 | — | Assess SetupUserDefaultDirs, FirefoxPreferences; record user-owned data, exact prior state, inverse, and VM criteria. |
 | `desktop-user-02` | Desktop and user state 02: GNOME region and shell settings | medium 6 | 0/6 | — | Assess DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5; record user-owned data, exact prior state, inverse, and VM criteria. |
 | `desktop-user-03` | Desktop and user state 03: custom shortcuts and favorites with safe inverse | high 2, medium 1 | 0/3 | — | Assess CustomKeyboardShortcut, GnomeCustomFavorites; record user-owned data, exact prior state, inverse, and VM criteria. |
@@ -124,3 +124,6 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H012` | GNOME System Monitor Next activation, visual, and broader recovery review | After the Fedora 44 package and workstation-monitoring profile happy paths pass | queued |
 | `H013` | Solaar receiver pairing and desktop review | After the Fedora 44 package and logitech-unifying profile happy paths pass on a VM with receiver passthrough or a controlled disposable hardware host | queued |
 | `H014` | Commander file-manager interactive, visual, and broader recovery review | After Fedora 44 package and commander-file-managers profile happy paths pass | queued |
+| `H015` | Clementine visual, music-library, and broader recovery review | After Fedora 44 package and music-player profile happy paths pass | queued |
+| `H016` | EasyEffects audio, preset, visual, and broader recovery review | After Fedora 44 package and audio-effects profile happy paths pass without changing PipeWire | queued |
+| `H017` | Projecteur Spotlight device, visual, and broader recovery review | After Fedora 44 package and spotlight-pointer profile happy paths pass; use a controlled receiver/device target | queued |

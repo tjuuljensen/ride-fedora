@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "spotlight-pointer",
+  "description": "Opt-in Fedora Workstation Projecteur package; device behavior needs a Logitech Spotlight",
+  "operations": [
+    {"id": "package.projecteur", "state": "installed"}
+  ]
+}

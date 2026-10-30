@@ -463,3 +463,37 @@ Atom, or Vivaldi catalog row in this revision. No Linux catalog, profile, or
 run-state field changes in this batch; no unexplained shared-contract drift
 was found. Recheck if Linux adds an owned portable or publisher RPM handler,
 Windows changes the shared product facts, or release review begins.
+
+### Fedora publisher application batch 11, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[browser and media review](migrations/publisher-apps-11.md). Windows has
+`package.chrome` as a pinned enterprise MSI with Windows 11 and Server
+2025 lifecycle evidence. Chrome product identity and publisher terms are
+shared facts, but that MSI and browser-profile evidence do not establish
+an owned Fedora RPM repository/key or Linux inverse. Windows has no
+matching Opera, Edge Linux, Spotify, Clementine, or EasyEffects catalog
+operation at this revision. Linux's Clementine and EasyEffects candidates
+use the existing signed Fedora RPM, DNF, Workstation target, and run-journal
+contracts; each curated profile uses schema 1. The publisher browser and
+Spotify outcomes add no handler. No unexplained shared-contract drift was
+found. Recheck if Linux adds external repository support, Windows changes
+the Chrome product facts, or release review begins.
+
+### Fedora publisher application batches 12-16, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[Bitwarden RPM](migrations/publisher-apps-12.md),
+[Projecteur](migrations/publisher-apps-13.md),
+[YubiKey Personalization GUI](migrations/publisher-apps-14.md),
+[Xmind](migrations/publisher-apps-15.md), and
+[Cheat](migrations/publisher-apps-16.md) source outcomes. Windows has no
+matching catalog rows in this revision. Linux's Projecteur and Cheat rows
+use signed Fedora RPM, existing DNF and journal behavior, and the
+Workstation-only target; the Spotlight profile uses schema 1. The
+Bitwarden, archived YubiKey, and Xmind decisions add no handler or state
+field. No unexplained shared-contract drift was found. Recheck if Windows
+adds corresponding product facts, Linux implements an external publisher
+deployment, or release review begins.

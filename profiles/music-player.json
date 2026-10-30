@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "music-player",
+  "description": "Opt-in Fedora Workstation Clementine player package; music libraries remain user-owned",
+  "operations": [
+    {"id": "package.clementine", "state": "installed"}
+  ]
+}

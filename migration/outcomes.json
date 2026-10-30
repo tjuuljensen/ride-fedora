@@ -2092,13 +2092,17 @@
       "batch": "publisher-apps-11",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-11.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 HTTP Google repository file and name-based inverse have no owned source/key collision contract; v3 has no publisher RPM/repository handler.",
+      "reviewTrigger": "A requested official Chrome RPM has verified source, owned repository/key, preserved browser profile, and Fedora 44 VM lifecycle."
     },
     {
       "key": "workstation:setting.ChromePreferences",
@@ -2208,13 +2212,17 @@
       "batch": "publisher-apps-11",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-11.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust; stable versus developer channel is not selected in v3.",
+      "reviewTrigger": "A requested Opera channel has owned repository/key and profile-preserving Fedora 44 VM inverse."
     },
     {
       "key": "workstation:package.Edge",
@@ -2227,13 +2235,17 @@
       "batch": "publisher-apps-11",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-11.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 mutable developer-channel repository and fixed repo-file inverse do not own the Microsoft key or preserve other Microsoft packages.",
+      "reviewTrigger": "A requested Edge channel has pinned publisher source, collision-safe repository/key handling, and Fedora 44 VM evidence."
     },
     {
       "key": "workstation:package.Codecs",
@@ -2269,13 +2281,17 @@
       "batch": "publisher-apps-11",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-11.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 lpf-spotify-client request declares no source; LPF is interactive and a third-party Fedora repackaging is a distinct source with separate terms.",
+      "reviewTrigger": "A requested Spotify client chooses an acquisition provider, license/terms handling, owned state, and profile-preserving VM lifecycle."
     },
     {
       "key": "workstation:package.VLCPlayer",
@@ -2316,13 +2332,22 @@
       "batch": "publisher-apps-11",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.clementine"
+      ],
+      "evidence": [
+        "docs/acceptance/package.clementine.md",
+        "docs/migrations/publisher-apps-11.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep music-player opt-in; complete H015 visual/library and broader recovery review in v3.1.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H015"
+      ]
     },
     {
       "key": "workstation:package.PulseAudioEq",
@@ -2335,13 +2360,22 @@
       "batch": "publisher-apps-11",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.easyeffects"
+      ],
+      "evidence": [
+        "docs/acceptance/package.easyeffects.md",
+        "docs/migrations/publisher-apps-11.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep audio-effects opt-in and complete H016 audio/preset/visual and broader recovery review in v3.1.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H016"
+      ]
     },
     {
       "key": "workstation:package.YouTubeDownloader",
@@ -3089,13 +3123,17 @@
       "batch": "publisher-apps-12",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-12.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 latest RPM scrape lacks pinned publisher verification and a vault-preserving inverse; no v3 external-RPM handler satisfies the deeper credential/data gate.",
+      "reviewTrigger": "A requested pinned Bitwarden RPM proves publisher origin, installed identity, and seeded-vault-safe Fedora 44 failure and recovery evidence."
     },
     {
       "key": "workstation:package.BitwardenAppImage",
@@ -3294,14 +3332,17 @@
       "batch": "publisher-apps-16",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.cheat"
+      ],
       "evidence": [
+        "docs/acceptance/package.cheat.md",
         "docs/migrations/publisher-apps-16.md"
       ],
-      "blocker": "Current release provenance, owned destination, detection, inverse, and VM behavior need review.",
-      "nextAction": "Assess the current publisher artifact and define a safe opt-in acquisition operation.",
+      "blocker": "",
+      "nextAction": "Supported Fedora 44 Workstation package; include in optional CLI profile only after profile review.",
       "v31Hardening": []
     },
     {
@@ -3345,13 +3386,22 @@
       "batch": "publisher-apps-13",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.projecteur"
+      ],
+      "evidence": [
+        "docs/acceptance/package.projecteur.md",
+        "docs/migrations/publisher-apps-13.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep spotlight-pointer opt-in and complete H017 hardware/visual and broader recovery review in v3.1.",
+      "v31Hardening": [
+        "H002",
+        "H003",
+        "H017"
+      ]
     },
     {
       "key": "workstation:package.VMtoolsOnVM",
@@ -3409,13 +3459,17 @@
       "batch": "publisher-apps-14",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-14.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 unpinned Qt4 source build has no remove function; the archived BSD-2-Clause project directs users to Yubico Authenticator or ykman, and device credentials require separate safety evidence.",
+      "reviewTrigger": "A requested current Yubico deployment has pinned source, owned inverse, and device-safe Fedora 44 evidence."
     },
     {
       "key": "workstation:package.Xmind",
@@ -3428,13 +3482,17 @@
       "batch": "publisher-apps-15",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/publisher-apps-15.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "v31Hardening": [],
+      "reason": "The v2 old Zen RPM scrape does not identify the current publisher edition or package; its xmind-vana inverse lacks ownership and user-document recovery.",
+      "reviewTrigger": "A requested Xmind edition has exact publisher RPM and terms, owned installed identity, preserved documents, and Fedora 44 VM happy path."
     },
     {
       "key": "workstation:package.SonosPlayer",
@@ -4201,45 +4259,59 @@
       "id": "publisher-apps-11",
       "family": "publisher-apps",
       "title": "Publisher Apps 11: Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq",
-      "evidence": [],
-      "nextAction": "Assess Chrome, Opera, Edge, SpotifyClient, ClementinePlayer, PulseAudioEq; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-11.md",
+        "docs/acceptance/package.clementine.md",
+        "docs/acceptance/package.easyeffects.md"
+      ],
+      "nextAction": "Keep music-player and audio-effects opt-in; complete H015/H016 in v3.1 and reopen external apps only on documented source triggers. Continue publisher-apps-12."
     },
     {
       "id": "publisher-apps-12",
       "family": "publisher-apps",
       "title": "Publisher Apps 12: Bitwarden",
-      "evidence": [],
-      "nextAction": "Assess Bitwarden; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-12.md"
+      ],
+      "nextAction": "Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch."
     },
     {
       "id": "publisher-apps-13",
       "family": "publisher-apps",
       "title": "Publisher Apps 13: Projecteur",
-      "evidence": [],
-      "nextAction": "Assess Projecteur; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-13.md",
+        "docs/acceptance/package.projecteur.md"
+      ],
+      "nextAction": "Keep spotlight-pointer opt-in; complete H017 hardware/visual review in v3.1 and continue publisher-apps-14."
     },
     {
       "id": "publisher-apps-14",
       "family": "publisher-apps",
       "title": "Publisher Apps 14: YubikeyPersTool",
-      "evidence": [],
-      "nextAction": "Assess YubikeyPersTool; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-14.md"
+      ],
+      "nextAction": "Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch."
     },
     {
       "id": "publisher-apps-15",
       "family": "publisher-apps",
       "title": "Publisher Apps 15: Xmind",
-      "evidence": [],
-      "nextAction": "Assess Xmind; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/publisher-apps-15.md"
+      ],
+      "nextAction": "Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch."
     },
     {
       "id": "publisher-apps-16",
       "family": "publisher-apps",
       "title": "Publisher release binary: Cheat",
       "evidence": [
-        "docs/migrations/publisher-apps-16.md"
+        "docs/migrations/publisher-apps-16.md",
+        "docs/acceptance/package.cheat.md"
       ],
-      "nextAction": "Assess release provenance, owned destination, inverse, and exact-target VM acceptance."
+      "nextAction": "Supported on Fedora 44 Workstation; review optional CLI profile selection, then proceed to desktop-user batches."
     },
     {
       "id": "desktop-user-01",
@@ -4799,6 +4871,24 @@
       "id": "H014",
       "title": "Commander file-manager interactive, visual, and broader recovery review",
       "trigger": "After Fedora 44 package and commander-file-managers profile happy paths pass",
+      "status": "queued"
+    },
+    {
+      "id": "H015",
+      "title": "Clementine visual, music-library, and broader recovery review",
+      "trigger": "After Fedora 44 package and music-player profile happy paths pass",
+      "status": "queued"
+    },
+    {
+      "id": "H016",
+      "title": "EasyEffects audio, preset, visual, and broader recovery review",
+      "trigger": "After Fedora 44 package and audio-effects profile happy paths pass without changing PipeWire",
+      "status": "queued"
+    },
+    {
+      "id": "H017",
+      "title": "Projecteur Spotlight device, visual, and broader recovery review",
+      "trigger": "After Fedora 44 package and spotlight-pointer profile happy paths pass; use a controlled receiver/device target",
       "status": "queued"
     }
   ]

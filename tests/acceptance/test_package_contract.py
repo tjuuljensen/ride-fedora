@@ -743,6 +743,77 @@ def test_commander_file_managers_opt_in_packages_and_profile(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_clementine_opt_in_package_and_profile(vm):
+    vm.run("rpm -q pipewire-pulseaudio pulseaudio pulseaudio-qpaeq", check=False)
+    native_rpm_batch(vm, ("clementine",), inventory_policy="name-arch",
+                     residue_candidates=("clementine",),
+                     installed_probes={"clementine": "test -x /usr/bin/clementine"})
+    planned = vm.ride("plan", "--profile", "music-player").stdout
+    assert table_row(planned, "package.clementine")["STATUS"] == "candidate"
+    applied = vm.ride("apply", "--profile", "music-player", "--allow-candidate",
+                      timeout=900)
+    first_id = run_id(applied.stdout)
+    assert [step["result"] for step in journal(vm, first_id)["steps"]] == ["changed"]
+    vm.run("rpm -q --quiet clementine")
+    repeated = vm.ride("apply", "--profile", "music-player", "--allow-candidate")
+    assert [step["result"] for step in journal(vm, run_id(repeated.stdout))["steps"]] == ["unchanged"]
+    restored = vm.ride("restore", "--run-id", first_id, "--allow-candidate",
+                       timeout=900)
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    vm.run("! rpm -q --quiet clementine")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_easyeffects_opt_in_package_and_profile(vm):
+    vm.run("rpm -q --quiet pipewire-pulseaudio")
+    vm.run("! rpm -q --quiet pulseaudio")
+    native_rpm_batch(vm, ("easyeffects",), inventory_policy="name-arch",
+                     residue_candidates=("easyeffects",),
+                     installed_probes={"easyeffects": "test -x /usr/bin/easyeffects"})
+    planned = vm.ride("plan", "--profile", "audio-effects").stdout
+    assert table_row(planned, "package.easyeffects")["STATUS"] == "candidate"
+    applied = vm.ride("apply", "--profile", "audio-effects", "--allow-candidate",
+                      timeout=900)
+    first_id = run_id(applied.stdout)
+    assert [step["result"] for step in journal(vm, first_id)["steps"]] == ["changed"]
+    vm.run("rpm -q --quiet easyeffects pipewire-pulseaudio")
+    vm.run("! rpm -q --quiet pulseaudio")
+    repeated = vm.ride("apply", "--profile", "audio-effects", "--allow-candidate")
+    assert [step["result"] for step in journal(vm, run_id(repeated.stdout))["steps"]] == ["unchanged"]
+    restored = vm.ride("restore", "--run-id", first_id, "--allow-candidate",
+                       timeout=900)
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    vm.run("! rpm -q --quiet easyeffects")
+    vm.run("rpm -q --quiet pipewire-pulseaudio")
+    vm.run("! rpm -q --quiet pulseaudio")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_projecteur_and_cheat_native_packages(vm):
+    vm.run("rpm -qf /bin/cheat", check=False)
+    native_rpm_batch(vm, ("projecteur", "cheat"), inventory_policy="name-arch",
+                     residue_candidates=("projecteur", "cheat"),
+                     installed_probes={
+                         "projecteur": "test -x /usr/bin/projecteur && test -f /usr/lib/udev/rules.d/55-projecteur.rules",
+                         "cheat": "test -x /usr/bin/cheat && cheat --version",
+                     })
+    planned = vm.ride("plan", "--profile", "spotlight-pointer").stdout
+    assert table_row(planned, "package.projecteur")["STATUS"] == "candidate"
+    applied = vm.ride("apply", "--profile", "spotlight-pointer",
+                      "--allow-candidate", timeout=900)
+    first_id = run_id(applied.stdout)
+    assert [step["result"] for step in journal(vm, first_id)["steps"]] == ["changed"]
+    vm.run("rpm -q --quiet projecteur")
+    repeated = vm.ride("apply", "--profile", "spotlight-pointer",
+                       "--allow-candidate")
+    assert [step["result"] for step in journal(vm, run_id(repeated.stdout))["steps"]] == ["unchanged"]
+    restored = vm.ride("restore", "--run-id", first_id, "--allow-candidate",
+                       timeout=900)
+    assert journal(vm, run_id(restored.stdout))["status"] == "complete"
+    vm.run("! rpm -q --quiet projecteur")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_forensic_volatility3_user_environment(vm):
     identifier = "package.volatility3"
     environment = "/home/ride-test/.local/share/ride-fedora/tools/volatility3"

@@ -23,7 +23,8 @@ cannot reliably undo what it downloaded. User vaults and an existing
   status; an opt-in candidate cannot waive it.
 
 [Bitwarden's Linux downloads](https://bitwarden.com/download/) provide
-desktop distributions, but the v2 RPM/AppImage mismatch is not a safe
+desktop distributions; its [client source](https://github.com/bitwarden/clients)
+is GPL-3.0 by default with separately licensed components. The v2 RPM/AppImage mismatch is not a safe
 portable lifecycle and v3 has no owned portable handler. This is a
 **non-runnable unsupported v3.0 decision**. Reopen for a requested
 Bitwarden portable deployment with pinned publisher bytes, separate

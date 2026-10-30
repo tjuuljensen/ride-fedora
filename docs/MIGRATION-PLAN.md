@@ -262,6 +262,24 @@ and its plugin set after upstream sunset, and records Arduino IDE, Discord,
 Joplin, and Vivaldi as non-runnable until their respective portable or
 publisher-RPM acquisition and inverse contracts pass. These were all
 commented preset selections and do not enter base profiles.
+[Publisher batch 11](migrations/publisher-apps-11.md) accepts Clementine
+and the PipeWire-compatible EasyEffects replacement for the misleading
+`PulseAudioEq` source as separate opt-in candidates after exact-target RPM
+and profile lifecycles. Chrome, Opera, Edge, and Spotify remain non-runnable
+until their distinct publisher repository, key, LPF, and profile-preserving
+inverse contracts pass.
+[Publisher batch 12](migrations/publisher-apps-12.md) closes the commented
+Bitwarden desktop RPM until a pinned publisher artifact and vault-safe
+inverse meet the high-risk gate. [Batch 14](migrations/publisher-apps-14.md)
+documents the archived YubiKey Personalization GUI handoff to current
+Yubico tools without claiming a managed install. [Batch 15](migrations/publisher-apps-15.md)
+keeps Xmind non-runnable until its current RPM, edition, and document-safe
+inverse are owned. Projecteur and Cheat are reviewed separately in batches
+13 and 16. [Projecteur](migrations/publisher-apps-13.md) is an opt-in
+Fedora RPM candidate after package/profile VM checks; Spotlight behavior
+is H017 in v3.1. [Cheat](migrations/publisher-apps-16.md) is a supported
+Fedora RPM after the same exact-target package lifecycle, replacing the
+unowned v2 binary download without expanding `default`.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
