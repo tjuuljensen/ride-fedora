@@ -19,6 +19,7 @@ ride_observe() {
       esac
       ;;
     github-asset) printf 'not-applicable\n' ;;
+    pinned-script) ride_observe_asn "$entry" ;;
     python-venv)
       case "$(jq -r '.id' <<< "$entry")" in
         package.volatility3)
@@ -82,6 +83,10 @@ ride_change() {
         *) ride_die "unknown isolated Python operation" ;;
       esac
       ;;
+    pinned-script)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.asn ]] || ride_die "unknown pinned script operation"
+      ride_change_asn "$entry" "$state"
+      ;;
     gsettings-boolean)
       local schema key value writable
       read -r schema key < <(ride_gsettings_target "$entry")
@@ -127,6 +132,108 @@ ride_volatility_environment() {
 
 ride_unfurl_environment() {
   printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/dfir-unfurl"
+}
+
+ride_asn_environment() {
+  printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/asn"
+}
+
+ride_asn_link() {
+  printf '%s\n' "$HOME/.local/bin/asn"
+}
+
+ride_asn_owned_contents() {
+  local environment=$1
+  [[ "$(find "$environment" -mindepth 1 -maxdepth 1 -printf '%f\n' | LC_ALL=C sort)" == \
+    $'.ride-owned\nLICENSE\nasn' ]]
+}
+
+ride_observe_asn() {
+  local entry=$1 environment link script_sha license_sha marker
+  environment=$(ride_asn_environment)
+  link=$(ride_asn_link)
+  script_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  license_sha=$(jq -r '.licenseSha256' <<< "$entry")
+  marker="ride-fedora package.asn $script_sha"
+  if [[ -d "$environment" && ! -L "$environment" ]] &&
+     ride_asn_owned_contents "$environment" &&
+     [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+        "$(cat "$environment/.ride-owned")" == "$marker" &&
+        -f "$environment/asn" && ! -L "$environment/asn" && -x "$environment/asn" &&
+        -f "$environment/LICENSE" && ! -L "$environment/LICENSE" &&
+        -L "$link" && "$(readlink -- "$link")" == "$environment/asn" &&
+        "$(sha256sum -- "$environment/asn" | cut -d' ' -f1)" == "$script_sha" &&
+        "$(sha256sum -- "$environment/LICENSE" | cut -d' ' -f1)" == "$license_sha" ]]; then
+    printf 'installed\n'
+  else
+    printf 'absent\n'
+  fi
+}
+
+ride_change_asn() {
+  local entry=$1 state=$2 environment link base temporary source_uri license_uri script_sha license_sha marker
+  environment=$(ride_asn_environment)
+  link=$(ride_asn_link)
+  base=$(dirname "$environment")
+  source_uri=$(jq -r '.sourceUri' <<< "$entry")
+  license_uri=$(jq -r '.licenseUri' <<< "$entry")
+  script_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  license_sha=$(jq -r '.licenseSha256' <<< "$entry")
+  marker="ride-fedora package.asn $script_sha"
+  case "$state" in
+    installed)
+      ride_require_command curl
+      ride_require_command sha256sum
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        ride_die "ASN destination already exists; refusing to overwrite: $environment or $link"
+      fi
+      umask 077
+      mkdir -p "$base" "$(dirname "$link")"
+      temporary=$(mktemp -d "$base/.asn.XXXXXXXX") || ride_die "cannot stage ASN script"
+      if ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 60 --max-filesize 250000 \
+          "$source_uri" -o "$temporary/asn" ||
+         ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 60 --max-filesize 4096 \
+          "$license_uri" -o "$temporary/LICENSE"; then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      if [[ "$(sha256sum -- "$temporary/asn" | cut -d' ' -f1)" != "$script_sha" ||
+            "$(sha256sum -- "$temporary/LICENSE" | cut -d' ' -f1)" != "$license_sha" ]] ||
+         ! bash -n "$temporary/asn"; then
+        rm -rf -- "$temporary"
+        ride_error "ASN source digest or syntax verification failed"
+        return 1
+      fi
+      chmod 0755 "$temporary/asn"
+      chmod 0644 "$temporary/LICENSE"
+      printf '%s\n' "$marker" > "$temporary/.ride-owned"
+      if ! mv -T -- "$temporary" "$environment"; then
+        rm -rf -- "$temporary"
+        return 1
+      fi
+      if ! ln -s -- "$environment/asn" "$link"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      ;;
+    absent)
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        [[ -d "$environment" && ! -L "$environment" ]] &&
+        ride_asn_owned_contents "$environment" &&
+        [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+           "$(cat "$environment/.ride-owned")" == "$marker" &&
+           -f "$environment/asn" && ! -L "$environment/asn" &&
+           -f "$environment/LICENSE" && ! -L "$environment/LICENSE" &&
+           -L "$link" && "$(readlink -- "$link")" == "$environment/asn" &&
+           "$(sha256sum -- "$environment/asn" | cut -d' ' -f1)" == "$script_sha" &&
+           "$(sha256sum -- "$environment/LICENSE" | cut -d' ' -f1)" == "$license_sha" ]] ||
+          ride_die "refusing to remove modified or unowned ASN files"
+        rm -- "$link"
+        rm -rf -- "$environment"
+      fi
+      ;;
+    *) ride_die "invalid ASN state: $state" ;;
+  esac
 }
 
 ride_observe_unfurl() {

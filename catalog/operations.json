@@ -485,6 +485,59 @@
       "artifactFormat": "wheel"
     },
     {
+      "id": "package.asn",
+      "kind": "package",
+      "name": "ASN lookup tool",
+      "group": "forensics",
+      "description": "Install a pinned ASN lookup Bash script and MIT notice in an owned user path without starting its optional server.",
+      "handler": "pinned-script",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "dependencies": [
+        "package.curl",
+        "package.whois",
+        "package.dns-utils",
+        "package.mtr",
+        "package.jq",
+        "package.nmap",
+        "package.ncat",
+        "package.ipcalc",
+        "package.aha",
+        "package.grepcidr"
+      ],
+      "productId": "asn",
+      "productUri": "https://github.com/nitefood/asn",
+      "license": "MIT",
+      "licenseUri": "https://raw.githubusercontent.com/nitefood/asn/9384c07a35f5689ab7730c88b391ec47a8f2a11e/LICENSE",
+      "licenseSha256": "7ba6dff361f2da0b9712fcc13960ba3d04d85cb9d073c97c5367241fdc2c8868",
+      "sourceUri": "https://raw.githubusercontent.com/nitefood/asn/9384c07a35f5689ab7730c88b391ec47a8f2a11e/asn",
+      "sourceSha256": "dee866df4d5d8ea26784611512d5dc962a1a6dbe33cbb20d9d23e7b492378d75",
+      "verification": "github-commit-sha256-observed",
+      "sourceId": "github-raw-pinned",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "script",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
       "id": "package.pwgen",
       "kind": "package",
       "name": "Password generator",
@@ -1755,6 +1808,366 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.unrar.md"
+    },
+    {
+      "id": "package.curl",
+      "kind": "package",
+      "name": "curl command-line transfer tool",
+      "group": "asn-runtime",
+      "description": "Install Fedora curl for ASN network requests.",
+      "handler": "dnf-package",
+      "packageName": "curl",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "curl",
+      "productUri": "https://curl.se/",
+      "license": "curl",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/curl/curl/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/curl/curl/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.whois",
+      "kind": "package",
+      "name": "WHOIS lookup tool",
+      "group": "asn-runtime",
+      "description": "Install Fedora whois for ASN registration lookups.",
+      "handler": "dnf-package",
+      "packageName": "whois",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "whois",
+      "productUri": "https://www.linux.it/~md/software/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/whois/whois/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/whois/whois/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.dns-utils",
+      "kind": "package",
+      "name": "BIND DNS utilities",
+      "group": "asn-runtime",
+      "description": "Install Fedora bind-utils for ASN DNS lookups.",
+      "handler": "dnf-package",
+      "packageName": "bind-utils",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "bind-utils",
+      "productUri": "https://www.isc.org/downloads/bind/",
+      "license": "MPL-2.0 AND ISC AND MIT AND BSD-3-Clause AND BSD-2-Clause",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/bind/bind-utils/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/bind/bind-utils/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.mtr",
+      "kind": "package",
+      "name": "MTR network diagnostic tool",
+      "group": "asn-runtime",
+      "description": "Install Fedora mtr for ASN route diagnostics.",
+      "handler": "dnf-package",
+      "packageName": "mtr",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "mtr",
+      "productUri": "https://www.bitwizard.nl/mtr/",
+      "license": "GPL-2.0-only",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/mtr/mtr/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/mtr/mtr/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.jq",
+      "kind": "package",
+      "name": "jq JSON processor",
+      "group": "asn-runtime",
+      "description": "Install Fedora jq for ASN JSON processing.",
+      "handler": "dnf-package",
+      "packageName": "jq",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "jq",
+      "productUri": "https://jqlang.org/",
+      "license": "MIT AND ICU AND CC-BY-3.0",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/jq/jq/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/jq/jq/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.ncat",
+      "kind": "package",
+      "name": "Ncat network tool",
+      "group": "asn-runtime",
+      "description": "Install Fedora nmap-ncat for ASN network checks.",
+      "handler": "dnf-package",
+      "packageName": "nmap-ncat",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "nmap-ncat",
+      "productUri": "https://nmap.org/",
+      "license": "LicenseRef-Nmap",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/nmap/nmap-ncat/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/nmap/nmap-ncat/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.ipcalc",
+      "kind": "package",
+      "name": "IP network calculator",
+      "group": "asn-runtime",
+      "description": "Install Fedora ipcalc for ASN address calculations.",
+      "handler": "dnf-package",
+      "packageName": "ipcalc",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "ipcalc",
+      "productUri": "https://gitlab.com/ipcalc/ipcalc",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/ipcalc/ipcalc/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/ipcalc/ipcalc/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.aha",
+      "kind": "package",
+      "name": "ANSI to HTML converter",
+      "group": "asn-runtime",
+      "description": "Install Fedora aha for ASN HTML reports.",
+      "handler": "dnf-package",
+      "packageName": "aha",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "aha",
+      "productUri": "https://github.com/theZiz/aha",
+      "license": "MPL-1.1 OR LGPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/aha/aha/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/aha/aha/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
+    },
+    {
+      "id": "package.grepcidr",
+      "kind": "package",
+      "name": "CIDR range filter",
+      "group": "asn-runtime",
+      "description": "Install Fedora grepcidr for ASN address filtering.",
+      "handler": "dnf-package",
+      "packageName": "grepcidr",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "grepcidr",
+      "productUri": "https://www.pc-tools.net/unix/grepcidr/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/grepcidr/grepcidr/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/grepcidr/grepcidr/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.asn.md"
     },
     {
       "id": "package.nano",

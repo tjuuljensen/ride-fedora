@@ -680,3 +680,25 @@ only the accepted 7zip and unrar package operations. The
 [acceptance record](acceptance/package.unrar.md) shows complete RPM inventory
 recovery, a passing profile smoke, and preservation of pre-existing 7zip. No
 unexplained shared Windows contract drift was found.
+
+### Fedora ASN pinned-script preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding the ASN tool.
+Windows has no ASN product row or matching deployment. Linux adds an
+allowlisted `pinned-script` handler with fixed upstream commit, observed
+script and license hashes, a user-owned destination, and separate Fedora
+RPM prerequisites. The two opt-in profiles retain profile schema 1; the
+run journal and its source signature version remain unchanged. New hash
+fields are Linux acquisition metadata for this specific script, while
+Windows uses its own artifact validation and recovery paths. This is an
+intentional platform difference, with no shared product-state claim.
+Recheck if Windows adds ASN, either client changes installed-deployment
+identity or run-state recovery, or Linux generalizes the script handler.
+
+The pinned Fedora 44 Workstation VM lifecycle passed under QEMU TCG. The
+[acceptance record](acceptance/package.asn.md) covers the separate system
+and user profiles, exact script and notice hashes, and owned user inverse.
+The profile and run-state formats did not change. No unexplained shared
+Windows contract drift was found; the Linux-specific RPM and script paths
+remain deliberate differences.

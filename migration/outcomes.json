@@ -914,17 +914,35 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.asn",
+        "package.curl",
+        "package.whois",
+        "package.dns-utils",
+        "package.mtr",
+        "package.jq",
+        "package.nmap",
+        "package.ncat",
+        "package.ipcalc",
+        "package.aha",
+        "package.grepcidr"
+      ],
       "evidence": [
-        "docs/migrations/forensic-isolated-01.md"
+        "docs/migrations/forensic-isolated-01.md",
+        "docs/migrations/forensic-isolated-01-asn.md",
+        "docs/acceptance/package.asn.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept ASN for v3.0 on 2026-10-30. Review current source and license, pin acquisition, and install at an owned destination with a brief Fedora 44 lifecycle.",
-      "v31Hardening": [],
-      "reason": "The v2 installer fetches an unpinned MIT-licensed script into /usr/bin and removes shared RPM dependencies; v3 has no pinned owned-script handler or safe inverse.",
-      "reviewTrigger": "A concrete ASN lookup use case with pinned script provenance, independent dependency ownership, and Fedora 44 VM acceptance.",
+      "nextAction": "Keep ASN opt-in with --allow-candidate; H027 covers live lookup and optional server behavior, and H008 covers broader DNF update and dependency effects.",
+      "v31Hardening": [
+        "H002",
+        "H008",
+        "H027"
+      ],
+      "reason": "A pinned MIT ASN script has an owned user path and exact inverse; ten independently declared Fedora RPM prerequisites and the Fedora 44 Workstation happy path passed.",
+      "reviewTrigger": "Recheck source and notice hashes, prerequisite versions, command startup, and owned recovery if upstream or Fedora target changes.",
       "v30Decision": "keep"
     },
     {
@@ -5713,6 +5731,12 @@
       "id": "H026",
       "title": "RAR wrapper feature compatibility",
       "trigger": "After Fedora 44 unrar-free wrapper package acceptance, test representative RAR versions, encrypted archives, and automation switches needed by owner workflows; keep package-only support distinct.",
+      "status": "queued"
+    },
+    {
+      "id": "H027",
+      "title": "ASN live lookup and optional server behavior",
+      "trigger": "After pinned Fedora 44 Workstation script and prerequisite lifecycle acceptance, test representative live lookups, upstream service failures, and any explicitly requested server mode with its separate exposure and recovery review.",
       "status": "queued"
     }
   ]

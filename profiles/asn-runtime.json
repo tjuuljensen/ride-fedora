@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "asn-runtime",
+  "description": "Opt-in Fedora RPM prerequisites for the ASN lookup tool",
+  "operations": [
+    {"id": "package.curl", "state": "installed"},
+    {"id": "package.whois", "state": "installed"},
+    {"id": "package.dns-utils", "state": "installed"},
+    {"id": "package.mtr", "state": "installed"},
+    {"id": "package.jq", "state": "installed"},
+    {"id": "package.nmap", "state": "installed"},
+    {"id": "package.ncat", "state": "installed"},
+    {"id": "package.ipcalc", "state": "installed"},
+    {"id": "package.aha", "state": "installed"},
+    {"id": "package.grepcidr", "state": "installed"}
+  ]
+}

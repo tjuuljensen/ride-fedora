@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "gsettings-boolean")) and
+      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "gsettings-boolean")) and
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
@@ -33,7 +33,7 @@ ride_validate_catalog() {
       (.licenseUri | type == "string" and startswith("https://")) and
       (if .kind == "package" then
         .distribution == "installed" and .deploymentId == "local-installed" and
-        (.artifactFormat | IN("rpm", "wheel")) and
+        (.artifactFormat | IN("rpm", "wheel", "script")) and
         (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
         (.sourceId as $defaultSource | (.sourceProviders // []) | type == "array" and
           ([.[].sourceId] | length == (unique | length)) and
@@ -61,6 +61,14 @@ ride_validate_catalog() {
          (.id | IN("setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting")))
        elif .handler == "python-venv" then (.kind == "package" and .artifactFormat == "wheel" and
          (.id | IN("package.volatility3", "package.dfir-unfurl")))
+       elif .handler == "pinned-script" then (.kind == "package" and .id == "package.asn" and
+         .scope == "user" and .artifactFormat == "script" and
+         .sourceId == "github-raw-pinned" and .verification == "github-commit-sha256-observed" and
+         (.sourceUri | test("^https://raw[.]githubusercontent[.]com/nitefood/asn/[0-9a-f]{40}/asn$")) and
+         (.licenseUri | test("^https://raw[.]githubusercontent[.]com/nitefood/asn/[0-9a-f]{40}/LICENSE$")) and
+         (.sourceUri | split("/")[5]) == (.licenseUri | split("/")[5]) and
+         (.sourceSha256 | type == "string" and test("^[0-9a-f]{64}$")) and
+         (.licenseSha256 | type == "string" and test("^[0-9a-f]{64}$")))
        else (.kind == "artifact" and (.githubRepository | type == "string" and test("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")) and
              (.assetSuffix | type == "string" and test("^-[A-Za-z0-9_.-]+$")) and
              (.maxBytes | type == "number" and . > 0 and . <= 104857600)) end)
@@ -129,7 +137,13 @@ ride_source_signature() {
   local version=${2:-2} fields
   case "$version" in
     1) fields='{id, sourceId, handler, packageName, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
-    2) fields='{id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
+    2) fields='if .handler == "pinned-script" then
+         {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
+          scope, sourceUri, sourceSha256, licenseUri, licenseSha256, verification, targets, recovery}
+       else
+         {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
+          scope, sourceUri, verification, targets, recovery}
+       end' ;;
     *) ride_die "unsupported source signature version: $version" ;;
   esac
   jq -cS "$fields" <<< "$1" |

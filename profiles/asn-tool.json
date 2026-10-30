@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "asn-tool",
+  "description": "Opt-in pinned ASN lookup script in an owned user path; apply as the user after asn-runtime",
+  "operations": [
+    {"id": "package.asn", "state": "installed"}
+  ]
+}

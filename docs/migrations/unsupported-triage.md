@@ -4,7 +4,7 @@ Status: **individual review in progress**, 2026-10-30. This review assigns
 each of the original 99 `unsupported` source outcomes exactly one decision
 batch. Three were approved for retirement, and one of those, Opera, was later
 excluded from v3 scope. Teams desktop capability was also retired in the
-fast-track review. The current ledger has 104 `unsupported` and 13 `retire`
+fast-track review. The current ledger has 103 `unsupported` and 13 `retire`
 outcomes. These decisions do not add an
 operation, delete v2 code, or run a state-changing test. The
 [migration ledger](../../migration/outcomes.json) and [progress report](progress.md)
@@ -29,8 +29,8 @@ At the initial triage point, 96 unsupported outcomes consisted of 68 migration-d
 (51 original, six retained R2 inverses, and 11 retained U1 applications),
 23 keep-or-drop choices, and five deferred owner decisions. The original
 ledger total remained 180/180 after these decisions; six server package
-additions and the later Opera exclusion make current progress 179/185. The runnable count remains
-54. Retaining an outcome does not
+additions and the later Opera exclusion make current progress 185/185
+dispositioned. The runnable count is now 58. Retaining an outcome does not
 make its unsafe v2 function runnable; a new owned implementation needs its
 own evidence. Legacy functions and existing v2 machine state remain untouched.
 These review groups do not override the small implementation batches in the
@@ -179,7 +179,7 @@ If retained, choose a verified provider, owned key/repository or extension state
 
 If retained, choose pinned artifacts or isolated environments and preserve analysis output.
 
-- `workstation:package.ASN` (medium risk): The v2 installer fetches an unpinned MIT-licensed script into /usr/bin and removes shared RPM dependencies; v3 has no pinned owned-script handler or safe inverse.
+- `workstation:package.ASN` (medium risk): The v2 installer fetched an unpinned MIT script into `/usr/bin` and removed shared dependencies. The [v3 pinned user script and independent RPM path](../acceptance/package.asn.md) now pass a Fedora 44 opt-in lifecycle; live lookup and wider DNF transaction behavior remain H027/H008.
 - `workstation:package.UnfURL` (medium risk): The v2 installer mutates the user global Python environment with unpinned pip dependencies. A [pinned opt-in user venv](../acceptance/package.dfir-unfurl.md) now has a Fedora 44 VM happy path; this original triage entry remains for decision history.
 - `workstation:package.CyberChef` (medium risk): The v2 installer selects a mutable GitHub ZIP, extracts into a system path, and writes a desktop launcher without an owned artifact/notice/recovery contract; Linux v3 has no portable handler.
 - `workstation:package.Chepy` (medium risk): The v2 installer clones an unpinned Git branch, globally installs Python packages and PyInstaller, and copies a built binary into /usr/bin without owned recovery.

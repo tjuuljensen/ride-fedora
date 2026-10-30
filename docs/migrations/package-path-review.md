@@ -1,11 +1,11 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-133 v2 `package.*` outcomes: 50 mapped to runnable v3 operations, 9 replaced,
-10 retired, and 64 unsupported. The five path groups below assess the **70
+133 v2 `package.*` outcomes: 51 mapped to runnable v3 operations, 9 replaced,
+10 retired, and 63 unsupported. The five path groups below assess the **70
 original unsupported or retired outcomes**; the 10 original replacement
-assessments, 50 existing v3 mappings, and six newly scoped server outcomes
-follow. The 50 mapped outcomes have catalog and acceptance evidence. The
+assessments, 51 existing v3 mappings, and six newly scoped server outcomes
+follow. The 51 mapped outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
 disposition, risk, target, evidence, and next action.
 
@@ -69,7 +69,7 @@ assessment, not an automatic retirement decision.
 | `server:package.ExpressVPN` | Private publisher package, activation, and profile recovery need an owned path. | [Batch review](generic-server-decisions.md) |
 | `server:package.Selenium` | Use an isolated, pinned environment with a declared browser and driver. | [Batch review](generic-server-decisions.md) |
 | `server:package.Tailscale` | Use a verified package source with private node identity and service recovery. | [Batch review](generic-server-decisions.md) |
-| `workstation:package.ASN` | Pin the licensed script and own its destination and inverse. | [Batch review](forensic-isolated-01.md) |
+| `workstation:package.ASN` | The pinned MIT script and separately owned Fedora prerequisites now pass an opt-in lifecycle; live lookup checks remain H027. | [Acceptance](../acceptance/package.asn.md) |
 | `workstation:package.ArduinoIDE` | Choose a current edition and pinned portable or installed deployment. | [Batch review](publisher-apps-10.md) |
 | `workstation:package.Autopsy` | Pin the Linux distribution and preserve case data and Java dependencies. | [Batch review](forensic-isolated-02.md) |
 | `workstation:package.BalenaEtcher` | Pin the publisher RPM and separate application install from media writing. | [Batch review](publisher-apps-09.md) |
@@ -152,10 +152,10 @@ changes and must not be labeled EOL.
 | `workstation:package.YubikeyManager` | The old Manager GUI reached EOL; Yubico Authenticator is a separate product. | [Batch review](publisher-apps-08.md) |
 | `workstation:package.YubikeyPersTool` | The old GUI is archived; Yubico Authenticator and ykman are separate paths. | [Batch review](publisher-apps-14.md) |
 
-## Existing v3 package mappings (50)
+## Existing v3 package mappings (51)
 
 These outcomes already have runnable v3 mappings: 30 supported on their
-declared targets and 20 operable only as opt-in candidates. The linked
+declared targets and 21 operable only as opt-in candidates. The linked
 acceptance records and [ledger](../../migration/outcomes.json) state each
 target and limit; this review does not broaden their support matrix.
 
@@ -163,6 +163,7 @@ target and limit; this review does not broaden their support matrix.
 | --- | --- | --- | --- |
 | `server:package.PythonPip` | `package.python3-pip` | supported | [Acceptance](../acceptance/package.python3-pip.md) |
 | `workstation:package.Alien` | `package.alien` | supported | [Acceptance](../acceptance/package.alien.md) |
+| `workstation:package.ASN` | `package.asn` and ten Fedora prerequisite operations | opt-in candidate | [Acceptance](../acceptance/package.asn.md) |
 | `workstation:package.BasicEditors` | `package.nano`, `package.vim-enhanced` | supported | [Acceptance](../acceptance/provider-basic-editors.md) |
 | `workstation:package.Bat` | `package.bat` | supported | [Acceptance](../acceptance/package.bat.md) |
 | `workstation:package.Binwalk` | `package.binwalk` | supported | [Acceptance](../acceptance/package.binwalk.md) |

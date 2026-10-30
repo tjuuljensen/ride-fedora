@@ -1,7 +1,7 @@
 # Forensic isolated batch 01: active v2 tools
 
-Status: **one supported RPM and one operable opt-in UnfURL candidate; four
-remaining non-runnable tool decisions**, 2026-10-30.
+Status: **one supported RPM and two operable opt-in candidates; the VMFS
+placeholder is retired and CyberChef/Chepy remain non-runnable**, 2026-10-30.
 The owner subsequently kept VMFS access, ASN, UnfURL, CyberChef, and Chepy
 capabilities in the v3.0 fast-track review. The old VMFS link-only function
 remains retired; a working reader needs a current licensed source.
@@ -14,7 +14,7 @@ they must not be treated as one install bundle. The function source is
 | --- | --- | --- |
 | `VMFStools` | Prints two URLs and removes nothing. | No executable install; resolve the placeholder without claiming support. An actual VMFS reader requires a concrete user request and independent package/license/recovery review. |
 | `ExifTool` | Downloads the latest GitHub source ZIP, builds with Perl/CPAN, and removes `/usr/lib/exiftool`. | Fedora 44 publishes signed [`perl-Image-ExifTool`](https://packages.fedoraproject.org/pkgs/perl-Image-ExifTool/perl-Image-ExifTool/) (GPL-1.0-or-later OR Artistic-1.0-Perl) with the `exiftool` CLI. Replace source-build behavior with an owned RPM lifecycle. |
-| `ASN` | Downloads an unpinned [MIT-licensed upstream script](https://github.com/nitefood/asn) into `/usr/bin` and installs several RPM dependencies; inverse removes some shared dependencies. | No v3 owned-script handler; do not delete shared tools or execute an unpinned script. |
+| `ASN` | Downloads an unpinned [MIT-licensed upstream script](https://github.com/nitefood/asn) into `/usr/bin` and installs several RPM dependencies; inverse removes some shared dependencies. | A [pinned owned user script](forensic-isolated-01-asn.md) and independent Fedora RPM prerequisites now provide an operable opt-in candidate. |
 | `UnfURL` | Installs `dfir-unfurl` into the user's global Python environment. | A [pinned user venv](forensic-isolated-01-unfurl.md) now provides an operable opt-in candidate on Fedora 44 Workstation. |
 | `CyberChef` | Selects the first mutable GitHub release URL, extracts a ZIP into `/usr/lib`, and writes a desktop launcher. | [Upstream releases](https://github.com/gchq/CyberChef/releases) are Apache-2.0; need a pinned artifact and owned destination/launcher. |
 | `Chepy` | Clones an unpinned [GPL-3.0 upstream](https://github.com/securisec/chepy), globally installs Python dependencies, builds with PyInstaller, and writes `/usr/bin/chepy`. | Need a pinned isolated build or package, distinct from CyberChef, with owned inverse. |
@@ -56,15 +56,21 @@ two source URLs and its inverse is empty. It has never represented a working
 install. Reopen for a concrete VMFS access requirement with a licensed,
 verified acquisition path and read-only filesystem evidence.
 
-`ASN`, `CyberChef`, and `Chepy` remain **unsupported as v3.0 operations**.
-Their upstream projects and licenses are identifiable, but the current v3
-handlers cannot yet preserve the v2 script, desktop artifact, and build
-destinations with pinned provenance and an owned inverse. No VM install or
-operable candidate is claimed for these three. Reopen each with the
-corresponding pinned script or artifact, isolated runtime or owned
-destination, focused mocked tests, and exact-target VM happy path. `ASN`
-must not remove shared RPM tools; `CyberChef` must preserve its offline
-notices and any user recipes; and `Chepy` must not clone and build an
-unpinned branch into system paths. UnfURL now has a separate
+`ASN` now has a separate [accepted candidate path](forensic-isolated-01-asn.md)
+and [Fedora 44 acceptance](../acceptance/package.asn.md). The script is
+hash-pinned, installed in an owned user path, and recovered without deleting
+pre-existing RPM names or user files. Its ten Fedora RPM prerequisites are
+selected through a separate opt-in system profile. The VM exposed a DNF
+upgrade of a pre-existing `nmap-ncat` while installing `nmap`; broader update
+and dependency effects remain H008. Live ASN lookups and optional server
+behavior remain H027.
+
+`CyberChef` and `Chepy` remain **unsupported as v3.0 operations**. Their
+upstream projects and licenses are identifiable, but the current v3 handlers
+do not yet provide pinned offline artifacts or isolated build destinations
+with an owned inverse. Reopen each with the corresponding pinned source,
+focused mocked tests, and exact-target VM happy path. `CyberChef` must
+preserve its offline notices and any user recipes; `Chepy` must not clone and
+build an unpinned branch into system paths. UnfURL has a separate
 [accepted candidate path](forensic-isolated-01-unfurl.md), with broader UI
 and failure coverage in v3.1.
