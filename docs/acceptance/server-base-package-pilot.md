@@ -9,7 +9,7 @@ and architecture before testing. Source revision:
 `0bfd3c02350c85069c85b3b28457c2396e827d67` with uncommitted changes;
 catalog SHA-256:
 `27e2a8310a56123488a25a3c9dd74631365e4acbe8085e542247d9280f4d6bf5`.
-All operations remain candidates pending exact-diff review. No host-specific
+All operations were candidates at pilot time, pending exact-diff review. No host-specific
 server behavior was moved from `network-devices`.
 
 | Operation or profile | Focused automated result | Disposable overlay and JUnit |
@@ -31,8 +31,9 @@ lifecycle or installed-only behavior, and profile interaction. The OpenSSH
 artificial absence is recovered by discarding its overlay; it is never a
 production removal procedure. No manual session was needed.
 
-Reviewer: pending. Before promotion, review the exact source diff and any
-non-disposable run journals with signatures predating the Server target row.
+The later per-operation [less](package.less.md) and
+[OpenSSH](package.openssh-clients.md) acceptance records review the source diff.
+The owner confirmed no non-disposable v3 runs before promotion.
 
 Post-commit source check: after candidate commit `17849c4`, compared all 11
 bundled runtime source files (`ride.sh`, catalog, profiles, `lib/v3`, and

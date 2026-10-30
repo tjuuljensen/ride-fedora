@@ -57,8 +57,9 @@ For reversible package operations, the suite checks `package.exfatprogs` from an
 read-only plan, apply, repeated apply, status, RPM signature and file
 verification, restore, explicit remove, and partial-failure journaling. A
 test-only missing package is added to a temporary guest catalog for failure
-injection; it is never added to the published catalog. Package changes remain
-behind the existing candidate gate in the normal client.
+injection; it is never added to the published catalog. The three accepted
+base package operations run on their declared editions without the candidate
+override; all other candidates still require `--allow-candidate`.
 The suite also compares installed package inventories before and after
 recovery, including versions, so leftover dependencies or changed packages
 fail acceptance. If the pinned base has the pilot package installed, the suite

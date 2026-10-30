@@ -22,6 +22,7 @@ class TargetScopeTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "unscoped supported edition"):
                     validate_v3.validate()
                 entry["targets"]["fedora"]["variantIds"] = ["workstation"]
+                entry.pop("acceptanceEvidence", None)
                 path.write_text(json.dumps(catalog), encoding="utf-8")
                 with self.assertRaisesRegex(ValueError, "without acceptance evidence"):
                     validate_v3.validate()

@@ -1,7 +1,10 @@
-# `package.less` acceptance draft
+# `package.less` acceptance
 
-Status: `candidate`; target-specific VM checks passed on 2026-10-30, with
-promotion review pending. Product: Fedora `less` RPM, installed deployment,
+Status: **PASS; supported** on the two declared Fedora 44 x86_64 editions.
+Reviewer: Codex, 2026-10-30. The owner confirmed no non-disposable v3 runs,
+so no older run journal needs original-catalog recovery before promotion.
+VM acceptance evidence for each declared edition is listed below.
+Product: Fedora `less` RPM, installed deployment,
 `fedora-rpm` source, system scope, `remove-new-install` recovery. The selected
 source and DNF handler are unchanged from the earlier Cloud Base package
 pilot. The scoped [Windows comparison](../windows-alignment.md) found no
@@ -36,6 +39,9 @@ the cited Workstation and Server JUnit suites have no failures. The archived
 `lib/v3/providers.sh` and `lib/v3/state.sh` match commit `81f604f` byte for
 byte. Relative to the Workstation lifecycle archive, this operation changed
 only its target declaration; the Server lifecycle ran the current row, and
-the edition gates covered the declared target set. Owner acceptance and
-other-host run inventory remain pending. The local non-disposable run
-directory was absent.
+the edition gates covered the declared target set. The local non-disposable
+run directory was also absent. The catalog links this record as its
+`acceptanceEvidence`.
+
+The [supported-state promotion check](fedora-44-supported-promotion.md) passed
+on all declared Fedora 44 editions without `--allow-candidate`.

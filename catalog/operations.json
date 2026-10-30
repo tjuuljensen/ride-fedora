@@ -15,7 +15,8 @@
         "absent"
       ],
       "scope": "system",
-      "status": "candidate",
+      "status": "supported",
+      "acceptanceEvidence": "docs/acceptance/package.exfatprogs.md",
       "targets": {
         "fedora": {
           "releases": [
@@ -55,7 +56,8 @@
         "absent"
       ],
       "scope": "system",
-      "status": "candidate",
+      "status": "supported",
+      "acceptanceEvidence": "docs/acceptance/package.less.md",
       "targets": {
         "fedora": {
           "releases": [
@@ -94,7 +96,8 @@
         "installed"
       ],
       "scope": "system",
-      "status": "candidate",
+      "status": "supported",
+      "acceptanceEvidence": "docs/acceptance/package.openssh-clients.md",
       "targets": {
         "fedora": {
           "releases": [

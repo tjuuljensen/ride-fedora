@@ -22,6 +22,6 @@ This smoke check covers combined profile selection and interaction. The
 [first package batch](workstation-package-batch-1-pilot.md) and
 [OpenSSH client pilot](openssh-clients-workstation-pilot.md) contain the
 operation-specific install, failure, and recovery evidence. No manual session
-was needed. The profile and operations remain candidates pending exact-diff
-review and resolution of any non-disposable journals with older source
-signatures. Reviewer: pending.
+was needed. The operations were candidates during this pilot. The later
+[per-operation acceptance records](package.less.md) include source review;
+the owner confirmed no non-disposable v3 runs before promotion.

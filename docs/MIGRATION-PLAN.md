@@ -96,9 +96,9 @@ advertised as supported.
 
 | Target and scope | Required v3 outcome | Current decision and evidence |
 | --- | --- | --- |
-| Fedora 44 x86_64 Workstation | `default`: `package.less`, `package.openssh-clients`, `package.exfatprogs` installed through the Fedora RPM provider. | Required for the first Workstation envelope; all three are candidates. The [first batch pilot](acceptance/workstation-package-batch-1-pilot.md), [OpenSSH client pilot](acceptance/openssh-clients-workstation-pilot.md), and [combined profile smoke check](acceptance/workstation-default-profile-pilot.md) passed their applicable VM checks. Exact-diff review and promotion are pending. |
-| Fedora 44 x86_64 Server | `server-base`: `package.less` and `package.openssh-clients` as a generic baseline. | Required before claiming Server support. The [Server pilot](acceptance/server-base-package-pilot.md) passed focused VM checks on a pinned Server image; exact-diff review and promotion are pending. Other server functions remain in `network-devices`. |
-| Fedora 44 x86_64 Cloud Base | Generic `package.exfatprogs` handler pilot. | The [2026-10-30 pilot](acceptance/package.exfatprogs-cloud-base-pilot.md) passed on a pinned image; it cannot establish Workstation or Server support. |
+| Fedora 44 x86_64 Workstation | `default`: `package.less`, `package.openssh-clients`, `package.exfatprogs` installed through the Fedora RPM provider. | Accepted for this edition after the [package batch](acceptance/workstation-package-batch-1-pilot.md), [OpenSSH client](acceptance/openssh-clients-workstation-pilot.md), and [combined profile](acceptance/workstation-default-profile-pilot.md) VM checks. Each operation links its acceptance record in the catalog. |
+| Fedora 44 x86_64 Server | `server-base`: `package.less` and `package.openssh-clients` as a generic baseline. | Accepted for this edition after the [Server pilot](acceptance/server-base-package-pilot.md) and per-operation review. Other server functions remain in `network-devices`. |
+| Fedora 44 x86_64 Cloud Base | Generic `package.exfatprogs` handler pilot. | Accepted only for `package.exfatprogs` after its [Cloud Base pilot](acceptance/package.exfatprogs-cloud-base-pilot.md) and edition gate; it does not establish Workstation or Server support. |
 | Optional Fedora outcomes | `forensics` profile, unselected audit, artifact, and Python package candidates, and scoped deferred workstation/server outcomes. | Review in separate batches with explicit selectors and target evidence. Their absence does not block the package baselines above. |
 | Unsupported targets and private behavior | Other Fedora releases or architectures, Debian/Ubuntu, and host-specific server values. | Fail closed. Add adapters or targets only after their own implementation and VM evidence; keep identities, secrets, and site values outside this repository. |
 
@@ -130,8 +130,9 @@ Use this plan as the handoff record for phased migration. A batch names its
 operation IDs or legacy outcomes, source owner, target VM, dependencies,
 expected prior and final state, recovery limit, acceptance checks, status,
 revision, dated evidence, and exact next action. Keep source readiness separate
-from runtime activation and verified behavior. No batch is currently marked
-verified; catalog operations remain candidates.
+from runtime activation and verified behavior. The three base package
+operations are verified on their declared editions; optional operations remain
+candidates.
 
 | Stage | Agent work | Owner or runtime input | Completion evidence |
 | --- | --- | --- | --- |
@@ -188,8 +189,8 @@ passed lifecycle and partial-failure scenarios on clean commit `9cc6416`; the
 [Workstation pilot](acceptance/workstation-package-batch-1-pilot.md) passed its
 focused scenarios on the pinned edition image. The Cloud result informs the
 shared handler review but cannot replace edition-specific acceptance.
-`package.exfatprogs` remains `candidate` while the catalog support scope and
-per-operation evidence are reviewed.
+`package.exfatprogs` was a candidate during those pilots; its declared Cloud
+Base and Workstation targets are now accepted in the per-operation record.
 
 ### Workstation package batch 1: completion criteria
 
@@ -219,11 +220,11 @@ Status: focused pilot PASS for both operations on the pinned Workstation target
 as recorded in the [batch evidence](acceptance/workstation-package-batch-1-pilot.md).
 The [edition gate pilot](acceptance/fedora-44-variant-gate-pilot.md) then passed
 on Cloud Base and Workstation for the declared operation/edition pairs. Both
-remain `candidate`: source was dirty during the VM runs, operation-specific
-acceptance review is pending, and the target row change invalidates signatures
-of any older candidate run until it is recovered with its original catalog.
-Inventory non-disposable runs before promotion. The full Workstation default
-profile also needs `package.openssh-clients`.
+were candidates at that stage: source was dirty during the VM runs, and the
+target row change invalidated signatures of any older run. Subsequent source
+equivalence, edition gate, technical review, and the owner's confirmation that
+no non-disposable v3 runs exist cleared those gates. The full Workstation
+default profile also passed with `package.openssh-clients`.
 
 ### Workstation package batch 2: completion criteria
 
@@ -255,10 +256,9 @@ needed.
 Status: the [first VM run and focused rerun](acceptance/openssh-clients-workstation-pilot.md)
 retain the investigated preparation failure and show three applicable VM
 scenarios passing under the installed-only contract. Mocked recovery and
-catalog validation also pass. The operation remains `candidate` pending
-review of the exact source diff and any non-disposable journals with older
-source signatures. The Server variant is now declared after its separate
-[pilot](acceptance/server-base-package-pilot.md); promotion remains pending.
+catalog validation also pass. The Server variant was added after its separate
+[pilot](acceptance/server-base-package-pilot.md). Technical review and the
+owner's no-run confirmation now support the accepted target rows.
 
 Before accepting the Workstation `default` profile as a whole, run one
 combined smoke check on the pinned image. Require a read-only plan of exactly
@@ -269,8 +269,8 @@ failure, and recovery results above; this combined check tests profile
 selection and interaction, not another full lifecycle.
 
 Status: the [combined profile pilot](acceptance/workstation-default-profile-pilot.md)
-passed on 2026-10-30. The catalog remains candidate pending the operation
-reviews and source signature inventory described above.
+passed on 2026-10-30. Its three operations are accepted on the pinned
+Workstation target.
 
 ### Server base package batch: completion criteria
 
@@ -300,8 +300,8 @@ is promoted. These command-line checks need no manual desktop session.
 
 Status: the Server image and target matrix are pinned. The
 [focused pilot](acceptance/server-base-package-pilot.md) passed for both
-operations and the combined profile on 2026-10-30. Acceptance draft review,
-non-disposable run inventory, and promotion are pending.
+operations and the combined profile on 2026-10-30. Their per-operation records
+and the owner's no-run confirmation support the accepted Server target rows.
 
 Candidate milestone `17849c4` records the implementation, target-specific VM
 pilots, and per-operation acceptance drafts. The repository validation gates
@@ -311,9 +311,9 @@ post-commit byte comparison found all 11 runtime source files in representative
 Server VM archives identical to the committed candidate. At that milestone,
 the only remaining working-tree change was an unrelated user deletion of
 `docs/v3-migration.md`.
-Local `/var/lib/ride-fedora/runs` was absent. Before promotion, resolve whether
-older non-disposable v3 run journals exist on any other host, then finalize
-the acceptance review and supported target rows. The VM pilots need not be
+Local `/var/lib/ride-fedora/runs` was absent. The owner confirmed on
+2026-10-30 that no non-disposable machine has v3 runs. This resolves the
+original-catalog recovery gate for this promotion. The VM pilots need not be
 repeated for unchanged runtime files.
 
 On each non-disposable machine where v3 may have run, start in this repository
@@ -331,26 +331,51 @@ python3 tools/audit_v3_runs.py
 
 The 2026-10-30 local result was `journals=0 review=0`; six focused audit
 unit tests passed, including failed, orphaned, and symlinked journal handling. Other
-machines still need their own inventory before the candidate target rows are
-promoted.
+machines can use the command if future catalog target changes need an
+inventory; no non-disposable v3 runs existed before this promotion.
 
-The per-operation evidence drafts now include a 2026-10-30 technical review
+The per-operation acceptance records include a 2026-10-30 technical review
 of the Fedora package records, archived JUnit results, and source equivalence.
 Across the Cloud Base, Workstation, and Server pilots, the archived Fedora
 package handler and journal module are byte identical to candidate commit
 `81f604f`. The older Workstation operation rows differ from the current
 catalog only in their edition target declarations; the edition gate and
-current Server pilots cover those additions. Owner acceptance and other-host
-run inventory remain the promotion gates.
+current Server pilots cover those additions. The owner confirmed there are no
+non-disposable v3 runs; the declared targets are accepted after this review.
 
-Candidate commit `31c6729` was pushed to `codex/ride-v3-migration` on
-2026-10-30. The remote [v3 validation workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025412704)
-and [shell executable-mode workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025412750)
-both completed successfully for that commit. The v3 job passed shell syntax
-and ShellCheck, catalog and generated documentation, mocked CLI/cache/
-completion/Firefox tests, and acceptance test collection. These static gates
-complement the disposable VM evidence above; they do not substitute for the
-pending owner acceptance and other-host journal inventory.
+### Supported-state promotion check
+
+The owner confirmed on 2026-10-30 that no non-disposable machine has run v3.
+Promote only the three base package operations with acceptance records for
+every declared edition. Before accepting the promoted revision, require
+catalog/schema and generated-doc checks, mocked CLI and recovery tests, and
+one focused disposable VM check of the supported execution path on each
+declared profile target: Workstation `default` and Server `server-base` must
+plan and apply without `--allow-candidate`, report supported status and an
+unchanged journal, and preserve inventory, SSH configuration, and server
+availability. Cloud Base `package.exfatprogs` must install without the
+override, repeat unchanged, verify signed RPM/files and status, then restore
+the new install and recover package inventory. Reuse the earlier target gates,
+failure injection, and inverse checks because their handler, targets, and
+recovery logic did not change. The status and acceptance path do not enter the
+run source signature. No manual session is needed for these command-line
+operations. Record the final VM outcome and remote CI before closing this
+batch.
+
+The [supported-state promotion check](acceptance/fedora-44-supported-promotion.md)
+passed on 2026-10-30: Cloud Base exfatprogs installed and restored without
+the candidate override, while Workstation `default` and Server `server-base`
+planned and applied with supported status and unchanged journals. All three
+JUnit runs passed. Local shell, catalog, generated-doc, burndown, mocked,
+Firefox, Python compilation, and acceptance collection gates passed. The
+only unrelated working-tree change remains the user's deletion of
+`docs/v3-migration.md`, which is excluded from the promotion commit.
+
+The last pre-promotion commit, `39d5846`, passed the remote
+[v3 validation workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025748553)
+and [shell executable-mode workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025748482).
+These gates complement the disposable VM evidence; the promoted revision
+requires its own remote CI result.
 
 ## Former CERT forensic repository burndown
 

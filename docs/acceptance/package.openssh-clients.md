@@ -1,7 +1,10 @@
-# `package.openssh-clients` acceptance draft
+# `package.openssh-clients` acceptance
 
-Status: `candidate`; Fedora 44 Workstation and Server x86_64 VM checks passed
-on 2026-10-30. Product: Fedora `openssh-clients` RPM, installed deployment,
+Status: **PASS; supported** on Fedora 44 Workstation and Server x86_64.
+Reviewer: Codex, 2026-10-30. The owner confirmed no non-disposable v3 runs,
+so no older run journal needs original-catalog recovery before promotion.
+VM acceptance evidence for each declared edition is listed below.
+Product: Fedora `openssh-clients` RPM, installed deployment,
 `fedora-rpm` source, system scope. The operation declares only `installed`
 and `recovery: none`. It never promises to remove the package or restore a
 previous SSH configuration. Fedora's
@@ -39,6 +42,9 @@ the cited Workstation and Server JUnit suites have no failures. The archived
 `lib/v3/providers.sh` and `lib/v3/state.sh` match commit `81f604f` byte for
 byte. Relative to the Workstation installed-only archive, this operation
 changed only its target list to add Server; the Server suite ran the current
-row and both edition gates covered target selection. Owner acceptance and
-other-host run inventory remain pending. The local non-disposable run
-directory was absent.
+row and both edition gates covered target selection. The local non-disposable
+run directory was also absent. The catalog links this record as its
+`acceptanceEvidence`.
+
+The [supported-state promotion check](fedora-44-supported-promotion.md) passed
+on all declared Fedora 44 editions without `--allow-candidate`.

@@ -7,7 +7,8 @@
 #   journal explicit changes.
 #
 # Compatibility:
-#   Bash on Linux. Catalog targets currently name Fedora 44 x86_64 candidates.
+#   Bash on Linux. Supported package targets are Fedora 44 x86_64 editions;
+#   other catalog entries remain candidates.
 #
 # Usage:
 #   ./ride.sh [command] [options]; run ./ride.sh --help for commands.

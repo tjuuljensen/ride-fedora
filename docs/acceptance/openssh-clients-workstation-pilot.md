@@ -29,8 +29,9 @@ The harness verified base image SHA-256
 and guest `ID=fedora`, `VERSION_ID=44`, `VARIANT_ID=workstation`, and
 `x86_64`. Source revision: `0bfd3c02350c85069c85b3b28457c2396e827d67`;
 catalog SHA-256: `0a105c19f6d7166d6e59e0810eea96aef7f5ce53feb92b17a8f4a78eae13029d`.
-The source was uncommitted during the run, so this is pilot evidence pending
-review. Catalog status remains `candidate`.
+The source was uncommitted during the run, so this was pilot evidence pending
+review. Catalog status was `candidate` during the pilot; the later
+[acceptance record](package.openssh-clients.md) documents its supported state.
 
 | Scenario | Result | Disposable overlay |
 | --- | --- | --- |
@@ -41,5 +42,5 @@ review. Catalog status remains `candidate`.
 The generic reversible-package scenarios were skipped before VM startup by
 the catalog recovery marker. They do not count as tests of this installed-only
 operation. No desktop manual session was needed for these command-line tools.
-Reviewer: pending. Before promotion, review the exact diff and any
-non-disposable run journals created with an older source signature.
+The later [acceptance review](package.openssh-clients.md) checked the exact
+source diff. The owner confirmed no non-disposable v3 runs before promotion.

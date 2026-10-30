@@ -13,6 +13,14 @@ CATALOG = json.loads((ROOT / "catalog" / "operations.json").read_text(encoding="
 RUN_ID = re.compile(r"^Run ID: ([0-9]{8}T[0-9]{6}Z-[0-9]+-[0-9]+)$", re.MULTILINE)
 
 
+def catalog_status(identifier):
+    return next(item["status"] for item in CATALOG["operations"] if item["id"] == identifier)
+
+
+def candidate_args(identifier):
+    return ("--allow-candidate",) if catalog_status(identifier) == "candidate" else ()
+
+
 def run_id(output):
     match = RUN_ID.search(output)
     assert match, output
@@ -101,7 +109,7 @@ def test_guest_variant_scope_matches_catalog(vm):
     assert vm.target["variantId"] in row["targets"][vm.target["distro"]]["variantIds"]
     guest_profile = vm.put_json("variant-profile", profile(pilot_id))
     planned = vm.ride("plan", "--profile", guest_profile)
-    assert table_row(planned.stdout, pilot_id)["STATUS"] == "candidate"
+    assert table_row(planned.stdout, pilot_id)["STATUS"] == catalog_status(pilot_id)
 
     unsupported = copy.deepcopy(CATALOG)
     selected = next(item for item in unsupported["operations"] if item["id"] == pilot_id)
@@ -124,18 +132,18 @@ def test_package_apply_repeat_status_restore_and_remove(vm):
         original_plan = vm.ride("plan", "--profile", guest_profile)
         original_row = table_row(original_plan.stdout, pilot_id)
         assert (original_row["CURRENT"], original_row["DESIRED"], original_row["STATUS"]) == (
-            "installed", "installed", "candidate")
+            "installed", "installed", catalog_status(pilot_id))
     prepare_absent_package(vm)
     baseline_packages = package_inventory(vm)
 
     plan = vm.ride("plan", "--profile", guest_profile)
     plan_row = table_row(plan.stdout, pilot_id)
     assert (plan_row["CURRENT"], plan_row["DESIRED"], plan_row["STATUS"]) == (
-        "absent", "installed", "candidate")
+        "absent", "installed", catalog_status(pilot_id))
     assert not package_installed(vm)
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
 
-    first = vm.ride("apply", "--profile", guest_profile, "--allow-candidate", timeout=900)
+    first = vm.ride("apply", "--profile", guest_profile, *candidate_args(pilot_id), timeout=900)
     first_id = run_id(first.stdout)
     first_journal = journal(vm, first_id)
     assert first_journal["status"] == "complete"
@@ -143,29 +151,31 @@ def test_package_apply_repeat_status_restore_and_remove(vm):
             for step in first_journal["steps"]] == [(pilot_id, "absent", "installed", "changed")]
     assert package_installed(vm)
     installed_row = table_row(vm.ride("status", pilot_id).stdout, pilot_id)
-    assert (installed_row["OBSERVED"], installed_row["STATUS"]) == ("installed", "candidate")
+    assert (installed_row["OBSERVED"], installed_row["STATUS"]) == (
+        "installed", catalog_status(pilot_id))
 
     verify_installed_package(vm)
 
-    repeat = vm.ride("apply", "--profile", guest_profile, "--allow-candidate", timeout=900)
+    repeat = vm.ride("apply", "--profile", guest_profile, *candidate_args(pilot_id), timeout=900)
     repeat_journal = journal(vm, run_id(repeat.stdout))
     assert repeat_journal["status"] == "complete"
     assert repeat_journal["steps"][0]["result"] == "unchanged"
 
     vm.ride("restore", "--run-id", first_id, "--dry-run")
-    restore = vm.ride("restore", "--run-id", first_id, "--allow-candidate", timeout=900)
+    restore = vm.ride("restore", "--run-id", first_id, *candidate_args(pilot_id), timeout=900)
     assert journal(vm, run_id(restore.stdout))["status"] == "complete"
     assert not package_installed(vm)
     assert package_inventory(vm) == baseline_packages
     assert_ssh_server_available(vm)
     absent_row = table_row(vm.ride("status", pilot_id).stdout, pilot_id)
-    assert (absent_row["OBSERVED"], absent_row["STATUS"]) == ("absent", "candidate")
-    duplicate = vm.ride("restore", "--run-id", first_id, "--allow-candidate", check=False)
+    assert (absent_row["OBSERVED"], absent_row["STATUS"]) == (
+        "absent", catalog_status(pilot_id))
+    duplicate = vm.ride("restore", "--run-id", first_id, *candidate_args(pilot_id), check=False)
     assert duplicate.returncode != 0 and "already been restored" in duplicate.stderr
 
-    installed = vm.ride("install", pilot_id, "--allow-candidate", timeout=900)
+    installed = vm.ride("install", pilot_id, *candidate_args(pilot_id), timeout=900)
     assert journal(vm, run_id(installed.stdout))["status"] == "complete"
-    removed = vm.ride("remove", pilot_id, "--allow-candidate", timeout=900)
+    removed = vm.ride("remove", pilot_id, *candidate_args(pilot_id), timeout=900)
     assert journal(vm, run_id(removed.stdout))["status"] == "complete"
     assert not package_installed(vm)
     assert package_inventory(vm) == baseline_packages
@@ -183,12 +193,14 @@ def test_partial_failure_records_completed_step_and_can_restore(vm):
     missing.update({
         "id": missing_id, "name": "Deliberately missing acceptance package",
         "description": "Test-only missing package, never published as an operation.",
+        "status": "candidate",
         "packageName": "ride-acceptance-package-that-does-not-exist",
         "productId": "ride-acceptance-missing",
         "productUri": "https://example.org/ride-acceptance-missing",
         "sourceUri": "https://example.org/ride-acceptance-missing",
         "licenseUri": "https://example.org/ride-acceptance-missing",
     })
+    missing.pop("acceptanceEvidence", None)
     catalog["operations"].append(missing)
     guest_catalog = vm.put_json("failure-catalog", catalog)
     guest_profile = vm.put_json("failure-profile", profile(pilot_id, missing_id))
@@ -223,11 +235,11 @@ def test_installed_only_package_keeps_existing_client_and_server(vm):
     plan = vm.ride("plan", "--profile", guest_profile)
     row = table_row(plan.stdout, pilot_id)
     assert (row["CURRENT"], row["DESIRED"], row["STATUS"]) == (
-        "installed", "installed", "candidate")
+        "installed", "installed", catalog_status(pilot_id))
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
 
     for _ in range(2):
-        result = vm.ride("apply", "--profile", guest_profile, "--allow-candidate")
+        result = vm.ride("apply", "--profile", guest_profile, *candidate_args(pilot_id))
         record = journal(vm, run_id(result.stdout))
         assert record["status"] == "complete"
         assert [(step["id"], step["observedBefore"], step["observedAfter"],
@@ -235,9 +247,10 @@ def test_installed_only_package_keeps_existing_client_and_server(vm):
                      (pilot_id, "installed", "installed", "none", "unchanged")]
 
     status = table_row(vm.ride("status", pilot_id).stdout, pilot_id)
-    assert (status["OBSERVED"], status["STATUS"]) == ("installed", "candidate")
+    assert (status["OBSERVED"], status["STATUS"]) == (
+        "installed", catalog_status(pilot_id))
     verify_installed_package(vm)
-    refused = vm.ride("remove", pilot_id, "--allow-candidate", check=False)
+    refused = vm.ride("remove", pilot_id, *candidate_args(pilot_id), check=False)
     assert refused.returncode != 0 and "invalid state absent" in refused.stderr
     assert package_inventory(vm) == baseline_packages
     assert vm.run("sha256sum /etc/ssh/ssh_config").stdout == baseline_config
@@ -264,12 +277,14 @@ def test_installed_only_package_repairs_absence_and_refuses_inverse(vm):
     missing.update({
         "id": missing_id, "name": "Deliberately missing acceptance package",
         "description": "Test-only missing package, never published as an operation.",
+        "status": "candidate",
         "packageName": "ride-acceptance-package-that-does-not-exist",
         "productId": "ride-acceptance-missing",
         "productUri": "https://example.org/ride-acceptance-missing",
         "sourceUri": "https://example.org/ride-acceptance-missing",
         "licenseUri": "https://example.org/ride-acceptance-missing",
     })
+    missing.pop("acceptanceEvidence", None)
     catalog["operations"].append(missing)
     guest_catalog = vm.put_json("installed-only-failure-catalog", catalog)
     guest_profile = vm.put_json("installed-only-failure-profile", profile(pilot_id, missing_id))
@@ -288,17 +303,18 @@ def test_installed_only_package_repairs_absence_and_refuses_inverse(vm):
     verify_installed_package(vm)
 
     single_profile = vm.put_json("installed-only-single-profile", profile(pilot_id))
-    repeat = vm.ride("apply", "--profile", single_profile, "--allow-candidate")
+    repeat = vm.ride("apply", "--profile", single_profile, *candidate_args(pilot_id))
     assert journal(vm, run_id(repeat.stdout))["steps"][0]["result"] == "unchanged"
     status = table_row(vm.ride("status", pilot_id).stdout, pilot_id)
-    assert (status["OBSERVED"], status["STATUS"]) == ("installed", "candidate")
+    assert (status["OBSERVED"], status["STATUS"]) == (
+        "installed", catalog_status(pilot_id))
     baseline_packages = package_inventory(vm)
     baseline_config = vm.run("sha256sum /etc/ssh/ssh_config").stdout
 
     refused = vm.ride("restore", "--run-id", record["runId"], "--allow-candidate",
                       catalog=guest_catalog, check=False)
     assert refused.returncode != 0 and "exact recovery is unavailable" in refused.stderr
-    refused = vm.ride("remove", pilot_id, "--allow-candidate", check=False)
+    refused = vm.ride("remove", pilot_id, *candidate_args(pilot_id), check=False)
     assert refused.returncode != 0 and "invalid state absent" in refused.stderr
     assert package_inventory(vm) == baseline_packages
     assert vm.run("sha256sum /etc/ssh/ssh_config").stdout == baseline_config
@@ -313,17 +329,18 @@ def profile_smoke(vm, profile_name, selected):
     for identifier in selected:
         row = table_row(planned.stdout, identifier)
         assert (row["CURRENT"], row["DESIRED"], row["STATUS"]) == (
-            "installed", "installed", "candidate")
+            "installed", "installed", catalog_status(identifier))
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
 
-    applied = vm.ride("apply", "--profile", profile_name, "--allow-candidate")
+    applied = vm.ride("apply", "--profile", profile_name)
     record = journal(vm, run_id(applied.stdout))
     assert record["status"] == "complete"
     assert [(step["id"], step["result"]) for step in record["steps"]] == [
         (identifier, "unchanged") for identifier in selected]
     for identifier in selected:
         status = table_row(vm.ride("status", identifier).stdout, identifier)
-        assert (status["OBSERVED"], status["STATUS"]) == ("installed", "candidate")
+        assert (status["OBSERVED"], status["STATUS"]) == (
+            "installed", catalog_status(identifier))
     assert package_inventory(vm) == baseline_packages
     assert vm.run("sha256sum /etc/ssh/ssh_config").stdout == baseline_ssh_config
     vm.run("rpm -q --quiet openssh-server && systemctl is-active --quiet sshd")

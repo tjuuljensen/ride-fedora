@@ -1,6 +1,9 @@
-# `package.exfatprogs` acceptance draft
+# `package.exfatprogs` acceptance
 
-Status: `candidate`; target-specific VM checks passed on 2026-10-30.
+Status: **PASS; supported** on the two declared Fedora 44 x86_64 editions.
+Reviewer: Codex, 2026-10-30. The owner confirmed no non-disposable v3 runs,
+so no older run journal needs original-catalog recovery before promotion.
+VM acceptance evidence for each declared edition is listed below.
 Product: Fedora `exfatprogs` RPM, installed deployment, `fedora-rpm` source,
 system scope, `remove-new-install` recovery. The [Windows comparison](../windows-alignment.md)
 found no unexplained shared package-contract drift. No Windows installer fact
@@ -32,5 +35,8 @@ the cited Cloud Base and Workstation JUnit suites have no failures. The
 archived `lib/v3/providers.sh` and `lib/v3/state.sh` match commit `81f604f`
 byte for byte. Relative to the Workstation lifecycle archive, this operation
 changed only its target declaration; the later Cloud Base and Workstation
-edition gate covered that change. Owner acceptance and other-host run
-inventory remain pending. The local non-disposable run directory was absent.
+edition gate covered that change. The local non-disposable run directory was
+also absent. The catalog links this record as its `acceptanceEvidence`.
+
+The [supported-state promotion check](fedora-44-supported-promotion.md) passed
+on all declared Fedora 44 editions without `--allow-candidate`.

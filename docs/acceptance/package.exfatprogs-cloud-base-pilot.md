@@ -1,6 +1,8 @@
 # `package.exfatprogs` Fedora Cloud Base pilot
 
-Status: **PASS as a Cloud Base pilot on 2026-10-30; operation remains `candidate`.**
+Historical status: **PASS as a Cloud Base pilot on 2026-10-30.** The operation
+was a candidate during this pilot and is now supported on its declared editions;
+see the [acceptance record](package.exfatprogs.md).
 This is package-handler evidence, not Fedora Workstation or Server acceptance.
 
 | Field | Evidence |
@@ -39,6 +41,6 @@ runner stopped both VM processes and retained their overlays.
 
 The later [Workstation pilot](workstation-package-batch-1-pilot.md) and
 [Windows comparison](../windows-alignment.md#fedora-workstation-package-batch-preflight-2026-10-30)
-completed those next checks. The [per-operation acceptance draft](package.exfatprogs.md)
-collects both edition results. Promotion remains pending the acceptance review
-and non-disposable run inventory.
+completed those next checks. The [per-operation acceptance record](package.exfatprogs.md)
+collects both edition results, their technical review, and the owner's
+confirmation that no non-disposable v3 runs existed before promotion.

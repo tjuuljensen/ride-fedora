@@ -8,8 +8,9 @@ The harness verified that digest and the guest's distro, release, architecture,
 and edition before copying RIDE. Source revision: `0bfd3c02350c85069c85b3b28457c2396e827d67`;
 catalog SHA-256: `3d01f975860b02f7f87b4ec06bb6824c3b8df269eaab8bdfb0ca90a564a72dd0`.
 The run metadata marks the source tree as having uncommitted changes, so these
-results are recorded as pilot evidence pending review. The catalog status
-remains `candidate`.
+results were recorded as pilot evidence pending review. The catalog status
+was `candidate` during the pilot; see the later [less](package.less.md) and
+[exfatprogs](package.exfatprogs.md) acceptance records.
 
 | Operation | Focused automated result | Disposable overlay and JUnit |
 | --- | --- | --- |
@@ -37,9 +38,8 @@ preinstalled state. Neither earlier attempt is counted as passing evidence.
 Focused host validation: six VM harness unit tests passed; Python compilation,
 v3 catalog/profile validation (12 operations, three profiles), and `git diff
 --check` passed. The [Windows preflight](../windows-alignment.md#fedora-workstation-package-batch-preflight-2026-10-30)
-found no unexplained drift in the scoped package contract. Reviewer: pending.
-Before promoting either operation, review this result against the exact source
-diff and create its per-operation acceptance record with the supported target.
+found no unexplained drift in the scoped package contract. The later
+per-operation acceptance records review the exact source and supported targets.
 The catalog target predicate used distro, release, and architecture but did
 not restrict edition during this lifecycle run. The subsequent
 [edition gate pilot](fedora-44-variant-gate-pilot.md) added `variantIds` and

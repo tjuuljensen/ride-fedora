@@ -19,21 +19,23 @@ On Fedora 44 x86_64, install Bash and `jq`, then run from this checkout:
 ./ride.sh apply --profile forensics --dry-run
 ```
 
-The catalog currently contains **candidate** operations. They require
-`--allow-candidate` for a real change, because disposable VM acceptance has
-not yet been recorded. System operations need root. Review a plan before
-applying one:
+The `default` and `server-base` package operations are supported on their
+declared Fedora 44 x86_64 editions after disposable VM acceptance. Other
+catalog operations remain candidates and require `--allow-candidate` for a
+real change. System operations need root. Review a plan before applying one:
 
 ```bash
 ./ride.sh plan --profile default
-sudo ./ride.sh apply --profile default --allow-candidate
+sudo ./ride.sh apply --profile default
 sudo ./ride.sh status --profile default
 sudo ./ride.sh restore --run-id RUN_ID --dry-run
 ```
 
-`restore` only reverts operations with an exact inverse. A package installed
-by RIDE can be removed again; reinstalling a package that existed before RIDE
-removed it cannot guarantee its previous version and is refused. Run IDs and
+`restore` only reverts operations with a declared exact inverse. A package
+installed by RIDE can be removed again where the operation declares `absent`
+and `remove-new-install` recovery; OpenSSH clients are installed-only.
+Reinstalling a package that existed before RIDE removed it cannot guarantee
+its previous version and is refused. Run IDs and
 per-step outcomes are saved in private JSON journals. A failed run stops at
 the first failed operation and records completed steps.
 
@@ -67,7 +69,7 @@ sh docs/bootstrap.sh --branch codex/ride-v3-migration --plan --profile default
 
 Bootstrap dependency installation needs `--install-deps`; profile application
 needs `--apply`, and candidate application additionally needs
-`--allow-candidate`. Inspect downloaded source before using either option.
+`--allow-candidate`. Inspect downloaded source before applying it.
 `docs/index.html` mirrors the shell bootstrap for the existing GitHub Pages
 root URL; CI checks that both files stay identical.
 The bootstrapper recognizes Fedora, Debian, and Ubuntu, but the operation

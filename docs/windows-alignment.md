@@ -20,9 +20,9 @@ while JSON and Bash replace PowerShell's `.psd1` data and modules.
 | Package identity and license review | Catalog records product, source, license and verification. | Cross-check shared product facts against Windows without sharing installers. |
 
 Windows has a larger, VM-tested catalog and richer search filters, deployed
-variants, credentials, and settings presentation. Linux v3 currently has a narrow
-candidate catalog and Fedora 44 Cloud Base, Workstation, and Server package
-pilots, but no promoted Workstation or Server target. The command names align now;
+variants, credentials, and settings presentation. Linux v3 has accepted base
+package operations on Fedora 44 Cloud Base, Workstation, and Server, while its
+remaining catalog entries are candidates. The command names align now;
 feature parity is a staged migration, not a release claim.
 
 The shared deployment contract and Linux implementation limits are recorded in
@@ -126,3 +126,13 @@ product fact was introduced, and no unexplained shared-contract drift was
 found. Recheck when Windows adds OpenSSH, either schema or package recovery
 changes, another Linux edition is declared, or a release candidate is
 prepared.
+
+### Base package support promotion, 2026-10-30
+
+The owner confirmed no non-disposable v3 runs. The accepted Linux rows retain
+their reviewed target, provider, installed deployment, and recovery semantics;
+promotion changes only `status` and adds a per-operation acceptance path.
+The Windows development branch remained at `17f9cef` when checked before this
+promotion. No shared catalog, profile, or run-state contract changed, and no
+new Windows product fact was inferred. Recheck both branches at release
+candidate preparation or when a package contract changes.
