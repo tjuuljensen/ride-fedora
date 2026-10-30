@@ -203,7 +203,8 @@ found 137 default Security Lab group packages in the pinned Workstation VM
 and closed that broad group operation without changing individual tool
 outcomes. [Batch 07](migrations/provider-foundation-07.md) closed the
 commented HandBrake RPM path pending the RPM Fusion provider and a chosen
-CLI or GUI deployment. These are documented non-runnable dispositions.
+CLI or GUI deployment. The owner retained HandBrake for migration. These are
+documented non-runnable dispositions.
 [Provider batch 09](migrations/provider-foundation-09.md) closed the active
 Flathub remote until an ownership-aware handler is tested. [Batch 11](migrations/provider-foundation-11.md)
 replaced the commented Flatpak package pair with Fedora Workstation's
@@ -268,8 +269,8 @@ and the PipeWire-compatible EasyEffects replacement for the misleading
 `PulseAudioEq` source as separate opt-in candidates after exact-target RPM
 and profile lifecycles. Chrome, Edge, and Spotify remain non-runnable until
 their distinct publisher repository, key, LPF, and profile-preserving inverse
-contracts pass. The owner retained Chrome for migration and retired the
-scoped Opera outcome; no v3 Opera install is planned.
+contracts pass. The owner retained Chrome, Edge, and Spotify for migration
+and retired the scoped Opera outcome; no v3 Opera install is planned.
 [Publisher batch 12](migrations/publisher-apps-12.md) closes the commented
 Bitwarden desktop RPM until a pinned publisher artifact and vault-safe
 inverse meet the high-risk gate. [Batch 14](migrations/publisher-apps-14.md)
@@ -350,11 +351,11 @@ proposals, 38 individual keep-or-drop choices, and 51 original migration-design
 decisions. The owner retired NautilusHash and NautilusImageTools; deferred
 GnomeExtInstaller, GnomeRegion, and AppImageLauncher; and retained portable
 Bitwarden, six R2 inverse outcomes, BalenaEtcher, ArduinoIDE, Discord, Joplin,
-Xmind, and Chrome for migration. The owner also deferred Vivaldi and retired
-the scoped Opera outcome.
+Xmind, Chrome, Edge, SpotifyClient, and HandBrake for migration. The owner
+also deferred Vivaldi and retired the scoped Opera outcome.
 The retained outcomes require owned state and recovery; their unsafe v2
-methods remain non-runnable. The current 96 unsupported rows comprise 63
-migration-design outcomes, 29 keep-or-drop choices, and four deferred owner
+methods remain non-runnable. The current 96 unsupported rows comprise 66
+migration-design outcomes, 26 keep-or-drop choices, and four deferred owner
 decisions. Owner choices update next actions without changing legacy source
 code or machine state.
 

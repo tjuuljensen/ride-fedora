@@ -12,12 +12,12 @@ exclusions are outside this review.
 | Original decision lane | Outcomes | Owner decisions so far |
 | --- | ---: | --- |
 | Retirement proposals, R1-R2 | 10 | 2 retired, 6 retained for migration, 2 deferred. |
-| Keep-or-drop choices, U1a-U3b | 38 | 6 retained, 1 retired, 2 deferred, 29 still to decide. |
+| Keep-or-drop choices, U1a-U3b | 38 | 9 retained, 1 retired, 2 deferred, 26 still to decide. |
 | Migration design, D1a-D5a | 51 | Bitwarden AppImage retained; exact ownership, source, state, and recovery remain to design. |
 
-The current 96 unsupported outcomes consist of 63 migration-design outcomes
-(51 original, six retained R2 inverses, and six retained U1 applications),
-29 keep-or-drop choices, and four deferred owner decisions. The v3.0 total
+The current 96 unsupported outcomes consist of 66 migration-design outcomes
+(51 original, six retained R2 inverses, and nine retained U1 applications),
+26 keep-or-drop choices, and four deferred owner decisions. The v3.0 total
 stays 180/180 and the runnable count stays 54. Retaining an outcome does not
 make its unsafe v2 function runnable; a new owned implementation needs its
 own evidence. Legacy functions and existing v2 machine state remain untouched.
@@ -82,9 +82,9 @@ Choose which products and channels are still wanted; no old repository or user p
 - `workstation:package.Vivaldi` (commented; medium risk; **decide later** on 2026-10-30): Vivaldi supports Fedora 43+, but the v2 scraped RPM and publisher-managed repository/key lack an owned inverse in v3. Revisit after source and browser-profile recovery design.
 - `workstation:package.Chrome` (commented; medium risk; **keep for migration** on 2026-10-30): The v2 HTTP Google repository file and name-based inverse have no owned source/key collision contract; v3 has no publisher RPM/repository handler. Design the official source and profile-safe recovery.
 - `workstation:package.Opera` (commented; medium risk; **retired** by owner on 2026-10-30): The v2 external repository and fixed-key-ID removal can erase pre-existing Opera trust; no v3 channel was selected. Reopen only on a new explicit request with owned repository/key and profile recovery.
-- `workstation:package.Edge` (commented; medium risk): The v2 mutable developer-channel repository and fixed repo-file inverse do not own the Microsoft key or preserve other Microsoft packages.
-- `workstation:package.SpotifyClient` (commented; medium risk): The v2 lpf-spotify-client request declares no source; LPF is interactive and a third-party Fedora repackaging is a distinct source with separate terms.
-- `workstation:package.HandBrake` (commented; medium risk): The v2 DNF install relies on unaccepted RPM Fusion repository trust; the CLI and GUI RPMs are distinct and no exact-target package happy path was run.
+- `workstation:package.Edge` (commented; medium risk; **keep for migration** on 2026-10-30): The v2 mutable developer-channel repository and fixed repo-file inverse do not own the Microsoft key or preserve other Microsoft packages. Choose a channel and prove profile-safe recovery.
+- `workstation:package.SpotifyClient` (commented; medium risk; **keep for migration** on 2026-10-30): The v2 lpf-spotify-client request declares no source; LPF is interactive and a third-party Fedora repackaging is a distinct source with separate terms. Choose an acquisition provider and preserve user state.
+- `workstation:package.HandBrake` (commented; medium risk; **keep for migration** on 2026-10-30): The v2 DNF install relies on unaccepted RPM Fusion repository trust; the CLI and GUI RPMs are distinct and no exact-target package happy path was run. Accept source trust and choose CLI or GUI scope.
 
 ### U1c: Optional development, messaging, vault, and VMware applications (6)
 

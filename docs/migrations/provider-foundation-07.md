@@ -34,8 +34,9 @@ HandBrake operation would therefore fail the declared third-party candidate
 gate before its exact-target VM happy path.
 
 This source outcome is **unsupported in v3.0**, with no runnable catalog row
-or install acceptance. Reopen when the RPM Fusion provider passes its trust
-and recovery gate and a concrete CLI or GUI HandBrake deployment is requested;
-then test that deployment on the declared Workstation VM. Separately review
-Flathub only if a Flatpak distribution is requested. The decision does not
-claim HandBrake itself or Fedora 44 is unsupported by its publisher.
+or install acceptance. The owner retained HandBrake as an optional migration
+outcome on 2026-10-30. Accept the RPM Fusion trust and recovery gate, choose
+the CLI or GUI scope, then test that deployment on the declared Workstation
+VM. Separately review Flathub only if a Flatpak distribution is requested.
+This decision does not claim HandBrake itself or Fedora 44 is unsupported by
+its publisher.

@@ -50,7 +50,7 @@ and its inverse removes it; no equalizer is installed.
   [Microsoft supports Fedora 39+](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-supported-operating-systems)
   for Edge Linux. The v2 function selects the developer channel from a
   mutable repository; its inverse deletes a fixed repo file but does not
-  own the system key. Reopen for a selected channel and pinned publisher
+  own the system key. Choose a channel and pinned publisher
   source with collision-safe repository/key handling and Fedora 44 VM
   evidence.
 - **SpotifyClient: unsupported and non-runnable.** v2 requests
@@ -58,13 +58,16 @@ and its inverse removes it; no equalizer is installed.
   [LPF mechanism](https://packages.fedoraproject.org/pkgs/lpf/lpf/) is
   interactive and builds a local package from a licensed download; the
   [negativo17 Fedora repackaging](https://negativo17.org/spotify-client/)
-  is a different source with its own repository and terms. Reopen on an
-  explicitly chosen acquisition method with license/terms, owned state,
+  is a different source with its own repository and terms. Choose an
+  acquisition method with license/terms, owned state,
   unattended-install decision, and profile-preserving VM lifecycle.
 
 The owner retained optional Chrome for migration on 2026-10-30. Its v3.0
 status remains non-runnable until the official source, repository/key
 ownership, and seeded browser-profile recovery pass on Fedora 44 Workstation.
+The owner also retained optional Edge and SpotifyClient on 2026-10-30. Choose
+Edge's channel and Spotify's acquisition provider, then prove their distinct
+owned-state and profile-preserving lifecycles before runnable status.
 
 The [Fedora 44 PipeWire PulseAudio implementation](https://packages.fedoraproject.org/pkgs/pipewire/pipewire-pulseaudio/)
 is already present in the pinned Workstation image; `pulseaudio` and

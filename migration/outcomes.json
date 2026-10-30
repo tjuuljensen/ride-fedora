@@ -2338,10 +2338,10 @@
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "nextAction": "Owner retained optional Edge for migration on 2026-10-30; choose its channel and prove pinned publisher source, owned repository/key, and browser-profile recovery.",
       "v31Hardening": [],
       "reason": "The v2 mutable developer-channel repository and fixed repo-file inverse do not own the Microsoft key or preserve other Microsoft packages.",
-      "reviewTrigger": "A requested Edge channel has pinned publisher source, collision-safe repository/key handling, and Fedora 44 VM evidence."
+      "reviewTrigger": "A chosen Edge channel has pinned publisher source, collision-safe repository/key handling, and Fedora 44 VM evidence."
     },
     {
       "key": "workstation:package.Codecs",
@@ -2384,10 +2384,10 @@
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented publisher source, ownership, and Fedora 44 recovery trigger.",
+      "nextAction": "Owner retained optional SpotifyClient for migration on 2026-10-30; choose an acquisition provider and prove terms, owned state, and profile-preserving Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 lpf-spotify-client request declares no source; LPF is interactive and a third-party Fedora repackaging is a distinct source with separate terms.",
-      "reviewTrigger": "A requested Spotify client chooses an acquisition provider, license/terms handling, owned state, and profile-preserving VM lifecycle."
+      "reviewTrigger": "A chosen Spotify acquisition provider has reviewed license/terms, owned state, and profile-preserving Fedora 44 VM lifecycle."
     },
     {
       "key": "workstation:package.VLCPlayer",
@@ -2542,10 +2542,10 @@
         "docs/migrations/provider-foundation-07.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen after the RPM Fusion provider passes its trust/recovery gate and a CLI or GUI deployment is requested.",
+      "nextAction": "Owner retained optional HandBrake for migration on 2026-10-30; accept RPM Fusion trust/recovery, choose CLI or GUI scope, and pass Fedora 44 VM lifecycle.",
       "v31Hardening": [],
       "reason": "The v2 DNF install relies on unaccepted RPM Fusion repository trust; the CLI and GUI RPMs are distinct and no exact-target package happy path was run.",
-      "reviewTrigger": "Accepted RPM Fusion trust and owned recovery plus a concrete HandBrake CLI or GUI deployment request and Fedora 44 Workstation VM acceptance."
+      "reviewTrigger": "Accepted RPM Fusion trust and owned recovery plus chosen HandBrake CLI or GUI scope and Fedora 44 Workstation VM acceptance."
     },
     {
       "key": "workstation:package.GnomeTools",
@@ -4409,7 +4409,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-07.md"
       ],
-      "nextAction": "Reopen after accepted RPM Fusion provider trust and a requested HandBrake CLI or GUI deployment."
+      "nextAction": "Retain HandBrake for migration; accept RPM Fusion provider trust and recovery, choose CLI or GUI scope, then run exact-target lifecycle checks."
     },
     {
       "id": "provider-foundation-08",
@@ -4621,7 +4621,7 @@
         "docs/acceptance/package.clementine.md",
         "docs/acceptance/package.easyeffects.md"
       ],
-      "nextAction": "Design retained Chrome with owned publisher trust and profile recovery; keep Opera retired, review Edge and Spotify individually, and complete H015/H016 in v3.1."
+      "nextAction": "Design retained Chrome and Edge publisher trust and Spotify acquisition with profile-safe recovery; keep Opera retired and complete H015/H016 in v3.1."
     },
     {
       "id": "publisher-apps-12",
