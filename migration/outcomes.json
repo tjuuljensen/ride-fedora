@@ -543,20 +543,21 @@
       ],
       "selectorCoverage": "active",
       "family": "forensic-isolated",
-      "batch": "forensic-isolated-01",
-      "risk": "medium",
+      "batch": "forensic-isolated-07",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "retire",
+      "disposition": "unsupported",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/forensic-isolated-01.md"
+        "docs/migrations/forensic-isolated-01.md",
+        "docs/migrations/forensic-isolated-07-vmfs.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept VMFS access capability for v3.0 on 2026-10-30. The v2 link-only function remains retired; find a licensed current read-only VMFS tool and test an owned lifecycle.",
+      "nextAction": "Obtain a licensed genuine VMFS6 image fixture; the pinned source builds on Fedora 44 but its bundled test.img is VMFS3. Then implement and test an owned read-only reader. Review VMFS5 separately.",
       "v31Hardening": [],
-      "reason": "The active v2 installer only echoes two URLs and its inverse is empty; no working VMFS install exists to migrate.",
-      "reviewTrigger": "A concrete VMFS access use case with licensed verified acquisition, target compatibility, and safe recovery evidence.",
+      "reason": "The v2 installer only echoes two URLs. A pinned VMFS6 source built on Fedora 44, but its bundled image is VMFS3 and was rejected; no genuine VMFS6 image read or read-only runtime trace yet supports a runnable claim. The requested access capability remains a v3.0 gap.",
+      "reviewTrigger": "A pinned licensed VMFS6 reader that opens a verified image read-only on Fedora 44 and has an owned inverse; review VMFS5 separately.",
       "v30Decision": "keep"
     },
     {
@@ -4747,7 +4748,7 @@
     {
       "id": "forensic-isolated-01",
       "family": "forensic-isolated",
-      "title": "Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy",
+      "title": "Forensic Isolated 01: ExifTool, ASN, UnfURL, CyberChef, Chepy",
       "evidence": [
         "docs/migrations/forensic-isolated-01.md",
         "docs/acceptance/package.exiftool.md",
@@ -4760,7 +4761,16 @@
         "docs/migrations/forensic-isolated-01-chepy.md",
         "docs/acceptance/package.chepy.md"
       ],
-      "nextAction": "ASN, UnfURL, CyberChef, and Chepy are operable opt-in; find a working VMFS reader path. H029 covers wider Chepy behavior."
+      "nextAction": "All five source outcomes have an operable v3 path; keep optional forensic profiles and complete H025/H027/H028/H029 wider behavior in v3.1."
+    },
+    {
+      "id": "forensic-isolated-07",
+      "family": "forensic-isolated",
+      "title": "Forensic Isolated 07: read-only VMFS access",
+      "evidence": [
+        "docs/migrations/forensic-isolated-07-vmfs.md"
+      ],
+      "nextAction": "Find a genuine licensed VMFS6 fixture, then prove read-only access and owned Fedora 44 lifecycle; determine VMFS5 need separately."
     },
     {
       "id": "forensic-isolated-02",

@@ -41,7 +41,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallRipgrep` | deferred | Candidate native repository package. |
 | `InstallFd` | deferred | Candidate native repository package. |
 | `InstallDocker` | deferred | Generic server role only after provider and repository review. |
-| `InstallVMFStools` | retired | The active function only prints URLs; [forensic batch 01](migrations/forensic-isolated-01.md) records the no-op and reopening trigger. |
+| `InstallVMFStools` | kept gap | The active v2 function only prints URLs. [Forensic batch 07](migrations/forensic-isolated-07-vmfs.md) tracks a read-only VMFS6 reader, its Fedora source build, and the missing genuine VMFS6 fixture. |
 | `InstallPythonPip` | supported | Fedora `python3-pip` passed [VM lifecycle acceptance](acceptance/package.python3-pip.md); omit the v2 global pip self-upgrade. |
 | `InstallPackagingTools` | replaced | Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. |
 | `InstallBasicEditors` | supported | Split into Fedora `nano` and `vim-enhanced` package installs with [VM evidence](acceptance/provider-basic-editors.md). |
@@ -693,4 +693,4 @@ result are recorded. No entry below is part of the v3 default profile.
 | `InstallXplico` / `RemoveXplico` | commented out | Review current upstream maintenance, dependencies, and a trusted package source before adding an operation. |
 | `InstallVolatility` / `RemoveVolatility` | commented out | [Retired](migrations/forensic-isolated-02.md): the v2 pair was a no-op and upstream Volatility 2 is archived; reopen for a concrete legacy need. |
 | `InstallVolatility3` / `RemoveVolatility3` | commented out | Isolated `package.volatility3` passed a [non-root VM happy path](acceptance/package.volatility3.md) as an opt-in core candidate; plugin and broader recovery work is queued for v3.1. |
-| `InstallVMFStools` / `RemoveVMFStools` | both commented out in this block; install also active later in the preset | [Retired as a no-op](migrations/forensic-isolated-01.md); reopen only for a concrete VMFS access need with licensed source and VM evidence. |
+| `InstallVMFStools` / `RemoveVMFStools` | both commented out in this block; install also active later in the preset | The v2 no-op is retired, while [the kept VMFS access gap](migrations/forensic-isolated-07-vmfs.md) needs a genuine VMFS6 fixture and read-only Fedora evidence. |

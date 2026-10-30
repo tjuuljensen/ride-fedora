@@ -742,3 +742,14 @@ The pinned Fedora 44 Workstation VM lifecycle passed under QEMU TCG. The
 [acceptance record](acceptance/package.chepy.md) covers the signed Python
 3.12 RPM, exact Chepy sdist digest, isolated CLI startup, repeat, restore,
 and explicit removal. No unexplained shared Windows contract drift was found.
+
+### Fedora VMFS6 reader source probe, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` while reviewing the kept
+VMFS access capability. Windows has no VMFS catalog or profile entry.
+The Linux probe changed only migration planning; no executable operation,
+profile, or shared data contract changed. A future Linux image reader would
+be a platform-specific acquisition and storage-safety path. Recheck
+Windows product identity and shared run-state behavior before adding it
+to the Linux catalog or claiming cross-platform alignment.

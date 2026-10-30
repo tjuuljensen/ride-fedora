@@ -53,7 +53,7 @@ Function coverage: 16 active in a server preset, 3 commented-only, 2 library-onl
 | `package.Plaso` | `InstallPlaso`, `RemovePlaso` | `InstallPlaso`: commented, `RemovePlaso`: library only | deferred candidate; opt-in COPR and removal need VM evidence | `forensic-isolated-02` / resolved |
 | `package.Autopsy` | `InstallAutopsy`, `RemoveAutopsy` | `InstallAutopsy`: commented, `RemoveAutopsy`: library only | deferred candidate; upstream Linux setup and removal need VM evidence | `forensic-isolated-02` / resolved |
 | `package.Xplico` | `InstallXplico`, `RemoveXplico` | `InstallXplico`: commented, `RemoveXplico`: library only | deferred incomplete legacy stub; source and current package need review | `resolution-review-01` / resolved |
-| `package.VMFStools` | `InstallVMFStools`, `RemoveVMFStools` | `InstallVMFStools`: active, `RemoveVMFStools`: library only | retired: The active function only prints URLs; [forensic batch 01](migrations/forensic-isolated-01.md) records the no-op and reopening trigger. | `forensic-isolated-01` / resolved |
+| `package.VMFStools` | `InstallVMFStools`, `RemoveVMFStools` | `InstallVMFStools`: active, `RemoveVMFStools`: library only | kept gap: The active v2 function only prints URLs. [Forensic batch 07](migrations/forensic-isolated-07-vmfs.md) tracks a read-only VMFS6 reader, its Fedora source build, and the missing genuine VMFS6 fixture. | `forensic-isolated-07` / resolved |
 | `package.Volatility` | `InstallVolatility`, `RemoveVolatility` | `InstallVolatility`: commented, `RemoveVolatility`: library only | deferred; inspect current package or publisher, detection, verification, removal and recovery | `forensic-isolated-02` / resolved |
 | `package.Volatility3` | `InstallVolatility3`, `RemoveVolatility3` | `InstallVolatility3`: commented, `RemoveVolatility3`: library only | implemented candidate `package.volatility3`; isolated pinned core, VM acceptance pending | `forensic-isolated-02` / operable |
 | `package.VeraCrypt` | `InstallVeraCrypt`, `UninstallVeraCrypt` | `InstallVeraCrypt`: active, `UninstallVeraCrypt`: library only | deferred: Review publisher verification and licensing. | `publisher-apps-02` / resolved |
@@ -254,7 +254,6 @@ initial assessment above. The ledger records each reason and review trigger.
 | `workstation:package.NautilusHash` | `retire` | `native-rpm-03` |
 | `workstation:package.NautilusImageTools` | `retire` | `native-rpm-03` |
 | `workstation:package.Flatpak` | `replace` | `provider-foundation-11` |
-| `workstation:package.VMFStools` | `retire` | `forensic-isolated-01` |
 | `workstation:package.Volatility` | `retire` | `forensic-isolated-02` |
 | `workstation:package.Macvendor` | `replace` | `forensic-isolated-03` |
 | `workstation:package.Dumpzilla` | `retire` | `forensic-isolated-03` |

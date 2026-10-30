@@ -1,18 +1,16 @@
 # Forensic isolated batch 01: active v2 tools
 
-Status: **one supported source outcome and four operable opt-in candidates;
-the VMFS placeholder is retired**, 2026-10-30.
-The owner subsequently kept VMFS access, ASN, UnfURL, CyberChef, and Chepy
-capabilities in the v3.0 fast-track review. The old VMFS link-only function
-remains retired; a working reader needs a current licensed source.
-This batch covers active v2 `VMFStools`, `ExifTool`, `ASN`, `UnfURL`,
-`CyberChef`, and `Chepy`. The v2 functions use unrelated acquisition methods;
+Status: **one supported source outcome and four operable opt-in candidates**,
+2026-10-30. The owner kept ASN, UnfURL, CyberChef, and Chepy capabilities
+in the v3.0 fast-track review. VMFS access is now isolated as a high-risk
+[follow-up batch](forensic-isolated-07-vmfs.md).
+This batch covers active v2 `ExifTool`, `ASN`, `UnfURL`, `CyberChef`, and
+`Chepy`. The v2 functions use unrelated acquisition methods;
 they must not be treated as one install bundle. The function source is
 `lib-fedora.sh`; its code is migration evidence, never a v3 fallback.
 
 | Source outcome | v2 behavior | Current source and v3.0 direction |
 | --- | --- | --- |
-| `VMFStools` | Prints two URLs and removes nothing. | No executable install; resolve the placeholder without claiming support. An actual VMFS reader requires a concrete user request and independent package/license/recovery review. |
 | `ExifTool` | Downloads the latest GitHub source ZIP, builds with Perl/CPAN, and removes `/usr/lib/exiftool`. | Fedora 44 publishes signed [`perl-Image-ExifTool`](https://packages.fedoraproject.org/pkgs/perl-Image-ExifTool/perl-Image-ExifTool/) (GPL-1.0-or-later OR Artistic-1.0-Perl) with the `exiftool` CLI. Replace source-build behavior with an owned RPM lifecycle. |
 | `ASN` | Downloads an unpinned [MIT-licensed upstream script](https://github.com/nitefood/asn) into `/usr/bin` and installs several RPM dependencies; inverse removes some shared dependencies. | A [pinned owned user script](forensic-isolated-01-asn.md) and independent Fedora RPM prerequisites now provide an operable opt-in candidate. |
 | `UnfURL` | Installs `dfir-unfurl` into the user's global Python environment. | A [pinned user venv](forensic-isolated-01-unfurl.md) now provides an operable opt-in candidate on Fedora 44 Workstation. |
@@ -21,9 +19,9 @@ they must not be treated as one install bundle. The function source is
 
 ## Completion criteria defined before implementation
 
-- Keep all six v2 source mappings in the ledger. Never count the VMFS
-  placeholder as an install, and give each non-runnable decision a reason
-  and review trigger.
+- Keep all five v2 source mappings in the ledger. Track the VMFS capability
+  in its separate high-risk batch; never count its v2 placeholder as an
+  install.
 - For `ExifTool`, use one Fedora RPM operation restricted to Fedora 44
   x86_64 Workstation, with the unchanged DNF handler, signed RPM/file
   verification, command detection, and a named-package inverse. Reuse the
@@ -50,11 +48,6 @@ name contained uppercase RPM characters. The helper now lowercases that
 filename; the corrected focused rerun passed. No operational handler
 changed. Source-build files from an old v2 run are not adopted or removed by
 the new RPM operation.
-
-`VMFStools` is **retired as a placeholder**: its v2 function only prints
-two source URLs and its inverse is empty. It has never represented a working
-install. Reopen for a concrete VMFS access requirement with a licensed,
-verified acquisition path and read-only filesystem evidence.
 
 `ASN` now has a separate [accepted candidate path](forensic-isolated-01-asn.md)
 and [Fedora 44 acceptance](../acceptance/package.asn.md). The script is

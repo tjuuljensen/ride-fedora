@@ -57,7 +57,7 @@ assessment, not an automatic retirement decision.
 | --- | --- | --- |
 | `workstation:package.Galleta` | The v2 pair only printed links; owner deferred the capability decision while reviewing legacy IE cookies versus modern browser forensics. | [Batch review](resolution-decisions.md) |
 | `workstation:package.Xplico` | The v2 pair only printed links; owner kept the capability and requested a current installation path or alternative. | [Batch review](resolution-decisions.md) |
-| `workstation:package.VMFStools` | The v2 pair only printed links; no working install path existed to migrate. | [Batch review](forensic-isolated-01.md) |
+| `workstation:package.VMFStools` | The v2 pair only printed links; the kept VMFS6 reader path now has pinned source and a Fedora build, but needs a genuine image fixture and owned lifecycle. | [Batch review](forensic-isolated-07-vmfs.md) |
 | `workstation:package.TecmintMonitorSh` | The unverified HTTP script path was retired; owner kept monitoring capability for a maintained replacement review. | [Batch review](resolution-decisions.md) |
 | `workstation:package.MicrosoftTeams` | Owner retired Linux Teams desktop capability; the web service remains outside RIDE installation. | [Batch review](publisher-apps-09.md) |
 | `workstation:package.VMwareWorkstation` | Owner retired the full VMware Workstation capability; the v2 installer and module recovery remain migration history. | [Batch review](system-security-risk-decisions.md) |
