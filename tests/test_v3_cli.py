@@ -534,6 +534,124 @@ esac
         self.assertIn("cannot observe current state", unreadable.stderr)
         self.assertEqual(override.read_text(), "['<Alt>F8']\n")
 
+    def test_gnome_string_profile_value_and_exact_recovery(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        entries = [row for row in catalog["operations"] if row["id"] in
+                   ("setting.gnome-region", "setting.gnome-window-buttons")]
+        (self.root / "catalog.json").write_text(json.dumps({
+            "schemaVersion": 3, "clientVersion": "3.0.0", "operations": entries,
+        }))
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        settings = self.root / "gnome-strings"
+        settings.mkdir()
+        region = settings / "region"
+        buttons = settings / "button-layout"
+        region.write_text("'en_US.UTF-8'\n")
+        (self.root / "bin" / "dconf").write_text("""#!/bin/sh
+[ "$1" = read ] || exit 2
+case "$2" in
+  /system/locale/region) file="$RIDE_TEST_STRINGS/region" ;;
+  /org/gnome/desktop/wm/preferences/button-layout) file="$RIDE_TEST_STRINGS/button-layout" ;;
+  *) exit 2 ;;
+esac
+[ ! -f "$file" ] || cat "$file"
+""")
+        (self.root / "bin" / "gsettings").write_text("""#!/bin/sh
+file="$RIDE_TEST_STRINGS/$3"
+case "$1" in
+  get) if [ -f "$file" ]; then cat "$file"; else printf "'default'\\n"; fi ;;
+  range) echo 'type s' ;;
+  writable) if [ "${RIDE_TEST_STRING_LOCK:-0}" = 1 ]; then echo false; else echo true; fi ;;
+  set)
+    printf '%s\\n' "$4" > "$file"
+    if [ "${RIDE_TEST_STRING_FAIL_ONCE:-0}" = 1 ] && [ ! -f "$RIDE_TEST_STRING_FAILURE_MARKER" ]; then
+      touch "$RIDE_TEST_STRING_FAILURE_MARKER"
+      exit 13
+    fi ;;
+  reset) rm -f "$file" ;;
+  *) exit 2 ;;
+esac
+""")
+        (self.root / "bin" / "locale").write_text("""#!/bin/sh
+[ "$1" = -a ] || exit 2
+printf 'en_US.utf8\\nda_DK.utf8\\n'
+""")
+        for name in ("dconf", "gsettings", "locale"):
+            (self.root / "bin" / name).chmod(0o755)
+        self.env["RIDE_TEST_STRINGS"] = str(settings)
+        self.env["RIDE_TEST_STRING_FAILURE_MARKER"] = str(self.root / "string-failure-marker")
+        self.env["DBUS_SESSION_BUS_ADDRESS"] = "unix:path=/tmp/ride-test-bus"
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "region-test", "description": "Test region",
+            "operations": [{"id": "setting.gnome-region", "state": "configured",
+                            "value": "da_DK.UTF-8"}],
+        }))
+
+        self.assertIn("configured:da_DK.UTF-8", self.run_ride("plan", "--profile", str(self.profile)).stdout)
+        self.run_ride("apply", "--profile", str(self.profile), success=False)
+        changed = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        journal = next(row for row in self.journals() if row["runId"] in changed.stdout)
+        self.assertEqual(journal["steps"][0]["selectedValue"], "da_DK.UTF-8")
+        self.assertTrue(journal["steps"][0]["observedBefore"].startswith("user:"))
+        self.assertEqual(region.read_text(), "'da_DK.UTF-8'\n")
+        region.write_text("'fr_FR.UTF-8'\n")
+        conflict = self.run_ride("restore", "--run-id", journal["runId"],
+                                 "--allow-candidate", success=False)
+        self.assertIn("restore conflict", conflict.stderr)
+        self.assertEqual(region.read_text(), "'fr_FR.UTF-8'\n")
+        region.write_text("'da_DK.UTF-8'\n")
+        bad_profile = json.loads(self.profile.read_text())
+        bad_profile["operations"][0]["value"] = "fr_FR.UTF-8"
+        self.profile.write_text(json.dumps(bad_profile))
+        self.run_ride("restore", "--run-id", journal["runId"], "--allow-candidate")
+        self.assertEqual(region.read_text(), "'en_US.UTF-8'\n")
+        unavailable = self.run_ride("apply", "--profile", str(self.profile),
+                                    "--allow-candidate", success=False)
+        self.assertIn("locale is unavailable", unavailable.stderr)
+        self.assertEqual(region.read_text(), "'en_US.UTF-8'\n")
+        bad_profile["operations"][0]["value"] = "not a locale"
+        self.profile.write_text(json.dumps(bad_profile))
+        self.run_ride("plan", "--profile", str(self.profile), success=False)
+
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "buttons-test", "description": "Test layout",
+            "operations": [{"id": "setting.gnome-window-buttons", "state": "configured",
+                            "value": ":minimize,maximize,close"}],
+        }))
+        missing = json.loads(self.profile.read_text())
+        del missing["operations"][0]["value"]
+        self.profile.write_text(json.dumps(missing))
+        self.run_ride("plan", "--profile", str(self.profile), success=False)
+        self.run_ride("set", "setting.gnome-window-buttons", "--state", "configured",
+                      "--allow-candidate", success=False)
+        missing["operations"][0]["value"] = ":minimize,maximize,close"
+        missing["operations"].append(dict(missing["operations"][0], value=":appmenu:close"))
+        self.profile.write_text(json.dumps(missing))
+        self.run_ride("plan", "--profile", str(self.profile), success=False)
+        missing["operations"] = missing["operations"][:1]
+        missing["operations"][0]["value"] = "invalid-layout"
+        self.profile.write_text(json.dumps(missing))
+        self.run_ride("plan", "--profile", str(self.profile), success=False)
+        for value in (":minimize,maximize,close", ":appmenu:close", "close,minimize,maximize:"):
+            missing["operations"][0]["value"] = value
+            self.profile.write_text(json.dumps(missing))
+            changed = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+            journal = next(row for row in self.journals() if row["runId"] in changed.stdout)
+            self.assertEqual(buttons.read_text(), f"'{value}'\n")
+            self.run_ride("restore", "--run-id", journal["runId"], "--dry-run")
+            self.run_ride("restore", "--run-id", journal["runId"], "--allow-candidate")
+            self.assertFalse(buttons.exists())
+
+        self.env["RIDE_TEST_STRING_FAIL_ONCE"] = "1"
+        self.run_ride("set", "setting.gnome-window-buttons", "--state", "configured",
+                      "--value", ":appmenu:close", "--allow-candidate", success=False)
+        self.assertFalse(buttons.exists())
+        del self.env["RIDE_TEST_STRING_FAIL_ONCE"]
+        self.env["RIDE_TEST_STRING_LOCK"] = "1"
+        locked = self.run_ride("set", "setting.gnome-window-buttons", "--state", "configured",
+                               "--value", ":appmenu:close", "--allow-candidate", success=False)
+        self.assertIn("locked", locked.stderr)
+
     def test_profile_source_and_unknown_source(self):
         profile = json.loads(self.profile.read_text())
         profile["operations"][0]["source"] = "not-declared"

@@ -2837,17 +2837,16 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-window-buttons"],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept GNOME window-control setting for v3.0 on 2026-10-30. Add a typed string handler with exact prior value and unset/default recovery.",
-      "v31Hardening": [],
-      "reason": "The v2 WindowCtlMinMaxClose behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Add a typed GNOME string handler with exact prior value and unset/default recovery, then pass a Workstation VM lifecycle.",
+      "nextAction": "Keep the exclusive window-layout profiles opt-in; complete H003 visual review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2860,17 +2859,16 @@
       "batch": "desktop-user-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-window-buttons"],
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept AppmenuClose layout for v3.0 on 2026-10-30 as an alternative to WindowCtlMinMaxClose. Model mutually exclusive profile values and exact prior-layout recovery.",
-      "v31Hardening": [],
-      "reason": "v2 writes one GNOME button-layout string without preserving the arbitrary prior user value.",
-      "reviewTrigger": "Add a typed GNOME string handler with default provenance and exact restore.",
+      "nextAction": "Keep the appmenu layout opt-in; complete H003 visual review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2883,17 +2881,16 @@
       "batch": "desktop-user-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-window-buttons"],
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept this third window-button-layout value alongside MinMaxClose and AppmenuClose; implement one exclusive profile choice with exact prior-layout recovery.",
-      "v31Hardening": [],
-      "reason": "Owner retained the left-side layout as a configurable choice in the shared GNOME window-button family on 2026-10-30.",
-      "reviewTrigger": "Owner kept this third window-button-layout value alongside MinMaxClose and AppmenuClose; implement one exclusive profile choice with exact prior-layout recovery.",
+      "nextAction": "Keep the left-side layout opt-in; complete H003 visual review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2932,17 +2929,16 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-region"],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept GNOME region setting for v3.0 on 2026-10-30. Make country/region a profile-configurable value, with exact prior-state and unset/default recovery.",
-      "v31Hardening": [],
-      "reason": "The v2 GnomeRegionDaDK behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Declare an opt-in locale value and exact prior-region recovery, then pass a Fedora 44 Workstation VM lifecycle.",
+      "nextAction": "Keep the configurable region opt-in; complete H003 visual and regional-format review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2959,13 +2955,14 @@
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-string-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner deferred the old remove-only GNOME region outcome on 2026-10-30 because its distinct use case is unclear; revisit after the configurable region setting is defined.",
+      "nextAction": "Owner deferred this remove-only use case; now that configurable region is operable, decide whether an explicit reset-to-default action is still needed.",
       "v31Hardening": [],
-      "reason": "The v2 GnomeRegion behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available.",
+      "reason": "The v2 remove-only function writes an empty region without a distinct desired install or prior-state journal. The kept configurable region operation does not imply that every user wants an explicit reset-to-default command.",
+      "reviewTrigger": "Owner decides whether reset-to-default is a separate desired action; if kept, add an explicit owned reset with exact prior-state recovery.",
       "v30Decision": "defer"
     },
     {
@@ -5003,9 +5000,11 @@
       "evidence": [
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
-      "nextAction": "Owner kept country-configurable GNOME region setting; design profile value and exact prior-state recovery while preserving existing boolean settings."
+      "nextAction": "Five settings are operable; owner-deferred remove-only GnomeRegion needs a distinct use-case decision. Complete H003/H018 in v3.1."
     },
     {
       "id": "desktop-user-03",
@@ -5050,9 +5049,11 @@
       "family": "desktop-user",
       "title": "Desktop and user state 07: window controls and screensaver variants",
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-remaining.md",
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
-      "nextAction": "Owner kept three exclusive GNOME window-button-layout choices; implement one configurable profile value and exact prior-layout recovery."
+      "nextAction": "Both alternative layout outcomes are operable; keep profiles opt-in and complete H003 visual review in v3.1."
     },
     {
       "id": "desktop-user-08",

@@ -781,3 +781,18 @@ uses its existing string observation field without a version change. No
 shared product or lifecycle semantics changed, and no unexplained drift was
 found. Recheck if either schema changes, Windows adds this product or a
 similar user-setting recovery contract, or a release candidate is prepared.
+
+### GNOME string value batch preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding GNOME region
+and button-layout choices. Windows has no matching GNOME settings. Linux
+adds an optional, typed profile `value` for its fixed string-setting handler;
+the selected value is copied into the private run journal and source
+signature. Existing package and boolean-setting profiles omit it and retain
+their behavior. Windows uses platform-specific PowerShell data and recovery
+records; the common contract remains explicit desired values and restoration
+from the recorded selection. The optional Linux field and dconf user override
+are intentional platform details. Recheck when either profile or run schema
+changes, Windows adds a comparable configured setting, or a release
+candidate is prepared.

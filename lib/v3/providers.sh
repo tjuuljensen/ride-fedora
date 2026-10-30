@@ -54,6 +54,7 @@ ride_observe() {
       esac
       ;;
     ibus-emoji-hotkey) ride_ibus_hotkey_observe ;;
+    gsettings-string) ride_gsettings_string_observe "$entry" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -110,6 +111,7 @@ ride_change() {
       ride_gsettings set "$schema" "$key" "$value"
       ;;
     ibus-emoji-hotkey) ride_ibus_hotkey_change "$state" ;;
+    gsettings-string) ride_gsettings_string_change "$entry" "$state" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -139,7 +141,7 @@ ride_ibus_hotkey_observe() {
   fi
 }
 
-ride_ibus_hotkey_valid_snapshot() {
+ride_gsettings_valid_snapshot() {
   local state=$1 encoded raw
   [[ "$state" == unset ]] && return 0
   [[ "$state" =~ ^user:([A-Za-z0-9+/]+={0,2})$ ]] || return 1
@@ -155,7 +157,7 @@ ride_ibus_hotkey_write() {
     enabled) ride_gsettings set "$schema" "$key" "['<Control><Alt><Shift>e']" ;;
     unset) ride_gsettings reset "$schema" "$key" ;;
     user:*)
-      ride_ibus_hotkey_valid_snapshot "$state" || ride_die "invalid saved iBus hotkey value"
+      ride_gsettings_valid_snapshot "$state" || ride_die "invalid saved iBus hotkey value"
       raw=$(printf '%s' "${state#user:}" | base64 --decode) || return 1
       ride_gsettings set "$schema" "$key" "$raw"
       ;;
@@ -165,14 +167,14 @@ ride_ibus_hotkey_write() {
 
 ride_ibus_hotkey_change() {
   local state=$1 schema key before writable after
-  [[ "$state" == enabled ]] || ride_ibus_hotkey_valid_snapshot "$state" ||
+  [[ "$state" == enabled ]] || ride_gsettings_valid_snapshot "$state" ||
     ride_die "invalid saved iBus hotkey state"
   read -r schema key < <(ride_ibus_hotkey_schema)
   writable=$(ride_gsettings writable "$schema" "$key") || ride_die "cannot check iBus hotkey writability"
   [[ "$writable" == true ]] || ride_die "iBus hotkey is locked"
   before=$(ride_ibus_hotkey_observe) || return 1
   if [[ "$before" == user:* ]]; then
-    ride_ibus_hotkey_valid_snapshot "$before" || ride_die "existing iBus hotkey cannot be safely journaled"
+    ride_gsettings_valid_snapshot "$before" || ride_die "existing iBus hotkey cannot be safely journaled"
   fi
   if ! ride_ibus_hotkey_write "$state"; then
     ride_ibus_hotkey_write "$before" || ride_error "iBus hotkey rollback failed after write error"
@@ -182,6 +184,82 @@ ride_ibus_hotkey_change() {
   if [[ "$after" != "$state" ]]; then
     ride_ibus_hotkey_write "$before" || ride_error "iBus hotkey rollback failed after verification error"
     ride_error "iBus hotkey verification failed"
+    return 1
+  fi
+}
+
+ride_gsettings_string_target() {
+  case "$(jq -r '.id' <<< "$1")" in
+    setting.gnome-region) printf 'org.gnome.system.locale region /system/locale/region\n' ;;
+    setting.gnome-window-buttons) printf 'org.gnome.desktop.wm.preferences button-layout /org/gnome/desktop/wm/preferences/button-layout\n' ;;
+    *) ride_die "unknown GNOME string operation" ;;
+  esac
+}
+
+ride_gsettings_string_observe() {
+  local entry=$1 schema key path selected effective override expected
+  ride_require_command dconf
+  ride_require_command base64
+  read -r schema key path < <(ride_gsettings_string_target "$entry")
+  selected=$(jq -r '.selectedValue // ""' <<< "$entry")
+  effective=$(ride_gsettings get "$schema" "$key") || ride_die "cannot observe GNOME string setting"
+  override=$(dconf read "$path") || ride_die "cannot read GNOME string override"
+  expected="'$selected'"
+  if [[ -n "$selected" && "$effective" == "$expected" && "$override" == "$expected" ]]; then
+    printf 'configured\n'
+  elif [[ -z "$override" ]]; then
+    printf 'unset\n'
+  else
+    printf 'user:%s\n' "$(printf '%s' "$override" | base64 -w0)"
+  fi
+}
+
+ride_gsettings_string_write() {
+  local entry=$1 state=$2 schema key path selected raw
+  read -r schema key path < <(ride_gsettings_string_target "$entry")
+  case "$state" in
+    configured)
+      selected=$(jq -r '.selectedValue // ""' <<< "$entry")
+      [[ -n "$selected" ]] || ride_die "GNOME string setting needs a selected value"
+      ride_gsettings set "$schema" "$key" "'$selected'"
+      ;;
+    unset) ride_gsettings reset "$schema" "$key" ;;
+    user:*)
+      ride_gsettings_valid_snapshot "$state" || ride_die "invalid saved GNOME string value"
+      raw=$(printf '%s' "${state#user:}" | base64 --decode) || return 1
+      ride_gsettings set "$schema" "$key" "$raw"
+      ;;
+    *) ride_die "invalid GNOME string state" ;;
+  esac
+}
+
+ride_gsettings_string_change() {
+  local entry=$1 state=$2 schema key path selected range writable before after listed locale_name
+  [[ "$state" == configured ]] || ride_gsettings_valid_snapshot "$state" ||
+    ride_die "invalid saved GNOME string state"
+  read -r schema key path < <(ride_gsettings_string_target "$entry")
+  range=$(ride_gsettings range "$schema" "$key") || ride_die "cannot check GNOME string type"
+  [[ "$range" == 'type s' ]] || ride_die "GNOME setting is not a string: $schema $key"
+  writable=$(ride_gsettings writable "$schema" "$key") || ride_die "cannot check GNOME setting writability"
+  [[ "$writable" == true ]] || ride_die "GNOME string setting is locked"
+  if [[ "$state" == configured && "$(jq -r '.id' <<< "$entry")" == setting.gnome-region ]]; then
+    selected=$(jq -r '.selectedValue' <<< "$entry")
+    locale_name=${selected/.UTF-8/.utf8}
+    listed=$(LC_ALL=C locale -a) || ride_die "cannot list installed locales"
+    grep -Fxiq -- "$locale_name" <<< "$listed" || ride_die "selected GNOME region locale is unavailable: $selected"
+  fi
+  before=$(ride_gsettings_string_observe "$entry") || return 1
+  if [[ "$before" == user:* ]]; then
+    ride_gsettings_valid_snapshot "$before" || ride_die "existing GNOME value cannot be safely journaled"
+  fi
+  if ! ride_gsettings_string_write "$entry" "$state"; then
+    ride_gsettings_string_write "$entry" "$before" || ride_error "GNOME string rollback failed after write error"
+    return 1
+  fi
+  after=$(ride_gsettings_string_observe "$entry") || after=unknown
+  if [[ "$after" != "$state" ]]; then
+    ride_gsettings_string_write "$entry" "$before" || ride_error "GNOME string rollback failed after verification error"
+    ride_error "GNOME string verification failed"
     return 1
   fi
 }

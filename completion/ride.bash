@@ -45,6 +45,15 @@ _ride_complete() {
       mapfile -t words < <(jq -r --arg id "$id" '.operations[] | select(.id == $id) | .states[]' "$catalog")
       COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
       return ;;
+    --value)
+      id=
+      for token in "${COMP_WORDS[@]:2:COMP_CWORD-2}"; do
+        [[ "$token" == setting.* ]] && id=$token
+      done
+      [[ -n "$id" ]] || return
+      mapfile -t words < <(jq -r --arg id "$id" '.operations[] | select(.id == $id and .handler == "gsettings-string") | .allowedValues[]?' "$catalog")
+      COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      return ;;
     --source)
       id=
       for token in "${COMP_WORDS[@]:2:COMP_CWORD-2}"; do
@@ -56,7 +65,14 @@ _ride_complete() {
       return ;;
   esac
   case "$command" in
-    show|install|set|unset|download|remove|status)
+    set)
+      if [[ "$current" == --* ]]; then
+        COMPREPLY=($(compgen -W '--state --value --allow-candidate --dry-run' -- "$current"))
+      else
+        mapfile -t words < <(jq -r '.operations[] | select(.kind == "setting") | .id' "$catalog")
+        COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      fi ;;
+    show|install|unset|download|remove|status)
       mapfile -t words < <(jq -r '.operations[].id' "$catalog")
       COMPREPLY=($(compgen -W "${words[*]}" -- "$current")) ;;
     list)
