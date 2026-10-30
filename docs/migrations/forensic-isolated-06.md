@@ -1,5 +1,9 @@
 # Email header analyzer service and Python environment
 
+The owner kept this capability in the v3.0 fast-track review on 2026-10-30.
+The licensed source, isolated service, and seeded-data recovery remain to
+implement before runnable status.
+
 Status: **unsupported for v3.0**, 2026-10-30. The commented v2
 `InstallEmailHeaderAnlzr` changes global pip state, clones an unpinned
 repository into `/opt`, writes a systemd unit, and may expose a web

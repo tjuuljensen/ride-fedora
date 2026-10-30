@@ -1,5 +1,9 @@
 # VeraCrypt encrypted-volume application
 
+The owner kept VeraCrypt in the v3.0 fast-track review on 2026-10-30.
+The signed application path and encrypted-volume-preserving recovery remain
+high-risk acceptance work.
+
 Status: **unsupported for v3.0**, 2026-10-30. This isolated high-risk
 active-preset outcome maps `InstallVeraCrypt` and `UninstallVeraCrypt`.
 The v2 installer scrapes the first matching HTML link, downloads a moving

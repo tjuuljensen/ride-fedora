@@ -407,10 +407,11 @@
         "docs/migrations/publisher-apps-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner deferred the keep-or-retire decision on 2026-10-30; revisit after current-source and owned user-AppImage recovery design.",
+      "nextAction": "Owner kept AppImageLauncher for v3.0 on 2026-10-30. Review current publisher RPM and own desktop integration while preserving pre-existing user AppImages.",
       "v31Hardening": [],
       "reason": "v2 selects a mutable beta publisher RPM and creates a user Applications directory without owned AppImage integration or safe inverse.",
-      "reviewTrigger": "A pinned publisher RPM passes Fedora 44 Workstation VM install, integration, conflict, and seeded user-AppImage recovery."
+      "reviewTrigger": "A pinned publisher RPM passes Fedora 44 Workstation VM install, integration, conflict, and seeded user-AppImage recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Snap",
@@ -623,10 +624,11 @@
         "docs/migrations/publisher-apps-02.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only when an exact signed Fedora 44 GUI or console RPM passes trust, interrupted install, mounted/unmounted seeded-volume, and removal evidence.",
+      "nextAction": "Owner kept VeraCrypt for v3.0 on 2026-10-30. Pin a verified Fedora 44 GUI or console package and prove installed-app recovery without changing mounted or unmounted encrypted volumes.",
       "v31Hardening": [],
       "reason": "v2 silently runs a scraped setup script; v3 has no verified publisher-RPM trust handler or seeded encrypted-volume recovery.",
-      "reviewTrigger": "An exact signed Fedora 44 GUI or console RPM passes trust, interrupted install, mounted/unmounted seeded-volume, and removal evidence."
+      "reviewTrigger": "An exact signed Fedora 44 GUI or console RPM passes trust, interrupted install, mounted/unmounted seeded-volume, and removal evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.BulkExtractor",
@@ -670,10 +672,11 @@
         "docs/migrations/forensic-isolated-06.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only when a requested local analyzer has a licensed pinned source, isolated dependencies, loopback service, and seeded-data start/failure/removal VM evidence.",
+      "nextAction": "Owner kept EmailHeaderAnlzr for v3.0 on 2026-10-30. Verify a licensed pinned local analyzer, isolated dependencies, loopback-only service, and seeded-data recovery.",
       "v31Hardening": [],
       "reason": "The v2 clone and global pip steps create an unpinned persistent Flask service; service identity, bind scope, unit ownership, and Python/data inverse are unproven.",
-      "reviewTrigger": "A requested local analyzer has a licensed pinned source, isolated dependencies, loopback service, and seeded-data start/failure/removal VM evidence."
+      "reviewTrigger": "A requested local analyzer has a licensed pinned source, isolated dependencies, loopback service, and seeded-data start/failure/removal VM evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.LibEWF",
@@ -4658,7 +4661,7 @@
       "evidence": [
         "docs/migrations/forensic-isolated-06.md"
       ],
-      "nextAction": "Reopen only on the documented source, ownership, and exact-target recovery trigger."
+      "nextAction": "Owner kept EmailHeaderAnlzr; verify licensed pinned source, loopback-only service, and seeded-data recovery."
     },
     {
       "id": "publisher-apps-01",
@@ -4667,7 +4670,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-01.md"
       ],
-      "nextAction": "Revisit the deferred AppImageLauncher choice after current-source and user-AppImage recovery design; continue publisher-apps-03."
+      "nextAction": "Owner kept AppImageLauncher; review current publisher RPM and preserve pre-existing user AppImages and launcher state."
     },
     {
       "id": "publisher-apps-02",
@@ -4676,7 +4679,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-02.md"
       ],
-      "nextAction": "Reopen only on its documented artifact, target, and user-data recovery trigger; continue publisher-apps-03."
+      "nextAction": "Owner kept VeraCrypt; verify signed Fedora 44 artifact and encrypted-volume-preserving recovery before runnable status."
     },
     {
       "id": "publisher-apps-03",

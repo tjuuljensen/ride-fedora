@@ -1,5 +1,8 @@
 # AppImageLauncher publisher RPM and user integration
 
+The owner kept AppImageLauncher in the v3.0 fast-track review on 2026-10-30.
+Preserve existing user AppImages when implementing its desktop integration.
+
 Status: **unsupported for v3.0**, 2026-10-30. This isolated active-preset
 outcome maps `InstallAppImageLauncher` and `RemoveAppImageLauncher`. v2
 selects the first x86_64 RPM from the mutable latest GitHub release, passes

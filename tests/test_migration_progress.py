@@ -101,7 +101,7 @@ class MigrationProgressTests(unittest.TestCase):
         self.assertEqual(coverage["total"], 169)
         self.assertEqual(coverage["operable"], 54)
         self.assertEqual(coverage["retired"], 2)
-        self.assertEqual(coverage["kept"], 21)
+        self.assertEqual(coverage["kept"], 24)
         self.assertEqual(coverage["deferred"], 4)
         self.assertEqual(coverage["replaced"], 1)
         self.assertEqual(coverage["gap"], 112)
