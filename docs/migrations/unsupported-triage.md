@@ -35,16 +35,16 @@ own evidence. Legacy functions and existing v2 machine state remain untouched.
 These review groups do not override the small implementation batches in the
 migration plan.
 The later [v3.0 capability reassessment](v30-path-reassessment.md) requires
-working paths for package and setting behavior. Retirement and unsupported
-labels here record previous exact-method decisions; they no longer establish
-v3.0 capability completion.
+working paths or explicit owner-approved capability retirement for package and
+setting behavior. Historical exact-method retirement and unsupported labels
+alone do not establish v3.0 capability completion.
 
 ## R1: obsolete or mismatched integrations (3 original; 2 retired)
 
 | Source outcome | Decision | Evidence and review trigger |
 | --- | --- | --- |
-| `workstation:package.NautilusHash` | **Retired** by owner on 2026-10-30. | v2 uses `gtkhash-nautilus`; its own source notes the GNOME 43 break. The [Fedora GtkHash source](https://packages.fedoraproject.org/pkgs/gtkhash/) lists Caja, Nemo, and Thunar extensions, with no Nautilus subpackage. The v3.0 capability review now evaluates an owned GNOME Files checksum script. |
-| `workstation:package.NautilusImageTools` | **Retired** by owner on 2026-10-30. | v2 calls `nautilus-image-converter`; its [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) lists only EPEL 7. Retiring that extension does not reject image resizing; Fedora has a separate [imgp](https://packages.fedoraproject.org/pkgs/imgp/imgp/) CLI. The v3.0 capability review now evaluates an owned GNOME Files image script. |
+| `workstation:package.NautilusHash` | **Full capability retired** by owner on 2026-10-30. | v2 uses `gtkhash-nautilus`; its own source notes the GNOME 43 break. The [Fedora GtkHash source](https://packages.fedoraproject.org/pkgs/gtkhash/) lists Caja, Nemo, and Thunar extensions, with no Nautilus subpackage. No v3.0 checksum context action is required. |
+| `workstation:package.NautilusImageTools` | **Full capability retired** by owner on 2026-10-30. | v2 calls `nautilus-image-converter`; its [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) lists only EPEL 7. No v3.0 image context action is required. |
 | `workstation:package.GnomeExtInstaller` | **Decide later**, per owner on 2026-10-30; remains unsupported. | v2 clones the [archived upstream script](https://github.com/brunelli/gnome-shell-extension-installer) and overwrites a system symlink. `workstation:package.GnomeExtensions` remains a separate migration decision. A retained helper would need a maintained installer, pinned acquisition, and owned rollback. |
 
 `workstation:package.BitwardenAppImage` moved to D1a during individual

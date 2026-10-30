@@ -12,8 +12,8 @@ those exact implementations; this review reopens their capability coverage.
 The current ledger has 133 package and 36 setting outcomes. Only 54 of those
 169 have operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
-**169 in-scope package/setting capabilities, 54 currently operable, and 115
-still needing a v3.0 path**. The ledger's 180 dispositioned outcomes out of
+**169 in-scope package/setting capabilities, 54 currently operable, two
+owner-retired, and 113 still needing a v3.0 decision or path**. The ledger's 179 dispositioned outcomes out of
 185 measure recorded decisions, not this v3.0 capability coverage.
 The two Citrix and two Opera functions remain explicitly out of scope. Host-specific
 users, shares, secrets, and IP values remain outside the public catalog;
@@ -72,7 +72,7 @@ copy a v2 download script or run a remote installer during apply.
 | Video downloader | Add Fedora 44 `yt-dlp` as a distinct native RPM operation; compare its CLI intent with `youtube-dl` before changing a published ID. | [Fedora package](https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/); real site compatibility belongs to broader testing. |
 | GUI IRC client | Keep the HexChat opt-in install while piloting Fedora `konversation` as a maintained GUI alternative. | [HexChat final release](https://hexchat.github.io/news/2.16.2.html), [Fedora Konversation](https://packages.fedoraproject.org/pkgs/konversation/konversation/). Its Qt UI and user profile differ; do not claim an automatic profile migration. |
 | Bandwidth-test CLI | Evaluate the publisher's pinned `librespeed-cli` Linux artifact as a portable operation. | [LibreSpeed releases](https://github.com/librespeed/speedtest-cli/releases) and [LGPL-3.0 license](https://github.com/librespeed/speedtest-cli). It uses LibreSpeed servers rather than the old speedtest.net service, so this is a product-level choice. |
-| GNOME Files checksum and image actions | Own two user Nautilus Scripts, one invoking a Fedora checksum utility and one invoking Fedora ImageMagick with non-overwriting output. | [GNOME Scripts location and context menu](https://help.gnome.org/gnome-help/nautilus-behavior.html), [Fedora ImageMagick](https://packages.fedoraproject.org/pkgs/ImageMagick/ImageMagick/). Check selected-file handling, output collision, and exact script inverse. |
+| GNOME Files checksum and image actions | Owner retired both user-visible capabilities on 2026-10-30. The previously researched owned-script path is retained only as historical analysis. | [GNOME Scripts location and context menu](https://help.gnome.org/gnome-help/nautilus-behavior.html), [Fedora ImageMagick](https://packages.fedoraproject.org/pkgs/ImageMagick/ImageMagick/). |
 | GNOME extension installer/management | Use Fedora's `gnome-extensions` CLI and Extensions app, with explicit extension IDs and per-user ownership. | [Fedora GNOME Shell CLI](https://packages.fedoraproject.org/pkgs/gnome-shell/gnome-shell/fedora-44.html), [Extensions app](https://packages.fedoraproject.org/pkgs/gnome-extensions-app/gnome-extensions-app/). The old archived helper is unnecessary if the native path passes. |
 
 ## Formerly excluded server package paths
@@ -100,10 +100,8 @@ behavior. The old preset selectors do not establish actual installation.
    with brief exact-target lifecycles; reuse the unchanged DNF handler's
    failure evidence. These two establish a low-risk path without new
    acquisition handlers.
-3. Prototype the two GNOME Files scripts as a separate user-state batch;
-   test seeded file selection and non-overwriting outputs. Pilot publisher
-   RPM and portable artifact handlers separately with an in-scope product
-   such as Ferium.
+3. Pilot publisher RPM and portable artifact handlers separately with an
+   in-scope product such as Ferium.
 4. Reopen the remaining retired or unsupported package/setting capabilities
    by user-visible intent. GNOME string/list settings need a value-aware
    handler and prior-state journal; conflicting variants need distinct

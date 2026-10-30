@@ -145,6 +145,10 @@ def validate() -> dict:
             raise ValueError(f"invalid risk or progress for {key}")
         if row.get("disposition") not in DISPOSITIONS:
             raise ValueError(f"invalid disposition for {key}")
+        if row.get("v30Decision") not in {None, "retire", "defer"}:
+            raise ValueError(f"invalid v3.0 owner decision for {key}")
+        if row.get("v30Decision") == "retire" and (row["disposition"], row["progress"]) != ("retire", "resolved"):
+            raise ValueError(f"v3.0 retirement disagrees with disposition for {key}")
         if row.get("target") != f"fedora-44-{source}-x86_64":
             raise ValueError(f"incorrect planned target for {key}")
         if not row.get("nextAction"):
@@ -226,17 +230,21 @@ def summarize(data: dict) -> dict:
                 excluded_packages.add((item["source"], name[len(prefix):]))
     v30_total = len(package_settings) + len(excluded_packages)
     v30_operable = sum(row["progress"] in {"operable", "supported"} for row in package_settings)
+    v30_retired = sum(row.get("v30Decision") == "retire" for row in package_settings)
+    v30_deferred = sum(row.get("v30Decision") == "defer" for row in package_settings)
     batches = []
     for batch in data["batches"]:
         members = [row for row in rows if row["batch"] == batch["id"]]
         done = sum(row["progress"] in {"operable", "supported", "resolved"} for row in members)
         capability_members = [row for row in members if ":package." in row["key"] or ":setting." in row["key"]]
         capability_operable = sum(row["progress"] in {"operable", "supported"} for row in capability_members)
+        capability_retired = sum(row.get("v30Decision") == "retire" for row in capability_members)
         batches.append({"id": batch["id"], "family": batch["family"], "title": batch["title"],
                         "total": len(members), "complete": done, "evidence": batch["evidence"],
                         "v30CapabilityTotal": len(capability_members),
                         "v30Operable": capability_operable,
-                        "v30Gap": len(capability_members) - capability_operable,
+                        "v30Retired": capability_retired,
+                        "v30Gap": len(capability_members) - capability_operable - capability_retired,
                         "risk": dict(Counter(row["risk"] for row in members)),
                         "nextAction": batch["nextAction"]})
     return {"total": len(rows), "complete": complete, "percent": round(100*complete/len(rows), 1),
@@ -248,7 +256,9 @@ def summarize(data: dict) -> dict:
             "unsupported": disposition["unsupported"], "unresolved": len(rows)-complete,
             "v30PackageSetting": {"total": v30_total, "ledgered": len(package_settings),
                                   "excludedPackages": len(excluded_packages),
-                                  "operable": v30_operable, "gap": v30_total-v30_operable,
+                                  "operable": v30_operable, "retired": v30_retired,
+                                  "deferred": v30_deferred,
+                                  "gap": v30_total-v30_operable-v30_retired,
                                   "percent": round(100*v30_operable/v30_total, 1)},
             "risk": dict(Counter(row["risk"] for row in rows)), "batches": batches,
             "v31Hardening": data["v31Hardening"]}
@@ -265,20 +275,22 @@ def render(data: dict) -> str:
              f"{report['unsupported']} unsupported; {report['unresolved']} unresolved.", "",
              f"**v3.0 package/setting coverage: {report['v30PackageSetting']['operable']}/"
              f"{report['v30PackageSetting']['total']} operable ({report['v30PackageSetting']['percent']}%)**; "
-             f"{report['v30PackageSetting']['gap']} still need a v3.0 path. "
+             f"{report['v30PackageSetting']['retired']} owner-retired capabilities; "
+             f"{report['v30PackageSetting']['gap']} still need a v3.0 decision or path "
+             f"({report['v30PackageSetting']['deferred']} explicitly deferred). "
              f"{report['v30PackageSetting']['ledgered']} are tracked in the ledger; "
              f"{report['v30PackageSetting']['excludedPackages']} in-scope package outcomes remain unledgered. "
              "Documented decisions do not count as operable behavior.", "",
              "For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.", "",
              f"Runnable outcomes: {report['runnable']}; {report['requiresAllowCandidate']} require `--allow-candidate`. "
              "Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.", "",
-             "| Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 gap | Evidence | Next action |",
-             "| --- | --- | --- | ---: | ---: | ---: | --- | --- |"]
+             "| Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 retired | v3.0 gap | Evidence | Next action |",
+             "| --- | --- | --- | ---: | ---: | ---: | ---: | --- | --- |"]
     for batch in report["batches"]:
         links = ", ".join(f"[{Path(path).name}](../../{path})" for path in batch["evidence"]) or "—"
         risk = ", ".join(f"{level} {count}" for level, count in sorted(batch["risk"].items()))
         lines.append(f"| `{batch['id']}` | {batch['title']} | {risk} | {batch['complete']}/{batch['total']} | "
-                     f"{batch['v30Operable']}/{batch['v30CapabilityTotal']} | {batch['v30Gap']} | "
+                     f"{batch['v30Operable']}/{batch['v30CapabilityTotal']} | {batch['v30Retired']} | {batch['v30Gap']} | "
                      f"{links} | {batch['nextAction']} |")
     lines += ["", "## v3.1 hardening queue", "",
               "These items do not replace v3.0 safety checks for data, storage, encryption, or security behavior.", "",
@@ -316,7 +328,8 @@ def main() -> int:
             print(f"runnable={report['runnable']} requires-allow-candidate={report['requiresAllowCandidate']}")
             coverage = report["v30PackageSetting"]
             print(f"v3.0 package/setting coverage={coverage['operable']}/{coverage['total']} "
-                  f"({coverage['percent']}%) gap={coverage['gap']} "
+                  f"({coverage['percent']}%) retired={coverage['retired']} "
+                  f"deferred={coverage['deferred']} gap={coverage['gap']} "
                   f"in-scope-unledgered-packages={coverage['excludedPackages']}")
             for batch in report["batches"]:
                 print(f"{batch['id']}: dispositioned={batch['complete']}/{batch['total']} "

@@ -348,8 +348,9 @@ The owner's later [v3.0 capability reassessment](migrations/v30-path-reassessmen
 supersedes disposition-only completion for package and setting outcomes. It
 identifies 169 in-scope package/setting capabilities including six formerly
 excluded server package outcomes; only 54 currently have operable v3 mappings.
-Exact old products may be replaced, but useful v2 capabilities stay in v3.0
-scope, except the owner-excluded Citrix and Opera functions. Historical
+Exact old products may be replaced, and the owner may explicitly retire a
+capability through the fast-track review. The owner retired both GNOME Files
+context actions and deferred the Required bundle choice. Historical
 "reopen only" review triggers in batch records now describe
 the evidence needed for a v3.0 path, not optional deferrals.
 The [v3.0 review note](release-v3.0-review.md) identifies opt-in candidates
@@ -400,8 +401,8 @@ need a documented reason and review trigger. Keep candidate operations out of
 are ready. Manual checks are limited to behavior automation cannot observe.
 
 The full v3.0 migration is ready for release review when every scoped v2 package and
-setting capability has an operable v3 implementation or evidence-backed
-functional replacement, the six newly scoped server package outcomes have
+setting capability has an operable v3 implementation, evidence-backed
+functional replacement, or explicit owner-approved retirement, the six newly scoped server package outcomes have
 working paths or evidence-backed functional replacements, supported profiles
 pass their declared targets, relevant CI and generated-doc checks pass, and no
 shared Windows contract drift remains unexplained. A v3 tag and movement of

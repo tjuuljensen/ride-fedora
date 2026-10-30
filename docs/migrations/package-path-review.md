@@ -46,8 +46,8 @@ assessment, not an automatic retirement decision.
 | `workstation:package.AtomPlugins` | Depends on sunset Atom and cannot be migrated as the old plugin set. | [Batch review](publisher-apps-10.md) |
 | `workstation:package.Dumpzilla` | Upstream declares the script discontinued; a new Firefox forensic tool is separate. | [Batch review](forensic-isolated-03.md) |
 | `workstation:package.GnomeExtInstaller` | The exact upstream helper is archived; owner deferred retirement, while GNOME extension management needs a new path. | [Batch review](provider-foundation-10.md) |
-| `workstation:package.NautilusHash` | The exact GtkHash Nautilus integration is absent on Fedora 44; owner retired this integration. | [Batch review](native-rpm-03.md) |
-| `workstation:package.NautilusImageTools` | The old Nautilus image converter lacks a Fedora 44 build; owner retired this integration. | [Batch review](native-rpm-03.md) |
+| `workstation:package.NautilusHash` | The exact GtkHash Nautilus integration is absent on Fedora 44; owner retired the full checksum context-action capability. | [Batch review](native-rpm-03.md) |
+| `workstation:package.NautilusImageTools` | The old Nautilus image converter lacks a Fedora 44 build; owner retired the full image context-action capability. | [Batch review](native-rpm-03.md) |
 | `workstation:package.SonosPlayer` | This unofficial controller declares itself deprecated; a new controller is a separate product. | [Batch review](publisher-apps-09.md) |
 | `workstation:package.Volatility` | Volatility 2 is archived; Volatility 3 is distinct and already tracked separately. | [Batch review](forensic-isolated-02.md) |
 
@@ -247,8 +247,9 @@ transfer runtime ownership or establish a working install.
 
 - Keep prior retirement decisions as history about exact v2 implementations.
   The [v3.0 reassessment](v30-path-reassessment.md) reopens their useful
-  capabilities for a working replacement, including GNOME Files actions.
-  `GnomeExtInstaller` still lacks a runnable path. Opera is out of scope by
+  capabilities for a working replacement where retained. The GNOME Files
+  actions were subsequently retired by the owner. `GnomeExtInstaller` still
+  lacks a runnable path. Opera is out of scope by
   explicit owner decision.
 - Do not close a v3.0 package capability merely because its v2 selector was
   commented, its installer failed, or the exact old product ended. Verify the

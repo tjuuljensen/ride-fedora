@@ -13,8 +13,8 @@ Two commented v2 outcomes in this family have a Fedora 44 resolution decision:
 
 | v2 outcome | Decision and evidence | Review trigger |
 | --- | --- | --- |
-| `package.NautilusHash` | **Retired** by individual owner decision on 2026-10-30. The v2 function installs `gtkhash-nautilus`, but the [Fedora GtkHash source package](https://packages.fedoraproject.org/pkgs/gtkhash/) lists only the GtkHash application and Caja, Nemo, and Thunar extensions. Installing the GtkHash application would lose the requested Nautilus context-menu behavior. | For v3.0, evaluate an owned GNOME Files checksum script with Fedora 44 compatibility and exact recovery; the old extension remains retired. |
-| `package.NautilusImageTools` | **Retired** by individual owner decision on 2026-10-30. The v2 function installs ImageMagick and `nautilus-image-converter`, but the [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) has only an EPEL 7 release. A standalone image converter is a different user-visible outcome. | For v3.0, evaluate an owned GNOME Files image-action script with non-overwriting output and exact recovery; the old extension remains retired. |
+| `package.NautilusHash` | **Capability retired** by owner on 2026-10-30. The v2 function installs `gtkhash-nautilus`, but the [Fedora GtkHash source package](https://packages.fedoraproject.org/pkgs/gtkhash/) lists only the GtkHash application and Caja, Nemo, and Thunar extensions. | No v3.0 checksum context action is required; preserve v2 source as evidence. |
+| `package.NautilusImageTools` | **Capability retired** by owner on 2026-10-30. The v2 function installs ImageMagick and `nautilus-image-converter`, but the [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) has only an EPEL 7 release. | No v3.0 image context action is required; preserve v2 source as evidence. |
 
 ## Completion criteria defined before implementation
 

@@ -108,10 +108,11 @@
         "docs/migrations/provider-foundation-01.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented optional developer-tool or prerequisite-contract review trigger.",
+      "nextAction": "Owner deferred the v3.0 bundle-capability decision on 2026-10-30; revisit whether the seven tools need a curated opt-in profile.",
       "v31Hardening": [],
       "reason": "The seven-package v2 global install bundle is replaced by explicit v3 bootstrap and handler prerequisite checks at the point of use; optional compiler/downloader tools are no longer installed by the base profile.",
-      "reviewTrigger": "An explicit request for an opt-in developer-tool profile, or a change to the v3 bootstrap or handler prerequisite contract."
+      "reviewTrigger": "An explicit request for an opt-in developer-tool profile, or a change to the v3 bootstrap or handler prerequisite contract.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.ShellTools",
@@ -306,10 +307,11 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "For v3.0, evaluate an owned GNOME Files checksum script with Fedora 44 behavior and exact recovery; the old extension remains retired.",
+      "nextAction": "Owner retired the user-visible capability for v3.0 on 2026-10-30; retain v2 source only as migration evidence.",
       "v31Hardening": [],
-      "reason": "The Fedora 44 GtkHash package lacks the v2 Nautilus extension, and the owner approved retiring this exact integration on 2026-10-30; the standalone application or another file-manager extension is not equivalent.",
-      "reviewTrigger": "A GNOME Files checksum action has Fedora 44 behavior and owned-script recovery evidence."
+      "reason": "The Fedora 44 GtkHash package lacks the v2 Nautilus extension, and the owner approved retiring this exact integration on 2026-10-30; the standalone application or another file-manager extension is not equivalent. The owner then explicitly retired the full user-visible capability from v3.0 on 2026-10-30.",
+      "reviewTrigger": "A new explicit owner decision to restore this capability to v3 scope.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.NautilusImageTools",
@@ -329,10 +331,11 @@
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "For v3.0, evaluate an owned GNOME Files image-action script with non-overwriting output and exact recovery; the old extension remains retired.",
+      "nextAction": "Owner retired the user-visible capability for v3.0 on 2026-10-30; retain v2 source only as migration evidence.",
       "v31Hardening": [],
-      "reason": "The Fedora nautilus-image-converter package record has only an EPEL 7 release, not a Fedora 44 build; the owner approved retiring this exact GNOME Files integration on 2026-10-30.",
-      "reviewTrigger": "A GNOME Files image action has Fedora 44 behavior, non-overwriting output, and owned-script recovery evidence."
+      "reason": "The Fedora nautilus-image-converter package record has only an EPEL 7 release, not a Fedora 44 build; the owner approved retiring this exact GNOME Files integration on 2026-10-30. The owner then explicitly retired the full user-visible capability from v3.0 on 2026-10-30.",
+      "reviewTrigger": "A new explicit owner decision to restore this capability to v3 scope.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.Flatpak",
@@ -4423,7 +4426,7 @@
         "docs/acceptance/package.speedtest-cli.md",
         "docs/acceptance/package.chromium.md"
       ],
-      "nextAction": "Evaluate v3.0 GUI IRC and bandwidth CLI successor paths; preserve current package evidence and put wider desktop/network checks in H007/H022."
+      "nextAction": "GNOME Files checksum and image capabilities retired by owner; evaluate maintained GUI IRC and bandwidth CLI successor paths."
     },
     {
       "id": "native-rpm-04",
@@ -4463,7 +4466,7 @@
         "docs/acceptance/package.pv.md",
         "docs/acceptance/package.strace.md"
       ],
-      "nextAction": "Continue to RPM Fusion provider batch 02; revisit optional developer tools only on explicit request."
+      "nextAction": "Required bundle-capability decision deferred by owner; revisit a curated optional developer-tools profile after the fast-track review."
     },
     {
       "id": "provider-foundation-02",

@@ -12,7 +12,8 @@ exclusions remained outside that historical denominator. The current ledger
 has 185 outcomes and eleven exclusions: the six newly scoped generic server
 package outcomes remain unresolved. The owner's later
 [v3.0 capability clarification](migrations/v30-path-reassessment.md) makes
-working package and setting paths part of v3.0 completion. Only 54 of 169
+working package and setting paths or explicit owner retirement part of v3.0
+completion. Only 54 of 169
 in-scope package/setting capabilities are currently operable, including
 six server package outcomes now assigned review batches. Citrix and Opera remain
 out of scope. This prior release
