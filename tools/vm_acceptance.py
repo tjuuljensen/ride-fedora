@@ -190,6 +190,7 @@ class VM:
         user_data = self.artifacts / "user-data"
         user_data.write_text(
             "#cloud-config\n"
+            "preserve_hostname: true\n"
             "users:\n"
             "  - name: ride-test\n"
             "    sudo: ALL=(ALL) NOPASSWD:ALL\n"
@@ -203,7 +204,7 @@ class VM:
         )
         meta_data = self.artifacts / "meta-data"
         meta_data.write_text(
-            f"instance-id: ride-{self.artifacts.name}\nlocal-hostname: ride-acceptance\n",
+            f"instance-id: ride-{self.artifacts.name}\n",
             encoding="utf-8",
         )
         seed = self.artifacts / "seed.iso"

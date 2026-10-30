@@ -20,6 +20,7 @@ python3 -m venv /tmp/ride-acceptance-venv
 /tmp/ride-acceptance-venv/bin/python -m pip install -r tests/acceptance/requirements.txt
 mkdir -p /tmp/ride-acceptance-runs
 /tmp/ride-acceptance-venv/bin/python -m pytest tests/acceptance -v \
+  -p no:cacheprovider --rootdir=. \
   --vm-target fedora-44-cloud-x86_64 \
   --vm-image /absolute/path/to/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2 \
   --vm-output /tmp/ride-acceptance-runs \

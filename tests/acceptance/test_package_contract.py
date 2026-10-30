@@ -28,6 +28,15 @@ def profile(*ids):
             "operations": [{"id": identifier, "state": "installed"} for identifier in ids]}
 
 
+def table_row(output, identifier):
+    rows = [line.split("\t") for line in output.splitlines()]
+    assert rows, output
+    header, *data = rows
+    matches = [dict(zip(header, row, strict=True)) for row in data if row[0] == identifier]
+    assert len(matches) == 1, output
+    return matches[0]
+
+
 def package_installed(vm):
     package = vm.target["pilotPackage"]
     if vm.target["packageDatabase"] == "rpm":
@@ -67,7 +76,9 @@ def test_package_apply_repeat_status_restore_and_remove(vm):
     guest_profile = vm.put_json("pilot-profile", profile(pilot_id))
 
     plan = vm.ride("plan", "--profile", guest_profile)
-    assert f"{pilot_id}\tabsent\tinstalled\tcandidate" in plan.stdout
+    plan_row = table_row(plan.stdout, pilot_id)
+    assert (plan_row["CURRENT"], plan_row["DESIRED"], plan_row["STATUS"]) == (
+        "absent", "installed", "candidate")
     assert not package_installed(vm)
     assert vm.run("sudo test ! -e /var/lib/ride-fedora/runs", check=False).returncode == 0
 
@@ -78,7 +89,8 @@ def test_package_apply_repeat_status_restore_and_remove(vm):
     assert [(step["id"], step["observedBefore"], step["observedAfter"], step["result"])
             for step in first_journal["steps"]] == [(pilot_id, "absent", "installed", "changed")]
     assert package_installed(vm)
-    assert f"{pilot_id}\tinstalled\tcandidate" in vm.ride("status", pilot_id).stdout
+    installed_row = table_row(vm.ride("status", pilot_id).stdout, pilot_id)
+    assert (installed_row["OBSERVED"], installed_row["STATUS"]) == ("installed", "candidate")
 
     verify_installed_package(vm)
 
@@ -92,7 +104,8 @@ def test_package_apply_repeat_status_restore_and_remove(vm):
     assert journal(vm, run_id(restore.stdout))["status"] == "complete"
     assert not package_installed(vm)
     assert package_inventory(vm) == baseline_packages
-    assert f"{pilot_id}\tabsent\tcandidate" in vm.ride("status", pilot_id).stdout
+    absent_row = table_row(vm.ride("status", pilot_id).stdout, pilot_id)
+    assert (absent_row["OBSERVED"], absent_row["STATUS"]) == ("absent", "candidate")
     duplicate = vm.ride("restore", "--run-id", first_id, "--allow-candidate", check=False)
     assert duplicate.returncode != 0 and "already been restored" in duplicate.stderr
 
