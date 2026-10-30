@@ -74,6 +74,75 @@ The bootstrapper recognizes Fedora, Debian, and Ubuntu, but the operation
 catalog currently declares **Fedora 44 x86_64 only**. No Debian or Ubuntu
 package support is advertised yet.
 
+### ArtCraft Linux download library
+
+The ArtCraft library discovers every public repository in
+[storytold](https://github.com/storytold/) and downloads the newest published
+release containing full Linux installers. It includes prereleases when those
+are the newest downloadable builds; it does not archive historical versions.
+AppImage, RPM and actual `.flatpak` bundles are selected, together with upstream
+checksum files. Repositories without these installers are listed in the catalog.
+
+Download on Windows with Python 3.11 or newer (no additional Python packages):
+
+```powershell
+python tools/download-artcraft.py all --arch x86_64 --destination 'Z:\Artcraft\linux'
+```
+
+On Fedora, use the RIDE library (the download directory must already exist):
+
+```bash
+sudo ARTCRAFT_ARCH=x86_64 ./ride.sh --include lib/artcraft/lib-artcraft.sh \
+  --downloaddir /path/to/downloads GetArtCraft
+sudo ARTCRAFT_FEDORA_RELEASE=44 ARTCRAFT_DEPENDENCY_ARCH=x86_64 \
+  ./ride.sh --include lib/artcraft/lib-artcraft.sh \
+  --downloaddir /path/to/downloads GetArtCraftDependencies
+```
+
+`ARTCRAFT_DOWNLOADDIR` can override the archive directory. The library also
+works when sourced directly from Bash. `CheckArtCraftDownloads` only writes a
+catalog. `ARTCRAFT_ARCH=all` (the library default) includes every published
+architecture; dependency preparation handles one specified architecture.
+
+The cross-platform downloader records versions, source URLs, architecture,
+upstream SHA256 hashes and local checksums in `catalog.json`,
+`download-report.json` and `SHA256SUMS.local`. Matching verified downloads are
+reused; interrupted or invalid files are never promoted from `.part` files.
+Discovery errors fail the operation instead of claiming an incomplete inventory
+is complete. The downloader uses public HTML because GitHub API quotas are shared.
+
+Dependency preparation requires Fedora, root, `dnf` (DNF5), `python3`, `flatpak`
+and `ostree`. Install the tooling with `sudo dnf install flatpak ostree`.
+`lib/artcraft/download-dependencies.sh ARCHIVE 44 x86_64` resolves the RPMs
+against Fedora 44 and updates with an empty temporary installroot, including
+weak dependencies and AppImage/Flatpak host support. It downloads packages
+with `dnf install --downloadonly`, without performing an RPM transaction.
+Fedora dependency RPM signatures are checked against Fedora's signing key.
+Flatpak app bundles are imported only for metadata; their exact runtime branches
+and related extensions (including all locales) are downloaded
+without deploying the apps. Exported runtime bundles and the RPMs are stored in
+`dependencies/fedora-44-x86_64/`, with their own hashes and dependency report.
+Large temporary files stay on the native Linux filesystem under `/var/tmp`.
+Set `ARTCRAFT_KEEP_STAGE=1` to retain that directory for troubleshooting.
+
+On the target Fedora system, install a chosen app format. For RPMs, supply the
+app RPM and the dependency RPM directory to `dnf install` (no network is needed
+if the entire package closure matches the target release). For Flatpak, install
+the saved runtime bundles first, then the app bundle:
+
+```bash
+for runtime in dependencies/fedora-44-x86_64/flatpak/*.flatpak; do
+  flatpak install --user --no-deps --no-related "$runtime"
+done
+flatpak install --user --no-deps --no-related photocraft/v0.7.0/photocraft-0.7.0-linux-x86_64.flatpak
+```
+
+AppImages bundle their application libraries; FUSE, the base OS and GPU drivers
+are host requirements. The archive includes Fedora FUSE/Mesa/Vulkan support.
+Proprietary GPU drivers depend on the target hardware. PhotoCraft's official
+desktop builds already include Craft fonts, so its source font repository is
+not needed.
+
 ## Development and migration
 
 - [`docs/architecture.md`](docs/architecture.md) describes the engine,
