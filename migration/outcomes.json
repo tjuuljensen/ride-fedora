@@ -135,15 +135,17 @@
       "batch": "provider-foundation-02",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "migrate",
-      "progress": "assessed",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/provider-foundation-02.md"
       ],
-      "blocker": "Independent signing-key trust and owned repository-file/key recovery are not established; the existing DNF handler does not cover this provider.",
-      "nextAction": "Implement and test a trust-pinned, ownership-aware repository provider, or close as unsupported for v3.0 with a review trigger.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only for a concrete RPM Fusion application after independent trust, owned repository recovery, and Fedora 44 VM evidence.",
+      "v31Hardening": [],
+      "reason": "The v2 free/nonfree release-RPM install changes host package trust and its wildcard inverse deletes unowned repositories; v3 has no authenticated ownership-aware repository handler or safety/recovery evidence.",
+      "reviewTrigger": "A concrete RPM Fusion application request plus pinned independent signing-key fingerprints, release-RPM verification, owned inverse, and exact-target VM tests."
     },
     {
       "key": "workstation:package.KernelTools",
@@ -631,15 +633,17 @@
       "batch": "provider-foundation-06",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/provider-foundation-06.md"
       ],
-      "blocker": "Current group membership and per-tool ownership are unreviewed.",
-      "nextAction": "Inspect Fedora 44 group membership and split retained tools into owned operations.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen only for a bounded set of individually reviewed tools; keep the broader forensic outcome batches separate.",
+      "v31Hardening": [],
+      "reason": "The Fedora 44 security-lab group has 137 default packages and group state outside the per-package v3 journal; no safe group ownership or inverse is established.",
+      "reviewTrigger": "An explicit bounded Security Lab tool selection with per-tool source, license, target, and recovery evidence."
     },
     {
       "key": "workstation:package.Dc3dd",
@@ -2244,15 +2248,17 @@
       "batch": "provider-foundation-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/provider-foundation-07.md"
       ],
-      "blocker": "RPM Fusion repository trust, package split, product behavior, and recovery need review.",
-      "nextAction": "Review RPM Fusion acquisition and the CLI/GUI package split before implementation.",
-      "v31Hardening": []
+      "blocker": "",
+      "nextAction": "Reopen after the RPM Fusion provider passes its trust/recovery gate and a CLI or GUI deployment is requested.",
+      "v31Hardening": [],
+      "reason": "The v2 DNF install relies on unaccepted RPM Fusion repository trust; the CLI and GUI RPMs are distinct and no exact-target package happy path was run.",
+      "reviewTrigger": "Accepted RPM Fusion trust and owned recovery plus a concrete HandBrake CLI or GUI deployment request and Fedora 44 Workstation VM acceptance."
     },
     {
       "key": "workstation:package.GnomeTools",
@@ -3739,7 +3745,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-02.md"
       ],
-      "nextAction": "Resolve signing-key trust, repository ownership, and safe inverse before any runnable operation."
+      "nextAction": "Reopen only for a concrete RPM Fusion dependency with independent trust and owned recovery evidence."
     },
     {
       "id": "provider-foundation-03",
@@ -3780,7 +3786,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-06.md"
       ],
-      "nextAction": "Inspect group membership and map each retained tool to owned operations."
+      "nextAction": "Reopen only for a bounded individually reviewed tool set; continue separate forensic migrations."
     },
     {
       "id": "provider-foundation-07",
@@ -3789,7 +3795,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-07.md"
       ],
-      "nextAction": "Review trusted repository source, CLI/GUI package split, and recovery."
+      "nextAction": "Reopen after accepted RPM Fusion provider trust and a requested HandBrake CLI or GUI deployment."
     },
     {
       "id": "provider-foundation-08",

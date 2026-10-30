@@ -18,7 +18,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `UpdateFedora` | deferred | Add explicit non-reversible system update operation after VM acceptance. |
 | `InstallRequired` | replaced | The global seven-package bundle is replaced by bootstrap and handler prerequisite checks. Optional developer tools need a separate requested profile; see [provider foundation batch 01](migrations/provider-foundation-01.md). |
 | `InstallShellTools` | supported | Split into supported `package.pv` and `package.strace` in the opt-in `shell-tools` profile; see [VM acceptance](acceptance/provider-shell-tools.md). |
-| `InstallRPMfusionRepos` | deferred | [Provider batch 02](migrations/provider-foundation-02.md) records the signing-key and owned-recovery work required before a runnable operation. |
+| `InstallRPMfusionRepos` | unsupported | [Provider batch 02](migrations/provider-foundation-02.md) records the signing-key and owned-recovery work required before a runnable operation. |
 | `InstallKernelTools` | supported | Split into signed Fedora `kernel-devel` and `kernel-headers` package installs; [VM evidence](acceptance/provider-kernel-tools.md) does not establish a matching module-build environment. |
 | `InstallDNFutils` | replaced | Fedora 44 Workstation has DNF5 and plugins; current `config-manager` and `download` commands passed the disposable-VM check. See [provider foundation batch 03](migrations/provider-foundation-03.md). |
 | `InstallEzaGitHub` | replaced | The unpinned ZIP path is a [non-runnable replacement](migrations/provider-foundation-08.md); Fedora `package.eza` passed [VM acceptance](acceptance/package.eza.md) for an installed Eza. |
@@ -181,7 +181,7 @@ losing their package identities.
 the global `Required` install bundle with explicit prerequisite checks and
 accepted `pv` and `strace` as supported operations in the opt-in
 `shell-tools` profile. [RPM Fusion provider batch 02](migrations/provider-foundation-02.md)
-is assessed and remains blocked on trust and owned recovery.
+is a non-runnable v3.0 decision pending trust and owned recovery.
 [Provider foundation batch 03](migrations/provider-foundation-03.md) accepted
 kernel development and Python pip RPM installs, documented DNF5 as the
 replacement for `dnf-utils`, and accepted Fedora 7zip/unar package operations
@@ -196,6 +196,14 @@ the commented broad codec bundle as unsupported for v3.0 because its wildcard
 and optional group transactions lack a safe owned inverse. [Batch 08](migrations/provider-foundation-08.md)
 accepted the Fedora Eza RPM while documenting the active GitHub ZIP path as
 a non-runnable replacement. Neither decision adds to the base profiles.
+[Provider batch 02](migrations/provider-foundation-02.md) closed the active
+RPM Fusion repository pair as unsupported for v3.0 pending authenticated
+repository ownership and recovery. [Batch 06](migrations/provider-foundation-06.md)
+found 137 default Security Lab group packages in the pinned Workstation VM
+and closed that broad group operation without changing individual tool
+outcomes. [Batch 07](migrations/provider-foundation-07.md) closed the
+commented HandBrake RPM path pending the RPM Fusion provider and a chosen
+CLI or GUI deployment. These are documented non-runnable dispositions.
 The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,

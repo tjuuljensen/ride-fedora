@@ -1,6 +1,6 @@
 # Provider foundation batch 02: RPM Fusion repository enablement
 
-Status: **assessed; high-risk trust and recovery design pending**, 2026-10-30.
+Status: **unsupported as a runnable v3.0 repository operation**, 2026-10-30.
 The active v2 preset calls `InstallRPMfusionRepos`, which installs the free
 and nonfree Fedora release RPMs from RPM Fusion mirror URLs. Its inverse
 deletes every `/etc/yum.repos.d/rpmfusion*` path and removes every installed
@@ -12,6 +12,10 @@ RPM Fusion currently publishes Fedora 44
 [`rpmfusion-free-release-44.noarch.rpm`](https://download1.rpmfusion.org/free/fedora/)
 and the corresponding
 [`nonfree` release package](https://download1.rpmfusion.org/nonfree/fedora/).
+It also publishes separate [free](https://download1.rpmfusion.org/free/fedora/RPM-GPG-KEY-rpmfusion-free-fedora-2020)
+and [nonfree](https://download1.rpmfusion.org/nonfree/fedora/RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020)
+signing keys. The availability of these files is source discovery, not
+independent trust, package signature verification, or proof of owned recovery.
 This is a third-party repository that changes future package acquisition;
 the release RPM must not be treated as a normal Fedora-signed package. The
 current v3 `dnf-package` handler assumes Fedora repository GPG verification
@@ -38,3 +42,25 @@ configuration. No runnable v3 operation is declared for this outcome yet.
   runnable candidate or the v2 broad-deletion inverse to bypass the gate.
 - Keep repository enablement out of `default` and `server-base`; downstream
   RPM Fusion package operations require their own source and VM evidence.
+
+## v3.0 decision
+
+The v2 pair changes future acquisition for the whole host, uses two external
+release RPMs, and has a wildcard inverse that can delete another owner's
+repository configuration and installed release packages. The current v3
+catalog and DNF handler only model one installed Fedora RPM; they do not
+pin and authenticate a third-party release RPM, distinguish a pre-existing
+free or nonfree repository, journal its files and keys, or refuse an inverse
+when packages still depend on that repository. No focused trust or recovery
+test, or disposable-VM lifecycle, has been completed for a replacement
+handler. A runnable candidate would bypass the high-risk gate in the
+v3.0 migration plan.
+
+`RPMfusionRepos` is therefore **unsupported as an operation in v3.0**.
+No repository enablement or downstream RPM Fusion package is counted as
+accepted. Reopen this decision if a concrete RPM Fusion application needs it
+and a pinned independent key fingerprint, signed release-RPM check, owned
+file/key journal, safe inverse, and exact-target VM evidence are available.
+That follow-up should separate free and nonfree acquisition unless a reviewed
+atomic bundle is needed. Existing independently installed repositories
+remain outside RIDE ownership.

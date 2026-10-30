@@ -265,3 +265,19 @@ existing platform-specific representation and portable-handler differences
 remain intentional as registered above. Recheck if either platform adds Eza
 or portable coexistence, changes source fallback or run-state semantics, or
 before release review. No unexplained shared-contract drift was found.
+
+### Fedora provider foundation batches 02, 06, and 07, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f`. The
+[RPM Fusion repository](migrations/provider-foundation-02.md),
+[Security Lab group](migrations/provider-foundation-06.md), and
+[HandBrake RPM](migrations/provider-foundation-07.md) outcomes are
+documented non-runnable v3.0 decisions. They add no catalog ID, profile
+selection, handler, or journal semantics. Existing Fedora-signed individual
+forensic packages retain their separately reviewed Linux source and target.
+No Windows repository source or installer fact is inferred from these
+Linux-only decisions. The registered representation and deployment
+differences remain intentional; no unexplained shared-contract drift was
+found. Recheck if a repository or group handler is introduced, a shared
+product/source contract changes, or a release candidate is prepared.
