@@ -231,6 +231,43 @@ selectors but are controller flow, not server-library outcomes. The commented
 `GenerateSSHkeys` selector is not defined in the server library; it must not silently
 resolve to `GenerateSSHkeysRSA` without a migration decision.
 
+## Current retirement and replacement decisions
+
+These dispositions come from `migration/outcomes.json` and supersede the
+initial assessment above. The ledger records each reason and review trigger.
+
+| Source outcome | Current disposition | Batch |
+| --- | --- | --- |
+| `workstation:package.Required` | `replace` | `provider-foundation-01` |
+| `workstation:package.DNFutils` | `replace` | `provider-foundation-03` |
+| `workstation:package.EzaGitHub` | `replace` | `provider-foundation-08` |
+| `workstation:package.VersionLock` | `replace` | `provider-foundation-04` |
+| `workstation:package.NautilusHash` | `retire` | `native-rpm-03` |
+| `workstation:package.NautilusImageTools` | `retire` | `native-rpm-03` |
+| `workstation:package.Flatpak` | `replace` | `provider-foundation-11` |
+| `workstation:package.Galleta` | `retire` | `resolution-review-01` |
+| `workstation:package.Xplico` | `retire` | `resolution-review-01` |
+| `workstation:package.VMFStools` | `retire` | `forensic-isolated-01` |
+| `workstation:package.Volatility` | `retire` | `forensic-isolated-02` |
+| `workstation:package.Macvendor` | `replace` | `forensic-isolated-03` |
+| `workstation:package.Dumpzilla` | `retire` | `forensic-isolated-03` |
+| `workstation:package.PackagingTools` | `replace` | `provider-foundation-03` |
+| `workstation:package.MicrosoftTeams` | `replace` | `publisher-apps-09` |
+| `workstation:package.AtomEditor` | `retire` | `publisher-apps-10` |
+| `workstation:setting.AtomTelemetry` | `retire` | `resolution-review-01` |
+| `workstation:package.AtomPlugins` | `retire` | `publisher-apps-10` |
+| `workstation:package.TecmintMonitorSh` | `retire` | `resolution-review-01` |
+| `workstation:action.CheckFirefoxAddons` | `replace` | `desktop-user-05` |
+| `workstation:package.FirefoxAddons` | `replace` | `publisher-apps-04` |
+| `workstation:action.FinalizeFirefoxAddonRemoval` | `replace` | `desktop-user-06` |
+| `workstation:setting.Screensaver` | `retire` | `resolution-review-01` |
+| `workstation:setting.GnomeDefaultFavorites` | `retire` | `desktop-user-08` |
+| `workstation:setting.AliasRideLog` | `retire` | `desktop-user-05` |
+| `workstation:package.YubikeyManager` | `replace` | `publisher-apps-08` |
+| `workstation:package.YubikeyPersTool` | `replace` | `publisher-apps-14` |
+| `workstation:package.SonosPlayer` | `retire` | `publisher-apps-09` |
+| `server:action.ViewIPaddress` | `retire` | `generic-server-04` |
+
 ## Closeout rules
 
 1. Count an outcome as operable only with a mapped v3 operation and focused

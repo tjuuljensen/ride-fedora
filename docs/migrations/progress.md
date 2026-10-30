@@ -3,7 +3,7 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**180/180 complete (100.0%)**: 28 supported, 26 opt-in candidate, 13 replaced, 14 retired, 0 private, 99 unsupported; 0 unresolved.
+**180/180 complete (100.0%)**: 28 supported, 26 opt-in candidate, 13 replaced, 16 retired, 0 private, 97 unsupported; 0 unresolved.
 
 Runnable outcomes: 54; 26 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
@@ -37,7 +37,7 @@ Runnable outcomes: 54; 26 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `publisher-apps-03` | Publisher Apps 03: VisualStudioCode, Brave | medium 2 | 2/2 | [publisher-apps-03.md](../../docs/migrations/publisher-apps-03.md) | Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch. |
 | `publisher-apps-04` | Publisher Apps 04: FirefoxAddons | high 1 | 1/1 | [publisher-apps-04.md](../../docs/migrations/publisher-apps-04.md) | Reopen on the documented owned-source and exact-target recovery trigger; continue the next publisher batch. |
 | `publisher-apps-05` | Publisher Apps 05: YouTubeDownloader and SystemMonitor | low 1, medium 1 | 2/2 | [publisher-apps-05.md](../../docs/migrations/publisher-apps-05.md), [package.youtube-dl.md](../../docs/acceptance/package.youtube-dl.md), [package.gnome-shell-extension-system-monitor-applet.md](../../docs/acceptance/package.gnome-shell-extension-system-monitor-applet.md), [package.lm-sensors.md](../../docs/acceptance/package.lm-sensors.md) | Continue publisher-apps-06; keep monitoring opt-in and complete H012 visual/recovery review in v3.1. |
-| `publisher-apps-06` | Publisher Apps 06: BitwardenAppImage | high 1 | 1/1 | [publisher-apps-06.md](../../docs/migrations/publisher-apps-06.md) | Reopen only for a verified portable distribution with vault-preserving recovery; continue publisher-apps-07. |
+| `publisher-apps-06` | Publisher Apps 06: BitwardenAppImage | high 1 | 1/1 | [publisher-apps-06.md](../../docs/migrations/publisher-apps-06.md) | Retain the owner-requested portable AppImage; design pinned publisher acquisition, owned deployment, and vault-preserving recovery before runnable status. |
 | `publisher-apps-07` | Publisher Apps 07: UnifyingOnLaptop, VMtoolsOnVM | medium 2 | 2/2 | [publisher-apps-07.md](../../docs/migrations/publisher-apps-07.md), [package.solaar.md](../../docs/acceptance/package.solaar.md), [package.acpi.md](../../docs/acceptance/package.acpi.md) | Keep Solaar/ACPI opt-in, complete H013 hardware review in v3.1, and reopen guest tools only on explicit hypervisor evidence. Continue publisher-apps-09. |
 | `publisher-apps-08` | Publisher Apps 08: YubikeyManager | high 1 | 1/1 | [publisher-apps-08.md](../../docs/migrations/publisher-apps-08.md) | Reopen only for the publisher-supported successor and credential-safe target evidence; continue publisher-apps-09. |
 | `publisher-apps-09` | Publisher Apps 09: SonosPlayer, CommanderFileMgrs, PowerShell, MicrosoftTeams, WoeUSB, BalenaEtcher | medium 6 | 6/6 | [publisher-apps-09.md](../../docs/migrations/publisher-apps-09.md), [package.gnome-commander.md](../../docs/acceptance/package.gnome-commander.md), [package.mc.md](../../docs/acceptance/package.mc.md) | Continue publisher-apps-10; keep the file-manager profile opt-in and complete H014 in v3.1. |

@@ -252,6 +252,19 @@ def render() -> str:
         "`GenerateSSHkeys` selector is not defined in the server library; it must not silently",
         "resolve to `GenerateSSHkeysRSA` without a migration decision.",
         "",
+        "## Current retirement and replacement decisions",
+        "",
+        "These dispositions come from `migration/outcomes.json` and supersede the",
+        "initial assessment above. The ledger records each reason and review trigger.",
+        "",
+        "| Source outcome | Current disposition | Batch |",
+        "| --- | --- | --- |",
+    ]
+    for row in progress_rows:
+        if row["disposition"] in {"retire", "replace"}:
+            lines.append(f"| `{row['key']}` | `{row['disposition']}` | `{row['batch']}` |")
+    lines += [
+        "",
         "## Closeout rules",
         "",
         "1. Count an outcome as operable only with a mapped v3 operation and focused",
@@ -279,8 +292,10 @@ def main() -> None:
         OUTPUT.write_text(content, encoding="utf-8")
     if args.check and (not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != content):
         raise SystemExit("workstation/server burndown is stale; run --write")
-    print(f"Verified {sum(line.startswith('| `') for line in content.splitlines())} "
-          "library outcome rows and 1 reference candidate")
+    outcomes = json.loads(PROGRESS_LEDGER.read_text(encoding="utf-8"))["outcomes"]
+    decisions = sum(row["disposition"] in {"retire", "replace"} for row in outcomes)
+    print(f"Verified {len(outcomes)} library outcome rows, {decisions} current "
+          "retirement/replacement decisions, and 1 reference candidate")
 
 
 if __name__ == "__main__":

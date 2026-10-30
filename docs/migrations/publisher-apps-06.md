@@ -1,6 +1,8 @@
 # Bitwarden AppImage source outcome
 
-Status: **unsupported for v3.0**, 2026-10-30. This isolated high-risk
+Status: **retained for migration, unsupported for v3.0**, 2026-10-30. The
+owner chose to keep a real portable Bitwarden AppImage as a distinct outcome.
+This isolated high-risk
 active-preset outcome maps `InstallBitwardenAppImage` and
 `RemoveBitwardenAppImage`. The v2 function requests a mutable GitHub release,
 filters for an RPM URL despite its AppImage name, and saves that RPM under
@@ -26,7 +28,7 @@ cannot reliably undo what it downloaded. User vaults and an existing
 desktop distributions; its [client source](https://github.com/bitwarden/clients)
 is GPL-3.0 by default with separately licensed components. The v2 RPM/AppImage mismatch is not a safe
 portable lifecycle and v3 has no owned portable handler. This is a
-**non-runnable unsupported v3.0 decision**. Reopen for a requested
-Bitwarden portable deployment with pinned publisher bytes, separate
+**non-runnable unsupported v3.0 decision**. The next batch should design
+the official AppImage acquisition with pinned publisher bytes, separate
 deployment identity, and vault-preserving VM evidence. The v2 `Bitwarden`
 RPM outcome remains independently tracked in publisher-apps-12.

@@ -167,10 +167,10 @@ those outcomes as installs. [Native RPM batch 02](migrations/native-rpm-02.md)
 passed four more exact-target packages. Its investigated `alien` recovery
 retains one named DNF dependency without losing or changing pre-existing RPMs;
 that cleanup question is in the v3.1 queue.
-[Native RPM batch 03](migrations/native-rpm-03.md) closed its two unavailable
-Nautilus integrations as unsupported, accepted Speedtest CLI as supported,
+[Native RPM batch 03](migrations/native-rpm-03.md) accepted Speedtest CLI as supported,
 and recorded HexChat and Chromium as operable opt-in candidates with desktop
-hardening in v3.1. [Native RPM batch 04](migrations/native-rpm-04.md) passed
+hardening in v3.1. The owner later retired its two unavailable Nautilus
+integrations individually. [Native RPM batch 04](migrations/native-rpm-04.md) passed
 `dc3dd` as supported and four desktop RPMs as operable opt-in candidates;
 each passed install and inverse checks in the disposable Workstation VM.
 [Native RPM batch 05](migrations/native-rpm-05.md) passed Libpst and Lynis as
@@ -324,9 +324,9 @@ until a service-aware inverse exists. Pidgin/OTR and ClamAV signatures have
 their own [security decisions](migrations/system-security-27.md) and
 [signature decision](migrations/system-security-28.md).
 
-The 2026-10-30 ledger result is **180/180 scoped outcomes dispositioned**:
-28 supported, 26 operable opt-in candidates, 13 replaced, 14 retired, and
-99 unsupported. Runnable source outcomes total 54; 26 require
+The current 2026-10-30 ledger result is **180/180 scoped outcomes dispositioned**:
+28 supported, 26 operable opt-in candidates, 13 replaced, 16 retired, and
+97 unsupported. Runnable source outcomes total 54; 26 require
 `--allow-candidate`. The 15 owner exclusions are retained outside the
 denominator. These counts are a dated snapshot; use the
 [generated progress report](migrations/progress.md) for current status.
@@ -342,13 +342,13 @@ VM without a candidate override; the shared Python pip operation passed
 its Server VM. The ledger is complete and the branch is ready for release
 review, with publication still a separate decision.
 
-The 99 non-runnable `unsupported` rows have a separate
-[decision triage](migrations/unsupported-triage.md): 10 proposed retirements,
-38 individual keep-or-drop choices, and 51 individual migration-design
-decisions. The owner requested individual review of both retirement groups.
-Bitwarden's active portable outcome moved to migration design after its real
-publisher AppImage was confirmed. The ledger still records all 99 as
-unsupported until individual decisions are approved. An approval changes
+The original 99 non-runnable `unsupported` rows have a separate
+[decision triage](migrations/unsupported-triage.md): 10 original retirement
+proposals, 38 individual keep-or-drop choices, and 51 individual migration-design
+decisions. The owner requested individual review of both retirement groups,
+approved retirement of NautilusHash and NautilusImageTools, deferred
+GnomeExtInstaller, and retained the portable Bitwarden AppImage for migration.
+The remaining eight retirement proposals await decisions. An approval changes
 disposition and generated progress, not legacy source code or machine state.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,

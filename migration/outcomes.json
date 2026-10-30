@@ -299,17 +299,17 @@
       "batch": "native-rpm-03",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
+      "disposition": "retire",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "Review at the stated Fedora 44 extension availability trigger.",
+      "nextAction": "No v3 install planned for the retired Nautilus extension; review a separately scoped GNOME Files hash action only if requested.",
       "v31Hardening": [],
-      "reason": "The Fedora 44 GtkHash package lacks the Nautilus extension requested by v2; the application or another file-manager extension is not equivalent.",
-      "reviewTrigger": "A maintained Fedora 44 GNOME Files hash extension is packaged and its compatibility and recovery are demonstrated."
+      "reason": "The Fedora 44 GtkHash package lacks the v2 Nautilus extension, and the owner approved retiring this exact integration on 2026-10-30; the standalone application or another file-manager extension is not equivalent.",
+      "reviewTrigger": "The owner requests GNOME Files checksum actions and a maintained implementation has Fedora 44 compatibility and recovery evidence."
     },
     {
       "key": "workstation:package.NautilusImageTools",
@@ -322,17 +322,17 @@
       "batch": "native-rpm-03",
       "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
+      "disposition": "retire",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/native-rpm-03.md"
       ],
       "blocker": "",
-      "nextAction": "Review at the stated Fedora 44 extension availability trigger.",
+      "nextAction": "No v3 install planned for the retired Nautilus extension; review a separately scoped GNOME Files image action only if requested.",
       "v31Hardening": [],
-      "reason": "The Fedora nautilus-image-converter package record has only an EPEL 7 release, not a Fedora 44 build of the v2 GNOME Files extension.",
-      "reviewTrigger": "A maintained Fedora 44 GNOME Files image-resize extension is packaged and its behavior and recovery are demonstrated."
+      "reason": "The Fedora nautilus-image-converter package record has only an EPEL 7 release, not a Fedora 44 build; the owner approved retiring this exact GNOME Files integration on 2026-10-30.",
+      "reviewTrigger": "The owner requests GNOME Files image actions and a maintained implementation has Fedora 44 behavior and recovery evidence."
     },
     {
       "key": "workstation:package.Flatpak",
@@ -2083,7 +2083,7 @@
         "docs/migrations/provider-foundation-10.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented maintained-tool and safe-recovery trigger.",
+      "nextAction": "Owner deferred the retire-or-keep decision on 2026-10-30; review this helper individually later.",
       "v31Hardening": [],
       "reason": "The v2 installer clones mutable unpinned code and overwrites a system symlink; upstream is GPL-2.0 licensed but archived since 2023, without Fedora 44 GNOME compatibility or owned-path recovery evidence.",
       "reviewTrigger": "A maintained licensed tool supports the declared Fedora/GNOME target with pinned acquisition and ownership-aware rollback."
@@ -3389,10 +3389,10 @@
         "docs/migrations/publisher-apps-06.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen for a separately owned, pinned Bitwarden portable deployment with vault-preserving VM recovery.",
+      "nextAction": "Owner retained the portable AppImage outcome on 2026-10-30; design a pinned official AppImage deployment and vault-preserving VM recovery.",
       "v31Hardening": [],
       "reason": "The v2 AppImage function downloads an RPM into Applications and its inverse removes only AppImage names; the source, destination, and encrypted-vault inverse do not match.",
-      "reviewTrigger": "A requested Bitwarden AppImage has publisher-pinned bytes, separate portable identity, ownership and vault-preserving Fedora 44 VM evidence."
+      "reviewTrigger": "A pinned official Bitwarden AppImage has separate portable identity, ownership and vault-preserving Fedora 44 VM evidence."
     },
     {
       "key": "workstation:action.ImportOpenVPNProfiles",
@@ -4570,7 +4570,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-06.md"
       ],
-      "nextAction": "Reopen only for a verified portable distribution with vault-preserving recovery; continue publisher-apps-07."
+      "nextAction": "Retain the owner-requested portable AppImage; design pinned publisher acquisition, owned deployment, and vault-preserving recovery before runnable status."
     },
     {
       "id": "publisher-apps-07",

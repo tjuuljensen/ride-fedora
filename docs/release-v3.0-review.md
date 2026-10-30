@@ -5,7 +5,7 @@ Status: **ready for release review**, 2026-10-30. No v3 release tag has been pub
 [progress report](migrations/progress.md) is authoritative for current
 counts. At this candidate revision, all 180 scoped v2 outcomes have a
 decision: 28 supported, 26 operable opt-in candidates, 13 replaced,
-14 retired, and 99 unsupported. Thus 54 source outcomes are runnable; 26
+16 retired, and 97 unsupported. Thus 54 source outcomes are runnable; 26
 of those require `--allow-candidate`. The 126 non-runnable decisions do
 not represent working installs. The two Citrix and 13 host-specific server
 exclusions remain outside this denominator.

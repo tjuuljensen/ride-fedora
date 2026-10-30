@@ -1,41 +1,41 @@
 # Unsupported outcome triage and retirement approval
 
-Status: **individual review requested**, 2026-10-30. The authoritative ledger still has 99
-`unsupported` source outcomes. This review assigns each of those 99 outcomes
-exactly one decision batch. It does not change a ledger disposition, add an
-operation, delete v2 code, or run a state-changing test. The [migration ledger](../../migration/outcomes.json)
-and [progress report](progress.md) remain authoritative until an approval is
-applied. The 15 Citrix and host-specific exclusions are outside this review.
+Status: **individual review in progress**, 2026-10-30. This review assigns
+each of the original 99 `unsupported` source outcomes exactly one decision
+batch. Two have since been approved for retirement; the current ledger has
+97 `unsupported` and 16 `retire` outcomes. These decisions do not add an
+operation, delete v2 code, or run a state-changing test. The
+[migration ledger](../../migration/outcomes.json) and [progress report](progress.md)
+are authoritative for current disposition. The 15 Citrix and host-specific
+exclusions are outside this review.
 
 | Decision lane | Outcomes | What happens next |
 | --- | ---: | --- |
-| Retirement proposals, R1-R2 | 10 | Owner requested an individual decision for each row. |
+| Retirement proposals, R1-R2 | 10 original; 2 approved, 8 pending | Owner requested an individual decision for each row. |
 | Keep-or-drop choices, U1a-U3b | 38 | Decide each feature or value individually before migration work. |
 | Migration design, D1a-D5a | 51 | Decide the exact owner, source, state, and recovery for each outcome. |
 
-Approving all retirement proposals would change only their 10 ledger rows from
-`unsupported` to `retire` with a documented reason and review trigger.
-The v3.0 total stays 180/180 and the runnable count stays 54; the category
-counts would become 89 unsupported and 24 retired. Legacy functions and any
-existing v2 machine state remain untouched. Future behavior may return as
-a separately reviewed v3 operation with its own evidence. The owner chose
-individual review of R1 and R2; no batch approval or ledger change has been
-made. These review groups do not override the small implementation batches
-in the migration plan.
+Approving the eight remaining retirement proposals would change only their
+ledger rows from `unsupported` to `retire` with documented reasons and review
+triggers. The v3.0 total stays 180/180 and the runnable count stays 54; the
+category counts would become 89 unsupported and 24 retired. Legacy functions
+and existing v2 machine state remain untouched. Future behavior may return as
+a separately reviewed v3 operation with its own evidence. These review groups
+do not override the small implementation batches in the migration plan.
 
-## R1: obsolete or mismatched integrations (3)
+## R1: obsolete or mismatched integrations (3 original; 2 retired)
 
-| Source outcome | Current coverage | Why retirement is proposed | Reopen only if |
+| Source outcome | Current coverage | Decision | Evidence and review trigger |
 | --- | --- | --- | --- |
-| `workstation:package.NautilusHash` | Commented | v2 uses `gtkhash-nautilus`; its own source notes the GNOME 43 break. The [current Fedora GtkHash source](https://packages.fedoraproject.org/pkgs/gtkhash/) lists Caja, Nemo, and Thunar extensions, with no Nautilus subpackage. | A maintained GNOME Files hash integration for the declared target is requested and tested. |
-| `workstation:package.NautilusImageTools` | Commented | v2 calls `nautilus-image-converter`; its [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) lists only EPEL 7. Retiring that extension does not reject image resizing; Fedora has a separate [imgp](https://packages.fedoraproject.org/pkgs/imgp/imgp/) CLI. | A current GNOME Files resize integration is requested with compatible package and recovery evidence. |
-| `workstation:package.GnomeExtInstaller` | Active | v2 clones the [archived upstream script](https://github.com/brunelli/gnome-shell-extension-installer) and overwrites a system symlink. This retires that helper, while `workstation:package.GnomeExtensions` remains a separate migration decision. | A maintained installer for the declared GNOME target has pinned acquisition and owned rollback. |
+| `workstation:package.NautilusHash` | Commented | **Retired** by owner on 2026-10-30. | v2 uses `gtkhash-nautilus`; its own source notes the GNOME 43 break. The [Fedora GtkHash source](https://packages.fedoraproject.org/pkgs/gtkhash/) lists Caja, Nemo, and Thunar extensions, with no Nautilus subpackage. Reopen if GNOME Files hash actions are requested and a maintained implementation has target and recovery evidence. |
+| `workstation:package.NautilusImageTools` | Commented | **Retired** by owner on 2026-10-30. | v2 calls `nautilus-image-converter`; its [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) lists only EPEL 7. Retiring that extension does not reject image resizing; Fedora has a separate [imgp](https://packages.fedoraproject.org/pkgs/imgp/imgp/) CLI. Reopen if GNOME Files image actions are requested with target and recovery evidence. |
+| `workstation:package.GnomeExtInstaller` | Active | **Decide later**, per owner on 2026-10-30; remains unsupported. | v2 clones the [archived upstream script](https://github.com/brunelli/gnome-shell-extension-installer) and overwrites a system symlink. `workstation:package.GnomeExtensions` remains a separate migration decision. A retained helper would need a maintained installer, pinned acquisition, and owned rollback. |
 
 `workstation:package.BitwardenAppImage` moved to D1a during individual
 review. Its v2 function downloads an RPM into `~/Applications`, but
 [Bitwarden still publishes a Linux AppImage](https://bitwarden.com/help/desktop-app-feature-support/).
-The active portable outcome therefore needs a retain-or-retire product
-decision and, if retained, a verified AppImage and vault-safe lifecycle.
+The owner chose to **keep the portable AppImage outcome** on 2026-10-30.
+It needs a verified AppImage and vault-safe lifecycle before runnable status.
 
 ## R2: unsafe standalone cleanup functions (7)
 
