@@ -12,12 +12,12 @@ exclusions are outside this review.
 | Original decision lane | Outcomes | Owner decisions so far |
 | --- | ---: | --- |
 | Retirement proposals, R1-R2 | 10 | 2 retired, 6 retained for migration, 2 deferred. |
-| Keep-or-drop choices, U1a-U3b | 38 | 9 retained, 1 retired, 2 deferred, 26 still to decide. |
+| Keep-or-drop choices, U1a-U3b | 38 | 11 retained, 1 retired, 3 deferred, 23 still to decide. |
 | Migration design, D1a-D5a | 51 | Bitwarden AppImage retained; exact ownership, source, state, and recovery remain to design. |
 
-The current 96 unsupported outcomes consist of 66 migration-design outcomes
-(51 original, six retained R2 inverses, and nine retained U1 applications),
-26 keep-or-drop choices, and four deferred owner decisions. The v3.0 total
+The current 96 unsupported outcomes consist of 68 migration-design outcomes
+(51 original, six retained R2 inverses, and 11 retained U1 applications),
+23 keep-or-drop choices, and five deferred owner decisions. The v3.0 total
 stays 180/180 and the runnable count stays 54. Retaining an outcome does not
 make its unsafe v2 function runnable; a new owned implementation needs its
 own evidence. Legacy functions and existing v2 machine state remain untouched.
@@ -90,9 +90,9 @@ Choose which products and channels are still wanted; no old repository or user p
 
 Decide individual demand and edition; a current product does not validate the old installer.
 
-- `workstation:package.PowerShell` (commented; medium risk): The v2 function imports a system Microsoft key and a RHEL 7 repository; current Microsoft RPM guidance does not establish Fedora 44 support or an owned inverse.
-- `workstation:package.WoeUSB` (commented; medium risk): Fedora WoeUSB is orphaned and has no Fedora 44 package; the v2 DNF name cannot install on the declared target.
-- `workstation:package.Pidgin` (commented; high risk): v2 installs Pidgin and OTR but has no account, key, plugin activation, encrypted-message, or user-data recovery contract.
+- `workstation:package.PowerShell` (commented; medium risk; **keep for migration** on 2026-10-30): The v2 function imports a system Microsoft key and a RHEL 7 repository; current Microsoft RPM guidance does not establish Fedora 44 support or an owned inverse. Review a current source and exact recovery.
+- `workstation:package.WoeUSB` (commented; medium risk; **keep for migration** on 2026-10-30): Fedora WoeUSB is orphaned and has no Fedora 44 package; the v2 DNF name cannot install on the declared target. Review a maintained WoeUSB-ng source and keep USB writing user-initiated.
+- `workstation:package.Pidgin` (commented; high risk; **decide later** on 2026-10-30): v2 installs Pidgin and OTR but has no account, key, plugin activation, encrypted-message, or user-data recovery contract. Revisit the combined outcome after compatibility and recovery review.
 - `workstation:package.Bitwarden` (commented; high risk): The v2 latest RPM scrape lacks pinned publisher verification and a vault-preserving inverse; no v3 external-RPM handler satisfies the deeper credential/data gate.
 - `workstation:package.VMwareWorkstation` (commented; high risk): v2 follows a moving publisher installer redirect and uses host-specific serial data without pinned provenance or full recovery.
 - `workstation:action.PatchVMwareModules` (commented; high risk): v2 pulls moving third-party kernel module source, stops service, and lacks module rollback.
@@ -265,5 +265,5 @@ another product. No VM session is needed to record a non-runnable owner
 decision. After an individual decision, update its ledger row and batch next
 action, regenerate the progress report and burndown, run ledger/CI checks,
 and record the decision in the migration plan. Review the remaining U1-U3
-outcomes individually, starting with active v2 selectors. Revisit the four
+outcomes individually, starting with active v2 selectors. Revisit the five
 deferred choices when their related design work makes the choice concrete.

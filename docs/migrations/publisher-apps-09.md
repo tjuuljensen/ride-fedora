@@ -33,7 +33,7 @@ inverse deletes matching names.
   [Microsoft's current PowerShell RPM instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/install-rhel)
   cover supported RHEL versions and a universal RPM, but do not establish
   Fedora 44 support or ownership of an existing Microsoft repository/key.
-  Reopen for a requested Fedora deployment with pinned RPM/source, owned
+  Migrate through a Fedora deployment with pinned RPM/source, owned
   repository/key handling, and a VM apply/inverse that preserves pre-existing
   Microsoft products.
 - **Microsoft Teams: documented non-runnable replacement.**
@@ -44,7 +44,7 @@ inverse deletes matching names.
 - **WoeUSB: unsupported and non-runnable in v3.0.**
   [Fedora's WoeUSB package](https://packages.fedoraproject.org/pkgs/WoeUSB/WoeUSB/)
   is orphaned and its release table ends at Fedora 41. The v2 DNF name does
-  not provide a Fedora 44 package. A requested WoeUSB-ng successor needs
+  not provide a Fedora 44 package. A WoeUSB-ng successor needs
   a reviewed source/license and a safe package inverse; writing USB media
   remains an explicit user action outside RIDE apply.
 - **balenaEtcher: unsupported and non-runnable in v3.0.** The publisher
@@ -66,6 +66,12 @@ inverse deletes matching names.
   app. Reopen only for an explicitly requested maintained client with a
   pinned license/artifact, owned destination, and app-data-preserving VM
   lifecycle.
+
+The owner retained optional PowerShell and Windows USB media creation
+tooling for migration on 2026-10-30, alongside balenaEtcher. PowerShell needs
+a reviewed publisher source and owned repository/key lifecycle; WoeUSB needs
+a maintained successor with an owned inverse. Both remain non-runnable in
+v3.0. Creating USB media remains an explicit user action.
 
 ## Fedora 44 file-manager result
 

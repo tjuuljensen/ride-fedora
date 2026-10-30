@@ -1415,10 +1415,10 @@
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "nextAction": "Owner retained optional PowerShell for migration on 2026-10-30; select a current publisher source and prove owned repository/key plus Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 function imports a system Microsoft key and a RHEL 7 repository; current Microsoft RPM guidance does not establish Fedora 44 support or an owned inverse.",
-      "reviewTrigger": "A requested Fedora 44 PowerShell deployment has pinned RPM/source, repository/key ownership, and a VM lifecycle that preserves pre-existing Microsoft products."
+      "reviewTrigger": "A Fedora 44 PowerShell deployment has pinned RPM/source, repository/key ownership, and a VM lifecycle that preserves pre-existing Microsoft products."
     },
     {
       "key": "workstation:package.MicrosoftTeams",
@@ -1461,10 +1461,10 @@
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "nextAction": "Owner retained Windows USB media creation tooling for migration on 2026-10-30; review a maintained WoeUSB-ng source and prove owned Fedora 44 lifecycle.",
       "v31Hardening": [],
       "reason": "Fedora WoeUSB is orphaned and has no Fedora 44 package; the v2 DNF name cannot install on the declared target.",
-      "reviewTrigger": "A requested maintained WoeUSB-ng source has license and acquisition review, a safe package inverse, and exact-target VM evidence; USB writing stays user-initiated."
+      "reviewTrigger": "A maintained WoeUSB-ng source has license and acquisition review, a safe package inverse, and exact-target VM evidence; USB writing stays user-initiated."
     },
     {
       "key": "workstation:package.BalenaEtcher",
@@ -1698,7 +1698,7 @@
         "docs/migrations/system-security-27.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on the documented target-specific safety and ownership trigger.",
+      "nextAction": "Owner deferred the combined Pidgin/OTR keep-or-retire decision on 2026-10-30; revisit after plugin compatibility and account/key recovery are reviewed.",
       "v31Hardening": [],
       "reason": "v2 installs Pidgin and OTR but has no account, key, plugin activation, encrypted-message, or user-data recovery contract.",
       "reviewTrigger": "A requested Pidgin/OTR deployment passes current source and license review, two-party message test, and seeded-profile recovery."
@@ -4601,7 +4601,7 @@
         "docs/acceptance/package.gnome-commander.md",
         "docs/acceptance/package.mc.md"
       ],
-      "nextAction": "Design the retained balenaEtcher publisher RPM lifecycle; keep file managers opt-in, complete H014 in v3.1, and continue publisher-apps-10."
+      "nextAction": "Design retained PowerShell source, WoeUSB-ng acquisition, and balenaEtcher RPM lifecycles; keep file managers opt-in and complete H014 in v3.1."
     },
     {
       "id": "publisher-apps-10",
@@ -5019,7 +5019,7 @@
       "evidence": [
         "docs/migrations/system-security-27.md"
       ],
-      "nextAction": "Reopen OTR only after two-party encrypted messaging and seeded-profile recovery evidence."
+      "nextAction": "Revisit the deferred combined Pidgin/OTR decision after plugin compatibility, two-party messaging, and seeded-profile recovery review."
     },
     {
       "id": "system-security-28",

@@ -257,7 +257,7 @@ GNOME Commander and Midnight Commander as a curated opt-in profile after a
 combined package and profile VM lifecycle. Teams web access replaces the
 unsupported Linux desktop client; the deprecated Sonos AppImage is retired;
 PowerShell, WoeUSB, and Etcher remain non-runnable on their documented
-source/ownership triggers; the owner retained Etcher for migration.
+source/ownership triggers; the owner retained all three for migration.
 [Publisher batch 10](migrations/publisher-apps-10.md) retires Atom editor
 and its plugin set after upstream sunset, and records Arduino IDE, Discord,
 Joplin, and Vivaldi as non-runnable until their respective portable or
@@ -325,7 +325,9 @@ operations. The [SmartMonTools probe](migrations/system-security-smartmontools.m
 found that the RPM enabled `smartd`, so that outcome remains non-runnable
 until a service-aware inverse exists. Pidgin/OTR and ClamAV signatures have
 their own [security decisions](migrations/system-security-27.md) and
-[signature decision](migrations/system-security-28.md).
+[signature decision](migrations/system-security-28.md). The owner deferred
+the combined Pidgin/OTR keep-or-retire choice pending compatibility and
+account/key recovery review.
 
 The current 2026-10-30 ledger result is **180/180 scoped outcomes dispositioned**:
 28 supported, 26 operable opt-in candidates, 13 replaced, 17 retired, and
@@ -351,11 +353,12 @@ proposals, 38 individual keep-or-drop choices, and 51 original migration-design
 decisions. The owner retired NautilusHash and NautilusImageTools; deferred
 GnomeExtInstaller, GnomeRegion, and AppImageLauncher; and retained portable
 Bitwarden, six R2 inverse outcomes, BalenaEtcher, ArduinoIDE, Discord, Joplin,
-Xmind, Chrome, Edge, SpotifyClient, and HandBrake for migration. The owner
-also deferred Vivaldi and retired the scoped Opera outcome.
+Xmind, Chrome, Edge, SpotifyClient, HandBrake, PowerShell, and WoeUSB for
+migration. The owner also deferred Vivaldi and Pidgin/OTR and retired the
+scoped Opera outcome.
 The retained outcomes require owned state and recovery; their unsafe v2
-methods remain non-runnable. The current 96 unsupported rows comprise 66
-migration-design outcomes, 26 keep-or-drop choices, and four deferred owner
+methods remain non-runnable. The current 96 unsupported rows comprise 68
+migration-design outcomes, 23 keep-or-drop choices, and five deferred owner
 decisions. Owner choices update next actions without changing legacy source
 code or machine state.
 

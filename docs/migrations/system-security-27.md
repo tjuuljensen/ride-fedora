@@ -9,9 +9,13 @@ review plugin compatibility, installation and activation, security claims,
 user data and key ownership, removal, and recovery in an isolated VM batch.
 An RPM transaction alone does not establish correct encrypted messaging.
 The v2 function gives no account, key, plugin activation, protocol test, or
-user-data inverse. A runnable operation needs a separately requested Pidgin
-and OTR deployment, current upstream and license review, isolated key store,
+user-data inverse. If retained, a runnable operation needs a Pidgin and OTR
+deployment, current upstream and license review, isolated key store,
 two-party encrypted-message test, and seeded-profile recovery on a disposable
 Workstation. Reopen on that evidence; do not put a security claim behind a
 package-only success result. No state-changing VM test was run for this
 non-runnable decision.
+
+The owner deferred the combined Pidgin/OTR keep-or-retire choice on
+2026-10-30. Revisit it after plugin compatibility and account/key recovery
+are reviewed; the pair remains non-runnable.
