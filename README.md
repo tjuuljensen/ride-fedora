@@ -4,8 +4,8 @@ This branch develops RIDE Linux v3. The client is written in Bash, the
 bootstrapper in POSIX `sh`, and operations and profiles in JSON. `jq` is a
 runtime dependency. The historical Fedora function library remains in this
 repository for migration reference; `ride.sh` no longer evaluates functions
-from a preset. The stable v2 release line remains on `master` until v3 passes
-its acceptance gates.
+from a preset. The stable v2 release line remains on `master` while the v3
+release is prepared on `codex/ride-v3-migration`.
 
 ## Try the development client
 

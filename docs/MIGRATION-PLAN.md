@@ -371,11 +371,14 @@ Firefox, Python compilation, and acceptance collection gates passed. The
 only unrelated working-tree change remains the user's deletion of
 `docs/v3-migration.md`, which is excluded from the promotion commit.
 
-The last pre-promotion commit, `39d5846`, passed the remote
-[v3 validation workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025748553)
-and [shell executable-mode workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41025748482).
-These gates complement the disposable VM evidence; the promoted revision
-requires its own remote CI result.
+Promotion commit `cc96362` passed the remote
+[v3 validation workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41031081441)
+and [shell executable-mode workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41031081445).
+The v3 job passed shell syntax and ShellCheck, catalog and generated docs,
+55 mocked and Firefox tests, and acceptance collection. The required v3
+package envelope is accepted on its declared Fedora targets; optional and
+unsupported outcomes remain scoped separately above. A v3 release tag has
+not been published and `master` remains the v2 release line.
 
 ## Former CERT forensic repository burndown
 
