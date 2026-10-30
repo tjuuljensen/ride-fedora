@@ -724,3 +724,21 @@ The pinned Fedora 44 Workstation VM lifecycle passed under QEMU TCG. The
 verification, headless offline browser startup, the desktop link, and owned
 recovery. Linux's installed deployment remains a deliberate platform
 difference; no unexplained shared Windows contract drift was found.
+
+### Fedora Chepy isolated Python preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding Linux
+`package.chepy` and `package.python3.12`. Windows has no Chepy or Python
+3.12 catalog operation. Linux selects a Fedora RPM for the interpreter and
+a hash-pinned PyPI source distribution in a user venv for the Chepy CLI.
+This is a Linux-only capability and source path. The existing catalog,
+profile, and run schema versions remain unchanged; the Chepy source digest
+is bound to its Linux run signature. Recheck if Windows adds Chepy, either
+platform changes product or deployment selection, or a shared run-state
+contract is revised.
+
+The pinned Fedora 44 Workstation VM lifecycle passed under QEMU TCG. The
+[acceptance record](acceptance/package.chepy.md) covers the signed Python
+3.12 RPM, exact Chepy sdist digest, isolated CLI startup, repeat, restore,
+and explicit removal. No unexplained shared Windows contract drift was found.

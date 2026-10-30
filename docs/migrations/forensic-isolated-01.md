@@ -1,7 +1,7 @@
 # Forensic isolated batch 01: active v2 tools
 
-Status: **one supported RPM and three operable opt-in candidates; the VMFS
-placeholder is retired and Chepy remains non-runnable**, 2026-10-30.
+Status: **one supported source outcome and four operable opt-in candidates;
+the VMFS placeholder is retired**, 2026-10-30.
 The owner subsequently kept VMFS access, ASN, UnfURL, CyberChef, and Chepy
 capabilities in the v3.0 fast-track review. The old VMFS link-only function
 remains retired; a working reader needs a current licensed source.
@@ -17,7 +17,7 @@ they must not be treated as one install bundle. The function source is
 | `ASN` | Downloads an unpinned [MIT-licensed upstream script](https://github.com/nitefood/asn) into `/usr/bin` and installs several RPM dependencies; inverse removes some shared dependencies. | A [pinned owned user script](forensic-isolated-01-asn.md) and independent Fedora RPM prerequisites now provide an operable opt-in candidate. |
 | `UnfURL` | Installs `dfir-unfurl` into the user's global Python environment. | A [pinned user venv](forensic-isolated-01-unfurl.md) now provides an operable opt-in candidate on Fedora 44 Workstation. |
 | `CyberChef` | Selects the first mutable GitHub release URL, extracts a ZIP into `/usr/lib`, and writes a desktop launcher. | A [pinned offline ZIP and owned desktop launcher](forensic-isolated-01-cyberchef.md) now provide an operable opt-in candidate. |
-| `Chepy` | Clones an unpinned [GPL-3.0 upstream](https://github.com/securisec/chepy), globally installs Python dependencies, builds with PyInstaller, and writes `/usr/bin/chepy`. | Need a pinned isolated build or package, distinct from CyberChef, with owned inverse. |
+| `Chepy` | Clones an unpinned [GPL-3.0 upstream](https://github.com/securisec/chepy), globally installs Python dependencies, builds with PyInstaller, and writes `/usr/bin/chepy`. | A [pinned PyPI sdist in an owned Python 3.12 user venv](forensic-isolated-01-chepy.md) now provides an operable opt-in candidate. |
 
 ## Completion criteria defined before implementation
 
@@ -71,10 +71,10 @@ ZIP and tagged license are hash-checked; the owned payload retains bundled
 notices and a desktop launcher. Firefox opened the offline page headlessly
 in the disposable VM. Broader visual and recipe interaction remains H028.
 
-`Chepy` remains **unsupported as a v3.0 operation**. Its upstream project
-and license are identifiable, but the current v3 handlers do not yet provide
-an isolated build destination with an owned inverse. Reopen it with pinned
-source, focused mocked tests, and an exact-target VM happy path. It must not
-clone and build an unpinned branch into system paths. UnfURL has a separate
-[accepted candidate path](forensic-isolated-01-unfurl.md), with broader UI
-and failure coverage in v3.1.
+`Chepy` now has a separate [accepted candidate path](forensic-isolated-01-chepy.md)
+and [Fedora 44 acceptance](../acceptance/package.chepy.md). Fedora Python
+3.12 is a supported RPM operation on the declared Workstation target; the
+Chepy sdist is hash-pinned in an owned user venv. Broader transformations,
+optional plugins, dependency locking, and update behavior remain H029.
+UnfURL has a separate [accepted candidate path](forensic-isolated-01-unfurl.md),
+with broader UI and failure coverage in v3.1.

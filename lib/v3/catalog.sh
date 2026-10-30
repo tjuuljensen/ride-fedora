@@ -33,7 +33,7 @@ ride_validate_catalog() {
       (.licenseUri | type == "string" and startswith("https://")) and
       (if .kind == "package" then
         .distribution == "installed" and .deploymentId == "local-installed" and
-        (.artifactFormat | IN("rpm", "wheel", "script", "zip")) and
+        (.artifactFormat | IN("rpm", "wheel", "script", "zip", "sdist")) and
         (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
         (.sourceId as $defaultSource | (.sourceProviders // []) | type == "array" and
           ([.[].sourceId] | length == (unique | length)) and
@@ -59,8 +59,13 @@ ride_validate_catalog() {
        elif .handler == "gsettings-boolean" then (.kind == "setting" and .scope == "user" and
          .states == ["enabled", "disabled"] and
          (.id | IN("setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting")))
-       elif .handler == "python-venv" then (.kind == "package" and .artifactFormat == "wheel" and
-         (.id | IN("package.volatility3", "package.dfir-unfurl")))
+       elif .handler == "python-venv" then (.kind == "package" and
+         (if .id == "package.chepy" then
+           .scope == "user" and .artifactFormat == "sdist" and .sourceId == "pypi-sdist-venv" and
+           .verification == "pypi-sdist-sha256" and
+           .sourceUri == "https://files.pythonhosted.org/packages/3f/4c/b8bc1607c96e1df206912e4db82ace5adfb2fe9dce5926fd7860d265fa58/chepy-7.6.0.tar.gz" and
+           .sourceSha256 == "f6084689e43d128748c18f79c79d75539abb67ac8245e950b678cfa0da2f5010"
+          else .artifactFormat == "wheel" and (.id | IN("package.volatility3", "package.dfir-unfurl")) end))
        elif .handler == "pinned-script" then (.kind == "package" and .id == "package.asn" and
          .scope == "user" and .artifactFormat == "script" and
          .sourceId == "github-raw-pinned" and .verification == "github-commit-sha256-observed" and
@@ -144,7 +149,7 @@ ride_source_signature() {
   local version=${2:-2} fields
   case "$version" in
     1) fields='{id, sourceId, handler, packageName, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
-    2) fields='if (.handler | IN("pinned-script", "pinned-zip")) then
+    2) fields='if (.handler | IN("pinned-script", "pinned-zip")) or .id == "package.chepy" then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
           scope, sourceUri, sourceSha256, licenseUri, licenseSha256, verification, targets, recovery}
        else

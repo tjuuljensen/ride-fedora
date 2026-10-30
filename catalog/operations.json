@@ -579,6 +579,89 @@
       "acceptanceEvidence": "docs/acceptance/package.cyberchef.md"
     },
     {
+      "id": "package.python3.12",
+      "kind": "package",
+      "name": "Python 3.12 runtime",
+      "group": "chepy-runtime",
+      "description": "Install Fedora Python 3.12 for tools that do not support Fedora 44 default Python without changing the system python command.",
+      "handler": "dnf-package",
+      "packageName": "python3.12",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "python-3.12",
+      "productUri": "https://www.python.org/",
+      "license": "Python-2.0.1",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/python3.12/python3.12/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/python3.12/python3.12/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.python3.12.md"
+    },
+    {
+      "id": "package.chepy",
+      "kind": "package",
+      "name": "Chepy forensic transformation CLI",
+      "group": "forensics",
+      "description": "Install pinned Chepy 7.6.0 into an isolated Python 3.12 user environment without global pip or PyInstaller.",
+      "handler": "python-venv",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "dependencies": [
+        "package.python3.12"
+      ],
+      "productId": "chepy",
+      "productUri": "https://github.com/securisec/chepy",
+      "license": "GPL-3.0-only",
+      "licenseUri": "https://github.com/securisec/chepy/blob/7.6.0/LICENSE",
+      "sourceUri": "https://files.pythonhosted.org/packages/3f/4c/b8bc1607c96e1df206912e4db82ace5adfb2fe9dce5926fd7860d265fa58/chepy-7.6.0.tar.gz",
+      "sourceSha256": "f6084689e43d128748c18f79c79d75539abb67ac8245e950b678cfa0da2f5010",
+      "verification": "pypi-sdist-sha256",
+      "sourceId": "pypi-sdist-venv",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "sdist",
+      "acceptanceEvidence": "docs/acceptance/package.chepy.md"
+    },
+    {
       "id": "package.pwgen",
       "kind": "package",
       "name": "Password generator",

@@ -48,7 +48,7 @@
         "handler": {"enum": ["dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean"]},
         "distribution": {"const": "installed"},
         "deploymentId": {"const": "local-installed"},
-        "artifactFormat": {"enum": ["rpm", "wheel", "script", "zip"]},
+        "artifactFormat": {"enum": ["rpm", "wheel", "script", "zip", "sdist"]},
         "sourceId": {"type": "string", "pattern": "^[a-z0-9-]+$"},
         "sourceProviders": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sourceProvider"}},
         "packageName": {"type": "string", "pattern": "^[A-Za-z0-9+_.-]+$"},
@@ -70,7 +70,7 @@
         "sourceUri": {"type": "string", "pattern": "^https://"},
         "sourceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "licenseSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "local-gsettings-state", "github-release-sha256-observed", "github-release-api-sha256", "github-commit-sha256-observed", "pypi-pinned-sha256"]}
+        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "local-gsettings-state", "github-release-sha256-observed", "github-release-api-sha256", "github-commit-sha256-observed", "pypi-pinned-sha256", "pypi-sdist-sha256"]}
       },
       "allOf": [
         {"if": {"properties": {"kind": {"const": "package"}}}, "then": {"required": ["distribution", "deploymentId", "artifactFormat", "sourceId"], "oneOf": [{"properties": {"states": {"const": ["installed", "absent"]}, "recovery": {"const": "remove-new-install"}}}, {"properties": {"states": {"const": ["installed"]}, "recovery": {"const": "none"}}}]}, "else": {"not": {"anyOf": [{"required": ["distribution"]}, {"required": ["deploymentId"]}, {"required": ["artifactFormat"]}, {"required": ["sourceId"]}, {"required": ["sourceProviders"]}]}}},
@@ -78,7 +78,8 @@
         {"if": {"properties": {"handler": {"const": "systemd-service"}}}, "then": {"required": ["serviceName"], "properties": {"kind": {"const": "setting"}, "states": {"const": ["enabled", "disabled"]}}}},
         {"if": {"properties": {"handler": {"const": "gsettings-boolean"}}}, "then": {"properties": {"kind": {"const": "setting"}, "scope": {"const": "user"}, "states": {"const": ["enabled", "disabled"]}, "id": {"enum": ["setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting"]}, "verification": {"const": "local-gsettings-state"}, "recovery": {"const": "exact-state"}}}},
         {"if": {"properties": {"handler": {"const": "github-asset"}}}, "then": {"required": ["githubRepository", "assetSuffix", "maxBytes"], "properties": {"kind": {"const": "artifact"}, "states": {"const": ["downloaded"]}}}},
-        {"if": {"properties": {"handler": {"const": "python-venv"}}}, "then": {"properties": {"id": {"enum": ["package.volatility3", "package.dfir-unfurl"]}, "kind": {"const": "package"}, "artifactFormat": {"const": "wheel"}, "states": {"const": ["installed", "absent"]}}}},
+        {"if": {"properties": {"handler": {"const": "python-venv"}}}, "then": {"properties": {"id": {"enum": ["package.volatility3", "package.dfir-unfurl", "package.chepy"]}, "kind": {"const": "package"}, "artifactFormat": {"enum": ["wheel", "sdist"]}, "states": {"const": ["installed", "absent"]}}}},
+        {"if": {"properties": {"id": {"const": "package.chepy"}}}, "then": {"required": ["sourceSha256"], "properties": {"handler": {"const": "python-venv"}, "scope": {"const": "user"}, "artifactFormat": {"const": "sdist"}, "sourceId": {"const": "pypi-sdist-venv"}, "verification": {"const": "pypi-sdist-sha256"}, "sourceUri": {"const": "https://files.pythonhosted.org/packages/3f/4c/b8bc1607c96e1df206912e4db82ace5adfb2fe9dce5926fd7860d265fa58/chepy-7.6.0.tar.gz"}, "sourceSha256": {"const": "f6084689e43d128748c18f79c79d75539abb67ac8245e950b678cfa0da2f5010"}}}},
         {"if": {"properties": {"handler": {"const": "pinned-script"}}}, "then": {"required": ["sourceSha256", "licenseSha256"], "properties": {"id": {"const": "package.asn"}, "kind": {"const": "package"}, "scope": {"const": "user"}, "artifactFormat": {"const": "script"}, "sourceId": {"const": "github-raw-pinned"}, "verification": {"const": "github-commit-sha256-observed"}, "states": {"const": ["installed", "absent"]}, "sourceUri": {"pattern": "^https://raw\\.githubusercontent\\.com/nitefood/asn/[0-9a-f]{40}/asn$"}, "licenseUri": {"pattern": "^https://raw\\.githubusercontent\\.com/nitefood/asn/[0-9a-f]{40}/LICENSE$"}}}},
         {"if": {"properties": {"handler": {"const": "pinned-zip"}}}, "then": {"required": ["sourceSha256", "licenseSha256"], "properties": {"id": {"const": "package.cyberchef"}, "kind": {"const": "package"}, "scope": {"const": "system"}, "artifactFormat": {"const": "zip"}, "sourceId": {"const": "github-release-pinned"}, "verification": {"const": "github-release-api-sha256"}, "states": {"const": ["installed", "absent"]}, "sourceUri": {"const": "https://github.com/gchq/CyberChef/releases/download/v11.5.0/CyberChef_8cd426dd4f40f1423912d5fad91b578a86a65112.zip"}, "licenseUri": {"const": "https://raw.githubusercontent.com/gchq/CyberChef/v11.5.0/LICENSE"}, "sourceSha256": {"const": "f6478925d3eaa16ec08626a85f5b85eed10d531a5e18700615fed7ecb024cccf"}, "licenseSha256": {"const": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"}}}}
       ]

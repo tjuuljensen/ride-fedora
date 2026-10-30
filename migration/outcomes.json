@@ -1019,17 +1019,24 @@
       "batch": "forensic-isolated-01",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "package.chepy"
+      ],
       "evidence": [
-        "docs/migrations/forensic-isolated-01.md"
+        "docs/migrations/forensic-isolated-01.md",
+        "docs/migrations/forensic-isolated-01-chepy.md",
+        "docs/acceptance/package.chepy.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept Chepy for v3.0 on 2026-10-30. Pin an isolated Python environment and prove owned recovery with a focused Fedora 44 lifecycle.",
-      "v31Hardening": [],
-      "reason": "The v2 installer clones an unpinned Git branch, globally installs Python packages and PyInstaller, and copies a built binary into /usr/bin without owned recovery.",
-      "reviewTrigger": "A concrete Chepy CLI need with pinned licensed source or wheel, isolated reproducible build, owned inverse, and Fedora 44 VM acceptance.",
+      "nextAction": "Keep Chepy opt-in with --allow-candidate; H029 covers transitive dependency locking, plugin compatibility, wider transformations, and update behavior.",
+      "v31Hardening": [
+        "H002",
+        "H029"
+      ],
+      "reason": "Pinned Chepy 7.6.0 PyPI source runs in an owned Python 3.12 user venv; the Fedora runtime and CLI passed the declared Workstation VM lifecycle with exact inverse.",
+      "reviewTrigger": "Recheck the PyPI release digest, dependency resolution, Python 3.12 availability, CLI behavior, and owned recovery when upstream or Fedora target changes.",
       "v30Decision": "keep"
     },
     {
@@ -4749,9 +4756,11 @@
         "docs/migrations/forensic-isolated-01-asn.md",
         "docs/acceptance/package.asn.md",
         "docs/migrations/forensic-isolated-01-cyberchef.md",
-        "docs/acceptance/package.cyberchef.md"
+        "docs/acceptance/package.cyberchef.md",
+        "docs/migrations/forensic-isolated-01-chepy.md",
+        "docs/acceptance/package.chepy.md"
       ],
-      "nextAction": "ASN, UnfURL, and CyberChef are operable opt-in; migrate Chepy in an isolated environment and find a working VMFS reader path."
+      "nextAction": "ASN, UnfURL, CyberChef, and Chepy are operable opt-in; find a working VMFS reader path. H029 covers wider Chepy behavior."
     },
     {
       "id": "forensic-isolated-02",
@@ -5755,6 +5764,12 @@
       "id": "H028",
       "title": "CyberChef offline browser behavior and updates",
       "trigger": "After Fedora 44 Workstation offline ZIP lifecycle acceptance, test representative recipe interactions, browser compatibility, visual behavior, and a version-update path that preserves user data.",
+      "status": "queued"
+    },
+    {
+      "id": "H029",
+      "title": "Chepy dependency, plugin, transformation, and update behavior",
+      "trigger": "After Fedora 44 Workstation Python 3.12 and pinned Chepy sdist lifecycle acceptance, lock transitive dependency hashes, test optional plugins and representative transformations, and review version updates with owned recovery.",
       "status": "queued"
     }
   ]

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "forensic-chepy",
+  "description": "Opt-in isolated Chepy 7.6.0 CLI; apply as the user after chepy-runtime",
+  "operations": [
+    {"id": "package.chepy", "state": "installed"}
+  ]
+}

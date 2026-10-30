@@ -77,7 +77,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.BitwardenAppImage` | Use the real AppImage with a separate portable identity and vault-safe inverse. | [Batch review](publisher-apps-06.md) |
 | `workstation:package.Brave` | Own the publisher repository, signing key, and installed package lifecycle. | [Batch review](publisher-apps-03.md) |
 | `workstation:package.BulkExtractor` | Use a pinned current release and preserve forensic output. | [Batch review](forensic-isolated-04.md) |
-| `workstation:package.Chepy` | Build or install in a pinned isolated environment, not global pip. | [Batch review](forensic-isolated-01.md) |
+| `workstation:package.Chepy` | The pinned PyPI sdist, Fedora Python 3.12 runtime, and owned user venv now pass an opt-in lifecycle; wider behavior remains H029. | [Acceptance](../acceptance/package.chepy.md) |
 | `workstation:package.Chrome` | Use an owned official package source and preserve browser profile data. | [Batch review](publisher-apps-11.md) |
 | `workstation:package.CyberChef` | The pinned official ZIP, tagged license, bundled notices, and owned desktop launcher now pass an opt-in lifecycle. | [Acceptance](../acceptance/package.cyberchef.md) |
 | `workstation:package.Discord` | Choose verified publisher RPM or owned Flatpak source; preserve profile data. | [Batch review](publisher-apps-10.md) |

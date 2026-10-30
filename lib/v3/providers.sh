@@ -37,6 +37,9 @@ ride_observe() {
         package.dfir-unfurl)
           ride_observe_unfurl
           ;;
+        package.chepy)
+          ride_observe_chepy "$entry"
+          ;;
         *) ride_die "unknown isolated Python operation" ;;
       esac
       ;;
@@ -81,6 +84,7 @@ ride_change() {
       case "$(jq -r '.id' <<< "$entry")" in
         package.volatility3) ride_change_volatility "$state" ;;
         package.dfir-unfurl) ride_change_unfurl "$state" ;;
+        package.chepy) ride_change_chepy "$entry" "$state" ;;
         *) ride_die "unknown isolated Python operation" ;;
       esac
       ;;
@@ -137,6 +141,116 @@ ride_volatility_environment() {
 
 ride_unfurl_environment() {
   printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/dfir-unfurl"
+}
+
+ride_chepy_environment() {
+  printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/chepy"
+}
+
+ride_chepy_link() {
+  printf '%s\n' "$HOME/.local/bin/chepy"
+}
+
+ride_chepy_owned_contents() {
+  local environment=$1
+  [[ "$(find "$environment" -mindepth 1 -maxdepth 1 -printf '%f\n' | LC_ALL=C sort)" == \
+    $'.ride-owned\nchepy-7.6.0.tar.gz\ndependencies.txt\nvenv' ]]
+}
+
+ride_observe_chepy() {
+  local entry=$1 environment link source_sha marker
+  environment=$(ride_chepy_environment)
+  link=$(ride_chepy_link)
+  source_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  marker="ride-fedora package.chepy 7.6.0 $source_sha"
+  if [[ -d "$environment" && ! -L "$environment" ]] &&
+     ride_chepy_owned_contents "$environment" &&
+     [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+        "$(cat "$environment/.ride-owned")" == "$marker" &&
+        -f "$environment/chepy-7.6.0.tar.gz" && ! -L "$environment/chepy-7.6.0.tar.gz" &&
+        "$(sha256sum -- "$environment/chepy-7.6.0.tar.gz" | cut -d' ' -f1)" == "$source_sha" &&
+        -f "$environment/dependencies.txt" && ! -L "$environment/dependencies.txt" &&
+        -x "$environment/venv/bin/python" && -x "$environment/venv/bin/chepy" &&
+        -L "$link" && "$(readlink -- "$link")" == "$environment/venv/bin/chepy" ]] &&
+     "$environment/venv/bin/python" -c 'import importlib.metadata as m; assert m.version("chepy") == "7.6.0"; import chepy' >/dev/null 2>&1; then
+    printf 'installed\n'
+  else
+    printf 'absent\n'
+  fi
+}
+
+ride_change_chepy() {
+  local entry=$1 state=$2 environment link base source_uri source_sha marker
+  environment=$(ride_chepy_environment)
+  link=$(ride_chepy_link)
+  base=$(dirname "$environment")
+  source_uri=$(jq -r '.sourceUri' <<< "$entry")
+  source_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  marker="ride-fedora package.chepy 7.6.0 $source_sha"
+  case "$state" in
+    installed)
+      ride_require_command python3.12
+      ride_require_command curl
+      ride_require_command sha256sum
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        ride_die "Chepy destination already exists; refusing to overwrite"
+      fi
+      umask 077
+      mkdir -p "$base" "$(dirname "$link")"
+      mkdir "$environment" || ride_die "cannot create isolated Chepy destination"
+      if ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 90 --max-filesize 200000 \
+          "$source_uri" -o "$environment/chepy-7.6.0.tar.gz"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      if [[ "$(sha256sum -- "$environment/chepy-7.6.0.tar.gz" | cut -d' ' -f1)" != "$source_sha" ]]; then
+        rm -rf -- "$environment"
+        ride_error "Chepy source digest verification failed"
+        return 1
+      fi
+      if ! python3.12 -m venv "$environment/venv"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      if ! PIP_NO_INPUT=1 "$environment/venv/bin/python" -m pip --isolated install \
+          --disable-pip-version-check --index-url https://pypi.org/simple \
+          "$environment/chepy-7.6.0.tar.gz"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      if [[ ! -x "$environment/venv/bin/chepy" ]] ||
+         ! "$environment/venv/bin/python" -c 'import importlib.metadata as m; assert m.version("chepy") == "7.6.0"; import chepy' >/dev/null 2>&1; then
+        rm -rf -- "$environment"
+        ride_error "Chepy CLI or import verification failed"
+        return 1
+      fi
+      if ! "$environment/venv/bin/python" -m pip --isolated freeze --all > "$environment/dependencies.txt"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      printf '%s\n' "$marker" > "$environment/.ride-owned"
+      if ! ln -s -- "$environment/venv/bin/chepy" "$link"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      ;;
+    absent)
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        if ! { [[ -d "$environment" && ! -L "$environment" ]] &&
+               ride_chepy_owned_contents "$environment" &&
+               [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+                  "$(cat "$environment/.ride-owned")" == "$marker" &&
+                  -f "$environment/chepy-7.6.0.tar.gz" && ! -L "$environment/chepy-7.6.0.tar.gz" &&
+                  "$(sha256sum -- "$environment/chepy-7.6.0.tar.gz" | cut -d' ' -f1)" == "$source_sha" &&
+                  -L "$link" && "$(readlink -- "$link")" == "$environment/venv/bin/chepy" ]]; }; then
+          ride_die "refusing to remove modified or unowned Chepy files"
+        fi
+        rm -- "$link"
+        rm -rf -- "$environment"
+      fi
+      ;;
+    *) ride_die "invalid Chepy state: $state" ;;
+  esac
 }
 
 ride_asn_environment() {

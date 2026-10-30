@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "chepy-runtime",
+  "description": "Opt-in Fedora Python 3.12 runtime for Chepy",
+  "operations": [
+    {"id": "package.python3.12", "state": "installed"}
+  ]
+}

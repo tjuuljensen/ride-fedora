@@ -20,7 +20,7 @@ drift blocks promotion of a package operation.
 | Distribution | Installed application or portable files | `installed` |
 | Deployment | One owned instance of that distribution | `local-installed` |
 | Provider | Approved route to an exact artifact/build | `fedora-rpm` |
-| Artifact format | Bytes acquired or installed | `rpm`, `wheel`, `script`, `zip` |
+| Artifact format | Bytes acquired or installed | `rpm`, `wheel`, `sdist`, `script`, `zip` |
 | Scope | System or intended user | `system` for DNF, `user` for Volatility3 |
 | Destination | Package-manager identity or owned path | RPM name or Volatility3 environment |
 
