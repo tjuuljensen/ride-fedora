@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "openconnect-vpn-tools",
+  "description": "Opt-in Fedora OpenConnect CLI, routing helper, and GNOME editor packages; no connections or secrets.",
+  "operations": [
+    {"id": "package.vpnc-script", "state": "installed"},
+    {"id": "package.openconnect", "state": "installed"},
+    {"id": "package.networkmanager-openconnect-gnome", "state": "installed"}
+  ]
+}

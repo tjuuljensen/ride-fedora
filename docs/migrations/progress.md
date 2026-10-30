@@ -3,13 +3,13 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**185/185 dispositioned (100.0%)**: 30 supported, 37 opt-in candidate, 11 replaced, 11 retired, 0 private, 96 unsupported; 0 unresolved.
+**185/185 dispositioned (100.0%)**: 31 supported, 37 opt-in candidate, 11 replaced, 11 retired, 0 private, 95 unsupported; 0 unresolved.
 
-**v3.0 package/setting coverage: 67/169 operable (39.6%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 92 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
+**v3.0 package/setting coverage: 68/169 operable (40.2%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 91 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
 
 For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.
 
-Runnable outcomes: 67; 37 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
+Runnable outcomes: 68; 37 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
 
 | Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 retired | v3.0 replaced | v3.0 gap | Evidence | Next action |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -72,7 +72,7 @@ Runnable outcomes: 67; 37 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `system-security-05` | System Security 05: NetMgrLibreswan | high 1 | 1/1 | 1/1 | 0 | 0 | 0 | [system-security-packages.md](../../docs/acceptance/system-security-packages.md), [system-security-packages.md](../../docs/migrations/system-security-packages.md) | Keep package-only profile opt-in; complete the named v3.1 VPN or vault review before extending behavior. |
 | `system-security-06` | System Security 06: MulticastDNS | medium 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner kept MulticastDNS control; design line-scoped resolver ownership and exact DNS-order recovery. |
 | `system-security-07` | System Security 07: NetMgrL2TP | high 1 | 1/1 | 1/1 | 0 | 0 | 0 | [system-security-packages.md](../../docs/acceptance/system-security-packages.md), [system-security-packages.md](../../docs/migrations/system-security-packages.md) | Keep package-only profile opt-in; complete the named v3.1 VPN or vault review before extending behavior. |
-| `system-security-08` | System Security 08: OpenconnectVPN | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner kept OpenconnectVPN; choose a reviewed package and prove profile, service, and removal behavior. |
+| `system-security-08` | System Security 08: OpenconnectVPN | high 1 | 1/1 | 1/1 | 0 | 0 | 0 | [system-security-openconnect-packages.md](../../docs/acceptance/system-security-openconnect-packages.md), [system-security-openconnect-01.md](../../docs/migrations/system-security-openconnect-01.md) | Keep the signed OpenConnect package profile opt-in and review actual connection behavior under H031. |
 | `system-security-09` | System Security 09: ImportOpenVPNProfiles | high 1 | 1/1 | 0/0 | 0 | 0 | 0 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger. |
 | `system-security-10` | System Security 10: ExpressVPN | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner kept ExpressVPN; pin licensed publisher acquisition and prove private activation and profile-safe recovery. |
 | `system-security-11` | System Security 11: StartExpressVPNafterBoot | high 1 | 1/1 | 0/0 | 0 | 0 | 0 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger. |
@@ -153,3 +153,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H028` | CyberChef offline browser behavior and updates | After Fedora 44 Workstation offline ZIP lifecycle acceptance, test representative recipe interactions, browser compatibility, visual behavior, and a version-update path that preserves user data. | queued |
 | `H029` | Chepy dependency, plugin, transformation, and update behavior | After Fedora 44 Workstation Python 3.12 and pinned Chepy sdist lifecycle acceptance, lock transitive dependency hashes, test optional plugins and representative transformations, and review version updates with owned recovery. | queued |
 | `H030` | UPower warning behavior on battery hardware | After the opt-in 15- and 20-percent UPower drop-in lifecycles pass on Fedora 44 Workstation, verify warning transitions on a disposable battery-capable target without risking production power state. | queued |
+| `H031` | OpenConnect protocol, routing, credentials, and GNOME dialog | After the Fedora 44 OpenConnect CLI, routing helper, and GNOME editor package lifecycles pass, test a private disposable Juniper-compatible endpoint, DNS and route changes, secret handling, and connection recovery without changing unrelated profiles. | queued |

@@ -811,3 +811,23 @@ No Windows catalog, profile, or run-state behavior is changed, and no
 unexplained shared contract drift was found. Recheck if either platform adds
 battery-policy management, changes selected-value journaling, or prepares a
 release candidate.
+
+### Fedora OpenConnect package batch preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before replacing the v2
+OpenConnect source build. Windows has no matching OpenConnect deployment or
+VPN profile operation. Linux adds three Fedora RPM rows and one opt-in
+profile using the existing `dnf-package`, signed-source, and
+remove-new-install contract. Package IDs name the client, routing helper,
+and GNOME editor separately; no shared profile or run-state schema changes.
+VPN identities, credentials, and connection state remain outside this
+package batch. No unexplained Windows contract drift was found. Recheck
+if either platform adds VPN profile management, package-source semantics
+change, or a release candidate is prepared.
+
+The Fedora 44 Workstation package lifecycle passed before promotion. Changing
+these three rows from candidate to supported adds only status and acceptance
+links; the Linux source, handler, target, profile order, and run-state schema
+stay the same. Windows still has no matching OpenConnect operation. Recheck
+the package and connection contracts before any broader VPN behavior ships.

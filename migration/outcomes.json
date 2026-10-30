@@ -1999,17 +1999,20 @@
       "batch": "system-security-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.vpnc-script",
+        "package.openconnect",
+        "package.networkmanager-openconnect-gnome"
+      ],
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-openconnect-packages.md",
+        "docs/migrations/system-security-openconnect-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept OpenconnectVPN; choose a reviewed package source and verify profile, service, and removal behavior without the moving v2 source build.",
-      "v31Hardening": [],
-      "reason": "Owner kept OpenconnectVPN for v3.0 on 2026-10-30; the unpinned source build remains unsuitable.",
-      "reviewTrigger": "Owner kept OpenconnectVPN; choose a reviewed package source and verify profile, service, and removal behavior without the moving v2 source build.",
+      "nextAction": "Keep package-only support opt-in; review protocol, routing, credentials, and GNOME dialog behavior under H031 before extending the operation.",
+      "v31Hardening": ["H031"],
       "v30Decision": "keep"
     },
     {
@@ -5178,9 +5181,10 @@
       "family": "system-security",
       "title": "System Security 08: OpenconnectVPN",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-openconnect-packages.md",
+        "docs/migrations/system-security-openconnect-01.md"
       ],
-      "nextAction": "Owner kept OpenconnectVPN; choose a reviewed package and prove profile, service, and removal behavior."
+      "nextAction": "Keep the signed OpenConnect package profile opt-in and review actual connection behavior under H031."
     },
     {
       "id": "system-security-09",
@@ -5811,6 +5815,12 @@
       "id": "H030",
       "title": "UPower warning behavior on battery hardware",
       "trigger": "After the opt-in 15- and 20-percent UPower drop-in lifecycles pass on Fedora 44 Workstation, verify warning transitions on a disposable battery-capable target without risking production power state.",
+      "status": "queued"
+    },
+    {
+      "id": "H031",
+      "title": "OpenConnect protocol, routing, credentials, and GNOME dialog",
+      "trigger": "After the Fedora 44 OpenConnect CLI, routing helper, and GNOME editor package lifecycles pass, test a private disposable Juniper-compatible endpoint, DNS and route changes, secret handling, and connection recovery without changing unrelated profiles.",
       "status": "queued"
     }
   ]
