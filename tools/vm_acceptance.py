@@ -128,11 +128,15 @@ def free_loopback_port() -> int:
         return listener.getsockname()[1]
 
 
-def qemu_command(overlay: Path, seed: Path, serial: Path, port: int) -> list[str]:
+def qemu_command(overlay: Path, seed: Path, serial: Path, port: int,
+                 *, accel: str = "kvm") -> list[str]:
     if not 1 <= port <= 65535:
         raise ValueError("invalid SSH forward port")
+    if accel not in {"kvm", "tcg"}:
+        raise ValueError("unsupported QEMU acceleration mode")
     return [
-        "qemu-system-x86_64", "-accel", "kvm", "-machine", "q35", "-cpu", "host",
+        "qemu-system-x86_64", "-accel", accel, "-machine", "q35",
+        "-cpu", "host" if accel == "kvm" else "max",
         "-smp", "2", "-m", "3072", "-display", "none", "-monitor", "none",
         "-serial", f"file:{serial}",
         "-drive", f"file={overlay},if=virtio,format=qcow2",
@@ -155,10 +159,14 @@ def assert_guest_target(os_release: str, architecture: str,
 class VM:
     """One isolated scenario, always created from a clean verified base image."""
 
-    def __init__(self, target: dict[str, str], image: Path, artifacts: Path):
+    def __init__(self, target: dict[str, str], image: Path, artifacts: Path,
+                 *, accel: str = "kvm"):
+        if accel not in {"kvm", "tcg"}:
+            raise ValueError("unsupported QEMU acceleration mode")
         self.target = target
         self.image = image.resolve()
         self.artifacts = artifacts.resolve()
+        self.accel = accel
         for source in SOURCE_PATHS[1:]:
             if self.artifacts.is_relative_to(ROOT / source):
                 raise ValueError("VM output cannot be inside bundled source directories")
@@ -289,7 +297,9 @@ class VM:
     def start(self) -> None:
         if self.target["architecture"] != "x86_64":
             raise ValueError("this QEMU launcher currently supports x86_64 guests only")
-        if os.uname().machine != "x86_64" or not os.access("/dev/kvm", os.R_OK | os.W_OK):
+        if os.uname().machine != "x86_64":
+            raise RuntimeError("x86_64 host is required for VM acceptance")
+        if self.accel == "kvm" and not os.access("/dev/kvm", os.R_OK | os.W_OK):
             raise RuntimeError("x86_64 KVM access is required for VM acceptance")
         for program in ("qemu-img", "qemu-system-x86_64", "genisoimage", "ssh-keygen", "ssh", "scp", "git"):
             if shutil.which(program) is None:
@@ -301,6 +311,7 @@ class VM:
         dirty = bool(subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, text=True,
                                     capture_output=True, check=True, timeout=10).stdout)
         metadata = {"target": self.target, "imagePath": str(self.image),
+                    "acceleration": self.accel,
                     "verifiedImageSha256": digest, "sourceRevision": revision,
                     "sourceHasUncommittedChanges": dirty,
                     "catalogSha256": file_sha256(ROOT / "catalog" / "operations.json")}
@@ -314,12 +325,13 @@ class VM:
         self.port = free_loopback_port()
         self._qemu_log = (self.artifacts / "qemu.log").open("wb")
         self.process = subprocess.Popen(
-            qemu_command(overlay, seed, self.artifacts / "serial.log", self.port),
+            qemu_command(overlay, seed, self.artifacts / "serial.log", self.port,
+                         accel=self.accel),
             stdin=subprocess.DEVNULL, stdout=self._qemu_log, stderr=subprocess.STDOUT,
         )
         try:
-            self._wait_for_ssh()
-            self.run("cloud-init status --wait", timeout=600)
+            self._wait_for_ssh(timeout=1800 if self.accel == "tcg" else 600)
+            self.run("cloud-init status --wait", timeout=1800 if self.accel == "tcg" else 600)
             self.run("command -v bash && command -v jq && command -v sudo")
             os_release = self.run("cat /etc/os-release").stdout
             arch = self.run("uname -m").stdout.strip()

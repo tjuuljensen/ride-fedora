@@ -4382,16 +4382,17 @@
       "risk": "medium",
       "target": "fedora-44-server-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "supported",
       "v3Ids": [
         "package.qbittorrent-nox"
       ],
       "evidence": [
         "docs/migrations/generic-server-15.md",
-        "tests/acceptance/test_server_qbittorrent.py"
+        "tests/acceptance/test_server_qbittorrent.py",
+        "docs/acceptance/package.qbittorrent-nox.md"
       ],
-      "blocker": "Pinned Fedora 44 Server VM lifecycle has not run because this session has no /dev/kvm.",
-      "nextAction": "Run the focused package-only Server VM lifecycle, investigate failures, then add opt-in profile and acceptance record before promoting support.",
+      "blocker": "",
+      "nextAction": "Recheck the package-only opt-in profile if Fedora source, declared Server target, or DNF handler changes; migrate service state separately.",
       "v31Hardening": [],
       "reason": "The active server v2 function installs qbittorrent-nox only; adjacent user, service, firewall, SSH-key, and download behavior remains separately owned in network-devices.",
       "reviewTrigger": "Recheck source, consumers, package verification, and separate server-state ownership before cross-repository transfer or broader profiles.",
@@ -5428,9 +5429,10 @@
       "title": "Generic Server 15: qBittorrentServer",
       "evidence": [
         "docs/migrations/generic-server-15.md",
-        "tests/acceptance/test_server_qbittorrent.py"
+        "tests/acceptance/test_server_qbittorrent.py",
+        "docs/acceptance/package.qbittorrent-nox.md"
       ],
-      "nextAction": "Run the focused package-only Server VM lifecycle, investigate failures, then add opt-in profile and acceptance record before promoting support."
+      "nextAction": "Package-only Server operation is supported; keep service, user, firewall, and download migration separate."
     },
     {
       "id": "generic-server-16",

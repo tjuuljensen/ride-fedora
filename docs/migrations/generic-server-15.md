@@ -1,6 +1,6 @@
 # Generic Server 15: qBittorrent headless package
 
-Status: **source-ready candidate; Server VM acceptance pending**, 2026-10-30.
+Status: **package-only Server VM acceptance passed; supported**, 2026-10-30.
 This batch migrates only `InstallqBittorrentServer` from the active
 `network-devices/operations/provisioning/ride/lib-fedora-server.sh`. That
 function installs `qbittorrent-nox` through DNF. The adjacent v2 functions
@@ -32,18 +32,20 @@ consumer is removed from `network-devices` in this batch.
   operation acceptance file, and promote the catalog row to `supported`.
   Reconcile Windows catalog/profile/run-state semantics for this batch.
 
-## Current boundary
+## Acceptance execution
 
-The current session has the pinned Server image at
+The session used the pinned Server image at
 `.acceptance-runs/server-image/server.qcow2`, matching the digest in
-`tests/acceptance/targets.json`, but no `/dev/kvm`. The acceptance harness
-requires KVM, so no VM result or supported status is claimed here. A focused
-acceptance test may be prepared now and run when a KVM-capable host is
-available. The package-only catalog candidate is not selected by a profile.
+`tests/acceptance/targets.json`. This session has no `/dev/kvm`, so the focused
+test uses the harness's explicit QEMU software acceleration mode. The
+package-only catalog candidate was tested before promotion. The
+[acceptance record](../acceptance/package.qbittorrent-nox.md) gives the
+retained overlay, image and catalog hashes, result, and recovery evidence.
+`server-qbittorrent-package` is now an opt-in profile; `server-base` stays
+small. Service setup remains a separate migration.
 
-On a KVM-capable host, run the focused test from the repository root as a
-regular user with access to `/dev/kvm`. It changes only a disposable overlay,
-retains its transcript and image for review, and stops the VM on exit. The
+Run the focused test from the repository root as a regular user. It changes
+only a disposable overlay, retains its transcript and image for review, and stops the VM on exit. The
 verified base image remains unchanged. If the test fails, inspect the retained
 transcript and overlay before retrying; deleting an overlay is the recovery
 for this disposable test, not a recovery action on a real server.
@@ -54,6 +56,7 @@ python3 -m venv /tmp/ride-acceptance-venv
 /tmp/ride-acceptance-venv/bin/python -m pytest tests/acceptance/test_server_qbittorrent.py -v \
   -p no:cacheprovider --rootdir=. \
   --vm-target fedora-44-server-x86_64 \
+  --vm-accel tcg \
   --vm-image "$(pwd)/.acceptance-runs/server-image/server.qcow2" \
   --vm-output "$(pwd)/.acceptance-runs/generic-server-15" \
   --junitxml="$(pwd)/.acceptance-runs/generic-server-15.xml"

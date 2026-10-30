@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "server-qbittorrent-package",
+  "description": "Opt-in Fedora Server headless qBittorrent package only; no service or user setup",
+  "operations": [
+    {"id": "package.qbittorrent-nox", "state": "installed"}
+  ]
+}

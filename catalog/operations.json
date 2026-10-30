@@ -1056,7 +1056,8 @@
         "absent"
       ],
       "scope": "system",
-      "status": "candidate",
+      "status": "supported",
+      "acceptanceEvidence": "docs/acceptance/package.qbittorrent-nox.md",
       "targets": {
         "fedora": {
           "releases": [

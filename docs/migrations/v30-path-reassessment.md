@@ -9,13 +9,13 @@ can be retired as an implementation once its intended capability has a v3.0
 path. Earlier individual retirement choices remain historical decisions about
 those exact implementations; this review reopens their capability coverage.
 
-The current ledger has 133 package and 36 setting outcomes. Only 54 of those
+The current ledger has 133 package and 36 setting outcomes. Only 55 of those
 169 have operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
-**169 in-scope package/setting capabilities, 54 currently operable, nine
-owner-retired, one standalone functional replacement, and 105 still needing
-an operable v3.0 path**. The ledger's 184 dispositioned outcomes out of
-185 include one source-ready package awaiting Server VM acceptance; this
+**169 in-scope package/setting capabilities, 55 currently operable, nine
+owner-retired, one standalone functional replacement, and 104 still needing
+an operable v3.0 path**. The ledger's 185 dispositioned outcomes out of
+185 include the now-supported Server qBittorrent package; this
 measure records reviewed decisions, not v3.0 capability coverage.
 The two Citrix and two Opera functions remain explicitly out of scope. Host-specific
 users, shares, secrets, and IP values remain outside the public catalog;
@@ -98,10 +98,9 @@ behavior. The old preset selectors do not establish actual installation.
 1. Complete the source, consumer, runtime identity, publication, and recovery
    audit for the six newly scoped server packages; keep host-specific actions
    in the source repository until ownership is recorded.
-2. Pilot the Fedora-native `yt-dlp` and `qbittorrent-nox` package operations
-   with brief exact-target lifecycles; reuse the unchanged DNF handler's
-   failure evidence. These two establish a low-risk path without new
-   acquisition handlers.
+2. Pilot Fedora-native `yt-dlp` with a brief exact-target lifecycle. The
+   `qbittorrent-nox` package already passed its Server lifecycle; both reuse
+   the unchanged DNF handler's failure evidence.
 3. Pilot publisher RPM and portable artifact handlers separately with an
    in-scope product such as Ferium.
 4. Reopen the remaining retired or unsupported package/setting capabilities

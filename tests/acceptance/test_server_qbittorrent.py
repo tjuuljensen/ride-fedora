@@ -38,7 +38,7 @@ def test_qbittorrent_nox_package_only_lifecycle(vm):
     })
 
     plan = vm.ride("plan", "--profile", profile)
-    assert f"{OPERATION}\tfedora-rpm\tabsent\tinstalled\tcandidate" in plan.stdout
+    assert f"{OPERATION}\tfedora-rpm\tabsent\tinstalled\tsupported" in plan.stdout
     applied = vm.ride("apply", "--profile", profile, "--allow-candidate", timeout=900)
     first = run_id(applied.stdout)
     record = json.loads(vm.run(f"sudo cat /var/lib/ride-fedora/runs/{first}.json").stdout)

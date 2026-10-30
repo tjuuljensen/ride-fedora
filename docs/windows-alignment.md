@@ -624,3 +624,10 @@ firewall, user, credentials, or downloads from `network-devices`. No shared
 package, profile, or run-state contract change is introduced. Recheck if
 Windows adds qBittorrent, either client changes installed-deployment
 identity, or the server service is migrated.
+
+The package-only Fedora 44 Server VM lifecycle passed under QEMU TCG on
+2026-10-30. Promotion changed only the Linux catalog status and added the
+`server-qbittorrent-package` opt-in profile under the existing profile schema.
+The [acceptance record](acceptance/package.qbittorrent-nox.md) contains exact
+target and recovery evidence. No Windows contract change is needed; recheck
+the triggers above before expanding scope.

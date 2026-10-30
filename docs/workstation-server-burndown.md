@@ -228,7 +228,7 @@ v3 catalog ID and are not selected by a profile.
 | `package.ExpressVPN` | `InstallExpressVPN` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-09` / resolved |
 | `action.CreateVPNrandomizer` | `CreateVPNrandomizer` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-10` / resolved |
 | `setting.VPNRandomizerPersistent` | `SetVPNRandomizerPersistent` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-11` / resolved |
-| `package.qBittorrentServer` | `InstallqBittorrentServer` | complete, streambox | plexserver | deferred optional server operation; verify current package/source, state and recovery | `generic-server-15` / implemented |
+| `package.qBittorrentServer` | `InstallqBittorrentServer` | complete, streambox | plexserver | deferred optional server operation; verify current package/source, state and recovery | `generic-server-15` / supported |
 | `package.PlexServer` | `InstallPlexServer` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-16` / resolved |
 | `package.PlexAutoUpdate` | `InstallPlexAutoUpdate` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-17` / resolved |
 | `package.AMP` | `InstallAMP` | complete | — | deferred optional server operation; verify current package/source, state and recovery | `generic-server-18` / resolved |

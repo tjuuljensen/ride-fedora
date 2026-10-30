@@ -1,8 +1,10 @@
 # Disposable Linux VM acceptance
 
-Run these commands from the repository root on a Linux host with accessible
-`/dev/kvm`. The host needs Python 3, `qemu-system-x86_64`, `qemu-img`,
-`genisoimage`, `ssh`, `scp`, and `ssh-keygen`. The target matrix includes Fedora
+Run these commands from the repository root on a Linux x86_64 host. KVM is the
+default and requires accessible `/dev/kvm`; use explicit `--vm-accel tcg` for
+slower software emulation when KVM is unavailable. The host needs Python 3,
+`qemu-system-x86_64`, `qemu-img`, `genisoimage`, `ssh`, `scp`, and `ssh-keygen`.
+The target matrix includes Fedora
 44 Cloud Base, a [locally built Workstation image](fedora-44-workstation-image.md),
 and a [locally built Server image](fedora-44-server-image.md), all x86_64.
 The runner accepts only the selected pinned qcow2 SHA256 digest and
@@ -43,6 +45,12 @@ and acceptance evidence directory. It never applies operations to the host.
 Guest package installation uses Fedora repositories through QEMU user-mode
 networking. The only incoming guest port is SSH forwarded to a host loopback
 port.
+
+The `tcg` option keeps the same digest, guest edition, architecture, overlay,
+and host-only SSH checks. It is slower, so the harness allows a longer guest
+boot and cloud-init wait. Record the acceleration mode from `metadata.json`
+with the acceptance evidence; a timeout or failed test still requires
+investigation before retrying.
 
 Each scenario writes its overlay, seed, serial log, QEMU log, target metadata,
 and `transcript.jsonl` under `--vm-output`. This directory can be large and

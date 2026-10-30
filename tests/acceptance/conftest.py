@@ -21,6 +21,8 @@ def pytest_addoption(parser):
     group.addoption("--vm-target", help="Target ID from tests/acceptance/targets.json")
     group.addoption("--vm-pilot", help="Declared pilot operation; defaults to the target's first pilot")
     group.addoption("--vm-image", help="Local, verified qcow2 image for the target")
+    group.addoption("--vm-accel", choices=("kvm", "tcg"), default="kvm",
+                    help="QEMU acceleration; tcg is a slower software fallback")
     group.addoption("--vm-output", default="/tmp/ride-acceptance-runs",
                     help="Directory for VM overlays, transcripts, and console logs")
 
@@ -51,7 +53,7 @@ def vm(request):
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     artifacts = Path(request.config.getoption("--vm-output")).expanduser().resolve()
     artifacts = artifacts / target_id / f"{stamp}-{name}-{uuid4().hex[:8]}"
-    machine = VM(target, Path(image), artifacts)
+    machine = VM(target, Path(image), artifacts, accel=request.config.getoption("--vm-accel"))
     machine.start()
     try:
         yield machine

@@ -1,10 +1,9 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-133 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 10 replaced,
-10 retired, 65 unsupported, and one source-ready candidate awaiting Server
-VM acceptance. The five path groups below assess the **70
-original unsupported or retired outcomes**; the 10 replacements, 47 existing
+133 v2 `package.*` outcomes: 48 mapped to runnable v3 operations, 10 replaced,
+10 retired, and 65 unsupported. The five path groups below assess the **70
+original unsupported or retired outcomes**; the 10 replacements, 48 existing
 v3 mappings, and six newly scoped server outcomes follow. The 47 mapped
 outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
