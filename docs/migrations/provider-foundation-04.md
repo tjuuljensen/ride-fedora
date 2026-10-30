@@ -2,6 +2,8 @@
 
 Status: **complete: editors supported, GNOME utilities operable opt-in,
 versionlock replaced**, 2026-10-30.
+The owner deferred deciding whether the DNF5 versionlock command fully covers
+the v2 capability in the v3.0 fast-track review.
 The active v2 `BasicEditors` bundle installs/removes `nano` and `vim`.
 Fedora 44 provides [`nano`](https://packages.fedoraproject.org/pkgs/nano/nano/)
 and the concrete [`vim-enhanced`](https://packages.fedoraproject.org/pkgs/vim/vim-enhanced/)

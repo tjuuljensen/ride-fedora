@@ -1,6 +1,11 @@
 # Provider foundation batch 06: Security Lab group
 
 Status: **unsupported as a group operation in v3.0**, 2026-10-30.
+The owner chose **keep** for the Security Lab capability in the v3.0 fast-track
+review. The group contains 137 default Fedora packages on the pinned image;
+this does not require 137 deep manual tests. Reuse accepted package evidence,
+choose the needed tools, and apply brief automated package lifecycles to new
+operations. Direct group removal still needs separate ownership evidence.
 The commented v2 pair `InstallSecurityLab`/`RemoveSecurityLab` invokes DNF
 `group install` and `group remove` for `security-lab`. This is a changing
 collection rather than one product. Fedora's
@@ -14,10 +19,10 @@ not own a DNF group or capture a safe inverse for the group's state.
 - Query the exact Fedora 44 x86_64 Workstation group and installed-group
   state read-only in a disposable VM. Identify overlap with individually
   tracked v2 outcomes and accepted v3 operations.
-- Permit a runnable group migration only with a fixed tool set, per-tool
-  source and license review, focused failure tests, and a VM inverse that
-  preserves pre-existing packages and group marks. Otherwise record a
-  reasoned non-runnable result and leave specific tools to their own batches.
+- Prefer a bounded opt-in set of Fedora RPM operations, reusing package source
+  metadata and accepted handler evidence. Run brief exact-target lifecycles
+  for newly selected packages. A direct group migration would additionally
+  need a VM inverse preserving pre-existing packages and group marks.
 
 ## Fedora 44 inspection and v3.0 decision
 

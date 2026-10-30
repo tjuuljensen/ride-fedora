@@ -1,6 +1,9 @@
 # Codec source and broad Multimedia group resolution
 
 Status: **unsupported as a broad v3.0 operation**, 2026-10-30.
+The owner chose **keep** for codec capability in the v3.0 fast-track review.
+Select concrete Fedora or reviewed RPM Fusion packages, then reuse the brief
+automated lifecycle check for each new package operation.
 The commented v2 `InstallCodecs` uses globs for several GStreamer families,
 `lame*`, and a DNF `Multimedia` group upgrade with optional packages.
 `RemoveCodecs` removes only some globbed packages and does not invert the

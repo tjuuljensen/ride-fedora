@@ -286,10 +286,11 @@
         "docs/migrations/provider-foundation-04.md"
       ],
       "blocker": "",
-      "nextAction": "Recheck DNF5 versionlock on new targets; policy-entry management is separate work.",
+      "nextAction": "Owner deferred deciding whether the observed DNF5 versionlock replacement fully covers the v2 package capability on 2026-10-30.",
       "v31Hardening": [],
       "reason": "Fedora 44 DNF5 exposes the versionlock command without the v2 python3-dnf-plugin-versionlock package; its availability passed a read-only Workstation VM check.",
-      "reviewTrigger": "DNF5 versionlock availability or the declared Fedora target changes, or a user requests managed lock policy entries."
+      "reviewTrigger": "DNF5 versionlock availability or the declared Fedora target changes, or a user requests managed lock policy entries.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.NautilusHash",
@@ -707,10 +708,11 @@
         "docs/migrations/provider-foundation-06.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only for a bounded set of individually reviewed tools; keep the broader forensic outcome batches separate.",
+      "nextAction": "Owner kept the Security Lab capability for v3.0 on 2026-10-30. Inventory the Fedora group, reuse accepted package evidence, and select a bounded opt-in tool set with brief per-operation checks.",
       "v31Hardening": [],
       "reason": "The Fedora 44 security-lab group has 137 default packages and group state outside the per-package v3 journal; no safe group ownership or inverse is established.",
-      "reviewTrigger": "An explicit bounded Security Lab tool selection with per-tool source, license, target, and recovery evidence."
+      "reviewTrigger": "An explicit bounded Security Lab tool selection with per-tool source, license, target, and recovery evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Dc3dd",
@@ -2346,10 +2348,11 @@
         "docs/migrations/provider-foundation-05.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only for a concrete codec requirement with fixed package identities, trusted sources, and a tested owned inverse.",
+      "nextAction": "Owner kept the codec capability for v3.0 on 2026-10-30. Choose concrete codec RPMs and a trusted source, then use a focused owned-lifecycle check.",
       "v31Hardening": [],
       "reason": "The legacy wildcard installs and optional Multimedia group upgrade have a changing package set and no complete owned inverse; RPM Fusion source trust is also unresolved.",
-      "reviewTrigger": "A concrete Fedora 44 codec requirement, accepted RPM Fusion trust if needed, and a fixed package and data-preserving recovery design."
+      "reviewTrigger": "A concrete Fedora 44 codec requirement, accepted RPM Fusion trust if needed, and a fixed package and data-preserving recovery design.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.SpotifyClient",
@@ -4501,7 +4504,7 @@
         "docs/acceptance/provider-basic-editors.md",
         "docs/acceptance/provider-gnome-tools.md"
       ],
-      "nextAction": "Continue provider-foundation-05 codec review; defer desktop visual and pre-installed editor removal hardening to v3.1."
+      "nextAction": "VersionLock capability decision deferred by owner; preserve observed DNF5 command evidence while completing other provider work."
     },
     {
       "id": "provider-foundation-05",
@@ -4510,7 +4513,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-05.md"
       ],
-      "nextAction": "Reopen only for a concrete codec requirement with trusted acquisition and tested package-specific recovery."
+      "nextAction": "Owner kept codec capability; choose explicit codec RPMs and trusted source, then run focused Fedora 44 lifecycle checks."
     },
     {
       "id": "provider-foundation-06",
@@ -4519,7 +4522,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-06.md"
       ],
-      "nextAction": "Reopen only for a bounded individually reviewed tool set; continue separate forensic migrations."
+      "nextAction": "Owner kept Security Lab capability; inventory the 137-package Fedora group, reuse accepted package evidence, and define a bounded opt-in tool set."
     },
     {
       "id": "provider-foundation-07",
