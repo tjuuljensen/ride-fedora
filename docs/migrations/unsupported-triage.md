@@ -1,6 +1,6 @@
 # Unsupported outcome triage and retirement approval
 
-Status: **proposal only**, 2026-10-30. The authoritative ledger still has 99
+Status: **individual review requested**, 2026-10-30. The authoritative ledger still has 99
 `unsupported` source outcomes. This review assigns each of those 99 outcomes
 exactly one decision batch. It does not change a ledger disposition, add an
 operation, delete v2 code, or run a state-changing test. The [migration ledger](../../migration/outcomes.json)
@@ -9,26 +9,33 @@ applied. The 15 Citrix and host-specific exclusions are outside this review.
 
 | Decision lane | Outcomes | What happens next |
 | --- | ---: | --- |
-| Retirement proposals, R1-R2 | 11 | Owner can approve the two larger batches independently. |
+| Retirement proposals, R1-R2 | 10 | Owner requested an individual decision for each row. |
 | Keep-or-drop choices, U1a-U3b | 38 | Decide each feature or value individually before migration work. |
-| Migration design, D1a-D5a | 50 | Decide the exact owner, source, state, and recovery for each outcome. |
+| Migration design, D1a-D5a | 51 | Decide the exact owner, source, state, and recovery for each outcome. |
 
-Approving both retirement batches changes only their 11 ledger rows from
+Approving all retirement proposals would change only their 10 ledger rows from
 `unsupported` to `retire` with a documented reason and review trigger.
 The v3.0 total stays 180/180 and the runnable count stays 54; the category
-counts become 88 unsupported and 25 retired. Legacy functions and any
+counts would become 89 unsupported and 24 retired. Legacy functions and any
 existing v2 machine state remain untouched. Future behavior may return as
-a separately reviewed v3 operation with its own evidence. These review
-batches do not override the small implementation batches in the migration plan.
+a separately reviewed v3 operation with its own evidence. The owner chose
+individual review of R1 and R2; no batch approval or ledger change has been
+made. These review groups do not override the small implementation batches
+in the migration plan.
 
-## R1: obsolete or mismatched integrations (4)
+## R1: obsolete or mismatched integrations (3)
 
 | Source outcome | Current coverage | Why retirement is proposed | Reopen only if |
 | --- | --- | --- | --- |
 | `workstation:package.NautilusHash` | Commented | v2 uses `gtkhash-nautilus`; its own source notes the GNOME 43 break. The [current Fedora GtkHash source](https://packages.fedoraproject.org/pkgs/gtkhash/) lists Caja, Nemo, and Thunar extensions, with no Nautilus subpackage. | A maintained GNOME Files hash integration for the declared target is requested and tested. |
 | `workstation:package.NautilusImageTools` | Commented | v2 calls `nautilus-image-converter`; its [Fedora package record](https://packages.fedoraproject.org/pkgs/nautilus-image-converter/nautilus-image-converter/) lists only EPEL 7. Retiring that extension does not reject image resizing; Fedora has a separate [imgp](https://packages.fedoraproject.org/pkgs/imgp/imgp/) CLI. | A current GNOME Files resize integration is requested with compatible package and recovery evidence. |
 | `workstation:package.GnomeExtInstaller` | Active | v2 clones the [archived upstream script](https://github.com/brunelli/gnome-shell-extension-installer) and overwrites a system symlink. This retires that helper, while `workstation:package.GnomeExtensions` remains a separate migration decision. | A maintained installer for the declared GNOME target has pinned acquisition and owned rollback. |
-| `workstation:package.BitwardenAppImage` | Active | The function labeled AppImage actually downloads an RPM into `~/Applications`; its inverse removes only `Bitwarden*.AppImage`. The separate `workstation:package.Bitwarden` product outcome remains in the keep-or-drop queue. | A real portable Bitwarden artifact and vault-safe lifecycle are requested and verified. |
+
+`workstation:package.BitwardenAppImage` moved to D1a during individual
+review. Its v2 function downloads an RPM into `~/Applications`, but
+[Bitwarden still publishes a Linux AppImage](https://bitwarden.com/help/desktop-app-feature-support/).
+The active portable outcome therefore needs a retain-or-retire product
+decision and, if retained, a verified AppImage and vault-safe lifecycle.
 
 ## R2: unsafe standalone cleanup functions (7)
 
@@ -128,7 +135,7 @@ Select one desired value or retire the unused variant after checking user intent
 - `workstation:setting.GnomeMinimalFavorites` (library-only; high risk): v2 replaces the full user favorites list without snapshot or inverse.
 - `workstation:setting.PowerPercentageLow20` (library-only; medium risk): The v2 PowerPercentageLow20 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.
 
-## Later individual decisions: migration design (50)
+## Later individual decisions: migration design (51)
 
 These source outcomes express behavior that may be retained, but the v2
 method cannot be carried forward. The next decision for each is the exact
@@ -136,7 +143,7 @@ v3 owner, source or provider, target, state boundary, and recovery. High-risk
 storage, encryption, network, and security work stays isolated; grouping
 here is for review, not a shared installer or shared safety gate.
 
-### D1a: Trusted repositories and desktop integrations (5)
+### D1a: Trusted sources and desktop integrations (6)
 
 If retained, choose a verified provider, owned key/repository or extension state, and exact inverse.
 
@@ -145,6 +152,7 @@ If retained, choose a verified provider, owned key/repository or extension state
 - `workstation:package.VisualStudioCode` (active; medium risk): The official Fedora code RPM requires an owned external repository and signing-key lifecycle; v3 has no handler or exact-target VM recovery, and v2 removes a hard-coded potentially shared key.
 - `workstation:package.Brave` (active; medium risk): The official Fedora Brave RPM requires an owned external repository/key lifecycle; v3 has no handler or exact-target VM recovery, and v2 leaves its repository on removal.
 - `workstation:package.GnomeExtensions` (active; high risk): The v2 bundle downloads user extensions through a mutable script and removes named user directories without ownership; native management RPMs alone do not reproduce the outcome.
+- `workstation:package.BitwardenAppImage` (active; high risk): v2 downloads an RPM into `~/Applications` despite its AppImage name and cannot remove what it downloaded; the publisher offers a real Linux AppImage, which needs separate provenance and vault-safe recovery.
 
 ### D1b: Active forensic acquisition and isolation (5)
 
@@ -245,7 +253,9 @@ Review each source outcome individually and implement only in isolated disposabl
 
 The source-level reasons and review triggers above are taken from the
 checked-in ledger and its linked batch records. The archived GNOME helper
-and absent Fedora 44 Nautilus subpackages support R1. An obsolete v2
+and absent Fedora 44 Nautilus subpackages support R1. The active Bitwarden
+AppImage intent remains a migration decision even though its v2 method is
+broken. An obsolete v2
 acquisition method alone is insufficient to retire PowerShell,
 [WoeUSB-ng](https://github.com/WoeUSB/WoeUSB-ng),
 [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher), or

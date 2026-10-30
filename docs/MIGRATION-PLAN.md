@@ -343,12 +343,13 @@ its Server VM. The ledger is complete and the branch is ready for release
 review, with publication still a separate decision.
 
 The 99 non-runnable `unsupported` rows have a separate
-[decision triage](migrations/unsupported-triage.md): 11 proposed retirements
-in two approval batches, 38 individual keep-or-drop choices, and 50
-individual migration-design decisions. The retirement batches are proposals
-only; the ledger still records all 99 as unsupported until the owner approves
-specific batches. Approval changes dispositions and generated progress, not
-legacy source code or machine state.
+[decision triage](migrations/unsupported-triage.md): 10 proposed retirements,
+38 individual keep-or-drop choices, and 51 individual migration-design
+decisions. The owner requested individual review of both retirement groups.
+Bitwarden's active portable outcome moved to migration design after its real
+publisher AppImage was confirmed. The ledger still records all 99 as
+unsupported until individual decisions are approved. An approval changes
+disposition and generated progress, not legacy source code or machine state.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
