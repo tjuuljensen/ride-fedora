@@ -1,5 +1,11 @@
 # GNOME string settings and UPower configuration decisions
 
+The owner kept the GNOME window-control button layout in the v3.0 fast-track
+review. Implement a typed value with exact prior-state recovery.
+The owner also kept GNOME region selection, with country/region supplied by
+the profile rather than fixed to Denmark. The separate remove-only
+`GnomeRegion` use case remains deferred until that owned setting is designed.
+
 Status: **non-runnable v3.0 decisions**, 2026-10-30, for the remaining
 desktop-user-02, desktop-user-04, and desktop-user-09 outcomes. These are
 separate from the [operable boolean settings](desktop-user-boolean.md).

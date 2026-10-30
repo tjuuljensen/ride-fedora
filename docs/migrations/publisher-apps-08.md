@@ -1,5 +1,11 @@
 # YubiKey Manager GUI end-of-life handoff
 
+The owner confirmed **keep** for YubiKey management capability in the v3.0
+fast-track review. [Yubico's current guidance](https://docs.yubico.com/software/yubikey/tools/ykman/Using_the_ykman_GUI.html)
+names Yubico Authenticator as the GUI successor and retains `ykman` for CLI
+tasks. Evaluate those as separate deployments; neither may mutate credentials
+during installation or recovery.
+
 Status: **documented non-runnable replacement for v3.0**, 2026-10-30.
 This isolated high-risk active-preset outcome maps `InstallYubikeyManager`
 and `RemoveYubikeyManager`. v2 scrapes a moving AppImage URL into

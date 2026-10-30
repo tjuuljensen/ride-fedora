@@ -1,5 +1,10 @@
 # YubiKey Personalization GUI handoff
 
+The owner kept YubiKey personalization capability in the v3.0 fast-track
+review. [Yubico's current guidance](https://docs.yubico.com/software/yubikey/tools/ykman/Using_the_ykman_GUI.html)
+points to Yubico Authenticator for GUI functions and retains `ykman` for CLI
+tasks. The archived GUI is not an install target; preserve device credentials.
+
 Status: **documented non-runnable replacement for v3.0**, 2026-10-30.
 This isolated high-risk v2 source outcome maps only
 `InstallYubikeyPersTool`; v2 clones an unpinned source into `/opt`, installs

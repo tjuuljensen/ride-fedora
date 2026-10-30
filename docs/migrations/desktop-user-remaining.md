@@ -1,5 +1,11 @@
 # Remaining desktop and user-state outcomes
 
+The owner kept Firefox preference capability in the v3.0 fast-track review.
+Use current policy with exact prior-state recovery rather than the v2 file
+overwrite.
+The owner also kept custom keyboard shortcuts; only RIDE-owned entries may be
+merged or removed, with exact prior list and slot recovery.
+
 Status: **v3.0 decisions**, 2026-10-30. This review covers the remaining
 scoped desktop-user batches after the [fixed GNOME boolean handler](desktop-user-boolean.md).
 Each disposition below is non-runnable unless a separate v3 operation is

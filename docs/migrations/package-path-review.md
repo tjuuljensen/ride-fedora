@@ -1,10 +1,10 @@
 # Scoped v2 package path review
 
 Status: **source and product assessment**, 2026-10-30. The scoped ledger has
-133 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 11 replaced,
-11 retired, 58 unsupported, and six newly scoped server outcomes under review.
-The five path groups below assess all **69 unsupported or retired outcomes**;
-the 11 replacements, 47 existing v3 mappings, and six new server reviews
+133 v2 `package.*` outcomes: 47 mapped to runnable v3 operations, 10 replaced,
+12 retired, 58 unsupported, and six newly scoped server outcomes under review.
+The five path groups below assess all **70 unsupported or retired outcomes**;
+the 10 replacements, 47 existing v3 mappings, and six new server reviews
 follow. The 47 mapped outcomes have catalog and acceptance evidence. The
 [ledger](../../migration/outcomes.json) remains authoritative for current
 disposition, risk, target, evidence, and next action.
@@ -42,16 +42,16 @@ assessment, not an automatic retirement decision.
 
 | Source outcome | Path assessment | Evidence |
 | --- | --- | --- |
-| `workstation:package.AtomEditor` | GitHub sunset Atom; keep its editor replacement as a separate product decision. | [Batch review](publisher-apps-10.md) |
-| `workstation:package.AtomPlugins` | Depends on sunset Atom and cannot be migrated as the old plugin set. | [Batch review](publisher-apps-10.md) |
+| `workstation:package.AtomEditor` | GitHub sunset Atom; owner retired the full editor capability from this migration. | [Batch review](publisher-apps-10.md) |
+| `workstation:package.AtomPlugins` | Depends on sunset Atom; owner retired the plugin capability from this migration. | [Batch review](publisher-apps-10.md) |
 | `workstation:package.Dumpzilla` | Upstream declares the script discontinued; a new Firefox forensic tool is separate. | [Batch review](forensic-isolated-03.md) |
 | `workstation:package.GnomeExtInstaller` | The exact upstream helper is archived; owner deferred retirement, while GNOME extension management needs a new path. | [Batch review](provider-foundation-10.md) |
 | `workstation:package.NautilusHash` | The exact GtkHash Nautilus integration is absent on Fedora 44; owner retired the full checksum context-action capability. | [Batch review](native-rpm-03.md) |
 | `workstation:package.NautilusImageTools` | The old Nautilus image converter lacks a Fedora 44 build; owner retired the full image context-action capability. | [Batch review](native-rpm-03.md) |
-| `workstation:package.SonosPlayer` | This unofficial controller declares itself deprecated; a new controller is a separate product. | [Batch review](publisher-apps-09.md) |
+| `workstation:package.SonosPlayer` | This unofficial controller declares itself deprecated; owner retired the player capability from this migration. | [Batch review](publisher-apps-09.md) |
 | `workstation:package.Volatility` | Volatility 2 is archived; Volatility 3 is distinct and already tracked separately. | [Batch review](forensic-isolated-02.md) |
 
-## Retired for a reason other than product EOL (4)
+## Retired for a reason other than product EOL (5)
 
 | Source outcome | Path assessment | Evidence |
 | --- | --- | --- |
@@ -59,6 +59,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.Xplico` | The v2 pair only printed links; retirement does not establish that the product ended. | [Batch review](resolution-decisions.md) |
 | `workstation:package.VMFStools` | The v2 pair only printed links; no working install path existed to migrate. | [Batch review](forensic-isolated-01.md) |
 | `workstation:package.TecmintMonitorSh` | The unverified HTTP script path was retired; a monitoring requirement needs its own source review. | [Batch review](resolution-decisions.md) |
+| `workstation:package.MicrosoftTeams` | Owner retired Linux Teams desktop capability; the web service remains outside RIDE installation. | [Batch review](publisher-apps-09.md) |
 
 ## New acquisition or deployment path (28)
 
@@ -132,7 +133,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.Pidgin` | Fedora 44 packages Pidgin and OTR, but combined messaging and key recovery remain unverified. | [Batch review](system-security-27.md) |
 | `workstation:package.Xmind` | Choose the current publisher edition and package identity before pinning an install. | [Batch review](publisher-apps-15.md) |
 
-## Already replaced package outcomes (11)
+## Already replaced package outcomes (10)
 
 These have explicit replacement dispositions in the ledger. EOL applies to
 the named old products where stated; several others are platform or method
@@ -147,7 +148,6 @@ changes and must not be labeled EOL.
 | `workstation:package.Flatpak` | Fedora Workstation supplies Flatpak; the unsafe v2 uninstall-all path is rejected. | [Batch review](provider-foundation-11.md) |
 | `workstation:package.Macvendor` | The maintained standalone lookup script remains outside the v3 install catalog. | [Batch review](forensic-isolated-03.md) |
 | `workstation:package.PackagingTools` | Replace the old p7zip bundle with accepted 7zip and unar operations; CLI identity differs. | [Batch review](../acceptance/provider-archive-tools.md) |
-| `workstation:package.MicrosoftTeams` | Native Linux Teams desktop support ended; Microsoft supports web access. | [Batch review](publisher-apps-09.md) |
 | `workstation:package.FirefoxAddons` | The existing policy helper manages repository-owned files outside the v3 catalog. | [Batch review](publisher-apps-04.md) |
 | `workstation:package.YubikeyManager` | The old Manager GUI reached EOL; Yubico Authenticator is a separate product. | [Batch review](publisher-apps-08.md) |
 | `workstation:package.YubikeyPersTool` | The old GUI is archived; Yubico Authenticator and ykman are separate paths. | [Batch review](publisher-apps-14.md) |

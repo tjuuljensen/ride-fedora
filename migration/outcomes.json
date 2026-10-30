@@ -1447,10 +1447,11 @@
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional PowerShell for migration on 2026-10-30; select a current publisher source and prove owned repository/key plus Fedora 44 recovery.",
+      "nextAction": "Owner kept PowerShell for v3.0 on 2026-10-30. Choose current Microsoft publisher source and prove owned repository/key lifecycle with Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 function imports a system Microsoft key and a RHEL 7 repository; current Microsoft RPM guidance does not establish Fedora 44 support or an owned inverse.",
-      "reviewTrigger": "A Fedora 44 PowerShell deployment has pinned RPM/source, repository/key ownership, and a VM lifecycle that preserves pre-existing Microsoft products."
+      "reviewTrigger": "A Fedora 44 PowerShell deployment has pinned RPM/source, repository/key ownership, and a VM lifecycle that preserves pre-existing Microsoft products.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.MicrosoftTeams",
@@ -1463,17 +1464,18 @@
       "batch": "publisher-apps-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "replace",
+      "disposition": "retire",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "nextAction": "Owner retired the Microsoft Teams Linux desktop capability for v3.0 on 2026-10-30; retain the historical web handoff as context only.",
       "v31Hardening": [],
-      "reason": "Microsoft no longer supports the Linux desktop client; the v2 RPM listing is not a supported acquisition path, while Teams web access remains available.",
-      "reviewTrigger": "Microsoft publishes a supported Fedora desktop client, or a separately requested browser/PWA operation has owned state and VM evidence."
+      "reason": "Microsoft no longer supports the Linux desktop client; the v2 RPM listing is not a supported acquisition path, while Teams web access remains available. The owner explicitly retired the full Linux desktop capability from v3.0 on 2026-10-30.",
+      "reviewTrigger": "A new explicit owner decision to restore the Linux Teams desktop capability to v3 scope.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.WoeUSB",
@@ -1493,10 +1495,11 @@
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained Windows USB media creation tooling for migration on 2026-10-30; review a maintained WoeUSB-ng source and prove owned Fedora 44 lifecycle.",
+      "nextAction": "Owner kept Windows USB media creation for v3.0 on 2026-10-30. Review maintained WoeUSB-ng acquisition and owned Fedora 44 lifecycle.",
       "v31Hardening": [],
       "reason": "Fedora WoeUSB is orphaned and has no Fedora 44 package; the v2 DNF name cannot install on the declared target.",
-      "reviewTrigger": "A maintained WoeUSB-ng source has license and acquisition review, a safe package inverse, and exact-target VM evidence; USB writing stays user-initiated."
+      "reviewTrigger": "A maintained WoeUSB-ng source has license and acquisition review, a safe package inverse, and exact-target VM evidence; USB writing stays user-initiated.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.BalenaEtcher",
@@ -1516,10 +1519,11 @@
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained this optional USB imaging application for migration on 2026-10-30; design pinned publisher RPM acquisition and an owned Fedora 44 lifecycle.",
+      "nextAction": "Owner confirmed on 2026-10-30: Keep USB imaging capability; pin publisher package and test an owned Fedora 44 lifecycle.",
       "v31Hardening": [],
       "reason": "The v2 latest-release scrape is mutable and v3 has no pinned external-RPM acquisition, detection, or inverse handler, despite a current publisher RPM.",
-      "reviewTrigger": "A pinned publisher RPM has verified bytes, owned installed identity, collision handling, and a Fedora 44 VM happy path."
+      "reviewTrigger": "A pinned publisher RPM has verified bytes, owned installed identity, collision handling, and a Fedora 44 VM happy path.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.VisualStudioCode",
@@ -1563,10 +1567,11 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional Arduino IDE for migration on 2026-10-30; choose its deployment form and prove pinned acquisition, collision-safe ownership, and Fedora 44 recovery.",
+      "nextAction": "Owner confirmed on 2026-10-30: Keep Arduino IDE; choose current distribution and preserve sketches and user state during recovery.",
       "v31Hardening": [],
       "reason": "The v2 latest AppImage scrape and filename-glob inverse lack owned destination and collision handling; no v3 portable handler exists.",
-      "reviewTrigger": "A chosen Arduino IDE deployment has verified publisher bytes, collision-safe ownership, and Fedora 44 VM lifecycle."
+      "reviewTrigger": "A chosen Arduino IDE deployment has verified publisher bytes, collision-safe ownership, and Fedora 44 VM lifecycle.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.AtomEditor",
@@ -1586,10 +1591,11 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner confirmed on 2026-10-30: Retire Atom editor capability from v3.0.",
       "v31Hardening": [],
-      "reason": "GitHub sunset Atom in 2022; v2 disables package signature checks and overwrites user init.coffee.",
-      "reviewTrigger": "A requested maintained editor successor has an independently reviewed source and user-state inverse."
+      "reason": "GitHub sunset Atom in 2022; v2 disables package signature checks and overwrites user init.coffee. The owner explicitly retired the full capability from v3.0 on 2026-10-30.",
+      "reviewTrigger": "A new explicit owner decision to restore this capability to v3 scope.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:setting.AtomTelemetry",
@@ -1632,10 +1638,11 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner confirmed on 2026-10-30: Retire Atom plugin capability from v3.0.",
       "v31Hardening": [],
-      "reason": "The ten apm plugin commands depend on sunset Atom and their inverse can remove independently installed user plugins.",
-      "reviewTrigger": "A requested maintained editor plugin set has per-user inventory, explicit identities, and safe inverse."
+      "reason": "The ten apm plugin commands depend on sunset Atom and their inverse can remove independently installed user plugins. The owner explicitly retired the full capability from v3.0 on 2026-10-30.",
+      "reviewTrigger": "A new explicit owner decision to restore this capability to v3 scope.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.PyhtonAutopep8",
@@ -1708,10 +1715,11 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional Discord for migration on 2026-10-30; choose an owned publisher RPM or Flathub source and prove profile-preserving Fedora 44 recovery.",
+      "nextAction": "Owner confirmed on 2026-10-30: Keep Discord; choose publisher RPM or Flatpak and preserve the user profile.",
       "v31Hardening": [],
       "reason": "The publisher offers a Linux RPM, but v2 has no declared Fedora 44 source and v3 lacks a pinned publisher-RPM or owned Flathub handler.",
-      "reviewTrigger": "A chosen Discord deployment has verified publisher or Flathub source, preserved user profile, and Fedora 44 VM happy path."
+      "reviewTrigger": "A chosen Discord deployment has verified publisher or Flathub source, preserved user profile, and Fedora 44 VM happy path.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Pidgin",
@@ -2072,10 +2080,11 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional Joplin for migration on 2026-10-30; design pinned owned deployment and prove notebook-preserving Fedora 44 recovery.",
+      "nextAction": "Owner confirmed on 2026-10-30: Keep Joplin; choose owned deployment and preserve notebooks.",
       "v31Hardening": [],
       "reason": "The v2 moving AppImage and glob inverse lack file ownership; the publisher script cannot be executed by a default v3 profile, and notebooks belong to the user.",
-      "reviewTrigger": "A chosen pinned Joplin deployment proves notebook-preserving recovery and Fedora 44 VM happy path."
+      "reviewTrigger": "A chosen pinned Joplin deployment proves notebook-preserving recovery and Fedora 44 VM happy path.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.TecmintMonitorSh",
@@ -2166,10 +2175,11 @@
         "docs/migrations/publisher-apps-10.md"
       ],
       "blocker": "",
-      "nextAction": "Owner deferred the keep-or-retire decision on 2026-10-30; revisit after current-source and browser-profile recovery design.",
+      "nextAction": "Owner confirmed on 2026-10-30: Keep Vivaldi; choose current publisher source and profile-safe recovery.",
       "v31Hardening": [],
       "reason": "Vivaldi supports Fedora 43+, but the v2 scraped RPM and publisher-managed repository/key lack an owned inverse in v3.",
-      "reviewTrigger": "A requested exact-version Vivaldi RPM has verified origin, owned repository/key, preserved browser profile, and Fedora 44 VM happy path."
+      "reviewTrigger": "A requested exact-version Vivaldi RPM has verified origin, owned repository/key, preserved browser profile, and Fedora 44 VM happy path.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Chromium",
@@ -2216,10 +2226,11 @@
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional Chrome for migration on 2026-10-30; design official-source repository/key ownership and profile-preserving Fedora 44 recovery.",
+      "nextAction": "Owner confirmed on 2026-10-30: Keep Chrome; use official source with owned repository/key and profile-safe recovery.",
       "v31Hardening": [],
       "reason": "The v2 HTTP Google repository file and name-based inverse have no owned source/key collision contract; v3 has no publisher RPM/repository handler.",
-      "reviewTrigger": "An official Chrome RPM has verified source, owned repository/key, preserved browser profile, and Fedora 44 VM lifecycle."
+      "reviewTrigger": "An official Chrome RPM has verified source, owned repository/key, preserved browser profile, and Fedora 44 VM lifecycle.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.ChromePreferences",
@@ -2262,10 +2273,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Choose current Firefox policies and prove owned-file, seeded-policy, browser, and recovery behavior on Fedora 44 Workstation.",
+      "nextAction": "Owner kept Firefox preference capability for v3.0 on 2026-10-30. Use current owned policy with seeded-policy and exact prior-state recovery.",
       "v31Hardening": [],
       "reason": "v2 overwrites three Firefox installation files with security and startup preferences and blindly deletes them on inverse.",
-      "reviewTrigger": "Choose current Firefox policies and prove owned-file, seeded-policy, browser, and recovery behavior on Fedora 44 Workstation."
+      "reviewTrigger": "Choose current Firefox policies and prove owned-file, seeded-policy, browser, and recovery behavior on Fedora 44 Workstation.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:action.CheckFirefoxAddons",
@@ -2353,10 +2365,11 @@
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional Edge for migration on 2026-10-30; choose its channel and prove pinned publisher source, owned repository/key, and browser-profile recovery.",
+      "nextAction": "Owner kept Edge for v3.0 on 2026-10-30. Choose current Microsoft channel and owned publisher repository/key with profile-safe Fedora 44 recovery.",
       "v31Hardening": [],
       "reason": "The v2 mutable developer-channel repository and fixed repo-file inverse do not own the Microsoft key or preserve other Microsoft packages.",
-      "reviewTrigger": "A chosen Edge channel has pinned publisher source, collision-safe repository/key handling, and Fedora 44 VM evidence."
+      "reviewTrigger": "A chosen Edge channel has pinned publisher source, collision-safe repository/key handling, and Fedora 44 VM evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Codecs",
@@ -2400,10 +2413,11 @@
         "docs/migrations/publisher-apps-11.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional SpotifyClient for migration on 2026-10-30; choose an acquisition provider and prove terms, owned state, and profile-preserving Fedora 44 recovery.",
+      "nextAction": "Owner kept Spotify desktop client for v3.0 on 2026-10-30. Choose an approved acquisition provider and preserve user profile and playback data.",
       "v31Hardening": [],
       "reason": "The v2 lpf-spotify-client request declares no source; LPF is interactive and a third-party Fedora repackaging is a distinct source with separate terms.",
-      "reviewTrigger": "A chosen Spotify acquisition provider has reviewed license/terms, owned state, and profile-preserving Fedora 44 VM lifecycle."
+      "reviewTrigger": "A chosen Spotify acquisition provider has reviewed license/terms, owned state, and profile-preserving Fedora 44 VM lifecycle.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.VLCPlayer",
@@ -2763,10 +2777,11 @@
         "docs/migrations/desktop-user-configuration.md"
       ],
       "blocker": "",
-      "nextAction": "Add a typed GNOME string handler with exact prior value and unset/default recovery, then pass a Workstation VM lifecycle.",
+      "nextAction": "Owner kept GNOME window-control setting for v3.0 on 2026-10-30. Add a typed string handler with exact prior value and unset/default recovery.",
       "v31Hardening": [],
       "reason": "The v2 WindowCtlMinMaxClose behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Add a typed GNOME string handler with exact prior value and unset/default recovery, then pass a Workstation VM lifecycle."
+      "reviewTrigger": "Add a typed GNOME string handler with exact prior value and unset/default recovery, then pass a Workstation VM lifecycle.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.WindowCtlAppmenuClose",
@@ -2855,10 +2870,11 @@
         "docs/migrations/desktop-user-configuration.md"
       ],
       "blocker": "",
-      "nextAction": "Declare an opt-in locale value and exact prior-region recovery, then pass a Fedora 44 Workstation VM lifecycle.",
+      "nextAction": "Owner kept GNOME region setting for v3.0 on 2026-10-30. Make country/region a profile-configurable value, with exact prior-state and unset/default recovery.",
       "v31Hardening": [],
       "reason": "The v2 GnomeRegionDaDK behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Declare an opt-in locale value and exact prior-region recovery, then pass a Fedora 44 Workstation VM lifecycle."
+      "reviewTrigger": "Declare an opt-in locale value and exact prior-region recovery, then pass a Fedora 44 Workstation VM lifecycle.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.GnomeRegion",
@@ -2877,10 +2893,11 @@
         "docs/migrations/desktop-user-configuration.md"
       ],
       "blocker": "",
-      "nextAction": "Owner deferred the retire-or-keep decision on 2026-10-30; review this remove-only outcome individually after the owned region setting is designed.",
+      "nextAction": "Owner deferred the old remove-only GNOME region outcome on 2026-10-30 because its distinct use case is unclear; revisit after the configurable region setting is defined.",
       "v31Hardening": [],
       "reason": "The v2 GnomeRegion behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available."
+      "reviewTrigger": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:setting.ScreensaverSlp10Lgn5",
@@ -2943,10 +2960,11 @@
         "docs/migrations/desktop-user-remaining.md"
       ],
       "blocker": "",
-      "nextAction": "Implement owned-entry merge and exact list/slot recovery; verify a disposable GNOME session.",
+      "nextAction": "Owner kept custom keyboard shortcuts for v3.0 on 2026-10-30. Merge only RIDE-owned shortcut entries and journal exact prior list/slot state for recovery.",
       "v31Hardening": [],
       "reason": "v2 replaces the entire GNOME custom-keybindings list and fixed slots, potentially hiding user shortcuts.",
-      "reviewTrigger": "Implement owned-entry merge and exact list/slot recovery; verify a disposable GNOME session."
+      "reviewTrigger": "Implement owned-entry merge and exact list/slot recovery; verify a disposable GNOME session.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.VMKeyboardShortcut",
@@ -3385,10 +3403,11 @@
         "docs/migrations/publisher-apps-12.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner kept Bitwarden RPM alongside AppImage and Flatpak options for v3.0 on 2026-10-30. Pin publisher source, review deployment-specific features and coexistence, and preserve vault data.",
       "v31Hardening": [],
       "reason": "The v2 latest RPM scrape lacks pinned publisher verification and a vault-preserving inverse; no v3 external-RPM handler satisfies the deeper credential/data gate.",
-      "reviewTrigger": "A requested pinned Bitwarden RPM proves publisher origin, installed identity, and seeded-vault-safe Fedora 44 failure and recovery evidence."
+      "reviewTrigger": "A requested pinned Bitwarden RPM proves publisher origin, installed identity, and seeded-vault-safe Fedora 44 failure and recovery evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.BitwardenAppImage",
@@ -3408,10 +3427,11 @@
         "docs/migrations/publisher-apps-06.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained the portable AppImage outcome on 2026-10-30; design a pinned official AppImage deployment and vault-preserving VM recovery.",
+      "nextAction": "Owner kept Bitwarden AppImage for v3.0 on 2026-10-30 alongside RPM and Flatpak deployment options where available. Review each source and feature set separately, allow product-specific coexistence, and preserve vault data.",
       "v31Hardening": [],
       "reason": "The v2 AppImage function downloads an RPM into Applications and its inverse removes only AppImage names; the source, destination, and encrypted-vault inverse do not match.",
-      "reviewTrigger": "A pinned official Bitwarden AppImage has separate portable identity, ownership and vault-preserving Fedora 44 VM evidence."
+      "reviewTrigger": "A pinned official Bitwarden AppImage has separate portable identity, ownership and vault-preserving Fedora 44 VM evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:action.ImportOpenVPNProfiles",
@@ -3712,10 +3732,11 @@
         "docs/migrations/publisher-apps-07.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen for an explicit QEMU or VMware target with absent-package install and owned inverse evidence.",
+      "nextAction": "Owner kept VM guest tools for v3.0 on 2026-10-30. Detect QEMU or VMware target and use the matching Fedora package lifecycle with an owned inverse.",
       "v31Hardening": [],
       "reason": "The v2 hypervisor branches use inconsistent DMI checks and have no QEMU inverse; the pinned KVM image preinstalls all three guest-tool RPMs, so it cannot establish a RIDE-owned install.",
-      "reviewTrigger": "A requested explicit hypervisor target passes absent-package VM apply, repeat/status, and safe recovery for its selected guest tools."
+      "reviewTrigger": "A requested explicit hypervisor target passes absent-package VM apply, repeat/status, and safe recovery for its selected guest tools.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.YubikeyManager",
@@ -3735,10 +3756,11 @@
         "docs/migrations/publisher-apps-08.md"
       ],
       "blocker": "",
-      "nextAction": "Choose Yubico Authenticator or ykman for a new explicit deployment; require pinned source and credential-safe VM evidence.",
+      "nextAction": "Owner kept YubiKey management capability for v3.0 on 2026-10-30. Replace the EOL Manager GUI with current Yubico Authenticator for GUI use and ykman for CLI tasks; preserve credentials and device state.",
       "v31Hardening": [],
       "reason": "The v2 YubiKey Manager GUI AppImage is end of life and its mutable download/name-based inverse is unowned; Yubico recommends Authenticator GUI or ykman CLI.",
-      "reviewTrigger": "A requested current Yubico deployment has pinned publisher bytes, owned portable or package identity, and Fedora 44 target/hardware evidence."
+      "reviewTrigger": "A requested current Yubico deployment has pinned publisher bytes, owned portable or package identity, and Fedora 44 target/hardware evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.YubikeyPersTool",
@@ -3757,10 +3779,11 @@
         "docs/migrations/publisher-apps-14.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented current-source, ownership, and recovery trigger.",
+      "nextAction": "Owner kept YubiKey personalization capability for v3.0 on 2026-10-30. Replace archived GUI path with current Yubico Authenticator where supported and ykman for CLI tasks; preserve credentials and device state.",
       "v31Hardening": [],
       "reason": "The v2 unpinned Qt4 source build has no remove function; the archived BSD-2-Clause project directs users to Yubico Authenticator or ykman, and device credentials require separate safety evidence.",
-      "reviewTrigger": "A requested current Yubico deployment has pinned source, owned inverse, and device-safe Fedora 44 evidence."
+      "reviewTrigger": "A requested current Yubico deployment has pinned source, owned inverse, and device-safe Fedora 44 evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Xmind",
@@ -3780,10 +3803,11 @@
         "docs/migrations/publisher-apps-15.md"
       ],
       "blocker": "",
-      "nextAction": "Owner retained optional Xmind for migration on 2026-10-30; choose the current edition and exact artifact, then prove document-preserving Fedora 44 recovery.",
+      "nextAction": "Owner kept Xmind for v3.0 on 2026-10-30. Choose current edition and exact artifact; preserve user documents during recovery.",
       "v31Hardening": [],
       "reason": "The v2 old Zen RPM scrape does not identify the current publisher edition or package; its xmind-vana inverse lacks ownership and user-document recovery.",
-      "reviewTrigger": "A chosen Xmind edition has exact publisher RPM and terms, owned installed identity, preserved documents, and Fedora 44 VM happy path."
+      "reviewTrigger": "A chosen Xmind edition has exact publisher RPM and terms, owned installed identity, preserved documents, and Fedora 44 VM happy path.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.SonosPlayer",
@@ -3803,10 +3827,11 @@
         "docs/migrations/publisher-apps-09.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only on its documented source, ownership, and Fedora 44 lifecycle trigger.",
+      "nextAction": "Owner confirmed on 2026-10-30: Retire the old Sonos player capability from v3.0.",
       "v31Hardening": [],
-      "reason": "The unofficial controller upstream declares the AppImage project deprecated; v2 downloads a moving release and deletes name-matched files without ownership.",
-      "reviewTrigger": "A requested maintained Sonos client has pinned license/artifact, owned portable destination, and app-data-preserving VM lifecycle."
+      "reason": "The unofficial controller upstream declares the AppImage project deprecated; v2 downloads a moving release and deletes name-matched files without ownership. The owner explicitly retired the full capability from v3.0 on 2026-10-30.",
+      "reviewTrigger": "A new explicit owner decision to restore this capability to v3 scope.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.VMwareWorkstation",
@@ -4721,7 +4746,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-06.md"
       ],
-      "nextAction": "Retain the owner-requested portable AppImage; design pinned publisher acquisition, owned deployment, and vault-preserving recovery before runnable status."
+      "nextAction": "Owner kept Bitwarden AppImage alongside RPM and Flatpak options; review distinct sources, feature sets, coexistence, and vault-safe recovery."
     },
     {
       "id": "publisher-apps-07",
@@ -4732,7 +4757,7 @@
         "docs/acceptance/package.solaar.md",
         "docs/acceptance/package.acpi.md"
       ],
-      "nextAction": "Keep Solaar/ACPI opt-in, complete H013 hardware review in v3.1, and reopen guest tools only on explicit hypervisor evidence. Continue publisher-apps-09."
+      "nextAction": "Owner kept VM guest tools; detect hypervisor and use matching Fedora packages with owned recovery while retaining Solaar/ACPI evidence."
     },
     {
       "id": "publisher-apps-08",
@@ -4741,7 +4766,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-08.md"
       ],
-      "nextAction": "Reopen only for the publisher-supported successor and credential-safe target evidence; continue publisher-apps-09."
+      "nextAction": "Owner kept YubiKey management capability; evaluate current Yubico Authenticator GUI and ykman CLI as replacements with credential-safe evidence."
     },
     {
       "id": "publisher-apps-09",
@@ -4752,7 +4777,7 @@
         "docs/acceptance/package.gnome-commander.md",
         "docs/acceptance/package.mc.md"
       ],
-      "nextAction": "Design retained PowerShell source, WoeUSB-ng acquisition, and balenaEtcher RPM lifecycles; keep file managers opt-in and complete H014 in v3.1."
+      "nextAction": "Owner kept PowerShell, WoeUSB, and balenaEtcher; retired Teams and Sonos desktop capabilities. Design the retained owned sources."
     },
     {
       "id": "publisher-apps-10",
@@ -4761,7 +4786,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-10.md"
       ],
-      "nextAction": "Design owned lifecycles for retained Arduino IDE, Discord, and Joplin; revisit deferred Vivaldi after source and profile recovery design."
+      "nextAction": "Owner kept Arduino IDE, Discord, Joplin, and Vivaldi; retired Atom editor and plugins. Design owned sources and profile-safe recovery."
     },
     {
       "id": "publisher-apps-11",
@@ -4772,7 +4797,7 @@
         "docs/acceptance/package.clementine.md",
         "docs/acceptance/package.easyeffects.md"
       ],
-      "nextAction": "Design Chrome, Edge, and Spotify source and profile-safe recovery paths for v3.0; complete H015/H016 broader checks in v3.1."
+      "nextAction": "Owner kept Chrome, Edge, and Spotify; design approved publisher sources and profile-safe recovery paths."
     },
     {
       "id": "publisher-apps-12",
@@ -4781,7 +4806,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-12.md"
       ],
-      "nextAction": "Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch."
+      "nextAction": "Owner kept Bitwarden RPM alongside AppImage and Flatpak options; review source, feature/coexistence boundaries, and vault-safe recovery."
     },
     {
       "id": "publisher-apps-13",
@@ -4800,7 +4825,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-14.md"
       ],
-      "nextAction": "Keep the non-runnable decision visible; reopen on its documented trigger and continue the next publisher batch."
+      "nextAction": "Owner kept YubiKey personalization capability; evaluate Yubico Authenticator and ykman as current alternatives with credential-safe evidence."
     },
     {
       "id": "publisher-apps-15",
@@ -4809,7 +4834,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-15.md"
       ],
-      "nextAction": "Choose the owner-retained Xmind edition and verified publisher RPM, then prove document-safe Fedora 44 recovery before runnable status."
+      "nextAction": "Owner kept Xmind; choose current edition and exact artifact, then prove document-preserving Fedora 44 recovery."
     },
     {
       "id": "publisher-apps-16",
@@ -4828,7 +4853,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
+      "nextAction": "Owner kept Firefox preference capability; design owned current policy and seeded prior-state recovery, then review SetupUserDefaultDirs separately."
     },
     {
       "id": "desktop-user-02",
@@ -4839,7 +4864,7 @@
         "docs/acceptance/gnome-user-boolean.md",
         "docs/migrations/desktop-user-configuration.md"
       ],
-      "nextAction": "Keep passing boolean settings opt-in; revisit the deferred GnomeRegion decision after an owned string-setting design. Complete H018 in v3.1."
+      "nextAction": "Owner kept country-configurable GNOME region setting; design profile value and exact prior-state recovery while preserving existing boolean settings."
     },
     {
       "id": "desktop-user-03",
@@ -4848,7 +4873,7 @@
       "evidence": [
         "docs/migrations/desktop-user-remaining.md"
       ],
-      "nextAction": "Design the owner-retained CustomKbrdShortcut outcome as a scoped inverse; preserve seeded user shortcuts and prove exact restore."
+      "nextAction": "Owner kept custom keyboard shortcuts; implement owned-entry merge and exact prior-state recovery."
     },
     {
       "id": "desktop-user-04",

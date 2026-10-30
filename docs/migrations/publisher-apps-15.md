@@ -1,5 +1,8 @@
 # Xmind desktop RPM outcome
 
+The owner kept Xmind in the v3.0 fast-track review. Choose the current edition
+and preserve user documents during recovery.
+
 Status: **unsupported and non-runnable in v3.0**, 2026-10-30. This
 v2 source outcome maps `InstallXmind` and `RemoveXmind`. v2 scrapes
 an old `/zen/download/linux_rpm/` endpoint, passes every extracted link to

@@ -1,5 +1,10 @@
 # Bitwarden desktop RPM outcome
 
+The owner kept the RPM option alongside the AppImage and, where available,
+Flatpak options in the v3.0 fast-track review. These need separate deployment
+identities, feature review, product-specific coexistence, and vault-safe
+recovery. The RPM remains non-runnable until its publisher source passes.
+
 Status: **unsupported and non-runnable in v3.0**, 2026-10-30. This
 isolated high-risk v2 source outcome maps `InstallBitwarden` and
 `RemoveBitwarden`. v2 scrapes the latest GitHub release for the first RPM

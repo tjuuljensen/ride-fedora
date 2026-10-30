@@ -1,5 +1,8 @@
 # File managers and legacy publisher applications
 
+Fast-track owner decisions: keep PowerShell, WoeUSB, and balenaEtcher;
+retire the Linux Teams desktop and old Sonos player capabilities.
+
 Status: **one opt-in candidate and five non-runnable decisions**, 2026-10-30. This batch maps the commented v2
 `CommanderFileMgrs`, `PowerShell`, `MicrosoftTeams`, `WoeUSB`, and
 `BalenaEtcher` outcomes and the active `SonosPlayer` outcome. v2 installs
@@ -36,11 +39,11 @@ inverse deletes matching names.
   Migrate through a Fedora deployment with pinned RPM/source, owned
   repository/key handling, and a VM apply/inverse that preserves pre-existing
   Microsoft products.
-- **Microsoft Teams: documented non-runnable replacement.**
+- **Microsoft Teams: owner-retired Linux desktop capability.**
   [Microsoft no longer supports a Linux desktop client](https://learn.microsoft.com/microsoftteams/get-clients)
   and directs users to Teams on the web. Do not scrape the old `ms-teams`
-  RPM listing. Reopen only if Microsoft publishes a supported Fedora desktop
-  client or an explicit browser/PWA operation is requested with owned state.
+  RPM listing. The owner retired this capability on 2026-10-30; a new explicit
+  owner decision would be needed to restore it to v3 scope.
 - **WoeUSB: unsupported and non-runnable in v3.0.**
   [Fedora's WoeUSB package](https://packages.fedoraproject.org/pkgs/WoeUSB/WoeUSB/)
   is orphaned and its release table ends at Fedora 41. The v2 DNF name does

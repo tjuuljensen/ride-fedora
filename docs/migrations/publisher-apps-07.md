@@ -1,5 +1,9 @@
 # Logitech Unifying and conditional VM guest tools
 
+The owner confirmed **keep** for VM guest tools in the v3.0 fast-track review.
+Detect the actual hypervisor and install only its matching Fedora packages;
+the v2 VMware-only inverse is insufficient.
+
 Status: **one opt-in candidate and one non-runnable decision**, 2026-10-30. This active-preset batch maps
 `InstallUnifyingOnLaptop` / `RemoveUnifyingOnLaptop` and
 `InstallVMtoolsOnVM` / `RemoveVMtoolsOnVM`. The v2 Unifying function tests

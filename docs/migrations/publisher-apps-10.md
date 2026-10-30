@@ -1,5 +1,8 @@
 # Legacy editor, portable IDE, and communication applications
 
+Fast-track owner decisions: keep Arduino IDE, Discord, Joplin, and Vivaldi;
+retire Atom editor and its plugin capability.
+
 Status: **in review**, 2026-10-30. This v2 source batch maps
 `ArduinoIDE`, `AtomEditor`, `AtomPlugins`, `Discord`, `Joplin`, and
 `Vivaldi`. v2 downloads moving Arduino/Joplin AppImages to

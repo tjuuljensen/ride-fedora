@@ -1,5 +1,11 @@
 # Bitwarden AppImage source outcome
 
+The owner confirmed **keep** in the v3.0 fast-track review, alongside RPM and
+Flatpak distributions where available. Each needs its own deployment identity,
+feature review, and vault-safe inverse; coexistence is reviewed per product.
+[Bitwarden's Linux feature matrix](https://bitwarden.com/help/desktop-app-feature-support/)
+lists AppImage, Flatpak, and RPM with differing integration features.
+
 Status: **retained for migration, unsupported for v3.0**, 2026-10-30. The
 owner chose to keep a real portable Bitwarden AppImage as a distinct outcome.
 This isolated high-risk

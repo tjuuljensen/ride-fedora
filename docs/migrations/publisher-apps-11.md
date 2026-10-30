@@ -1,5 +1,8 @@
 # Browser and media publisher applications
 
+Fast-track owner decisions: keep Chrome, Edge, and Spotify. Opera remains
+outside v3 scope.
+
 Status: **two opt-in candidates, three unsupported decisions, and one owner exclusion**, 2026-10-30. The v2 source family includes
 `Chrome`, `Opera`, `Edge`, `SpotifyClient`, `ClementinePlayer`, and
 `PulseAudioEq`; Opera is outside the current five-outcome batch. The first three add external browser RPM repositories and
