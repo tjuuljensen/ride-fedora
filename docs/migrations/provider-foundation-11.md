@@ -2,6 +2,10 @@
 
 Status: **replaced by Fedora Workstation's supplied runtime; no v3.0 RIDE
 install**, 2026-10-30.
+The owner subsequently chose **keep** for the Flatpak runtime capability in
+the v3.0 fast-track review, separately from the Flathub remote. Add an
+optional absent-runtime installation path with app- and data-preserving
+recovery; its presence on the pinned image remains baseline evidence only.
 The commented v2 `InstallFlatpak` installs the Fedora Flatpak RPM. Its
 `RemoveFlatpak` runs `flatpak uninstall --all` before `dnf autoremove -y
 flatpak`, so it can delete applications and runtimes RIDE did not install.

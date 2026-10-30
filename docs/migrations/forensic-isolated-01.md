@@ -2,6 +2,9 @@
 
 Status: **complete: one supported RPM, one retired placeholder, four
 non-runnable tool decisions**, 2026-10-30.
+The owner subsequently kept VMFS access, ASN, UnfURL, CyberChef, and Chepy
+capabilities in the v3.0 fast-track review. The old VMFS link-only function
+remains retired; a working reader needs a current licensed source.
 This batch covers active v2 `VMFStools`, `ExifTool`, `ASN`, `UnfURL`,
 `CyberChef`, and `Chepy`. The v2 functions use unrelated acquisition methods;
 they must not be treated as one install bundle. The function source is

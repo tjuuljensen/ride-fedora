@@ -359,10 +359,11 @@
         "docs/migrations/provider-foundation-11.md"
       ],
       "blocker": "",
-      "nextAction": "Use Fedora Workstation supplied Flatpak runtime; reopen only if RIDE repair of an absent runtime is required.",
+      "nextAction": "Owner kept Flatpak runtime capability for v3.0 on 2026-10-30, separate from the Flathub remote. Add an optional runtime repair/install path that preserves existing Flatpak apps, remotes, and data.",
       "v31Hardening": [],
       "reason": "Fedora Workstation supplies Flatpak by default and the pinned target has it; the v2 uninstall-all inverse would delete unowned apps and no RIDE lifecycle is accepted.",
-      "reviewTrigger": "A declared Workstation host needs RIDE to repair absent Flatpak while preserving seeded apps, remotes, and data through failure and recovery."
+      "reviewTrigger": "A declared Workstation host needs RIDE to repair absent Flatpak while preserving seeded apps, remotes, and data through failure and recovery.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Flathub",
@@ -429,10 +430,11 @@
         "docs/migrations/provider-foundation-12.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only for a concrete Snap use case with confinement, service, app-data, and recovery requirements.",
+      "nextAction": "Owner kept optional Snap enablement for v3.0 on 2026-10-30 so users can install individual snaps when needed. Scope the daemon/runtime lifecycle and preserve existing snaps and data; do not add a default app bundle.",
       "v31Hardening": [],
       "reason": "The v2 RPM-only pair does not establish usable Snapd, service/confined operation, or preservation of pre-existing snap apps and data; no high-risk recovery evidence exists.",
-      "reviewTrigger": "An explicit Snap application requirement with documented confinement mode and seeded-state Fedora 44 VM acceptance for install and safe inverse."
+      "reviewTrigger": "An explicit Snap application requirement with documented confinement mode and seeded-state Fedora 44 VM acceptance for install and safe inverse.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Galleta",
@@ -475,10 +477,11 @@
         "docs/migrations/forensic-isolated-02.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen for a concrete timeline need with selected packaged source, pinned dependencies, and VM inverse.",
+      "nextAction": "Owner kept Plaso for v3.0 on 2026-10-30. Choose a maintained packaged source and pinned dependencies; preserve case timelines and output during recovery.",
       "v31Hardening": [],
       "reason": "The v2 pair only prints a URL; current Plaso has a broad Python dependency set and no pinned isolated Fedora 44 handler or lifecycle acceptance.",
-      "reviewTrigger": "A concrete Plaso timeline use case with licensed packaged source, isolated dependencies, owned inverse, and Fedora 44 VM evidence."
+      "reviewTrigger": "A concrete Plaso timeline use case with licensed packaged source, isolated dependencies, owned inverse, and Fedora 44 VM evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Autopsy",
@@ -544,10 +547,11 @@
         "docs/migrations/forensic-isolated-01.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen only for a concrete VMFS access need with licensed source and read-only filesystem evidence.",
+      "nextAction": "Owner kept VMFS access capability for v3.0 on 2026-10-30. The v2 link-only function remains retired; find a licensed current read-only VMFS tool and test an owned lifecycle.",
       "v31Hardening": [],
       "reason": "The active v2 installer only echoes two URLs and its inverse is empty; no working VMFS install exists to migrate.",
-      "reviewTrigger": "A concrete VMFS access use case with licensed verified acquisition, target compatibility, and safe recovery evidence."
+      "reviewTrigger": "A concrete VMFS access use case with licensed verified acquisition, target compatibility, and safe recovery evidence.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Volatility",
@@ -901,10 +905,11 @@
         "docs/migrations/forensic-isolated-01.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen ASN only on the documented provenance, ownership, and VM acceptance trigger.",
+      "nextAction": "Owner kept ASN for v3.0 on 2026-10-30. Review current source and license, pin acquisition, and install at an owned destination with a brief Fedora 44 lifecycle.",
       "v31Hardening": [],
       "reason": "The v2 installer fetches an unpinned MIT-licensed script into /usr/bin and removes shared RPM dependencies; v3 has no pinned owned-script handler or safe inverse.",
-      "reviewTrigger": "A concrete ASN lookup use case with pinned script provenance, independent dependency ownership, and Fedora 44 VM acceptance."
+      "reviewTrigger": "A concrete ASN lookup use case with pinned script provenance, independent dependency ownership, and Fedora 44 VM acceptance.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.UnfURL",
@@ -924,10 +929,11 @@
         "docs/migrations/forensic-isolated-01.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen UnfURL only on the documented provenance, ownership, and VM acceptance trigger.",
+      "nextAction": "Owner kept UnfURL for v3.0 on 2026-10-30. Pin an isolated Python environment and prove owned recovery with a focused Fedora 44 lifecycle.",
       "v31Hardening": [],
       "reason": "The v2 installer mutates the user global Python environment with unpinned pip dependencies; v3 has no isolated pinned dfir-unfurl environment or VM happy path.",
-      "reviewTrigger": "A concrete UnfURL use case with a hash-pinned isolated environment, owned inverse, and Fedora 44 VM acceptance."
+      "reviewTrigger": "A concrete UnfURL use case with a hash-pinned isolated environment, owned inverse, and Fedora 44 VM acceptance.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.CyberChef",
@@ -947,10 +953,11 @@
         "docs/migrations/forensic-isolated-01.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen CyberChef only on the documented provenance, ownership, and VM acceptance trigger.",
+      "nextAction": "Owner kept CyberChef for v3.0 on 2026-10-30. Pin a verified offline artifact, own its desktop destination, and test apply and removal while preserving user data.",
       "v31Hardening": [],
       "reason": "The v2 installer selects a mutable GitHub ZIP, extracts into a system path, and writes a desktop launcher without an owned artifact/notice/recovery contract; Linux v3 has no portable handler.",
-      "reviewTrigger": "A concrete offline CyberChef deployment with pinned release provenance, owned destination and launcher, preserved notices and user data, and Fedora 44 VM acceptance."
+      "reviewTrigger": "A concrete offline CyberChef deployment with pinned release provenance, owned destination and launcher, preserved notices and user data, and Fedora 44 VM acceptance.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Chepy",
@@ -970,10 +977,11 @@
         "docs/migrations/forensic-isolated-01.md"
       ],
       "blocker": "",
-      "nextAction": "Reopen Chepy only on the documented provenance, ownership, and VM acceptance trigger.",
+      "nextAction": "Owner kept Chepy for v3.0 on 2026-10-30. Pin an isolated Python environment and prove owned recovery with a focused Fedora 44 lifecycle.",
       "v31Hardening": [],
       "reason": "The v2 installer clones an unpinned Git branch, globally installs Python packages and PyInstaller, and copies a built binary into /usr/bin without owned recovery.",
-      "reviewTrigger": "A concrete Chepy CLI need with pinned licensed source or wheel, isolated reproducible build, owned inverse, and Fedora 44 VM acceptance."
+      "reviewTrigger": "A concrete Chepy CLI need with pinned licensed source or wheel, isolated reproducible build, owned inverse, and Fedora 44 VM acceptance.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.Dumpzilla",
@@ -2095,10 +2103,11 @@
         "docs/migrations/provider-foundation-10.md"
       ],
       "blocker": "",
-      "nextAction": "Owner deferred the retire-or-keep decision on 2026-10-30; review this helper individually later.",
+      "nextAction": "Owner deferred the GNOME extension helper decision again in the v3.0 fast-track review on 2026-10-30; compare the archived helper with current GNOME extension tools.",
       "v31Hardening": [],
       "reason": "The v2 installer clones mutable unpinned code and overwrites a system symlink; upstream is GPL-2.0 licensed but archived since 2023, without Fedora 44 GNOME compatibility or owned-path recovery evidence.",
-      "reviewTrigger": "A maintained licensed tool supports the declared Fedora/GNOME target with pinned acquisition and ownership-aware rollback."
+      "reviewTrigger": "A maintained licensed tool supports the declared Fedora/GNOME target with pinned acquisition and ownership-aware rollback.",
+      "v30Decision": "defer"
     },
     {
       "key": "workstation:package.Brave",
@@ -4562,7 +4571,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-10.md"
       ],
-      "nextAction": "Reopen only if a maintained licensed GNOME-compatible installer with owned recovery becomes available."
+      "nextAction": "Owner deferred the GNOME extension helper decision; compare the archived helper with current GNOME extension management."
     },
     {
       "id": "provider-foundation-11",
@@ -4571,7 +4580,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-11.md"
       ],
-      "nextAction": "Reopen only if RIDE must repair an absent Fedora Workstation Flatpak runtime with data-preserving recovery."
+      "nextAction": "Owner kept Flatpak runtime capability, separate from Flathub; design optional absent-runtime repair preserving apps, remotes, and data."
     },
     {
       "id": "provider-foundation-12",
@@ -4580,7 +4589,7 @@
       "evidence": [
         "docs/migrations/provider-foundation-12.md"
       ],
-      "nextAction": "Reopen only for an explicit Snap use case with service, confinement, and seeded-data recovery evidence."
+      "nextAction": "Owner kept optional Snap enablement for occasional user-selected installs; design daemon/runtime lifecycle and preserve existing snaps and data."
     },
     {
       "id": "forensic-isolated-01",
@@ -4590,7 +4599,7 @@
         "docs/migrations/forensic-isolated-01.md",
         "docs/acceptance/package.exiftool.md"
       ],
-      "nextAction": "Continue forensic-isolated-02; reopen specific scripts or isolated tools only on their documented requirements."
+      "nextAction": "Owner kept VMFS access, ASN, UnfURL, CyberChef, and Chepy; review current sources and use owned, focused Fedora 44 lifecycles."
     },
     {
       "id": "forensic-isolated-02",
@@ -4600,7 +4609,7 @@
         "docs/migrations/forensic-isolated-02.md",
         "docs/acceptance/package.volatility3.md"
       ],
-      "nextAction": "Continue forensic-isolated-03; keep Volatility 3 opt-in and complete named v3.1 plugin/recovery checks."
+      "nextAction": "Owner kept Plaso; choose maintained source and preserve case timelines while retaining existing Volatility 3 evidence."
     },
     {
       "id": "forensic-isolated-03",

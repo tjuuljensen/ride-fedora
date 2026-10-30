@@ -1,6 +1,8 @@
 # GNOME extension installer disposition
 
 Status: **unsupported for v3.0**, 2026-10-30.
+The owner deferred the keep-or-retire decision again in the v3.0 fast-track
+review. Compare current GNOME extension tools before resolving this helper.
 The active v2 `InstallGnomeExtInstaller` clones an unpinned Git repository
 into `/opt` and force-links its script over `/usr/local/bin/gnome-shell-extension-installer`.
 `RemoveGnomeExtInstaller` recursively deletes that directory and symlink

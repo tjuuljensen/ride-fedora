@@ -1,6 +1,10 @@
 # Snapd service and package-manager ownership
 
 Status: **unsupported as a runnable v3.0 operation**, 2026-10-30.
+The owner chose **keep** for optional Snap enablement in the v3.0 fast-track
+review, for occasional user-selected snap installations. This does not add
+snap applications to a base profile. Model the daemon/runtime lifecycle and
+preserve pre-existing snaps and data.
 The commented v2 `InstallSnap`/`RemoveSnap` pair installs or removes the
 Fedora [`snapd` RPM](https://packages.fedoraproject.org/pkgs/snapd/snapd/).
 Snapd is a privileged package manager with service and application state;
