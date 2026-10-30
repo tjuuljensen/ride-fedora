@@ -3263,10 +3263,11 @@
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept the 15-percent battery-policy setting for v3.0 on 2026-10-30. Own the UPower policy fragment and preserve administrator policy with exact prior-state recovery.",
+      "nextAction": "Implement the validated, opt-in UPower drop-in shared with the 20-percent outcome; prove exact recovery on the pinned Workstation VM before candidate promotion.",
       "v31Hardening": [],
       "reason": "The v2 PowerPercentageLow15 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
       "reviewTrigger": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target.",
@@ -3286,10 +3287,11 @@
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept the 20-percent battery threshold; implement it as an optional validated value of one owned UPower setting shared with the 15-percent outcome, with exact prior-policy recovery.",
+      "nextAction": "Implement the same opt-in UPower drop-in with 20 as a selected value and exact prior-policy recovery; keep physical battery warning checks in H030.",
       "v31Hardening": [],
       "reason": "Owner kept the 20-percent capability on 2026-10-30, preferring a configurable optional threshold over separate fixed edits.",
       "reviewTrigger": "Owner kept the 20-percent battery threshold; implement it as an optional validated value of one owned UPower setting shared with the 15-percent outcome, with exact prior-policy recovery.",
@@ -5022,9 +5024,10 @@
       "evidence": [
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md"
       ],
-      "nextAction": "Owner kept 15-percent battery policy; design owned UPower fragment and exact prior-state recovery while retaining accepted boolean settings."
+      "nextAction": "Implement the shared opt-in UPower threshold handler and prove the 15-percent selection and exact drop-in recovery on Fedora 44 Workstation."
     },
     {
       "id": "desktop-user-05",
@@ -5071,9 +5074,10 @@
       "evidence": [
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md"
       ],
-      "nextAction": "Owner kept the 20-percent battery variant; design one optional configurable UPower threshold shared with 15-percent, preserving prior policy. Complete H018 in v3.1."
+      "nextAction": "Implement the shared opt-in UPower threshold handler and prove the 20-percent selection and exact drop-in recovery on Fedora 44 Workstation; H030 retains battery behavior."
     },
     {
       "id": "desktop-user-10",
@@ -5793,6 +5797,12 @@
       "id": "H029",
       "title": "Chepy dependency, plugin, transformation, and update behavior",
       "trigger": "After Fedora 44 Workstation Python 3.12 and pinned Chepy sdist lifecycle acceptance, lock transitive dependency hashes, test optional plugins and representative transformations, and review version updates with owned recovery.",
+      "status": "queued"
+    },
+    {
+      "id": "H030",
+      "title": "UPower warning behavior on battery hardware",
+      "trigger": "After the opt-in 15- and 20-percent UPower drop-in lifecycles pass on Fedora 44 Workstation, verify warning transitions on a disposable battery-capable target without risking production power state.",
       "status": "queued"
     }
   ]

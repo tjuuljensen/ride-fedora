@@ -8,7 +8,9 @@ because its distinct intent still needs an owner decision.
 The owner kept the 15- and 20-percent UPower threshold outcomes. Prefer one
 optional, configurable threshold with validated values rather than two
 independent file edits. Its implementation must preserve any
-administrator-owned policy and exact prior state.
+administrator-owned policy and exact prior state. The
+[UPower batch](desktop-user-upower-01.md) now defines completion checks and
+records Fedora 44's supported drop-in format before implementation.
 
 Status: **GNOME strings operable; UPower thresholds non-runnable**, 2026-10-30.
 The [boolean settings](desktop-user-boolean.md) are separately operable.
@@ -22,10 +24,10 @@ The [boolean settings](desktop-user-boolean.md) are separately operable.
   declared locale value. A restore must handle arbitrary prior values and
   distinguish an implicit default from an explicit override before a runnable
   implementation is promoted.
-- Require an owned UPower drop-in or an exact, conflict-checked backup and
-  restore of the existing file, plus a battery-capable disposable target,
-  before changing system power policy. A config edit alone cannot prove the
-  battery behavior.
+- Require an owned UPower drop-in and exact, conflict-checked restore on a
+  disposable Fedora 44 Workstation target before counting either outcome
+  operable. Record battery warning behavior as H030 when the VM has no
+  battery; a config edit alone cannot prove that user-visible behavior.
 
 ## Decisions and reopening triggers
 
