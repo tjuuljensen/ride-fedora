@@ -736,14 +736,19 @@
       "selectorCoverage": "commented",
       "family": "forensic-isolated",
       "batch": "forensic-isolated-03",
-      "risk": "medium",
+      "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.binwalk"
+      ],
+      "evidence": [
+        "docs/acceptance/package.binwalk.md",
+        "docs/migrations/forensic-isolated-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck Fedora Binwalk major-version behavior and exact target if the RPM or DNF handler changes.",
       "v31Hardening": []
     },
     {
@@ -805,13 +810,17 @@
       "batch": "forensic-isolated-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Use the maintained standalone mac-vendor.sh from linux-scripts directly; reopen v3 integration after licensing and owned-script lifecycle review.",
+      "v31Hardening": [],
+      "reason": "The v2 mutable download is replaced by the maintained standalone mac-vendor.sh with local IEEE cache; v3 does not install or manage it.",
+      "reviewTrigger": "A requested v3 managed install has a published license, pinned artifact, owned destination, cache policy, and VM lifecycle evidence."
     },
     {
       "key": "workstation:package.ExifTool",
@@ -940,13 +949,17 @@
       "batch": "forensic-isolated-03",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/forensic-isolated-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only for a maintained, licensed Firefox forensic parser with safe user-data handling.",
+      "v31Hardening": [],
+      "reason": "The upstream Dumpzilla repository declares the project discontinued and its original script has no accepted license, pinned artifact, or current Firefox-profile compatibility evidence.",
+      "reviewTrigger": "A maintained licensed source supports current Firefox profiles and passes isolated install, privacy, and removal checks."
     },
     {
       "key": "workstation:package.NetworkMiner",
@@ -1515,14 +1528,19 @@
       "selectorCoverage": "commented",
       "family": "forensic-isolated",
       "batch": "forensic-isolated-03",
-      "risk": "medium",
+      "risk": "low",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect current package or publisher, detection, verification, removal and recovery",
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.autopep8"
+      ],
+      "evidence": [
+        "docs/acceptance/package.autopep8.md",
+        "docs/migrations/forensic-isolated-03.md"
+      ],
+      "blocker": "",
+      "nextAction": "Recheck Fedora autopep8 package and exact target if the RPM or DNF handler changes; do not adopt global pip state.",
       "v31Hardening": []
     },
     {
@@ -3924,8 +3942,12 @@
       "id": "forensic-isolated-03",
       "family": "forensic-isolated",
       "title": "Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor",
-      "evidence": [],
-      "nextAction": "Assess Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor; record v2 behavior, current source, inverse, and risk-based completion criteria."
+      "evidence": [
+        "docs/migrations/forensic-isolated-03.md",
+        "docs/acceptance/package.binwalk.md",
+        "docs/acceptance/package.autopep8.md"
+      ],
+      "nextAction": "Continue forensic-isolated-04; revisit Binwalk major-version behavior and script reopens only on their explicit triggers."
     },
     {
       "id": "forensic-isolated-04",

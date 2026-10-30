@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**59/180 complete (32.8%)**: 20 supported, 11 opt-in candidate, 6 replaced, 7 retired, 0 private, 15 unsupported; 121 unresolved.
+**63/180 complete (35.0%)**: 22 supported, 11 opt-in candidate, 7 replaced, 8 retired, 0 private, 15 unsupported; 117 unresolved.
 
-Runnable outcomes: 31; 11 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
+Runnable outcomes: 33; 11 require `--allow-candidate`. Owner exclusions: 2 Citrix functions and 13 host-specific server functions, outside the 180 outcomes.
 
 | Batch | Family | Risk | Complete | Evidence | Next action |
 | --- | --- | --- | ---: | --- | --- |
@@ -28,7 +28,7 @@ Runnable outcomes: 31; 11 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `provider-foundation-12` | Snapd service and package-manager ownership | high 1 | 1/1 | [provider-foundation-12.md](../../docs/migrations/provider-foundation-12.md) | Reopen only for an explicit Snap use case with service, confinement, and seeded-data recovery evidence. |
 | `forensic-isolated-01` | Forensic Isolated 01: VMFStools, ExifTool, ASN, UnfURL, CyberChef, Chepy | medium 6 | 6/6 | [forensic-isolated-01.md](../../docs/migrations/forensic-isolated-01.md), [package.exiftool.md](../../docs/acceptance/package.exiftool.md) | Continue forensic-isolated-02; reopen specific scripts or isolated tools only on their documented requirements. |
 | `forensic-isolated-02` | Former CERT placeholders and isolated Volatility 3 | medium 4 | 4/4 | [forensic-isolated-02.md](../../docs/migrations/forensic-isolated-02.md), [package.volatility3.md](../../docs/acceptance/package.volatility3.md) | Continue forensic-isolated-03; keep Volatility 3 opt-in and complete named v3.1 plugin/recovery checks. |
-| `forensic-isolated-03` | Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor | medium 4 | 0/4 | — | Assess Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor; record v2 behavior, current source, inverse, and risk-based completion criteria. |
+| `forensic-isolated-03` | Forensic Isolated 03: Binwalk, Dumpzilla, PyhtonAutopep8, Macvendor | low 2, medium 2 | 4/4 | [forensic-isolated-03.md](../../docs/migrations/forensic-isolated-03.md), [package.binwalk.md](../../docs/acceptance/package.binwalk.md), [package.autopep8.md](../../docs/acceptance/package.autopep8.md) | Continue forensic-isolated-04; revisit Binwalk major-version behavior and script reopens only on their explicit triggers. |
 | `forensic-isolated-04` | BulkExtractor source build and owned artifact | high 1 | 0/1 | [forensic-isolated-04.md](../../docs/migrations/forensic-isolated-04.md) | Assess acquisition, license, build, detection, and safe recovery. |
 | `forensic-isolated-05` | NetworkMiner publisher artifact and evidence data | high 1 | 0/1 | [forensic-isolated-05.md](../../docs/migrations/forensic-isolated-05.md) | Review official Linux runtime, licensed artifact, capture-data preservation, and owned inverse. |
 | `forensic-isolated-06` | Email header analyzer service and Python environment | high 1 | 0/1 | [forensic-isolated-06.md](../../docs/migrations/forensic-isolated-06.md) | Review current service source, bind scope, isolated Python environment, and safe recovery. |

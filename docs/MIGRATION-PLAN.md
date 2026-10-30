@@ -218,6 +218,10 @@ non-runnable until their artifact, isolation, and ownership contracts pass.
 non-root, hash-pinned Volatility 3 core venv as an opt-in candidate, retired
 the archived Volatility 2 line, and recorded Plaso and Autopsy as
 non-runnable pending their separate Linux package and data contracts.
+[Forensic isolated batch 03](migrations/forensic-isolated-03.md) promoted
+Fedora Binwalk and autopep8 after a shared exact-target RPM lifecycle,
+retired the discontinued Dumpzilla script, and documented the maintained
+standalone MAC vendor lookup as a non-runnable replacement.
 The remaining outcomes stay visible in the progress report.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,

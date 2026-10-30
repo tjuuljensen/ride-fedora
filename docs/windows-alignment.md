@@ -334,3 +334,18 @@ product-identity conflict. No profile or run-state schema changed and no
 unexplained shared-contract drift was found. Recheck if Linux adds a
 portable Autopsy handler, Windows adds Volatility 3, shared product facts
 change, or release review begins.
+
+### Fedora forensic isolated batch 03, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[Binwalk, autopep8, and legacy script batch](migrations/forensic-isolated-03.md).
+Windows has no corresponding Binwalk, autopep8, Dumpzilla, or Macvendor
+catalog/profile operation at this revision. Linux adds only two Fedora RPM
+operations using the existing installed deployment, `fedora-rpm` source,
+DNF handler, and run journal. The standalone Macvendor replacement and
+Dumpzilla retirement add no Linux operation or executable fallback. No
+shared package source resolution, recovery, catalog, profile, or run-state
+contract changed, and no unexplained drift was found. Recheck if Windows
+adds any of these products, Linux adds owned script deployment, either
+schema/handler changes, or release review begins.

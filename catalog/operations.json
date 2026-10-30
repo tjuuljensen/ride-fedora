@@ -1874,6 +1874,86 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.exiftool.md"
+    },
+    {
+      "id": "package.binwalk",
+      "kind": "package",
+      "name": "Binwalk firmware analyzer",
+      "group": "forensics",
+      "description": "Install the Fedora Binwalk CLI without managing firmware samples or legacy Python plugins.",
+      "handler": "dnf-package",
+      "packageName": "binwalk",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "binwalk",
+      "productUri": "https://github.com/ReFirmLabs/binwalk",
+      "license": "(0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND BSL-1.0 AND ISC AND MIT AND (MIT OR Apache-2.0) AND (MIT OR Zlib OR Apache-2.0) AND MPL-2.0 AND (Unlicense OR MIT) AND (Zlib OR Apache-2.0 OR MIT)",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/binwalk/binwalk/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/binwalk/binwalk/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.binwalk.md"
+    },
+    {
+      "id": "package.autopep8",
+      "kind": "package",
+      "name": "autopep8 Python formatter",
+      "group": "python-tools",
+      "description": "Install the Fedora autopep8 CLI without changing the user global pip environment.",
+      "handler": "dnf-package",
+      "packageName": "python3-autopep8",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "autopep8",
+      "productUri": "https://github.com/hhatto/autopep8",
+      "license": "MIT",
+      "licenseUri": "https://src.fedoraproject.org/rpms/python-autopep8",
+      "sourceUri": "https://src.fedoraproject.org/rpms/python-autopep8",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.autopep8.md"
     }
   ]
 }

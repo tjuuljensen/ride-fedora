@@ -629,6 +629,21 @@ def test_forensic_exiftool_fedora_package(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_forensic_binwalk_and_autopep8_fedora_packages(vm):
+    # Installing the RPMs must leave the legacy mutable-script and global
+    # pip destinations outside RIDE's package lifecycle.
+    vm.run("test ! -e /usr/local/bin/binwalk && test ! -e /usr/local/bin/autopep8")
+    native_rpm_batch(vm, ("binwalk", "python3-autopep8"),
+                     inventory_policy="name-arch",
+                     residue_candidates=("binwalk", "python3-autopep8"),
+                     identifiers={"python3-autopep8": "package.autopep8"},
+                     installed_probes={"binwalk": "test -x /usr/bin/binwalk && binwalk --version",
+                                       "python3-autopep8":
+                                       "test -x /usr/bin/autopep8 && autopep8 --version"})
+    vm.run("test ! -e /usr/local/bin/binwalk && test ! -e /usr/local/bin/autopep8")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_forensic_volatility3_user_environment(vm):
     identifier = "package.volatility3"
     environment = "/home/ride-test/.local/share/ride-fedora/tools/volatility3"
