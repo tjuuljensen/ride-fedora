@@ -1395,15 +1395,16 @@
       "target": "fedora-44-workstation-x86_64",
       "disposition": "unsupported",
       "progress": "resolved",
-      "v3Ids": [],
+      "v3Ids": ["package.terminator"],
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-10-terminator.md",
+        "docs/acceptance/package.terminator.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept Terminator; split the Fedora RPM from the optional per-user iBus hotkey and verify package lifecycle and exact prior-hotkey recovery on Fedora 44 Workstation.",
+      "nextAction": "Verify the separate Terminator RPM lifecycle and implement exact prior-state recovery for the optional per-user iBus hotkey on Fedora 44 Workstation.",
       "v31Hardening": [],
-      "reason": "Owner kept Terminator for v3.0 on 2026-10-30; the v2 combined package and hotkey method remains unsafe.",
-      "reviewTrigger": "Owner kept Terminator; split the Fedora RPM from the optional per-user iBus hotkey and verify package lifecycle and exact prior-hotkey recovery on Fedora 44 Workstation.",
+      "reason": "Owner kept Terminator for v3.0 on 2026-10-30. The separate Fedora package candidate does not reproduce or recover the v2 iBus hotkey change, so the combined source outcome remains a gap.",
+      "reviewTrigger": "Add a typed per-user iBus setting with exact prior-value and default provenance recovery, then verify the package and setting lifecycle on Fedora 44 Workstation.",
       "v30Decision": "keep"
     },
     {
@@ -5079,9 +5080,10 @@
       "family": "desktop-user",
       "title": "Terminator and user iBus hotkey",
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-10-terminator.md",
+        "docs/acceptance/package.terminator.md"
       ],
-      "nextAction": "Owner kept Terminator; split the Fedora RPM from the optional iBus hotkey and verify each lifecycle on Fedora 44 Workstation."
+      "nextAction": "Verify the separate Fedora package and add exact prior-state iBus hotkey recovery; keep the combined outcome as a v3.0 gap until both pass."
     },
     {
       "id": "desktop-user-11",

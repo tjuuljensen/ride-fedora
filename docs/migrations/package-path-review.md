@@ -118,7 +118,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.SecurityLab` | Split the large mutable group into bounded owned tools or a group handler. | [Batch review](provider-foundation-06.md) |
 | `workstation:package.SmartMonTools` | Model smartd service state changed by package installation. | [Batch review](system-security-smartmontools.md) |
 | `workstation:package.Snap` | Model snapd service, confinement, installed snaps, and data recovery. | [Batch review](provider-foundation-12.md) |
-| `workstation:package.Terminator` | Separate Fedora RPM lifecycle from user iBus hotkey restoration. | [Batch review](desktop-user-remaining.md) |
+| `workstation:package.Terminator` | Fedora RPM is an opt-in candidate; the combined v2 outcome still needs exact prior iBus hotkey recovery. | [Batch review](desktop-user-10-terminator.md) |
 | `workstation:package.VMtoolsOnVM` | Split hypervisor detection and guest-service state; do not claim preinstalled RPMs. | [Batch review](publisher-apps-07.md) |
 | `workstation:package.VPNProfiles` | Remove only RIDE-owned NetworkManager UUIDs. | [Batch review](system-security-risk-decisions.md) |
 | `workstation:package.Wireguard` | Separate package tools from private keys, interfaces, and profile recovery. | [Batch review](system-security-risk-decisions.md) |

@@ -45,7 +45,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallPythonPip` | supported | Fedora `python3-pip` passed [VM lifecycle acceptance](acceptance/package.python3-pip.md); omit the v2 global pip self-upgrade. |
 | `InstallPackagingTools` | replaced | Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. |
 | `InstallBasicEditors` | supported | Split into Fedora `nano` and `vim-enhanced` package installs with [VM evidence](acceptance/provider-basic-editors.md). |
-| `InstallTerminator` | deferred | Optional desktop profile only. |
+| `InstallTerminator` | kept gap | Fedora [`package.terminator`](acceptance/package.terminator.md) passed the package-only Workstation VM path; the v2 iBus hotkey still needs exact prior-state recovery in [batch 10](migrations/desktop-user-10-terminator.md). |
 | `InstallAlien` | deferred | Review relevance and support. |
 | `InstallSmartMonTools` | deferred | Optional system tools profile. |
 | `InstallVisualStudioCode` | deferred | Align product facts with Windows; Fedora source stays local. |

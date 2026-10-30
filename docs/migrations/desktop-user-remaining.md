@@ -99,10 +99,12 @@ the deeper gate passes; a candidate switch is not a substitute.
 
 ## Batch 10: Terminator composite
 
-The owner kept `Terminator` for v3.0; it remains **unsupported** until migrated. The active v2
+The owner kept `Terminator` for v3.0; the combined outcome remains **unsupported** until migrated. The active v2
 install/remove pair changes both the Fedora `terminator` RPM and the current
 user's iBus emoji hotkey. Removal writes a hard-coded hotkey instead of the
 prior value. Installing the RPM alone would omit a user-visible side effect,
-so this review does not count the composite as a working install. Migrate by
-separating the signed Fedora package from an optional, exact-restorable
-per-user hotkey operation, then test both on the declared Workstation VM.
+so this review does not count the composite as a working install. The separate
+[`package.terminator` candidate](desktop-user-10-terminator.md) passed the
+Fedora 44 Workstation package lifecycle. Add an optional, exact-restorable
+per-user hotkey operation and test it on the declared Workstation VM before
+counting the combined source outcome as operable.

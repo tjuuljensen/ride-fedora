@@ -645,6 +645,15 @@ def test_provider_eza_fedora_package(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_terminator_package_without_ibus_setting(vm):
+    # The package path is independent of the v2 per-user iBus mutation.
+    native_rpm_batch(vm, ("terminator",), inventory_policy="name-arch",
+                     residue_candidates=("terminator",),
+                     installed_probes={"terminator":
+                                       "rpm -ql terminator | grep -q '/usr/share/applications/.*\\.desktop$'"})
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_forensic_exiftool_fedora_package(vm):
     # The RPM deployment must not adopt the source-build path from v2.
     vm.run("test ! -e /usr/lib/exiftool")

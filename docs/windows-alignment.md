@@ -764,3 +764,15 @@ review changes no executable Linux catalog, profile, or run contract.
 A future successor must preserve seeded browser data and keep secret
 output explicit; revisit product identity and shared recovery behavior
 before adding it to either platform.
+
+### Fedora Terminator package preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding
+`package.terminator`. Windows has no Terminator operation. The Linux row
+uses the existing single installed `fedora-rpm` deployment, DNF handler,
+explicit operation ID, and run-state recovery contract. The v2 iBus hotkey
+is a separate per-user setting still awaiting typed state and exact restore;
+the RPM operation makes no claim to it. No shared product or lifecycle
+semantics changed. Recheck when the iBus setting is added, either schema
+changes, Windows adds this product, or a release candidate is prepared.

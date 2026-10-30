@@ -2848,6 +2848,36 @@
       "artifactFormat": "rpm"
     },
     {
+      "id": "package.terminator",
+      "kind": "package",
+      "name": "Terminator terminal emulator",
+      "group": "desktop-tools",
+      "description": "Install Fedora Terminator without changing the user's iBus emoji hotkey.",
+      "handler": "dnf-package",
+      "packageName": "terminator",
+      "states": ["installed", "absent"],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": ["44"],
+          "architectures": ["x86_64"],
+          "variantIds": ["workstation"]
+        }
+      },
+      "productId": "terminator",
+      "productUri": "https://github.com/gnome-terminator/terminator",
+      "license": "GPL-2.0-only",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/terminator/terminator/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/terminator/terminator/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
       "id": "package.gnome-commander",
       "kind": "package",
       "name": "GNOME Commander file manager",
