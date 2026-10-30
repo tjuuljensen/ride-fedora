@@ -1391,20 +1391,19 @@
       "selectorCoverage": "active",
       "family": "desktop-user",
       "batch": "desktop-user-10",
-      "risk": "high",
+      "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": ["package.terminator"],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["package.terminator", "setting.ibus-emoji-hotkey"],
       "evidence": [
         "docs/migrations/desktop-user-10-terminator.md",
-        "docs/acceptance/package.terminator.md"
+        "docs/acceptance/package.terminator.md",
+        "docs/acceptance/setting.ibus-emoji-hotkey.md"
       ],
       "blocker": "",
-      "nextAction": "Verify the separate Terminator RPM lifecycle and implement exact prior-state recovery for the optional per-user iBus hotkey on Fedora 44 Workstation.",
-      "v31Hardening": [],
-      "reason": "Owner kept Terminator for v3.0 on 2026-10-30. The separate Fedora package candidate does not reproduce or recover the v2 iBus hotkey change, so the combined source outcome remains a gap.",
-      "reviewTrigger": "Add a typed per-user iBus setting with exact prior-value and default provenance recovery, then verify the package and setting lifecycle on Fedora 44 Workstation.",
+      "nextAction": "Keep the package command and per-user hotkey profile opt-in; complete H003 visual and accessibility review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -5081,9 +5080,10 @@
       "title": "Terminator and user iBus hotkey",
       "evidence": [
         "docs/migrations/desktop-user-10-terminator.md",
-        "docs/acceptance/package.terminator.md"
+        "docs/acceptance/package.terminator.md",
+        "docs/acceptance/setting.ibus-emoji-hotkey.md"
       ],
-      "nextAction": "Verify the separate Fedora package and add exact prior-state iBus hotkey recovery; keep the combined outcome as a v3.0 gap until both pass."
+      "nextAction": "Keep the scoped package command and user profile opt-in; complete H003 desktop visual review in v3.1."
     },
     {
       "id": "desktop-user-11",

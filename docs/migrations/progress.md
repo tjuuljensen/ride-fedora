@@ -3,13 +3,13 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**185/185 dispositioned (100.0%)**: 30 supported, 30 opt-in candidate, 11 replaced, 11 retired, 0 private, 103 unsupported; 0 unresolved.
+**185/185 dispositioned (100.0%)**: 30 supported, 31 opt-in candidate, 11 replaced, 11 retired, 0 private, 102 unsupported; 0 unresolved.
 
-**v3.0 package/setting coverage: 60/169 operable (35.5%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 99 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
+**v3.0 package/setting coverage: 61/169 operable (36.1%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 98 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
 
 For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.
 
-Runnable outcomes: 60; 30 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
+Runnable outcomes: 61; 31 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
 
 | Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 retired | v3.0 replaced | v3.0 gap | Evidence | Next action |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -63,7 +63,7 @@ Runnable outcomes: 60; 30 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `desktop-user-07` | Desktop and user state 07: window controls and screensaver variants | medium 2 | 2/2 | 0/2 | 0 | 0 | 2 | [desktop-user-remaining.md](../../docs/migrations/desktop-user-remaining.md) | Owner kept three exclusive GNOME window-button-layout choices; implement one configurable profile value and exact prior-layout recovery. |
 | `desktop-user-08` | Desktop and user state 08: VMKeyboardShortcut, GnomeDefaultFavorites, GnomeMinimalFavorites | high 3 | 3/3 | 0/3 | 0 | 0 | 3 | [desktop-user-remaining.md](../../docs/migrations/desktop-user-remaining.md) | Owner deferred VM shortcuts and a fixed minimal favorites preset, and kept current-default favorites; reconcile the preferred configurable list with exact recovery. |
 | `desktop-user-09` | Desktop and user state 09: GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20 | medium 3 | 3/3 | 2/3 | 0 | 0 | 1 | [desktop-user-boolean.md](../../docs/migrations/desktop-user-boolean.md), [gnome-user-boolean.md](../../docs/acceptance/gnome-user-boolean.md), [desktop-user-configuration.md](../../docs/migrations/desktop-user-configuration.md) | Owner kept the 20-percent battery variant; design one optional configurable UPower threshold shared with 15-percent, preserving prior policy. Complete H018 in v3.1. |
-| `desktop-user-10` | Terminator and user iBus hotkey | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [desktop-user-10-terminator.md](../../docs/migrations/desktop-user-10-terminator.md), [package.terminator.md](../../docs/acceptance/package.terminator.md) | Verify the separate Fedora package and add exact prior-state iBus hotkey recovery; keep the combined outcome as a v3.0 gap until both pass. |
+| `desktop-user-10` | Terminator and user iBus hotkey | medium 1 | 1/1 | 1/1 | 0 | 0 | 0 | [desktop-user-10-terminator.md](../../docs/migrations/desktop-user-10-terminator.md), [package.terminator.md](../../docs/acceptance/package.terminator.md), [setting.ibus-emoji-hotkey.md](../../docs/acceptance/setting.ibus-emoji-hotkey.md) | Keep the scoped package command and user profile opt-in; complete H003 desktop visual review in v3.1. |
 | `desktop-user-11` | Desktop and user state 11: lock and idle settings | high 2 | 2/2 | 0/2 | 0 | 0 | 2 | [desktop-user-remaining.md](../../docs/migrations/desktop-user-remaining.md) | Owner kept both lock-timing variants as optional values of one configurable setting; require atomic prior-state, partial-failure, and session-safety evidence. |
 | `system-security-01` | System Security 01: Hostname, FastDNF | medium 2 | 2/2 | 0/2 | 0 | 0 | 2 | [system-security-core.md](../../docs/migrations/system-security-core.md) | Owner kept hostname management and DNF5 FastDNF tuning; design validated parameters and exact prior-state recovery. |
 | `system-security-02` | System Security 02: UpdateFedora | high 1 | 1/1 | 0/0 | 0 | 0 | 0 | [system-security-core.md](../../docs/migrations/system-security-core.md) | Reopen only on the documented state, ownership, and exact-target recovery trigger. |

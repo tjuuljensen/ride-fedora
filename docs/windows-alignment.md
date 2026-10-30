@@ -772,7 +772,12 @@ Windows `codex/ride-v3-migration` at `d91c44b` before adding
 `package.terminator`. Windows has no Terminator operation. The Linux row
 uses the existing single installed `fedora-rpm` deployment, DNF handler,
 explicit operation ID, and run-state recovery contract. The v2 iBus hotkey
-is a separate per-user setting still awaiting typed state and exact restore;
-the RPM operation makes no claim to it. No shared product or lifecycle
-semantics changed. Recheck when the iBus setting is added, either schema
-changes, Windows adds this product, or a release candidate is prepared.
+is a separate per-user setting. The subsequent Linux
+`setting.ibus-emoji-hotkey` records the exact dconf user override in the
+run journal and restores it on the intended account, independently of the
+RPM. Windows has no matching setting. Linux catalog schema 3 and profile
+schema 1 gained a fixed local handler and one opt-in user profile; run schema 2
+uses its existing string observation field without a version change. No
+shared product or lifecycle semantics changed, and no unexplained drift was
+found. Recheck if either schema changes, Windows adds this product or a
+similar user-setting recovery contract, or a release candidate is prepared.

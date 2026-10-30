@@ -209,7 +209,7 @@ ride_apply_one() {
       ride_die "another source is installed for $id: $conflict; select that source explicitly before changing this one"
     fi
   fi
-  before=$(ride_observe "$entry")
+  before=$(ride_observe "$entry") || ride_die "cannot observe current state for $id"
   step=$(jq -nc --arg id "$id" --arg before "$before" --arg desired "$desired" --arg recovery "$recovery" \
     --arg source "$source" --arg signature "$signature" --arg distribution "$distribution" \
     --arg deployment "$deployment" --arg scope "$scope" \
@@ -235,12 +235,18 @@ ride_apply_one() {
     return 1
   fi
   if ! after=$(ride_observe "$entry"); then
+    if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
+      ride_change "$entry" "$before" || ride_error "iBus hotkey rollback failed after observation error"
+    fi
     ride_journal_update_last failed unknown
     ride_journal_finish failed
     ride_error "cannot verify changed state: $id"
     return 1
   fi
   if [[ "$after" != "$desired" ]]; then
+    if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
+      ride_change "$entry" "$before" || ride_error "iBus hotkey rollback failed after state mismatch"
+    fi
     ride_journal_update_last failed "$after"
     ride_journal_finish failed
     ride_error "desired state was not reached for $id (observed $after)"
@@ -307,7 +313,16 @@ ride_restore() {
     if [[ "$recovery" == none || ( "$recovery" == remove-new-install && ( "$before" != absent || "$after" != installed ) ) ]]; then
       ride_die "exact recovery is unavailable for $id ($before -> $after)"
     fi
-    if [[ "$RIDE_DRY_RUN" != 1 ]]; then ride_preflight_change "$entry" "$before"; fi
+    if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
+      ride_ibus_hotkey_valid_snapshot "$before" || ride_die "invalid saved iBus hotkey state"
+      if [[ "$RIDE_DRY_RUN" != 1 ]]; then
+        ride_require_target "$entry"
+        ride_require_accepted "$entry"
+        ride_require_privilege "$entry"
+      fi
+    elif [[ "$RIDE_DRY_RUN" != 1 ]]; then
+      ride_preflight_change "$entry" "$before"
+    fi
     current=$(ride_observe "$entry")
     [[ "$current" == "$after" || "$current" == "$before" ]] ||
       ride_die "restore conflict for $id: expected $after, observed $current"
@@ -317,7 +332,13 @@ ride_restore() {
       while IFS=$'\t' read -r id before after result source signature signature_version; do
         [[ "$result" == changed ]] || continue
         [[ "$source" != - ]] || source=
-        ride_plan_entry "$id" "$before" "$source"
+        if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
+          entry=$(ride_entry_or_die "$id" "$source")
+          printf '%s\t-\t%s\t%s\t%s\t-\t-\tuser\n' \
+            "$id" "$(ride_observe "$entry")" "$before" "$(jq -r '.status' <<< "$entry")"
+        else
+          ride_plan_entry "$id" "$before" "$source"
+        fi
       done < <(ride_restore_steps "$original")
     } | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
     return

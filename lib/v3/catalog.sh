@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean")) and
+      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey")) and
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
@@ -59,6 +59,9 @@ ride_validate_catalog() {
        elif .handler == "gsettings-boolean" then (.kind == "setting" and .scope == "user" and
          .states == ["enabled", "disabled"] and
          (.id | IN("setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting")))
+       elif .handler == "ibus-emoji-hotkey" then (.kind == "setting" and .scope == "user" and
+         .id == "setting.ibus-emoji-hotkey" and .states == ["enabled"] and
+         .recovery == "exact-state" and .verification == "local-gsettings-state")
        elif .handler == "python-venv" then (.kind == "package" and
          (if .id == "package.chepy" then
            .scope == "user" and .artifactFormat == "sdist" and .sourceId == "pypi-sdist-venv" and

@@ -3283,6 +3283,31 @@
       "verification": "local-gsettings-state"
     },
     {
+      "id": "setting.ibus-emoji-hotkey",
+      "kind": "setting",
+      "name": "iBus emoji hotkey for Terminator",
+      "group": "desktop-user",
+      "description": "Move the current user's iBus emoji hotkey to Control-Alt-Shift-E and journal the exact prior user override.",
+      "handler": "ibus-emoji-hotkey",
+      "states": ["enabled"],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "exact-state",
+      "targets": {
+        "fedora": {
+          "releases": ["44"],
+          "architectures": ["x86_64"],
+          "variantIds": ["workstation"]
+        }
+      },
+      "productId": "ibus",
+      "productUri": "https://github.com/ibus/ibus",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/ibus/ibus/",
+      "sourceUri": "https://github.com/ibus/ibus/blob/main/data/dconf/org.freedesktop.ibus.gschema.xml",
+      "verification": "local-gsettings-state"
+    },
+    {
       "id": "package.tcpdump",
       "kind": "package",
       "name": "tcpdump",

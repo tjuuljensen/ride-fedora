@@ -53,6 +53,7 @@ ride_observe() {
         *) ride_die "unexpected GNOME setting value: $schema $key=$value" ;;
       esac
       ;;
+    ibus-emoji-hotkey) ride_ibus_hotkey_observe ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -108,8 +109,81 @@ ride_change() {
       [[ "$writable" == true ]] || ride_die "GNOME setting is locked: $schema $key"
       ride_gsettings set "$schema" "$key" "$value"
       ;;
+    ibus-emoji-hotkey) ride_ibus_hotkey_change "$state" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
+}
+
+ride_ibus_hotkey_schema() {
+  printf 'org.freedesktop.ibus.panel.emoji hotkey\n'
+}
+
+ride_ibus_hotkey_override() {
+  ride_require_command dconf
+  dconf read /desktop/ibus/panel/emoji/hotkey
+}
+
+ride_ibus_hotkey_observe() {
+  local schema key effective override
+  ride_require_command base64
+  read -r schema key < <(ride_ibus_hotkey_schema)
+  effective=$(ride_gsettings get "$schema" "$key") || ride_die "cannot observe iBus emoji hotkey"
+  override=$(ride_ibus_hotkey_override) || ride_die "cannot read iBus emoji override"
+  if [[ "$effective" == "['<Control><Alt><Shift>e']" &&
+        "$override" == "['<Control><Alt><Shift>e']" ]]; then
+    printf 'enabled\n'
+  elif [[ -z "$override" ]]; then
+    printf 'unset\n'
+  else
+    printf 'user:%s\n' "$(printf '%s' "$override" | base64 -w0)"
+  fi
+}
+
+ride_ibus_hotkey_valid_snapshot() {
+  local state=$1 encoded raw
+  [[ "$state" == unset ]] && return 0
+  [[ "$state" =~ ^user:([A-Za-z0-9+/]+={0,2})$ ]] || return 1
+  encoded=${state#user:}
+  raw=$(printf '%s' "$encoded" | base64 --decode 2>/dev/null) || return 1
+  [[ -n "$raw" && ${#raw} -le 1024 && "$raw" != *$'\n'* ]]
+}
+
+ride_ibus_hotkey_write() {
+  local state=$1 schema key raw
+  read -r schema key < <(ride_ibus_hotkey_schema)
+  case "$state" in
+    enabled) ride_gsettings set "$schema" "$key" "['<Control><Alt><Shift>e']" ;;
+    unset) ride_gsettings reset "$schema" "$key" ;;
+    user:*)
+      ride_ibus_hotkey_valid_snapshot "$state" || ride_die "invalid saved iBus hotkey value"
+      raw=$(printf '%s' "${state#user:}" | base64 --decode) || return 1
+      ride_gsettings set "$schema" "$key" "$raw"
+      ;;
+    *) ride_die "invalid iBus hotkey state" ;;
+  esac
+}
+
+ride_ibus_hotkey_change() {
+  local state=$1 schema key before writable after
+  [[ "$state" == enabled ]] || ride_ibus_hotkey_valid_snapshot "$state" ||
+    ride_die "invalid saved iBus hotkey state"
+  read -r schema key < <(ride_ibus_hotkey_schema)
+  writable=$(ride_gsettings writable "$schema" "$key") || ride_die "cannot check iBus hotkey writability"
+  [[ "$writable" == true ]] || ride_die "iBus hotkey is locked"
+  before=$(ride_ibus_hotkey_observe) || return 1
+  if [[ "$before" == user:* ]]; then
+    ride_ibus_hotkey_valid_snapshot "$before" || ride_die "existing iBus hotkey cannot be safely journaled"
+  fi
+  if ! ride_ibus_hotkey_write "$state"; then
+    ride_ibus_hotkey_write "$before" || ride_error "iBus hotkey rollback failed after write error"
+    return 1
+  fi
+  after=$(ride_ibus_hotkey_observe) || after=unknown
+  if [[ "$after" != "$state" ]]; then
+    ride_ibus_hotkey_write "$before" || ride_error "iBus hotkey rollback failed after verification error"
+    ride_error "iBus hotkey verification failed"
+    return 1
+  fi
 }
 
 ride_gsettings_target() {

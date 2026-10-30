@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "terminator-hotkey",
+  "description": "Optional iBus emoji hotkey adjustment for the intended desktop user.",
+  "operations": [
+    {"id": "setting.ibus-emoji-hotkey", "state": "enabled"}
+  ]
+}

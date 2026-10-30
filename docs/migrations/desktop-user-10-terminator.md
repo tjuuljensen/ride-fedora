@@ -1,11 +1,11 @@
 # Desktop and user batch 10: Terminator package and iBus hotkey
 
-Status: **package candidate passed VM acceptance; composite kept gap**,
+Status: **two opt-in candidates passed VM acceptance; combined outcome operable**,
 2026-10-30. `InstallTerminator` installs Fedora's `terminator` RPM and changes
 the current user's iBus emoji hotkey to `<Control><Alt><Shift>e`.
 `RemoveTerminator` removes the RPM but writes a fixed iBus default instead of
 restoring the user's prior value. The package and user setting have different
-owners and inverses, so the v3.0 outcome remains a gap until both are handled.
+owners and inverses. They now have separate v3.0 operations.
 
 Fedora 44 publishes a signed
 [`terminator` RPM](https://packages.fedoraproject.org/pkgs/terminator/terminator/)
@@ -34,12 +34,23 @@ does not edit iBus or Terminator user configuration.
   generated docs, and any named v3.1 hardening. Investigate failure before
   rerunning a VM case.
 
-## Current implementation boundary
+## Fedora 44 Workstation result
 
 [`package.terminator` acceptance](../acceptance/package.terminator.md)
-passed the focused Fedora 44 x86_64 Workstation package lifecycle. It uses
-the existing Fedora DNF handler for the RPM alone and is individually
-selectable with `--allow-candidate`. Its candidate status does not assert the
-old iBus behavior. The hotkey remains non-runnable until a typed per-user
-setting and exact recovery are accepted. A desktop visual review of the RPM
-belongs to v3.1 item H003, after the v3.0 setting gate.
+passed the focused RPM lifecycle. The separate
+[`setting.ibus-emoji-hotkey` acceptance](../acceptance/setting.ibus-emoji-hotkey.md)
+passed a seeded custom-override lifecycle and restoration of an unset key.
+Its journal stores the exact user override as a data-only encoded state;
+restore refuses an intervening change and never evaluates the saved bytes as
+shell code. A mocked write-after-mutation failure rolled back to the prior
+override. The VM test also confirmed the setting works without the RPM.
+
+The source `Terminator` outcome is an **operable opt-in candidate** on Fedora
+44 x86_64 Workstation. Run `install package.terminator --allow-candidate` as
+root for the RPM, and apply the `terminator-hotkey` profile as the intended
+non-root desktop user for the separate hotkey. Each command records its own
+recovery ID. The setting profile stays out of `default`. A brief visual and
+accessibility review remains v3.1 item
+H003. The former high risk came from v2's unrecorded user-state overwrite;
+the separated paths and exact prior-state recovery make the v3.0 operation
+medium risk.

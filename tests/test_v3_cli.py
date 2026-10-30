@@ -446,6 +446,94 @@ esac
         self.assertIn("GNOME setting is locked", locked.stderr)
         self.assertEqual(value.read_text(), "false\n")
 
+    def test_ibus_hotkey_restores_custom_and_unset_values(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        entry = next(row for row in catalog["operations"] if row["id"] == "setting.ibus-emoji-hotkey")
+        (self.root / "catalog.json").write_text(json.dumps({
+            "schemaVersion": 3, "clientVersion": "3.0.0", "operations": [entry],
+        }))
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        override = self.root / "ibus-override"
+        override.write_text("['<Alt>F8']\n")
+        (self.root / "bin" / "dconf").write_text("""#!/bin/sh
+if [ "$1" = read ] && [ "$2" = /desktop/ibus/panel/emoji/hotkey ]; then
+  [ ! -f "$RIDE_TEST_IBUS_OVERRIDE" ] || cat "$RIDE_TEST_IBUS_OVERRIDE"
+else
+  exit 2
+fi
+""")
+        (self.root / "bin" / "gsettings").write_text("""#!/bin/sh
+case "$1" in
+  get)
+    [ "${RIDE_TEST_IBUS_GET_FAIL:-0}" != 1 ] || exit 17
+    if [ -f "$RIDE_TEST_IBUS_OVERRIDE" ]; then cat "$RIDE_TEST_IBUS_OVERRIDE"; else printf "['<Super>period']\\n"; fi ;;
+  writable) if [ "${RIDE_TEST_IBUS_LOCK:-0}" = 1 ]; then echo false; else echo true; fi ;;
+  set)
+    printf '%s\\n' "$4" > "$RIDE_TEST_IBUS_OVERRIDE"
+    if [ "${RIDE_TEST_IBUS_FAIL_ONCE:-0}" = 1 ] && [ ! -f "$RIDE_TEST_IBUS_FAILURE_MARKER" ]; then
+      touch "$RIDE_TEST_IBUS_FAILURE_MARKER"
+      exit 13
+    fi ;;
+  reset) rm -f "$RIDE_TEST_IBUS_OVERRIDE" ;;
+  *) exit 2 ;;
+esac
+""")
+        for name in ("dconf", "gsettings"):
+            (self.root / "bin" / name).chmod(0o755)
+        self.env["RIDE_TEST_IBUS_OVERRIDE"] = str(override)
+        self.env["RIDE_TEST_IBUS_FAILURE_MARKER"] = str(self.root / "failure-marker")
+        self.env["DBUS_SESSION_BUS_ADDRESS"] = "unix:path=/tmp/ride-test-bus"
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "ibus-test", "description": "Test setting",
+            "operations": [{"id": "setting.ibus-emoji-hotkey", "state": "enabled"}],
+        }))
+
+        planned = self.run_ride("plan", "--profile", str(self.profile)).stdout
+        self.assertIn("setting.ibus-emoji-hotkey", planned)
+        self.run_ride("apply", "--profile", str(self.profile), success=False)
+        first = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        changed = next(row for row in self.journals() if row["runId"] in first.stdout)
+        self.assertTrue(changed["steps"][0]["observedBefore"].startswith("user:"))
+        self.assertEqual(override.read_text(), "['<Control><Alt><Shift>e']\n")
+        repeat = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        self.assertEqual(next(row for row in self.journals() if row["runId"] in repeat.stdout)
+                         ["steps"][0]["result"], "unchanged")
+        override.write_text("['<Alt>F9']\n")
+        conflict = self.run_ride("restore", "--run-id", changed["runId"],
+                                 "--allow-candidate", success=False)
+        self.assertIn("restore conflict", conflict.stderr)
+        self.assertEqual(override.read_text(), "['<Alt>F9']\n")
+        override.write_text("['<Control><Alt><Shift>e']\n")
+        self.run_ride("restore", "--run-id", changed["runId"], "--dry-run")
+        self.run_ride("restore", "--run-id", changed["runId"], "--allow-candidate")
+        self.assertEqual(override.read_text(), "['<Alt>F8']\n")
+
+        override.unlink()
+        second = self.run_ride("set", "setting.ibus-emoji-hotkey", "--state", "enabled",
+                               "--allow-candidate")
+        second_run = next(row for row in self.journals() if row["runId"] in second.stdout)
+        self.assertEqual(second_run["steps"][0]["observedBefore"], "unset")
+        self.run_ride("restore", "--run-id", second_run["runId"], "--allow-candidate")
+        self.assertFalse(override.exists())
+
+        override.write_text("['<Alt>F8']\n")
+        self.env["RIDE_TEST_IBUS_FAIL_ONCE"] = "1"
+        self.run_ride("set", "setting.ibus-emoji-hotkey", "--state", "enabled",
+                      "--allow-candidate", success=False)
+        self.assertEqual(override.read_text(), "['<Alt>F8']\n")
+        del self.env["RIDE_TEST_IBUS_FAIL_ONCE"]
+        self.env["RIDE_TEST_IBUS_LOCK"] = "1"
+        locked = self.run_ride("set", "setting.ibus-emoji-hotkey", "--state", "enabled",
+                               "--allow-candidate", success=False)
+        self.assertIn("iBus hotkey is locked", locked.stderr)
+        self.assertEqual(override.read_text(), "['<Alt>F8']\n")
+        del self.env["RIDE_TEST_IBUS_LOCK"]
+        self.env["RIDE_TEST_IBUS_GET_FAIL"] = "1"
+        unreadable = self.run_ride("set", "setting.ibus-emoji-hotkey", "--state", "enabled",
+                                   "--allow-candidate", success=False)
+        self.assertIn("cannot observe current state", unreadable.stderr)
+        self.assertEqual(override.read_text(), "['<Alt>F8']\n")
+
     def test_profile_source_and_unknown_source(self):
         profile = json.loads(self.profile.read_text())
         profile["operations"][0]["source"] = "not-declared"

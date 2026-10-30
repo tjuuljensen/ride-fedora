@@ -33,6 +33,7 @@ def test_gnome_boolean_profiles_apply_repeat_and_restore(vm):
         actual = vm.run("dbus-run-session -- " + shlex.join(["gsettings", "get", schema, key])).stdout.strip()
         assert actual == baseline, (schema, key, actual)
 
+
     for profile in ("gnome-shell-preferences", "gnome-privacy"):
         planned = user_ride(vm, "plan", "--profile", profile)
         assert "candidate" in planned.stdout
@@ -58,3 +59,59 @@ def test_gnome_boolean_profiles_apply_repeat_and_restore(vm):
     for schema, key, baseline, _ in SETTINGS:
         actual = vm.run("dbus-run-session -- " + shlex.join(["gsettings", "get", schema, key])).stdout.strip()
         assert actual == baseline, (schema, key, actual)
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_terminator_ibus_hotkey_custom_and_unset_recovery(vm):
+    vm.run("test \"$(id -u)\" != 0")
+    vm.run("sudo dnf -y install dbus-daemon", timeout=900)
+    vm.run("command -v dbus-run-session && command -v gsettings && command -v dconf")
+    schema = "org.freedesktop.ibus.panel.emoji"
+    key = "hotkey"
+    target = "['<Control><Alt><Shift>e']"
+    custom = "['<Alt>F8']"
+    path = "/desktop/ibus/panel/emoji/hotkey"
+
+    def setting(*args):
+        return vm.run("dbus-run-session -- " + shlex.join(["gsettings", *args])).stdout.strip()
+
+    def override():
+        return vm.run("dbus-run-session -- " + shlex.join(["dconf", "read", path])).stdout.strip()
+
+    assert setting("range", schema, key) == "type as"
+    assert setting("writable", schema, key) == "true"
+    setting("set", schema, key, custom)
+    assert setting("get", schema, key) == custom and override() == custom
+    plan = user_ride(vm, "plan", "--profile", "terminator-hotkey")
+    assert "setting.ibus-emoji-hotkey" in plan.stdout and "candidate" in plan.stdout
+    refused = user_ride(vm, "apply", "--profile", "terminator-hotkey", check=False)
+    assert refused.returncode != 0 and "--allow-candidate" in refused.stderr
+    changed = user_ride(vm, "apply", "--profile", "terminator-hotkey", "--allow-candidate")
+    run_id = RUN_ID.search(changed.stdout).group(1)
+    journal = json.loads(vm.run(f"cat /home/ride-test/.local/state/ride-fedora/runs/{run_id}.json").stdout)
+    assert journal["status"] == "complete"
+    assert journal["steps"][0]["observedBefore"].startswith("user:")
+    assert journal["steps"][0]["observedAfter"] == "enabled"
+    assert setting("get", schema, key) == target and override() == target
+    repeat = user_ride(vm, "apply", "--profile", "terminator-hotkey", "--allow-candidate")
+    repeated_id = RUN_ID.search(repeat.stdout).group(1)
+    repeated = json.loads(vm.run(f"cat /home/ride-test/.local/state/ride-fedora/runs/{repeated_id}.json").stdout)
+    assert repeated["steps"][0]["result"] == "unchanged"
+    setting("set", schema, key, "['<Alt>F9']")
+    conflict = user_ride(vm, "restore", "--run-id", run_id, "--allow-candidate", check=False)
+    assert conflict.returncode != 0 and "restore conflict" in conflict.stderr
+    assert override() == "['<Alt>F9']"
+    setting("set", schema, key, target)
+    user_ride(vm, "restore", "--run-id", run_id, "--dry-run")
+    user_ride(vm, "restore", "--run-id", run_id, "--allow-candidate")
+    assert setting("get", schema, key) == custom and override() == custom
+
+    setting("reset", schema, key)
+    assert override() == ""
+    changed = user_ride(vm, "apply", "--profile", "terminator-hotkey", "--allow-candidate")
+    run_id = RUN_ID.search(changed.stdout).group(1)
+    journal = json.loads(vm.run(f"cat /home/ride-test/.local/state/ride-fedora/runs/{run_id}.json").stdout)
+    assert journal["steps"][0]["observedBefore"] == "unset"
+    assert override() == target
+    user_ride(vm, "restore", "--run-id", run_id, "--allow-candidate")
+    assert override() == ""
+    assert vm.run("rpm -q --quiet terminator", check=False).returncode != 0
