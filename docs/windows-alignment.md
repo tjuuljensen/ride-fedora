@@ -1,7 +1,7 @@
 # Alignment with the Windows v3 development branch
 
-This review uses `ride-windows` branch `codex/ride-v3-migration` at `006f5ab`
-(2026-10-14). The Linux
+The initial review used `ride-windows` branch `codex/ride-v3-migration` at
+`006f5ab` (2026-10-14). The Linux
 client follows its public command vocabulary and catalog-driven lifecycle,
 while JSON and Bash replace PowerShell's `.psd1` data and modules.
 
@@ -21,7 +21,8 @@ while JSON and Bash replace PowerShell's `.psd1` data and modules.
 
 Windows has a larger, VM-tested catalog and richer search filters, deployed
 variants, credentials, and settings presentation. Linux v3 currently has a narrow
-candidate catalog and no acceptance VM evidence. The command names align now;
+candidate catalog and Fedora 44 Cloud Base, Workstation, and Server package
+pilots, but no promoted Workstation or Server target. The command names align now;
 feature parity is a staged migration, not a release claim.
 
 The shared deployment contract and Linux implementation limits are recorded in
@@ -50,3 +51,78 @@ actually compared.
 | Linux currently requires different RPM names for alternative providers in one deployment slot. | RPM presence alone cannot identify which provider supplied the same package name; provenance-aware observation is still needed. | Adding two repositories or downloads for the same RPM name. |
 | Linux `download` writes an RPM and checksum sidecar while `install` resolves through DNF; neither client has completed the planned offline install-from-retained-artifact workflow. | A bound artifact manifest, offline dependency handling, and recovery need implementation and tests. | First offline install implementation in either repository. |
 | Linux run schema 2 records selected provider and installed deployment; Windows uses platform-specific state records. | Journals must preserve each platform's observable state and restoration method. | Any run-state migration or cross-platform recovery contract change. |
+
+### Fedora Workstation package batch preflight, 2026-10-30
+
+Compared Linux `codex/ride-v3-migration` at `0bfd3c0` with Windows
+`codex/ride-v3-migration` at `17f9cef` for `package.less` and
+`package.exfatprogs`. Linux catalog schema 3 and profile schema 1 select one
+installed deployment and an optional declared source; run schema 2 records
+that selection. Windows catalog and profile schema 1 use PowerShell data;
+package variants are selected from the catalog, and saved package recovery
+records can use schema 3 with the selected variant. The data formats and
+deployment models differ as registered above. Both clients separate
+acquisition from installed state and preserve the selected package identity
+for recovery. Neither offers the completed offline install-from-retained-RPM
+workflow. These Fedora RPM products have no shared Windows installer facts to
+copy into this batch.
+
+No unexplained shared-contract drift was found in this scoped review. Recheck
+the comparison if either schema or package lifecycle changes, and at release
+candidate preparation. The Workstation pilot later passed its focused VM
+checks; operation-level review remains before promotion. This review does not
+promote either operation.
+
+### Linux edition target gate, 2026-10-30
+
+Reviewed the Linux working diff based on `0bfd3c0` against Windows `17f9cef`
+before changing Linux catalog target matching. Windows `SupportedTargets`
+distinguishes Windows 11 and Windows Server 2025; its offline profile
+preflight also binds build, `EditionId`, and architecture. Linux's Fedora `ID`
+and release are shared by Cloud Base, Workstation, and Server, so supported
+Linux target rows require explicit `variantIds` matched against
+`/etc/os-release` `VARIANT_ID`. Candidate
+rows may omit the field during development, but still require
+`--allow-candidate` for changes. This is an intentional platform identity
+difference, not a shared package contract change. Review it when a new Linux
+edition or Windows target form is added and again before the release candidate.
+
+The Linux source signature includes the target declaration. Narrowing an
+existing row changes that signature; an older run cannot be restored with the
+new catalog. The mocked recovery check confirms that retaining the original
+catalog permits restore. Inventory and resolve any non-disposable candidate
+runs before publishing a narrowed target row; do not silently rewrite a run.
+
+### Fedora Workstation OpenSSH client batch preflight, 2026-10-30
+
+Compared the Linux working diff based on `0bfd3c0` with Windows `17f9cef` for
+`package.openssh-clients`. Windows has no OpenSSH catalog operation in this
+revision. The Linux operation uses the same installed `fedora-rpm` deployment,
+DNF handler, profile source selection, and run schema 2 journal structure as
+the first Fedora package batch. Its catalog row is restricted to Workstation
+until Server has its own evidence. The Workstation VM found that removing
+`openssh-clients` would break GNOME dependencies, so this Linux operation is
+installed-only with `recovery: none`. The reversible `remove-new-install`
+package contract remains available for other Linux operations; Windows has no
+corresponding OpenSSH row to align. The edition identity difference and source
+signature recovery limit above apply. No unexplained shared-contract drift
+was found in this scoped review. Recheck this deliberate recovery difference
+when adding Server, when Windows adds an OpenSSH operation, when changing
+package deployment semantics, or before a release candidate.
+
+### Fedora Server base package batch review, 2026-10-30
+
+Compared the Linux working diff based on `0bfd3c0` with Windows `17f9cef`
+again for the `server-base` profile, `package.less`, and
+`package.openssh-clients`. The Server addition changes only Linux's Fedora
+edition target lists and pinned VM matrix; catalog schema 3, profile schema
+1, run schema 2, package identity, explicit source selection, DNF handler,
+artifact verification, and installed deployment retain the semantics above.
+Windows `SupportedTargets` already separates Windows Server from Windows 11;
+Linux now binds `VARIANT_ID=server` in its target declaration and VM harness.
+The Server pilot verified reversible `less` and installed-only OpenSSH with
+its explicit `recovery: none` limit. No Windows OpenSSH operation or shared
+product fact was introduced, and no unexplained shared-contract drift was
+found. Recheck when Windows adds OpenSSH, either schema or package recovery
+changes, another Linux edition is declared, or a release candidate is
+prepared.

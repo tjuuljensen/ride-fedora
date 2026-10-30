@@ -137,9 +137,7 @@ ride_show() {
   local id=${1:-} source=${2:-} entry current conflict sources
   [[ -n "$id" ]] || ride_die "show requires an operation ID"
   entry=$(ride_entry_or_die "$id" "$source")
-  if jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
-      '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
-      <<< "$entry" >/dev/null; then
+  if ride_target_matches "$entry"; then
     current=$(ride_observe "$entry")
     conflict=$(ride_provider_conflict "$entry")
     [[ -z "$conflict" ]] || current="conflict:$conflict"
@@ -378,9 +376,7 @@ ride_status() {
     else
       while IFS= read -r id; do
         entry=$(ride_entry_or_die "$id")
-        if jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
-            '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
-            <<< "$entry" >/dev/null; then
+        if ride_target_matches "$entry"; then
           current=$(ride_observe "$entry")
           conflict=$(ride_provider_conflict "$entry")
           [[ -z "$conflict" ]] || current="conflict:$conflict"

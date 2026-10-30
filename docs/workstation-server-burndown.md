@@ -29,7 +29,7 @@ Function coverage: 11 active in a server preset, 3 commented-only, 1 library-onl
 | `setting.Hostname` | `SetHostname` | `SetHostname`: active | deferred: Host-specific value belongs in private profile. |
 | `setting.FastDNF` | `EnableFastDNF`, `DisableFastDNF` | `EnableFastDNF`: active, `DisableFastDNF`: library only | replaced: DNF5 defaults need current evidence; no legacy config edit. |
 | `action.UpdateFedora` | `UpdateFedora` | `UpdateFedora`: active | deferred: Add explicit non-reversible system update operation after VM acceptance. |
-| `package.Required` | `InstallRequired` | `InstallRequired`: active | replaced: Smaller package.less and package.openssh-clients in default; review remaining list. |
+| `package.Required` | `InstallRequired` | `InstallRequired`: active | deferred: Legacy coreutils, git, gnupg, python, tar, wget, and gcc list is not equivalent to the selected v3 less and openssh-clients baseline; review each legacy package separately. |
 | `package.ShellTools` | `InstallShellTools`, `RemoveShellTools` | `InstallShellTools`: active, `RemoveShellTools`: library only | deferred: Split into specific repository packages. |
 | `package.RPMfusionRepos` | `InstallRPMfusionRepos`, `RemoveRPMfusionRepos` | `InstallRPMfusionRepos`: active, `RemoveRPMfusionRepos`: library only | deferred: External repository enablement needs opt-in and trust review. |
 | `package.KernelTools` | `InstallKernelTools`, `RemoveKernelTools` | `InstallKernelTools`: active, `RemoveKernelTools`: library only | deferred: Kernel-dependent package group requires target checks. |

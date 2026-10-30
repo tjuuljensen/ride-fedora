@@ -3,6 +3,13 @@
 ride_validate_catalog() {
   [[ -r "$RIDE_CATALOG" ]] || ride_die "catalog not readable: $RIDE_CATALOG"
   jq -e '
+    def valid_variant_targets:
+      .status as $status | .targets |
+      type == "object" and length > 0 and all(.[];
+        if has("variantIds") then
+          (.variantIds | type == "array" and length > 0 and
+            all(.[]; type == "string" and test("^[a-z0-9_-]+$")))
+        else $status != "supported" end);
     .schemaVersion == 3 and (.operations | type == "array" and length > 0) and
     ([.operations[].id] | length == (unique | length)) and
     all(.operations[];
@@ -13,12 +20,14 @@ ride_validate_catalog() {
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
-      (if .kind == "package" then .recovery == "remove-new-install"
+      (if .kind == "package" then
+         ((.states == ["installed", "absent"] and .recovery == "remove-new-install") or
+          (.states == ["installed"] and .recovery == "none"))
        elif .kind == "setting" then .recovery == "exact-state"
        elif .kind == "artifact" then .recovery == "none"
        else true end) and
       (.states | type == "array" and length > 0 and all(.[]; type == "string")) and
-      (.targets | type == "object" and length > 0) and
+      valid_variant_targets and
       (.productUri | type == "string" and startswith("https://")) and
       (.sourceUri | type == "string" and startswith("https://")) and
       (.licenseUri | type == "string" and startswith("https://")) and
@@ -35,7 +44,7 @@ ride_validate_catalog() {
             .artifactFormat == "rpm" and
             (.status | IN("candidate", "supported")) and
             .recovery == "remove-new-install" and
-            (.targets | type == "object" and length > 0) and
+            valid_variant_targets and
             (.sourceUri | type == "string" and startswith("https://")) and
             .verification == "fedora-repository-gpg" and
             (.packageName | type == "string" and test("^[A-Za-z0-9+_.-]+$"))
@@ -104,9 +113,7 @@ ride_provider_conflict() {
   while IFS= read -r source; do
     [[ "$source" == "$selected" ]] && continue
     alternative=$(ride_entry_or_die "$id" "$source")
-    if ! jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
-        '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
-        <<< "$alternative" >/dev/null; then
+    if ! ride_target_matches "$alternative"; then
       continue
     fi
     observed=$(ride_observe "$alternative")

@@ -8,7 +8,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from tools.vm_acceptance import VM, ROOT, load_target, qemu_command, verify_image
+from tools.vm_acceptance import (VM, ROOT, assert_guest_target, load_target,
+                                 qemu_command, select_pilot, verify_image)
 
 
 class VmHarnessTests(unittest.TestCase):
@@ -18,7 +19,7 @@ class VmHarnessTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.target = {
             "id": "fedora-44-cloud-x86_64", "distro": "fedora", "release": "44",
-            "edition": "Cloud Base", "architecture": "x86_64", "imageFormat": "qcow2",
+            "edition": "Cloud Base", "variantId": "cloud", "architecture": "x86_64", "imageFormat": "qcow2",
             "imageSha256": "3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7",
             "imageSource": "https://fedoraproject.org/cloud/download/",
             "imageRelease": "44-1.7", "acceptanceScope": "generic-package-pilot",
@@ -49,6 +50,23 @@ class VmHarnessTests(unittest.TestCase):
         )):
             with self.assertRaisesRegex(ValueError, "not qcow2"):
                 verify_image(image, self.target)
+
+    def test_guest_edition_must_match_the_pinned_target(self):
+        os_release = 'ID=fedora\nVERSION_ID=44\nVARIANT_ID=cloud\n'
+        assert_guest_target(os_release, 'x86_64', self.target)
+        with self.assertRaisesRegex(AssertionError, 'guest target mismatch'):
+            assert_guest_target(os_release.replace('cloud', 'workstation'), 'x86_64', self.target)
+
+    def test_only_declared_pilot_can_be_selected(self):
+        target = load_target("fedora-44-workstation-x86_64")
+        selected = select_pilot(target, "package.less")
+        self.assertEqual((selected["pilotOperation"], selected["pilotPackage"]),
+                         ("package.less", "less"))
+        self.assertEqual(select_pilot(target, "package.openssh-clients")["pilotPackage"],
+                         "openssh-clients")
+        self.assertEqual(target["pilotOperation"], "package.exfatprogs")
+        with self.assertRaisesRegex(ValueError, "not declared"):
+            select_pilot(target, "package.unknown")
 
     def test_qemu_ssh_forward_is_loopback_only(self):
         command = qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",

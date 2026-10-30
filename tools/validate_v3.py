@@ -47,6 +47,8 @@ def validate() -> dict:
                 raise ValueError(f"{entry['id']} has RPM sources that cannot be distinguished by observation")
             for source in entry.get("sourceProviders", []):
                 if source["status"] == "supported":
+                    if any("variantIds" not in target for target in source["targets"].values()):
+                        raise ValueError(f"{entry['id']}/{source['sourceId']} has an unscoped supported edition")
                     evidence = source.get("acceptanceEvidence")
                     expected = f"docs/acceptance/{entry['id']}.{source['sourceId']}.md"
                     if evidence != expected or not (ROOT / expected).is_file():
@@ -58,6 +60,8 @@ def validate() -> dict:
             if dependency not in by_id:
                 raise ValueError(f"{entry['id']} has unknown dependency {dependency}")
         if entry["status"] == "supported":
+            if any("variantIds" not in target for target in entry["targets"].values()):
+                raise ValueError(f"{entry['id']} has an unscoped supported edition")
             evidence = entry.get("acceptanceEvidence")
             if evidence != f"docs/acceptance/{entry['id']}.md" or not (ROOT / evidence).is_file():
                 raise ValueError(f"{entry['id']} claims support without acceptance evidence")
@@ -104,6 +108,7 @@ def render_docs(catalog: dict) -> str:
     for entry in catalog["operations"]:
         targets = ", ".join(
             f"{distro} {','.join(map(str, target['releases']))} ({','.join(target['architectures'])})"
+            + (f" variants {','.join(target['variantIds'])}" if "variantIds" in target else "")
             for distro, target in entry["targets"].items()
         )
         description = entry["description"].replace("|", "\\|")

@@ -23,6 +23,10 @@
           ],
           "architectures": [
             "x86_64"
+          ],
+          "variantIds": [
+            "cloud",
+            "workstation"
           ]
         }
       },
@@ -59,6 +63,10 @@
           ],
           "architectures": [
             "x86_64"
+          ],
+          "variantIds": [
+            "workstation",
+            "server"
           ]
         }
       },
@@ -83,8 +91,7 @@
       "handler": "dnf-package",
       "packageName": "openssh-clients",
       "states": [
-        "installed",
-        "absent"
+        "installed"
       ],
       "scope": "system",
       "status": "candidate",
@@ -95,6 +102,10 @@
           ],
           "architectures": [
             "x86_64"
+          ],
+          "variantIds": [
+            "workstation",
+            "server"
           ]
         }
       },
@@ -104,7 +115,7 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/",
       "sourceUri": "https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/",
       "verification": "fedora-repository-gpg",
-      "recovery": "remove-new-install",
+      "recovery": "none",
       "sourceId": "fedora-rpm",
       "distribution": "installed",
       "deploymentId": "local-installed",

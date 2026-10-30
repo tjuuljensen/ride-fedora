@@ -179,11 +179,86 @@ esac
         result = self.run_ride("restore", "--run-id", run["runId"], "--allow-candidate", success=False)
         self.assertIn("exact recovery is unavailable", result.stderr)
 
+    def test_installed_only_package_refuses_remove_and_restore(self):
+        catalog = self.root / "catalog.json"
+        data = json.loads(catalog.read_text())
+        data["operations"][0]["states"] = ["installed"]
+        data["operations"][0]["recovery"] = "none"
+        catalog.write_text(json.dumps(data))
+        self.run_ride("install", "package.alpha", "--allow-candidate")
+        run_id = self.journals()[0]["runId"]
+        refused = self.run_ride("remove", "package.alpha", "--allow-candidate", success=False)
+        self.assertIn("invalid state absent", refused.stderr)
+        refused = self.run_ride("restore", "--run-id", run_id, "--allow-candidate", success=False)
+        self.assertIn("exact recovery is unavailable", refused.stderr)
+        self.assertTrue((self.root / "packages" / "alpha").exists())
+
+        data["operations"][0]["recovery"] = "remove-new-install"
+        catalog.write_text(json.dumps(data))
+        refused = self.run_ride("show", "package.alpha", success=False)
+        self.assertIn("invalid v3 operation catalog", refused.stderr)
+
     def test_unknown_and_unsupported_targets_fail_closed(self):
         self.run_ride("show", "package.unknown", success=False)
         self.run_ride("status", "package.unknown", success=False)
         (self.root / "os-release").write_text("ID=debian\nVERSION_ID=13\n")
         self.run_ride("plan", "--profile", str(self.profile), success=False)
+
+    def test_variant_scoped_target_fails_closed_on_other_or_missing_edition(self):
+        catalog = self.root / "catalog.json"
+        data = json.loads(catalog.read_text())
+        for item in data["operations"]:
+            item["targets"]["fedora"]["variantIds"] = ["workstation"]
+        catalog.write_text(json.dumps(data))
+        os_release = self.root / "os-release"
+        os_release.write_text('ID=fedora\nVERSION_ID=44\nVARIANT_ID="workstation"\n')
+        self.run_ride("plan", "--profile", str(self.profile))
+
+        for variant_line in ("VARIANT_ID=cloud\n", ""):
+            os_release.write_text(f"ID=fedora\nVERSION_ID=44\n{variant_line}")
+            result = self.run_ride("plan", "--profile", str(self.profile), success=False)
+            self.assertIn("operation is not declared", result.stderr)
+            shown = json.loads(self.run_ride("show", "package.alpha").stdout)
+            self.assertEqual(shown["observedState"], "unsupported")
+            self.assertIn("package.alpha\tfedora-rpm\tunsupported", self.run_ride("status").stdout)
+            self.run_ride("install", "package.alpha", "--allow-candidate", success=False)
+            self.assertFalse((self.root / "packages" / "alpha").exists())
+
+    def test_conflict_detection_ignores_provider_for_other_edition(self):
+        catalog = self.root / "catalog.json"
+        data = json.loads(catalog.read_text())
+        data["operations"][0]["sourceProviders"] = [{
+            "sourceId": "alternate-rpm", "handler": "dnf-package", "packageName": "alpha-alt",
+            "artifactFormat": "rpm", "status": "candidate", "recovery": "remove-new-install",
+            "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"],
+                                   "variantIds": ["server"]}},
+            "sourceUri": "https://example.org/alternate", "verification": "fedora-repository-gpg",
+        }]
+        catalog.write_text(json.dumps(data))
+        (self.root / "packages" / "alpha-alt").write_text("")
+        os_release = self.root / "os-release"
+        os_release.write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        self.assertNotIn("conflict:alternate-rpm", self.run_ride("status", "package.alpha").stdout)
+        os_release.write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=server\n")
+        self.assertIn("conflict:alternate-rpm", self.run_ride("status", "package.alpha").stdout)
+
+    def test_target_scope_change_requires_original_catalog_for_restore(self):
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        catalog = self.root / "catalog.json"
+        original = json.loads(catalog.read_text())
+        self.run_ride("install", "package.alpha", "--allow-candidate")
+        run_id = self.journals()[0]["runId"]
+
+        narrower = json.loads(catalog.read_text())
+        narrower["operations"][0]["targets"]["fedora"]["variantIds"] = ["workstation"]
+        catalog.write_text(json.dumps(narrower))
+        refused = self.run_ride("restore", "--run-id", run_id, "--allow-candidate", success=False)
+        self.assertIn("source definition changed", refused.stderr)
+        self.assertTrue((self.root / "packages" / "alpha").exists())
+
+        catalog.write_text(json.dumps(original))
+        self.run_ride("restore", "--run-id", run_id, "--allow-candidate")
+        self.assertFalse((self.root / "packages" / "alpha").exists())
 
     def test_catalog_cannot_supply_shell_expression(self):
         catalog = self.root / "catalog.json"

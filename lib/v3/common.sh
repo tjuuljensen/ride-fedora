@@ -15,15 +15,19 @@ ride_platform() {
   [[ -r "$os_file" ]] || ride_die "cannot read $os_file"
   RIDE_OS_ID=
   RIDE_OS_VERSION=
+  RIDE_OS_VARIANT=
   while IFS= read -r line; do
     case "$line" in
       ID=*) RIDE_OS_ID=${line#ID=} ;;
       VERSION_ID=*) RIDE_OS_VERSION=${line#VERSION_ID=} ;;
+      VARIANT_ID=*) RIDE_OS_VARIANT=${line#VARIANT_ID=} ;;
     esac
   done < "$os_file"
   RIDE_OS_ID=${RIDE_OS_ID#\"}; RIDE_OS_ID=${RIDE_OS_ID%\"}
   RIDE_OS_VERSION=${RIDE_OS_VERSION#\"}; RIDE_OS_VERSION=${RIDE_OS_VERSION%\"}
-  [[ "$RIDE_OS_ID" =~ ^[a-z0-9_-]+$ && "$RIDE_OS_VERSION" =~ ^[0-9]+(\.[0-9]+)?$ ]] ||
+  RIDE_OS_VARIANT=${RIDE_OS_VARIANT#\"}; RIDE_OS_VARIANT=${RIDE_OS_VARIANT%\"}
+  [[ "$RIDE_OS_ID" =~ ^[a-z0-9_-]+$ && "$RIDE_OS_VERSION" =~ ^[0-9]+(\.[0-9]+)?$ &&
+     "$RIDE_OS_VARIANT" =~ ^[a-z0-9_-]*$ ]] ||
     ride_die "unrecognized operating system in $os_file"
   RIDE_ARCH=$(uname -m)
   [[ "$RIDE_ARCH" =~ ^[A-Za-z0-9_]+$ ]] || ride_die "unrecognized CPU architecture"
@@ -60,11 +64,21 @@ ride_require_privilege() {
   fi
 }
 
-ride_require_target() {
+ride_target_matches() {
   local entry=$1
   jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \
-    '.targets[$os] as $t | $t != null and ($t.releases | index($release) != null) and ($t.architectures | index($arch) != null)' \
-    <<< "$entry" >/dev/null || ride_die "operation is not declared for $RIDE_OS_ID $RIDE_OS_VERSION $RIDE_ARCH"
+    --arg variant "$RIDE_OS_VARIANT" '
+    .targets[$os] as $t |
+    $t != null and ($t.releases | index($release) != null) and
+    ($t.architectures | index($arch) != null) and
+    (($t.variantIds // null) as $variants |
+      $variants == null or ($variants | index($variant) != null))
+  ' <<< "$entry" >/dev/null
+}
+
+ride_require_target() {
+  ride_target_matches "$1" ||
+    ride_die "operation is not declared for $RIDE_OS_ID $RIDE_OS_VERSION $RIDE_ARCH variant ${RIDE_OS_VARIANT:-unknown}"
 }
 
 ride_require_accepted() {

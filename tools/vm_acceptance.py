@@ -27,7 +27,7 @@ SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 SOURCE_PATHS = ("ride.sh", "catalog", "profiles", "lib/v3", "requirements")
 
 
-def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, str]:
+def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, Any]:
     matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
     if matrix.get("schemaVersion") != 1 or not isinstance(matrix.get("targets"), list):
         raise ValueError("invalid VM target matrix")
@@ -36,7 +36,7 @@ def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, str]:
     for target in matrix["targets"]:
         if not isinstance(target, dict) or any(
             not isinstance(target.get(key), str) or not target[key]
-            for key in ("id", "distro", "release", "edition", "architecture",
+            for key in ("id", "distro", "release", "edition", "variantId", "architecture",
                         "imageFormat", "imageSha256", "imageSource", "imageRelease",
                         "acceptanceScope", "pilotOperation", "pilotPackage",
                         "packageDatabase", "packageVerification")
@@ -44,12 +44,27 @@ def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, str]:
             raise ValueError("invalid VM target entry")
         if not ID_PATTERN.fullmatch(target["id"]) or target["id"] in seen:
             raise ValueError("invalid or duplicate VM target ID")
+        if not re.fullmatch(r"[a-z0-9-]+", target["variantId"]):
+            raise ValueError("invalid VM edition variant ID")
         if target["imageFormat"] != "qcow2" or not SHA256_PATTERN.fullmatch(target["imageSha256"]):
             raise ValueError("VM target needs a qcow2 image and SHA256 digest")
         if not re.fullmatch(r"package\.[a-z0-9.-]+", target["pilotOperation"]):
             raise ValueError("invalid VM pilot operation")
         if not re.fullmatch(r"[A-Za-z0-9+_.-]+", target["pilotPackage"]):
             raise ValueError("invalid VM pilot package")
+        additional = target.get("additionalPilots", [])
+        if not isinstance(additional, list):
+            raise ValueError("invalid additional VM pilots")
+        pilot_ids = {target["pilotOperation"]}
+        for pilot in additional:
+            if (not isinstance(pilot, dict) or
+                    not isinstance(pilot.get("operationId"), str) or
+                    not re.fullmatch(r"package\.[a-z0-9.-]+", pilot["operationId"]) or
+                    not isinstance(pilot.get("package"), str) or
+                    not re.fullmatch(r"[A-Za-z0-9+_.-]+", pilot["package"]) or
+                    pilot["operationId"] in pilot_ids):
+                raise ValueError("invalid or duplicate additional VM pilot")
+            pilot_ids.add(pilot["operationId"])
         if target["packageDatabase"] not in ("rpm", "dpkg"):
             raise ValueError("unknown VM package database")
         if target["packageVerification"] not in ("rpm-signature-and-files", "apt-repository"):
@@ -58,12 +73,30 @@ def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, str]:
             ("rpm", "rpm-signature-and-files"), ("dpkg", "apt-repository")
         ):
             raise ValueError("VM package database and verification do not match")
+        seed_packages = target.get("seedPackages", ["jq", "sudo"])
+        if not isinstance(seed_packages, list) or any(
+            not isinstance(package, str) or not re.fullmatch(r"[A-Za-z0-9+_.-]+", package)
+            for package in seed_packages
+        ):
+            raise ValueError("invalid VM seed package list")
         seen.add(target["id"])
         if target["id"] == target_id:
             selected = target
     if selected is None:
         raise ValueError(f"unknown VM target: {target_id}")
     return selected
+
+
+def select_pilot(target: dict[str, Any], operation_id: str | None) -> dict[str, Any]:
+    if operation_id is None or operation_id == target["pilotOperation"]:
+        return target
+    for pilot in target.get("additionalPilots", []):
+        if pilot["operationId"] == operation_id:
+            selected = target.copy()
+            selected["pilotOperation"] = operation_id
+            selected["pilotPackage"] = pilot["package"]
+            return selected
+    raise ValueError(f"pilot operation is not declared for {target['id']}: {operation_id}")
 
 
 def file_sha256(path: Path) -> str:
@@ -107,6 +140,16 @@ def qemu_command(overlay: Path, seed: Path, serial: Path, port: int) -> list[str
         "-netdev", f"user,id=net0,hostfwd=tcp:127.0.0.1:{port}-:22",
         "-device", "virtio-net-pci,netdev=net0",
     ]
+
+
+def assert_guest_target(os_release: str, architecture: str,
+                        target: dict[str, str]) -> None:
+    values = dict(line.split("=", 1) for line in os_release.splitlines() if "=" in line)
+    actual = tuple(values.get(key, "").strip('"') for key in ("ID", "VERSION_ID", "VARIANT_ID"))
+    actual += (architecture.strip(),)
+    expected = tuple(target[key] for key in ("distro", "release", "variantId", "architecture"))
+    if actual != expected:
+        raise AssertionError(f"guest target mismatch: {actual}, expected {expected}")
 
 
 class VM:
@@ -188,7 +231,7 @@ class VM:
         if not re.fullmatch(r"ssh-ed25519 [A-Za-z0-9+/=]+(?: [^\n]*)?", public_key):
             raise ValueError("unexpected generated SSH public key")
         user_data = self.artifacts / "user-data"
-        user_data.write_text(
+        cloud_config = (
             "#cloud-config\n"
             "preserve_hostname: true\n"
             "users:\n"
@@ -199,9 +242,11 @@ class VM:
             f"      - {public_key}\n"
             "ssh_pwauth: false\n"
             "disable_root: true\n"
-            "packages: [jq, sudo]\n",
-            encoding="utf-8",
         )
+        seed_packages = self.target.get("seedPackages", ["jq", "sudo"])
+        if seed_packages:
+            cloud_config += f"packages: [{', '.join(seed_packages)}]\n"
+        user_data.write_text(cloud_config, encoding="utf-8")
         meta_data = self.artifacts / "meta-data"
         meta_data.write_text(
             f"instance-id: ride-{self.artifacts.name}\n",
@@ -264,7 +309,7 @@ class VM:
         self._record(metadata)
         overlay = self.artifacts / "overlay.qcow2"
         self._command(["qemu-img", "create", "-f", "qcow2", "-F", "qcow2",
-                       "-b", str(self.image), str(overlay), "20G"], timeout=30)
+                       "-b", str(self.image), str(overlay)], timeout=30)
         seed = self._seed()
         self.port = free_loopback_port()
         self._qemu_log = (self.artifacts / "qemu.log").open("wb")
@@ -277,14 +322,8 @@ class VM:
             self.run("cloud-init status --wait", timeout=600)
             self.run("command -v bash && command -v jq && command -v sudo")
             os_release = self.run("cat /etc/os-release").stdout
-            values = dict(line.split("=", 1) for line in os_release.splitlines() if "=" in line)
-            distro = values.get("ID", "").strip('"')
-            release = values.get("VERSION_ID", "").strip('"')
             arch = self.run("uname -m").stdout.strip()
-            if (distro, release, arch) != (
-                self.target["distro"], self.target["release"], self.target["architecture"]
-            ):
-                raise AssertionError(f"guest target mismatch: {(distro, release, arch)}")
+            assert_guest_target(os_release, arch, self.target)
             bundle = self._bundle()
             bundle_digest = file_sha256(bundle)
             metadata_path = self.artifacts / "metadata.json"

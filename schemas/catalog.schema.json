@@ -14,7 +14,8 @@
       "type": "object", "required": ["releases", "architectures"], "additionalProperties": false,
       "properties": {
         "releases": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}},
-        "architectures": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z0-9_]+$"}}
+        "architectures": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z0-9_]+$"}},
+        "variantIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_-]+$"}}
       }
     },
     "sourceProvider": {
@@ -70,8 +71,8 @@
         "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "github-release-sha256-observed", "pypi-pinned-sha256"]}
       },
       "allOf": [
-        {"if": {"properties": {"kind": {"const": "package"}}}, "then": {"required": ["distribution", "deploymentId", "artifactFormat", "sourceId"], "properties": {"states": {"const": ["installed", "absent"]}}}, "else": {"not": {"anyOf": [{"required": ["distribution"]}, {"required": ["deploymentId"]}, {"required": ["artifactFormat"]}, {"required": ["sourceId"]}, {"required": ["sourceProviders"]}]}}},
-        {"if": {"properties": {"handler": {"const": "dnf-package"}}}, "then": {"required": ["packageName"], "properties": {"kind": {"const": "package"}, "artifactFormat": {"const": "rpm"}, "states": {"const": ["installed", "absent"]}}}},
+        {"if": {"properties": {"kind": {"const": "package"}}}, "then": {"required": ["distribution", "deploymentId", "artifactFormat", "sourceId"], "oneOf": [{"properties": {"states": {"const": ["installed", "absent"]}, "recovery": {"const": "remove-new-install"}}}, {"properties": {"states": {"const": ["installed"]}, "recovery": {"const": "none"}}}]}, "else": {"not": {"anyOf": [{"required": ["distribution"]}, {"required": ["deploymentId"]}, {"required": ["artifactFormat"]}, {"required": ["sourceId"]}, {"required": ["sourceProviders"]}]}}},
+        {"if": {"properties": {"handler": {"const": "dnf-package"}}}, "then": {"required": ["packageName"], "properties": {"kind": {"const": "package"}, "artifactFormat": {"const": "rpm"}}}},
         {"if": {"properties": {"handler": {"const": "systemd-service"}}}, "then": {"required": ["serviceName"], "properties": {"kind": {"const": "setting"}, "states": {"const": ["enabled", "disabled"]}}}},
         {"if": {"properties": {"handler": {"const": "github-asset"}}}, "then": {"required": ["githubRepository", "assetSuffix", "maxBytes"], "properties": {"kind": {"const": "artifact"}, "states": {"const": ["downloaded"]}}}},
         {"if": {"properties": {"handler": {"const": "python-venv"}}}, "then": {"properties": {"id": {"const": "package.volatility3"}, "kind": {"const": "package"}, "artifactFormat": {"const": "wheel"}, "states": {"const": ["installed", "absent"]}}}}

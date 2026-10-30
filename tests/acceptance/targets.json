@@ -6,6 +6,7 @@
       "distro": "fedora",
       "release": "44",
       "edition": "Cloud Base",
+      "variantId": "cloud",
       "architecture": "x86_64",
       "imageFormat": "qcow2",
       "imageSha256": "28680fe5b371a5a82ebf43a31926e086a168e59949d03969c5093e7071f90b7f",
@@ -14,6 +15,55 @@
       "acceptanceScope": "generic-package-pilot",
       "pilotOperation": "package.exfatprogs",
       "pilotPackage": "exfatprogs",
+      "packageDatabase": "rpm",
+      "packageVerification": "rpm-signature-and-files"
+    },
+    {
+      "id": "fedora-44-workstation-x86_64",
+      "distro": "fedora",
+      "release": "44",
+      "edition": "Workstation",
+      "variantId": "workstation",
+      "architecture": "x86_64",
+      "imageFormat": "qcow2",
+      "imageSha256": "49bb3c03b52f43325e5c7d5cf0ec83f2222b7170e3738baad1e0e5440bb6bf9a",
+      "imageSource": "https://download.fedoraproject.org/pub/fedora/linux/releases/44/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-44-1.7.iso",
+      "imageRelease": "44-1.7",
+      "imageInstallerSha256": "bd285201494dd0ba09b54d05ac707de1401668b8512a573edb5922dcf9d7067e",
+      "imageBuildRecipe": "tests/acceptance/fedora-44-workstation.ks",
+      "imageBuildRecipeSha256": "02a3b6d9be2a96d08993c48d24ffda848e66d64833e67ea31301cb637cd6a182",
+      "acceptanceScope": "workstation-package-batch-1",
+      "seedPackages": [],
+      "pilotOperation": "package.exfatprogs",
+      "pilotPackage": "exfatprogs",
+      "additionalPilots": [
+        {"operationId": "package.less", "package": "less"},
+        {"operationId": "package.openssh-clients", "package": "openssh-clients"}
+      ],
+      "packageDatabase": "rpm",
+      "packageVerification": "rpm-signature-and-files"
+    },
+    {
+      "id": "fedora-44-server-x86_64",
+      "distro": "fedora",
+      "release": "44",
+      "edition": "Server",
+      "variantId": "server",
+      "architecture": "x86_64",
+      "imageFormat": "qcow2",
+      "imageSha256": "efb75956d6dbde0801059fdac4a8a1451f06ecc843344ecdb71bb3e8d247af90",
+      "imageSource": "https://download.fedoraproject.org/pub/fedora/linux/releases/44/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-44-1.7.iso",
+      "imageRelease": "44-1.7",
+      "imageInstallerSha256": "bd285201494dd0ba09b54d05ac707de1401668b8512a573edb5922dcf9d7067e",
+      "imageBuildRecipe": "tests/acceptance/fedora-44-server.ks",
+      "imageBuildRecipeSha256": "be6f79592fb02091b281bc4a642445db94b5f3c45e6e9f6f59f704218dac9f80",
+      "acceptanceScope": "server-package-baseline",
+      "seedPackages": [],
+      "pilotOperation": "package.less",
+      "pilotPackage": "less",
+      "additionalPilots": [
+        {"operationId": "package.openssh-clients", "package": "openssh-clients"}
+      ],
       "packageDatabase": "rpm",
       "packageVerification": "rpm-signature-and-files"
     }

@@ -12,7 +12,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `SetupUserDefaultDirs` | deferred | Review directory ownership and user scope. |
 | `EnableFastDNF` | replaced | DNF5 defaults need current evidence; no legacy config edit. |
 | `UpdateFedora` | deferred | Add explicit non-reversible system update operation after VM acceptance. |
-| `InstallRequired` | replaced | Smaller package.less and package.openssh-clients in default; review remaining list. |
+| `InstallRequired` | deferred | Legacy coreutils, git, gnupg, python, tar, wget, and gcc list is not equivalent to the selected v3 less and openssh-clients baseline; review each legacy package separately. |
 | `InstallShellTools` | deferred | Split into specific repository packages. |
 | `InstallRPMfusionRepos` | deferred | External repository enablement needs opt-in and trust review. |
 | `InstallKernelTools` | deferred | Kernel-dependent package group requires target checks. |
@@ -85,6 +85,38 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `PressAnyKeyToContinue` | retired | Interaction belongs in CLI flow, not an operation. |
 | `Restart` | retired | Reboot remains an explicit separate user action. |
 
+## V3 release envelope and target matrix
+
+The initial v3 release envelope is the small, data-only Linux client and its
+declared Fedora package baselines. It does not imply replay of the 76-action
+legacy default preset. A deferred ledger row is migration inventory, not a
+release blocker unless a later scope decision selects it. Every required row
+below needs target-specific acceptance before its profile or operation is
+advertised as supported.
+
+| Target and scope | Required v3 outcome | Current decision and evidence |
+| --- | --- | --- |
+| Fedora 44 x86_64 Workstation | `default`: `package.less`, `package.openssh-clients`, `package.exfatprogs` installed through the Fedora RPM provider. | Required for the first Workstation envelope; all three are candidates. The [first batch pilot](acceptance/workstation-package-batch-1-pilot.md), [OpenSSH client pilot](acceptance/openssh-clients-workstation-pilot.md), and [combined profile smoke check](acceptance/workstation-default-profile-pilot.md) passed their applicable VM checks. Exact-diff review and promotion are pending. |
+| Fedora 44 x86_64 Server | `server-base`: `package.less` and `package.openssh-clients` as a generic baseline. | Required before claiming Server support. The [Server pilot](acceptance/server-base-package-pilot.md) passed focused VM checks on a pinned Server image; exact-diff review and promotion are pending. Other server functions remain in `network-devices`. |
+| Fedora 44 x86_64 Cloud Base | Generic `package.exfatprogs` handler pilot. | The [2026-10-30 pilot](acceptance/package.exfatprogs-cloud-base-pilot.md) passed on a pinned image; it cannot establish Workstation or Server support. |
+| Optional Fedora outcomes | `forensics` profile, unselected audit, artifact, and Python package candidates, and scoped deferred workstation/server outcomes. | Review in separate batches with explicit selectors and target evidence. Their absence does not block the package baselines above. |
+| Unsupported targets and private behavior | Other Fedora releases or architectures, Debian/Ubuntu, and host-specific server values. | Fail closed. Add adapters or targets only after their own implementation and VM evidence; keep identities, secrets, and site values outside this repository. |
+
+The official [Fedora 44 Workstation download](https://fedoraproject.org/workstation/download/)
+offers an x86_64 Live ISO, not the qcow2 accepted by the current harness. Its
+published 44-1.7 ISO SHA-256 is
+`1620295f6a00c27c3208f0c00b8ece4eab1ec69b9002152d97488bf26a426ddf`.
+Anaconda [does not support Kickstart installation from a Live ISO](https://anaconda-installer.readthedocs.io/en/latest/user-guide/troubleshooting/common-bugs.html#automatic-installation-in-live-os).
+For automated base preparation, use a signed-checksum-verified Fedora 44
+[Everything network installer](https://fedoraproject.org/en/misc/) with the
+Workstation environment selected in Kickstart. The [2026-10-30 build](acceptance/fedora-44-workstation-image.md)
+identified as `VARIANT_ID=workstation`; its installer and recipe checksums and
+derived qcow2 digest are pinned in the [target matrix](../tests/acceptance/targets.json).
+A modified Cloud Base image does not count as Workstation or Server evidence.
+The [Server image build](acceptance/fedora-44-server-image.md) also uses the
+verified Everything installer and a separate Kickstart environment selection;
+its `VARIANT_ID=server` and qcow2 digest are pinned in the target matrix.
+
 ## Release gates
 
 - Every implemented candidate remains blocked by default until a disposable Fedora VM run records apply, repeat apply, status, remove or restore where applicable, and failure behavior.
@@ -110,6 +142,28 @@ verified; catalog operations remain candidates.
 | Verify | Check plan, apply, repeat apply, status, removal or restore, partial failure, and package or artifact evidence. | Confirm any user-visible desktop behavior that automation cannot observe. | Dated `docs/acceptance/<operation-id>.md` results and `verified` or failed status. |
 | Close or recover | Recheck the shared contract after implementation; promote only accepted target rows. Otherwise restore the VM snapshot, retain candidate status, and record the failure. | Provide further observations only when a check depends on them. | Updated catalog, migration row, Windows alignment review, evidence, and concrete next action. |
 
+### Practical test scope for remaining batches
+
+- Define completion criteria before testing: the selected operation and target,
+  expected prior and final states, required lifecycle and failure checks,
+  artifact or signature proof, recovery limit, evidence location, and any
+  user-visible observation. State which result permits promotion and which
+  leaves the operation a candidate.
+- Run focused automated checks for changed code and reuse dated evidence for
+  unchanged handlers or contracts when its revision, target, source, and
+  behavior still apply. Record that reasoning in the batch evidence. A Cloud
+  Base result cannot substitute for Workstation or Server target acceptance.
+- Automate VM preparation, command execution, evidence collection, and
+  recovery. Use one brief manual session only when user-visible behavior needs
+  direct observation, such as desktop integration; record its exact checks.
+- Expand coverage for changes involving user data, storage, encryption,
+  security policy, or difficult recovery. Keep optional additions and
+  unsupported scenarios in their own queue unless they are required for the
+  selected migration outcome or a declared supported target.
+- Investigate a failed run and record its cause or current uncertainty before
+  retrying. Fix the defect or test environment first; do not repeat an
+  unchanged long-running scenario merely to seek a pass.
+
 Repeat the cross-repository schema and behavior review for every package batch
 and at release-candidate preparation. Compare product identity, distribution,
 deployment, provider selection, artifact evidence, profile selection, run-state
@@ -120,22 +174,134 @@ with its reason and next review trigger in
 revisions and review date in the batch evidence; treat an unexplained
 difference as unfinished migration work.
 
-Begin with a Fedora 44 x86_64 Workstation VM package pilot such as
-`package.less` and `package.exfatprogs`. Run CI first, then use `plan`, `apply`,
+The first Fedora 44 x86_64 Workstation VM package pilot covers `package.less`
+and `package.exfatprogs`. Run CI first, then use `plan`, `apply`,
 repeat `apply`, `status`, `remove`, and `restore` as applicable. Keep the VM
 snapshot until recovery is checked. A green static check or source commit alone
 does not promote an operation to `supported`. Server, Firefox, third-party
 artifact, and Waydroid work should use separate batches because their state
 and recovery differ.
 
-The [disposable VM harness](acceptance/VM-HARNESS.md) now provides a Fedora 44
-Cloud Base pilot for `package.exfatprogs`, including partial failure. Its Cloud
-result can inform the package handler review; Workstation and Server edition
-acceptance remain separate release gates. The [2026-10-30 Cloud Base pilot](acceptance/package.exfatprogs-cloud-base-pilot.md)
-passed both lifecycle and partial-failure scenarios on clean commit `9cc6416`.
-`package.exfatprogs` remains `candidate`; run the Fedora 44 x86_64 Workstation
-batch and update the Windows schema and behavior comparison before considering
-promotion.
+The [disposable VM harness](acceptance/VM-HARNESS.md) provides Fedora 44 Cloud
+Base and Workstation package pilots. The [Cloud Base pilot](acceptance/package.exfatprogs-cloud-base-pilot.md)
+passed lifecycle and partial-failure scenarios on clean commit `9cc6416`; the
+[Workstation pilot](acceptance/workstation-package-batch-1-pilot.md) passed its
+focused scenarios on the pinned edition image. The Cloud result informs the
+shared handler review but cannot replace edition-specific acceptance.
+`package.exfatprogs` remains `candidate` while the catalog support scope and
+per-operation evidence are reviewed.
+
+### Workstation package batch 1: completion criteria
+
+Scope: `package.less` and `package.exfatprogs`, Fedora 44 x86_64 Workstation,
+default `fedora-rpm` source, system scope. Fedora owns the RPMs; RIDE owns the
+catalog selection, DNF handler, and run journal. The required prior state is
+the observed, recorded package inventory of each fresh VM overlay. If either
+package is already present in the installed image, use a separate disposable
+overlay with that package deliberately removed to test the install path; do
+not count an unchanged apply as install evidence.
+The [Windows schema and behavior preflight](windows-alignment.md#fedora-workstation-package-batch-preflight-2026-10-30)
+compared Linux `0bfd3c0` and Windows `17f9cef` on 2026-10-30; repeat it if the
+package contract changes before promotion.
+
+Pass only if the pinned Workstation guest identifies as Fedora 44 x86_64 with
+`VARIANT_ID=workstation`; read-only plan changes nothing; apply installs absent packages;
+repeat apply is unchanged; status matches RPM observation; RPM signature and
+files verify; restore and explicit remove recover RIDE-owned new installs;
+package inventory returns to its recorded baseline after recovery; and a
+focused injected failure leaves an accurate journal and recoverable completed
+steps. Record any limit on reinstalling a pre-existing package. Use the clean
+Cloud Base pilot as evidence for unchanged DNF handler logic, while recording
+why that reuse applies; run the edition-specific lifecycle checks here. These
+command-line packages need no desktop manual session.
+
+Status: focused pilot PASS for both operations on the pinned Workstation target
+as recorded in the [batch evidence](acceptance/workstation-package-batch-1-pilot.md).
+The [edition gate pilot](acceptance/fedora-44-variant-gate-pilot.md) then passed
+on Cloud Base and Workstation for the declared operation/edition pairs. Both
+remain `candidate`: source was dirty during the VM runs, operation-specific
+acceptance review is pending, and the target row change invalidates signatures
+of any older candidate run until it is recovered with its original catalog.
+Inventory non-disposable runs before promotion. The full Workstation default
+profile also needs `package.openssh-clients`.
+
+### Workstation package batch 2: completion criteria
+
+Scope: `package.openssh-clients` on Fedora 44 x86_64 Workstation only, with the
+default `fedora-rpm` source and system scope. The selected v3 baseline is not
+an equivalent replacement for legacy `InstallRequired`, whose seven-package
+list remains deferred. Fedora's [OpenSSH client package](https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/)
+provides `ssh`, `scp`, `sftp`, and client configuration; the catalog records its
+Fedora license expression and repository GPG verification. RIDE owns the
+selection, DNF handler, and run journal, not existing SSH configuration.
+
+The pinned Workstation base has `openssh-clients` installed. On an intact
+overlay, require a read-only plan, unchanged apply and repeat, matching status,
+unchanged client configuration bytes, `ssh -V`, RPM signature and file checks,
+and continuing SSH server availability. DNF cannot remove this package while
+GNOME depends on `ssh-add` and `ssh-agent`. To test installation, make it absent
+only in a separate disposable overlay with `rpm -e --nodeps`; this deliberately
+broken dependency state is a test fixture, never a default-profile action.
+Require RIDE apply to repair it, `dnf check` to pass, repeat apply to be
+unchanged, and the client and server checks to pass. Inject a later missing
+package, require an accurate failed journal, and verify that restore and
+explicit remove refuse unsupported reversal without changing the guest.
+Recovery of the artificial state is by discarding the overlay. This
+security-related batch gets its own failure/recovery run. The operation must
+declare installed-only state and `recovery: none`; no exact restoration of
+pre-existing SSH configuration is promised. No desktop manual session is
+needed.
+
+Status: the [first VM run and focused rerun](acceptance/openssh-clients-workstation-pilot.md)
+retain the investigated preparation failure and show three applicable VM
+scenarios passing under the installed-only contract. Mocked recovery and
+catalog validation also pass. The operation remains `candidate` pending
+review of the exact source diff and any non-disposable journals with older
+source signatures. The Server variant is now declared after its separate
+[pilot](acceptance/server-base-package-pilot.md); promotion remains pending.
+
+Before accepting the Workstation `default` profile as a whole, run one
+combined smoke check on the pinned image. Require a read-only plan of exactly
+its three installed operations, an unchanged apply journal in profile order,
+matching individual status, identical package inventory and SSH client
+configuration, and an active SSH server. Reuse the package-specific install,
+failure, and recovery results above; this combined check tests profile
+selection and interaction, not another full lifecycle.
+
+Status: the [combined profile pilot](acceptance/workstation-default-profile-pilot.md)
+passed on 2026-10-30. The catalog remains candidate pending the operation
+reviews and source signature inventory described above.
+
+### Server base package batch: completion criteria
+
+Scope: `server-base` with `package.less` and `package.openssh-clients` on a
+separately installed Fedora 44 x86_64 Server guest. The Fedora repository and
+RIDE catalog/provider ownership match the Workstation batches; no
+`network-devices` server function or host-specific value is transferred. The
+Server image must be built from the verified 44-1.7 Everything netinstaller
+with the Server environment selected, pinned by recipe and qcow2 digests, and
+identified by the harness as `VARIANT_ID=server`. Define a Server target row
+only after the image is verified. The [Windows OpenSSH preflight](windows-alignment.md#fedora-workstation-openssh-client-batch-preflight-2026-10-30)
+and first package batch review apply to the unchanged package and journal
+fields; recheck the exact Server target declarations before promotion.
+
+Pass only if read-only plan, apply, repeat apply, and status match RPM state on
+this edition. Exercise a new `less` install and its declared remove/restore
+in a disposable overlay with package inventory recovery. For OpenSSH, retain
+the installed-only `recovery: none` contract; check client version, signed
+RPM/files, unchanged configuration, active SSH server, and refusal of remove
+or restore. Use a separate disposable overlay for an artificially absent
+client and injected later failure if needed to establish Server-specific
+installation and journal behavior; never remove the client on a persistent
+host. Reuse Workstation/Cloud DNF handler failure evidence only where the
+handler and source are unchanged. Run one combined `server-base` profile smoke
+check, then create per-operation acceptance records before any Server target
+is promoted. These command-line checks need no manual desktop session.
+
+Status: the Server image and target matrix are pinned. The
+[focused pilot](acceptance/server-base-package-pilot.md) passed for both
+operations and the combined profile on 2026-10-30. Exact-diff review,
+per-operation acceptance records, and promotion are pending.
 
 ## Former CERT forensic repository burndown
 
