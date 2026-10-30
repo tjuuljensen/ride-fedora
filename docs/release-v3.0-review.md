@@ -1,6 +1,6 @@
 # v3.0 migration release review
 
-Status: **review pending**, 2026-10-30. No v3 release tag has been published;
+Status: **ready for release review**, 2026-10-30. No v3 release tag has been published;
 `master` remains the release line. The checked-in
 [progress report](migrations/progress.md) is authoritative for current
 counts. At this candidate revision, all 180 scoped v2 outcomes have a
@@ -51,7 +51,14 @@ source outcome remains non-runnable pending a service-aware inverse.
 - [x] Verify the promoted optional package-only profiles on the pinned
   Workstation VM without a candidate override; retain other valid VM
   evidence for unchanged handlers and profiles.
-- [ ] Verify migration-branch CI and the last Windows catalog, profile,
+- [x] Verify migration-branch CI and the last Windows catalog, profile,
   run-state, and product alignment record.
-- [ ] Decide separately whether to publish a v3 tag and move the release
-  line. This migration branch does neither automatically.
+
+Implementation commit `445810a` passed the
+[v3 validation workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41070406118)
+and [shell executable-mode workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41070406164).
+The [final Windows comparison](windows-alignment.md#package-only-security-batch-and-final-v30-alignment-2026-10-30)
+found no unexplained shared-contract drift at `4c90577`.
+
+Publishing a v3 tag and moving `master` are separate release decisions. This
+migration branch does neither automatically.

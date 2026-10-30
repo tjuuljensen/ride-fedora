@@ -332,6 +332,15 @@ denominator. These counts are a dated snapshot; use the
 [generated progress report](migrations/progress.md) for current status.
 The [v3.0 review note](release-v3.0-review.md) identifies opt-in candidates
 and remaining release checks. No v3 tag is implied by ledger completion.
+Implementation commit `445810a` passed the
+[v3 validation workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41070406118)
+and [shell executable-mode workflow](https://github.com/tjuuljensen/ride-fedora/actions/runs/41070406164).
+Local shell, catalog, generated-doc, ledger, mocked and Firefox tests,
+Python compilation, and acceptance collection also passed. The final
+supported VPN-plugin and KeePassXC profiles passed the declared Workstation
+VM without a candidate override; the shared Python pip operation passed
+its Server VM. The ledger is complete and the branch is ready for release
+review, with publication still a separate decision.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
