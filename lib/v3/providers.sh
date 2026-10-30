@@ -30,6 +30,16 @@ ride_observe() {
         printf 'absent\n'
       fi
       ;;
+    gsettings-boolean)
+      local schema key value
+      read -r schema key < <(ride_gsettings_target "$entry")
+      value=$(ride_gsettings get "$schema" "$key") || ride_die "cannot observe GNOME setting: $schema $key"
+      case "$value" in
+        true) printf 'enabled\n' ;;
+        false) printf 'disabled\n' ;;
+        *) ride_die "unexpected GNOME setting value: $schema $key=$value" ;;
+      esac
+      ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -61,8 +71,43 @@ ride_change() {
       [[ "$(jq -r '.id' <<< "$entry")" == package.volatility3 ]] || ride_die "unknown isolated Python operation"
       ride_change_volatility "$state"
       ;;
+    gsettings-boolean)
+      local schema key value writable
+      read -r schema key < <(ride_gsettings_target "$entry")
+      case "$state" in
+        enabled) value=true ;;
+        disabled) value=false ;;
+        *) ride_die "invalid GNOME boolean state: $state" ;;
+      esac
+      writable=$(ride_gsettings writable "$schema" "$key") || ride_die "cannot check GNOME setting writability: $schema $key"
+      [[ "$writable" == true ]] || ride_die "GNOME setting is locked: $schema $key"
+      ride_gsettings set "$schema" "$key" "$value"
+      ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
+}
+
+ride_gsettings_target() {
+  case "$(jq -r '.id' <<< "$1")" in
+    setting.gnome-clock-date) printf 'org.gnome.desktop.interface clock-show-date\n' ;;
+    setting.gnome-calendar-week-numbers) printf 'org.gnome.desktop.calendar show-weekdate\n' ;;
+    setting.gnome-primary-paste) printf 'org.gnome.desktop.interface gtk-enable-primary-paste\n' ;;
+    setting.gnome-location) printf 'org.gnome.system.location enabled\n' ;;
+    setting.gnome-problem-reporting) printf 'org.gnome.desktop.privacy report-technical-problems\n' ;;
+    *) ride_die "unknown GNOME boolean operation" ;;
+  esac
+}
+
+ride_gsettings() {
+  ride_require_command gsettings
+  if [[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]]; then
+    gsettings "$@"
+  elif [[ -S "/run/user/$UID/bus" ]]; then
+    DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$UID/bus" gsettings "$@"
+  else
+    ride_require_command dbus-run-session
+    dbus-run-session -- gsettings "$@"
+  fi
 }
 
 ride_volatility_environment() {

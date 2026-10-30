@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "gnome-shell-preferences",
+  "description": "Opt-in GNOME date, week-number, and middle-button paste preferences for the current user",
+  "operations": [
+    {"id": "setting.gnome-clock-date", "state": "enabled"},
+    {"id": "setting.gnome-calendar-week-numbers", "state": "enabled"},
+    {"id": "setting.gnome-primary-paste", "state": "enabled"}
+  ]
+}

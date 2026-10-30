@@ -401,6 +401,51 @@ esac
         self.run_ride("restore", "--run-id", journal["runId"], "--allow-candidate")
         self.assertFalse((self.root / "packages" / "alpha").exists())
 
+    def test_gnome_boolean_setting_journals_and_restores_prior_state(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        entry = next(row for row in catalog["operations"] if row["id"] == "setting.gnome-clock-date")
+        (self.root / "catalog.json").write_text(json.dumps({
+            "schemaVersion": 3, "clientVersion": "3.0.0", "operations": [entry],
+        }))
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        settings = self.root / "settings"
+        settings.mkdir()
+        value = settings / "clock-show-date"
+        value.write_text("false\n")
+        command = self.root / "bin" / "gsettings"
+        command.write_text("""#!/bin/sh
+case "$1" in
+  get) cat "$RIDE_TEST_SETTINGS/$3" ;;
+  writable) if [ "${RIDE_TEST_LOCK:-0}" = 1 ]; then printf 'false\\n'; else printf 'true\\n'; fi ;;
+  set) printf '%s\\n' "$4" > "$RIDE_TEST_SETTINGS/$3" ;;
+  *) exit 2 ;;
+esac
+""")
+        command.chmod(0o755)
+        self.env["RIDE_TEST_SETTINGS"] = str(settings)
+        self.env["DBUS_SESSION_BUS_ADDRESS"] = "unix:path=/tmp/ride-test-bus"
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "gnome-test", "description": "Test setting",
+            "operations": [{"id": "setting.gnome-clock-date", "state": "enabled"}],
+        }))
+        planned = self.run_ride("plan", "--profile", str(self.profile)).stdout
+        self.assertIn("disabled\t", planned)
+        self.run_ride("set", "setting.gnome-clock-date", "--state", "enabled", success=False)
+        self.assertEqual(value.read_text(), "false\n")
+        changed = self.run_ride("set", "setting.gnome-clock-date", "--state", "enabled",
+                                "--allow-candidate")
+        self.assertEqual(value.read_text(), "true\n")
+        journal = next(row for row in self.journals() if row["runId"] in changed.stdout)
+        self.assertEqual(journal["steps"][0]["observedBefore"], "disabled")
+        self.assertEqual(journal["steps"][0]["observedAfter"], "enabled")
+        self.run_ride("restore", "--run-id", journal["runId"], "--allow-candidate")
+        self.assertEqual(value.read_text(), "false\n")
+        self.env["RIDE_TEST_LOCK"] = "1"
+        locked = self.run_ride("set", "setting.gnome-clock-date", "--state", "enabled",
+                               "--allow-candidate", success=False)
+        self.assertIn("GNOME setting is locked", locked.stderr)
+        self.assertEqual(value.read_text(), "false\n")
+
     def test_profile_source_and_unknown_source(self):
         profile = json.loads(self.profile.read_text())
         profile["operations"][0]["source"] = "not-declared"

@@ -2159,10 +2159,25 @@
       "description": "Install Fedora GNOME Commander without changing user file preferences.",
       "handler": "dnf-package",
       "packageName": "gnome-commander",
-      "states": ["installed", "absent"],
+      "states": [
+        "installed",
+        "absent"
+      ],
       "scope": "system",
       "status": "candidate",
-      "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}},
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
       "productId": "gnome-commander",
       "productUri": "https://gnome.pages.gitlab.gnome.org/gnome-commander/",
       "license": "GPL-3.0-or-later AND GFDL-1.3-or-later AND CC0-1.0",
@@ -2183,10 +2198,25 @@
       "description": "Install Fedora Midnight Commander without changing user file preferences.",
       "handler": "dnf-package",
       "packageName": "mc",
-      "states": ["installed", "absent"],
+      "states": [
+        "installed",
+        "absent"
+      ],
       "scope": "system",
       "status": "candidate",
-      "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}},
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
       "productId": "midnight-commander",
       "productUri": "https://midnight-commander.org/",
       "license": "GPL-3.0-or-later",
@@ -2207,10 +2237,25 @@
       "description": "Install Fedora Clementine without changing user music libraries.",
       "handler": "dnf-package",
       "packageName": "clementine",
-      "states": ["installed", "absent"],
+      "states": [
+        "installed",
+        "absent"
+      ],
       "scope": "system",
       "status": "candidate",
-      "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}},
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
       "productId": "clementine",
       "productUri": "https://www.clementine-player.org/",
       "license": "GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND Apache-2.0 AND BSD-3-Clause AND (LGPL-2.1-only WITH Qt-LGPL-exception-1.1 OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT",
@@ -2231,10 +2276,25 @@
       "description": "Install Fedora EasyEffects without replacing PipeWire or changing user audio presets.",
       "handler": "dnf-package",
       "packageName": "easyeffects",
-      "states": ["installed", "absent"],
+      "states": [
+        "installed",
+        "absent"
+      ],
       "scope": "system",
       "status": "candidate",
-      "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}},
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
       "productId": "easyeffects",
       "productUri": "https://github.com/wwmm/easyeffects",
       "license": "GPL-3.0-or-later",
@@ -2255,10 +2315,25 @@
       "description": "Install Fedora Projecteur and its packaged udev rule without configuring a device.",
       "handler": "dnf-package",
       "packageName": "projecteur",
-      "states": ["installed", "absent"],
+      "states": [
+        "installed",
+        "absent"
+      ],
       "scope": "system",
       "status": "candidate",
-      "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}},
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
       "productId": "projecteur",
       "productUri": "https://github.com/jahnf/Projecteur",
       "license": "MIT",
@@ -2279,10 +2354,25 @@
       "description": "Install Fedora's signed cheat RPM instead of overwriting /bin/cheat with a release binary.",
       "handler": "dnf-package",
       "packageName": "cheat",
-      "states": ["installed", "absent"],
+      "states": [
+        "installed",
+        "absent"
+      ],
       "scope": "system",
       "status": "supported",
-      "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}},
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
       "productId": "cheat",
       "productUri": "https://github.com/cheat/cheat",
       "license": "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT",
@@ -2295,6 +2385,176 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.cheat.md"
+    },
+    {
+      "id": "setting.gnome-clock-date",
+      "kind": "setting",
+      "name": "GNOME top-bar date",
+      "group": "desktop-user",
+      "description": "Show or hide the date in the GNOME top bar.",
+      "handler": "gsettings-boolean",
+      "states": [
+        "enabled",
+        "disabled"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "exact-state",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gnome-desktop",
+      "productUri": "https://www.gnome.org/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
+      "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
+      "verification": "local-gsettings-state"
+    },
+    {
+      "id": "setting.gnome-calendar-week-numbers",
+      "kind": "setting",
+      "name": "GNOME calendar week numbers",
+      "group": "desktop-user",
+      "description": "Show or hide week numbers in the GNOME calendar.",
+      "handler": "gsettings-boolean",
+      "states": [
+        "enabled",
+        "disabled"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "exact-state",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gnome-desktop",
+      "productUri": "https://www.gnome.org/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
+      "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
+      "verification": "local-gsettings-state"
+    },
+    {
+      "id": "setting.gnome-primary-paste",
+      "kind": "setting",
+      "name": "GNOME middle-button paste",
+      "group": "desktop-user",
+      "description": "Enable or disable primary-selection paste with the middle mouse button.",
+      "handler": "gsettings-boolean",
+      "states": [
+        "enabled",
+        "disabled"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "exact-state",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gnome-desktop",
+      "productUri": "https://www.gnome.org/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
+      "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
+      "verification": "local-gsettings-state"
+    },
+    {
+      "id": "setting.gnome-location",
+      "kind": "setting",
+      "name": "GNOME location service",
+      "group": "desktop-user",
+      "description": "Enable or disable the current user GNOME location setting.",
+      "handler": "gsettings-boolean",
+      "states": [
+        "enabled",
+        "disabled"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "exact-state",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gnome-desktop",
+      "productUri": "https://www.gnome.org/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
+      "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
+      "verification": "local-gsettings-state"
+    },
+    {
+      "id": "setting.gnome-problem-reporting",
+      "kind": "setting",
+      "name": "GNOME problem reporting",
+      "group": "desktop-user",
+      "description": "Enable or disable the current user GNOME technical-problem reporting setting.",
+      "handler": "gsettings-boolean",
+      "states": [
+        "enabled",
+        "disabled"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "exact-state",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gnome-desktop",
+      "productUri": "https://www.gnome.org/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
+      "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
+      "verification": "local-gsettings-state"
     }
   ]
 }

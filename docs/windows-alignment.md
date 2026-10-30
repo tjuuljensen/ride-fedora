@@ -497,3 +497,20 @@ Bitwarden, archived YubiKey, and Xmind decisions add no handler or state
 field. No unexplained shared-contract drift was found. Recheck if Windows
 adds corresponding product facts, Linux implements an external publisher
 deployment, or release review begins.
+
+### GNOME boolean user-setting batch, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[GNOME boolean review](migrations/desktop-user-boolean.md). Windows has no
+corresponding GNOME schema/key operations. The Linux handler adds five fixed,
+per-user boolean settings with effective `enabled` or `disabled` observation;
+the existing journal and `exact-state` preflight record and restore that
+effective value. Windows uses platform-specific settings and recovery
+records, so neither client shares GNOME keys or installers. The opt-in Linux
+profiles use schema 1 and leave `default` unchanged. The Linux journal does
+not distinguish an unset dconf default from an explicit equal value; H018
+tracks that Linux recovery limit before support promotion. No unexplained
+shared-contract drift was found. Recheck if Windows adds a corresponding
+user-setting contract, Linux changes run-state representation, or release
+review begins.

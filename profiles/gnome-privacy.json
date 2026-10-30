@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "gnome-privacy",
+  "description": "Opt-in GNOME location and technical-problem reporting preferences for the current user",
+  "operations": [
+    {"id": "setting.gnome-location", "state": "disabled"},
+    {"id": "setting.gnome-problem-reporting", "state": "disabled"}
+  ]
+}

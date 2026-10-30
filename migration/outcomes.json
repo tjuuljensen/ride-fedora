@@ -2582,13 +2582,20 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Setting handler needs baseline and restore.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-clock-date"
+      ],
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the setting opt-in; review visual behavior and implicit-default recovery in H018 before support promotion.",
+      "v31Hardening": [
+        "H018"
+      ]
     },
     {
       "key": "workstation:setting.WeekNumbersInTaskbar",
@@ -2601,13 +2608,20 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Setting handler needs baseline and restore.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-calendar-week-numbers"
+      ],
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the setting opt-in; review visual behavior and implicit-default recovery in H018 before support promotion.",
+      "v31Hardening": [
+        "H018"
+      ]
     },
     {
       "key": "workstation:setting.WindowCtlMinMaxClose",
@@ -2619,13 +2633,17 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Setting handler needs baseline and restore.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add a typed GNOME string handler with exact prior value and unset/default recovery, then pass a Workstation VM lifecycle.",
+      "v31Hardening": [],
+      "reason": "The v2 WindowCtlMinMaxClose behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
+      "reviewTrigger": "Add a typed GNOME string handler with exact prior value and unset/default recovery, then pass a Workstation VM lifecycle."
     },
     {
       "key": "workstation:setting.WindowCtlAppmenuClose",
@@ -2674,13 +2692,20 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Setting handler needs baseline and restore.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-primary-paste"
+      ],
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the setting opt-in; review visual behavior and implicit-default recovery in H018 before support promotion.",
+      "v31Hardening": [
+        "H018"
+      ]
     },
     {
       "key": "workstation:setting.GnomeRegionDaDK",
@@ -2692,13 +2717,17 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: User locale must be explicit profile data.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "blocker": "",
+      "nextAction": "Declare an opt-in locale value and exact prior-region recovery, then pass a Fedora 44 Workstation VM lifecycle.",
+      "v31Hardening": [],
+      "reason": "The v2 GnomeRegionDaDK behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
+      "reviewTrigger": "Declare an opt-in locale value and exact prior-region recovery, then pass a Fedora 44 Workstation VM lifecycle."
     },
     {
       "key": "workstation:package.GnomeRegion",
@@ -2710,13 +2739,17 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "This is the unpaired legacy inverse of SetGnomeRegionDaDK; user-scope GNOME setting and recovery need review together.",
-      "nextAction": "Review with SetGnomeRegionDaDK and preserve prior user locale state during restore.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available.",
+      "v31Hardening": [],
+      "reason": "The v2 GnomeRegion behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
+      "reviewTrigger": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available."
     },
     {
       "key": "workstation:setting.ScreensaverSlp10Lgn5",
@@ -2872,13 +2905,20 @@
       "batch": "desktop-user-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current GNOME setting and scope.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-location"
+      ],
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the setting opt-in; review visual behavior and implicit-default recovery in H018 before support promotion.",
+      "v31Hardening": [
+        "H018"
+      ]
     },
     {
       "key": "workstation:setting.GnmLocationServiceOn",
@@ -2890,13 +2930,20 @@
       "batch": "desktop-user-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-location"
+      ],
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the setting opt-in; review visual behavior and implicit-default recovery in H018 before support promotion.",
+      "v31Hardening": [
+        "H018"
+      ]
     },
     {
       "key": "workstation:setting.GnmAutoProblemRptOff",
@@ -2908,13 +2955,20 @@
       "batch": "desktop-user-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current GNOME setting and scope.",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-problem-reporting"
+      ],
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the setting opt-in; review visual behavior and implicit-default recovery in H018 before support promotion.",
+      "v31Hardening": [
+        "H018"
+      ]
     },
     {
       "key": "workstation:setting.GnmAutoProblemRptOn",
@@ -2926,13 +2980,20 @@
       "batch": "desktop-user-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-problem-reporting"
+      ],
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the setting opt-in; review visual behavior and implicit-default recovery in H018 before support promotion.",
+      "v31Hardening": [
+        "H018"
+      ]
     },
     {
       "key": "workstation:setting.PowerPercentageLow15",
@@ -2944,13 +3005,17 @@
       "batch": "desktop-user-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review current power setting and support.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "blocker": "",
+      "nextAction": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target.",
+      "v31Hardening": [],
+      "reason": "The v2 PowerPercentageLow15 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
+      "reviewTrigger": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target."
     },
     {
       "key": "workstation:setting.PowerPercentageLow20",
@@ -2962,13 +3027,17 @@
       "batch": "desktop-user-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen with the 15-percent variant after an owned, conflict-safe UPower policy handler and battery target exist.",
+      "v31Hardening": [],
+      "reason": "The v2 PowerPercentageLow20 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
+      "reviewTrigger": "Reopen with the 15-percent variant after an owned, conflict-safe UPower policy handler and battery target exist."
     },
     {
       "key": "workstation:setting.BashAliases",
@@ -4324,8 +4393,12 @@
       "id": "desktop-user-02",
       "family": "desktop-user",
       "title": "Desktop and user state 02: GNOME region and shell settings",
-      "evidence": [],
-      "nextAction": "Assess DateInTaskbar, WeekNumbersInTaskbar, WindowCtlMinMaxClose, MiddleButtonPaste, GnomeRegionDaDK, ScreensaverSlp10Lgn5; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md",
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "nextAction": "Keep passing boolean settings opt-in; reopen string and UPower decisions only on their documented recovery triggers. Complete H018 in v3.1."
     },
     {
       "id": "desktop-user-03",
@@ -4338,8 +4411,12 @@
       "id": "desktop-user-04",
       "family": "desktop-user",
       "title": "Desktop and user state 04: GnmLocationServiceOff, GnmAutoProblemRptOff, PowerPercentageLow15",
-      "evidence": [],
-      "nextAction": "Assess GnmLocationServiceOff, GnmAutoProblemRptOff, PowerPercentageLow15; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md",
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "nextAction": "Keep passing boolean settings opt-in; reopen string and UPower decisions only on their documented recovery triggers. Complete H018 in v3.1."
     },
     {
       "id": "desktop-user-05",
@@ -4373,8 +4450,12 @@
       "id": "desktop-user-09",
       "family": "desktop-user",
       "title": "Desktop and user state 09: GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20",
-      "evidence": [],
-      "nextAction": "Assess GnmLocationServiceOn, GnmAutoProblemRptOn, PowerPercentageLow20; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-boolean.md",
+        "docs/acceptance/gnome-user-boolean.md",
+        "docs/migrations/desktop-user-configuration.md"
+      ],
+      "nextAction": "Keep passing boolean settings opt-in; reopen string and UPower decisions only on their documented recovery triggers. Complete H018 in v3.1."
     },
     {
       "id": "desktop-user-10",
@@ -4889,6 +4970,12 @@
       "id": "H017",
       "title": "Projecteur Spotlight device, visual, and broader recovery review",
       "trigger": "After Fedora 44 package and spotlight-pointer profile happy paths pass; use a controlled receiver/device target",
+      "status": "queued"
+    },
+    {
+      "id": "H018",
+      "title": "GNOME boolean setting visual behavior and implicit-default recovery",
+      "trigger": "After the five fixed GNOME boolean keys pass their Fedora 44 Workstation headless user-session happy path; inspect UI behavior and preserve unset-vs-explicit dconf provenance before support promotion.",
       "status": "queued"
     }
   ]

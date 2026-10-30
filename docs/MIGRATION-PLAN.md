@@ -281,6 +281,17 @@ is H017 in v3.1. [Cheat](migrations/publisher-apps-16.md) is a supported
 Fedora RPM after the same exact-target package lifecycle, replacing the
 unowned v2 binary download without expanding `default`.
 
+The [GNOME boolean batch](migrations/desktop-user-boolean.md) passes five
+fixed per-user settings in a disposable Fedora 44 Workstation VM, covering
+seven v2 outcomes across desktop-user-02, -04, and -09. The opt-in
+`gnome-shell-preferences` and `gnome-privacy` profiles require
+`--allow-candidate`; they preserve the effective prior boolean on restore.
+The [string and UPower review](migrations/desktop-user-configuration.md)
+closes five other outcomes as non-runnable until exact user-state or
+administrator-file recovery is available. The resulting checked-in progress
+is 113/180 scoped outcomes; the generated report remains authoritative as
+later batches change it.
+
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse
 failure-injection evidence for an unchanged handler within the batch. For

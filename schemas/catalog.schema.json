@@ -45,7 +45,7 @@
         "name": {"type": "string", "minLength": 1},
         "group": {"type": "string", "pattern": "^[a-z0-9-]+$"},
         "description": {"type": "string", "minLength": 1},
-        "handler": {"enum": ["dnf-package", "systemd-service", "github-asset", "python-venv"]},
+        "handler": {"enum": ["dnf-package", "systemd-service", "github-asset", "python-venv", "gsettings-boolean"]},
         "distribution": {"const": "installed"},
         "deploymentId": {"const": "local-installed"},
         "artifactFormat": {"enum": ["rpm", "wheel"]},
@@ -68,12 +68,13 @@
         "license": {"type": "string", "minLength": 1},
         "licenseUri": {"type": "string", "pattern": "^https://"},
         "sourceUri": {"type": "string", "pattern": "^https://"},
-        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "github-release-sha256-observed", "pypi-pinned-sha256"]}
+        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "local-gsettings-state", "github-release-sha256-observed", "pypi-pinned-sha256"]}
       },
       "allOf": [
         {"if": {"properties": {"kind": {"const": "package"}}}, "then": {"required": ["distribution", "deploymentId", "artifactFormat", "sourceId"], "oneOf": [{"properties": {"states": {"const": ["installed", "absent"]}, "recovery": {"const": "remove-new-install"}}}, {"properties": {"states": {"const": ["installed"]}, "recovery": {"const": "none"}}}]}, "else": {"not": {"anyOf": [{"required": ["distribution"]}, {"required": ["deploymentId"]}, {"required": ["artifactFormat"]}, {"required": ["sourceId"]}, {"required": ["sourceProviders"]}]}}},
         {"if": {"properties": {"handler": {"const": "dnf-package"}}}, "then": {"required": ["packageName"], "properties": {"kind": {"const": "package"}, "artifactFormat": {"const": "rpm"}}}},
         {"if": {"properties": {"handler": {"const": "systemd-service"}}}, "then": {"required": ["serviceName"], "properties": {"kind": {"const": "setting"}, "states": {"const": ["enabled", "disabled"]}}}},
+        {"if": {"properties": {"handler": {"const": "gsettings-boolean"}}}, "then": {"properties": {"kind": {"const": "setting"}, "scope": {"const": "user"}, "states": {"const": ["enabled", "disabled"]}, "id": {"enum": ["setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting"]}, "verification": {"const": "local-gsettings-state"}, "recovery": {"const": "exact-state"}}}},
         {"if": {"properties": {"handler": {"const": "github-asset"}}}, "then": {"required": ["githubRepository", "assetSuffix", "maxBytes"], "properties": {"kind": {"const": "artifact"}, "states": {"const": ["downloaded"]}}}},
         {"if": {"properties": {"handler": {"const": "python-venv"}}}, "then": {"properties": {"id": {"const": "package.volatility3"}, "kind": {"const": "package"}, "artifactFormat": {"const": "wheel"}, "states": {"const": ["installed", "absent"]}}}}
       ]

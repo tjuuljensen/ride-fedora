@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv")) and
+      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "gsettings-boolean")) and
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
@@ -56,6 +56,9 @@ ride_validate_catalog() {
       (if .handler == "dnf-package" then (.kind == "package" and .artifactFormat == "rpm" and
         (.packageName | type == "string" and test("^[A-Za-z0-9+_.-]+$")))
        elif .handler == "systemd-service" then (.kind == "setting" and (.serviceName | type == "string" and test("^[A-Za-z0-9_.@-]+\\.service$")))
+       elif .handler == "gsettings-boolean" then (.kind == "setting" and .scope == "user" and
+         .states == ["enabled", "disabled"] and
+         (.id | IN("setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting")))
        elif .handler == "python-venv" then (.kind == "package" and .artifactFormat == "wheel" and .id == "package.volatility3")
        else (.kind == "artifact" and (.githubRepository | type == "string" and test("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")) and
              (.assetSuffix | type == "string" and test("^-[A-Za-z0-9_.-]+$")) and
