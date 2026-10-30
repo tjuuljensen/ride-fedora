@@ -1,6 +1,6 @@
 # Video downloader and GNOME monitoring packages
 
-Status: **complete: one supported RPM and one operable opt-in package pair**,
+Status: **complete: two supported downloader RPM choices and one operable opt-in monitoring pair**,
 2026-10-30. This v2 source batch covers `YouTubeDownloader` and
 `SystemMonitor`, preserving their v2 function mappings. The first is one
 Fedora RPM. The v2 SystemMonitor function installs the GNOME System Monitor
@@ -36,9 +36,10 @@ not a claim that a particular site still works.
 The [latest tagged youtube-dl release](https://github.com/ytdl-org/youtube-dl/releases)
 is from 2021, but Fedora 44 packages a later source snapshot and
 [yt-dlp](https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/) separately.
-The maintained downloader path is now v3.0 work; H023 covers wider site
-and extractor behavior. This review does not change the accepted package-only
-support claim.
+The maintained [yt-dlp path](publisher-apps-05-yt-dlp.md) has now passed its
+own package lifecycle and coexistence test on Fedora 44 Workstation. H023
+covers wider site and extractor behavior. The existing accepted package-only
+support claim remains valid.
 
 The SystemMonitor outcome is migrated to the distinct
 [`package.gnome-shell-extension-system-monitor-applet`](../acceptance/package.gnome-shell-extension-system-monitor-applet.md)

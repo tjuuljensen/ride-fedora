@@ -631,3 +631,14 @@ The package-only Fedora 44 Server VM lifecycle passed under QEMU TCG on
 The [acceptance record](acceptance/package.qbittorrent-nox.md) contains exact
 target and recovery evidence. No Windows contract change is needed; recheck
 the triggers above before expanding scope.
+
+### Fedora yt-dlp downloader preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding the maintained
+Fedora `yt-dlp` alternative. Windows has no `yt-dlp` or `youtube-dl` product
+row. The new Linux operation uses the existing DNF handler, `fedora-rpm`
+source, installed deployment, and run journal. `package.youtube-dl` remains
+a separate published ID. No schema or shared state behavior changes; recheck
+if either platform introduces downloader variants, changes package source
+selection, or changes run-state identity.

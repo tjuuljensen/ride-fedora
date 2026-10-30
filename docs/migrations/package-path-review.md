@@ -207,7 +207,7 @@ target and limit; this review does not broaden their support matrix.
 | `workstation:package.VLCPlayer` | `package.vlc` | opt-in candidate | [Acceptance](../acceptance/package.vlc.md) |
 | `workstation:package.Volatility3` | `package.volatility3` | opt-in candidate | [Acceptance](../acceptance/package.volatility3.md) |
 | `workstation:package.Wine` | `package.wine` | opt-in candidate | [Acceptance](../acceptance/package.wine.md) |
-| `workstation:package.YouTubeDownloader` | `package.youtube-dl` | supported | [Acceptance](../acceptance/package.youtube-dl.md) |
+| `workstation:package.YouTubeDownloader` | `package.youtube-dl`, `package.yt-dlp` (opt-in alternative) | supported | [Acceptance](../acceptance/package.youtube-dl.md), [yt-dlp](../acceptance/package.yt-dlp.md) |
 
 ### Upstream changes found in existing v3 mappings
 
@@ -222,8 +222,9 @@ target and limit; this review does not broaden their support matrix.
 - `YouTubeDownloader`: the [latest tagged youtube-dl release is from 2021](https://github.com/ytdl-org/youtube-dl/releases),
   though [Fedora 44 packages a later source snapshot](https://packages.fedoraproject.org/pkgs/youtube-dl/youtube-dl/).
   [yt-dlp is also available for Fedora 44](https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/).
-  The current operation proves installation only; a maintained downloader
-  path is v3.0 work, with wider site checks in H023. Do not classify
+  The existing operation proves installation only; a maintained downloader
+  [yt-dlp path](publisher-apps-05-yt-dlp.md) is now supported as an opt-in
+  alternative, with wider site checks in H023. Do not classify
   youtube-dl as EOL solely from the old release tag.
 
 ## Newly scoped generic server packages (6)

@@ -60,18 +60,18 @@ work; their remaining broader behavior checks may stay in v3.1.
 | H020 | NetworkManager plugin RPMs are supported. | Credential and GUI use; v2 VPN profile outcomes separately need v3.0 paths. |
 | H021 | KeePassXC RPM lifecycle is supported. | Vault workflows; package installation does not manage vault contents. |
 | H022 | Choose a maintained bandwidth-test CLI path now; existing Fedora speedtest-cli install evidence remains valid. | Wider network/server behavior. |
-| H023 | Choose a maintained video-downloader path now; existing youtube-dl install evidence remains valid. | Wider extractor and site compatibility. |
+| H023 | Fedora yt-dlp is now a supported opt-in package path; existing youtube-dl install evidence remains valid. | Wider extractor and site compatibility. |
 
 ## First source and replacement paths
 
-These are reviewed acquisition candidates, not accepted v3 operations. A
-batch still checks product/license, provenance, version pin, actual package
+These paths include reviewed candidates and the accepted yt-dlp operation. A
+batch checks product/license, provenance, version pin, actual package
 files, detection, inverse, and the declared target. In particular, do not
 copy a v2 download script or run a remote installer during apply.
 
 | v2 capability | v3.0 path to evaluate | Evidence and unresolved point |
 | --- | --- | --- |
-| Video downloader | Add Fedora 44 `yt-dlp` as a distinct native RPM operation; compare its CLI intent with `youtube-dl` before changing a published ID. | [Fedora package](https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/); real site compatibility belongs to broader testing. |
+| Video downloader | Fedora 44 `yt-dlp` now has a distinct supported native RPM operation and opt-in profile; the published `youtube-dl` ID remains. | [Acceptance](../acceptance/package.yt-dlp.md); real site compatibility belongs to broader testing. |
 | GUI IRC client | Keep the HexChat opt-in install while piloting Fedora `konversation` as a maintained GUI alternative. | [HexChat final release](https://hexchat.github.io/news/2.16.2.html), [Fedora Konversation](https://packages.fedoraproject.org/pkgs/konversation/konversation/). Its Qt UI and user profile differ; do not claim an automatic profile migration. |
 | Bandwidth-test CLI | Evaluate the publisher's pinned `librespeed-cli` Linux artifact as a portable operation. | [LibreSpeed releases](https://github.com/librespeed/speedtest-cli/releases) and [LGPL-3.0 license](https://github.com/librespeed/speedtest-cli). It uses LibreSpeed servers rather than the old speedtest.net service, so this is a product-level choice. |
 | GNOME Files checksum and image actions | Owner retired both user-visible capabilities on 2026-10-30. The previously researched owned-script path is retained only as historical analysis. | [GNOME Scripts location and context menu](https://help.gnome.org/gnome-help/nautilus-behavior.html), [Fedora ImageMagick](https://packages.fedoraproject.org/pkgs/ImageMagick/ImageMagick/). |
@@ -98,9 +98,8 @@ behavior. The old preset selectors do not establish actual installation.
 1. Complete the source, consumer, runtime identity, publication, and recovery
    audit for the six newly scoped server packages; keep host-specific actions
    in the source repository until ownership is recorded.
-2. Pilot Fedora-native `yt-dlp` with a brief exact-target lifecycle. The
-   `qbittorrent-nox` package already passed its Server lifecycle; both reuse
-   the unchanged DNF handler's failure evidence.
+2. Fedora-native `yt-dlp` and `qbittorrent-nox` passed their exact-target
+   package lifecycles; both reuse the unchanged DNF handler's failure evidence.
 3. Pilot publisher RPM and portable artifact handlers separately with an
    in-scope product such as Ferium.
 4. Reopen the remaining retired or unsupported package/setting capabilities

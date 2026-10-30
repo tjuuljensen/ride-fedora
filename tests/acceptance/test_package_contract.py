@@ -663,6 +663,23 @@ def test_publisher_native_video_and_monitor_packages(vm):
 
 
 @pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_yt_dlp_native_package_and_youtube_dl_coexistence(vm):
+    native_rpm_batch(vm, ("yt-dlp",), inventory_policy="name-arch",
+                     residue_candidates=("yt-dlp",),
+                     installed_probes={"yt-dlp":
+                                       "test -x /usr/bin/yt-dlp && yt-dlp --version"})
+    # The v2 package may still be in use; the new CLI must not replace it.
+    if vm.run("rpm -q --quiet youtube-dl", check=False).returncode != 0:
+        vm.ride("install", "package.youtube-dl", timeout=900)
+    assert vm.run("rpm -q --quiet youtube-dl", check=False).returncode == 0
+    vm.ride("install", "package.yt-dlp", "--allow-candidate", timeout=900)
+    vm.run("test -x /usr/bin/youtube-dl && test -x /usr/bin/yt-dlp")
+    vm.ride("remove", "package.yt-dlp", "--allow-candidate", timeout=900)
+    assert vm.run("rpm -q --quiet youtube-dl", check=False).returncode == 0
+    vm.run("test -x /usr/bin/youtube-dl")
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
 def test_workstation_monitoring_opt_in_profile(vm):
     identifiers = ("package.gnome-shell-extension-system-monitor-applet",
                    "package.lm-sensors")

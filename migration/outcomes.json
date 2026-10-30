@@ -2531,14 +2531,17 @@
       "disposition": "migrate",
       "progress": "supported",
       "v3Ids": [
-        "package.youtube-dl"
+        "package.youtube-dl",
+        "package.yt-dlp"
       ],
       "evidence": [
         "docs/acceptance/package.youtube-dl.md",
-        "docs/migrations/publisher-apps-05.md"
+        "docs/migrations/publisher-apps-05.md",
+        "docs/acceptance/package.yt-dlp.md",
+        "docs/migrations/publisher-apps-05-yt-dlp.md"
       ],
       "blocker": "",
-      "nextAction": "Evaluate Fedora yt-dlp as a v3.0 video-downloader path while retaining the current package-install claim; H023 covers broader site behavior.",
+      "nextAction": "Keep the two downloader RPMs separately selectable; H023 covers wider yt-dlp site and extractor behavior in v3.1.",
       "v31Hardening": [
         "H023"
       ]
@@ -4795,10 +4798,12 @@
       "evidence": [
         "docs/migrations/publisher-apps-05.md",
         "docs/acceptance/package.youtube-dl.md",
+        "docs/migrations/publisher-apps-05-yt-dlp.md",
+        "docs/acceptance/package.yt-dlp.md",
         "docs/acceptance/package.gnome-shell-extension-system-monitor-applet.md",
         "docs/acceptance/package.lm-sensors.md"
       ],
-      "nextAction": "Evaluate Fedora yt-dlp as a v3.0 downloader path; keep monitoring opt-in and complete H012 visual/recovery review in v3.1."
+      "nextAction": "Keep youtube-dl and yt-dlp selectable independently; complete H023 site checks and H012 monitoring visual/recovery review in v3.1."
     },
     {
       "id": "publisher-apps-06",
@@ -5673,7 +5678,7 @@
     {
       "id": "H023",
       "title": "Video-downloader site and extractor compatibility",
-      "trigger": "After a maintained v3.0 downloader path is selected; test additional sites and extractors beyond package installation.",
+      "trigger": "The Fedora yt-dlp path is supported for package installation; test additional sites and extractors without changing its package-only claim.",
       "status": "queued"
     },
     {

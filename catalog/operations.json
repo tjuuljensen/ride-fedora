@@ -2037,6 +2037,46 @@
       "acceptanceEvidence": "docs/acceptance/package.youtube-dl.md"
     },
     {
+      "id": "package.yt-dlp",
+      "kind": "package",
+      "name": "yt-dlp video downloader",
+      "group": "media",
+      "description": "Install the Fedora yt-dlp CLI without downloading user media or changing youtube-dl.",
+      "handler": "dnf-package",
+      "packageName": "yt-dlp",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "yt-dlp",
+      "productUri": "https://github.com/yt-dlp/yt-dlp",
+      "license": "Unlicense",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/yt-dlp/yt-dlp/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.yt-dlp.md"
+    },
+    {
       "id": "package.gnome-shell-extension-system-monitor-applet",
       "kind": "package",
       "name": "GNOME System Monitor Next applet",

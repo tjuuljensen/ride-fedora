@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "video-downloader-yt-dlp",
+  "description": "Opt-in maintained yt-dlp CLI from Fedora; existing youtube-dl remains separate",
+  "operations": [
+    {"id": "package.yt-dlp", "state": "installed"}
+  ]
+}
