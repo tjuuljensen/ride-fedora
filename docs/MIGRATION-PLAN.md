@@ -289,8 +289,11 @@ seven v2 outcomes across desktop-user-02, -04, and -09. The opt-in
 The [string and UPower review](migrations/desktop-user-configuration.md)
 closes five other outcomes as non-runnable until exact user-state or
 administrator-file recovery is available. The resulting checked-in progress
-is 113/180 scoped outcomes; the generated report remains authoritative as
-later batches change it.
+was 113/180 scoped outcomes at that handler milestone. The
+[remaining desktop review](migrations/desktop-user-remaining.md) then closed
+20 more outcomes with documented non-runnable decisions, including the
+separate high-risk lock and idle batch. The generated report is authoritative
+as later batches change it.
 
 For low-risk Fedora RPMs, use a focused automated plan/apply/repeat/status,
 signature/files, and declared remove/restore check on each exact target; reuse

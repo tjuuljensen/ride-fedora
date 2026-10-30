@@ -12,13 +12,17 @@
       "batch": "desktop-user-01",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Review directory ownership and user scope.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Implement an owned user-directory handler; test existing, symlinked, nonempty, and restored paths in a disposable Workstation.",
+      "v31Hardening": [],
+      "reason": "v2 chowns pre-existing ~/git and ~/bin and has no ownership-aware inverse.",
+      "reviewTrigger": "Implement an owned user-directory handler; test existing, symlinked, nonempty, and restored paths in a disposable Workstation."
     },
     {
       "key": "workstation:setting.Hostname",
@@ -1289,13 +1293,17 @@
       "batch": "desktop-user-10",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "Review the v2 package install and owned iBus hotkey change; preserve the original user setting before migration.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Split RPM and optional hotkey operations and pass both package and exact user-setting recovery in a Workstation VM.",
+      "v31Hardening": [],
+      "reason": "v2 combines a Fedora RPM with a user iBus hotkey; inverse hard-codes a default instead of restoring the prior hotkey.",
+      "reviewTrigger": "Split RPM and optional hotkey operations and pass both package and exact user-setting recovery in a Workstation VM."
     },
     {
       "key": "workstation:package.Alien",
@@ -2115,13 +2123,17 @@
       "batch": "desktop-user-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Accept an owned Chrome deployment, choose initial preferences or policy, and prove existing-file and browser-profile recovery.",
+      "v31Hardening": [],
+      "reason": "v2 overwrites legacy master_preferences and has a broken inverse; Chrome deployment itself remains unowned.",
+      "reviewTrigger": "Accept an owned Chrome deployment, choose initial preferences or policy, and prove existing-file and browser-profile recovery."
     },
     {
       "key": "workstation:setting.FirefoxPreferences",
@@ -2134,13 +2146,17 @@
       "batch": "desktop-user-01",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "replaced: Review settings against current Firefox policy; avoid legacy file overwrite.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Choose current Firefox policies and prove owned-file, seeded-policy, browser, and recovery behavior on Fedora 44 Workstation.",
+      "v31Hardening": [],
+      "reason": "v2 overwrites three Firefox installation files with security and startup preferences and blindly deletes them on inverse.",
+      "reviewTrigger": "Choose current Firefox policies and prove owned-file, seeded-policy, browser, and recovery behavior on Fedora 44 Workstation."
     },
     {
       "key": "workstation:action.CheckFirefoxAddons",
@@ -2152,13 +2168,17 @@
       "batch": "desktop-user-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred v3 integration; existing policy helper remains tested separately",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reconsider catalog inclusion only if an offline desired-state and lifecycle contract is defined.",
+      "v31Hardening": [],
+      "reason": "The existing maintained Firefox policy tool already provides the explicit online check outside a declarative install lifecycle.",
+      "reviewTrigger": "Reconsider catalog inclusion only if an offline desired-state and lifecycle contract is defined."
     },
     {
       "key": "workstation:package.FirefoxAddons",
@@ -2193,13 +2213,17 @@
       "batch": "desktop-user-06",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred v3 integration; restart-dependent policy lifecycle needs journal ownership",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Model the two-stage browser policy lifecycle and recovery before catalog inclusion.",
+      "v31Hardening": [],
+      "reason": "The maintained Firefox policy tool already implements this procedural post-restart finalization with tests.",
+      "reviewTrigger": "Model the two-stage browser policy lifecycle and recovery before catalog inclusion."
     },
     {
       "key": "workstation:package.Opera",
@@ -2655,13 +2679,17 @@
       "batch": "desktop-user-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add a typed GNOME string handler with default provenance and exact restore.",
+      "v31Hardening": [],
+      "reason": "v2 writes one GNOME button-layout string without preserving the arbitrary prior user value.",
+      "reviewTrigger": "Add a typed GNOME string handler with default provenance and exact restore."
     },
     {
       "key": "workstation:setting.WindowCtlLeftClsMinMax",
@@ -2673,13 +2701,17 @@
       "batch": "desktop-user-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Model exclusive layout choices and exact prior-state restore in a Workstation VM.",
+      "v31Hardening": [],
+      "reason": "v2 writes another value to the same GNOME button-layout key without conflict or inverse handling.",
+      "reviewTrigger": "Model exclusive layout choices and exact prior-state restore in a Workstation VM."
     },
     {
       "key": "workstation:setting.MiddleButtonPaste",
@@ -2758,16 +2790,20 @@
       ],
       "selectorCoverage": "active",
       "family": "desktop-user",
-      "batch": "desktop-user-07",
-      "risk": "medium",
+      "batch": "desktop-user-11",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: Resolve conflict with other screensaver operations.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add a lock-safe atomic operation with partial-failure recovery and disposable VM session evidence.",
+      "v31Hardening": [],
+      "reason": "v2 writes four lock and idle GNOME keys without prior values, atomicity, or inverse.",
+      "reviewTrigger": "Add a lock-safe atomic operation with partial-failure recovery and disposable VM session evidence."
     },
     {
       "key": "workstation:setting.ScreensaverSlp15Lgn5",
@@ -2776,16 +2812,20 @@
       ],
       "selectorCoverage": "library-only",
       "family": "desktop-user",
-      "batch": "desktop-user-07",
-      "risk": "medium",
+      "batch": "desktop-user-11",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen as an exclusive lock-safe profile choice after the deeper recovery gate.",
+      "v31Hardening": [],
+      "reason": "v2 library-only lock variant conflicts with the 10-minute choice and has no exact inverse.",
+      "reviewTrigger": "Reopen as an exclusive lock-safe profile choice after the deeper recovery gate."
     },
     {
       "key": "workstation:setting.CustomKeyboardShortcut",
@@ -2797,13 +2837,17 @@
       "batch": "desktop-user-03",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: User-owned shortcut state needs exact restore.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Implement owned-entry merge and exact list/slot recovery; verify a disposable GNOME session.",
+      "v31Hardening": [],
+      "reason": "v2 replaces the entire GNOME custom-keybindings list and fixed slots, potentially hiding user shortcuts.",
+      "reviewTrigger": "Implement owned-entry merge and exact list/slot recovery; verify a disposable GNOME session."
     },
     {
       "key": "workstation:setting.VMKeyboardShortcut",
@@ -2815,13 +2859,17 @@
       "batch": "desktop-user-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add an exclusive VM shortcut choice with ownership, conflict, and restore evidence.",
+      "v31Hardening": [],
+      "reason": "v2 VM variant reuses fixed custom-keybinding slots and can overwrite user or workstation bindings.",
+      "reviewTrigger": "Add an exclusive VM shortcut choice with ownership, conflict, and restore evidence."
     },
     {
       "key": "workstation:package.CustomKbrdShortcut",
@@ -2831,15 +2879,19 @@
       "selectorCoverage": "library-only",
       "family": "desktop-user",
       "batch": "desktop-user-03",
-      "risk": "medium",
+      "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "This is the broad legacy inverse of SetCustomKeyboardShortcut and clears all custom keybindings; ownership and recovery need review together.",
-      "nextAction": "Review with SetCustomKeyboardShortcut and preserve unrelated user shortcuts.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reconcile as a scoped inverse of owned custom shortcuts without clearing user entries.",
+      "v31Hardening": [],
+      "reason": "v2 remove-only inverse clears the complete custom-keybindings list and slots, including unowned user entries.",
+      "reviewTrigger": "Reconcile as a scoped inverse of owned custom shortcuts without clearing user entries."
     },
     {
       "key": "workstation:setting.GnomeCustomFavorites",
@@ -2851,13 +2903,17 @@
       "batch": "desktop-user-03",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: User-specific favorites need profile data.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Select current installed desktop IDs and prove user-list preservation and visual/restore behavior.",
+      "v31Hardening": [],
+      "reason": "v2 replaces all user favorites and includes retired Atom desktop ID.",
+      "reviewTrigger": "Select current installed desktop IDs and prove user-list preservation and visual/restore behavior."
     },
     {
       "key": "workstation:setting.GnomeDefaultFavorites",
@@ -2869,13 +2925,17 @@
       "batch": "desktop-user-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen only if a current edition-specific default reset is requested with exact prior-list recovery.",
+      "v31Hardening": [],
+      "reason": "v2 library-only Fedora 37-era hard-coded favorites snapshot is not the Fedora 44 default contract.",
+      "reviewTrigger": "Reopen only if a current edition-specific default reset is requested with exact prior-list recovery."
     },
     {
       "key": "workstation:setting.GnomeMinimalFavorites",
@@ -2887,13 +2947,17 @@
       "batch": "desktop-user-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add opt-in minimal favorites with exact list recovery and a brief visual check.",
+      "v31Hardening": [],
+      "reason": "v2 replaces the full user favorites list without snapshot or inverse.",
+      "reviewTrigger": "Add opt-in minimal favorites with exact list recovery and a brief visual check."
     },
     {
       "key": "workstation:setting.GnmLocationServiceOff",
@@ -3050,13 +3114,17 @@
       "batch": "desktop-user-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: User shell configuration must preserve unowned content.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Implement an owned shell block or fragment with seeded-file and exact rollback tests.",
+      "v31Hardening": [],
+      "reason": "v2 appends to .bashrc and inverse deletes all .bash_aliases lines, including user content.",
+      "reviewTrigger": "Implement an owned shell block or fragment with seeded-file and exact rollback tests."
     },
     {
       "key": "workstation:setting.AliasLsEza",
@@ -3069,13 +3137,17 @@
       "batch": "desktop-user-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: User shell configuration must preserve unowned content.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Add an owned alias entry with existing-ls conflict and exact-file restore checks.",
+      "v31Hardening": [],
+      "reason": "v2 appends ls=eza to .bash_aliases but inverse removes ride-log lines instead.",
+      "reviewTrigger": "Add an owned alias entry with existing-ls conflict and exact-file restore checks."
     },
     {
       "key": "workstation:setting.AliasWanIP",
@@ -3088,13 +3160,17 @@
       "batch": "desktop-user-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "unsupported",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred: User shell configuration must preserve unowned content.",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Choose a maintained resolver and owned shell fragment with offline plan, conflict, and restore tests.",
+      "v31Hardening": [],
+      "reason": "v2 appends three external-DNS aliases and inverse uses a broad line deletion.",
+      "reviewTrigger": "Choose a maintained resolver and owned shell fragment with offline plan, conflict, and restore tests."
     },
     {
       "key": "workstation:setting.AliasRideLog",
@@ -3107,13 +3183,17 @@
       "batch": "desktop-user-05",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "review",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
-      "evidence": [],
-      "blocker": "Current v2 intent, upstream source, and safe inverse have not been reviewed for this outcome.",
-      "nextAction": "deferred; inspect exact prior value, ownership, applicability and restore",
-      "v31Hardening": []
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "blocker": "",
+      "nextAction": "Reopen as a read-only v3 run-log command only if users request it.",
+      "v31Hardening": [],
+      "reason": "v2 alias points at obsolete bootstrap-installer logs; inverse edits a different shell file.",
+      "reviewTrigger": "Reopen as a read-only v3 run-log command only if users request it."
     },
     {
       "key": "workstation:package.Lynis",
@@ -4386,8 +4466,10 @@
       "id": "desktop-user-01",
       "family": "desktop-user",
       "title": "Desktop and user state 01: SetupUserDefaultDirs, FirefoxPreferences",
-      "evidence": [],
-      "nextAction": "Assess SetupUserDefaultDirs, FirefoxPreferences; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
     },
     {
       "id": "desktop-user-02",
@@ -4404,8 +4486,10 @@
       "id": "desktop-user-03",
       "family": "desktop-user",
       "title": "Desktop and user state 03: custom shortcuts and favorites with safe inverse",
-      "evidence": [],
-      "nextAction": "Assess CustomKeyboardShortcut, GnomeCustomFavorites; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
     },
     {
       "id": "desktop-user-04",
@@ -4422,29 +4506,37 @@
       "id": "desktop-user-05",
       "family": "desktop-user",
       "title": "Desktop and user state 05: BashAliases, AliasLsEza, AliasWanIP, ChromePreferences, AliasRideLog, CheckFirefoxAddons",
-      "evidence": [],
-      "nextAction": "Assess BashAliases, AliasLsEza, AliasWanIP, ChromePreferences, AliasRideLog, CheckFirefoxAddons; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
     },
     {
       "id": "desktop-user-06",
       "family": "desktop-user",
       "title": "Desktop and user state 06: FinalizeFirefoxAddonRemoval",
-      "evidence": [],
-      "nextAction": "Assess FinalizeFirefoxAddonRemoval; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
     },
     {
       "id": "desktop-user-07",
       "family": "desktop-user",
       "title": "Desktop and user state 07: window controls and screensaver variants",
-      "evidence": [],
-      "nextAction": "Assess WindowCtlAppmenuClose, WindowCtlLeftClsMinMax, ScreensaverSlp15Lgn5; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
     },
     {
       "id": "desktop-user-08",
       "family": "desktop-user",
       "title": "Desktop and user state 08: VMKeyboardShortcut, GnomeDefaultFavorites, GnomeMinimalFavorites",
-      "evidence": [],
-      "nextAction": "Assess VMKeyboardShortcut, GnomeDefaultFavorites, GnomeMinimalFavorites; record user-owned data, exact prior state, inverse, and VM criteria."
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
     },
     {
       "id": "desktop-user-09",
@@ -4461,8 +4553,19 @@
       "id": "desktop-user-10",
       "family": "desktop-user",
       "title": "Terminator and user iBus hotkey",
-      "evidence": [],
-      "nextAction": "Assess the package and exact user-owned hotkey baseline before implementing a reversible setting."
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep the v3.0 decision visible; reopen individual outcomes only on their documented ownership and recovery triggers."
+    },
+    {
+      "id": "desktop-user-11",
+      "family": "desktop-user",
+      "title": "Desktop and user state 11: lock and idle settings",
+      "evidence": [
+        "docs/migrations/desktop-user-remaining.md"
+      ],
+      "nextAction": "Keep both lock-setting variants non-runnable until atomic prior-state, partial-failure, and session-safety evidence passes."
     },
     {
       "id": "system-security-01",

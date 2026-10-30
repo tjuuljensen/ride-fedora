@@ -514,3 +514,19 @@ tracks that Linux recovery limit before support promotion. No unexplained
 shared-contract drift was found. Recheck if Windows adds a corresponding
 user-setting contract, Linux changes run-state representation, or release
 review begins.
+
+### Remaining desktop and user-state decisions, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `0ff139f` for the
+[remaining desktop review](migrations/desktop-user-remaining.md). These
+decisions add no Linux catalog handler, profile, or run-state field. Windows
+has a Chrome package deployment but its machine MSI and Windows policy do
+not establish an owned Linux browser or Linux initial-preferences inverse.
+The existing Linux Firefox policy helper remains an explicit standalone
+workflow, while its three-file v2 preference overwrite is unresolved as an
+owned security policy. GNOME shortcuts, favorites, dconf state, Bash user
+files, and iBus bindings are Linux user-state ownership questions, not
+Windows installer behavior. No unexplained shared-contract drift was found.
+Recheck if either client adds a shared browser preference or user-state
+recovery contract, and before release review.

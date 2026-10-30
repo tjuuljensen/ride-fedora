@@ -65,7 +65,7 @@ class MigrationProgressTests(unittest.TestCase):
     def test_non_operable_resolution_needs_evidence(self):
         data = copy.deepcopy(self.data)
         row = data["outcomes"][0]
-        row.update(disposition="retire", progress="resolved", blocker="")
+        row.update(disposition="retire", progress="resolved", blocker="", evidence=[])
         with self.assertRaisesRegex(ValueError, "documented non-operable resolution"):
             self.validate_copy(data)
 
