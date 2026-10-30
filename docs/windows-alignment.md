@@ -609,3 +609,18 @@ remaining v2 source decisions add no shared contract fields. No unexplained
 catalog, profile, or run-state drift was found at this comparison. Recheck
 before a v3 tag if the Windows branch advances or a shared product or state
 contract is proposed.
+
+### Fedora Server qBittorrent package preflight, 2026-10-30
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `d91c44b` before adding
+`package.qbittorrent-nox`. Since the prior Windows review at `4c90577`, its
+catalog and default profile gained Windows-specific settings, while the
+catalog schema version remains 1 and no run-state module changed. Windows
+has no qBittorrent product row. The Linux row uses the existing Fedora RPM
+provider, package-only system scope, `installed`/`local-installed` metadata,
+and unchanged package journal. It does not transfer the server service,
+firewall, user, credentials, or downloads from `network-devices`. No shared
+package, profile, or run-state contract change is introduced. Recheck if
+Windows adds qBittorrent, either client changes installed-deployment
+identity, or the server service is migrated.

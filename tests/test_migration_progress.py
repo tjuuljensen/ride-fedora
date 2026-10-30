@@ -106,7 +106,7 @@ class MigrationProgressTests(unittest.TestCase):
         self.assertEqual(coverage["replaced"], 1)
         self.assertEqual(coverage["gap"], 105)
         server_batch = next(batch for batch in report["batches"] if batch["id"] == "generic-server-15")
-        self.assertEqual(server_batch["complete"], 1)
+        self.assertEqual(server_batch["complete"], 0)
         self.assertEqual(server_batch["v30Operable"], 0)
         self.assertEqual(server_batch["v30Gap"], 1)
 

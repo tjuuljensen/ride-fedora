@@ -4381,17 +4381,20 @@
       "batch": "generic-server-15",
       "risk": "medium",
       "target": "fedora-44-server-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/v30-path-reassessment.md"
+      "disposition": "migrate",
+      "progress": "implemented",
+      "v3Ids": [
+        "package.qbittorrent-nox"
       ],
-      "blocker": "",
-      "nextAction": "Owner kept server qBittorrent; install Fedora qbittorrent-nox as a package, then own service user and preserve firewall, credentials, settings, and downloads.",
+      "evidence": [
+        "docs/migrations/generic-server-15.md",
+        "tests/acceptance/test_server_qbittorrent.py"
+      ],
+      "blocker": "Pinned Fedora 44 Server VM lifecycle has not run because this session has no /dev/kvm.",
+      "nextAction": "Run the focused package-only Server VM lifecycle, investigate failures, then add opt-in profile and acceptance record before promoting support.",
       "v31Hardening": [],
-      "reason": "Owner kept qBittorrentServer for v3.0 on 2026-10-30; the native RPM and adjacent server state need separate ownership.",
-      "reviewTrigger": "Owner kept server qBittorrent; install Fedora qbittorrent-nox as a package, then own service user and preserve firewall, credentials, settings, and downloads.",
+      "reason": "The active server v2 function installs qbittorrent-nox only; adjacent user, service, firewall, SSH-key, and download behavior remains separately owned in network-devices.",
+      "reviewTrigger": "Recheck source, consumers, package verification, and separate server-state ownership before cross-repository transfer or broader profiles.",
       "v30Decision": "keep"
     },
     {
@@ -5424,9 +5427,10 @@
       "family": "generic-server",
       "title": "Generic Server 15: qBittorrentServer",
       "evidence": [
-        "docs/migrations/v30-path-reassessment.md"
+        "docs/migrations/generic-server-15.md",
+        "tests/acceptance/test_server_qbittorrent.py"
       ],
-      "nextAction": "Owner kept qBittorrentServer; install native RPM and separately own service user, firewall, settings, and downloads."
+      "nextAction": "Run the focused package-only Server VM lifecycle, investigate failures, then add opt-in profile and acceptance record before promoting support."
     },
     {
       "id": "generic-server-16",

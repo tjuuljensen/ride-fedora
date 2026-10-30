@@ -292,7 +292,7 @@ def render(data: dict) -> str:
              f"{report['v30PackageSetting']['total']} operable ({report['v30PackageSetting']['percent']}%)**; "
              f"{report['v30PackageSetting']['retired']} owner-retired capabilities; "
              f"{report['v30PackageSetting']['replaced']} functional standalone replacements; "
-             f"{report['v30PackageSetting']['gap']} still need a v3.0 decision or path "
+             f"{report['v30PackageSetting']['gap']} still lack operable v3.0 coverage "
              f"({report['v30PackageSetting']['kept']} kept for work, "
              f"{report['v30PackageSetting']['deferred']} explicitly deferred). "
              f"{report['v30PackageSetting']['ledgered']} are tracked in the ledger; "

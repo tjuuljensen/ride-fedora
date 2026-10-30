@@ -228,12 +228,12 @@ v3 catalog ID and are not selected by a profile.
 | `package.ExpressVPN` | `InstallExpressVPN` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-09` / resolved |
 | `action.CreateVPNrandomizer` | `CreateVPNrandomizer` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-10` / resolved |
 | `setting.VPNRandomizerPersistent` | `SetVPNRandomizerPersistent` | complete, streambox | plexserver | deferred opt-in VPN profile; keep provider account and host routing private | `generic-server-11` / resolved |
-| `package.qBittorrentServer` | `InstallqBittorrentServer` | complete, streambox | plexserver | deferred optional server operation; verify current package/source, state and recovery | `generic-server-15` / unresolved |
-| `package.PlexServer` | `InstallPlexServer` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-16` / unresolved |
-| `package.PlexAutoUpdate` | `InstallPlexAutoUpdate` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-17` / unresolved |
-| `package.AMP` | `InstallAMP` | complete | — | deferred optional server operation; verify current package/source, state and recovery | `generic-server-18` / unresolved |
-| `package.Ferium` | `InstallFerium` | — | — | deferred optional server operation; verify current package/source, state and recovery | `generic-server-19` / unresolved |
-| `package.MinecraftServer` | `InstallMinecraftServer` | complete | plexserver, streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-20` / unresolved |
+| `package.qBittorrentServer` | `InstallqBittorrentServer` | complete, streambox | plexserver | deferred optional server operation; verify current package/source, state and recovery | `generic-server-15` / implemented |
+| `package.PlexServer` | `InstallPlexServer` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-16` / resolved |
+| `package.PlexAutoUpdate` | `InstallPlexAutoUpdate` | complete, plexserver | streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-17` / resolved |
+| `package.AMP` | `InstallAMP` | complete | — | deferred optional server operation; verify current package/source, state and recovery | `generic-server-18` / resolved |
+| `package.Ferium` | `InstallFerium` | — | — | deferred optional server operation; verify current package/source, state and recovery | `generic-server-19` / resolved |
+| `package.MinecraftServer` | `InstallMinecraftServer` | complete | plexserver, streambox | deferred optional server operation; verify current package/source, state and recovery | `generic-server-20` / resolved |
 
 `RequireAdmin`, `PressAnyKeyToContinue` and `Restart` appear as active server preset
 selectors but are controller flow, not server-library outcomes. The commented
@@ -254,27 +254,23 @@ initial assessment above. The ledger records each reason and review trigger.
 | `workstation:package.NautilusHash` | `retire` | `native-rpm-03` |
 | `workstation:package.NautilusImageTools` | `retire` | `native-rpm-03` |
 | `workstation:package.Flatpak` | `replace` | `provider-foundation-11` |
-| `workstation:package.Galleta` | `retire` | `resolution-review-01` |
-| `workstation:package.Xplico` | `retire` | `resolution-review-01` |
 | `workstation:package.VMFStools` | `retire` | `forensic-isolated-01` |
 | `workstation:package.Volatility` | `retire` | `forensic-isolated-02` |
 | `workstation:package.Macvendor` | `replace` | `forensic-isolated-03` |
 | `workstation:package.Dumpzilla` | `retire` | `forensic-isolated-03` |
 | `workstation:package.PackagingTools` | `replace` | `provider-foundation-03` |
-| `workstation:package.MicrosoftTeams` | `replace` | `publisher-apps-09` |
+| `workstation:package.MicrosoftTeams` | `retire` | `publisher-apps-09` |
 | `workstation:package.AtomEditor` | `retire` | `publisher-apps-10` |
 | `workstation:setting.AtomTelemetry` | `retire` | `resolution-review-01` |
 | `workstation:package.AtomPlugins` | `retire` | `publisher-apps-10` |
-| `workstation:package.TecmintMonitorSh` | `retire` | `resolution-review-01` |
 | `workstation:action.CheckFirefoxAddons` | `replace` | `desktop-user-05` |
 | `workstation:package.FirefoxAddons` | `replace` | `publisher-apps-04` |
 | `workstation:action.FinalizeFirefoxAddonRemoval` | `replace` | `desktop-user-06` |
-| `workstation:setting.Screensaver` | `retire` | `resolution-review-01` |
-| `workstation:setting.GnomeDefaultFavorites` | `retire` | `desktop-user-08` |
 | `workstation:setting.AliasRideLog` | `retire` | `desktop-user-05` |
 | `workstation:package.YubikeyManager` | `replace` | `publisher-apps-08` |
 | `workstation:package.YubikeyPersTool` | `replace` | `publisher-apps-14` |
 | `workstation:package.SonosPlayer` | `retire` | `publisher-apps-09` |
+| `workstation:package.VMwareWorkstation` | `retire` | `system-security-13` |
 | `server:action.ViewIPaddress` | `retire` | `generic-server-04` |
 
 ## Closeout rules

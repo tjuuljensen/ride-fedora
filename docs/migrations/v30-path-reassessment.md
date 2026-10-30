@@ -14,8 +14,9 @@ The current ledger has 133 package and 36 setting outcomes. Only 54 of those
 were previously excluded and are now assigned review batches. That makes
 **169 in-scope package/setting capabilities, 54 currently operable, nine
 owner-retired, one standalone functional replacement, and 105 still needing
-an operable v3.0 path**. The ledger's 185 dispositioned outcomes out of
-185 measure recorded decisions, not this v3.0 capability coverage.
+an operable v3.0 path**. The ledger's 184 dispositioned outcomes out of
+185 include one source-ready package awaiting Server VM acceptance; this
+measure records reviewed decisions, not v3.0 capability coverage.
 The two Citrix and two Opera functions remain explicitly out of scope. Host-specific
 users, shares, secrets, and IP values remain outside the public catalog;
 generic package behavior can be modeled without publishing them.

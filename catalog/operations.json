@@ -1044,6 +1044,45 @@
       "artifactFormat": "rpm"
     },
     {
+      "id": "package.qbittorrent-nox",
+      "kind": "package",
+      "name": "qBittorrent headless package",
+      "group": "server-apps",
+      "description": "Install the Fedora headless qBittorrent RPM without creating a user, service, firewall rule, or profile.",
+      "handler": "dnf-package",
+      "packageName": "qbittorrent-nox",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "server"
+          ]
+        }
+      },
+      "productId": "qbittorrent",
+      "productUri": "https://www.qbittorrent.org/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/qbittorrent/qbittorrent-nox/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/qbittorrent/qbittorrent-nox/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
       "id": "package.thunderbird",
       "kind": "package",
       "name": "Thunderbird mail client",

@@ -3,9 +3,9 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**185/185 dispositioned (100.0%)**: 28 supported, 26 opt-in candidate, 12 replaced, 13 retired, 0 private, 106 unsupported; 0 unresolved.
+**184/185 dispositioned (99.5%)**: 28 supported, 26 opt-in candidate, 12 replaced, 13 retired, 0 private, 105 unsupported; 1 unresolved.
 
-**v3.0 package/setting coverage: 54/169 operable (32.0%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 105 still need a v3.0 decision or path (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
+**v3.0 package/setting coverage: 54/169 operable (32.0%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 105 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
 
 For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.
 
@@ -108,7 +108,7 @@ Runnable outcomes: 54; 26 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `generic-server-14` | Generic Server 14: Tailscale | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [generic-server-decisions.md](../../docs/migrations/generic-server-decisions.md) | Owner kept Tailscale; verify publisher package source and preserve node identity, tailnet, and service state. |
 | `resolution-review-01` | Resolution Review 01: TecmintMonitorSh, ScreenSaver, Screensaver, Galleta, Xplico, AtomTelemetry | medium 6 | 6/6 | 0/6 | 1 | 0 | 5 | [resolution-decisions.md](../../docs/migrations/resolution-decisions.md) | Owner kept Xplico and monitoring; compare pinned Xplico or Zeek paths and Fedora Glances, while deferred Galleta and screensaver choices remain open. |
 | `publisher-apps-17` | Publisher Apps 17: GNOME user extension bundle | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [publisher-apps-17.md](../../docs/migrations/publisher-apps-17.md) | Owner deferred GNOME Extensions; review IDs, GNOME 50 compatibility, pinned artifacts, and seeded user-extension recovery. |
-| `generic-server-15` | Generic Server 15: qBittorrentServer | medium 1 | 1/1 | 0/1 | 0 | 0 | 1 | [v30-path-reassessment.md](../../docs/migrations/v30-path-reassessment.md) | Owner kept qBittorrentServer; install native RPM and separately own service user, firewall, settings, and downloads. |
+| `generic-server-15` | Generic Server 15: qBittorrentServer | medium 1 | 0/1 | 0/1 | 0 | 0 | 1 | [generic-server-15.md](../../docs/migrations/generic-server-15.md), [test_server_qbittorrent.py](../../tests/acceptance/test_server_qbittorrent.py) | Run the focused package-only Server VM lifecycle, investigate failures, then add opt-in profile and acceptance record before promoting support. |
 | `generic-server-16` | Generic Server 16: PlexServer | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [v30-path-reassessment.md](../../docs/migrations/v30-path-reassessment.md) | Owner kept PlexServer; review signed publisher RPM and prove media, metadata, account, and service recovery. |
 | `generic-server-17` | Generic Server 17: PlexAutoUpdate | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [v30-path-reassessment.md](../../docs/migrations/v30-path-reassessment.md) | Owner kept Plex update capability; first reconcile official repository updates with server AutoUpdate and Cockpit settings. |
 | `generic-server-18` | Generic Server 18: AMP | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [v30-path-reassessment.md](../../docs/migrations/v30-path-reassessment.md) | Owner kept AMP; find pinned licensed source and preserve private license, instances, ports, users, and data. |
