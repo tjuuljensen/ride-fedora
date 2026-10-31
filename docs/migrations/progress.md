@@ -3,13 +3,13 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**185/185 dispositioned (100.0%)**: 31 supported, 37 opt-in candidate, 11 replaced, 11 retired, 0 private, 95 unsupported; 0 unresolved.
+**185/185 dispositioned (100.0%)**: 32 supported, 37 opt-in candidate, 11 replaced, 11 retired, 0 private, 94 unsupported; 0 unresolved.
 
-**v3.0 package/setting coverage: 68/169 operable (40.2%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 91 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
+**v3.0 package/setting coverage: 69/169 operable (40.8%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 90 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
 
 For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.
 
-Runnable outcomes: 68; 37 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
+Runnable outcomes: 69; 37 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
 
 | Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 retired | v3.0 replaced | v3.0 gap | Evidence | Next action |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -83,7 +83,7 @@ Runnable outcomes: 68; 37 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `system-security-16` | System Security 16: EncryptUnpartitionedDisks | high 1 | 1/1 | 0/0 | 0 | 0 | 0 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger. |
 | `system-security-17` | System Security 17: ReclaimEncryptDWUnmntPrt | high 1 | 1/1 | 0/0 | 0 | 0 | 0 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger. |
 | `system-security-18` | System Security 18: SSHreboot | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner kept SSH reboot policy; design private principal, scoped sudoers validation, and seeded-policy recovery. |
-| `system-security-19` | System Security 19: Wireguard | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner kept WireGuard; separate RPM from private keys and prove seeded-key and connection recovery. |
+| `system-security-19` | System Security 19: Wireguard | high 1 | 1/1 | 1/1 | 0 | 0 | 0 | [system-security-wireguard.md](../../docs/acceptance/system-security-wireguard.md), [system-security-wireguard-01.md](../../docs/migrations/system-security-wireguard-01.md) | Keep the local tools and key pair opt-in; review interface and peer behavior under H032. |
 | `system-security-20` | System Security 20: VPNProfiles | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner deferred a separate VPNProfiles inverse; determine whether owned deployment inverses cover it while preserving unrelated profiles. |
 | `system-security-21` | System Security 21: ExpressVPNProfiles | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner deferred a separate ExpressVPNProfiles inverse; determine whether the kept deployment covers UUID-scoped removal. |
 | `system-security-22` | System Security 22: ExpressVPNafterBoot | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [system-security-risk-decisions.md](../../docs/migrations/system-security-risk-decisions.md) | Owner kept ExpressVPNafterBoot; design an exact inverse of an owned boot schedule that preserves unrelated jobs. |
@@ -154,3 +154,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H029` | Chepy dependency, plugin, transformation, and update behavior | After Fedora 44 Workstation Python 3.12 and pinned Chepy sdist lifecycle acceptance, lock transitive dependency hashes, test optional plugins and representative transformations, and review version updates with owned recovery. | queued |
 | `H030` | UPower warning behavior on battery hardware | After the opt-in 15- and 20-percent UPower drop-in lifecycles pass on Fedora 44 Workstation, verify warning transitions on a disposable battery-capable target without risking production power state. | queued |
 | `H031` | OpenConnect protocol, routing, credentials, and GNOME dialog | After the Fedora 44 OpenConnect CLI, routing helper, and GNOME editor package lifecycles pass, test a private disposable Juniper-compatible endpoint, DNS and route changes, secret handling, and connection recovery without changing unrelated profiles. | queued |
+| `H032` | WireGuard interfaces, peer configuration, and key rotation | After Fedora 44 package and owned local key-pair recovery pass, test NetworkManager or wg-quick interface creation, peer and endpoint configuration, route changes, key rotation, and recovery on a private disposable endpoint without exposing private keys. | queued |

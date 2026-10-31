@@ -1976,17 +1976,19 @@
       "batch": "system-security-19",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.wireguard-tools",
+        "setting.wireguard-keypair"
+      ],
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-wireguard.md",
+        "docs/migrations/system-security-wireguard-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept WireGuard; separate the signed RPM from private key and connection state, and prove seeded-key preservation before making the operation runnable.",
-      "v31Hardening": [],
-      "reason": "Owner kept WireGuard for v3.0 on 2026-10-30; the v2 recursive key-directory removal remains unsafe.",
-      "reviewTrigger": "Owner kept WireGuard; separate the signed RPM from private key and connection state, and prove seeded-key preservation before making the operation runnable.",
+      "nextAction": "Keep local key-pair tools opt-in; review interface, peer, route, and rotation behavior under H032 before extending the operation.",
+      "v31Hardening": ["H032"],
       "v30Decision": "keep"
     },
     {
@@ -5281,9 +5283,10 @@
       "family": "system-security",
       "title": "System Security 19: Wireguard",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-wireguard.md",
+        "docs/migrations/system-security-wireguard-01.md"
       ],
-      "nextAction": "Owner kept WireGuard; separate RPM from private keys and prove seeded-key and connection recovery."
+      "nextAction": "Keep the local tools and key pair opt-in; review interface and peer behavior under H032."
     },
     {
       "id": "system-security-20",
@@ -5821,6 +5824,12 @@
       "id": "H031",
       "title": "OpenConnect protocol, routing, credentials, and GNOME dialog",
       "trigger": "After the Fedora 44 OpenConnect CLI, routing helper, and GNOME editor package lifecycles pass, test a private disposable Juniper-compatible endpoint, DNS and route changes, secret handling, and connection recovery without changing unrelated profiles.",
+      "status": "queued"
+    },
+    {
+      "id": "H032",
+      "title": "WireGuard interfaces, peer configuration, and key rotation",
+      "trigger": "After Fedora 44 package and owned local key-pair recovery pass, test NetworkManager or wg-quick interface creation, peer and endpoint configuration, route changes, key rotation, and recovery on a private disposable endpoint without exposing private keys.",
       "status": "queued"
     }
   ]

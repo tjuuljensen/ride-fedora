@@ -831,3 +831,15 @@ these three rows from candidate to supported adds only status and acceptance
 links; the Linux source, handler, target, profile order, and run-state schema
 stay the same. Windows still has no matching OpenConnect operation. Recheck
 the package and connection contracts before any broader VPN behavior ships.
+
+### Fedora WireGuard tools and local key pair, 2026-10-31
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` before adding the WireGuard RPM and local
+key-pair operation. Windows has no matching WireGuard operation. Linux reuses
+the existing DNF contract and adds a Linux-only exact-state handler with a
+dedicated ownership marker; no shared schema or run-state field changes were
+made. The Fedora 44 Workstation VM passed the owned key-pair lifecycle before
+promotion. Recheck if Windows adds key management, Linux changes secret
+journaling or ownership semantics, or interface and peer management expands
+the shared VPN contract.

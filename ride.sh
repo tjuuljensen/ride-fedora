@@ -47,6 +47,8 @@ source "$RIDE_ROOT/lib/v3/common.sh"
 source "$RIDE_ROOT/lib/v3/catalog.sh"
 # shellcheck source=lib/v3/providers.sh
 source "$RIDE_ROOT/lib/v3/providers.sh"
+# shellcheck source=lib/v3/wireguard.sh
+source "$RIDE_ROOT/lib/v3/wireguard.sh"
 # shellcheck source=lib/v3/state.sh
 source "$RIDE_ROOT/lib/v3/state.sh"
 # shellcheck source=lib/v3/github.sh
@@ -199,6 +201,8 @@ ride_preflight_change() {
   ride_require_privilege "$entry"
   if [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
     ride_upower_guard "$(jq -r '.selectedValue' <<< "$entry")"
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == wireguard-keypair ]]; then
+    ride_wireguard_preflight
   fi
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")

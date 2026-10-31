@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "upower-threshold")) and
+      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "upower-threshold", "wireguard-keypair")) and
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
@@ -73,6 +73,9 @@ ride_validate_catalog() {
          .id == "setting.upower-percentage-low" and .states == ["configured"] and
          .valueKind == "percentage-low" and .recovery == "exact-state" and
          .verification == "local-upower-config")
+       elif .handler == "wireguard-keypair" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.wireguard-keypair" and .states == ["configured", "absent"] and
+         .recovery == "exact-state" and .verification == "local-wireguard-keypair")
        elif .handler == "python-venv" then (.kind == "package" and
          (if .id == "package.chepy" then
            .scope == "user" and .artifactFormat == "sdist" and .sourceId == "pypi-sdist-venv" and
