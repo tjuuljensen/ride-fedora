@@ -378,17 +378,16 @@
       "batch": "provider-foundation-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.flathub-system-remote"],
       "evidence": [
+        "docs/acceptance/system-flathub-remote.md",
         "docs/migrations/provider-foundation-09.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept Flathub for v3.0 on 2026-10-30. Own a fixed-scope remote and safe inverse; enable Flatpak applications as separate deployments that may coexist with RPM editions after product-specific conflict review.",
-      "v31Hardening": [],
-      "reason": "The active v2 remote-add has no owned remote journal and its inverse is not remote-delete; v3 lacks a scoped Flatpak remote handler and app-preserving inverse.",
-      "reviewTrigger": "An explicit Flathub use case with URL/key detection, ownership-aware system or user remote handler, attached-app refusal, and Fedora 44 Workstation VM acceptance.",
+      "nextAction": "Keep the remote opt-in; migrate app deployments separately and review RPM/Flatpak coexistence by product. H033 tracks broader app and GUI behavior.",
+      "v31Hardening": ["H033"],
       "v30Decision": "keep"
     },
     {
@@ -4725,9 +4724,10 @@
       "family": "provider-foundation",
       "title": "Flathub remote ownership and recovery",
       "evidence": [
+        "docs/acceptance/system-flathub-remote.md",
         "docs/migrations/provider-foundation-09.md"
       ],
-      "nextAction": "Owner kept Flathub; implement owned remote lifecycle and separate Flatpak deployments that can coexist with RPM editions after product conflict review."
+      "nextAction": "Keep Flathub system remote opt-in; migrate app deployments separately and review RPM/Flatpak coexistence by product."
     },
     {
       "id": "provider-foundation-10",
@@ -5830,6 +5830,12 @@
       "id": "H032",
       "title": "WireGuard interfaces, peer configuration, and key rotation",
       "trigger": "After Fedora 44 package and owned local key-pair recovery pass, test NetworkManager or wg-quick interface creation, peer and endpoint configuration, route changes, key rotation, and recovery on a private disposable endpoint without exposing private keys.",
+      "status": "queued"
+    },
+    {
+      "id": "H033",
+      "title": "Flatpak application behavior and RPM coexistence",
+      "trigger": "After the Fedora 44 system Flathub remote lifecycle passes, migrate selected app deployments separately and verify app install/update/removal, per-app user data recovery, and coexistence with installed RPM editions without shared product-wide exclusions.",
       "status": "queued"
     }
   ]

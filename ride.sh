@@ -49,6 +49,8 @@ source "$RIDE_ROOT/lib/v3/catalog.sh"
 source "$RIDE_ROOT/lib/v3/providers.sh"
 # shellcheck source=lib/v3/wireguard.sh
 source "$RIDE_ROOT/lib/v3/wireguard.sh"
+# shellcheck source=lib/v3/flatpak.sh
+source "$RIDE_ROOT/lib/v3/flatpak.sh"
 # shellcheck source=lib/v3/state.sh
 source "$RIDE_ROOT/lib/v3/state.sh"
 # shellcheck source=lib/v3/github.sh
@@ -203,6 +205,8 @@ ride_preflight_change() {
     ride_upower_guard "$(jq -r '.selectedValue' <<< "$entry")"
   elif [[ "$(jq -r '.handler' <<< "$entry")" == wireguard-keypair ]]; then
     ride_wireguard_preflight
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == flatpak-remote ]]; then
+    ride_flathub_preflight "$desired"
   fi
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")

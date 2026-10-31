@@ -843,3 +843,14 @@ made. The Fedora 44 Workstation VM passed the owned key-pair lifecycle before
 promotion. Recheck if Windows adds key management, Linux changes secret
 journaling or ownership semantics, or interface and peer management expands
 the shared VPN contract.
+
+### Fedora system Flathub remote, 2026-10-31
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` before adding the system Flathub remote.
+Windows has no matching Flatpak remote or app deployment operation. Linux
+adds a setting handler and an owned marker under RIDE's system state; no shared
+schema or run-journal fields change. Fedora 44 Workstation acceptance passed
+before marking the operation an opt-in candidate. Recheck if Windows gains
+Flatpak deployment behavior or Linux changes remote ownership, GPG, or
+recovery semantics.

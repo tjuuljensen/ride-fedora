@@ -45,7 +45,7 @@
         "name": {"type": "string", "minLength": 1},
         "group": {"type": "string", "pattern": "^[a-z0-9-]+$"},
         "description": {"type": "string", "minLength": 1},
-        "handler": {"enum": ["dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "upower-threshold", "wireguard-keypair"]},
+        "handler": {"enum": ["dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "upower-threshold", "wireguard-keypair", "flatpak-remote"]},
         "distribution": {"const": "installed"},
         "deploymentId": {"const": "local-installed"},
         "artifactFormat": {"enum": ["rpm", "wheel", "script", "zip", "sdist"]},
@@ -72,7 +72,7 @@
         "sourceUri": {"type": "string", "pattern": "^https://"},
         "sourceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "licenseSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "local-gsettings-state", "local-upower-config", "local-wireguard-keypair", "github-release-sha256-observed", "github-release-api-sha256", "github-commit-sha256-observed", "pypi-pinned-sha256", "pypi-sdist-sha256"]}
+        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "local-gsettings-state", "local-upower-config", "local-wireguard-keypair", "local-flatpak-remote", "github-release-sha256-observed", "github-release-api-sha256", "github-commit-sha256-observed", "pypi-pinned-sha256", "pypi-sdist-sha256"]}
       },
       "allOf": [
         {"if": {"properties": {"kind": {"const": "package"}}}, "then": {"required": ["distribution", "deploymentId", "artifactFormat", "sourceId"], "oneOf": [{"properties": {"states": {"const": ["installed", "absent"]}, "recovery": {"const": "remove-new-install"}}}, {"properties": {"states": {"const": ["installed"]}, "recovery": {"const": "none"}}}]}, "else": {"not": {"anyOf": [{"required": ["distribution"]}, {"required": ["deploymentId"]}, {"required": ["artifactFormat"]}, {"required": ["sourceId"]}, {"required": ["sourceProviders"]}]}}},
@@ -83,6 +83,7 @@
         {"if": {"properties": {"handler": {"const": "gsettings-string"}}}, "then": {"required": ["valueKind"], "properties": {"id": {"enum": ["setting.gnome-region", "setting.gnome-window-buttons"]}, "kind": {"const": "setting"}, "scope": {"const": "user"}, "states": {"const": ["configured"]}, "valueKind": {"enum": ["locale", "window-buttons"]}, "verification": {"const": "local-gsettings-state"}, "recovery": {"const": "exact-state"}}}},
         {"if": {"properties": {"handler": {"const": "upower-threshold"}}}, "then": {"required": ["valueKind"], "properties": {"id": {"const": "setting.upower-percentage-low"}, "kind": {"const": "setting"}, "scope": {"const": "system"}, "states": {"const": ["configured"]}, "valueKind": {"const": "percentage-low"}, "verification": {"const": "local-upower-config"}, "recovery": {"const": "exact-state"}}}},
         {"if": {"properties": {"handler": {"const": "wireguard-keypair"}}}, "then": {"properties": {"id": {"const": "setting.wireguard-keypair"}, "kind": {"const": "setting"}, "scope": {"const": "system"}, "states": {"const": ["configured", "absent"]}, "verification": {"const": "local-wireguard-keypair"}, "recovery": {"const": "exact-state"}}}},
+        {"if": {"properties": {"handler": {"const": "flatpak-remote"}}}, "then": {"properties": {"id": {"const": "setting.flathub-system-remote"}, "kind": {"const": "setting"}, "scope": {"const": "system"}, "states": {"const": ["configured", "absent"]}, "verification": {"const": "local-flatpak-remote"}, "recovery": {"const": "exact-state"}}}},
         {"if": {"properties": {"handler": {"const": "github-asset"}}}, "then": {"required": ["githubRepository", "assetSuffix", "maxBytes"], "properties": {"kind": {"const": "artifact"}, "states": {"const": ["downloaded"]}}}},
         {"if": {"properties": {"handler": {"const": "python-venv"}}}, "then": {"properties": {"id": {"enum": ["package.volatility3", "package.dfir-unfurl", "package.chepy"]}, "kind": {"const": "package"}, "artifactFormat": {"enum": ["wheel", "sdist"]}, "states": {"const": ["installed", "absent"]}}}},
         {"if": {"properties": {"id": {"const": "package.chepy"}}}, "then": {"required": ["sourceSha256"], "properties": {"handler": {"const": "python-venv"}, "scope": {"const": "user"}, "artifactFormat": {"const": "sdist"}, "sourceId": {"const": "pypi-sdist-venv"}, "verification": {"const": "pypi-sdist-sha256"}, "sourceUri": {"const": "https://files.pythonhosted.org/packages/3f/4c/b8bc1607c96e1df206912e4db82ace5adfb2fe9dce5926fd7860d265fa58/chepy-7.6.0.tar.gz"}, "sourceSha256": {"const": "f6084689e43d128748c18f79c79d75539abb67ac8245e950b678cfa0da2f5010"}}}},

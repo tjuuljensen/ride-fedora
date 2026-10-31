@@ -3,13 +3,13 @@
 Generated from `migration/outcomes.json`; run `python3 tools/migration_progress.py --summary` for a current CLI view.
 Source outcomes are counted separately from catalog operations. A disposition is not a working install.
 
-**185/185 dispositioned (100.0%)**: 32 supported, 37 opt-in candidate, 11 replaced, 11 retired, 0 private, 94 unsupported; 0 unresolved.
+**185/185 dispositioned (100.0%)**: 32 supported, 38 opt-in candidate, 11 replaced, 11 retired, 0 private, 93 unsupported; 0 unresolved.
 
-**v3.0 package/setting coverage: 69/169 operable (40.8%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 90 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
+**v3.0 package/setting coverage: 70/169 operable (41.4%)**; 9 owner-retired capabilities; 1 functional standalone replacements; 89 still lack operable v3.0 coverage (90 kept for work, 16 explicitly deferred). 169 are tracked in the ledger; 0 in-scope package outcomes remain unledgered. Documented decisions do not count as operable behavior.
 
 For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.
 
-Runnable outcomes: 69; 37 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
+Runnable outcomes: 70; 38 require `--allow-candidate`. Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.
 
 | Batch | Family | Risk | Dispositioned | v3.0 operable | v3.0 retired | v3.0 replaced | v3.0 gap | Evidence | Next action |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -26,7 +26,7 @@ Runnable outcomes: 69; 37 require `--allow-candidate`. Owner exclusions: 2 Citri
 | `provider-foundation-06` | Split Security Lab DNF group | medium 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-06.md](../../docs/migrations/provider-foundation-06.md) | Owner kept Security Lab capability; inventory the 137-package Fedora group, reuse accepted package evidence, and define a bounded opt-in tool set. |
 | `provider-foundation-07` | HandBrake RPM Fusion source and package split | medium 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-07.md](../../docs/migrations/provider-foundation-07.md) | Owner kept HandBrake; choose CLI or GUI distribution, complete RPM Fusion trust/recovery, and run brief Fedora 44 VM lifecycle. |
 | `provider-foundation-08` | Eza Fedora and GitHub source ownership | medium 2 | 2/2 | 1/2 | 0 | 0 | 1 | [provider-foundation-08.md](../../docs/migrations/provider-foundation-08.md), [package.eza.md](../../docs/acceptance/package.eza.md) | Owner kept portable Eza; design pinned upstream artifact and owned destination beside the accepted Fedora RPM. |
-| `provider-foundation-09` | Flathub remote ownership and recovery | medium 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-09.md](../../docs/migrations/provider-foundation-09.md) | Owner kept Flathub; implement owned remote lifecycle and separate Flatpak deployments that can coexist with RPM editions after product conflict review. |
+| `provider-foundation-09` | Flathub remote ownership and recovery | medium 1 | 1/1 | 1/1 | 0 | 0 | 0 | [system-flathub-remote.md](../../docs/acceptance/system-flathub-remote.md), [provider-foundation-09.md](../../docs/migrations/provider-foundation-09.md) | Keep Flathub system remote opt-in; migrate app deployments separately and review RPM/Flatpak coexistence by product. |
 | `provider-foundation-10` | GNOME extension installer acquisition and owned path | medium 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-10.md](../../docs/migrations/provider-foundation-10.md) | Owner deferred the GNOME extension helper decision; compare the archived helper with current GNOME extension management. |
 | `provider-foundation-11` | Flatpak runtime and application-preserving inverse | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-11.md](../../docs/migrations/provider-foundation-11.md) | Owner kept Flatpak runtime capability, separate from Flathub; design optional absent-runtime repair preserving apps, remotes, and data. |
 | `provider-foundation-12` | Snapd service and package-manager ownership | high 1 | 1/1 | 0/1 | 0 | 0 | 1 | [provider-foundation-12.md](../../docs/migrations/provider-foundation-12.md) | Owner kept optional Snap enablement for occasional user-selected installs; design daemon/runtime lifecycle and preserve existing snaps and data. |
@@ -155,3 +155,4 @@ These items do not replace v3.0 safety checks for data, storage, encryption, or 
 | `H030` | UPower warning behavior on battery hardware | After the opt-in 15- and 20-percent UPower drop-in lifecycles pass on Fedora 44 Workstation, verify warning transitions on a disposable battery-capable target without risking production power state. | queued |
 | `H031` | OpenConnect protocol, routing, credentials, and GNOME dialog | After the Fedora 44 OpenConnect CLI, routing helper, and GNOME editor package lifecycles pass, test a private disposable Juniper-compatible endpoint, DNS and route changes, secret handling, and connection recovery without changing unrelated profiles. | queued |
 | `H032` | WireGuard interfaces, peer configuration, and key rotation | After Fedora 44 package and owned local key-pair recovery pass, test NetworkManager or wg-quick interface creation, peer and endpoint configuration, route changes, key rotation, and recovery on a private disposable endpoint without exposing private keys. | queued |
+| `H033` | Flatpak application behavior and RPM coexistence | After the Fedora 44 system Flathub remote lifecycle passes, migrate selected app deployments separately and verify app install/update/removal, per-app user data recovery, and coexistence with installed RPM editions without shared product-wide exclusions. | queued |

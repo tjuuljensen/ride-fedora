@@ -57,6 +57,7 @@ ride_observe() {
     gsettings-string) ride_gsettings_string_observe "$entry" ;;
     upower-threshold) ride_upower_observe "$entry" ;;
     wireguard-keypair) ride_wireguard_observe ;;
+    flatpak-remote) ride_flathub_remote_state ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -116,6 +117,7 @@ ride_change() {
     gsettings-string) ride_gsettings_string_change "$entry" "$state" ;;
     upower-threshold) ride_upower_change "$entry" "$state" ;;
     wireguard-keypair) ride_wireguard_change "$state" ;;
+    flatpak-remote) ride_flathub_change "$state" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
