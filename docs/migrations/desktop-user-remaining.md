@@ -84,8 +84,8 @@ ownership and approval boundary. The helper is not in `default`.
 
 | Outcome | Decision and reason | Reopen when |
 | --- | --- | --- |
-| `WindowCtlAppmenuClose` | **Unsupported.** v2 writes one hard-coded `button-layout` string with no exact prior-state inverse. | Add the typed GNOME string handler and conflict-aware restore described in [batch 02](desktop-user-configuration.md). |
-| `WindowCtlLeftClsMinMax` | **Kept by owner.** This is a third value in the same window-button-layout setting family as `WindowCtlMinMaxClose` and `WindowCtlAppmenuClose`, rather than a separate simultaneous write. | Model mutually exclusive profile values and exact prior-state recovery in a Workstation VM. |
+| `WindowCtlAppmenuClose` | **Operable opt-in candidate.** The shared `setting.gnome-window-buttons` handler selects this v2 value and restores the exact prior override. | [VM acceptance](../acceptance/setting.gnome-string-values.md); H003 visual review in v3.1. |
+| `WindowCtlLeftClsMinMax` | **Operable opt-in candidate.** This is an exclusive profile value of the same handler, with exact prior-state recovery. | [VM acceptance](../acceptance/setting.gnome-string-values.md); H003 visual review in v3.1. |
 
 ## Batch 11: lock and idle settings
 

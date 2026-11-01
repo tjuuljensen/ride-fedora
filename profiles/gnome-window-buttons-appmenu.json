@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "gnome-window-buttons-appmenu",
+  "description": "Optional legacy appmenu and close button layout for the current GNOME user.",
+  "operations": [
+    {"id": "setting.gnome-window-buttons", "state": "configured", "value": ":appmenu:close"}
+  ]
+}

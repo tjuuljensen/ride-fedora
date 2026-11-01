@@ -1,6 +1,6 @@
 # Flathub remote ownership and recovery
 
-Status: **unsupported as a runnable v3.0 remote operation**, 2026-10-30.
+Status: **opt-in candidate acceptance passed**, 2026-10-31 UTC.
 The owner confirmed **keep** in the v3.0 fast-track review. Flatpak
 applications may coexist with RPM editions of the same product after
 product-specific conflict review, using separate deployment identities and
@@ -14,18 +14,30 @@ describes the stable Flathub `.flatpakrepo` source, bundled GPG key, and
 `remote-delete` inverse. RIDE must select a fixed scope and preserve any
 pre-existing remote, apps, and configuration.
 
-## Completion criteria defined before resolution
+## Completion criteria defined before implementation
 
-- Inspect the exact system and user remote state on the declared Fedora 44
-  x86_64 Workstation VM. Select a fixed scope; do not adopt or overwrite a
-  remote configured by another owner.
-- For an opt-in candidate, require exact remote URL and GPG-verification
-  detection, a journaled apply and inverse that remove only a RIDE-created
-  remote, focused mocked failure checks, and a disposable-VM happy path.
-  Refuse removal if attached applications or a changed remote make it unsafe.
-- Otherwise record a non-runnable v3.0 result with a review trigger. Do not
-  use the v2 `flatpak uninstall flathub` as an inverse or add Flathub to the
-  base profiles.
+- Use the system installation and canonical current remote URL
+  `https://dl.flathub.org/repo/flathub.flatpakrepo`; require the imported GPG
+  key and strict remote verification. Keep the operation separate from the
+  Flatpak RPM/runtime outcome and out of base profiles.
+- Read system and user remotes separately. Never adopt a pre-existing remote,
+  even when its name and URL match. Journal a RIDE ownership marker only after
+  adding an absent system remote. A name collision, altered URL, missing key,
+  disabled GPG verification, or changed marker must fail closed.
+- Restore and explicit remove must delete only the exact RIDE-owned system
+  remote, and only while no application or runtime is installed from it.
+  Preserve all user remotes, system remotes, applications, runtimes, and
+  remote configuration. Never use the v2 `flatpak uninstall flathub` as an
+  inverse.
+- Add mocked checks for absent apply/repeat/remove, a pre-existing same-name
+  remote, URL or key drift, attached-application refusal, marker tampering,
+  and rollback if ownership recording fails. In a disposable pinned Fedora
+  44 x86_64 Workstation VM, verify plan, candidate gate, apply, repeat,
+  status, GPG verification, restore, explicit removal, and preservation of
+  seeded user/system remotes and installed app state.
+- Promote only after the exact-target lifecycle passes. Keep per-app
+  installation and RPM/Flatpak product coexistence under each application's
+  own operation and product conflict review.
 
 ## Fedora 44 inspection and v3.0 decision
 
@@ -41,10 +53,10 @@ install or inverse acceptance. The current
 v2 used `flathub.org`. [Flatpak's documentation](https://docs.flatpak.org/en/latest/using-flatpak.html)
 distinguishes system and user remotes and describes `remote-delete`.
 
-The v3 catalog has no remote handler or journaled remote ownership, and the
-v2 inverse is not a safe remote deletion. The active `Flathub` source outcome
-is **unsupported as a v3.0 operation**. No remote or app install is claimed.
-Reopen if an explicit Flathub use case is selected and a fixed-scope handler
-passes URL/key detection, pre-existing-remote preservation, attached-app
-refusal, focused failure tests, and exact-target VM apply/recovery. It may
-then be an opt-in candidate while broader desktop use moves to v3.1.
+The owner has kept Flathub in scope and confirmed that RPM and Flatpak
+deployments may coexist after product-specific review. The opt-in system
+remote passed the focused mocks and [disposable Workstation lifecycle](../acceptance/system-flathub-remote.md).
+It uses an ownership marker and refuses to delete a remote that has attached
+system applications. The v3.0 result covers only the remote; application
+installation and per-product RPM/Flatpak coexistence remain attached to each
+application operation and H033.

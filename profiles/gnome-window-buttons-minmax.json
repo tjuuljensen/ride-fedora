@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "gnome-window-buttons-minmax",
+  "description": "Optional right-side minimize, maximize, and close buttons for the current GNOME user.",
+  "operations": [
+    {"id": "setting.gnome-window-buttons", "state": "configured", "value": ":minimize,maximize,close"}
+  ]
+}

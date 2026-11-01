@@ -378,17 +378,16 @@
       "batch": "provider-foundation-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.flathub-system-remote"],
       "evidence": [
+        "docs/acceptance/system-flathub-remote.md",
         "docs/migrations/provider-foundation-09.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept Flathub for v3.0 on 2026-10-30. Own a fixed-scope remote and safe inverse; enable Flatpak applications as separate deployments that may coexist with RPM editions after product-specific conflict review.",
-      "v31Hardening": [],
-      "reason": "The active v2 remote-add has no owned remote journal and its inverse is not remote-delete; v3 lacks a scoped Flatpak remote handler and app-preserving inverse.",
-      "reviewTrigger": "An explicit Flathub use case with URL/key detection, ownership-aware system or user remote handler, attached-app refusal, and Fedora 44 Workstation VM acceptance.",
+      "nextAction": "Keep the remote opt-in; migrate app deployments separately and review RPM/Flatpak coexistence by product. H033 tracks broader app and GUI behavior.",
+      "v31Hardening": ["H033"],
       "v30Decision": "keep"
     },
     {
@@ -1976,17 +1975,19 @@
       "batch": "system-security-19",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.wireguard-tools",
+        "setting.wireguard-keypair"
+      ],
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-wireguard.md",
+        "docs/migrations/system-security-wireguard-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept WireGuard; separate the signed RPM from private key and connection state, and prove seeded-key preservation before making the operation runnable.",
-      "v31Hardening": [],
-      "reason": "Owner kept WireGuard for v3.0 on 2026-10-30; the v2 recursive key-directory removal remains unsafe.",
-      "reviewTrigger": "Owner kept WireGuard; separate the signed RPM from private key and connection state, and prove seeded-key preservation before making the operation runnable.",
+      "nextAction": "Keep local key-pair tools opt-in; review interface, peer, route, and rotation behavior under H032 before extending the operation.",
+      "v31Hardening": ["H032"],
       "v30Decision": "keep"
     },
     {
@@ -1999,17 +2000,20 @@
       "batch": "system-security-08",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "supported",
+      "v3Ids": [
+        "package.vpnc-script",
+        "package.openconnect",
+        "package.networkmanager-openconnect-gnome"
+      ],
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-openconnect-packages.md",
+        "docs/migrations/system-security-openconnect-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept OpenconnectVPN; choose a reviewed package source and verify profile, service, and removal behavior without the moving v2 source build.",
-      "v31Hardening": [],
-      "reason": "Owner kept OpenconnectVPN for v3.0 on 2026-10-30; the unpinned source build remains unsuitable.",
-      "reviewTrigger": "Owner kept OpenconnectVPN; choose a reviewed package source and verify profile, service, and removal behavior without the moving v2 source build.",
+      "nextAction": "Keep package-only support opt-in; review protocol, routing, credentials, and GNOME dialog behavior under H031 before extending the operation.",
+      "v31Hardening": ["H031"],
       "v30Decision": "keep"
     },
     {
@@ -2837,17 +2841,16 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-window-buttons"],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept GNOME window-control setting for v3.0 on 2026-10-30. Add a typed string handler with exact prior value and unset/default recovery.",
-      "v31Hardening": [],
-      "reason": "The v2 WindowCtlMinMaxClose behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Add a typed GNOME string handler with exact prior value and unset/default recovery, then pass a Workstation VM lifecycle.",
+      "nextAction": "Keep the exclusive window-layout profiles opt-in; complete H003 visual review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2860,17 +2863,16 @@
       "batch": "desktop-user-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-window-buttons"],
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept AppmenuClose layout for v3.0 on 2026-10-30 as an alternative to WindowCtlMinMaxClose. Model mutually exclusive profile values and exact prior-layout recovery.",
-      "v31Hardening": [],
-      "reason": "v2 writes one GNOME button-layout string without preserving the arbitrary prior user value.",
-      "reviewTrigger": "Add a typed GNOME string handler with default provenance and exact restore.",
+      "nextAction": "Keep the appmenu layout opt-in; complete H003 visual review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2883,17 +2885,16 @@
       "batch": "desktop-user-07",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-window-buttons"],
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept this third window-button-layout value alongside MinMaxClose and AppmenuClose; implement one exclusive profile choice with exact prior-layout recovery.",
-      "v31Hardening": [],
-      "reason": "Owner retained the left-side layout as a configurable choice in the shared GNOME window-button family on 2026-10-30.",
-      "reviewTrigger": "Owner kept this third window-button-layout value alongside MinMaxClose and AppmenuClose; implement one exclusive profile choice with exact prior-layout recovery.",
+      "nextAction": "Keep the left-side layout opt-in; complete H003 visual review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2932,17 +2933,16 @@
       "batch": "desktop-user-02",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["setting.gnome-region"],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept GNOME region setting for v3.0 on 2026-10-30. Make country/region a profile-configurable value, with exact prior-state and unset/default recovery.",
-      "v31Hardening": [],
-      "reason": "The v2 GnomeRegionDaDK behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Declare an opt-in locale value and exact prior-region recovery, then pass a Fedora 44 Workstation VM lifecycle.",
+      "nextAction": "Keep the configurable region opt-in; complete H003 visual and regional-format review in v3.1.",
+      "v31Hardening": ["H003"],
       "v30Decision": "keep"
     },
     {
@@ -2959,13 +2959,14 @@
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-string-01.md"
       ],
       "blocker": "",
-      "nextAction": "Owner deferred the old remove-only GNOME region outcome on 2026-10-30 because its distinct use case is unclear; revisit after the configurable region setting is defined.",
+      "nextAction": "Owner deferred this remove-only use case; now that configurable region is operable, decide whether an explicit reset-to-default action is still needed.",
       "v31Hardening": [],
-      "reason": "The v2 GnomeRegion behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Reconcile this remove-only v2 function with an owned region operation after exact prior-state and default recovery are available.",
+      "reason": "The v2 remove-only function writes an empty region without a distinct desired install or prior-state journal. The kept configurable region operation does not imply that every user wants an explicit reset-to-default command.",
+      "reviewTrigger": "Owner decides whether reset-to-default is a separate desired action; if kept, add an explicit owned reset with exact prior-state recovery.",
       "v30Decision": "defer"
     },
     {
@@ -3262,17 +3263,21 @@
       "batch": "desktop-user-04",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.upower-percentage-low"
+      ],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept the 15-percent battery-policy setting for v3.0 on 2026-10-30. Own the UPower policy fragment and preserve administrator policy with exact prior-state recovery.",
-      "v31Hardening": [],
-      "reason": "The v2 PowerPercentageLow15 behavior lacks owned, exact prior-state recovery required for a runnable setting; see the batch review.",
-      "reviewTrigger": "Review UPower drop-in ownership, preserve administrator policy, and pass battery-policy and restore checks on a disposable target.",
+      "nextAction": "Keep the owned 15-percent UPower profile opt-in; verify physical warning behavior in H030 before support promotion.",
+      "v31Hardening": [
+        "H030"
+      ],
       "v30Decision": "keep"
     },
     {
@@ -3285,17 +3290,21 @@
       "batch": "desktop-user-09",
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": [
+        "setting.upower-percentage-low"
+      ],
       "evidence": [
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
       "blocker": "",
-      "nextAction": "Owner kept the 20-percent battery threshold; implement it as an optional validated value of one owned UPower setting shared with the 15-percent outcome, with exact prior-policy recovery.",
-      "v31Hardening": [],
-      "reason": "Owner kept the 20-percent capability on 2026-10-30, preferring a configurable optional threshold over separate fixed edits.",
-      "reviewTrigger": "Owner kept the 20-percent battery threshold; implement it as an optional validated value of one owned UPower setting shared with the 15-percent outcome, with exact prior-policy recovery.",
+      "nextAction": "Keep the owned 20-percent UPower profile opt-in; verify physical warning behavior in H030 before support promotion.",
+      "v31Hardening": [
+        "H030"
+      ],
       "v30Decision": "keep"
     },
     {
@@ -4715,9 +4724,10 @@
       "family": "provider-foundation",
       "title": "Flathub remote ownership and recovery",
       "evidence": [
+        "docs/acceptance/system-flathub-remote.md",
         "docs/migrations/provider-foundation-09.md"
       ],
-      "nextAction": "Owner kept Flathub; implement owned remote lifecycle and separate Flatpak deployments that can coexist with RPM editions after product conflict review."
+      "nextAction": "Keep Flathub system remote opt-in; migrate app deployments separately and review RPM/Flatpak coexistence by product."
     },
     {
       "id": "provider-foundation-10",
@@ -5003,9 +5013,11 @@
       "evidence": [
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
-      "nextAction": "Owner kept country-configurable GNOME region setting; design profile value and exact prior-state recovery while preserving existing boolean settings."
+      "nextAction": "Five settings are operable; owner-deferred remove-only GnomeRegion needs a distinct use-case decision. Complete H003/H018 in v3.1."
     },
     {
       "id": "desktop-user-03",
@@ -5023,9 +5035,11 @@
       "evidence": [
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
-      "nextAction": "Owner kept 15-percent battery policy; design owned UPower fragment and exact prior-state recovery while retaining accepted boolean settings."
+      "nextAction": "All three settings are operable; keep UPower opt-in and complete H030 battery behavior in v3.1."
     },
     {
       "id": "desktop-user-05",
@@ -5050,9 +5064,11 @@
       "family": "desktop-user",
       "title": "Desktop and user state 07: window controls and screensaver variants",
       "evidence": [
-        "docs/migrations/desktop-user-remaining.md"
+        "docs/migrations/desktop-user-remaining.md",
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md"
       ],
-      "nextAction": "Owner kept three exclusive GNOME window-button-layout choices; implement one configurable profile value and exact prior-layout recovery."
+      "nextAction": "Both alternative layout outcomes are operable; keep profiles opt-in and complete H003 visual review in v3.1."
     },
     {
       "id": "desktop-user-08",
@@ -5070,9 +5086,11 @@
       "evidence": [
         "docs/migrations/desktop-user-boolean.md",
         "docs/acceptance/gnome-user-boolean.md",
-        "docs/migrations/desktop-user-configuration.md"
+        "docs/migrations/desktop-user-configuration.md",
+        "docs/migrations/desktop-user-upower-01.md",
+        "docs/acceptance/setting.upower-percentage-low.md"
       ],
-      "nextAction": "Owner kept the 20-percent battery variant; design one optional configurable UPower threshold shared with 15-percent, preserving prior policy. Complete H018 in v3.1."
+      "nextAction": "All three settings are operable; keep UPower opt-in and complete H030 battery behavior in v3.1."
     },
     {
       "id": "desktop-user-10",
@@ -5165,9 +5183,10 @@
       "family": "system-security",
       "title": "System Security 08: OpenconnectVPN",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-openconnect-packages.md",
+        "docs/migrations/system-security-openconnect-01.md"
       ],
-      "nextAction": "Owner kept OpenconnectVPN; choose a reviewed package and prove profile, service, and removal behavior."
+      "nextAction": "Keep the signed OpenConnect package profile opt-in and review actual connection behavior under H031."
     },
     {
       "id": "system-security-09",
@@ -5264,9 +5283,10 @@
       "family": "system-security",
       "title": "System Security 19: Wireguard",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/acceptance/system-security-wireguard.md",
+        "docs/migrations/system-security-wireguard-01.md"
       ],
-      "nextAction": "Owner kept WireGuard; separate RPM from private keys and prove seeded-key and connection recovery."
+      "nextAction": "Keep the local tools and key pair opt-in; review interface and peer behavior under H032."
     },
     {
       "id": "system-security-20",
@@ -5792,6 +5812,30 @@
       "id": "H029",
       "title": "Chepy dependency, plugin, transformation, and update behavior",
       "trigger": "After Fedora 44 Workstation Python 3.12 and pinned Chepy sdist lifecycle acceptance, lock transitive dependency hashes, test optional plugins and representative transformations, and review version updates with owned recovery.",
+      "status": "queued"
+    },
+    {
+      "id": "H030",
+      "title": "UPower warning behavior on battery hardware",
+      "trigger": "After the opt-in 15- and 20-percent UPower drop-in lifecycles pass on Fedora 44 Workstation, verify warning transitions on a disposable battery-capable target without risking production power state.",
+      "status": "queued"
+    },
+    {
+      "id": "H031",
+      "title": "OpenConnect protocol, routing, credentials, and GNOME dialog",
+      "trigger": "After the Fedora 44 OpenConnect CLI, routing helper, and GNOME editor package lifecycles pass, test a private disposable Juniper-compatible endpoint, DNS and route changes, secret handling, and connection recovery without changing unrelated profiles.",
+      "status": "queued"
+    },
+    {
+      "id": "H032",
+      "title": "WireGuard interfaces, peer configuration, and key rotation",
+      "trigger": "After Fedora 44 package and owned local key-pair recovery pass, test NetworkManager or wg-quick interface creation, peer and endpoint configuration, route changes, key rotation, and recovery on a private disposable endpoint without exposing private keys.",
+      "status": "queued"
+    },
+    {
+      "id": "H033",
+      "title": "Flatpak application behavior and RPM coexistence",
+      "trigger": "After the Fedora 44 system Flathub remote lifecycle passes, migrate selected app deployments separately and verify app install/update/removal, per-app user data recovery, and coexistence with installed RPM editions without shared product-wide exclusions.",
       "status": "queued"
     }
   ]

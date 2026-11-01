@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "upower-low-20",
+  "description": "Opt-in 20-percent UPower low-battery threshold.",
+  "operations": [
+    {"id": "setting.upower-percentage-low", "state": "configured", "value": "20"}
+  ]
+}

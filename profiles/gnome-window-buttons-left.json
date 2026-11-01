@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "gnome-window-buttons-left",
+  "description": "Optional left-side close, minimize, and maximize buttons for the current GNOME user.",
+  "operations": [
+    {"id": "setting.gnome-window-buttons", "state": "configured", "value": "close,minimize,maximize:"}
+  ]
+}

@@ -159,6 +159,16 @@ class CompletionTests(unittest.TestCase):
                                 capture_output=True, check=True)
         self.assertIn("fedora-rpm", result.stdout.splitlines())
 
+    def test_gnome_layout_values_from_catalog(self):
+        script = ('source "$RIDE_ROOT/completion/ride.bash"; '
+                  'COMP_WORDS=(./ride.sh set setting.gnome-window-buttons --value ""); '
+                  'COMP_CWORD=4; _ride_complete; printf "%s\\n" "${COMPREPLY[@]}"')
+        env = os.environ | {"RIDE_ROOT": str(ROOT)}
+        result = subprocess.run(["bash", "-c", script], env=env, text=True,
+                                capture_output=True, check=True)
+        self.assertEqual(set(result.stdout.splitlines()),
+                         {":minimize,maximize,close", ":appmenu:close", "close,minimize,maximize:"})
+
     def test_run_ids_from_client_state_store(self):
         with tempfile.TemporaryDirectory() as temp:
             run_id = "20261014T000000Z-12-34"

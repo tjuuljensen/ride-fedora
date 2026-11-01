@@ -66,15 +66,15 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallGnomeExtensions` | deferred | Review current GNOME extension IDs and API. |
 | `ShowDateInTaskbar` | deferred | Setting handler needs baseline and restore. |
 | `ShowWeekNumbersInTaskbar` | deferred | Setting handler needs baseline and restore. |
-| `SetWindowCtlMinMaxClose` | deferred | Setting handler needs baseline and restore. |
+| `SetWindowCtlMinMaxClose` | opt-in candidate | One [GNOME string-setting operation](migrations/desktop-user-string-01.md) selects this or either alternative layout and restores the exact prior user override; [Workstation VM evidence](acceptance/setting.gnome-string-values.md). |
 | `DisableMiddleButtonPaste` | deferred | Setting handler needs baseline and restore. |
-| `SetGnomeRegionDaDK` | deferred | User locale must be explicit profile data. |
+| `SetGnomeRegionDaDK` | opt-in candidate | The [region operation](migrations/desktop-user-string-01.md) takes an explicit validated locale value; the Danish profile passed [Workstation VM acceptance](acceptance/setting.gnome-string-values.md). |
 | `SetScreensaverSlp10Lgn5` | deferred | Resolve conflict with other screensaver operations. |
 | `SetCustomKeyboardShortcut` | deferred | User-owned shortcut state needs exact restore. |
 | `SetGnomeCustomFavorites` | deferred | User-specific favorites need profile data. |
 | `SetGnmLocationServiceOff` | deferred | Review current GNOME setting and scope. |
 | `SetGnmAutoProblemRptOff` | deferred | Review current GNOME setting and scope. |
-| `SetPowerPercentageLow15` | deferred | Review current power setting and support. |
+| `SetPowerPercentageLow15` | opt-in candidate | The [shared UPower threshold operation](migrations/desktop-user-upower-01.md) selects 15 or 20 through an owned drop-in and exact restore; [Workstation VM evidence](acceptance/setting.upower-percentage-low.md). |
 | `EnableBashAliases` | deferred | User shell configuration must preserve unowned content. |
 | `SetAliasLsEza` | deferred | User shell configuration must preserve unowned content. |
 | `SetAliasWanIP` | deferred | User shell configuration must preserve unowned content. |

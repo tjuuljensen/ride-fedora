@@ -47,6 +47,10 @@ source "$RIDE_ROOT/lib/v3/common.sh"
 source "$RIDE_ROOT/lib/v3/catalog.sh"
 # shellcheck source=lib/v3/providers.sh
 source "$RIDE_ROOT/lib/v3/providers.sh"
+# shellcheck source=lib/v3/wireguard.sh
+source "$RIDE_ROOT/lib/v3/wireguard.sh"
+# shellcheck source=lib/v3/flatpak.sh
+source "$RIDE_ROOT/lib/v3/flatpak.sh"
 # shellcheck source=lib/v3/state.sh
 source "$RIDE_ROOT/lib/v3/state.sh"
 # shellcheck source=lib/v3/github.sh
@@ -65,7 +69,7 @@ Usage: ./ride.sh <command> [argument] [options]
   apply [--profile name-or-path]
   download <package-or-artifact-id> [--source source-id] [--destination directory]
   install <package-id> [--source source-id]
-  set <setting-id> --state <declared-state>
+  set <setting-id> --state <declared-state> [--value <declared-value>]
   unset <setting-id>
   status [operation-id] [--source source-id] [--profile name-or-path]
   restore --run-id <id>
@@ -151,30 +155,37 @@ ride_show() {
 }
 
 ride_plan_entry() {
-  local id=$1 desired=$2 source=${3:-} entry current status conflict
-  entry=$(ride_entry_or_die "$id" "$source")
+  local id=$1 desired=$2 source=${3:-} value=${4:-} entry current status conflict shown
+  entry=$(ride_entry_or_die "$id" "$source" "$value")
   ride_require_target "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]] && [[ -z "$value" ]]; then
+    ride_die "configurable setting requires --value or a profile value: $id"
+  fi
   current=$(ride_observe "$entry")
   conflict=$(ride_provider_conflict "$entry")
   [[ -z "$conflict" ]] || current="conflict:$conflict"
   status=$(jq -r '.status' <<< "$entry")
+  shown=$desired
+  [[ -z "$value" ]] || shown="$desired:$value"
   printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$id" \
-    "$(jq -r '.sourceId // "-"' <<< "$entry")" "$current" "$desired" "$status" \
+    "$(jq -r '.sourceId // "-"' <<< "$entry")" "$current" "$shown" "$status" \
     "$(jq -r '.distribution // "-"' <<< "$entry")" \
     "$(jq -r '.deploymentId // "-"' <<< "$entry")" "$(jq -r '.scope' <<< "$entry")"
 }
 
 ride_plan_profile() {
-  local profile=$1 id desired source
+  local profile=$1 id desired source value
   ride_validate_profile "$profile"
   {
     printf 'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE\n'
-    while IFS=$'\t' read -r id desired source; do
+    while IFS=$'\t' read -r id desired source value; do
       [[ -z "$id" ]] && continue
-      ride_plan_entry "$id" "$desired" "$source"
-    done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
+      [[ "$source" != '~' ]] || source=
+      [[ "$value" != '~' ]] || value=
+      ride_plan_entry "$id" "$desired" "$source" "$value"
+    done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (.value // "~")] | @tsv' "$profile")
   } | ride_table
 }
 
@@ -185,7 +196,18 @@ ride_preflight_change() {
   ride_require_accepted "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+    [[ -n "$(jq -r '.selectedValue // ""' <<< "$entry")" ]] ||
+      ride_die "configurable setting requires --value or a profile value: $id"
+  fi
   ride_require_privilege "$entry"
+  if [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+    ride_upower_guard "$(jq -r '.selectedValue' <<< "$entry")"
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == wireguard-keypair ]]; then
+    ride_wireguard_preflight
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == flatpak-remote ]]; then
+    ride_flathub_preflight "$desired"
+  fi
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")
     if [[ -n "$conflict" && ( "$desired" == installed || "$(ride_observe "$entry")" != installed ) ]]; then
@@ -195,13 +217,14 @@ ride_preflight_change() {
 }
 
 ride_apply_one() {
-  local entry=$1 desired=$2 id before after step recovery source signature conflict distribution deployment scope
+  local entry=$1 desired=$2 id before after step recovery source signature conflict distribution deployment scope selected_value
   id=$(jq -r '.id' <<< "$entry")
   recovery=$(jq -r '.recovery' <<< "$entry")
   source=$(jq -r '.sourceId // ""' <<< "$entry")
   distribution=$(jq -r '.distribution // ""' <<< "$entry")
   deployment=$(jq -r '.deploymentId // ""' <<< "$entry")
   scope=$(jq -r '.scope' <<< "$entry")
+  selected_value=$(jq -r '.selectedValue // ""' <<< "$entry")
   signature=$(ride_source_signature "$entry")
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")
@@ -212,10 +235,11 @@ ride_apply_one() {
   before=$(ride_observe "$entry") || ride_die "cannot observe current state for $id"
   step=$(jq -nc --arg id "$id" --arg before "$before" --arg desired "$desired" --arg recovery "$recovery" \
     --arg source "$source" --arg signature "$signature" --arg distribution "$distribution" \
-    --arg deployment "$deployment" --arg scope "$scope" \
+    --arg deployment "$deployment" --arg scope "$scope" --arg selectedValue "$selected_value" \
     '{id:$id, distribution:$distribution, deploymentId:$deployment, scope:$scope,
       sourceId:$source, sourceSignature:$signature, sourceSignatureVersion:2,
-      observedBefore:$before, desired:$desired, recovery:$recovery, result:"pending"}')
+      observedBefore:$before, desired:$desired, recovery:$recovery, result:"pending"} |
+      if $selectedValue != "" then . + {selectedValue:$selectedValue} else . end')
   ride_journal_append "$step"
   if [[ "$before" == "$desired" ]]; then
     ride_journal_update_last unchanged "$before"
@@ -235,8 +259,8 @@ ride_apply_one() {
     return 1
   fi
   if ! after=$(ride_observe "$entry"); then
-    if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
-      ride_change "$entry" "$before" || ride_error "iBus hotkey rollback failed after observation error"
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+      ride_change "$entry" "$before" || ride_error "user setting rollback failed after observation error"
     fi
     ride_journal_update_last failed unknown
     ride_journal_finish failed
@@ -244,8 +268,8 @@ ride_apply_one() {
     return 1
   fi
   if [[ "$after" != "$desired" ]]; then
-    if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
-      ride_change "$entry" "$before" || ride_error "iBus hotkey rollback failed after state mismatch"
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+      ride_change "$entry" "$before" || ride_error "user setting rollback failed after state mismatch"
     fi
     ride_journal_update_last failed "$after"
     ride_journal_finish failed
@@ -257,29 +281,33 @@ ride_apply_one() {
 }
 
 ride_apply_profile() {
-  local profile=$1 id desired source entry
+  local profile=$1 id desired source value entry
   ride_validate_profile "$profile"
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then ride_plan_profile "$profile"; return; fi
   # Validate every target, desired state and privilege before the first mutation.
-  while IFS=$'\t' read -r id desired source; do
+  while IFS=$'\t' read -r id desired source value; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id" "$source")
+    [[ "$source" != '~' ]] || source=
+    [[ "$value" != '~' ]] || value=
+    entry=$(ride_entry_or_die "$id" "$source" "$value")
     ride_preflight_change "$entry" "$desired"
-  done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
+  done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (.value // "~")] | @tsv' "$profile")
   ride_journal_create apply
-  while IFS=$'\t' read -r id desired source; do
+  while IFS=$'\t' read -r id desired source value; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id" "$source")
+    [[ "$source" != '~' ]] || source=
+    [[ "$value" != '~' ]] || value=
+    entry=$(ride_entry_or_die "$id" "$source" "$value")
     ride_apply_one "$entry" "$desired" || return 1
-  done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
+  done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (.value // "~")] | @tsv' "$profile")
   ride_journal_finish complete
 }
 
 ride_apply_single() {
-  local id=$1 desired=$2 source=${3:-} entry
-  entry=$(ride_entry_or_die "$id" "$source")
+  local id=$1 desired=$2 source=${3:-} value=${4:-} entry
+  entry=$(ride_entry_or_die "$id" "$source" "$value")
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then
-    ride_plan_entry "$id" "$desired" "$source" | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
+    ride_plan_entry "$id" "$desired" "$source" "$value" | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
     return
   fi
   ride_preflight_change "$entry" "$desired"
@@ -295,6 +323,19 @@ ride_restore_steps() {
      (.sourceSignature // "-"), (.sourceSignatureVersion // 1)] | @tsv' "$1"
 }
 
+ride_restore_entry() {
+  local id=$1 source=$2 original=$3 entry value
+  entry=$(ride_entry_or_die "$id" "$source")
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+    value=$(jq -er --arg id "$id" '[.steps[] | select(.id == $id) | .selectedValue] |
+      if length == 1 and .[0] != null then .[0] else empty end' "$original") ||
+      ride_die "run lacks selected configurable value for $id"
+    ride_entry_or_die "$id" "$source" "$value"
+  else
+    printf '%s\n' "$entry"
+  fi
+}
+
 ride_restore() {
   local original_id=$1 original id before after result source signature signature_version entry current recovery
   [[ -n "$original_id" ]] || ride_die "restore requires --run-id"
@@ -306,15 +347,19 @@ ride_restore() {
   while IFS=$'\t' read -r id before after result source signature signature_version; do
     [[ "$result" == changed ]] || continue
     [[ "$source" != - ]] || source=
-    entry=$(ride_entry_or_die "$id" "$source")
+    entry=$(ride_restore_entry "$id" "$source" "$original")
     [[ "$signature" == - || "$signature" == "$(ride_source_signature "$entry" "$signature_version")" ]] ||
       ride_die "source definition changed since run for $id; exact recovery is unavailable"
     recovery=$(jq -r '.recovery' <<< "$entry")
     if [[ "$recovery" == none || ( "$recovery" == remove-new-install && ( "$before" != absent || "$after" != installed ) ) ]]; then
       ride_die "exact recovery is unavailable for $id ($before -> $after)"
     fi
-    if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
-      ride_ibus_hotkey_valid_snapshot "$before" || ride_die "invalid saved iBus hotkey state"
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+      if [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+        ride_upower_valid_snapshot "$before" || ride_die "invalid saved UPower setting state"
+      else
+        ride_gsettings_valid_snapshot "$before" || ride_die "invalid saved user setting state"
+      fi
       if [[ "$RIDE_DRY_RUN" != 1 ]]; then
         ride_require_target "$entry"
         ride_require_accepted "$entry"
@@ -332,10 +377,10 @@ ride_restore() {
       while IFS=$'\t' read -r id before after result source signature signature_version; do
         [[ "$result" == changed ]] || continue
         [[ "$source" != - ]] || source=
-        if [[ "$id" == setting.ibus-emoji-hotkey ]]; then
-          entry=$(ride_entry_or_die "$id" "$source")
-          printf '%s\t-\t%s\t%s\t%s\t-\t-\tuser\n' \
-            "$id" "$(ride_observe "$entry")" "$before" "$(jq -r '.status' <<< "$entry")"
+        entry=$(ride_restore_entry "$id" "$source" "$original")
+        if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+          printf '%s\t-\t%s\t%s\t%s\t-\t-\t%s\n' \
+            "$id" "$(ride_observe "$entry")" "$before" "$(jq -r '.status' <<< "$entry")" "$(jq -r '.scope' <<< "$entry")"
         else
           ride_plan_entry "$id" "$before" "$source"
         fi
@@ -347,7 +392,7 @@ ride_restore() {
   while IFS=$'\t' read -r id before after result source signature signature_version; do
     [[ "$result" == changed ]] || continue
     [[ "$source" != - ]] || source=
-    entry=$(ride_entry_or_die "$id" "$source")
+    entry=$(ride_restore_entry "$id" "$source" "$original")
     ride_apply_one "$entry" "$before" || return 1
   done < <(ride_restore_steps "$original")
   ride_journal_finish complete
@@ -415,7 +460,7 @@ ride_status() {
 }
 
 ride_main() {
-  local command=${1:-list} argument= profile=default profile_set=0 desired= run_id= destination= source= source_set=0
+  local command=${1:-list} argument= profile=default profile_set=0 desired= value= run_id= destination= source= source_set=0
   if [[ $# -gt 0 ]]; then shift; fi
   case "$command" in
     -h|--help|help) ride_help; return ;;
@@ -425,6 +470,7 @@ ride_main() {
     case "$1" in
       --profile) [[ $# -ge 2 ]] || ride_die "--profile needs a value"; profile=$2; profile_set=1; shift 2 ;;
       --state) [[ $# -ge 2 ]] || ride_die "--state needs a value"; desired=$2; shift 2 ;;
+      --value) [[ $# -ge 2 ]] || ride_die "--value needs a value"; value=$2; shift 2 ;;
       --run-id) [[ $# -ge 2 ]] || ride_die "--run-id needs a value"; run_id=$2; shift 2 ;;
       --destination) [[ $# -ge 2 ]] || ride_die "--destination needs a value"; destination=$2; shift 2 ;;
       --source) [[ $# -ge 2 ]] || ride_die "--source needs a value"; source=$2; source_set=1; shift 2 ;;
@@ -443,6 +489,7 @@ ride_main() {
       *) ride_die "--source is only valid with a direct package command" ;;
     esac
   fi
+  [[ -z "$value" || "$command" == set ]] || ride_die "--value is only valid with set"
   case "$command" in
     list) ride_list "${argument:-all}" ;;
     search) ride_search "$argument" ;;
@@ -475,7 +522,7 @@ ride_main() {
     set)
       [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument")")" == setting ]] || ride_die "set requires a setting ID"
       [[ -n "$desired" ]] || ride_die "set requires --state"
-      ride_apply_single "$argument" "$desired"
+      ride_apply_single "$argument" "$desired" "" "$value"
       ;;
     unset)
       [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument")")" == setting ]] || ride_die "unset requires a setting ID"

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "wireguard-keypair",
+  "description": "Opt-in WireGuard tools and locally generated key pair; no interface or peer configuration.",
+  "operations": [
+    {"id": "package.wireguard-tools", "state": "installed"},
+    {"id": "setting.wireguard-keypair", "state": "configured"}
+  ]
+}

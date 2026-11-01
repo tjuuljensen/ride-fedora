@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey")) and
+      (.handler | IN("dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "upower-threshold", "wireguard-keypair", "flatpak-remote")) and
       (.scope | IN("system", "user")) and
       (.status | IN("candidate", "supported")) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
@@ -62,6 +62,23 @@ ride_validate_catalog() {
        elif .handler == "ibus-emoji-hotkey" then (.kind == "setting" and .scope == "user" and
          .id == "setting.ibus-emoji-hotkey" and .states == ["enabled"] and
          .recovery == "exact-state" and .verification == "local-gsettings-state")
+       elif .handler == "gsettings-string" then (.kind == "setting" and .scope == "user" and
+         .states == ["configured"] and .recovery == "exact-state" and
+         .verification == "local-gsettings-state" and
+         (if .id == "setting.gnome-region" then .valueKind == "locale" and .allowedValues == null
+          elif .id == "setting.gnome-window-buttons" then .valueKind == "window-buttons" and
+            .allowedValues == [":minimize,maximize,close", ":appmenu:close", "close,minimize,maximize:"]
+          else false end))
+       elif .handler == "upower-threshold" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.upower-percentage-low" and .states == ["configured"] and
+         .valueKind == "percentage-low" and .recovery == "exact-state" and
+         .verification == "local-upower-config")
+       elif .handler == "wireguard-keypair" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.wireguard-keypair" and .states == ["configured", "absent"] and
+         .recovery == "exact-state" and .verification == "local-wireguard-keypair")
+       elif .handler == "flatpak-remote" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.flathub-system-remote" and .states == ["configured", "absent"] and
+         .recovery == "exact-state" and .verification == "local-flatpak-remote")
        elif .handler == "python-venv" then (.kind == "package" and
          (if .id == "package.chepy" then
            .scope == "user" and .artifactFormat == "sdist" and .sourceId == "pypi-sdist-venv" and
@@ -113,13 +130,21 @@ ride_entry() {
 }
 
 ride_entry_or_die() {
-  local id=$1 requested=${2:-} base selected
+  local id=$1 requested=${2:-} value=${3:-} base selected
   base=$(ride_entry "$id") || ride_die "unknown catalog ID: $id"
   if [[ "$(jq -r '.kind' <<< "$base")" != package ]]; then
     [[ -z "$requested" ]] || ride_die "source selection requires a package: $id"
+    if [[ -n "$value" ]]; then
+      [[ "$(jq -r '.handler' <<< "$base")" == gsettings-string || "$(jq -r '.handler' <<< "$base")" == upower-threshold ]] ||
+        ride_die "value selection requires a configurable setting: $id"
+      ride_setting_value_valid "$base" "$value" || ride_die "invalid value for $id: $value"
+      jq -c --arg value "$value" '. + {selectedValue:$value}' <<< "$base"
+      return
+    fi
     printf '%s\n' "$base"
     return
   fi
+  [[ -z "$value" ]] || ride_die "value selection requires a configurable setting: $id"
   selected=${requested:-$(jq -r '.sourceId' <<< "$base")}
   if [[ "$selected" == "$(jq -r '.sourceId' <<< "$base")" ]]; then
     jq -c 'del(.sourceProviders)' <<< "$base"
@@ -130,6 +155,22 @@ ride_entry_or_die() {
     ($base | del(.handler, .packageName, .artifactFormat, .status, .recovery,
                  .targets, .sourceUri, .verification, .sourceProviders)) + $source
   ' <<< "$base" || ride_die "unknown source $selected for $id"
+}
+
+ride_setting_value_valid() {
+  local entry=$1 value=$2
+  case "$(jq -r '.id' <<< "$entry")" in
+    setting.gnome-region)
+      [[ "$value" =~ ^[a-z]{2,3}_[A-Z]{2}\.UTF-8$ ]]
+      ;;
+    setting.gnome-window-buttons)
+      jq -e --arg value "$value" '.allowedValues | index($value) != null' <<< "$entry" >/dev/null
+      ;;
+    setting.upower-percentage-low)
+      [[ "$value" =~ ^([6-9]|[1-4][0-9]|50)$ ]]
+      ;;
+    *) return 1 ;;
+  esac
 }
 
 ride_provider_conflict() {
@@ -152,7 +193,9 @@ ride_source_signature() {
   local version=${2:-2} fields
   case "$version" in
     1) fields='{id, sourceId, handler, packageName, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
-    2) fields='if (.handler | IN("pinned-script", "pinned-zip")) or .id == "package.chepy" then
+    2) fields='if (.handler | IN("gsettings-string", "upower-threshold")) then
+         {id, handler, scope, sourceUri, verification, targets, recovery, valueKind, allowedValues, selectedValue}
+       elif (.handler | IN("pinned-script", "pinned-zip")) or .id == "package.chepy" then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
           scope, sourceUri, sourceSha256, licenseUri, licenseSha256, verification, targets, recovery}
        else
@@ -175,22 +218,31 @@ ride_profile_path() {
 }
 
 ride_validate_profile() {
-  local profile=$1 id state source entry
+  local profile=$1 id state source value entry handler
   [[ -r "$profile" ]] || ride_die "profile not readable: $profile"
   jq -e '
     .schemaVersion == 1 and (.id | type == "string" and test("^[a-z0-9-]+$")) and
     (.operations | type == "array") and
     ([.operations[].id] | length == (unique | length)) and
     all(.operations[]; (.id | type == "string") and (.state | type == "string") and
+      (.value == null or (.value | type == "string" and length > 0 and length <= 80)) and
       (.source == null or (.source | type == "string" and test("^[a-z0-9-]+$"))))
   ' "$profile" >/dev/null || ride_die "invalid v3 profile: $profile"
-  while IFS=$'\t' read -r id state source; do
+  while IFS=$'\t' read -r id state source value; do
     [[ -z "$id" ]] && continue
-    entry=$(ride_entry_or_die "$id" "$source")
+    [[ "$source" != '~' ]] || source=
+    [[ "$value" != '~' ]] || value=
+    entry=$(ride_entry_or_die "$id" "$source" "$value")
     [[ "$(jq -r '.kind' <<< "$entry")" != artifact ]] || ride_die "download-only artifact cannot appear in a profile: $id"
     jq -e --arg state "$state" '.states | index($state) != null' <<< "$entry" >/dev/null ||
       ride_die "invalid state $state for $id"
-  done < <(jq -r '.operations[] | [.id, .state, (.source // "")] | @tsv' "$profile")
+    handler=$(jq -r '.handler' <<< "$entry")
+    if [[ "$handler" == gsettings-string || "$handler" == upower-threshold ]]; then
+      [[ -n "$value" ]] || ride_die "configurable setting requires a profile value: $id"
+    else
+      [[ -z "$value" ]] || ride_die "profile value is not valid for $id"
+    fi
+  done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (.value // "~")] | @tsv' "$profile")
 }
 
 ride_dependencies_ready() {

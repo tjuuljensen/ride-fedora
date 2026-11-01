@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "flathub-system",
+  "description": "Opt-in system Flathub remote for user-selected Flatpak apps; does not install apps.",
+  "operations": [
+    {"id": "setting.flathub-system-remote", "state": "configured"}
+  ]
+}

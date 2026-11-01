@@ -1,20 +1,20 @@
 # GNOME string settings and UPower configuration decisions
 
-The owner kept the GNOME window-control button layout in the v3.0 fast-track
-review. Implement a typed value with exact prior-state recovery.
-AppmenuClose is a second owner-kept layout choice; profile selections are
-mutually exclusive and both restore the exact prior layout.
-The owner also kept GNOME region selection, with country/region supplied by
-the profile rather than fixed to Denmark. The separate remove-only
-`GnomeRegion` use case remains deferred until that owned setting is designed.
+The owner kept three exclusive GNOME window-button layouts and a configurable
+GNOME region. Their [shared string-setting batch](desktop-user-string-01.md)
+now provides typed profile values and exact prior-state recovery on Fedora 44
+Workstation. The separate remove-only `GnomeRegion` use case remains deferred
+because its distinct intent still needs an owner decision.
 The owner kept the 15- and 20-percent UPower threshold outcomes. Prefer one
 optional, configurable threshold with validated values rather than two
 independent file edits. Its implementation must preserve any
-administrator-owned policy and exact prior state.
+administrator-owned policy and exact prior state. The
+[UPower batch](desktop-user-upower-01.md) now defines completion checks and
+records Fedora 44's supported drop-in format before implementation.
 
-Status: **non-runnable v3.0 decisions**, 2026-10-30, for the remaining
-desktop-user-02, desktop-user-04, and desktop-user-09 outcomes. These are
-separate from the [operable boolean settings](desktop-user-boolean.md).
+Status: **GNOME strings and UPower thresholds operable as opt-in candidates**,
+2026-10-30.
+The [boolean settings](desktop-user-boolean.md) are separately operable.
 
 ## Completion criteria defined for this review
 
@@ -25,24 +25,24 @@ separate from the [operable boolean settings](desktop-user-boolean.md).
   declared locale value. A restore must handle arbitrary prior values and
   distinguish an implicit default from an explicit override before a runnable
   implementation is promoted.
-- Require an owned UPower drop-in or an exact, conflict-checked backup and
-  restore of the existing file, plus a battery-capable disposable target,
-  before changing system power policy. A config edit alone cannot prove the
-  battery behavior.
+- Require an owned UPower drop-in and exact, conflict-checked restore on a
+  disposable Fedora 44 Workstation target before counting either outcome
+  operable. Record battery warning behavior as H030 when the VM has no
+  battery; a config edit alone cannot prove that user-visible behavior.
 
 ## Decisions and reopening triggers
 
 | Scoped outcome | v2 behavior and v3.0 decision | Review trigger |
 | --- | --- | --- |
-| `WindowCtlMinMaxClose` | **Unsupported.** `SetWindowCtlMinMaxClose` writes one `button-layout` string. Its inverse is another hard-coded layout, not the prior arbitrary user value. The current v3 setting schema and journal accept boolean enum states only. | Add a typed string handler that records the exact prior value and unset/default provenance, then test apply, conflict, and restore in a Workstation VM. |
-| `GnomeRegionDaDK` | **Unsupported.** `SetGnomeRegionDaDK` sets `org.gnome.system.locale region` to `da_DK.UTF-8` for the login user. That localized value must be explicit opt-in profile data, with exact prior-region recovery. | Add validated locale selection and a string-state journal, then verify the target locale and restore on Fedora 44 Workstation. |
-| `GnomeRegion` | **Unsupported.** `RemoveGnomeRegion` is a remove-only v2 function that writes an empty string. It cannot restore the previous locale and has no standalone desired install. | Reconcile it as the inverse of an owned region operation once exact prior-state and default recovery are available. |
-| `PowerPercentageLow15` | **Unsupported.** The active v2 function rewrites every matching `PercentageLow=` line in `/etc/UPower/UPower.conf` with `sed -i` and has no inverse or ownership check. | Review the current UPower drop-in contract, preserve an existing administrator policy, and pass battery-policy and restore checks on a disposable target. |
-| `PowerPercentageLow20` | **Kept by owner.** The library-only variant performs the same broad file rewrite to `20.0`, with the same inverse and ownership gap. Prefer an optional validated threshold shared with the 15-percent outcome. | Implement one conflict-safe, owned UPower policy setting, then prove battery behavior and exact recovery on a disposable target. |
+| `WindowCtlMinMaxClose` | **Operable opt-in candidate.** v2 wrote one fixed layout with no exact inverse; v3 selects that value through `setting.gnome-window-buttons` and restores the prior override. | [VM acceptance](../acceptance/setting.gnome-string-values.md); complete H003 visual review in v3.1. |
+| `GnomeRegionDaDK` | **Operable opt-in candidate.** `gnome-region-da-dk` explicitly selects an available locale through `setting.gnome-region`; another installed locale can be chosen through a validated profile value. | [VM acceptance](../acceptance/setting.gnome-string-values.md); complete H003 region-format review in v3.1. |
+| `GnomeRegion` | **Owner-deferred.** `RemoveGnomeRegion` wrote an empty string without a distinct desired install or prior-state journal. The configurable v3 region setting does not imply an explicit reset-to-default request. | Decide whether reset-to-default is a separate use case; if kept, add an owned action with exact recovery. |
+| `PowerPercentageLow15` | **Operable opt-in candidate.** The active v2 function rewrote the main config without recovery; `upower-low-15` now selects 15 through an owned drop-in with [VM acceptance](../acceptance/setting.upower-percentage-low.md). | H030 tests the user-visible warning on battery hardware in v3.1. |
+| `PowerPercentageLow20` | **Operable opt-in candidate.** The library-only v2 variant had the same unsafe edit; `upower-low-20` selects 20 through the same owned operation. | H030 tests the user-visible warning on battery hardware in v3.1. |
 
 The owner deferred the separate `GnomeRegion` retire-or-keep choice on
-2026-10-30. It remains non-runnable while an owned region setting and exact
-prior-state recovery are designed.
+2026-10-30. The configurable setting is now operable, so this remove-only
+outcome awaits its distinct use-case decision.
 
 [GNOME's user-settings guide](https://help.gnome.org/system-admin-guide/dconf.html)
 describes dconf's user database and default layers. The

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "gnome-region-da-dk",
+  "description": "Optional Danish region formats for the current GNOME user; copy and edit value for another installed locale.",
+  "operations": [
+    {"id": "setting.gnome-region", "state": "configured", "value": "da_DK.UTF-8"}
+  ]
+}
