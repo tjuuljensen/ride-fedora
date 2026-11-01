@@ -411,8 +411,65 @@ pass their declared targets, relevant CI and generated-doc checks pass, and no
 shared Windows contract drift remains unexplained. A v3 tag and movement of
 the `master` release line are separate publication decisions.
 
+## Cross-platform alignment for final v3
+
+Added 2026-11-01 at the user's request. These engineering/release tasks supplement
+the existing scoped migration and native acceptance gates; they do not add or
+close legacy outcomes. Fedora and Windows maintainers own their respective
+consumer work. Use the same ALIGN IDs in the
+[Windows task list](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/TODO.md#cross-platform-alignment-for-final-v3).
+The [shared contract](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/models/ride-behavior-contract.md)
+owns the rules; [Windows alignment](windows-alignment.md) owns local differences.
+
+- [x] **ALIGN-01:** Adopt canonical contract 1.0.0 and matching SHA-256 references
+  in both repos. Source documentation complete; immutable publication is ALIGN-09.
+- [x] **ALIGN-02:** Add reciprocal AGENTS review/versioning rules covering CLI,
+  settings, planning, acquisition, privilege and recovery, not only package batches.
+- [ ] **ALIGN-03:** Declare unset semantics, restrict profile removal to eligible
+  operation classes, reject conflicting ID/profile and irrelevant options, and
+  transition bare remove to require an explicit selector. Coordinate the Windows
+  argument/default-remove and exclusion-help changes. Done when mocked tests
+  prove refusal before mutation and preserve explicit set and saved recovery.
+- [ ] **ALIGN-04:** Separate download eligibility from VM execution acceptance;
+  unify target/identity preflight for all restore previews, including the iBus
+  branch. Coordinate Windows flag-free candidate preview and installed-package
+  no-op exception review. Done when paired RB-03/04/05/08 cases retain actual
+  mutation gates and demonstrate zero preview writes/run creation.
+- [ ] **ALIGN-05:** Add pinned shared scenario data and the native Bash/Python
+  adapter/CI alongside Windows Pester. Cover candidate/target/privilege gates,
+  invalid arguments, unset/removal, dependencies, partial failure/recovery,
+  acquisition and read-only completion. Done when both report the same revision
+  and a seeded mismatch fails without using a live workstation for mutation.
+- [ ] **ALIGN-06:** Structure the local capability/difference register with stable
+  IDs, owners, reasons, RB rules, reviewed revisions/evidence, linked tasks and
+  review/removal triggers. Done when every current comparison row is aligned,
+  an intentional platform difference, or a named temporary gap.
+- [ ] **ALIGN-07:** Add linked-change review templates and scheduled/manual
+  read-only drift reports against newer contract/peer capabilities. Keep PR
+  checks pinned; never auto-merge updates. Done when a deliberate upstream
+  change is detected and both consumer tasks carry compatibility and evidence.
+- [ ] **ALIGN-08:** Add paired explicit-profile/state usage examples, compatible
+  ID/view status selectors and a scoped versioned machine-output interface.
+  Preserve native syntax and source/variant distinctions. Done when applicable
+  examples and versioned output cases pass on each client.
+- [ ] **ALIGN-09:** Before final v3, record the immutable published contract
+  reference, verify both digest pins, close preceding tasks or record explicit
+  owner-approved deferrals, and review the final consumer implementations.
+  Keep native target acceptance and publication separate; neither identical
+  catalog coverage nor synchronized client release numbers is required.
+
+Adoption evidence: matching contract 1.0.0 digest references, reciprocal AGENTS
+rules and linked local task lists. Validation is documentation/link/digest/diff
+inspection; no Linux command, installer, VM or supported target was changed.
+Resolved: contract ownership/version and reciprocal policy. Partial: source policy
+only. Deferred: ALIGN-03 through ALIGN-09. Retired/excluded or completed legacy
+outcomes: none; `migration/outcomes.json` and generated counts remain unchanged.
+Next batch: ALIGN-03 command/option and lifecycle mapping with mocked refusal
+tests. This task record does not itself implement runtime or CI changes.
+
 ## Release gates
 
+- Complete the [final-v3 alignment tasks](#cross-platform-alignment-for-final-v3), or record explicit owner-approved deferrals; adopting the contract alone does not prove conformance.
 - Candidates remain blocked by default and require `--allow-candidate` for an
   explicit change. An implemented outcome counts as operable only after its
   risk-appropriate focused evidence; support still requires a passing VM on

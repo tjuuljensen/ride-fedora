@@ -55,6 +55,21 @@ seeded-state preservation; it does not manage vaults or VPN connections.
 Installing `smartmontools` enabled `smartd` in a disposable VM, so that
 source outcome remains non-runnable pending a service-aware inverse.
 
+## Cross-platform alignment gate, 2026-11-01
+
+The user added [ALIGN-01 through ALIGN-09](MIGRATION-PLAN.md#cross-platform-alignment-for-final-v3)
+to final-v3 goals in both repositories. Contract 1.0.0, matching digest references
+and reciprocal AGENTS rules are adopted (ALIGN-01/02). This does not close the
+runtime/test/release work or replace the scoped capability requirements above.
+
+- [ ] Complete ALIGN-03 through ALIGN-08, or record explicit owner-approved
+  deferrals, with applicable native/mock evidence and tracked platform differences.
+- [ ] Complete ALIGN-09: published immutable contract reference, verified pins,
+  final consumer review and no unexplained shared-contract drift.
+
+The historical checks below remain evidence for their stated revisions; they
+do not certify the newly adopted shared contract or final release source.
+
 ## Review checks
 
 - [x] Verify the final generated catalog, burndown, and progress reports,

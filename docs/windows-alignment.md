@@ -1,5 +1,38 @@
 # Alignment with the Windows v3 development branch
 
+## Shared contract adoption, 2026-11-01
+
+The user requested a versioned shared behavior contract and reciprocal maintainer
+rules while both clients are under active development. Contract **1.0.0** is
+canonical in [ride-windows](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/models/ride-behavior-contract.md);
+the [local reference](models/ride-behavior-contract-ref.json) pins its exact UTF-8
+LF bytes by SHA-256. Both repos adopt the same version/digest. Neither the mutable
+development branch nor the peer implementation is automatically authoritative
+for new behavior. Either repo can propose a versioned change.
+
+ALIGN-01/02 are complete as source documentation/policy. AGENTS now requires
+reciprocal review for shared CLI, settings, schema meaning, acquisition, planning,
+acceptance, privilege and recovery changes, as well as package batches and RCs.
+The contract owns the procedure; this register records Fedora's implementation
+and evidence. No duplicate contract is maintained here.
+
+The [updated Windows comparison](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/fedora-alignment.md)
+includes Windows' new candidate execution/preview/restore switch. Remaining gaps
+include candidate preview/download rules, generic disabled mapping for unset,
+profile removal eligibility, ignored/conflicting arguments, status selectors and
+completion. The special iBus restore-preview path needs common target/identity
+preflight review. Native Bash/PowerShell syntax, provider implementations and
+support evidence remain intentional platform boundaries.
+
+The [final-v3 tasks](MIGRATION-PLAN.md#cross-platform-alignment-for-final-v3)
+track ALIGN-03 through ALIGN-09 with owners and completion criteria. Existing
+comparison rows below are dated evidence, not proof of full 1.0.0 conformance.
+The contract is not published at an immutable commit yet; ALIGN-09 tracks that
+release step. Adoption changes no CLI, target support, catalog or migration count.
+Review triggers: every affected shared change, package batch and release candidate.
+
+## Earlier comparison baseline
+
 The initial review used `ride-windows` branch `codex/ride-v3-migration` at
 `006f5ab` (2026-10-14). The Linux
 client follows its public command vocabulary and catalog-driven lifecycle,

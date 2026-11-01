@@ -31,11 +31,23 @@ references, not a fallback execution path.
   changing source selection, portable tools, downloads, installation, or
   recovery. Installed and portable deployments may coexist after product
   conflict review; do not impose a blanket product-wide exclusion.
-- At each package migration batch and before a release candidate, compare
-  Linux catalog, profile, and run-state schemas and their behavior with the
-  Windows development branch. Record intentional differences, their reasons,
-  and a review trigger in [Windows alignment](docs/windows-alignment.md);
-  resolve unexplained drift before promoting an operation.
+- Follow the versioned [shared RIDE behavior contract](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/models/ride-behavior-contract.md)
+  and this repo's [adopted digest reference](docs/models/ride-behavior-contract-ref.json).
+  Windows hosts the canonical contract; either RIDE repository may originate changes.
+- Before changing shared CLI, catalog/profile meaning, acquisition, planning,
+  acceptance, privilege or recovery behavior, review the pinned contract and the
+  Windows implementation. Also review each package migration batch and release
+  candidate. Classify the impact and record compared revisions or source hashes.
+- Follow the contract's review/versioning procedure. Record alignment or an
+  intentional difference with an owner, reason, linked follow-up and review
+  trigger in [Windows alignment](docs/windows-alignment.md). Update affected help,
+  completion and tests with the implementation; track shared conformance work
+  honestly while its automated suite remains pending.
+- Native target acceptance stays local. Unexplained shared-contract drift blocks
+  the affected capability's promotion, not unrelated development. Track remaining
+  final-v3 alignment work in the [migration plan](docs/MIGRATION-PLAN.md#cross-platform-alignment-for-final-v3).
+  Do not copy the canonical contract here or silently follow a newer development
+  HEAD; update its version/digest references deliberately.
 - Keep the engine and public IDs distro-neutral. Place DNF/RPM behavior in the
   Fedora provider; add apt/dpkg providers only with matching VM evidence.
 - Keep host-specific users, shares, secrets, and IP addresses outside this

@@ -17,7 +17,7 @@ copy of the shared models.
 | Generated references | CLI help, catalog, migration sources, and `tools/` generators | `docs/COMMANDS.md`, `docs/OPERATIONS.md`, `docs/workstation-server-burndown.md` | Regenerate and check; do not hand-edit generated output. |
 | Fedora v2 material | `lib-fedora.sh`, `default.preset`, `legacy/v2/` | Migration assessment only | Historical behavior is not a v3 execution fallback. Preserve its provenance and defects as evidence. |
 | Server RIDE | `network-devices/operations/provisioning/ride/` | Name-only `migration/server-inventory.json` | Server source, host identities, NAS mounts, credentials, and service-specific configuration stay in the server repository. Refresh the snapshot deliberately; it is not a synchronized runtime copy. |
-| Windows RIDE | `ride-windows` development branch | Shared command and GitHub behavior contract | Reconcile product identity and protocol behavior; keep PowerShell and Bash installers native to their platforms. |
+| Shared RIDE behavior | [Canonical versioned contract](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/models/ride-behavior-contract.md), pinned by [local digest reference](ride-behavior-contract-ref.json) | Both CLI clients, review rules and conformance work | Either repo may originate changes; update pins deliberately. Keep native installers and target acceptance separate. |
 | Reference scripts | `reference/` | Burndown inputs only | A reference script is not a supported catalog operation or a default-profile action. |
 
 The catalog supports three base package operations on their declared Fedora 44
