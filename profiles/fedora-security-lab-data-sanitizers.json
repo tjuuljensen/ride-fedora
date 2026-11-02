@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-data-sanitizers",
+  "description": "Isolated opt-in Fedora 44 Workstation packages for file and disk sanitization tools.",
+  "operations": [
+    {
+      "id": "package.nwipe",
+      "state": "installed"
+    },
+    {
+      "id": "package.scrub",
+      "state": "installed"
+    },
+    {
+      "id": "package.wipe",
+      "state": "installed"
+    }
+  ]
+}

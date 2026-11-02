@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-minimal-favorites",
+  "description": "Opt-in minimal GNOME favorites from the retained v2 choice, implemented through the configurable exact-recovery list.",
+  "operations": [
+    {
+      "id": "setting.gnome-favorite-apps",
+      "state": "configured",
+      "value": "[\"org.mozilla.firefox.desktop\",\"org.gnome.Nautilus.desktop\",\"org.gnome.Console.desktop\"]"
+    }
+  ]
+}

@@ -1,61 +1,56 @@
-# Provider foundation batch 08: Eza source and destination ownership
+# Provider foundation batch 08: Eza installed and portable deployments
 
-Status: **Fedora Eza supported; GitHub ZIP source replaced**, 2026-10-30.
-The owner confirmed **keep** for the separate portable Eza path in the v3.0
-fast-track review. Its pinned artifact and owned destination remain to
-implement; the accepted Fedora RPM is a distinct installed deployment.
-The v2 library offers `InstallEza` from Fedora and the active preset instead
-calls `InstallEzaGitHub`, which parses a mutable latest-release API response
-and extracts an unverified ZIP into `/usr/local/bin`. Their common
-`RemoveEza` removes the Fedora RPM and then deletes `/usr/local/bin/eza`
-without proving that either was created by RIDE. A separate v3 source
-outcome is retained for each acquisition path; a Fedora RPM install cannot
-be reported as acceptance of the portable GitHub download.
+Status: **Fedora RPM supported; portable release operable as an opt-in candidate**, 2026-11-01. The owner kept
+both v2 acquisition paths. The library-only `InstallEza` path is the accepted
+Fedora RPM recorded in [`package.eza` acceptance](../acceptance/package.eza.md).
+The active `InstallEzaGitHub` path is a separate user-local deployment and is
+not covered by the RPM result.
 
-Fedora 44 publishes the signed [`eza` RPM](https://packages.fedoraproject.org/pkgs/rust-eza/eza/)
-under EUPL-1.2. The current [upstream releases](https://github.com/eza-community/eza/releases)
-also publish Linux GNU archives, but the v2 parser does not pin an asset
-digest or own its destination. The Fedora 44 package and upstream latest
-release both report 0.23.5 at this review; the replacement choice does not
-promise Fedora will always track upstream immediately.
+The upstream [installation guide](https://github.com/eza-community/eza/blob/main/INSTALL.md)
+documents the x86_64 GNU release archive and Fedora's repository package. The
+[0.23.5 release](https://github.com/eza-community/eza/releases/tag/v0.23.5)
+publishes the x86_64 GNU tarball with SHA-256
+`35c70c5c43c29108075e58b893234c67ef585f0b53a7eaf8e9e7d4eec9f339b4`.
+The release tag is shown as signed on GitHub, but the signing key is expired;
+v3 therefore verifies the exact publisher release archive against its pinned
+digest and does not claim a currently valid signature. The upstream Cargo
+manifest declares EUPL-1.2, and the matching version's
+[`LICENSE.txt`](https://raw.githubusercontent.com/eza-community/eza/v0.23.5/LICENSE.txt)
+is recorded in catalog and deployment metadata.
 
-## Completion criteria defined before implementation
+## Completion checks defined before implementation
 
-- Add one `package.eza` Fedora RPM operation for the library-only v2
-  `InstallEza` path, exact Fedora 44 x86_64 Workstation target, source,
-  license, signed-package verification, detection, and owned inverse. Keep
-  it out of base profiles. Reuse focused mocked failure tests for the
-  unchanged DNF package handler.
-- In one disposable Workstation VM overlay, prove absent plan, apply,
-  signature and installed files, `eza` command detection, repeat, status,
-  restore, and explicit remove. Reject loss of pre-existing RPM identities
-  and record any updates or retained dependencies. Do not touch
-  `/usr/local/bin/eza` during the RPM check.
-- If the Fedora operation passes, close the active GitHub-source outcome
-  as a **documented, non-runnable replacement**: select the supported Fedora
-  operation for an installed Eza, and defer portable deployment until a
-  checksum-pinned, ownership-aware handler exists. Record this source change
-  and its review trigger; do not count the old download as a working install.
-- Update ledger, acceptance records, Windows alignment, and generated docs
-  after checking the evidence. Investigate a failed VM run before retrying.
+- Preserve the two v2 acquisition intents as separate operations:
+  `package.eza` uses Fedora RPM; `package.eza-portable` uses the exact pinned
+  upstream archive in a user-local deployment. Both remain opt-in.
+- Keep portable files under
+  `~/.local/opt/ride-fedora/eza/0.23.5`, expose the binary through
+  `~/.local/bin/eza`, and record an owned manifest. Coexist with the Fedora
+  RPM at `/usr/bin/eza`; never overwrite a pre-existing user-local command.
+- Verify the archive SHA-256 before extracting. Inspect tar members without
+  extracting paths, accept exactly one regular `eza` binary, probe its version,
+  and preserve unrelated files in RIDE's owned-tools directory.
+- Mock tests cover install, repeat, remove, digest/download failure, unsafe or
+  incomplete archives, destination collision, modified owned state, and
+  preservation of sibling user data.
+- On a disposable Fedora 44 Workstation x86_64 VM, run candidate refusal,
+  plan, install alongside the Fedora RPM, version and status checks, repeat,
+  remove, RPM-preservation checks, and user-data recovery. Do not run Eza on
+  user data during acceptance.
+- Compare the Linux catalog/profile/run contract with Windows alignment and
+  document intentional differences. Keep the portable deployment out of base
+  profiles.
 
-## Focused VM result and source decision
+## Implementation and acceptance record
 
-The Fedora package lifecycle **PASS** result is recorded in
-[`package.eza` acceptance](../acceptance/package.eza.md). A single disposable
-Fedora 44 x86_64 Workstation overlay exercised the absent package through
-plan, apply, signed RPM and file verification, command detection, status,
-unchanged repeat, restore, and explicit remove. The RPM introduced `eza`,
-`libgit2`, and `llhttp`; both inverse paths returned the RPM inventory to
-baseline and left `/usr/local/bin/eza` absent. The unchanged DNF handler's
-mocked failure evidence is reused from the base package checks.
-
-The active `InstallEzaGitHub` outcome is a **documented replacement**, not
-a working portable install. A user who wants an installed Eza can select
-`package.eza` from Fedora, with a supported package lifecycle on the declared
-target. The v2 unpinned ZIP extraction, mutable latest-release selection,
-and unconditional deletion of `/usr/local/bin/eza` are retired from the
-public v3.0 execution path. Review the portable choice if a portable Eza is
-explicitly requested and a pinned artifact, owned destination, coexistence
-policy, and recoverable inverse are designed and tested. This outcome does
-not add an operation to `default` or `server-base`.
+`package.eza-portable` uses a pinned x86_64 GNU release, a separate
+`user-local-bin` deployment identity, and an ownership manifest. The opt-in
+[`fedora-eza-portable` profile](../../profiles/fedora-eza-portable.json) may
+coexist with `package.eza`. Focused mock tests passed download/digest failure,
+invalid archive, collision, modified-state, install, repeat, and inverse
+checks. On Fedora 44 Workstation x86_64, the pinned binary installed and
+reported version 0.23.5 while the Fedora RPM remained installed; repeat was
+unchanged, and portable removal preserved the RPM and sibling user data. The
+test invoked only `eza --version`. Transcript, image digest, catalog digest,
+and run IDs are recorded in [`package.eza-portable` acceptance](../acceptance/package.eza-portable.md).
+H068 tracks refresh and additional-architecture review.

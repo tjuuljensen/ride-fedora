@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "server-required-tools",
+  "description": "Opt-in Fedora Server tools from the legacy Required RPM bundle; one-way packages remain installed after profile removal.",
+  "operations": [
+    {
+      "id": "package.open-vm-tools",
+      "state": "installed"
+    },
+    {
+      "id": "package.server-nano",
+      "state": "installed"
+    },
+    {
+      "id": "package.wget",
+      "state": "installed"
+    },
+    {
+      "id": "package.unzip",
+      "state": "installed"
+    },
+    {
+      "id": "package.git",
+      "state": "installed"
+    },
+    {
+      "id": "package.cifs-utils",
+      "state": "installed"
+    },
+    {
+      "id": "package.samba-client",
+      "state": "installed"
+    },
+    {
+      "id": "package.samba-common",
+      "state": "installed"
+    },
+    {
+      "id": "package.cronie",
+      "state": "installed"
+    },
+    {
+      "id": "package.screen",
+      "state": "installed"
+    }
+  ]
+}

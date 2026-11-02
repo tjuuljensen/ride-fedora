@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-woeusb-runtime",
+  "description": "Opt-in Fedora packages required by WoeUSB 5.2.4. Installing this profile does not create or modify boot media.",
+  "operations": [
+    {"id": "package.parted", "state": "installed"},
+    {"id": "package.dosfstools", "state": "installed"},
+    {"id": "package.ntfs-3g", "state": "installed"},
+    {"id": "package.ntfsprogs", "state": "installed"},
+    {"id": "package.wimlib-utils", "state": "installed"},
+    {"id": "package.grub2-tools-extra", "state": "installed"},
+    {"id": "package.wget2-wget", "state": "installed"}
+  ]
+}

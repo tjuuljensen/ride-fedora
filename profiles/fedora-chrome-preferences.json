@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-chrome-preferences",
+  "description": "Opt-in Chrome Flatpak with user-changeable RIDE recommended defaults. Safe Browsing is explicitly disabled to match the retained v2 value; review this security tradeoff before applying.",
+  "operations": [
+    {"id": "package.chrome", "state": "installed"},
+    {
+      "id": "setting.chrome-preferences",
+      "state": "configured",
+      "value": "[\"homepage\",\"homepage-not-newtab\",\"home-button\",\"no-default-browser-prompt\",\"disable-safe-browsing\",\"no-safe-browsing-reporting\",\"disable-network-prediction\",\"bookmark-bar\"]"
+    }
+  ]
+}

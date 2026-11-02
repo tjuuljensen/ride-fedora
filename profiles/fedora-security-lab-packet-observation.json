@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-packet-observation",
+  "description": "Opt-in Fedora 44 Workstation packet observation and traffic inspection packages.",
+  "operations": [
+    {
+      "id": "package.iptraf-ng",
+      "state": "installed"
+    },
+    {
+      "id": "package.netsniff-ng",
+      "state": "installed"
+    },
+    {
+      "id": "package.ngrep",
+      "state": "installed"
+    },
+    {
+      "id": "package.tcptrack",
+      "state": "installed"
+    }
+  ]
+}

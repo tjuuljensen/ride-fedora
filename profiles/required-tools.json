@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "required-tools",
+  "description": "Opt-in Fedora Workstation and Server RPMs from the legacy Required bundle; one-way packages remain installed after profile removal.",
+  "operations": [
+    {
+      "id": "package.coreutils",
+      "state": "installed"
+    },
+    {
+      "id": "package.git",
+      "state": "installed"
+    },
+    {
+      "id": "package.gnupg2",
+      "state": "installed"
+    },
+    {
+      "id": "package.python-command",
+      "state": "installed"
+    },
+    {
+      "id": "package.tar",
+      "state": "installed"
+    },
+    {
+      "id": "package.wget",
+      "state": "installed"
+    },
+    {
+      "id": "package.gcc",
+      "state": "installed"
+    }
+  ]
+}

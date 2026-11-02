@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-traffic",
+  "description": "Opt-in Fedora 44 Workstation HTTP and TCP traffic utility packages.",
+  "operations": [
+    {
+      "id": "package.httping",
+      "state": "installed"
+    },
+    {
+      "id": "package.httpry",
+      "state": "installed"
+    },
+    {
+      "id": "package.tcpflow",
+      "state": "installed"
+    },
+    {
+      "id": "package.tcpick",
+      "state": "installed"
+    }
+  ]
+}

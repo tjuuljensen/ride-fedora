@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-amp",
+  "description": "Opt-in CubeCoders AMP instance manager package for Fedora 44 Server; does not provision a controller, credentials, license, firewall rules, runtimes, or instances.",
+  "operations": [
+    {
+      "id": "package.amp-installer",
+      "state": "installed"
+    }
+  ]
+}

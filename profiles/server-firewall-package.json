@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "server-firewall-package",
+  "description": "Opt-in installation of Fedora firewalld package without enabling or configuring firewall policy.",
+  "operations": [
+    {"id": "package.firewalld", "state": "installed"}
+  ]
+}

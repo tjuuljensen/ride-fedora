@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-fast-dnf",
+  "description": "Opt-in DNF5 mirror selection and parallel download tuning, with owned drop-in recovery.",
+  "operations": [
+    {
+      "id": "setting.dnf5-fast-tuning",
+      "state": "configured"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-no-root-login",
+  "description": "Opt-in Fedora 44 Server policy that disables direct SSH root login through an owned sshd drop-in.",
+  "operations": [
+    {
+      "id": "setting.ssh-root-login",
+      "state": "configured"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-balena-etcher",
+  "description": "Opt-in balenaEtcher RPM. RIDE installs the application only; writing media remains user initiated.",
+  "operations": [
+    {
+      "id": "package.balena-etcher",
+      "state": "installed"
+    }
+  ]
+}

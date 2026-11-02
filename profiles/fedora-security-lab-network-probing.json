@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-probing",
+  "description": "Opt-in Fedora 44 Workstation active network probing packages.",
+  "operations": [
+    {
+      "id": "package.firewalk",
+      "state": "installed"
+    },
+    {
+      "id": "package.lbd",
+      "state": "installed"
+    },
+    {
+      "id": "package.masscan",
+      "state": "installed"
+    },
+    {
+      "id": "package.zmap",
+      "state": "installed"
+    }
+  ]
+}

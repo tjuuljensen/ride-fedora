@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-glances-web",
+  "description": "Opt-in Fedora 44 Server Glances Web UI bound to loopback; access remotely through SSH port forwarding.",
+  "operations": [
+    {
+      "id": "package.glances",
+      "state": "installed"
+    },
+    {
+      "id": "setting.glances-web-service",
+      "state": "enabled"
+    }
+  ]
+}

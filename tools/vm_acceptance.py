@@ -24,7 +24,10 @@ ROOT = Path(__file__).resolve().parent.parent
 TARGETS = ROOT / "tests" / "acceptance" / "targets.json"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
-SOURCE_PATHS = ("ride.sh", "catalog", "profiles", "lib/v3", "requirements")
+SOURCE_PATHS = ("ride.sh", "catalog", "profiles", "lib/v3", "requirements",
+                "tools/manage-firefox-extensions.py", "tools/manage-ferium.py",
+                "tools/manage-minecraft-server.py", "tools/manage-galleta.py",
+                "policies/firefox-extensions.json")
 
 
 def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, Any]:
@@ -48,7 +51,7 @@ def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, Any]:
             raise ValueError("invalid VM edition variant ID")
         if target["imageFormat"] != "qcow2" or not SHA256_PATTERN.fullmatch(target["imageSha256"]):
             raise ValueError("VM target needs a qcow2 image and SHA256 digest")
-        if not re.fullmatch(r"package\.[a-z0-9.-]+", target["pilotOperation"]):
+        if not re.fullmatch(r"(?:package|setting)\.[a-z0-9.-]+", target["pilotOperation"]):
             raise ValueError("invalid VM pilot operation")
         if not re.fullmatch(r"[A-Za-z0-9+_.-]+", target["pilotPackage"]):
             raise ValueError("invalid VM pilot package")
@@ -59,7 +62,7 @@ def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, Any]:
         for pilot in additional:
             if (not isinstance(pilot, dict) or
                     not isinstance(pilot.get("operationId"), str) or
-                    not re.fullmatch(r"package\.[a-z0-9.-]+", pilot["operationId"]) or
+                        not re.fullmatch(r"(?:package|setting)\.[a-z0-9.-]+", pilot["operationId"]) or
                     not isinstance(pilot.get("package"), str) or
                     not re.fullmatch(r"[A-Za-z0-9+_.-]+", pilot["package"]) or
                     pilot["operationId"] in pilot_ids):
@@ -79,6 +82,12 @@ def load_target(target_id: str, matrix_path: Path = TARGETS) -> dict[str, Any]:
             for package in seed_packages
         ):
             raise ValueError("invalid VM seed package list")
+        vm_smp = target.get("vmSmp", 2)
+        vm_memory = target.get("vmMemoryMiB", 3072)
+        if (not isinstance(vm_smp, int) or isinstance(vm_smp, bool) or not 1 <= vm_smp <= 16 or
+                not isinstance(vm_memory, int) or isinstance(vm_memory, bool) or
+                not 1024 <= vm_memory <= 65536):
+            raise ValueError("invalid VM resource settings")
         seen.add(target["id"])
         if target["id"] == target_id:
             selected = target
@@ -129,15 +138,20 @@ def free_loopback_port() -> int:
 
 
 def qemu_command(overlay: Path, seed: Path, serial: Path, port: int,
-                 *, accel: str = "kvm") -> list[str]:
+                 *, accel: str = "kvm", smp: int = 2,
+                 memory_mib: int = 3072) -> list[str]:
     if not 1 <= port <= 65535:
         raise ValueError("invalid SSH forward port")
     if accel not in {"kvm", "tcg"}:
         raise ValueError("unsupported QEMU acceleration mode")
+    if (not isinstance(smp, int) or isinstance(smp, bool) or not 1 <= smp <= 16 or
+            not isinstance(memory_mib, int) or isinstance(memory_mib, bool) or
+            not 1024 <= memory_mib <= 65536):
+        raise ValueError("invalid VM resource settings")
     return [
         "qemu-system-x86_64", "-accel", accel, "-machine", "q35",
-        "-cpu", "host" if accel == "kvm" else "max",
-        "-smp", "2", "-m", "3072", "-display", "none", "-monitor", "none",
+        "-cpu", "host" if accel == "kvm" else "max,-svm",
+        "-smp", str(smp), "-m", str(memory_mib), "-display", "none", "-monitor", "none",
         "-serial", f"file:{serial}",
         "-drive", f"file={overlay},if=virtio,format=qcow2",
         "-drive", f"file={seed},media=cdrom,readonly=on",
@@ -283,12 +297,32 @@ class VM:
 
     def _wait_for_ssh(self, timeout: int = 600) -> None:
         deadline = time.monotonic() + timeout
+        serial_log = self.artifacts / "serial.log"
         while time.monotonic() < deadline:
             if self.process is not None and self.process.poll() is not None:
                 raise RuntimeError(f"QEMU stopped during boot; inspect {self.artifacts / 'qemu.log'}")
-            result = self._command(
-                ["ssh", *self._ssh_options(), "-p", str(self.port),
-                 "ride-test@127.0.0.1", "true"], timeout=10, check=False, record=False)
+            if serial_log.is_file():
+                try:
+                    console = serial_log.read_text(encoding="utf-8", errors="replace")
+                except OSError as exc:
+                    raise RuntimeError(f"cannot inspect guest console log: {serial_log}: {exc}") from exc
+                if ("You are in emergency mode." in console or
+                        "Reached target Emergency Mode" in console):
+                    raise RuntimeError(
+                        "Fedora guest entered emergency mode before SSH; "
+                        f"inspect {serial_log} and {self.artifacts / 'qemu.log'}"
+                    )
+            try:
+                result = self._command(
+                    ["ssh", *self._ssh_options(), "-p", str(self.port),
+                     "ride-test@127.0.0.1", "true"], timeout=10, check=False, record=False)
+            except subprocess.TimeoutExpired:
+                # Under TCG, a live guest can take longer than the per-probe
+                # timeout to answer SSH while it finishes first-boot setup.
+                # Keep polling until the overall boot deadline instead of
+                # aborting the acceptance run on one slow probe.
+                time.sleep(3)
+                continue
             if result.returncode == 0:
                 return
             time.sleep(3)
@@ -312,6 +346,8 @@ class VM:
                                     capture_output=True, check=True, timeout=10).stdout)
         metadata = {"target": self.target, "imagePath": str(self.image),
                     "acceleration": self.accel,
+                    "vmResources": {"smp": self.target.get("vmSmp", 2),
+                                    "memoryMiB": self.target.get("vmMemoryMiB", 3072)},
                     "verifiedImageSha256": digest, "sourceRevision": revision,
                     "sourceHasUncommittedChanges": dirty,
                     "catalogSha256": file_sha256(ROOT / "catalog" / "operations.json")}
@@ -326,7 +362,8 @@ class VM:
         self._qemu_log = (self.artifacts / "qemu.log").open("wb")
         self.process = subprocess.Popen(
             qemu_command(overlay, seed, self.artifacts / "serial.log", self.port,
-                         accel=self.accel),
+                         accel=self.accel, smp=self.target.get("vmSmp", 2),
+                         memory_mib=self.target.get("vmMemoryMiB", 3072)),
             stdin=subprocess.DEVNULL, stdout=self._qemu_log, stderr=subprocess.STDOUT,
         )
         try:

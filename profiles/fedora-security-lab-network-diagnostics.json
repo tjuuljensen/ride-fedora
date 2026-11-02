@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-diagnostics",
+  "description": "Opt-in Fedora Security Lab network diagnostics; does not alter interfaces, capture traffic, or contact external lookup services.",
+  "operations": [
+    {"id": "package.macchanger", "state": "installed"},
+    {"id": "package.mtr", "state": "installed"},
+    {"id": "package.nethogs", "state": "installed"},
+    {"id": "package.whois", "state": "installed"}
+  ]
+}

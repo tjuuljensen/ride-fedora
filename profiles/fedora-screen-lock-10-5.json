@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-screen-lock-10-5",
+  "description": "Opt-in GNOME idle activation at 10 minutes with automatic screen lock five minutes later.",
+  "operations": [
+    {
+      "id": "setting.gnome-lock-timing",
+      "state": "configured",
+      "value": "idle-10-lock-5"
+    }
+  ]
+}

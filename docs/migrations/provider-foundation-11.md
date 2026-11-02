@@ -1,11 +1,11 @@
-# Flatpak runtime and application-preserving inverse
+# Flatpak runtime install and safe inverse boundary
 
-Status: **replaced by Fedora Workstation's supplied runtime; no v3.0 RIDE
-install**, 2026-10-30.
+Status: **PASS; supported** on Fedora 44 Workstation x86_64, 2026-10-31.
 The owner subsequently chose **keep** for the Flatpak runtime capability in
 the v3.0 fast-track review, separately from the Flathub remote. Add an
-optional absent-runtime installation path with app- and data-preserving
-recovery; its presence on the pinned image remains baseline evidence only.
+optional absent-runtime installation path while refusing to remove the
+runtime or its app/data stores. Its presence on the pinned image remains
+baseline evidence only.
 The commented v2 `InstallFlatpak` installs the Fedora Flatpak RPM. Its
 `RemoveFlatpak` runs `flatpak uninstall --all` before `dnf autoremove -y
 flatpak`, so it can delete applications and runtimes RIDE did not install.
@@ -14,17 +14,29 @@ is available for Fedora 44 and is pre-installed in the pinned Workstation
 image. Pre-installation in one image does not prove a safe v3 installation
 or inverse on all declared hosts.
 
-## Completion criteria defined before resolution
+## Completion criteria defined before implementation
 
-- Inspect the runtime package and remote/application baseline on the pinned
-  Fedora 44 x86_64 Workstation image. Check the current distribution contract.
-- Allow a runnable v3 operation only with an installed-only or ownership-aware
-  package lifecycle that preserves seeded user Flatpak apps, remotes, and data
-  through apply, repeat, failure, and recovery in a disposable VM. Never use
-  `uninstall --all` or blanket `autoremove` as an inverse.
-- Otherwise record a documented non-runnable replacement or unsupported
-  decision with a review trigger; do not count baseline package presence as
-  an accepted RIDE install.
+- Add `package.flatpak` with `states: ["installed"]` and `recovery: "none"`.
+  Keep the operation opt-in; do not make package absence an exposed desired
+  state. This retains repair/install while making the unsafe legacy removal
+  unavailable. Reuse the Fedora DNF handler and its focused failure evidence.
+- Before a disposable VM run, seed a user remote, a system remote, and user
+  data under `~/.var/app`; capture package inventory, remote records, and
+  sentinel metadata. Prepare absence with `rpm -e --nodeps flatpak` in the
+  disposable overlay so the scenario tests installation while leaving reverse
+  dependencies, other RPMs, and remote configuration in place. This is test
+  setup only; it is not a supported RIDE operation.
+- Verify plan, candidate gate, signed RPM install, repeat, status, and RPM
+  files. Since recovery is none, restore and remove must refuse. Apply must
+  leave seeded remotes and app data identical. Confirm the CLI can list the
+  retained remotes and user data remains owned by its original user.
+- Run the profile smoke with supported status after absent-state install
+  checks pass; the install acceptance is recorded separately in the evidence
+  report.
+  Never call `flatpak uninstall --all` or blanket `autoremove` as an inverse.
+- Retain broader app and runtime upgrades, per-app data lifecycle, and
+  Flatpak/RPM coexistence under H033. These are not part of installing the
+  Flatpak runtime itself.
 
 ## Fedora 44 inspection and v3.0 decision
 
@@ -39,11 +51,24 @@ no installed apps. The separate
 baseline. The query made no state change and does not establish preservation
 of seeded user data through a RIDE lifecycle.
 
-The commented v2 `Flatpak` package pair is **replaced for v3.0 by the Fedora
-Workstation supplied runtime**, with no RIDE operation or managed removal.
-This is a documented, non-runnable replacement, not a working RIDE install.
-The destructive v2 inverse is retired from execution. Reopen if RIDE must
-repair an absent runtime on a declared Workstation host; then prove a
-data-preserving installed-only contract or an owned inverse with seeded
-apps, remotes, and data in a disposable VM. Other editions still require
-their own support evidence.
+The prior replacement decision predated the owner's v3.0 keep decision.
+RIDE provides an installed-only runtime operation for Fedora 44 Workstation.
+The v2 `flatpak uninstall --all` and blanket autoremove behavior remain
+excluded from execution because they can delete unrelated apps and data.
+The Fedora 44 Workstation install path is supported; other editions require
+their own target evidence.
+
+The first disposable acceptance attempt applied `dnf remove flatpak` in its
+throwaway overlay. DNF removed 21 packages, including `gnome-software`,
+`fedora-flathub-remote`, and 18 packages it classified as unused dependencies.
+The test's exact-set assertion failed after that transaction. The guest was
+stopped and the overlay retained only as failure evidence; the pinned base
+image and host were unchanged. This confirms normal DNF removal is not a safe
+inverse for the runtime or its dependents.
+The second attempt confirmed that only the Flatpak RPM was erased. Its test
+then correctly encountered that the absent package also removes the `flatpak`
+CLI used to query remotes. Compare registered remote configuration file
+hashes while the package is absent; query remote listings again after RIDE
+installs the RPM. This preparation and preservation check passed, followed
+by a separate profile smoke using the supported catalog status without
+`--allow-candidate`. See the [acceptance record](../acceptance/package.flatpak.md).

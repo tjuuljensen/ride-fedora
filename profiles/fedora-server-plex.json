@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-plex",
+  "description": "Opt-in Plex Media Server on Fedora 44 Server; starts only the packaged Plex service and does not configure network exposure or an account.",
+  "operations": [
+    {
+      "id": "package.plex-server",
+      "state": "installed"
+    },
+    {
+      "id": "setting.plex-server-service",
+      "state": "enabled"
+    }
+  ]
+}

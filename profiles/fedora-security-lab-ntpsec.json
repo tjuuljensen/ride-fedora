@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-ntpsec",
+  "description": "Opt-in Fedora 44 Workstation candidate for NTPsec package presence without service activation or clock configuration.",
+  "operations": [
+    {
+      "id": "package.ntpsec",
+      "state": "installed"
+    }
+  ]
+}

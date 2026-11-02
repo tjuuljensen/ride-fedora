@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-handbrake-cli",
+  "description": "Install the HandBrakeCLI RPM from RPM Fusion after activating the accepted RPM Fusion profile.",
+  "operations": [
+    {
+      "id": "package.handbrake-cli",
+      "state": "installed"
+    }
+  ]
+}

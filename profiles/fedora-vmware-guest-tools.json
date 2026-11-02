@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-vmware-guest-tools",
+  "description": "Opt-in Fedora VMware guest tools package. This installs package state only and does not configure VMware or user data.",
+  "operations": [
+    {
+      "id": "package.open-vm-tools",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-web-tools",
+  "description": "Opt-in Fedora 44 Workstation HTTP utilities and web analysis packages.",
+  "operations": [
+    {
+      "id": "package.goaccess",
+      "state": "installed"
+    },
+    {
+      "id": "package.httpd-tools",
+      "state": "installed"
+    },
+    {
+      "id": "package.httrack",
+      "state": "installed"
+    },
+    {
+      "id": "package.wget2-wget",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-eza-portable",
+  "description": "Opt-in pinned portable Eza binary in the user's local bin; may coexist with the Fedora RPM.",
+  "operations": [
+    {
+      "id": "package.eza-portable",
+      "state": "installed"
+    }
+  ]
+}

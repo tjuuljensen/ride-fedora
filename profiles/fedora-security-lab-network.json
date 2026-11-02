@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network",
+  "description": "Opt-in Fedora Security Lab network-discovery and packet-analysis packages; restoring an apply run preserves pre-existing package identities.",
+  "operations": [
+    {
+      "id": "package.ncat",
+      "state": "installed"
+    },
+    {
+      "id": "package.nmap",
+      "state": "installed"
+    },
+    {
+      "id": "package.tcpdump",
+      "state": "installed"
+    },
+    {
+      "id": "package.wireshark-cli",
+      "state": "installed"
+    },
+    {
+      "id": "package.wireshark",
+      "state": "installed"
+    }
+  ]
+}

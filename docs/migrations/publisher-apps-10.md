@@ -3,7 +3,10 @@
 Fast-track owner decisions: keep Arduino IDE, Discord, Joplin, and Vivaldi;
 retire Atom editor and its plugin capability.
 
-Status: **in review**, 2026-10-30. This v2 source batch maps
+Status: **Arduino IDE, Joplin, and Discord are operable opt-in candidates;
+Vivaldi is an operable opt-in Flatpak candidate; two Atom outcomes
+retired**, updated
+2026-11-01. This v2 source batch maps
 `ArduinoIDE`, `AtomEditor`, `AtomPlugins`, `Discord`, `Joplin`, and
 `Vivaldi`. v2 downloads moving Arduino/Joplin AppImages to
 `~/Applications`; adds an Atom repository with package signature checks
@@ -27,62 +30,61 @@ download page.
   docs. Keep these applications outside the small v3 base profiles until
   their declared deployment and recovery checks pass.
 
-## Source decisions
+## Current v3 paths and source review
 
-The current source review finds
-[Arduino IDE's executable](https://github.com/arduino/arduino-ide) under
-AGPLv3 with component exceptions, [Atom](https://github.com/atom/atom/blob/master/LICENSE.md)
-under MIT, [Joplin code](https://github.com/laurent22/joplin/blob/dev/LICENSE)
-under AGPL-3.0-or-later with asset exceptions, and
-[Discord](https://discord.com/terms) and
-[Vivaldi](https://vivaldi.com/privacy/vivaldi-end-user-license-agreement/)
-under their publisher terms. These licenses and terms do not transfer
-Windows installer evidence to the Linux deployment.
+- **Arduino IDE:** owner-kept. Upstream publishes Arduino IDE 2.3.10 as a
+  versioned Linux x86_64 AppImage with the release API's SHA-256. Upstream says
+  its distribution is AGPL-3.0-or-later and includes compatible third-party
+  licenses. RIDE pins the AppImage and installs it under `~/Applications` with
+  an owned manifest. Sketches, board data, USB permissions, and board uploads
+  remain outside the operation. The install lifecycle is implemented; exact
+  Fedora 44 acceptance remains pending. See
+  [Arduino acceptance](../acceptance/package.arduino-ide.md).
+- **AtomEditor:** retired. GitHub sunset and archived Atom in 2022. v2 also
+  disables RPM package signature checks and overwrites the user's Atom init
+  file. Reopen only on a specific maintained successor request.
+- **AtomPlugins:** retired. Its `apm` plugin set depends on the sunset editor
+  and its name-based inverse can remove independently installed plugins.
+- **Discord:** owner-kept. The official download page's stable RPM currently
+  resolves to Discord 1.0.168. RIDE pins the versioned RPM URL and its observed
+  SHA-256, checks RPM name/version/architecture before installation, and
+  removes only the `discord` package. Discord does not publish a verifiable
+  signature for this direct RPM, so the operation remains an opt-in candidate
+  with digest plus metadata verification. A disposable VM acceptance path
+  checks profile preservation. Login, voice, and screen sharing remain v3.1
+  checks. See [Discord acceptance](../acceptance/package.discord.md).
+- **Joplin:** owner-kept. Joplin 3.7.22 has a versioned Linux AppImage and a
+  GitHub release SHA-256; the source is AGPL-3.0-or-later with separately
+  licensed assets. The current Flathub build remains at 3.6.14, below Joplin's
+  3.7.0 sync compatibility requirement, so v3 pins the newer publisher
+  AppImage. The v3.7.18 AppImage had a Fedora 44 launch report; acceptance
+  checks the newer release runtime while leaving notebooks and configuration
+  untouched. Do not use the publisher's moving install script. See
+  [Joplin acceptance](../acceptance/package.joplin.md).
+- **Vivaldi:** retained in the v3.0 scope under the owner's instruction that
+  every kept v2 outcome remains available. The initial path is the documented
+  Flathub Flatpak, an opt-in candidate authenticated by the signed Flathub
+  system remote. Its profile remains under `~/.var/app/com.vivaldi.Vivaldi`
+  after removal. Acceptance is pending; native messaging, sign-in, sync, and
+  browser behavior are tracked in H080. A separately selectable official RPM
+  remains possible after explicit repository/key ownership and exact rollback
+  are implemented. Do not use the publisher's `--nogpgcheck` bootstrap.
 
-- **ArduinoIDE: unsupported, non-runnable.** The publisher's
-  [current Linux AppImage release](https://github.com/arduino/arduino-ide/releases)
-  includes a versioned asset and SHA-256, but the v2 `latest` scrape and
-  name-glob removal do not establish file ownership. Choose a pinned
-  deployment with collision-safe storage and Fedora 44 VM
-  lifecycle. Hardware upload is separate from the application install.
+Source links: [Arduino 2.3.10 release](https://github.com/arduino/arduino-ide/releases/tag/2.3.10),
+[Arduino IDE license](https://raw.githubusercontent.com/arduino/arduino-ide/2.3.10/LICENSE.txt),
+[Arduino IDE project license notes](https://github.com/arduino/arduino-ide),
+[Arduino Linux download guidance](https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE),
+[Discord Linux downloads](https://discord.com/download),
+[Joplin 3.7.22 release](https://github.com/laurent22/joplin/releases/tag/v3.7.22),
+[Joplin Flathub package](https://flathub.org/en/apps/net.cozic.joplin_desktop),
+[Joplin Fedora 44 AppImage issue](https://github.com/laurent22/joplin/issues/16558),
+[Vivaldi Fedora support](https://help.vivaldi.com/desktop/install-update/install-the-vivaldi-browser/),
+[Vivaldi package signing](https://help.vivaldi.com/desktop/install-update/obtaining-official-builds/),
+[Vivaldi Flatpak instructions](https://help.vivaldi.com/desktop/install-update/install-vivaldi-on-flatpak/),
+[Vivaldi Flathub package](https://flathub.org/en/apps/com.vivaldi.Vivaldi).
 
-  The owner retained Arduino IDE as an optional v3 outcome on 2026-10-30.
-  Choose the deployment form during migration and test its pinned acquisition,
-  ownership, and inverse. The v2 moving AppImage path remains non-runnable.
-- **AtomEditor: retired, non-runnable.** GitHub
-  [sunset and archived Atom](https://github.blog/2022-06-08-sunsetting-atom/)
-  in 2022. v2 also disables RPM package signature checks and overwrites a
-  user's Atom initialization file. Reopen only for a specifically requested
-  maintained successor with separate source and user-state ownership.
-- **AtomPlugins: retired, non-runnable.** Its ten `apm` commands depend on
-  the sunset Atom editor and can remove plugins installed independently by
-  the user. Reopen for a maintained editor's explicit plugin set with
-  per-user inventory and inverse.
-- **Discord: unsupported, non-runnable.** The
-  [publisher offers a Linux RPM](https://discord.com/download), but the v2
-  `dnf install discord` request has no declared Fedora 44 source in v3, and
-  v3 has no pinned publisher-RPM handler. Choose a
-  publisher RPM or an owned Flathub deployment with verified bytes/source,
-  preserved user profile, and disposable-VM happy path.
-- **Joplin: unsupported, non-runnable.** The
-  [publisher's Linux guidance](https://joplinapp.org/help/install/) uses a
-  remote installation script; RIDE must not run it in a default profile.
-  The v2 moving AppImage and glob inverse can overwrite or delete an
-  existing app, while notebooks belong to the user. Reopen for a pinned
-  portable deployment with notebook-preserving recovery and VM evidence.
-- **Vivaldi: unsupported, non-runnable.**
-  [Vivaldi supports Fedora 43+](https://help.vivaldi.com/desktop/install-update/install-the-vivaldi-browser/),
-  but the v2 scraped RPM and publisher-managed repository/key lack an owned
-  inverse. Reopen for a requested exact-version RPM with verified publisher
-  origin, repository/key ownership, preserved browser profile, and VM
-  happy path.
-
-The owner retained optional Discord and Joplin for migration on 2026-10-30,
-alongside Arduino IDE. Their v2 acquisition methods remain non-runnable.
-Choose Discord's owned publisher RPM or Flathub source and prove user-profile
-preservation; pin Joplin's deployment and prove notebook-safe recovery on
-Fedora 44 Workstation.
-
-The owner deferred the Vivaldi keep-or-retire decision on 2026-10-30. Its
-v3.0 disposition remains non-runnable while source and browser-profile
-recovery are clarified.
+The owner kept Arduino IDE, Discord, and Joplin on 2026-10-30 and later
+clarified that all kept v2 outcomes remain in v3.0 scope. Vivaldi's documented
+Flathub deployment is therefore included as an opt-in candidate; its official
+RPM remains a separately managed deployment that can be added after its
+repository lifecycle is owned and verified.

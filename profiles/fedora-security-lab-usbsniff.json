@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-usbsniff",
+  "description": "Install Fedora USB capture and replay utilities without operating USB devices.",
+  "operations": [
+    {
+      "id": "package.usbsniff",
+      "state": "installed"
+    }
+  ]
+}

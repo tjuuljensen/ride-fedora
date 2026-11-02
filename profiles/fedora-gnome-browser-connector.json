@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-gnome-browser-connector",
+  "description": "Opt-in Fedora native messaging connector for manually managed GNOME Shell browser integration.",
+  "operations": [
+    {
+      "id": "package.gnome-browser-connector",
+      "state": "installed"
+    }
+  ]
+}

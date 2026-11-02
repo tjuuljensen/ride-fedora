@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-storage-tools",
+  "description": "Isolated opt-in Fedora 44 Workstation package for GParted; installing it does not enumerate or modify storage.",
+  "operations": [
+    {
+      "id": "package.gparted",
+      "state": "installed"
+    }
+  ]
+}

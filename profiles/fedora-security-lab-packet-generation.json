@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-packet-generation",
+  "description": "Opt-in Fedora 44 Workstation packet crafting and replay utilities.",
+  "operations": [
+    {
+      "id": "package.hping3",
+      "state": "installed"
+    },
+    {
+      "id": "package.packeth",
+      "state": "installed"
+    },
+    {
+      "id": "package.sing",
+      "state": "installed"
+    },
+    {
+      "id": "package.tcpreplay",
+      "state": "installed"
+    },
+    {
+      "id": "package.thc-ipv6",
+      "state": "installed"
+    }
+  ]
+}

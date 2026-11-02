@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-gnome-extensions",
+  "description": "Opt-in Fedora GNOME Extensions manager and browser connector; extensions remain user-managed.",
+  "operations": [
+    {"id": "package.gnome-extensions-app", "state": "installed"},
+    {"id": "package.gnome-browser-connector", "state": "installed"}
+  ]
+}

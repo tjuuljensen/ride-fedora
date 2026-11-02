@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-workstation-zeek",
+  "description": "Opt-in Fedora 44 Workstation Zeek CLI for offline network traffic analysis; RIDE does not process PCAPs or manage extracted case data.",
+  "operations": [
+    {
+      "id": "package.zeek-core",
+      "state": "installed"
+    }
+  ]
+}

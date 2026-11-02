@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-discord",
+  "description": "Opt-in Discord desktop client from a SHA-256 pinned official publisher RPM.",
+  "operations": [
+    {
+      "id": "package.discord",
+      "state": "installed"
+    }
+  ]
+}

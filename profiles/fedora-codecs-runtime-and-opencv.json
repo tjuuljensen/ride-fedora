@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-runtime-and-opencv",
+  "description": "Opt-in Fedora GStreamer runtime and OpenCV codec components. Existing packages are preserved.",
+  "operations": [
+    {
+      "id": "package.gstreamer1-plugins-bad-free-libs",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-bad-free-opencv",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-base",
+      "state": "installed"
+    },
+    {
+      "id": "package.lame-libs",
+      "state": "installed"
+    }
+  ]
+}

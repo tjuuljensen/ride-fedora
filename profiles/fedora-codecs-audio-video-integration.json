@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-audio-video-integration",
+  "description": "Opt-in Fedora Workstation audio and video integrations from the Multimedia group; existing packages are preserved.",
+  "operations": [
+    {
+      "id": "package.packagekit-gstreamer-plugin",
+      "state": "installed"
+    },
+    {
+      "id": "package.alsa-ucm",
+      "state": "installed"
+    },
+    {
+      "id": "package.alsa-utils",
+      "state": "installed"
+    },
+    {
+      "id": "package.libva-intel-media-driver",
+      "state": "installed"
+    },
+    {
+      "id": "package.pipewire-alsa",
+      "state": "installed"
+    },
+    {
+      "id": "package.pipewire-gstreamer",
+      "state": "installed"
+    }
+  ]
+}

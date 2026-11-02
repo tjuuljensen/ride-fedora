@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "rpmfusion",
+  "description": "Opt-in Fedora 44 RPM Fusion repositories. Installs Fedora-maintained verification keys as a persistent system trust prerequisite.",
+  "operations": [
+    {
+      "id": "package.distribution-gpg-keys",
+      "state": "installed"
+    },
+    {
+      "id": "setting.rpmfusion-repositories",
+      "state": "configured"
+    }
+  ]
+}

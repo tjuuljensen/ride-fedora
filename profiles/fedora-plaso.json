@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-plaso",
+  "description": "Opt-in Plaso RPM from the GIFT stable Fedora COPR.",
+  "operations": [
+    {
+      "id": "package.plaso",
+      "state": "installed"
+    }
+  ]
+}

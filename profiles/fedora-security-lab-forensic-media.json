@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-forensic-media",
+  "description": "Opt-in Fedora 44 Workstation forensic media and file inspection packages.",
+  "operations": [
+    {
+      "id": "package.dcfldd",
+      "state": "installed"
+    },
+    {
+      "id": "package.ddrescue",
+      "state": "installed"
+    },
+    {
+      "id": "package.foremost",
+      "state": "installed"
+    },
+    {
+      "id": "package.hexedit",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,972 @@
+{
+  "schemaVersion": 1,
+  "target": "fedora-44-workstation-x86_64",
+  "groupId": "security-lab",
+  "groupName": "Security Lab",
+  "observedDefaultMemberCount": 137,
+  "evidence": "docs/migrations/provider-foundation-06.md",
+  "inventoryRun": "provider-security-lab-inventory-root",
+  "packages": [
+    {
+      "index": 1,
+      "packageName": "ArpON",
+      "operationId": "package.arpon",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AB"
+    },
+    {
+      "index": 2,
+      "packageName": "afftools",
+      "operationId": "package.afftools",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AE"
+    },
+    {
+      "index": 3,
+      "packageName": "aide",
+      "operationId": "package.aide",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06N"
+    },
+    {
+      "index": 4,
+      "packageName": "aircrack-ng",
+      "operationId": "package.aircrack-ng",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Q"
+    },
+    {
+      "index": 5,
+      "packageName": "argus",
+      "operationId": "package.argus",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06T"
+    },
+    {
+      "index": 6,
+      "packageName": "argus-clients",
+      "operationId": "package.argus-clients",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06H"
+    },
+    {
+      "index": 7,
+      "packageName": "arp-scan",
+      "operationId": "package.arp-scan",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06H"
+    },
+    {
+      "index": 8,
+      "packageName": "binwalk",
+      "operationId": "package.binwalk",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06A"
+    },
+    {
+      "index": 9,
+      "packageName": "bkhive",
+      "operationId": "package.bkhive",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06P"
+    },
+    {
+      "index": 10,
+      "packageName": "bmon",
+      "operationId": "package.bmon",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06E"
+    },
+    {
+      "index": 11,
+      "packageName": "chkrootkit",
+      "operationId": "package.chkrootkit",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06N"
+    },
+    {
+      "index": 12,
+      "packageName": "cmospwd",
+      "operationId": "package.cmospwd",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06P"
+    },
+    {
+      "index": 13,
+      "packageName": "cowpatty",
+      "operationId": "package.cowpatty",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Q"
+    },
+    {
+      "index": 14,
+      "packageName": "dc3dd",
+      "operationId": "package.dc3dd",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06A"
+    },
+    {
+      "index": 15,
+      "packageName": "dcfldd",
+      "operationId": "package.dcfldd",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06J"
+    },
+    {
+      "index": 16,
+      "packageName": "ddrescue",
+      "operationId": "package.ddrescue",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06J"
+    },
+    {
+      "index": 17,
+      "packageName": "default-editor",
+      "operationId": "package.nano-default-editor",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AI",
+      "v3PackageName": "nano-default-editor"
+    },
+    {
+      "index": 18,
+      "packageName": "dislocker",
+      "operationId": "package.dislocker",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06X"
+    },
+    {
+      "index": 19,
+      "packageName": "dnsenum",
+      "operationId": "package.dnsenum",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06G"
+    },
+    {
+      "index": 20,
+      "packageName": "dnsmap",
+      "operationId": "package.dnsmap",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06H"
+    },
+    {
+      "index": 21,
+      "packageName": "dnstop",
+      "operationId": "package.dnstop",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06G"
+    },
+    {
+      "index": 22,
+      "packageName": "dnstracer",
+      "operationId": "package.dnstracer",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06G"
+    },
+    {
+      "index": 23,
+      "packageName": "dsniff",
+      "operationId": "package.dsniff",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06S"
+    },
+    {
+      "index": 24,
+      "packageName": "etherape",
+      "operationId": "package.etherape",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06V"
+    },
+    {
+      "index": 25,
+      "packageName": "ettercap",
+      "operationId": "package.ettercap",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06S"
+    },
+    {
+      "index": 26,
+      "packageName": "ewftools",
+      "operationId": "package.ewftools",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06C"
+    },
+    {
+      "index": 27,
+      "packageName": "extundelete",
+      "operationId": "package.extundelete",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06W"
+    },
+    {
+      "index": 28,
+      "packageName": "firewalk",
+      "operationId": "package.firewalk",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06M"
+    },
+    {
+      "index": 29,
+      "packageName": "flawfinder",
+      "operationId": "package.flawfinder",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AC"
+    },
+    {
+      "index": 30,
+      "packageName": "foremost",
+      "operationId": "package.foremost",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06J"
+    },
+    {
+      "index": 31,
+      "packageName": "fpdns",
+      "operationId": "package.fpdns",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06G"
+    },
+    {
+      "index": 32,
+      "packageName": "fping",
+      "operationId": "package.fping",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06E"
+    },
+    {
+      "index": 33,
+      "packageName": "goaccess",
+      "operationId": "package.goaccess",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Z"
+    },
+    {
+      "index": 34,
+      "packageName": "gparted",
+      "operationId": "package.gparted",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AD"
+    },
+    {
+      "index": 35,
+      "packageName": "hexedit",
+      "operationId": "package.hexedit",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06J"
+    },
+    {
+      "index": 36,
+      "packageName": "hfsutils",
+      "operationId": "package.hfsutils",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06W"
+    },
+    {
+      "index": 37,
+      "packageName": "hping3",
+      "operationId": "package.hping3",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06U"
+    },
+    {
+      "index": 38,
+      "packageName": "htop",
+      "operationId": "package.htop",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06A"
+    },
+    {
+      "index": 39,
+      "packageName": "httpd-tools",
+      "operationId": "package.httpd-tools",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Z"
+    },
+    {
+      "index": 40,
+      "packageName": "httpie",
+      "operationId": "package.httpie",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06F"
+    },
+    {
+      "index": 41,
+      "packageName": "httping",
+      "operationId": "package.httping",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06I"
+    },
+    {
+      "index": 42,
+      "packageName": "httpry",
+      "operationId": "package.httpry",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06I"
+    },
+    {
+      "index": 43,
+      "packageName": "httrack",
+      "operationId": "package.httrack",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Z"
+    },
+    {
+      "index": 44,
+      "packageName": "hunt",
+      "operationId": "package.hunt",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AB"
+    },
+    {
+      "index": 45,
+      "packageName": "hydra",
+      "operationId": "package.hydra",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06S"
+    },
+    {
+      "index": 46,
+      "packageName": "iftop",
+      "operationId": "package.iftop",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06E"
+    },
+    {
+      "index": 47,
+      "packageName": "inxi",
+      "operationId": "package.inxi",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06K"
+    },
+    {
+      "index": 48,
+      "packageName": "iperf",
+      "operationId": "package.iperf",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06F"
+    },
+    {
+      "index": 49,
+      "packageName": "iptraf-ng",
+      "operationId": "package.iptraf-ng",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06L"
+    },
+    {
+      "index": 50,
+      "packageName": "irssi",
+      "operationId": "package.irssi",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06F"
+    },
+    {
+      "index": 51,
+      "packageName": "john",
+      "operationId": "package.john",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06P"
+    },
+    {
+      "index": 52,
+      "packageName": "kismet",
+      "operationId": "package.kismet",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Q"
+    },
+    {
+      "index": 53,
+      "packageName": "lbd",
+      "operationId": "package.lbd",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06M"
+    },
+    {
+      "index": 54,
+      "packageName": "lnav",
+      "operationId": "package.lnav",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06E"
+    },
+    {
+      "index": 55,
+      "packageName": "lynis",
+      "operationId": "package.lynis",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06A"
+    },
+    {
+      "index": 56,
+      "packageName": "macchanger",
+      "operationId": "package.macchanger",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06D"
+    },
+    {
+      "index": 57,
+      "packageName": "masscan",
+      "operationId": "package.masscan",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06M"
+    },
+    {
+      "index": 58,
+      "packageName": "mcabber",
+      "operationId": "package.mcabber",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Y"
+    },
+    {
+      "index": 59,
+      "packageName": "medusa",
+      "operationId": "package.medusa",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06S"
+    },
+    {
+      "index": 60,
+      "packageName": "mtr",
+      "operationId": "package.mtr",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06D"
+    },
+    {
+      "index": 61,
+      "packageName": "mutt",
+      "operationId": "package.mutt",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Y"
+    },
+    {
+      "index": 62,
+      "packageName": "ncrack",
+      "operationId": "package.ncrack",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06S"
+    },
+    {
+      "index": 63,
+      "packageName": "nebula",
+      "operationId": "package.nebula",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AJ"
+    },
+    {
+      "index": 64,
+      "packageName": "net-snmp",
+      "operationId": "package.net-snmp",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06O"
+    },
+    {
+      "index": 65,
+      "packageName": "net-snmp-utils",
+      "operationId": "package.net-snmp-utils",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06O"
+    },
+    {
+      "index": 66,
+      "packageName": "nethogs",
+      "operationId": "package.nethogs",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06D"
+    },
+    {
+      "index": 67,
+      "packageName": "netsed",
+      "operationId": "package.netsed",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AB"
+    },
+    {
+      "index": 68,
+      "packageName": "netsniff-ng",
+      "operationId": "package.netsniff-ng",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06L"
+    },
+    {
+      "index": 69,
+      "packageName": "nfswatch",
+      "operationId": "package.nfswatch",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06T"
+    },
+    {
+      "index": 70,
+      "packageName": "ngrep",
+      "operationId": "package.ngrep",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06L"
+    },
+    {
+      "index": 71,
+      "packageName": "nicstat",
+      "operationId": "package.nicstat",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06T"
+    },
+    {
+      "index": 72,
+      "packageName": "nload",
+      "operationId": "package.nload",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06E"
+    },
+    {
+      "index": 73,
+      "packageName": "nmap",
+      "operationId": "package.nmap",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06B"
+    },
+    {
+      "index": 74,
+      "packageName": "nmap-ncat",
+      "operationId": "package.ncat",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06B"
+    },
+    {
+      "index": 75,
+      "packageName": "nmbscan",
+      "operationId": "package.nmbscan",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06H"
+    },
+    {
+      "index": 76,
+      "packageName": "ntfs-3g",
+      "operationId": "package.ntfs-3g",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06W"
+    },
+    {
+      "index": 77,
+      "packageName": "ntfsprogs",
+      "operationId": "package.ntfsprogs",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06W"
+    },
+    {
+      "index": 78,
+      "packageName": "ntpsec",
+      "operationId": "package.ntpsec",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AK"
+    },
+    {
+      "index": 79,
+      "packageName": "nwipe",
+      "operationId": "package.nwipe",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AA"
+    },
+    {
+      "index": 80,
+      "packageName": "onesixtyone",
+      "operationId": "package.onesixtyone",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06O"
+    },
+    {
+      "index": 81,
+      "packageName": "openscap-scanner",
+      "operationId": "package.openscap-scanner",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06N"
+    },
+    {
+      "index": 82,
+      "packageName": "openssh",
+      "operationId": "package.openssh-clients",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06AL",
+      "v3PackageName": "openssh-clients"
+    },
+    {
+      "index": 83,
+      "packageName": "ophcrack",
+      "operationId": "package.ophcrack",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06P"
+    },
+    {
+      "index": 84,
+      "packageName": "p0f",
+      "operationId": "package.p0f",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06V"
+    },
+    {
+      "index": 85,
+      "packageName": "packETH",
+      "operationId": "package.packeth",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06U"
+    },
+    {
+      "index": 86,
+      "packageName": "pads",
+      "operationId": "package.pads",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06V"
+    },
+    {
+      "index": 87,
+      "packageName": "pcapdiff",
+      "operationId": "package.pcapdiff",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06V"
+    },
+    {
+      "index": 88,
+      "packageName": "pcp-system-tools",
+      "operationId": "package.pcp-system-tools",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06K"
+    },
+    {
+      "index": 89,
+      "packageName": "pdfcrack",
+      "operationId": "package.pdfcrack",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06P"
+    },
+    {
+      "index": 90,
+      "packageName": "powertop",
+      "operationId": "package.powertop",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06K"
+    },
+    {
+      "index": 91,
+      "packageName": "proxychains-ng",
+      "operationId": "package.proxychains-ng",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AF"
+    },
+    {
+      "index": 92,
+      "packageName": "psad",
+      "operationId": "package.psad",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AM"
+    },
+    {
+      "index": 93,
+      "packageName": "pwgen",
+      "operationId": "package.pwgen",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06A"
+    },
+    {
+      "index": 94,
+      "packageName": "python3-scapy",
+      "operationId": "package.python3-scapy",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AF"
+    },
+    {
+      "index": 95,
+      "packageName": "rats",
+      "operationId": "package.rats",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AN"
+    },
+    {
+      "index": 96,
+      "packageName": "reaver",
+      "operationId": "package.reaver",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Q"
+    },
+    {
+      "index": 97,
+      "packageName": "rkhunter",
+      "operationId": "package.rkhunter",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06N"
+    },
+    {
+      "index": 98,
+      "packageName": "scanmem",
+      "operationId": "package.scanmem",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AH"
+    },
+    {
+      "index": 99,
+      "packageName": "scap-security-guide",
+      "operationId": "package.scap-security-guide",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06N"
+    },
+    {
+      "index": 100,
+      "packageName": "screen",
+      "operationId": "package.screen",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Y"
+    },
+    {
+      "index": 101,
+      "packageName": "scrub",
+      "operationId": "package.scrub",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AA"
+    },
+    {
+      "index": 102,
+      "packageName": "security-menus",
+      "operationId": "package.security-menus",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AG"
+    },
+    {
+      "index": 103,
+      "packageName": "setools-gui",
+      "operationId": "package.setools-gui",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AG"
+    },
+    {
+      "index": 104,
+      "packageName": "siege",
+      "operationId": "package.siege",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06R"
+    },
+    {
+      "index": 105,
+      "packageName": "sing",
+      "operationId": "package.sing",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06U"
+    },
+    {
+      "index": 106,
+      "packageName": "sipp",
+      "operationId": "package.sipp",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06R"
+    },
+    {
+      "index": 107,
+      "packageName": "sipsak",
+      "operationId": "package.sipsak",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06R"
+    },
+    {
+      "index": 108,
+      "packageName": "sleuthkit",
+      "operationId": "package.sleuthkit",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06C"
+    },
+    {
+      "index": 109,
+      "packageName": "snmpcheck",
+      "operationId": "package.snmpcheck",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06O"
+    },
+    {
+      "index": 110,
+      "packageName": "socat",
+      "operationId": "package.socat",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06F"
+    },
+    {
+      "index": 111,
+      "packageName": "sockperf",
+      "operationId": "package.sockperf",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06R"
+    },
+    {
+      "index": 112,
+      "packageName": "ssldump",
+      "operationId": "package.ssldump",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06V"
+    },
+    {
+      "index": 113,
+      "packageName": "sslscan",
+      "operationId": "package.sslscan",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AC"
+    },
+    {
+      "index": 114,
+      "packageName": "sslsplit",
+      "operationId": "package.sslsplit",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AB"
+    },
+    {
+      "index": 115,
+      "packageName": "subnetcalc",
+      "operationId": "package.subnetcalc",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AC"
+    },
+    {
+      "index": 116,
+      "packageName": "swaks",
+      "operationId": "package.swaks",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AC"
+    },
+    {
+      "index": 117,
+      "packageName": "sysstat",
+      "operationId": "package.sysstat",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06K"
+    },
+    {
+      "index": 118,
+      "packageName": "tcpdump",
+      "operationId": "package.tcpdump",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06B"
+    },
+    {
+      "index": 119,
+      "packageName": "tcpflow",
+      "operationId": "package.tcpflow",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06I"
+    },
+    {
+      "index": 120,
+      "packageName": "tcpick",
+      "operationId": "package.tcpick",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06I"
+    },
+    {
+      "index": 121,
+      "packageName": "tcpreplay",
+      "operationId": "package.tcpreplay",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06U"
+    },
+    {
+      "index": 122,
+      "packageName": "tcptrack",
+      "operationId": "package.tcptrack",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06L"
+    },
+    {
+      "index": 123,
+      "packageName": "telnet",
+      "operationId": "package.telnet",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Y"
+    },
+    {
+      "index": 124,
+      "packageName": "testdisk",
+      "operationId": "package.testdisk",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06C"
+    },
+    {
+      "index": 125,
+      "packageName": "thc-ipv6",
+      "operationId": "package.thc-ipv6",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06U"
+    },
+    {
+      "index": 126,
+      "packageName": "tripwire",
+      "operationId": "package.tripwire",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AO"
+    },
+    {
+      "index": 127,
+      "packageName": "unhide",
+      "operationId": "package.unhide",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AH"
+    },
+    {
+      "index": 128,
+      "packageName": "uperf",
+      "operationId": "package.uperf",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06R"
+    },
+    {
+      "index": 129,
+      "packageName": "usbsniff",
+      "operationId": "package.usbsniff",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AP"
+    },
+    {
+      "index": 130,
+      "packageName": "vim-enhanced",
+      "operationId": "package.vim-enhanced",
+      "catalogStatus": "supported",
+      "migrationStage": "profiled-06A"
+    },
+    {
+      "index": 131,
+      "packageName": "vnstat",
+      "operationId": "package.vnstat",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06T"
+    },
+    {
+      "index": 132,
+      "packageName": "wget2-wget",
+      "operationId": "package.wget2-wget",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06Z"
+    },
+    {
+      "index": 133,
+      "packageName": "whois",
+      "operationId": "package.whois",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06D"
+    },
+    {
+      "index": 134,
+      "packageName": "wipe",
+      "operationId": "package.wipe",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06AA"
+    },
+    {
+      "index": 135,
+      "packageName": "wireshark",
+      "operationId": "package.wireshark",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06B"
+    },
+    {
+      "index": 136,
+      "packageName": "wireshark-cli",
+      "operationId": "package.wireshark-cli",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06B"
+    },
+    {
+      "index": 137,
+      "packageName": "zmap",
+      "operationId": "package.zmap",
+      "catalogStatus": "candidate",
+      "migrationStage": "profiled-06M"
+    }
+  ]
+}

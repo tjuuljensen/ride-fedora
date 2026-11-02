@@ -24,13 +24,13 @@ application batches remain separate for exact-target review.
 
 | Outcome | v2 behavior and v3.0 decision | Reopen when |
 | --- | --- | --- |
-| `MulticastDNS` | **Kept by owner.** v2 comments and appends `hosts:` lines in `/etc/nsswitch.conf`; inverse re-enables every commented `#hosts` line and can discard administrator edits. | Add a line-scoped, owned resolver setting with exact original-file and DNS-order recovery on a disposable target. |
+| `MulticastDNS` | **Kept by owner; operable opt-in v3.0 candidate.** Fedora 44 manages generated `nsswitch.conf` through authselect. `setting.multicast-dns` uses the selected profile's `with-mdns4` feature, records the exact profile selection, and refuses restore after an external authselect change. The Fedora 44 Workstation lifecycle, resolver probe, conflict check, and exact restore passed. It does not edit generated resolver files directly. | Keep the candidate opt-in. H100 covers alternate profiles, generated-file ownership, and future Fedora/authselect behavior before adding targets. |
 | `Wireguard` | **Migrated for local tools and key generation.** The signed Fedora tools RPM and owned key pair passed the [Workstation acceptance](../acceptance/system-security-wireguard.md). The v3 inverse removes only unchanged RIDE-owned keys and marker. | Keep the opt-in profile; review interfaces, peers, routes, and key rotation under H032 before extending behavior. |
 | `OpenconnectVPN` | **Migrated, package-only.** The signed Fedora OpenConnect CLI, `vpnc-script`, and GNOME editor passed the [Workstation lifecycle](../acceptance/system-security-openconnect-packages.md). The v2 moving source build remains excluded. | Keep the opt-in package profile; review real connection, routing, DNS, credential, and GNOME dialog behavior under H031 before extending scope. |
 | `ImportOpenVPNProfiles` | **Unsupported.** v2 searches several working and source directories for `.ovpn`, then imports connection profiles through `nmcli`; input ownership and credentials are implicit. | Define an explicit private profile source, name/UUID conflict policy, secret handling, and exact NetworkManager rollback. |
 | `VPNProfiles` | **Decision deferred by owner.** The remove-only v2 function deletes every NetworkManager VPN connection, including unowned ones. | Decide whether owned VPN deployment inverses cover this outcome; preserve all unrelated connection UUIDs. |
 | `ExpressVPNProfiles` | **Decision deferred by owner.** The remove-only function matches names containing `expressvpn`, then deletes connections without ownership proof. | Decide whether the kept ExpressVPN deployment's owned inverse covers this outcome; preserve seeded user connections. |
-| `ExpressVPN` | **Kept by owner.** v2 scrapes a moving publisher RPM URL and may prompt for an activation code; removal leaves activation, connection profiles, and user state unaccounted for. | Pin and verify the publisher artifact, identify licensed deployment scope, keep activation private, and prove profile-safe inverse. |
+| `ExpressVPN` | **Kept by owner as a private publisher handoff.** The current official app is an authenticated-portal `.run` installer, replacing the v2 moving RPM path. Installer provenance is account-scoped; setup can activate the app and change VPN, network-lock, startup, and routing state. RIDE does not claim a public package operation or remove the product from v3 scope. | Reopen when an owner-permitted artifact can be publisher-verified and package-only Fedora 44 Workstation/Server install/remove tests prove private state, seeded NetworkManager profiles, routing, and DNS are preserved. See [ExpressVPN handoff](system-security-10-expressvpn.md). |
 | `StartExpressVPNafterBoot` | **Unsupported.** v2 appends an `@reboot` line to the current crontab without owning the rest of the file. | Use an owned service/timer tied to an accepted VPN deployment and test seeded crontab and connection recovery. |
 | `ExpressVPNafterBoot` | **Kept by owner.** The remove-only inverse filters a matching crontab string, which can remove an unowned job. | Reconcile as the exact inverse of an owned boot connection schedule. |
 | `CreateExpVPNrandomizer` | **Unsupported.** v2 appends executable shell text to `/usr/sbin/expressvpn-randomizer.sh`, without source verification, idempotence, or inverse. | Define a reviewed, owned script with bounded VPN selection, failure handling, and private connection state. |
@@ -63,7 +63,9 @@ recovery specified above; retaining them does not approve the broad v2
 deletion functions. Keyfile mounts require isolated disposable-disk and boot
 recovery evidence before promotion.
 
-No state-changing acceptance was run for these non-runnable decisions. The
-v2 source in `lib-fedora.sh` supplies the observed mutation and inverse
-facts. A later implementation must perform its own current upstream,
-license, target, and recovery review before promotion.
+No state-changing acceptance was run for the remaining non-runnable decisions.
+The v2 source in `lib-fedora.sh` supplies the observed mutation and inverse
+facts. MulticastDNS uses Fedora's authselect-managed feature path and has a
+focused Fedora 44 Workstation acceptance pilot. Later implementations must
+perform their own current upstream, license, target, and recovery review before
+promotion.

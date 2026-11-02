@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-openssh-core",
+  "description": "Opt-in Fedora 44 mapping of the legacy OpenSSH core package to the existing supported OpenSSH client operation; does not configure a server.",
+  "operations": [
+    {
+      "id": "package.openssh-clients",
+      "state": "installed"
+    }
+  ]
+}

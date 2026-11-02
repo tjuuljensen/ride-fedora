@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-chrome",
+  "description": "Opt-in Google Chrome Flatpak from the verified Flathub remote.",
+  "operations": [{"id": "package.chrome", "state": "installed"}]
+}

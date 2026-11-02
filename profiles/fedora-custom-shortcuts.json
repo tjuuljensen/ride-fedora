@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-custom-shortcuts",
+  "description": "Opt-in GNOME shortcuts; customize shortcut commands and bindings for this workstation.",
+  "operations": [
+    {
+      "id": "setting.gnome-custom-shortcuts",
+      "state": "configured",
+      "value": "{\"global\":{\"showDesktop\":[\"<Super>d\"],\"switchWindows\":[\"<Alt>Tab\"]},\"shortcuts\":[{\"name\":\"Files home folder\",\"command\":\"nautilus\",\"binding\":\"<Super>e\"},{\"name\":\"Terminal\",\"command\":\"gnome-terminal\",\"binding\":\"<Super><Control>t\"}]}"
+    }
+  ]
+}

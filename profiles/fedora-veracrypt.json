@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-veracrypt",
+  "description": "Opt-in publisher-signed VeraCrypt GUI RPM for Fedora 44 Workstation x86_64.",
+  "operations": [
+    {
+      "id": "package.veracrypt",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-appimage-manager",
+  "description": "Opt-in Gear Lever AppImage manager from the GPG-verified system Flathub remote. AppImage files and integration choices remain user managed.",
+  "operations": [
+    {
+      "id": "package.gearlever",
+      "state": "installed"
+    }
+  ]
+}

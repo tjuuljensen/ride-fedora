@@ -1,95 +1,60 @@
-# File managers and legacy publisher applications
+# Publisher Apps 09: file managers and publisher applications
 
-Fast-track owner decisions: keep PowerShell, WoeUSB, and balenaEtcher;
-retire the Linux Teams desktop and old Sonos player capabilities.
+This six-outcome batch covers `CommanderFileMgrs`, `PowerShell`,
+`MicrosoftTeams`, `WoeUSB`, `BalenaEtcher`, and `SonosPlayer`. The owner kept
+PowerShell, WoeUSB, and balenaEtcher for v3.0. Microsoft Teams Linux desktop
+and the old Sonos player were explicitly retired. The two Fedora file manager
+operations and three retained publisher tools passed candidate-gated package
+acceptance.
 
-Status: **one opt-in candidate and five non-runnable decisions**, 2026-10-30. This batch maps the commented v2
-`CommanderFileMgrs`, `PowerShell`, `MicrosoftTeams`, `WoeUSB`, and
-`BalenaEtcher` outcomes and the active `SonosPlayer` outcome. v2 installs
-`gnome-commander` and `mc` together; its inverse removes both by name.
-PowerShell adds a RHEL 7 Microsoft repository and key; Teams scrapes a
-publisher RPM listing; WoeUSB requests a Fedora RPM; Etcher scrapes a moving
-GitHub RPM; Sonos downloads a moving AppImage into `~/Applications` and its
-inverse deletes matching names.
+Status: **4 source outcomes operable candidates; 2 retired**. Fedora 44
+Workstation x86_64 acceptance passed on 2026-11-01 under TCG.
 
-## Completion criteria defined before implementation
+## Completion checks defined before implementation
 
-- Split the two signed Fedora file-manager RPMs into separate operations and
-  a curated opt-in profile. On the exact Fedora 44 x86_64 Workstation VM,
-  check absent plan, apply, signed RPM/files, CLI or desktop-entry probe,
-  repeat, status, restore, explicit remove, and profile smoke. Reuse the
-  unchanged DNF handler's mocked failure evidence. Do not claim a visual
-  GNOME session without one.
-- For external applications, verify current publisher method, target and
-  license. Any runnable external RPM or AppImage needs pinned provenance,
-  owned destination/key, safe detection and inverse, focused mocked tests,
-  and a disposable-VM happy path. Keep user data and removable media outside
-  the package install inverse. If these conditions cannot be met in v3.0,
-  record a specific non-runnable disposition and reopen trigger.
-- Compare Windows schemas and behavior, update ledger and generated docs,
-  and investigate VM failures before retrying.
+- Migrate retained applications from a specific publisher release or a
+  Fedora-signed package. Check exact source digest and RPM identity before
+  DNF, then plan, candidate gate, apply, repeat, status, and remove.
+- Probe PowerShell in no-profile mode. For Etcher, inspect installed RPM files
+  only. Do not launch Etcher against a physical drive or write removable
+  media. Reuse pinned RPM handler tests; add exact source validation.
+- For WoeUSB, check its pinned script and GPL text digests, private ownership,
+  Fedora runtime RPMs, help/version, repeat, status, and exact inverse. Do not
+  supply source or target media arguments, attach a drive, or write media.
+- Update the ledger, generated docs, and Windows alignment. Queue GUI behavior
+  and broader failure/recovery coverage for v3.1.
 
-## External application decisions
+## Current source paths
 
-- **PowerShell: unsupported and non-runnable in v3.0.** The v2 method adds
-  Microsoft's RHEL 7 repository to Fedora and imports a system-wide key.
-  [Microsoft's current PowerShell RPM instructions](https://learn.microsoft.com/en-us/powershell/scripting/install/install-rhel)
-  cover supported RHEL versions and a universal RPM, but do not establish
-  Fedora 44 support or ownership of an existing Microsoft repository/key.
-  Migrate through a Fedora deployment with pinned RPM/source, owned
-  repository/key handling, and a VM apply/inverse that preserves pre-existing
-  Microsoft products.
-- **Microsoft Teams: owner-retired Linux desktop capability.**
-  [Microsoft no longer supports a Linux desktop client](https://learn.microsoft.com/microsoftteams/get-clients)
-  and directs users to Teams on the web. Do not scrape the old `ms-teams`
-  RPM listing. The owner retired this capability on 2026-10-30; a new explicit
-  owner decision would be needed to restore it to v3 scope.
-- **WoeUSB: unsupported and non-runnable in v3.0.**
-  [Fedora's WoeUSB package](https://packages.fedoraproject.org/pkgs/WoeUSB/WoeUSB/)
-  is orphaned and its release table ends at Fedora 41. The v2 DNF name does
-  not provide a Fedora 44 package. A WoeUSB-ng successor needs
-  a reviewed source/license and a safe package inverse; writing USB media
-  remains an explicit user action outside RIDE apply.
-- **balenaEtcher: unsupported and non-runnable in v3.0.** The publisher
-  [does ship a versioned x86_64 RPM with a SHA-256](https://github.com/balena-io/etcher/releases),
-  but v2 selects a moving GitHub release URL and the v3 catalog has no
-  pinned external-RPM acquisition handler. Choose a pinned
-  publisher RPM with verified bytes, installed-package detection, collision
-  handling, and disposable-VM happy path. Flashing media is separate from
-  installing the application and must be user-initiated.
+- **PowerShell 7.6.6:** Microsoft publishes a versioned universal x86_64 RPM
+  and release SHA-256. Fedora 44 is not listed as a Microsoft-supported target,
+  so this is an opt-in Fedora candidate. RIDE adds no Microsoft repository or
+  key. See [PowerShell acceptance](../acceptance/package.powershell.md).
+- **balenaEtcher 2.1.9:** balena publishes an x86_64 RPM and SHA-256 in the
+  versioned GitHub release. Installing Etcher does not start a flash
+  operation. See [Etcher acceptance](../acceptance/package.balena-etcher.md).
+- **WoeUSB:** use upstream's standalone Bash release 5.2.4, pinned with
+  SHA-256, and install the GPL-3.0-or-later text alongside it. RIDE owns a
+  versioned private user directory and one `~/.local/bin/woeusb` symlink.
+  Fedora dependencies are explicit candidate RPM operations in
+  `fedora-woeusb-runtime`; `fedora-woeusb` installs the tool after its runtime
+  profile. RIDE never supplies media arguments or writes a USB device.
+  See [WoeUSB acceptance](../acceptance/package.woeusb.md).
+- **Microsoft Teams:** the owner retired the Linux desktop outcome; web access
+  is not a replacement package operation.
+- **SonosPlayer:** the owner retired the old unofficial player capability.
+- **GNOME Commander and Midnight Commander:** both Fedora package operations
+  passed their disposable Workstation lifecycle and remain opt-in.
 
-  The owner retained this optional USB imaging application for migration on
-  2026-10-30. The next implementation batch should pin the publisher RPM and
-  prove installed identity, collision handling, and Fedora 44 recovery;
-  retaining the product does not authorize the v2 moving-release scrape.
-- **SonosPlayer: retired and non-runnable.** The source
-  [declares the unofficial controller deprecated](https://github.com/pascalopitz/unoffical-sonos-controller-for-linux)
-  and its latest release is an AppImage-only release candidate. The v2
-  moving download and name-glob inverse can delete a pre-existing portable
-  app. Reopen only for an explicitly requested maintained client with a
-  pinned license/artifact, owned destination, and app-data-preserving VM
-  lifecycle.
+Sources: [Microsoft PowerShell release](https://github.com/PowerShell/PowerShell/releases/tag/v7.6.6),
+[Microsoft RHEL install guide](https://learn.microsoft.com/en-us/powershell/scripting/install/install-rhel),
+[balenaEtcher release](https://github.com/balena-io/etcher/releases/tag/v2.1.9),
+[WoeUSB 5.2.4 upstream release](https://github.com/WoeUSB/WoeUSB/releases/tag/v5.2.4),
+[WoeUSB 5.2.4 README](https://raw.githubusercontent.com/WoeUSB/WoeUSB/v5.2.4/README.md),
+[WoeUSB GPL text](https://raw.githubusercontent.com/WoeUSB/WoeUSB/v5.2.4/LICENSES/GPL-3.0-or-later.txt).
 
-The owner retained optional PowerShell and Windows USB media creation
-tooling for migration on 2026-10-30, alongside balenaEtcher. PowerShell needs
-a reviewed publisher source and owned repository/key lifecycle; WoeUSB needs
-a maintained successor with an owned inverse. Both remain non-runnable in
-v3.0. Creating USB media remains an explicit user action.
-
-## Fedora 44 file-manager result
-
-`package.gnome-commander` and `package.mc` each passed absent plan,
-candidate-gated apply, signed RPM/file checks, installed status, unchanged
-repeat, restore, and explicit install/remove in the pinned disposable
-Workstation VM. GNOME Commander shipped an executable; Midnight Commander
-reported its version when the headless SSH probe set `TERM=xterm`. The first
-attempt failed only on that missing test terminal environment; the corrected
-probe passed in a fresh overlay. The curated `commander-file-managers`
-profile passed plan/apply/repeat/restore. Pre-existing RPM identities were
-preserved. Mocked failure evidence is reused from the unchanged DNF handler.
-See [`package.gnome-commander`](../acceptance/package.gnome-commander.md)
-and [`package.mc`](../acceptance/package.mc.md).
-
-The source `CommanderFileMgrs` outcome is an **operable opt-in candidate**;
-the profile requires `--allow-candidate` and stays outside `default`.
-GNOME session visual behavior and broader recovery are H014 in v3.1.
+WoeUSB is a Linux-specific standalone script deployment. No shared Windows
+schema or lifecycle contract changed; Windows packaging remains independently
+owned. This difference is intentional because the artifact and Fedora runtime
+dependencies are Linux-specific. Recheck if Windows adds a portable WoeUSB
+deployment or if a shared package acquisition contract changes.

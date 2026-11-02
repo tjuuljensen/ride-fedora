@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-xmind",
+  "description": "Opt-in current Xmind desktop app from the verified Flathub remote.",
+  "operations": [{"id": "package.xmind", "state": "installed"}]
+}

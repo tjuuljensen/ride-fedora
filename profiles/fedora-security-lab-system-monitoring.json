@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-system-monitoring",
+  "description": "Opt-in Fedora 44 Workstation system diagnostics and performance monitoring packages.",
+  "operations": [
+    {
+      "id": "package.inxi",
+      "state": "installed"
+    },
+    {
+      "id": "package.pcp-system-tools",
+      "state": "installed"
+    },
+    {
+      "id": "package.powertop",
+      "state": "installed"
+    },
+    {
+      "id": "package.sysstat",
+      "state": "installed"
+    }
+  ]
+}

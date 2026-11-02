@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-default-editor",
+  "description": "Opt-in Fedora 44 Workstation candidate for setting GNU nano as the default editor.",
+  "operations": [
+    {
+      "id": "package.nano-default-editor",
+      "state": "installed"
+    }
+  ]
+}

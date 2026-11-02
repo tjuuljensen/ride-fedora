@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-volatility2",
+  "description": "Opt-in archived Volatility 2.6.1 with a private PyPy 2.7 runtime.",
+  "operations": [
+    {
+      "id": "package.volatility2",
+      "state": "installed"
+    }
+  ]
+}

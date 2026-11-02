@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-workstation-smartmontools",
+  "description": "Opt-in Fedora Workstation SmartMonTools package with smartd kept disabled.",
+  "operations": [
+    {
+      "id": "package.smartmontools",
+      "state": "installed"
+    }
+  ]
+}

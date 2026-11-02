@@ -47,10 +47,18 @@ source "$RIDE_ROOT/lib/v3/common.sh"
 source "$RIDE_ROOT/lib/v3/catalog.sh"
 # shellcheck source=lib/v3/providers.sh
 source "$RIDE_ROOT/lib/v3/providers.sh"
+# shellcheck source=lib/v3/firefox.sh
+source "$RIDE_ROOT/lib/v3/firefox.sh"
+# shellcheck source=lib/v3/bash_aliases.sh
+source "$RIDE_ROOT/lib/v3/bash_aliases.sh"
+# shellcheck source=lib/v3/chrome_preferences.sh
+source "$RIDE_ROOT/lib/v3/chrome_preferences.sh"
 # shellcheck source=lib/v3/wireguard.sh
 source "$RIDE_ROOT/lib/v3/wireguard.sh"
 # shellcheck source=lib/v3/flatpak.sh
 source "$RIDE_ROOT/lib/v3/flatpak.sh"
+# shellcheck source=lib/v3/rpmfusion.sh
+source "$RIDE_ROOT/lib/v3/rpmfusion.sh"
 # shellcheck source=lib/v3/state.sh
 source "$RIDE_ROOT/lib/v3/state.sh"
 # shellcheck source=lib/v3/github.sh
@@ -70,6 +78,8 @@ Usage: ./ride.sh <command> [argument] [options]
   download <package-or-artifact-id> [--source source-id] [--destination directory]
   install <package-id> [--source source-id]
   set <setting-id> --state <declared-state> [--value <declared-value>]
+  deploy <system-operation-id> --state <declared-state>
+  update <system-operation-id>
   unset <setting-id>
   status [operation-id] [--source source-id] [--profile name-or-path]
   restore --run-id <id>
@@ -160,7 +170,7 @@ ride_plan_entry() {
   ride_require_target "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
-  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]] && [[ -z "$value" ]]; then
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$entry")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$entry")" == bash-aliases || "$(jq -r '.handler' <<< "$entry")" == chrome-preferences || "$(jq -r '.handler' <<< "$entry")" == upower-threshold || "$(jq -r '.handler' <<< "$entry")" == system-hostname ]] && [[ -z "$value" ]]; then
     ride_die "configurable setting requires --value or a profile value: $id"
   fi
   current=$(ride_observe "$entry")
@@ -196,17 +206,46 @@ ride_preflight_change() {
   ride_require_accepted "$entry"
   jq -e --arg desired "$desired" '.states | index($desired) != null' <<< "$entry" >/dev/null ||
     ride_die "invalid state $desired for $id"
-  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$entry")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$entry")" == bash-aliases || "$(jq -r '.handler' <<< "$entry")" == chrome-preferences || "$(jq -r '.handler' <<< "$entry")" == upower-threshold || "$(jq -r '.handler' <<< "$entry")" == system-hostname ]]; then
     [[ -n "$(jq -r '.selectedValue // ""' <<< "$entry")" ]] ||
       ride_die "configurable setting requires --value or a profile value: $id"
   fi
   ride_require_privilege "$entry"
   if [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
     ride_upower_guard "$(jq -r '.selectedValue' <<< "$entry")"
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == dnf5-fast-tuning ]]; then
+    ride_dnf5_tuning_guard
   elif [[ "$(jq -r '.handler' <<< "$entry")" == wireguard-keypair ]]; then
     ride_wireguard_preflight
   elif [[ "$(jq -r '.handler' <<< "$entry")" == flatpak-remote ]]; then
     ride_flathub_preflight "$desired"
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == flatpak-app ]]; then
+    ride_flatpak_halloy_preflight "$desired"
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == pinned-binary ]]; then
+    ride_librespeed_preflight "$entry" "$desired"
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == rpmfusion-repositories ]]; then
+    ride_rpmfusion_guard "$desired"
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == dnf5-system-update ]]; then
+    local system_update_state
+    system_update_state=$(ride_dnf5_system_update_check refresh)
+    if [[ "$system_update_state" == outdated ]]; then ride_dnf5_system_update_preview; fi
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == docker-engine ]]; then
+    if [[ "$desired" == configured ]]; then
+      local docker_state
+      docker_state=$(ride_docker_engine_observe "$entry")
+      [[ "$docker_state" != absent ]] || ride_docker_engine_guard "$entry"
+    elif [[ "$desired" == absent ]]; then
+      local docker_state
+      docker_state=$(ride_docker_engine_observe "$entry")
+      [[ "$docker_state" == absent ]] || ride_docker_engine_remove_guard "$entry"
+    fi
+  elif [[ "$(jq -r '.handler' <<< "$entry")" == dnf-package-set-update ]]; then
+    local update_state
+    update_state=$(ride_dnf5_package_set_update_observe "$entry" refresh)
+    [[ "$update_state" != no-packages ]] || ride_die "no declared Multimedia packages are installed"
+    if [[ "$update_state" == outdated ]]; then
+      ride_dnf5_package_set_update_preview "$entry"
+    fi
   fi
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")
@@ -217,7 +256,7 @@ ride_preflight_change() {
 }
 
 ride_apply_one() {
-  local entry=$1 desired=$2 id before after step recovery source signature conflict distribution deployment scope selected_value
+  local entry=$1 desired=$2 id before after step recovery source signature conflict distribution deployment scope selected_value update_report
   id=$(jq -r '.id' <<< "$entry")
   recovery=$(jq -r '.recovery' <<< "$entry")
   source=$(jq -r '.sourceId // ""' <<< "$entry")
@@ -225,6 +264,7 @@ ride_apply_one() {
   deployment=$(jq -r '.deploymentId // ""' <<< "$entry")
   scope=$(jq -r '.scope' <<< "$entry")
   selected_value=$(jq -r '.selectedValue // ""' <<< "$entry")
+  RIDE_DNF5_SYSTEM_UPDATE_REPORT=
   signature=$(ride_source_signature "$entry")
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")
@@ -253,30 +293,43 @@ ride_apply_one() {
     return 1
   fi
   if ! ride_change "$entry" "$desired"; then
+    update_report=$RIDE_DNF5_SYSTEM_UPDATE_REPORT
+    [[ -z "$update_report" ]] || ride_journal_update_last_report "$update_report"
     ride_journal_update_last failed unknown
     ride_journal_finish failed
     ride_error "change failed: $id"
     return 1
   fi
+  update_report=$RIDE_DNF5_SYSTEM_UPDATE_REPORT
   if ! after=$(ride_observe "$entry"); then
-    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$entry")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$entry")" == bash-aliases || "$(jq -r '.handler' <<< "$entry")" == chrome-preferences || "$(jq -r '.handler' <<< "$entry")" == upower-threshold || "$(jq -r '.handler' <<< "$entry")" == rpmfusion-repositories || "$(jq -r '.handler' <<< "$entry")" == dnf5-fast-tuning || "$(jq -r '.handler' <<< "$entry")" == system-hostname ]]; then
       ride_change "$entry" "$before" || ride_error "user setting rollback failed after observation error"
     fi
+    [[ -z "$update_report" ]] || ride_journal_update_last_report "$update_report"
     ride_journal_update_last failed unknown
     ride_journal_finish failed
     ride_error "cannot verify changed state: $id"
     return 1
   fi
   if [[ "$after" != "$desired" ]]; then
-    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+    if [[ "$(jq -r '.handler' <<< "$entry")" == firefox-extensions &&
+          "$desired" == absent && "$after" == removal-pending ]]; then
+      ride_journal_update_last pending "$after"
+      RIDE_RUN_PENDING=1
+      printf 'pending %s: Firefox must restart before removal can be finalized\n' "$id"
+      return 0
+    fi
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$entry")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$entry")" == bash-aliases || "$(jq -r '.handler' <<< "$entry")" == chrome-preferences || "$(jq -r '.handler' <<< "$entry")" == upower-threshold || "$(jq -r '.handler' <<< "$entry")" == rpmfusion-repositories || "$(jq -r '.handler' <<< "$entry")" == dnf5-fast-tuning || "$(jq -r '.handler' <<< "$entry")" == system-hostname ]]; then
       ride_change "$entry" "$before" || ride_error "user setting rollback failed after state mismatch"
     fi
+    [[ -z "$update_report" ]] || ride_journal_update_last_report "$update_report"
     ride_journal_update_last failed "$after"
     ride_journal_finish failed
     ride_error "desired state was not reached for $id (observed $after)"
     return 1
   fi
   ride_journal_update_last changed "$after"
+  [[ -z "$update_report" ]] || ride_journal_update_last_report "$update_report"
   printf 'changed %s: %s -> %s\n' "$id" "$before" "$after"
 }
 
@@ -293,6 +346,7 @@ ride_apply_profile() {
     ride_preflight_change "$entry" "$desired"
   done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (.value // "~")] | @tsv' "$profile")
   ride_journal_create apply
+  RIDE_RUN_PENDING=0
   while IFS=$'\t' read -r id desired source value; do
     [[ -z "$id" ]] && continue
     [[ "$source" != '~' ]] || source=
@@ -300,7 +354,7 @@ ride_apply_profile() {
     entry=$(ride_entry_or_die "$id" "$source" "$value")
     ride_apply_one "$entry" "$desired" || return 1
   done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (.value // "~")] | @tsv' "$profile")
-  ride_journal_finish complete
+  if [[ "${RIDE_RUN_PENDING:-0}" == 1 ]]; then ride_journal_finish pending; else ride_journal_finish complete; fi
 }
 
 ride_apply_single() {
@@ -312,8 +366,9 @@ ride_apply_single() {
   fi
   ride_preflight_change "$entry" "$desired"
   ride_journal_create single
+  RIDE_RUN_PENDING=0
   ride_apply_one "$entry" "$desired" || return 1
-  ride_journal_finish complete
+  if [[ "${RIDE_RUN_PENDING:-0}" == 1 ]]; then ride_journal_finish pending; else ride_journal_finish complete; fi
 }
 
 ride_restore_steps() {
@@ -326,7 +381,7 @@ ride_restore_steps() {
 ride_restore_entry() {
   local id=$1 source=$2 original=$3 entry value
   entry=$(ride_entry_or_die "$id" "$source")
-  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+  if [[ "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$entry")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$entry")" == bash-aliases || "$(jq -r '.handler' <<< "$entry")" == chrome-preferences || "$(jq -r '.handler' <<< "$entry")" == upower-threshold || "$(jq -r '.handler' <<< "$entry")" == system-hostname ]]; then
     value=$(jq -er --arg id "$id" '[.steps[] | select(.id == $id) | .selectedValue] |
       if length == 1 and .[0] != null then .[0] else empty end' "$original") ||
       ride_die "run lacks selected configurable value for $id"
@@ -345,18 +400,26 @@ ride_restore() {
   fi
   # Refuse a conflicting machine state before restoring any step.
   while IFS=$'\t' read -r id before after result source signature signature_version; do
-    [[ "$result" == changed ]] || continue
     [[ "$source" != - ]] || source=
     entry=$(ride_restore_entry "$id" "$source" "$original")
+    [[ "$result" == changed || ( "$result" == pending &&
+       "$(jq -r '.handler' <<< "$entry")" == firefox-extensions ) ]] || continue
     [[ "$signature" == - || "$signature" == "$(ride_source_signature "$entry" "$signature_version")" ]] ||
       ride_die "source definition changed since run for $id; exact recovery is unavailable"
     recovery=$(jq -r '.recovery' <<< "$entry")
     if [[ "$recovery" == none || ( "$recovery" == remove-new-install && ( "$before" != absent || "$after" != installed ) ) ]]; then
       ride_die "exact recovery is unavailable for $id ($before -> $after)"
     fi
-    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
-      if [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+    if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$entry")" == upower-threshold || "$(jq -r '.handler' <<< "$entry")" == dnf5-fast-tuning || "$(jq -r '.handler' <<< "$entry")" == system-hostname ]]; then
+      if [[ "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing ]]; then
+        [[ "$before" == absent ]] || ride_gnome_lock_timing_snapshot_valid "$before" ||
+          ride_die "invalid saved GNOME lock timing state"
+      elif [[ "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
         ride_upower_valid_snapshot "$before" || ride_die "invalid saved UPower setting state"
+      elif [[ "$(jq -r '.handler' <<< "$entry")" == dnf5-fast-tuning ]]; then
+        [[ "$before" == absent || "$before" == configured ]] || ride_die "invalid saved DNF5 tuning state"
+      elif [[ "$(jq -r '.handler' <<< "$entry")" == system-hostname ]]; then
+        ride_system_hostname_snapshot_valid "$before" || ride_die "invalid saved static hostname state"
       else
         ride_gsettings_valid_snapshot "$before" || ride_die "invalid saved user setting state"
       fi
@@ -369,16 +432,20 @@ ride_restore() {
       ride_preflight_change "$entry" "$before"
     fi
     current=$(ride_observe "$entry")
-    [[ "$current" == "$after" || "$current" == "$before" ]] ||
+    [[ "$current" == "$after" || "$current" == "$before" ||
+       ( "$(jq -r '.handler' <<< "$entry")" == firefox-extensions &&
+         "$before" == absent && "$after" == configured &&
+         "$current" == removal-pending ) ]] ||
       ride_die "restore conflict for $id: expected $after, observed $current"
   done < <(ride_restore_steps "$original")
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then
     {
       while IFS=$'\t' read -r id before after result source signature signature_version; do
-        [[ "$result" == changed ]] || continue
         [[ "$source" != - ]] || source=
         entry=$(ride_restore_entry "$id" "$source" "$original")
-        if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == upower-threshold ]]; then
+        [[ "$result" == changed || ( "$result" == pending &&
+           "$(jq -r '.handler' <<< "$entry")" == firefox-extensions ) ]] || continue
+        if [[ "$id" == setting.ibus-emoji-hotkey || "$(jq -r '.handler' <<< "$entry")" == gsettings-string || "$(jq -r '.handler' <<< "$entry")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$entry")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$entry")" == bash-aliases || "$(jq -r '.handler' <<< "$entry")" == chrome-preferences || "$(jq -r '.handler' <<< "$entry")" == upower-threshold || "$(jq -r '.handler' <<< "$entry")" == system-hostname ]]; then
           printf '%s\t-\t%s\t%s\t%s\t-\t-\t%s\n' \
             "$id" "$(ride_observe "$entry")" "$before" "$(jq -r '.status' <<< "$entry")" "$(jq -r '.scope' <<< "$entry")"
         else
@@ -389,41 +456,61 @@ ride_restore() {
     return
   fi
   ride_journal_create "restore:$original_id"
+  RIDE_RUN_PENDING=0
   while IFS=$'\t' read -r id before after result source signature signature_version; do
-    [[ "$result" == changed ]] || continue
     [[ "$source" != - ]] || source=
     entry=$(ride_restore_entry "$id" "$source" "$original")
+    [[ "$result" == changed || ( "$result" == pending &&
+       "$(jq -r '.handler' <<< "$entry")" == firefox-extensions ) ]] || continue
     ride_apply_one "$entry" "$before" || return 1
   done < <(ride_restore_steps "$original")
-  ride_journal_finish complete
+  if [[ "${RIDE_RUN_PENDING:-0}" == 1 ]]; then ride_journal_finish pending; else ride_journal_finish complete; fi
 }
 
 ride_remove_profile() {
-  local profile=$1 id source entry
+  local profile=$1 id source value entry
   ride_validate_profile "$profile"
   if [[ "$RIDE_DRY_RUN" == 1 ]]; then
     {
-      while IFS=$'\t' read -r id source; do
+      while IFS=$'\t' read -r id source value; do
         [[ "$source" != - ]] || source=
-        ride_plan_entry "$id" absent "$source"
-      done < <(jq -r '.operations | reverse[] | [.id, (.source // "-")] | @tsv' "$profile")
+        [[ "$value" != '~' ]] || value=
+        entry=$(ride_entry_or_die "$id" "$source" "$value")
+        if jq -e '.states | index("absent") != null' <<< "$entry" >/dev/null; then
+          ride_plan_entry "$id" absent "$source" "$value"
+        else
+          ride_plan_entry "$id" "$(jq -r '.states[0]' <<< "$entry")" "$source" "$value"
+        fi
+      done < <(jq -r '.operations | reverse[] | [.id, (.source // "-"), (.value // "~")] | @tsv' "$profile")
     } | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
     return
   fi
-  while IFS=$'\t' read -r id source; do
+  while IFS=$'\t' read -r id source value; do
     [[ -z "$id" ]] && continue
     [[ "$source" != - ]] || source=
-    entry=$(ride_entry_or_die "$id" "$source")
+    [[ "$value" != '~' ]] || value=
+    entry=$(ride_entry_or_die "$id" "$source" "$value")
+    jq -e '.states | index("absent") != null' <<< "$entry" >/dev/null || continue
     ride_preflight_change "$entry" absent
-  done < <(jq -r '.operations | reverse[] | [.id, (.source // "-")] | @tsv' "$profile")
+  done < <(jq -r '.operations | reverse[] | [.id, (.source // "-"), (.value // "~")] | @tsv' "$profile")
   ride_journal_create remove-profile
-  while IFS=$'\t' read -r id source; do
+  RIDE_RUN_PENDING=0
+  while IFS=$'\t' read -r id source value; do
     [[ -z "$id" ]] && continue
     [[ "$source" != - ]] || source=
-    entry=$(ride_entry_or_die "$id" "$source")
+    [[ "$value" != '~' ]] || value=
+    entry=$(ride_entry_or_die "$id" "$source" "$value")
+    if ! jq -e '.states | index("absent") != null' <<< "$entry" >/dev/null; then
+      if [[ "$(jq -r '.kind' <<< "$entry")" == system ]]; then
+        printf 'kept non-reversible operation %s\n' "$id"
+      else
+        printf 'kept one-way prerequisite %s\n' "$id"
+      fi
+      continue
+    fi
     ride_apply_one "$entry" absent || return 1
-  done < <(jq -r '.operations | reverse[] | [.id, (.source // "-")] | @tsv' "$profile")
-  ride_journal_finish complete
+  done < <(jq -r '.operations | reverse[] | [.id, (.source // "-"), (.value // "~")] | @tsv' "$profile")
+  if [[ "${RIDE_RUN_PENDING:-0}" == 1 ]]; then ride_journal_finish pending; else ride_journal_finish complete; fi
 }
 
 ride_status() {
@@ -524,6 +611,32 @@ ride_main() {
       [[ -n "$desired" ]] || ride_die "set requires --state"
       ride_apply_single "$argument" "$desired" "" "$value"
       ;;
+    deploy)
+      local deploy_entry
+      deploy_entry=$(ride_entry_or_die "$argument")
+      [[ "$(jq -r '.handler' <<< "$deploy_entry")" == docker-engine &&
+         "$(jq -r '.kind' <<< "$deploy_entry")" == system ]] ||
+        ride_die "deploy requires a managed Docker Engine system operation ID"
+      [[ -n "$desired" && -z "$value" ]] || ride_die "deploy requires --state and does not accept --value"
+      if [[ "$RIDE_DRY_RUN" == 1 ]]; then
+        ride_plan_entry "$argument" "$desired" | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
+      else
+        ride_apply_single "$argument" "$desired"
+      fi
+      ;;
+    update)
+      local update_entry
+      update_entry=$(ride_entry_or_die "$argument")
+      [[ "$(jq -r '.kind' <<< "$update_entry")" == system &&
+         "$(jq -r '.handler' <<< "$update_entry")" == dnf5-system-update ]] ||
+        ride_die "update requires a whole-system update operation ID"
+      [[ -z "$desired" && -z "$value" ]] || ride_die "update does not accept --state or --value"
+      if [[ "$RIDE_DRY_RUN" == 1 ]]; then
+        ride_plan_entry "$argument" current | ride_table $'ID\tSOURCE\tCURRENT\tDESIRED\tSTATUS\tDISTRIBUTION\tDEPLOYMENT\tSCOPE'
+      else
+        ride_apply_single "$argument" current
+      fi
+      ;;
     unset)
       [[ "$(jq -r '.kind' <<< "$(ride_entry_or_die "$argument")")" == setting ]] || ride_die "unset requires a setting ID"
       ride_apply_single "$argument" disabled
@@ -553,4 +666,6 @@ ride_main() {
   esac
 }
 
-ride_main "$@"
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  ride_main "$@"
+fi

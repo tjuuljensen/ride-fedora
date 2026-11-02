@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-security-desktop-tools",
+  "description": "Opt-in Fedora 44 Workstation candidate RPMs for Security Lab menu entries and SELinux policy analysis GUI.",
+  "operations": [
+    {
+      "id": "package.security-menus",
+      "state": "installed"
+    },
+    {
+      "id": "package.setools-gui",
+      "state": "installed"
+    }
+  ]
+}

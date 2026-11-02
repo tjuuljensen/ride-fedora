@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-yubikey-tools",
+  "description": "Opt-in YubiKey management CLI; package lifecycle only, no key configuration.",
+  "operations": [
+    {
+      "id": "package.yubikey-manager",
+      "state": "installed"
+    },
+    {
+      "id": "package.yubico-authenticator",
+      "state": "installed"
+    }
+  ]
+}

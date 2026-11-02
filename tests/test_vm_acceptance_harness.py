@@ -64,6 +64,9 @@ class VmHarnessTests(unittest.TestCase):
                          ("package.less", "less"))
         self.assertEqual(select_pilot(target, "package.openssh-clients")["pilotPackage"],
                          "openssh-clients")
+        setting = select_pilot(target, "setting.gnome-custom-shortcuts")
+        self.assertEqual((setting["pilotOperation"], setting["pilotPackage"]),
+                         ("setting.gnome-custom-shortcuts", "gsettings-desktop-schemas"))
         self.assertEqual(target["pilotOperation"], "package.exfatprogs")
         with self.assertRaisesRegex(ValueError, "not declared"):
             select_pilot(target, "package.unknown")
@@ -75,14 +78,45 @@ class VmHarnessTests(unittest.TestCase):
         software = qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",
                                 self.root / "serial.log", 2222, accel="tcg")
         self.assertEqual(software[1:3], ["-accel", "tcg"])
-        self.assertEqual(software[5:7], ["-cpu", "max"])
+        self.assertEqual(software[5:7], ["-cpu", "max,-svm"])
         self.assertIn("user,id=net0,hostfwd=tcp:127.0.0.1:2222-:22", software)
+        workstation = qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",
+                                   self.root / "serial.log", 2222, accel="tcg",
+                                   smp=4, memory_mib=6144)
+        self.assertEqual(workstation[7:11], ["-smp", "4", "-m", "6144"])
         with self.assertRaises(ValueError):
             qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",
                          self.root / "serial.log", 0)
         with self.assertRaises(ValueError):
             qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",
                          self.root / "serial.log", 2222, accel="unknown")
+        with self.assertRaisesRegex(ValueError, "resource"):
+            qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",
+                         self.root / "serial.log", 2222, smp=0)
+
+    def test_ssh_wait_fails_fast_when_guest_enters_emergency_mode(self):
+        artifacts = self.root / "emergency-guest"
+        artifacts.mkdir()
+        (artifacts / "serial.log").write_text(
+            "[FAILED] Failed to mount /boot.\nYou are in emergency mode.\n",
+            encoding="utf-8",
+        )
+        machine = VM(self.target, self.root / "image.qcow2", artifacts, accel="tcg")
+        machine.process = type("LiveProcess", (), {"poll": lambda _self: None})()
+        with self.assertRaisesRegex(RuntimeError, "entered emergency mode"):
+            machine._wait_for_ssh(timeout=60)
+
+    def test_ssh_wait_retries_a_slow_probe_under_tcg(self):
+        artifacts = self.root / "slow-guest"
+        artifacts.mkdir()
+        machine = VM(self.target, self.root / "image.qcow2", artifacts, accel="tcg")
+        machine.process = type("LiveProcess", (), {"poll": lambda _self: None})()
+        timeout = subprocess.TimeoutExpired(["ssh"], 10)
+        ready = subprocess.CompletedProcess(["ssh"], 0, "", "")
+        with patch("tools.vm_acceptance.time.monotonic", side_effect=[0, 0, 4]), \
+             patch("tools.vm_acceptance.time.sleep"), \
+             patch.object(machine, "_command", side_effect=[timeout, ready]):
+            machine._wait_for_ssh(timeout=60)
 
     def test_output_cannot_be_nested_inside_the_source_bundle(self):
         with self.assertRaisesRegex(ValueError, "VM output cannot be inside"):

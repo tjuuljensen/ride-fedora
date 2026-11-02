@@ -51,9 +51,42 @@ The exact image digest is pinned in the [target matrix](../../tests/acceptance/t
 A new build can differ because the network repository and installation metadata
 can change. Review and pin a new digest before using that image for acceptance.
 
+The 2026-11-01 rebuild used the same signed ISO and unchanged Kickstart recipe.
+Fedora's checksum signature and ISO digest were verified again; the installer
+reported `ID=fedora`, `VERSION_ID=44`, and `VARIANT_ID=workstation`. `qemu-img
+check` found no image errors. The rebuilt qcow2 SHA-256 is
+`78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`, now pinned
+in the target matrix. The old image was no longer available locally; the
+rebuilt image is the same declared Fedora 44 Workstation target from the same
+build recipe, with its own digest recorded in VM evidence.
+
 The disk remains a candidate test fixture until it boots through the VM harness
 and passes its package checks. The harness creates a fresh overlay for each
 scenario. Keep the base qcow2 read-only during testing. To recover host space
 after evidence is recorded, delete only the disposable build directory and
 test overlays; retain the signed source checksum, build recipe, image digest,
 and acceptance results in this repository.
+
+## 2026-11-02 boot diagnosis
+
+The pinned image passed SHA-256 and qcow2 validation, but a TCG disposable VM
+entered emergency mode before SSH. The console reported `/boot` and local
+filesystem mount failures. Read-only inspection found that the `/boot` UUID in
+`/etc/fstab` exists on an ext4 partition in the image, and both root and boot
+ext4 filesystems pass read-only checks. The guest nevertheless did not resolve
+the `/boot` UUID while booting. No migration operation ran. The VM harness now
+detects emergency mode from the console and stops the attempt promptly. The
+next investigation should compare the guest's udev/device links at boot with
+the image UUIDs before rebuilding or changing the declared target.
+
+## 2026-11-02 Glances acceptance boot retry
+
+The focused `package.glances` Workstation lifecycle was launched with TCG
+against the same pinned image digest. The kernel detected `/dev/vda` and
+partitions `vda1`-`vda3`; systemd found the root filesystem UUID, but timed out
+waiting for the `/boot` UUID and entered emergency mode before SSH. The
+acceptance harness stopped the VM promptly, and Glances was never applied.
+Because an earlier run of this image reached SSH successfully, the repeated
+failure remains unexplained and this is not evidence that the Glances
+operation failed. Do not retry the same launch unchanged; inspect the boot
+device links/udev evidence and QEMU device ordering first.

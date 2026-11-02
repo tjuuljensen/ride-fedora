@@ -7,14 +7,17 @@ Purpose:
     administrator policies.
 Behavior:
     ``check`` validates the manifest and can verify each extension against
-    Mozilla Add-ons. ``install`` performs the online check before an atomic
-    policy update. ``remove`` switches RIDE-owned entries to ``blocked`` so
-    Firefox uninstalls them. ``finalize-remove`` later removes the tombstones.
+    Mozilla Add-ons. ``observe`` reports the owned lifecycle state.
+    ``set-state`` applies ``configured``, ``removal-pending``, or ``absent``;
+    final removal verifies Firefox is stopped and managed add-ons are absent
+    from discovered profiles before deleting the policy tombstones.
 Usage:
     manage-firefox-extensions.py check [--online]
     manage-firefox-extensions.py install [--offline]
     manage-firefox-extensions.py remove
     manage-firefox-extensions.py finalize-remove
+    manage-firefox-extensions.py observe
+    manage-firefox-extensions.py set-state configured|removal-pending|absent
 Inputs/environment:
     The manifest defaults to ``policies/firefox-extensions.json``. Target and
     state paths can be overridden with command-line options for testing.
@@ -31,11 +34,13 @@ from __future__ import annotations
 
 import argparse
 import copy
+import configparser
 import datetime as dt
 import hashlib
 import json
 import os
 from pathlib import Path
+import pwd
 import shutil
 import sys
 import tempfile
@@ -352,6 +357,20 @@ def install(manifest: dict[str, Any], target: Path, state_path: Path) -> None:
     settings = updated.setdefault("policies", {}).setdefault("ExtensionSettings", {})
 
     previous = state.get("managed_extensions", {}) if state else {}
+    if state and state.get("phase") == "removal_pending":
+        extensions_policy = updated["policies"].get("Extensions", {})
+        if not isinstance(extensions_policy, dict):
+            raise PolicyError("policies.Extensions must be an object")
+        uninstall = extensions_policy.get("Uninstall", [])
+        if not isinstance(uninstall, list) or not all(isinstance(item, str) for item in uninstall):
+            raise PolicyError("policies.Extensions.Uninstall must be a list of extension IDs")
+        if not set(previous) <= set(uninstall):
+            raise PolicyError("refusing to restore modified managed Extensions.Uninstall entries")
+        extensions_policy["Uninstall"] = [item for item in uninstall if item not in previous]
+        if not extensions_policy["Uninstall"]:
+            extensions_policy.pop("Uninstall")
+        if not extensions_policy:
+            updated["policies"].pop("Extensions", None)
     for extension_id in previous:
         settings.pop(extension_id, None)
 
@@ -377,6 +396,9 @@ def remove(manifest: dict[str, Any], target: Path, state_path: Path) -> None:
 
     policy = load_policy(target)
     state = load_state(state_path)
+    if state and state.get("phase") == "removal_pending":
+        print("Firefox extension removal is already pending a restart")
+        return
     expected = state.get("managed_extensions", {}) if state else desired_settings(manifest)
     settings = policy["policies"].get("ExtensionSettings", {})
     conflicts = [
@@ -392,6 +414,17 @@ def remove(manifest: dict[str, Any], target: Path, state_path: Path) -> None:
     updated = copy.deepcopy(policy)
     updated_settings = updated["policies"].setdefault("ExtensionSettings", {})
     updated_settings.update(blocked)
+    extensions_policy = updated["policies"].setdefault("Extensions", {})
+    if not isinstance(extensions_policy, dict):
+        raise PolicyError("policies.Extensions must be an object")
+    uninstall = extensions_policy.get("Uninstall", [])
+    if not isinstance(uninstall, list) or not all(isinstance(item, str) for item in uninstall):
+        raise PolicyError("policies.Extensions.Uninstall must be a list of extension IDs")
+    conflicts = set(expected).intersection(uninstall)
+    if conflicts:
+        joined = ", ".join(sorted(conflicts))
+        raise PolicyError(f"refusing to claim pre-existing Extensions.Uninstall entries: {joined}")
+    extensions_policy["Uninstall"] = [*uninstall, *expected]
     new_state = build_state("removal_pending", blocked, state)
     backup = apply_transaction(target, policy, updated, state_path, new_state)
     if backup:
@@ -420,19 +453,172 @@ def finalize_remove(target: Path, state_path: Path) -> None:
         joined = ", ".join(conflicts)
         raise PolicyError(f"refusing to remove modified blocked entries: {joined}")
 
+    extensions_policy = policy["policies"].get("Extensions", {})
+    if not isinstance(extensions_policy, dict):
+        raise PolicyError("policies.Extensions must be an object")
+    uninstall = extensions_policy.get("Uninstall", [])
+    if not isinstance(uninstall, list) or not all(isinstance(item, str) for item in uninstall):
+        raise PolicyError("policies.Extensions.Uninstall must be a list of extension IDs")
+    if len(uninstall) != len(set(uninstall)) or not set(managed) <= set(uninstall):
+        raise PolicyError("refusing to remove modified managed Extensions.Uninstall entries")
+
+    verify_extensions_removed(set(managed))
+
     updated = copy.deepcopy(policy)
     updated_settings = updated["policies"].get("ExtensionSettings", {})
     for extension_id in managed:
         updated_settings.pop(extension_id, None)
     if not updated_settings:
         updated["policies"].pop("ExtensionSettings", None)
+    updated_extensions = updated["policies"].get("Extensions", {})
+    updated_extensions["Uninstall"] = [item for item in uninstall if item not in managed]
+    if not updated_extensions["Uninstall"]:
+        updated_extensions.pop("Uninstall")
+    if not updated_extensions:
+        updated["policies"].pop("Extensions", None)
 
     backup = backup_file(target)
-    write_atomic(target, updated)
-    state_path.unlink()
+    prior_state = state_path.read_bytes()
+    try:
+        write_atomic(target, updated)
+        state_path.unlink()
+    except Exception:
+        write_atomic(target, policy)
+        state_path.parent.mkdir(parents=True, exist_ok=True, mode=0o755)
+        state_path.write_bytes(prior_state)
+        raise
     if backup:
         print(f"Previous Firefox policy backed up to: {backup}")
     print(f"Removed {len(managed)} completed RIDE removal tombstones")
+
+
+def firefox_running() -> bool:
+    proc = Path("/proc")
+    try:
+        entries = list(proc.iterdir())
+    except OSError as exc:
+        raise PolicyError(f"cannot inspect processes before Firefox policy finalization: {exc}") from exc
+    for entry in entries:
+        if not entry.name.isdigit():
+            continue
+        try:
+            command = (entry / "comm").read_text(encoding="utf-8").strip().lower()
+        except (FileNotFoundError, ProcessLookupError):
+            continue
+        except OSError as exc:
+            raise PolicyError(f"cannot inspect process {entry.name}: {exc}") from exc
+        if command in {"firefox", "firefox-bin", "firefox-esr"}:
+            return True
+    return False
+
+
+def firefox_profiles() -> set[Path]:
+    profiles: set[Path] = set()
+    for account in pwd.getpwall():
+        home = Path(account.pw_dir)
+        if not home.is_absolute() or not home.is_dir():
+            continue
+        profile_ini = home / ".mozilla/firefox/profiles.ini"
+        if not profile_ini.exists():
+            continue
+        parser = configparser.ConfigParser(interpolation=None)
+        try:
+            with profile_ini.open("r", encoding="utf-8") as handle:
+                parser.read_file(handle)
+        except (OSError, configparser.Error) as exc:
+            raise PolicyError(f"cannot inspect Firefox profiles {profile_ini}: {exc}") from exc
+        for section in parser.sections():
+            if not section.startswith("Profile"):
+                continue
+            relative = parser.getboolean(section, "IsRelative", fallback=True)
+            profile_path = parser.get(section, "Path", fallback="")
+            if not profile_path:
+                continue
+            candidate = Path(profile_path)
+            if relative:
+                candidate = profile_ini.parent / candidate
+            if not candidate.is_absolute():
+                raise PolicyError(f"Firefox profile path is not absolute: {candidate}")
+            if candidate.exists():
+                profiles.add(candidate)
+    return profiles
+
+
+def verify_extensions_removed(extension_ids: set[str]) -> None:
+    if firefox_running():
+        raise PolicyError("Firefox is still running; restart and close Firefox before finalizing removal")
+    for profile in firefox_profiles():
+        extensions_json = profile / "extensions.json"
+        if extensions_json.is_file():
+            try:
+                data = json.loads(extensions_json.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                raise PolicyError(f"cannot verify Firefox profile {profile}: {exc}") from exc
+            addons = data.get("addons") if isinstance(data, dict) else None
+            if not isinstance(addons, list):
+                raise PolicyError(f"Firefox profile extension inventory is invalid: {extensions_json}")
+            present = sorted(
+                addon.get("id") for addon in addons
+                if isinstance(addon, dict) and addon.get("id") in extension_ids
+            )
+            if present:
+                raise PolicyError(
+                    f"managed Firefox extensions remain in {profile}: {', '.join(present)}"
+                )
+        extension_dir = profile / "extensions"
+        if extension_dir.exists():
+            try:
+                present = sorted(path.name for path in extension_dir.iterdir()
+                                 if path.name in extension_ids)
+            except OSError as exc:
+                raise PolicyError(f"cannot inspect Firefox profile {extension_dir}: {exc}") from exc
+            if present:
+                raise PolicyError(
+                    f"managed Firefox extension files remain in {profile}: {', '.join(present)}"
+                )
+
+
+def observe(manifest: dict[str, Any], target: Path, state_path: Path) -> str:
+    policy = load_policy(target) if target.exists() else {"policies": {}}
+    state = load_state(state_path)
+    wanted = desired_settings(manifest)
+    settings = policy["policies"].get("ExtensionSettings", {})
+    if state is None:
+        conflicts = sorted(set(wanted).intersection(settings))
+        if conflicts:
+            raise PolicyError(
+                "Firefox policy contains unowned RIDE extension IDs: " + ", ".join(conflicts)
+            )
+        return "absent"
+    phase = state["phase"]
+    managed = state["managed_extensions"]
+    if phase == "installed" and managed != wanted:
+        raise PolicyError("owned Firefox extension set differs from the declared manifest")
+    expected = ({key: BLOCKED_SETTING for key in managed}
+                if phase == "removal_pending" else managed)
+    if not target.exists() or any(settings.get(key) != value for key, value in expected.items()):
+        raise PolicyError("Firefox policy no longer matches its RIDE ownership record")
+    return "removal-pending" if phase == "removal_pending" else "configured"
+
+
+def set_state(manifest: dict[str, Any], target: Path, state_path: Path, desired: str) -> None:
+    current = observe(manifest, target, state_path)
+    if desired == "configured":
+        if current != "configured":
+            check_online(manifest)
+            install(manifest, target, state_path)
+    elif desired == "removal-pending":
+        if current == "configured":
+            remove(manifest, target, state_path)
+        elif current == "absent":
+            raise PolicyError("cannot request removal when Firefox extensions are already absent")
+    elif desired == "absent":
+        if current == "configured":
+            remove(manifest, target, state_path)
+        elif current == "removal-pending":
+            finalize_remove(target, state_path)
+    else:
+        raise PolicyError(f"invalid desired Firefox extension state: {desired}")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -455,6 +641,10 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser(
         "finalize-remove", help="remove policy tombstones after Firefox uninstalls"
     )
+    observe_parser = subparsers.add_parser("observe", help="report the owned Firefox policy state")
+    observe_parser.add_argument("--machine-readable", action="store_true")
+    state_parser = subparsers.add_parser("set-state", help="apply one Firefox policy lifecycle state")
+    state_parser.add_argument("desired_state", choices=("configured", "removal-pending", "absent"))
     return parser
 
 
@@ -474,6 +664,10 @@ def main() -> int:
             remove(manifest, args.target, args.state)
         elif args.command == "finalize-remove":
             finalize_remove(args.target, args.state)
+        elif args.command == "observe":
+            print(observe(manifest, args.target, args.state))
+        elif args.command == "set-state":
+            set_state(manifest, args.target, args.state, args.desired_state)
         return 0
     except PolicyError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

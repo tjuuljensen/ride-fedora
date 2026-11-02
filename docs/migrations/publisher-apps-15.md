@@ -1,31 +1,34 @@
-# Xmind desktop RPM outcome
+# Xmind desktop outcome
 
-The owner kept Xmind in the v3.0 fast-track review. Choose the current edition
-and preserve user documents during recovery.
+The owner kept Xmind for v3.0. The v2 functions `InstallXmind` and
+`RemoveXmind` scrape an old `/zen/download/linux_rpm/` endpoint, pass extracted
+links to DNF, then remove `xmind-vana` by name. The publisher currently lists
+Linux RPM and Flathub options. The initial v3.0 path is a Flathub Flatpak
+candidate for the publisher's current proprietary Xmind app. This gives a
+signed Flathub acquisition and an owned app ID while the legacy RPM scrape is
+retired. The Flathub manifest grants broad home-directory and network access,
+so the app is not confined to its private data directory. At review time, the
+Flathub version is 26.03.04129 and the publisher download page offers RPM
+26.05.01107. A separate publisher RPM operation remains addable after its
+source, package identity, and coexistence/recovery behavior are verified.
 
-Status: **unsupported and non-runnable in v3.0**, 2026-10-30. This
-v2 source outcome maps `InstallXmind` and `RemoveXmind`. v2 scrapes
-an old `/zen/download/linux_rpm/` endpoint, passes every extracted link to
-DNF, then removes `xmind-vana` by name. The
-[publisher still offers a Linux RPM](https://xmind.app/xmind2024/) under its
-[desktop terms](https://xmind.app/mas/terms/), but the
-v2 URL and package name do not identify the current release or an owned
-inverse. Mind maps and application settings are user data.
+## Completion criteria defined before implementation
 
-## Completion criteria defined before a runnable operation
+- Pin the current Flathub application ID and verify the GPG-checked system
+  remote on Fedora 44 Workstation x86_64. Keep it opt-in and outside base
+  profiles.
+- Verify plan, apply, repeat, status, and remove while preserving a seeded
+  file under the app's data directory. Do not alter Xmind documents outside
+  the managed application package.
+- Keep GUI launch, existing document open/save/export, and account/sync
+  behavior in H081. Investigate a failed VM run before retrying.
 
-- Select a current publisher product/edition and exact RPM, terms, hash or
-  signature, and installed package identity. Detect existing installations
-  and preserve document files and application state.
-- Mock collision and failed acquisition; verify a Fedora 44 x86_64
-  Workstation VM plan/apply/repeat/status and owned inverse. A desktop
-  happy path may remain opt-in candidate while visual checks move to v3.1.
+`package.xmind` uses `net.xmind.XMind`, the publisher's proprietary Linux
+application packaged for Flathub. See the [operation acceptance record](../acceptance/package.xmind.md)
+and the curated [Xmind profile](../../profiles/fedora-xmind.json). The shared
+browser/media Flatpak acceptance covers its candidate gate, source origin,
+repeat, inverse, and app-data preservation.
 
-The current catalog has no pinned publisher-RPM acquisition and recovery
-handler. Choose an Xmind edition with verified artifact,
-owned install, and VM happy path.
-
-The owner retained Xmind as an optional v3 outcome on 2026-10-30. Choose the
-current edition and exact publisher artifact, then prove document-preserving
-Fedora 44 recovery. The v2 Zen scrape and name-based inverse remain
-non-runnable.
+Sources: [Xmind Linux downloads](https://xmind.com/download),
+[Flathub application](https://flathub.org/en/apps/net.xmind.XMind),
+[Flathub manifest](https://github.com/flathub/net.xmind.XMind).

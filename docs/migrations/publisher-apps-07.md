@@ -4,7 +4,7 @@ The owner confirmed **keep** for VM guest tools in the v3.0 fast-track review.
 Detect the actual hypervisor and install only its matching Fedora packages;
 the v2 VMware-only inverse is insufficient.
 
-Status: **one opt-in candidate and one non-runnable decision**, 2026-10-30. This active-preset batch maps
+Status: **two operable opt-in outcomes**, 2026-11-01. This active-preset batch maps
 `InstallUnifyingOnLaptop` / `RemoveUnifyingOnLaptop` and
 `InstallVMtoolsOnVM` / `RemoveVMtoolsOnVM`. The v2 Unifying function tests
 for a battery and installs Fedora `solaar` and `acpi`; its inverse removes
@@ -22,12 +22,11 @@ only handles VMware and uses a different DMI field.
   receiver; do not run hardware mutation commands. Reuse the unchanged DNF
   handler's mocked failure evidence. Make any desktop pairing visual check
   a separate opt-in hardening item.
-- For the conditional VM function, determine whether QEMU and VMware
-  behavior can be represented with explicit targets/profiles without
-  falsely claiming the other hypervisor. Check the pinned QEMU image's
-  package baseline read-only. Require a provider-specific VM lifecycle and
-  recovery before a runnable operation; otherwise document an explicit
-  non-runnable decision and reopen trigger.
+- For the conditional VM function, use explicit QEMU/SPICE and VMware
+  profiles without claiming behavior on the other hypervisor. Check the
+  pinned QEMU image's package baseline read-only. Require absent-state package
+  apply/repeat/status/remove acceptance on Fedora 44 Workstation before
+  promoting the candidate package operations.
 - Compare Windows schema/behavior, update catalog, profile, acceptance,
   ledger, and generated docs. Investigate any VM failure before retrying.
 
@@ -37,12 +36,26 @@ The pinned disposable Workstation image identifies itself as `kvm` and
 already contains `spice-vdagent`, `spice-webdavd`, and `open-vm-tools` RPMs.
 That read-only baseline does not establish which packages RIDE should install
 on a newly provisioned QEMU or VMware guest. The v2 install and remove
-branches also use different DMI fields, so copying the detection would leave
-an unsafe inverse. `VMtoolsOnVM` is **unsupported and non-runnable in v3.0**.
-Reopen when a requested hypervisor-specific target has an explicit package
-selection, absent-package VM install, repeat/status, and owned inverse on
-that hypervisor. Preinstalled guest tools belong to the image owner, not a
-RIDE removal journal.
+branches also use different DMI fields, so v3 replaces automatic detection
+with explicit `fedora-qemu-guest-tools` and `fedora-vmware-guest-tools`
+profiles. The QEMU profile selects Fedora's `spice-vdagent` and
+`spice-webdavd`; the VMware profile selects `open-vm-tools`. These RPM
+operations manage package presence only; they do not claim hypervisor feature
+behavior, alter host settings, or configure user state. Workstation operations
+remain candidate-gated until absent-state package lifecycle evidence passes.
+The first VM setup attempt confirmed that the image's
+`open-vm-tools-desktop` RPM depends on `open-vm-tools`; acceptance now removes
+those two exact RPMs together in its disposable overlay before testing the
+mapped core package. The RIDE operation is unchanged.
+
+The Fedora 44 Workstation acceptance passed for both explicit profiles after
+resetting the image-seeded guest-tool packages in the disposable overlay.
+Both profiles passed their candidate gate, absent-state apply, package query,
+repeat, status, and exact removal. The run did not exercise a QEMU or VMware
+host, desktop session, clipboard, display, or file-sharing behavior. The
+transcript and hash are recorded in the three operation acceptance pages.
+`VMtoolsOnVM` is now an **operable opt-in candidate**. QEMU/SPICE and VMware
+profiles remain separate; neither belongs in a base profile.
 
 ## Fedora 44 VM result
 

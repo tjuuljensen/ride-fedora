@@ -84,6 +84,8 @@ ride_require_target() {
 ride_require_accepted() {
   local entry=$1 status
   status=$(jq -r '.status' <<< "$entry")
+  [[ "$status" != blocked ]] ||
+    ride_die "operation is blocked pending required safety and recovery evidence"
   if [[ "$status" != supported && "${RIDE_ALLOW_CANDIDATE:-0}" != 1 ]]; then
     ride_die "operation is a candidate without VM acceptance; pass --allow-candidate for explicit development use"
   fi

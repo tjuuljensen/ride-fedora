@@ -10,7 +10,8 @@ No source file in that repository is modified by this branch.
 | Existing function family | Generic RIDE outcome | Ownership decision |
 | --- | --- | --- |
 | `UpdateFedora`, `InstallRequired`, `InstallAutoUpdate` | Update and baseline packages | Non-runnable v3.0 decisions with bounded update, role split, and timer recovery triggers. |
-| `InstallDocker`, `InstallTailscale`, `InstallGlances`, `InstallSelenium` | Optional services and tools | Non-runnable v3.0 decisions; split into opt-in operations only with independent source and recovery checks. |
+| `InstallDocker`, `InstallTailscale`, `InstallGlances`, `InstallPlexServer`, `InstallPlexAutoUpdate`, `InstallSelenium` | Optional services and tools | Docker is supported on Workstation and Server; Glances package and loopback service are supported on both declared targets; Tailscale is an operable package-only candidate on Fedora 44 Server; Plex package and service are supported on Fedora 44 Server with an opt-in profile; Plex's mutable updater is replaced by signed RPM/DNF updates; Selenium bindings are an opt-in Fedora 44 Server candidate, while browser/driver and Grid lifecycle stay outside RIDE. |
+| `InstallAMP` | AMP game-server manager | The unsigned CubeCoders RPM is a Fedora 44 Server opt-in candidate pinned by version and SHA-256, with RPM scriptlets suppressed. Controller setup, credentials, license activation, network exposure, and private AMP state remain operator-managed. |
 | `SetNoRootLogin`, `GenerateSSHkeysRSA` | SSH policy and key material | Policy needs exact backup and restore; private keys must remain outside catalog and run state. |
 | `SetHostname` | Host identity | Hostname is a private profile value; only generic behavior remains under review. |
 | ExpressVPN and VPN randomizer | VPN client and scheduling | Keep provider and subscription details private; review deterministic disable and removal first. |
@@ -20,6 +21,12 @@ setup. The public catalog must not absorb either value or prompt. Owner-excluded
 service and configuration functions stay outside the generic v3 migration queue;
 their existing server consumers remain in that repository. The initial
 `server-base` profile deliberately contains only the small common package baseline.
+
+OpenCTI Community Edition is a [planned post-v3.0 generic server
+operation](migrations/opencti-server.md). It has no v2 source function, is
+outside the scoped migration denominator, and is not a v3.0 release gate.
+Its future opt-in deployment needs an explicit container runtime and
+data-preserving recovery; it is not part of `server-base`.
 
 The [scoped outcome burndown](workstation-server-burndown.md) records selector
 coverage for generic server candidates, including inactive functions. The

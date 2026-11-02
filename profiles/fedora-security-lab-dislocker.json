@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-dislocker",
+  "description": "Opt-in Fedora 44 Workstation package for BitLocker volume access.",
+  "operations": [
+    {
+      "id": "package.dislocker",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-interception",
+  "description": "Opt-in Fedora 44 Workstation packages for network interception and manipulation tools. Installing these RPMs does not activate their behavior.",
+  "operations": [
+    {
+      "id": "package.arpon",
+      "state": "installed"
+    },
+    {
+      "id": "package.hunt",
+      "state": "installed"
+    },
+    {
+      "id": "package.netsed",
+      "state": "installed"
+    },
+    {
+      "id": "package.sslsplit",
+      "state": "installed"
+    }
+  ]
+}

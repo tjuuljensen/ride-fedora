@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-bitwarden-rpm",
+  "description": "Bitwarden publisher RPM; preserves its user vault and other deployment methods.",
+  "operations": [
+    {
+      "id": "package.bitwarden-rpm",
+      "state": "installed"
+    }
+  ]
+}

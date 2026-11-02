@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-irc-halloy",
+  "description": "Opt-in Halloy from a trusted system Flathub remote; configure flathub-system first. Existing IRC settings are not imported.",
+  "operations": [
+    {
+      "id": "package.halloy",
+      "state": "installed"
+    }
+  ]
+}

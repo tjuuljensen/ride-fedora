@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-shell-aliases",
+  "description": "Opt-in Fedora user aliases for Eza and external IPv4/IPv6 address lookup.",
+  "operations": [
+    {
+      "id": "package.eza",
+      "state": "installed"
+    },
+    {
+      "id": "package.curl",
+      "state": "installed"
+    },
+    {
+      "id": "setting.bash-aliases",
+      "state": "configured",
+      "value": "[\"ls-eza\",\"wanip\",\"wanip4\",\"wanip6\"]"
+    }
+  ]
+}

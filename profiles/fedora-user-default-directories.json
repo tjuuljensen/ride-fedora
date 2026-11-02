@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-user-default-directories",
+  "description": "Opt-in creation of ~/bin and ~/git with ownership-aware recovery.",
+  "operations": [
+    {
+      "id": "setting.user-default-directories",
+      "state": "installed"
+    }
+  ]
+}

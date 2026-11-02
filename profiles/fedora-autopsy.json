@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-autopsy",
+  "description": "Opt-in Autopsy Snap from the Sleuth Kit Labs publisher in the Snap Store; requires the separate Fedora Snap runtime.",
+  "operations": [
+    {
+      "id": "package.autopsy",
+      "state": "installed"
+    }
+  ]
+}

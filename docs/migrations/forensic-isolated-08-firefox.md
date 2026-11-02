@@ -37,11 +37,15 @@ the old script does not retire that capability.
 | Candidate | Current evidence | Decision for this batch |
 | --- | --- | --- |
 | [Dumpzilla](https://github.com/Busindre/dumpzilla) | Upstream labels it discontinued; the v2 download was mutable and no current Firefox compatibility or owned inverse was accepted. | Retire this exact script path only. |
-| [browser-forensic](https://github.com/SecurityRonin/browser-forensic) | Apache-2.0 source at commit `10e2f70bd53d50144edcff849749efd0095c9a03`, covering Firefox history, cookies, downloads, bookmarks, autofill, extensions, sessions, login metadata, and preferences. Its README says evidence is opened read-only and secret reveal requires explicit flags and file output. The repository has a lockfile and Linux CI but no published GitHub release. | Primary source-build candidate; pin source and Cargo dependencies, then check its actual CLI and seeded-data behavior in the declared VM. No runnable claim yet. |
+| [browser-forensic](https://github.com/SecurityRonin/browser-forensic) | Apache-2.0 source; the earlier proposed commit `10e2f70bd53d50144edcff849749efd0095c9a03` is an old pin. The repository has no published GitHub release. Its current README describes broad Firefox artifact coverage, read-only SQLite access, and a separate secret-reveal command. | Do not build from the stale proposed pin. Re-evaluate only after recording a current immutable source revision and checking its current CLI and build inputs. |
+| [Hindsight](https://github.com/obsidianforensics/hindsight) | Released Firefox support in `v2026.06` (signed release commit `25bfb16`). The official README documents Firefox history, bookmarks, downloads, cookies, and form history, with JSONL, XLSX, or SQLite output. Its tagged requirements still include an unpinned `ccl_chromium_reader` Git dependency. The documented Firefox subset does not establish Dumpzilla parity for extensions, sessions, preferences, or login artifacts. | Better released candidate for a narrower first path. Pin and verify the wheel plus every transitive dependency, then probe synthetic profiles and secret behavior before deciding whether it can serve as the opt-in v3.0 successor. |
 | [Plaso](https://github.com/log2timeline/plaso/blob/main/docs/sources/user/Parsers-and-plugins.md) | Maintained Firefox history, cookies, downloads, and cache parsers. Plaso is already a separate kept v2 outcome in `forensic-isolated-02`. | Reuse its future accepted path for timeline analysis, but do not silently treat that subset as complete Dumpzilla coverage. |
 
-The browser-forensic README documents optional password output, so this
-batch is high risk even though RIDE would install the tool without reading
-profiles. A source build is a development path, not accepted installation
-evidence. The next action is a pinned Fedora 44 build and synthetic-profile
-probe, followed by an owned v3 operation only if those checks pass.
+Both candidates remain investigation inputs, not accepted installation
+evidence. Hindsight currently has the clearer released Firefox path but needs
+its Git dependency pinned and its actual profile-read behavior checked. The
+next action is to pin a complete dependency set and run a synthetic-profile
+probe in the disposable Fedora 44 target; proceed to an owned opt-in operation
+only if read-only input and secret-handling checks pass. Keep the remaining
+Dumpzilla artifact gaps explicit if the first v3 path covers only the Hindsight
+Firefox subset.

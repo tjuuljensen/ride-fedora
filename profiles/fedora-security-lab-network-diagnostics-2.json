@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-diagnostics-2",
+  "description": "Opt-in Fedora 44 Workstation RPMs for network and security diagnostics.",
+  "operations": [
+    {
+      "id": "package.flawfinder",
+      "state": "installed"
+    },
+    {
+      "id": "package.sslscan",
+      "state": "installed"
+    },
+    {
+      "id": "package.subnetcalc",
+      "state": "installed"
+    },
+    {
+      "id": "package.swaks",
+      "state": "installed"
+    }
+  ]
+}

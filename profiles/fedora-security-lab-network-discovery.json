@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-discovery",
+  "description": "Opt-in Fedora 44 Workstation network discovery and audit client packages.",
+  "operations": [
+    {
+      "id": "package.arp-scan",
+      "state": "installed"
+    },
+    {
+      "id": "package.argus-clients",
+      "state": "installed"
+    },
+    {
+      "id": "package.dnsmap",
+      "state": "installed"
+    },
+    {
+      "id": "package.nmbscan",
+      "state": "installed"
+    }
+  ]
+}

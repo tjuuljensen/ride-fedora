@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-dns-tools",
+  "description": "Opt-in Fedora 44 Workstation DNS inspection and analysis packages.",
+  "operations": [
+    {
+      "id": "package.dnsenum",
+      "state": "installed"
+    },
+    {
+      "id": "package.dnstracer",
+      "state": "installed"
+    },
+    {
+      "id": "package.dnstop",
+      "state": "installed"
+    },
+    {
+      "id": "package.fpdns",
+      "state": "installed"
+    }
+  ]
+}

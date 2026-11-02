@@ -43,6 +43,7 @@ class CliTests(unittest.TestCase):
 test -f "$RIDE_TEST_PACKAGES/$3"
 """,
             "dnf": """#!/bin/sh
+printf '%s\\n' "$*" >> "$RIDE_TEST_DNF_LOG"
 for arg do last=$arg; done
 case " $* " in
   *' install '*)
@@ -73,6 +74,7 @@ esac
             "PATH": f"{binary}:{self.env['PATH']}",
             "RIDE_TEST_MODE": "1", "RIDE_OS_RELEASE_FILE": str(os_release),
             "RIDE_CATALOG_PATH": str(catalog), "RIDE_TEST_PACKAGES": str(packages),
+            "RIDE_TEST_DNF_LOG": str(self.root / "dnf.log"),
             "RIDE_STATE_DIR": str(self.root / "runs"),
             "RIDE_CACHE_DIR": str(self.root / "cache"),
         })
@@ -119,6 +121,38 @@ esac
         self.run_ride("install", "package.alpha", success=False)
         self.assertEqual(self.journals(), [])
         self.assertFalse((self.root / "packages" / "alpha").exists())
+
+    def test_blocked_operation_cannot_be_enabled_with_candidate_override(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        catalog["operations"] = [entry for entry in catalog["operations"]
+                                 if entry["id"] == "setting.firefox-addons"]
+        path = self.root / "blocked-catalog.json"
+        path.write_text(json.dumps(catalog))
+        self.env["RIDE_CATALOG_PATH"] = str(path)
+        (self.root / "os-release").write_text(
+            "ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n", encoding="utf-8")
+        blocked = self.run_ride("set", "setting.firefox-addons", "--state", "configured",
+                                "--allow-candidate", success=False)
+        self.assertIn("operation is blocked pending required safety and recovery evidence",
+                      blocked.stderr)
+        self.assertEqual(self.journals(), [])
+
+    def test_update_command_plans_system_operation_without_mutation(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        path = self.root / "system-update-catalog.json"
+        path.write_text(json.dumps(catalog))
+        self.env["RIDE_CATALOG_PATH"] = str(path)
+        (self.root / "os-release").write_text(
+            "ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n", encoding="utf-8")
+        dnf5 = Path(self.env["PATH"].split(":", 1)[0]) / "dnf5"
+        dnf5.write_text("#!/bin/sh\nprintf '%s\\n' '{}'\n")
+        dnf5.chmod(0o755)
+        planned = self.run_ride("update", "system.update-all-packages", "--dry-run")
+        self.assertIn("system.update-all-packages", planned.stdout)
+        self.assertIn("current", planned.stdout)
+        self.assertEqual(self.journals(), [])
+        invalid = self.run_ride("set", "system.update-all-packages", "--state", "current", success=False)
+        self.assertIn("set requires a setting ID", invalid.stderr)
 
     def test_native_cli_tools_profile_uses_candidate_gate_and_dnf_lifecycle(self):
         identifiers = ("pwgen", "htop", "bat", "ncdu", "ripgrep", "fd-find")
@@ -181,6 +215,60 @@ esac
         self.assertEqual([step["result"] for step in repeat["steps"]], ["unchanged"] * len(names))
         self.run_ride("restore", "--run-id", first["runId"])
         self.assertFalse(any((self.root / "packages" / name).exists() for name in names))
+
+    def test_rpmfusion_codec_uses_only_declared_repository(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        entry = next(item for item in catalog["operations"]
+                     if item["id"] == "package.gstreamer1-plugins-bad-freeworld")
+        entry["scope"] = "user"  # Mocked provider test runs without elevation.
+        entry["status"] = "candidate"
+        entry.pop("acceptanceEvidence", None)
+        path = self.root / "rpmfusion-catalog.json"
+        path.write_text(json.dumps(catalog))
+        self.env["RIDE_CATALOG_PATH"] = str(path)
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        profile = self.root / "rpmfusion-profile.json"
+        profile.write_text(json.dumps({"schemaVersion": 1, "id": "rpmfusion-codec-test",
+                                       "description": "Test-only source-pinned package",
+                                       "operations": [{"id": entry["id"], "state": "installed"}]}))
+
+        self.run_ride("plan", "--profile", str(profile), "--allow-candidate")
+        self.run_ride("apply", "--profile", str(profile), "--allow-candidate")
+        call = (self.root / "dnf.log").read_text().strip()
+        self.assertIn("--from-repo=rpmfusion-free-updates", call)
+        self.assertIn("gstreamer1-plugins-bad-freeworld", call)
+
+        entry["sourceId"] = "unknown-repository"
+        path.write_text(json.dumps(catalog))
+        (self.root / "packages" / entry["packageName"]).unlink()
+        (self.root / "dnf.log").unlink()
+        self.run_ride("apply", "--profile", str(profile), "--allow-candidate", success=False)
+        self.assertFalse((self.root / "dnf.log").exists())
+
+    def test_handbrake_cli_uses_only_verified_rpmfusion_repository(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        entry = next(item for item in catalog["operations"]
+                     if item["id"] == "package.handbrake-cli")
+        entry["scope"] = "user"  # Mocked provider test runs without elevation.
+        entry.pop("acceptanceEvidence", None)
+        path = self.root / "handbrake-catalog.json"
+        path.write_text(json.dumps(catalog))
+        self.env["RIDE_CATALOG_PATH"] = str(path)
+        (self.root / "os-release").write_text(
+            "ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        profile = self.root / "handbrake-profile.json"
+        profile.write_text(json.dumps({
+            "schemaVersion": 1,
+            "id": "handbrake-cli-test",
+            "description": "Test-only RPM Fusion CLI source selection",
+            "operations": [{"id": entry["id"], "state": "installed"}],
+        }))
+
+        self.run_ride("plan", "--profile", str(profile), "--allow-candidate")
+        self.run_ride("apply", "--profile", str(profile), "--allow-candidate")
+        call = (self.root / "dnf.log").read_text().strip()
+        self.assertIn("--from-repo=rpmfusion-free-updates", call)
+        self.assertIn("HandBrake", call)
 
     def test_interactive_tables_align_and_pipes_remain_tsv(self):
         if shutil.which("column") is None:
@@ -652,12 +740,138 @@ printf 'en_US.utf8\\nda_DK.utf8\\n'
                                "--value", ":appmenu:close", "--allow-candidate", success=False)
         self.assertIn("locked", locked.stderr)
 
+    def test_profile_removal_keeps_one_way_prerequisite(self):
+        catalog = json.loads((self.root / "catalog.json").read_text())
+        prerequisite = operation("trust-keys")
+        prerequisite.update({"states": ["installed"], "recovery": "none"})
+        catalog["operations"].append(prerequisite)
+        (self.root / "catalog.json").write_text(json.dumps(catalog))
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "test", "description": "Fixture",
+            "operations": [{"id": "package.trust-keys", "state": "installed"}],
+        }))
+
+        self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        self.assertTrue((self.root / "packages" / "trust-keys").exists())
+        removed = self.run_ride("remove", "--profile", str(self.profile), "--allow-candidate")
+        self.assertIn("kept one-way prerequisite package.trust-keys", removed.stdout)
+        self.assertTrue((self.root / "packages" / "trust-keys").exists())
+
     def test_profile_source_and_unknown_source(self):
         profile = json.loads(self.profile.read_text())
         profile["operations"][0]["source"] = "not-declared"
         self.profile.write_text(json.dumps(profile))
         refused = self.run_ride("plan", "--profile", str(self.profile), success=False)
         self.assertIn("unknown source", refused.stderr)
+
+    def test_required_tools_maps_exact_rpms_and_stays_one_way(self):
+        expected = {
+            "package.coreutils": "coreutils",
+            "package.git": "git",
+            "package.gnupg2": "gnupg2",
+            "package.python-command": "python-unversioned-command",
+            "package.tar": "tar",
+            "package.wget": "wget2-wget",
+            "package.gcc": "gcc",
+        }
+        catalog = json.loads((ROOT / "catalog/operations.json").read_text())
+        entries = [row for row in catalog["operations"] if row["id"] in expected]
+        self.assertEqual({row["id"]: row["packageName"] for row in entries}, expected)
+        for row in entries:
+            self.assertEqual(row["states"], ["installed"])
+            self.assertEqual(row["recovery"], "none")
+            self.assertEqual(row["status"], "candidate")
+            row["scope"] = "user"  # Test-only catalog permits mocked, unelevated DNF.
+        test_catalog = self.root / "required-tools-catalog.json"
+        test_catalog.write_text(json.dumps({"schemaVersion": 3, "clientVersion": "3.0.0",
+                                            "operations": entries}))
+        self.env["RIDE_CATALOG_PATH"] = str(test_catalog)
+        self.env["RIDE_TEST_MODE"] = "1"
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
+        profile = str(ROOT / "profiles/required-tools.json")
+        profile_ids = [item["id"] for item in json.loads(Path(profile).read_text())["operations"]]
+        self.assertEqual(profile_ids, list(expected))
+
+        plan = self.run_ride("plan", "--profile", profile).stdout
+        for identifier in expected:
+            self.assertIn(f"{identifier}\tfedora-rpm\tabsent\tinstalled\tcandidate", plan)
+        self.run_ride("apply", "--profile", profile, success=False)
+        self.assertFalse(any((self.root / "packages" / name).exists() for name in expected.values()))
+        self.run_ride("apply", "--profile", profile, "--allow-candidate")
+        self.assertTrue(all((self.root / "packages" / name).exists() for name in expected.values()))
+        repeat = self.run_ride("apply", "--profile", profile, "--allow-candidate").stdout
+        self.assertTrue(all(f"unchanged {identifier}" in repeat for identifier in expected))
+        status = self.run_ride("status").stdout
+        self.assertTrue(all(f"{identifier}\tfedora-rpm\tinstalled\tcandidate" in status
+                            for identifier in expected))
+        removed = self.run_ride("remove", "--profile", profile, "--allow-candidate").stdout
+        self.assertTrue(all(f"kept one-way prerequisite {identifier}" in removed
+                            for identifier in expected))
+        self.assertTrue(all((self.root / "packages" / name).exists() for name in expected.values()))
+
+    def test_server_required_tools_maps_exact_rpms_and_isolates_firewalld(self):
+        expected = {
+            "package.open-vm-tools": "open-vm-tools",
+            "package.server-nano": "nano",
+            "package.wget": "wget2-wget",
+            "package.unzip": "unzip",
+            "package.git": "git",
+            "package.cifs-utils": "cifs-utils",
+            "package.samba-client": "samba-client",
+            "package.samba-common": "samba-common",
+            "package.cronie": "cronie",
+            "package.screen": "screen",
+        }
+        catalog = json.loads((ROOT / "catalog/operations.json").read_text())
+        entries = [row for row in catalog["operations"]
+                   if row["id"] in expected or row["id"] == "package.firewalld"]
+        by_id = {row["id"]: row for row in entries}
+        self.assertEqual({identifier: by_id[identifier]["packageName"]
+                          for identifier in expected}, expected)
+        for identifier, row in by_id.items():
+            self.assertIn("server", row["targets"]["fedora"]["variantIds"])
+            self.assertEqual(row["scope"], "system")
+            row["scope"] = "user"  # Test-only catalog permits mocked, unelevated DNF.
+            if row["states"] == ["installed"]:
+                self.assertEqual(row["states"], ["installed"])
+                self.assertEqual(row["recovery"], "none")
+            else:
+                self.assertEqual(row["states"], ["installed", "absent"])
+                self.assertEqual(row["recovery"], "remove-new-install")
+        self.assertEqual(by_id["package.firewalld"]["packageName"], "firewalld")
+        self.assertEqual(by_id["package.firewalld"]["states"], ["installed"])
+        self.assertEqual(by_id["package.firewalld"]["recovery"], "none")
+
+        test_catalog = self.root / "server-required-catalog.json"
+        test_catalog.write_text(json.dumps({"schemaVersion": 3, "clientVersion": "3.0.0",
+                                            "operations": entries}))
+        self.env["RIDE_CATALOG_PATH"] = str(test_catalog)
+        self.env["RIDE_TEST_MODE"] = "1"
+        (self.root / "os-release").write_text("ID=fedora\nVERSION_ID=44\nVARIANT_ID=server\n")
+        profile = str(ROOT / "profiles/server-required-tools.json")
+        profile_ids = [item["id"] for item in json.loads(Path(profile).read_text())["operations"]]
+        self.assertEqual(profile_ids, list(expected))
+        firewall_profile = str(ROOT / "profiles/server-firewall-package.json")
+        firewall_ids = [item["id"] for item in
+                        json.loads(Path(firewall_profile).read_text())["operations"]]
+        self.assertEqual(firewall_ids, ["package.firewalld"])
+
+        plan = self.run_ride("plan", "--profile", profile).stdout
+        self.assertIn("candidate", plan)
+        self.assertNotIn("package.firewalld", plan)
+        self.run_ride("apply", "--profile", profile, success=False)
+        self.run_ride("apply", "--profile", profile, "--allow-candidate")
+        repeat = self.run_ride("apply", "--profile", profile, "--allow-candidate").stdout
+        self.assertTrue(all(f"unchanged {identifier}" in repeat for identifier in expected), repeat)
+        removed = self.run_ride("remove", "--profile", profile, "--allow-candidate").stdout
+        one_way = [identifier for identifier in expected
+                   if by_id[identifier]["recovery"] == "none"]
+        reversible = [identifier for identifier in expected
+                      if by_id[identifier]["recovery"] == "remove-new-install"]
+        self.assertTrue(all(f"kept one-way prerequisite {identifier}" in removed
+                            for identifier in one_way), removed)
+        self.assertTrue(all(f"changed {identifier}: installed -> absent" in removed
+                            for identifier in reversible), removed)
 
 
 if __name__ == "__main__":

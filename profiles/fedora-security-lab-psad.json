@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-psad",
+  "description": "Opt-in Fedora 44 Workstation candidate for PSAD package presence without daemon, alert, or firewall activity.",
+  "operations": [
+    {
+      "id": "package.psad",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-network-librespeed-cli",
+  "description": "Opt-in LibreSpeed CLI from the pinned publisher release; does not run a bandwidth test.",
+  "operations": [
+    {
+      "id": "package.librespeed-cli",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-ferium",
+  "description": "Optional user-local Ferium no-GUI CLI for Fedora 44 Server.",
+  "operations": [
+    {
+      "id": "package.ferium-portable",
+      "state": "installed"
+    }
+  ]
+}

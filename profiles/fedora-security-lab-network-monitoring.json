@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-monitoring",
+  "description": "Opt-in Fedora 44 Workstation network activity monitoring and accounting packages.",
+  "operations": [
+    {
+      "id": "package.argus",
+      "state": "installed"
+    },
+    {
+      "id": "package.nfswatch",
+      "state": "installed"
+    },
+    {
+      "id": "package.nicstat",
+      "state": "installed"
+    },
+    {
+      "id": "package.vnstat",
+      "state": "installed"
+    }
+  ]
+}

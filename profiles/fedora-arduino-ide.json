@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-arduino-ide",
+  "description": "Opt-in Arduino IDE 2.3.10 x86_64 AppImage. Sketch and board data remain outside RIDE management.",
+  "operations": [
+    {
+      "id": "package.arduino-ide",
+      "state": "installed"
+    }
+  ]
+}

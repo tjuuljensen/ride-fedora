@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-core",
+  "description": "Opt-in Security Lab group subset using accepted Fedora package operations; profile removal preserves packages that were already installed.",
+  "operations": [
+    {"id": "package.binwalk", "state": "installed"},
+    {"id": "package.dc3dd", "state": "installed"},
+    {"id": "package.htop", "state": "installed"},
+    {"id": "package.lynis", "state": "installed"},
+    {"id": "package.pwgen", "state": "installed"},
+    {"id": "package.vim-enhanced", "state": "installed"}
+  ]
+}

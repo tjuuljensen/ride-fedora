@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-brave",
+  "description": "Opt-in Brave Browser RPM from its publisher repository.",
+  "operations": [
+    {
+      "id": "package.brave",
+      "state": "installed"
+    }
+  ]
+}

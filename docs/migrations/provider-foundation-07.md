@@ -1,45 +1,49 @@
-# Provider foundation batch 07: HandBrake RPM Fusion source
+# Provider foundation batch 07: HandBrake deployments
 
-Status: **unsupported on the declared v3.0 target until its provider is
-accepted**, 2026-10-30. The commented v2 pair `InstallHandBrake` and
-`RemoveHandBrake` remains in scope: the owner confirmed **keep** in the v3.0
-fast-track review on 2026-10-30. Choose the CLI or GUI distribution and use
-the focused package lifecycle after RPM Fusion trust is established. The v2
-pair invokes DNF for `HandBrake`. The
-[RPM Fusion Fedora 44 x86_64 index](https://download1.rpmfusion.org/free/fedora/updates/44/x86_64/h/)
-lists `HandBrake` 1.11.2 and a separate `HandBrake-gui` RPM. The
-[HandBrake project](https://handbrake.fr/project_information.php) describes
-its GPL-2.0 license and points Linux users to Flathub. RPM Fusion is a
-third-party package source, not an automatically trusted Fedora repository.
+Status: **CLI path operable as an opt-in candidate**, 2026-11-01. The owner kept the v2
+`InstallHandBrake`/`RemoveHandBrake` outcome. The v2 pair invokes DNF for
+`HandBrake`; its practical intent is the CLI encoder. The current Fedora 44
+RPM Fusion free repository keeps the CLI binaries in package `HandBrake` and
+publishes a separate `HandBrake-gui` RPM. The
+Fedora 44 x86_64 RPM Fusion index lists version 1.11.2 packages. HandBrake's
+[official installation guide](https://handbrake.fr/docs/en/1.9.0/get-handbrake/download-and-install.html)
+recommends its Flathub edition for desktop users; Flathub publishes app ID
+`fr.handbrake.ghb` from the [Flathub manifest](https://github.com/flathub/fr.handbrake.ghb).
+RPM Fusion remains an external package source, but the separate
+[RPM Fusion source batch](provider-foundation-02.md) now has accepted Fedora 44
+trust and owned repository recovery.
 
-## Completion criteria defined before resolution
+## Completion checks defined before implementation
 
-- Preserve the v2 DNF package intent and distinguish the CLI RPM from the
-  GUI RPM; do not infer that `HandBrake` alone supplies the desktop app.
-- Permit an opt-in candidate only after the RPM Fusion provider has an
-  accepted trust and owned recovery contract, HandBrake's exact package and
-  dependencies are reviewed, focused mocked failure checks pass, and a
-  disposable Fedora 44 x86_64 Workstation VM passes its package happy path.
-  Keep it out of `default` and `server-base`.
-- Otherwise give the source outcome a non-runnable v3.0 disposition with a
-  clear review trigger. An upstream Flatpak alternative requires its own
-  remote, application, data, and inverse evidence; it is not an implicit
-  fallback for this RPM outcome.
+- Preserve the exact v2 CLI capability as an opt-in RPM Fusion package
+  operation. Require the accepted RIDE RPM Fusion provider explicitly; never
+  add an unverified RPM or implicit repository fallback.
+- Offer the official Flathub desktop GUI as a separate system Flatpak
+  deployment. Use a distinct deployment ID and keep its app data after
+  uninstall. Product review allows the CLI RPM and GUI Flatpak to coexist
+  because the CLI package installs no desktop launcher and Flatpak does not
+  place its CLI binary on the host PATH.
+- Keep the separate RPM Fusion GUI package visible as an alternative, but do
+  not combine it with the Flathub GUI until their exported desktop entry and
+  update ownership have a conflict review.
+- Keep all choices opt-in. Provide a combined profile for users who want both
+  the RPM CLI and Flatpak GUI, plus no additions to `default` or `server-base`.
+- Focused mocked tests must cover source selection, deployment identity,
+  refusal for an untrusted remote/provider, and independent state. A disposable
+  Fedora 44 Workstation VM must verify repository setup, both deployments,
+  repeat, status, restore, explicit remove, RPM inventory recovery, and
+  preservation of pre-existing Flatpak user data. Do not process media or use
+  device/hardware acceleration during acceptance.
+- Compare Linux and Windows package/deployment contracts and record the
+  intentional Fedora CLI/Flatpak GUI split.
 
-## v3.0 decision
+## Implementation record
 
-The separate [RPM Fusion source batch](provider-foundation-02.md) has not
-established independent signing-key trust or ownership of repository files
-and keys. The current Fedora DNF handler cannot install from this provider
-without that prerequisite. The v2 function does not declare a repository
-source, cannot prove the RPM's provenance, and has no GUI selection. A
-HandBrake operation would therefore fail the declared third-party candidate
-gate before its exact-target VM happy path.
-
-This source outcome is **unsupported in v3.0**, with no runnable catalog row
-or install acceptance. The owner retained HandBrake as an optional migration
-outcome on 2026-10-30. Accept the RPM Fusion trust and recovery gate, choose
-the CLI or GUI scope, then test that deployment on the declared Workstation
-VM. Separately review Flathub only if a Flatpak distribution is requested.
-This decision does not claim HandBrake itself or Fedora 44 is unsupported by
-its publisher.
+The Fedora 44 RPM Fusion CLI candidate passed its complete disposable-VM
+lifecycle, including source/signature verification, command detection, repeat,
+status, restore, and explicit remove. Only RPM Fusion's imported public-key
+record remains in the RPM database; all HandBrake and dependency RPMs returned
+to baseline. See [acceptance evidence](../acceptance/package.handbrake-cli.md)
+for the overlay, image, catalog digest, and transcript. The Flathub GUI path
+and product-conflict review remain in H067. Fedora 44 RPM Fusion package
+source: [HandBrake package index](https://download1.rpmfusion.org/free/fedora/updates/44/x86_64/h/).

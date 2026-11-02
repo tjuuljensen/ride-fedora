@@ -14,6 +14,8 @@ Usage: ./ride.sh <command> [argument] [options]
   download <package-or-artifact-id> [--source source-id] [--destination directory]
   install <package-id> [--source source-id]
   set <setting-id> --state <declared-state> [--value <declared-value>]
+  deploy <system-operation-id> --state <declared-state>
+  update <system-operation-id>
   unset <setting-id>
   status [operation-id] [--source source-id] [--profile name-or-path]
   restore --run-id <id>

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-pipewire-and-espeak",
+  "description": "Opt-in remaining Fedora Multimedia group packages, including the conditional eSpeak plugin.",
+  "operations": [
+    {
+      "id": "package.pipewire-pulseaudio",
+      "state": "installed"
+    },
+    {
+      "id": "package.pipewire-utils",
+      "state": "installed"
+    },
+    {
+      "id": "package.wireplumber",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer-plugins-espeak",
+      "state": "installed"
+    }
+  ]
+}

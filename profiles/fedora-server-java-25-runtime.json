@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-java-25-runtime",
+  "description": "Optional system-scope Fedora 44 Server OpenJDK 25 headless runtime required by current Minecraft Java Edition releases.",
+  "operations": [
+    {
+      "id": "package.java-25-openjdk-headless",
+      "state": "installed"
+    }
+  ]
+}

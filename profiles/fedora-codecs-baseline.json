@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-baseline",
+  "description": "Opt-in Fedora 44 Workstation GStreamer baseline. Existing packages are preserved; 32-bit packages are not selected.",
+  "operations": [
+    {
+      "id": "package.gstreamer1-plugins-base",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-good",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-bad-free",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugin-dav1d",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugin-libav",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugin-openh264",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-ugly-free",
+      "state": "installed"
+    }
+  ]
+}

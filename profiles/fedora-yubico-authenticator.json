@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-yubico-authenticator",
+  "description": "Opt-in Yubico Authenticator GUI from the pinned publisher archive.",
+  "operations": [
+    {
+      "id": "package.yubico-authenticator",
+      "state": "installed"
+    }
+  ]
+}

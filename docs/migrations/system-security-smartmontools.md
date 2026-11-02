@@ -1,27 +1,28 @@
-# SmartMonTools storage-monitoring decision
+# SmartMonTools storage monitoring decision
 
-Status: **decision deferred by owner; unsupported for v3.0**, 2026-10-30. The active v2 pair only
-installs and removes the signed Fedora [`smartmontools` RPM](https://packages.fedoraproject.org/pkgs/smartmontools/smartmontools/).
-The package also supplies `smartd`, so its service state must be observed
-before treating a package-only lifecycle as safe. No storage device is
-probed by RIDE during this review.
+Status: **kept by owner for v3.0; operable opt-in candidate passed Fedora 44 Workstation x86_64 acceptance**, 2026-11-02.
+The v2 pair only installs and removes the signed Fedora `smartmontools` RPM.
+Fedora 44 publishes `smartmontools` 7.5 and the RPM includes `smartd.service`.
+The upstream project describes `smartctl` and `smartd` as utilities for SMART
+control and monitoring and publishes its GPL-2.0 license. See the
+[Fedora 44 package record](https://packages.fedoraproject.org/pkgs/smartmontools/smartmontools/fedora-44.html)
+and [upstream project and license](https://github.com/smartmontools/smartmontools).
 
-The predefined gate required plan, signed apply, repeat, status, inverse,
-RPM inventory recovery, and unchanged smartd service state on the pinned
-Fedora 44 x86_64 Workstation VM. The disposable overlay
-`20261030T140047Z-test-package-only-security-lifecycles-ed37222c` found
-that installing the RPM **enabled `smartd.service`** while it stayed
-inactive. It was disabled before installation. The test stopped on that
-new service enablement before restore; its overlay and transcript are
-retained. A generic `dnf-package` handler would misrepresent the side effect
-and its service recovery. The experimental catalog row and opt-in profile
-were removed rather than promoted as a runnable candidate.
+The generic RPM pilot on 2026-10-30 found that package installation enabled
+`smartd.service` while leaving it inactive. It was disabled before installation.
+The previous experiment stopped before restore and its transcript is retained
+in the acceptance run journal. Do not reuse generic DNF lifecycle evidence.
 
-Reopen when a dedicated operation can record prior smartd enable/active
-state, preserve administrator configuration and device selection, and pass
-apply, partial failure, remove, and restore on the disposable target.
-Hardware SMART polling remains a separate opt-in review. This failure was
-investigated; no unchanged VM retry was made.
+The v3 implementation is `package.smartmontools` in the opt-in
+`fedora-workstation-smartmontools` profile. Its Fedora-specific handler installs
+the signed RPM, then disables and stops `smartd.service`. It refuses package
+removal if the service is enabled or active, so a later administrator decision
+to turn monitoring on is not silently undone. The operation does not edit
+`smartd.conf`, select devices, run SMART polling, or read device data.
 
-The owner deferred the v3.0 capability decision in the fast-track review on
-2026-10-30. The service-state evidence above remains the reopening gate.
+The full lifecycle passed on 2026-11-02, including plan, candidate gating,
+apply, RPM signature and files, stopped/disabled service, repeat, status, restore,
+explicit remove, and exact package baseline recovery. Transcript and image hashes
+are recorded in [the acceptance record](../acceptance/package.smartmontools.md).
+The package remains opt-in and candidate-gated. Hardware monitoring
+configuration and device selection remain in the named v3.1 hardening queue.

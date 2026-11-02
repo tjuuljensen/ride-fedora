@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-auto-update",
+  "description": "Opt-in Fedora 44 Server DNF5 automatic package installation on its daily systemd timer.",
+  "operations": [
+    {
+      "id": "package.dnf5-plugin-automatic",
+      "state": "installed"
+    },
+    {
+      "id": "setting.dnf5-automatic",
+      "state": "enabled"
+    }
+  ]
+}

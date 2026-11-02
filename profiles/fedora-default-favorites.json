@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-default-favorites",
+  "description": "Restore Fedora 44 Workstation's current default GNOME favorite applications as an opt-in profile.",
+  "operations": [
+    {
+      "id": "setting.gnome-favorite-apps",
+      "state": "configured",
+      "value": "[\"org.mozilla.firefox.desktop\",\"org.gnome.Calendar.desktop\",\"org.gnome.Nautilus.desktop\",\"org.gnome.Software.desktop\",\"org.gnome.TextEditor.desktop\",\"org.gnome.Calculator.desktop\"]"
+    }
+  ]
+}

@@ -14,6 +14,8 @@ __pycache__/
 .pytest_cache/
 .venv/
 .acceptance-runs/
+# Local VM acceptance run artifacts
+/.tmp-vm-*/
 TODO.md
 
 # Generated ArtCraft inventories and local download archives

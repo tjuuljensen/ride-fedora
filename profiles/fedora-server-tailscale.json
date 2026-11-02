@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-tailscale",
+  "description": "Opt-in Tailscale client package on Fedora 44 Server. Package install and removal do not authenticate the host or select tailnet routes.",
+  "operations": [
+    {
+      "id": "package.tailscale",
+      "state": "installed"
+    }
+  ]
+}

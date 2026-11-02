@@ -37,12 +37,18 @@ distributions and may coexist under the same rule. Each must have a distinct
 deployment ID, package-manager identity, scope, and recovery record. A
 product-only request must not silently select or remove either edition.
 
-The current Linux engine has only one `installed` deployment slot per package.
-Its alternate provider check is scoped to that slot. It is a temporary guard
-against ambiguous provider/build state, not a rule that portable and installed
-editions are mutually exclusive. Portable deployments and kit assembly require
-their own identifiers, destination selection, manifests, handlers, state
-migration, and VM evidence before the runtime can allow coexistence.
+AppImage integration managers are also subject to product-specific conflict
+review. The v3 AppImage integration operation uses Gear Lever from Flathub and
+refuses to install while the legacy AppImageLauncher RPM is present, because
+both may register handling for AppImage files. The operator removes the old
+RPM explicitly; existing AppImage files and `~/Applications` remain user data.
+
+The Linux engine uses an operation ID for each owned deployment. Its alternate
+provider check is scoped to the selected operation and installed slot. A
+separate operation can represent a portable user-local binary beside a Fedora
+RPM; the opt-in Eza pair follows this model. Each new pair still needs its own
+product conflict review, destination ownership, manifest, lifecycle tests, and
+target-specific VM evidence before coexistence is claimed.
 
 CyberChef's pinned ZIP is deployed as an owned system application with a
 desktop entry under this single `installed` slot. A future separate portable

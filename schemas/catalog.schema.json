@@ -2,93 +2,2969 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/tjuuljensen/ride-fedora/schemas/catalog.schema.json",
   "type": "object",
-  "required": ["schemaVersion", "clientVersion", "operations"],
+  "required": [
+    "schemaVersion",
+    "clientVersion",
+    "operations"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schemaVersion": {"const": 3},
-    "clientVersion": {"type": "string", "minLength": 1},
-    "operations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/operation"}}
+    "schemaVersion": {
+      "const": 3
+    },
+    "clientVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/operation"
+      }
+    }
   },
   "$defs": {
     "target": {
-      "type": "object", "required": ["releases", "architectures"], "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "releases",
+        "architectures"
+      ],
+      "additionalProperties": false,
       "properties": {
-        "releases": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"}},
-        "architectures": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z0-9_]+$"}},
-        "variantIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_-]+$"}}
+        "releases": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$"
+          }
+        },
+        "architectures": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_]+$"
+          }
+        },
+        "variantIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          }
+        }
       }
     },
     "sourceProvider": {
       "type": "object",
-      "required": ["sourceId", "handler", "packageName", "artifactFormat", "status", "recovery", "targets", "sourceUri", "verification"],
+      "required": [
+        "sourceId",
+        "handler",
+        "packageName",
+        "artifactFormat",
+        "status",
+        "recovery",
+        "targets",
+        "sourceUri",
+        "verification"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sourceId": {"type": "string", "pattern": "^[a-z0-9-]+$"},
-        "handler": {"const": "dnf-package"},
-        "packageName": {"type": "string", "pattern": "^[A-Za-z0-9+_.-]+$"},
-        "artifactFormat": {"const": "rpm"},
-        "status": {"enum": ["candidate", "supported"]},
-        "acceptanceEvidence": {"type": "string", "pattern": "^docs/acceptance/[a-z0-9._-]+\\.md$"},
-        "recovery": {"const": "remove-new-install"},
-        "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/target"}},
-        "sourceUri": {"type": "string", "pattern": "^https://"},
-        "verification": {"const": "fedora-repository-gpg"}
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "handler": {
+          "const": "dnf-package"
+        },
+        "packageName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9+_.-]+$"
+        },
+        "artifactFormat": {
+          "const": "rpm"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "supported"
+          ]
+        },
+        "acceptanceEvidence": {
+          "type": "string",
+          "pattern": "^docs/acceptance/[a-z0-9._-]+\\.md$"
+        },
+        "recovery": {
+          "const": "remove-new-install"
+        },
+        "targets": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/target"
+          }
+        },
+        "sourceUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "verification": {
+          "enum": [
+            "fedora-repository-gpg",
+            "fedora-rpmfusion-signatures-and-owned-state"
+          ]
+        }
       }
     },
     "operation": {
       "type": "object",
-      "required": ["id", "kind", "name", "group", "description", "handler", "states", "scope", "status", "recovery", "targets", "productId", "productUri", "license", "licenseUri", "sourceUri", "verification"],
+      "required": [
+        "id",
+        "kind",
+        "name",
+        "group",
+        "description",
+        "handler",
+        "states",
+        "scope",
+        "status",
+        "recovery",
+        "targets",
+        "productId",
+        "productUri",
+        "license",
+        "licenseUri",
+        "sourceUri",
+        "verification"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": {"type": "string", "pattern": "^(package|setting|artifact|system)\\.[a-z0-9.-]+$"},
-        "kind": {"enum": ["package", "setting", "artifact", "system"]},
-        "name": {"type": "string", "minLength": 1},
-        "group": {"type": "string", "pattern": "^[a-z0-9-]+$"},
-        "description": {"type": "string", "minLength": 1},
-        "handler": {"enum": ["dnf-package", "systemd-service", "github-asset", "python-venv", "pinned-script", "pinned-zip", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "upower-threshold", "wireguard-keypair", "flatpak-remote"]},
-        "distribution": {"const": "installed"},
-        "deploymentId": {"const": "local-installed"},
-        "artifactFormat": {"enum": ["rpm", "wheel", "script", "zip", "sdist"]},
-        "sourceId": {"type": "string", "pattern": "^[a-z0-9-]+$"},
-        "sourceProviders": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sourceProvider"}},
-        "packageName": {"type": "string", "pattern": "^[A-Za-z0-9+_.-]+$"},
-        "serviceName": {"type": "string", "pattern": "^[A-Za-z0-9_.@-]+\\.service$"},
-        "valueKind": {"enum": ["locale", "window-buttons", "percentage-low"]},
-        "allowedValues": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "githubRepository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
-        "assetSuffix": {"type": "string", "pattern": "^-[A-Za-z0-9_.-]+$"},
-        "maxBytes": {"type": "integer", "minimum": 1, "maximum": 104857600},
-        "states": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["installed", "absent", "enabled", "disabled", "configured", "downloaded"]}},
-        "scope": {"enum": ["system", "user"]},
-        "status": {"enum": ["candidate", "supported"]},
-        "recovery": {"enum": ["remove-new-install", "exact-state", "none"]},
-        "acceptanceEvidence": {"type": "string", "pattern": "^docs/acceptance/[a-z0-9._-]+\\.md$"},
-        "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/target"}},
-        "dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^package\\.[a-z0-9.-]+$"}},
-        "productId": {"type": "string", "pattern": "^[a-z0-9.-]+$"},
-        "productUri": {"type": "string", "pattern": "^https://"},
-        "license": {"type": "string", "minLength": 1},
-        "licenseUri": {"type": "string", "pattern": "^https://"},
-        "sourceUri": {"type": "string", "pattern": "^https://"},
-        "sourceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "licenseSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "verification": {"enum": ["fedora-repository-gpg", "local-systemd-state", "local-gsettings-state", "local-upower-config", "local-wireguard-keypair", "local-flatpak-remote", "github-release-sha256-observed", "github-release-api-sha256", "github-commit-sha256-observed", "pypi-pinned-sha256", "pypi-sdist-sha256"]}
+        "id": {
+          "type": "string",
+          "pattern": "^(package|setting|artifact|system)\\.[a-z0-9.-]+$"
+        },
+        "kind": {
+          "enum": [
+            "package",
+            "setting",
+            "artifact",
+            "system"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "group": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "handler": {
+          "enum": [
+            "dnf-package",
+            "smartmontools-package",
+            "systemd-service",
+            "plex-server-service",
+            "glances-web-service",
+            "sshd-root-login",
+            "dnf5-automatic",
+            "nsswitch-mdns",
+            "github-asset",
+            "python-venv",
+            "pinned-script",
+            "pinned-woeusb-script",
+            "pinned-zip",
+            "pinned-binary",
+            "pinned-eza-binary",
+            "pinned-appimage",
+            "pinned-publisher-appimage",
+            "pinned-yubico-tarball",
+            "pinned-volatility2-bundle",
+            "pinned-deb-binary",
+            "ferium-portable",
+            "minecraft-server-jar",
+            "veracrypt-signed-rpm",
+            "publisher-repo-rpm",
+            "gsettings-boolean",
+            "ibus-emoji-hotkey",
+            "gsettings-string",
+            "upower-threshold",
+            "dnf5-fast-tuning",
+            "system-hostname",
+            "wireguard-keypair",
+            "flatpak-remote",
+            "flatpak-app",
+            "rpmfusion-repositories",
+            "dnf-package-set-update",
+            "dnf5-system-update",
+            "docker-engine",
+            "user-directories",
+            "pinned-rpm",
+            "amp-pinned-rpm",
+            "firefox-preferences",
+              "firefox-extensions",
+            "gnome-custom-shortcuts",
+            "bash-aliases",
+            "chrome-preferences",
+            "snap-store-package",
+            "gnome-lock-timing"
+          ]
+        },
+        "distribution": {
+          "enum": [
+            "installed",
+            "portable"
+          ]
+        },
+        "deploymentId": {
+          "enum": [
+            "local-installed",
+            "system-flatpak",
+            "user-local-bin",
+            "user-applications-appimage",
+            "user-local-opt"
+          ]
+        },
+        "artifactFormat": {
+          "enum": [
+            "rpm",
+            "wheel",
+            "script",
+            "zip",
+            "sdist",
+            "snap",
+            "flatpak-ref",
+            "tar.gz",
+            "AppImage",
+            "jar",
+            "deb"
+          ]
+        },
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "sourceProviders": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/sourceProvider"
+          }
+        },
+        "packageName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9+_.-]+$"
+        },
+        "packageNames": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9+_.-]+$"
+          }
+        },
+        "applicationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9.-]+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9.+_-]+$"
+        },
+        "snapChannel": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
+        },
+        "assetName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "signatureUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "signingKeyUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "signingFingerprint": {
+          "type": "string",
+          "pattern": "^[A-F0-9]{40}$"
+        },
+        "repositoryId": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "repositoryFile": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+\\.repo$"
+        },
+        "repositoryBaseUrl": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "repositoryKeyUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "repositoryConfigUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "repositoryKeyFingerprint": {
+          "type": "string",
+          "pattern": "^[A-F0-9]{40}$"
+        },
+        "serviceName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.@-]+\\.service$"
+        },
+        "valueKind": {
+          "enum": [
+            "locale",
+            "window-buttons",
+            "desktop-id-list",
+            "custom-shortcut-list",
+            "bash-alias-list",
+            "chrome-policy-list",
+            "percentage-low",
+            "screensaver-lock-timing",
+            "hostname"
+          ]
+        },
+        "allowedValues": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "githubRepository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "assetSuffix": {
+          "type": "string",
+          "pattern": "^-[A-Za-z0-9_.-]+$"
+        },
+        "maxBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 104857600
+        },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "installed",
+              "absent",
+              "enabled",
+              "disabled",
+              "configured",
+              "removal-pending",
+              "downloaded",
+              "current"
+            ]
+          }
+        },
+        "scope": {
+          "enum": [
+            "system",
+            "user"
+          ]
+        },
+        "status": {
+          "enum": [
+            "blocked",
+            "candidate",
+            "supported"
+          ]
+        },
+        "recovery": {
+          "enum": [
+            "remove-new-install",
+            "exact-state",
+            "none"
+          ]
+        },
+        "acceptanceEvidence": {
+          "type": "string",
+          "pattern": "^docs/acceptance/[a-z0-9._-]+\\.md$"
+        },
+        "targets": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/target"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^package\\.[a-z0-9.-]+$"
+          }
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]+$"
+        },
+        "productUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "licenseUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "sourceUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "sourceManifestUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "runtimeUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "sourceSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "sourceSha512": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9+/]{86}==$"
+        },
+        "manifestSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "licenseSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "sourceSha512Hex": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{128}$"
+        },
+        "sourceSha1Hex": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "runtimeSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "verification": {
+          "enum": [
+            "fedora-repository-gpg",
+            "fedora-rpm-gpg-smartd-disabled",
+            "local-systemd-state",
+            "authselect-feature-state",
+            "dnf5-automatic-owned-systemd-dropin",
+            "local-gsettings-state",
+            "local-owned-shell-config",
+            "local-owned-user-directories",
+            "local-upower-config",
+            "local-dnf5-config",
+            "local-systemd-static-hostname",
+            "local-wireguard-keypair",
+            "local-flatpak-remote",
+            "flathub-system-gpg",
+            "fedora-rpmfusion-signatures-and-owned-state",
+            "dnf5-scoped-package-updates",
+            "dnf5-system-update-report",
+            "docker-ce-local-key-and-data-preservation",
+            "glances-loopback-web-service",
+            "sshd-tested-root-login-dropin",
+            "plex-unit-and-active-enabled-state",
+            "github-release-sha256-observed",
+            "github-release-api-sha256",
+            "github-release-manifest-sha256",
+            "github-release-pinned-sha256",
+            "github-release-version-and-observed-sha256",
+            "mojang-object-sha1-and-observed-sha256",
+            "publisher-https-observed-sha256",
+            "github-commit-sha256-observed",
+            "pypi-pinned-sha256",
+            "pypi-sdist-sha256",
+            "veracrypt-detached-pgp-signature",
+            "publisher-repository-rpm-signature",
+            "publisher-release-manifest-and-sha512",
+            "yubico-detached-pgp-and-sha256",
+            "dual-pinned-archive-sha256-sha512",
+            "local-owned-firefox-config",
+            "local-owned-firefox-extension-policy",
+            "local-owned-chrome-policy",
+            "snap-store-assertion",
+            "debian-package-index-sha256"
+          ]
+        }
       },
       "allOf": [
-        {"if": {"properties": {"kind": {"const": "package"}}}, "then": {"required": ["distribution", "deploymentId", "artifactFormat", "sourceId"], "oneOf": [{"properties": {"states": {"const": ["installed", "absent"]}, "recovery": {"const": "remove-new-install"}}}, {"properties": {"states": {"const": ["installed"]}, "recovery": {"const": "none"}}}]}, "else": {"not": {"anyOf": [{"required": ["distribution"]}, {"required": ["deploymentId"]}, {"required": ["artifactFormat"]}, {"required": ["sourceId"]}, {"required": ["sourceProviders"]}]}}},
-        {"if": {"properties": {"handler": {"const": "dnf-package"}}}, "then": {"required": ["packageName"], "properties": {"kind": {"const": "package"}, "artifactFormat": {"const": "rpm"}}}},
-        {"if": {"properties": {"handler": {"const": "systemd-service"}}}, "then": {"required": ["serviceName"], "properties": {"kind": {"const": "setting"}, "states": {"const": ["enabled", "disabled"]}}}},
-        {"if": {"properties": {"handler": {"const": "gsettings-boolean"}}}, "then": {"properties": {"kind": {"const": "setting"}, "scope": {"const": "user"}, "states": {"const": ["enabled", "disabled"]}, "id": {"enum": ["setting.gnome-clock-date", "setting.gnome-calendar-week-numbers", "setting.gnome-primary-paste", "setting.gnome-location", "setting.gnome-problem-reporting"]}, "verification": {"const": "local-gsettings-state"}, "recovery": {"const": "exact-state"}}}},
-        {"if": {"properties": {"handler": {"const": "ibus-emoji-hotkey"}}}, "then": {"properties": {"id": {"const": "setting.ibus-emoji-hotkey"}, "kind": {"const": "setting"}, "scope": {"const": "user"}, "states": {"const": ["enabled"]}, "verification": {"const": "local-gsettings-state"}, "recovery": {"const": "exact-state"}}}},
-        {"if": {"properties": {"handler": {"const": "gsettings-string"}}}, "then": {"required": ["valueKind"], "properties": {"id": {"enum": ["setting.gnome-region", "setting.gnome-window-buttons"]}, "kind": {"const": "setting"}, "scope": {"const": "user"}, "states": {"const": ["configured"]}, "valueKind": {"enum": ["locale", "window-buttons"]}, "verification": {"const": "local-gsettings-state"}, "recovery": {"const": "exact-state"}}}},
-        {"if": {"properties": {"handler": {"const": "upower-threshold"}}}, "then": {"required": ["valueKind"], "properties": {"id": {"const": "setting.upower-percentage-low"}, "kind": {"const": "setting"}, "scope": {"const": "system"}, "states": {"const": ["configured"]}, "valueKind": {"const": "percentage-low"}, "verification": {"const": "local-upower-config"}, "recovery": {"const": "exact-state"}}}},
-        {"if": {"properties": {"handler": {"const": "wireguard-keypair"}}}, "then": {"properties": {"id": {"const": "setting.wireguard-keypair"}, "kind": {"const": "setting"}, "scope": {"const": "system"}, "states": {"const": ["configured", "absent"]}, "verification": {"const": "local-wireguard-keypair"}, "recovery": {"const": "exact-state"}}}},
-        {"if": {"properties": {"handler": {"const": "flatpak-remote"}}}, "then": {"properties": {"id": {"const": "setting.flathub-system-remote"}, "kind": {"const": "setting"}, "scope": {"const": "system"}, "states": {"const": ["configured", "absent"]}, "verification": {"const": "local-flatpak-remote"}, "recovery": {"const": "exact-state"}}}},
-        {"if": {"properties": {"handler": {"const": "github-asset"}}}, "then": {"required": ["githubRepository", "assetSuffix", "maxBytes"], "properties": {"kind": {"const": "artifact"}, "states": {"const": ["downloaded"]}}}},
-        {"if": {"properties": {"handler": {"const": "python-venv"}}}, "then": {"properties": {"id": {"enum": ["package.volatility3", "package.dfir-unfurl", "package.chepy"]}, "kind": {"const": "package"}, "artifactFormat": {"enum": ["wheel", "sdist"]}, "states": {"const": ["installed", "absent"]}}}},
-        {"if": {"properties": {"id": {"const": "package.chepy"}}}, "then": {"required": ["sourceSha256"], "properties": {"handler": {"const": "python-venv"}, "scope": {"const": "user"}, "artifactFormat": {"const": "sdist"}, "sourceId": {"const": "pypi-sdist-venv"}, "verification": {"const": "pypi-sdist-sha256"}, "sourceUri": {"const": "https://files.pythonhosted.org/packages/3f/4c/b8bc1607c96e1df206912e4db82ace5adfb2fe9dce5926fd7860d265fa58/chepy-7.6.0.tar.gz"}, "sourceSha256": {"const": "f6084689e43d128748c18f79c79d75539abb67ac8245e950b678cfa0da2f5010"}}}},
-        {"if": {"properties": {"handler": {"const": "pinned-script"}}}, "then": {"required": ["sourceSha256", "licenseSha256"], "properties": {"id": {"const": "package.asn"}, "kind": {"const": "package"}, "scope": {"const": "user"}, "artifactFormat": {"const": "script"}, "sourceId": {"const": "github-raw-pinned"}, "verification": {"const": "github-commit-sha256-observed"}, "states": {"const": ["installed", "absent"]}, "sourceUri": {"pattern": "^https://raw\\.githubusercontent\\.com/nitefood/asn/[0-9a-f]{40}/asn$"}, "licenseUri": {"pattern": "^https://raw\\.githubusercontent\\.com/nitefood/asn/[0-9a-f]{40}/LICENSE$"}}}},
-        {"if": {"properties": {"handler": {"const": "pinned-zip"}}}, "then": {"required": ["sourceSha256", "licenseSha256"], "properties": {"id": {"const": "package.cyberchef"}, "kind": {"const": "package"}, "scope": {"const": "system"}, "artifactFormat": {"const": "zip"}, "sourceId": {"const": "github-release-pinned"}, "verification": {"const": "github-release-api-sha256"}, "states": {"const": ["installed", "absent"]}, "sourceUri": {"const": "https://github.com/gchq/CyberChef/releases/download/v11.5.0/CyberChef_8cd426dd4f40f1423912d5fad91b578a86a65112.zip"}, "licenseUri": {"const": "https://raw.githubusercontent.com/gchq/CyberChef/v11.5.0/LICENSE"}, "sourceSha256": {"const": "f6478925d3eaa16ec08626a85f5b85eed10d531a5e18700615fed7ecb024cccf"}, "licenseSha256": {"const": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"}}}}
+        {
+          "if": {
+            "properties": {
+              "handler": {"const": "pinned-deb-binary"}
+            }
+          },
+          "then": {
+            "required": ["sourceSha256", "version", "licenseUri"],
+            "properties": {
+              "id": {"const": "package.galleta"},
+              "kind": {"const": "package"},
+              "scope": {"const": "user"},
+              "states": {"const": ["installed", "absent"]},
+              "recovery": {"const": "remove-new-install"},
+              "distribution": {"const": "portable"},
+              "deploymentId": {"const": "user-local-bin"},
+              "artifactFormat": {"const": "deb"},
+              "sourceId": {"const": "debian-galleta-pinned"},
+              "version": {"const": "1.0+20040505-12"},
+              "sourceUri": {"const": "https://deb.debian.org/debian/pool/main/g/galleta/galleta_1.0+20040505-12_amd64.deb"},
+              "sourceSha256": {"const": "1bb1867237e07c403c9f79abad71b6838645f4494a5ea1a4077821f610b401ff"},
+              "license": {"const": "BSD-3-Clause"},
+              "verification": {"const": "debian-package-index-sha256"},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "package"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "distribution",
+              "deploymentId",
+              "artifactFormat",
+              "sourceId"
+            ],
+            "oneOf": [
+              {
+                "properties": {
+                  "states": {
+                    "const": [
+                      "installed",
+                      "absent"
+                    ]
+                  },
+                  "recovery": {
+                    "const": "remove-new-install"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "states": {
+                    "const": [
+                      "installed"
+                    ]
+                  },
+                  "recovery": {
+                    "const": "none"
+                  }
+                }
+              }
+            ]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "distribution"
+                  ]
+                },
+                {
+                  "required": [
+                    "deploymentId"
+                  ]
+                },
+                {
+                  "required": [
+                    "artifactFormat"
+                  ]
+                },
+                {
+                  "required": [
+                    "sourceId"
+                  ]
+                },
+                {
+                  "required": [
+                    "sourceProviders"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-woeusb-script"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceSha256",
+              "licenseSha256"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.woeusb"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "artifactFormat": {
+                "const": "script"
+              },
+              "sourceId": {
+                "const": "github-release-pinned"
+              },
+              "verification": {
+                "const": "github-release-pinned-sha256"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "sourceUri": {
+                "const": "https://github.com/WoeUSB/WoeUSB/releases/download/v5.2.4/woeusb-5.2.4.bash"
+              },
+              "licenseUri": {
+                "const": "https://raw.githubusercontent.com/WoeUSB/WoeUSB/v5.2.4/LICENSES/GPL-3.0-or-later.txt"
+              },
+              "sourceSha256": {
+                "const": "0b9e502313c6461346cc4d150459b2e1341d30f9ffda005e160829ad9d5bfffc"
+              },
+              "licenseSha256": {
+                "const": "2ca9503d76d1ffab14f599b4741382eec11face60ad1f0d7a41897809003a286"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "minecraft-server-jar"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {"const": "package.minecraft-server"},
+              "kind": {"const": "package"},
+              "scope": {"const": "user"},
+              "states": {"const": ["installed", "absent"]},
+              "recovery": {"const": "remove-new-install"},
+              "distribution": {"const": "installed"},
+              "deploymentId": {"const": "user-local-opt"},
+              "artifactFormat": {"const": "jar"},
+              "sourceId": {"const": "mojang-server-pinned"},
+              "version": {"const": "26.3"},
+              "sourceSha1Hex": {"const": "33680f5f2ac32864d6d7cf5e56a705fdb3e05f4c"},
+              "sourceUri": {"const": "https://piston-data.mojang.com/v1/objects/33680f5f2ac32864d6d7cf5e56a705fdb3e05f4c/server.jar"},
+              "verification": {"const": "mojang-object-sha1-and-observed-sha256"},
+              "status": {"const": "candidate"},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["server"]}}}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "smartmontools-package"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName",
+              "serviceName"
+            ],
+            "properties": {
+              "id": {"const": "package.smartmontools"},
+              "kind": {"const": "package"},
+              "packageName": {"const": "smartmontools"},
+              "serviceName": {"const": "smartd.service"},
+              "artifactFormat": {"const": "rpm"},
+              "sourceId": {"const": "fedora-rpm"},
+              "verification": {"const": "fedora-rpm-gpg-smartd-disabled"},
+              "status": {"const": "candidate"},
+              "states": {"const": ["installed", "absent"]},
+              "recovery": {"const": "remove-new-install"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "dnf-package"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName"
+            ],
+            "properties": {
+              "kind": {
+                "const": "package"
+              },
+              "artifactFormat": {
+                "const": "rpm"
+              },
+              "sourceId": {
+                "enum": [
+                  "fedora-rpm",
+                  "rpmfusion-free-updates"
+                ]
+              },
+              "deploymentId": {
+                "const": "local-installed"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "applicationId"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "package.halloy",
+                  "package.gearlever",
+                  "package.chrome",
+                  "package.edge",
+                  "package.spotify",
+                  "package.vivaldi",
+                  "package.xmind"
+                ]
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "system-flatpak"
+              },
+              "artifactFormat": {
+                "const": "flatpak-ref"
+              },
+              "sourceId": {
+                "const": "flathub-flatpak"
+              },
+              "applicationId": {
+                "enum": [
+                  "org.squidowl.halloy",
+                  "it.mijorus.gearlever",
+                  "com.google.Chrome",
+                  "com.microsoft.Edge",
+                  "com.spotify.Client",
+                  "com.vivaldi.Vivaldi",
+                  "net.xmind.XMind"
+                ]
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "flathub-system-gpg"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.halloy"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              },
+              "applicationId": {
+                "const": "org.squidowl.halloy"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.gearlever"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              },
+              "applicationId": {
+                "const": "it.mijorus.gearlever"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.chrome"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              },
+              "applicationId": {
+                "const": "com.google.Chrome"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.edge"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              },
+              "applicationId": {
+                "const": "com.microsoft.Edge"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.spotify"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              },
+              "applicationId": {
+                "const": "com.spotify.Client"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.vivaldi"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              },
+              "applicationId": {
+                "const": "com.vivaldi.Vivaldi"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-binary"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceManifestUri",
+              "manifestSha256",
+              "assetName",
+              "version",
+              "licenseUri"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.librespeed-cli"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "user-local-bin"
+              },
+              "artifactFormat": {
+                "const": "tar.gz"
+              },
+              "sourceId": {
+                "const": "github-release-pinned"
+              },
+              "version": {
+                "const": "1.0.14"
+              },
+              "assetName": {
+                "const": "librespeed-cli_1.0.14_linux_amd64.tar.gz"
+              },
+              "sourceUri": {
+                "const": "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/librespeed-cli_1.0.14_linux_amd64.tar.gz"
+              },
+              "sourceManifestUri": {
+                "const": "https://github.com/librespeed/speedtest-cli/releases/download/v1.0.14/checksums.txt"
+              },
+              "sourceSha256": {
+                "const": "89800767ac14085c78a20847ebea23340f6c14a78de0a15c2ac7db8b565c961f"
+              },
+              "manifestSha256": {
+                "const": "1cd30f1c4a25b008f2a401ffb4d5617cf5d3b4bc9e44e873f44dd2f2fbd8b3c6"
+              },
+              "license": {
+                "const": "LGPL-3.0-only"
+              },
+              "licenseUri": {
+                "const": "https://raw.githubusercontent.com/librespeed/speedtest-cli/v1.0.14/LICENSE"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "github-release-manifest-sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-eza-binary"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceSha256",
+              "assetName",
+              "version",
+              "licenseUri"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.eza-portable"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "user-local-bin"
+              },
+              "artifactFormat": {
+                "const": "tar.gz"
+              },
+              "sourceId": {
+                "const": "github-release-pinned"
+              },
+              "version": {
+                "const": "0.23.5"
+              },
+              "assetName": {
+                "const": "eza_x86_64-unknown-linux-gnu.tar.gz"
+              },
+              "sourceUri": {
+                "const": "https://github.com/eza-community/eza/releases/download/v0.23.5/eza_x86_64-unknown-linux-gnu.tar.gz"
+              },
+              "sourceSha256": {
+                "const": "35c70c5c43c29108075e58b893234c67ef585f0b53a7eaf8e9e7d4eec9f339b4"
+              },
+              "license": {
+                "const": "EUPL-1.2"
+              },
+              "licenseUri": {
+                "const": "https://raw.githubusercontent.com/eza-community/eza/v0.23.5/LICENSE.txt"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "github-release-pinned-sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-publisher-appimage"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "assetName",
+              "version",
+              "sourceSha256"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "package.arduino-ide",
+                  "package.joplin"
+                ]
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "distribution": {
+                "const": "portable"
+              },
+              "deploymentId": {
+                "const": "user-applications-appimage"
+              },
+              "artifactFormat": {
+                "const": "AppImage"
+              },
+              "sourceId": {
+                "const": "github-release-pinned"
+              },
+              "version": {
+                "enum": [
+                  "2.3.10",
+                  "3.7.22"
+                ]
+              },
+              "assetName": {
+                "enum": [
+                  "arduino-ide_2.3.10_Linux_64bit.AppImage",
+                  "Joplin-3.7.22.AppImage"
+                ]
+              },
+              "sourceUri": {
+                "pattern": "^https://github[.]com/(arduino/arduino-ide/releases/download/2[.]3[.]10/arduino-ide_2[.]3[.]10_Linux_64bit[.]AppImage|laurent22/joplin/releases/download/v3[.]7[.]22/Joplin-3[.]7[.]22[.]AppImage)$"
+              },
+              "license": {
+                "const": "AGPL-3.0-or-later (distribution includes separately licensed components)"
+              },
+              "licenseUri": {
+                "pattern": "^https://(raw[.]githubusercontent[.]com/arduino/arduino-ide/2[.]3[.]10/LICENSE[.]txt|github[.]com/laurent22/joplin/tree/v3[.]7[.]22)$"
+              },
+              "verification": {
+                "const": "github-release-api-sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-appimage"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceManifestUri",
+              "sourceSha512",
+              "manifestSha256",
+              "assetName",
+              "version",
+              "licenseUri"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.bitwarden-appimage"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "distribution": {
+                "const": "portable"
+              },
+              "deploymentId": {
+                "const": "user-applications-appimage"
+              },
+              "artifactFormat": {
+                "const": "AppImage"
+              },
+              "sourceId": {
+                "const": "github-release-pinned"
+              },
+              "version": {
+                "const": "2026.10.1"
+              },
+              "assetName": {
+                "const": "Bitwarden-2026.10.1-x86_64.AppImage"
+              },
+              "sourceUri": {
+                "const": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.1/Bitwarden-2026.10.1-x86_64.AppImage"
+              },
+              "sourceManifestUri": {
+                "const": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.1/latest-linux.yml"
+              },
+              "sourceSha512": {
+                "const": "Nd2GYFve1jSZ7ba3rAlZqRltN4UBzJAOTNuquAK93kiZuWOKagJZBstZ4ocXKeB3LNdbLmbiHZISQht5pQw/ug=="
+              },
+              "manifestSha256": {
+                "const": "995c06dcb33b8f7d63468840f1edc245447975ac20b81aeb5258c78d2aaa6aa7"
+              },
+              "license": {
+                "const": "GPL-3.0 (default; repository contains separately licensed components)"
+              },
+              "licenseUri": {
+                "const": "https://github.com/bitwarden/clients/blob/desktop-v2026.10.1/LICENSE.txt"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "publisher-release-manifest-and-sha512"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-yubico-tarball"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "signatureUri",
+              "signingKeyUri",
+              "signingFingerprint",
+              "sourceSha256",
+              "version",
+              "licenseUri"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.yubico-authenticator"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "distribution": {
+                "const": "portable"
+              },
+              "deploymentId": {
+                "const": "user-local-opt"
+              },
+              "artifactFormat": {
+                "const": "tar.gz"
+              },
+              "sourceId": {
+                "const": "yubico-release-pinned"
+              },
+              "version": {
+                "const": "7.4.1"
+              },
+              "sourceUri": {
+                "const": "https://developers.yubico.com/yubioath-flutter/Releases/yubico-authenticator-7.4.1-linux.tar.gz"
+              },
+              "signatureUri": {
+                "const": "https://developers.yubico.com/yubioath-flutter/Releases/yubico-authenticator-7.4.1-linux.tar.gz.sig"
+              },
+              "signingKeyUri": {
+                "const": "https://keys.openpgp.org/vks/v1/by-fingerprint/20EE325B86A81BCBD3E56798F04367096FBA95E8"
+              },
+              "signingFingerprint": {
+                "const": "20EE325B86A81BCBD3E56798F04367096FBA95E8"
+              },
+              "sourceSha256": {
+                "const": "5c8f49cf3653ae9dd3911b53ca60475b03c8c957eb7385b1bd3d49ec4767ddac"
+              },
+              "license": {
+                "const": "Apache-2.0"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "yubico-detached-pgp-and-sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-volatility2-bundle"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceSha512Hex",
+              "runtimeSha256",
+              "version",
+              "licenseUri"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.volatility2"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "distribution": {
+                "const": "portable"
+              },
+              "deploymentId": {
+                "const": "user-local-opt"
+              },
+              "artifactFormat": {
+                "const": "tar.gz"
+              },
+              "sourceId": {
+                "const": "volatility2-pypy-pinned"
+              },
+              "version": {
+                "const": "2.6.1-pypy2.7-8.0.1"
+              },
+              "sourceUri": {
+                "const": "https://github.com/volatilityfoundation/volatility/archive/refs/tags/2.6.1.tar.gz"
+              },
+              "runtimeUri": {
+                "const": "https://downloads.python.org/pypy/pypy2.7-v8.0.1-linux64.tar.gz"
+              },
+              "sourceSha512Hex": {
+                "const": "64d49de21a87fb6152ad430126466bf66bca06457f3fa2d54cee29b0e4a2eee53ab658570b6cbc782e85ca558f45fac5cf6e6625ebd85aa3ffc9f69768cfa844"
+              },
+              "runtimeSha256": {
+                "const": "78674cdf95eb4cb1dd5a9b68a70200387111cb29467f8a472ab7cf07a251653c"
+              },
+              "license": {
+                "const": "GPL-2.0"
+              },
+              "licenseUri": {
+                "const": "https://github.com/volatilityfoundation/volatility/blob/2.6.1/LICENSE.txt"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "dual-pinned-archive-sha256-sha512"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "veracrypt-signed-rpm"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName",
+              "version",
+              "signatureUri",
+              "signingKeyUri",
+              "signingFingerprint",
+              "acceptanceEvidence"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.veracrypt"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "local-installed"
+              },
+              "artifactFormat": {
+                "const": "rpm"
+              },
+              "sourceId": {
+                "const": "veracrypt-publisher"
+              },
+              "packageName": {
+                "const": "veracrypt"
+              },
+              "version": {
+                "const": "1.26.30"
+              },
+              "sourceUri": {
+                "const": "https://github.com/veracrypt/VeraCrypt/releases/download/VeraCrypt_1.26.30/veracrypt-1.26.30-Fedora-44-x86_64.rpm"
+              },
+              "signatureUri": {
+                "const": "https://github.com/veracrypt/VeraCrypt/releases/download/VeraCrypt_1.26.30/veracrypt-1.26.30-Fedora-44-x86_64.rpm.sig"
+              },
+              "signingKeyUri": {
+                "const": "https://amcrypto.jp/VeraCrypt/VeraCrypt_PGP_public_key.asc"
+              },
+              "signingFingerprint": {
+                "const": "5069A233D55A0EEB174A5FC3821ACD02680D16DE"
+              },
+              "license": {
+                "const": "VeraCrypt License (Apache-2.0 AND TrueCrypt License 3.0)"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "veracrypt-detached-pgp-signature"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "amp-pinned-rpm"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName",
+              "version",
+              "sourceUri",
+              "sourceSha256",
+              "license",
+              "licenseUri",
+              "acceptanceEvidence"
+            ],
+            "properties": {
+              "id": { "const": "package.amp-installer" },
+              "kind": { "const": "package" },
+              "packageName": { "const": "ampinstmgr" },
+              "version": { "const": "2.8.0.10-2" },
+              "sourceId": { "const": "cubecoders-amp-pinned" },
+              "sourceUri": { "const": "https://cdn-repo.c7rs.com/ampinstmgr-2.8.0.10-2.x86_64.rpm" },
+              "sourceSha256": { "const": "c766e78308df4ff29d703081b4e2477d70822deb5344c985a3502a2306d0396e" },
+              "license": { "const": "Proprietary" },
+              "licenseUri": { "const": "https://www.cubecoders.com/AMP/TQ" },
+              "scope": { "const": "system" },
+              "distribution": { "const": "installed" },
+              "deploymentId": { "const": "local-installed" },
+              "artifactFormat": { "const": "rpm" },
+              "states": { "const": ["installed", "absent"] },
+              "recovery": { "const": "remove-new-install" },
+              "verification": { "const": "publisher-https-observed-sha256" },
+              "targets": {
+                "const": {
+                  "fedora": {
+                    "releases": ["44"],
+                    "architectures": ["x86_64"],
+                    "variantIds": ["server"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-rpm"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName",
+              "version",
+              "sourceSha256",
+              "acceptanceEvidence"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "package.bitwarden-rpm",
+                  "package.powershell",
+                  "package.balena-etcher",
+                  "package.discord"
+                ]
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "local-installed"
+              },
+              "artifactFormat": {
+                "const": "rpm"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "enum": [
+                  "github-release-pinned-sha256",
+                  "publisher-https-observed-sha256"
+                ]
+              }
+            },
+            "anyOf": [
+              {
+                "properties": {
+                  "id": {
+                    "const": "package.bitwarden-rpm"
+                  },
+                  "sourceId": {
+                    "const": "bitwarden-release"
+                  },
+                  "packageName": {
+                    "const": "bitwarden"
+                  },
+                  "version": {
+                    "const": "2026.10.1"
+                  },
+                  "sourceUri": {
+                    "const": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.1/Bitwarden-2026.10.1-x86_64.rpm"
+                  },
+                  "sourceSha256": {
+                    "const": "2aa3b7a675432bef75e73f513ba365b055a8c16ec2a42610f019f4b6f7d0a61b"
+                  },
+                  "license": {
+                    "const": "GPL-3.0 (default; repository contains separately licensed components)"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "id": {
+                    "const": "package.powershell"
+                  },
+                  "sourceId": {
+                    "const": "microsoft-powershell-release"
+                  },
+                  "packageName": {
+                    "const": "powershell"
+                  },
+                  "version": {
+                    "const": "7.6.6"
+                  },
+                  "sourceUri": {
+                    "const": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.6/powershell-7.6.6-1.rh.x86_64.rpm"
+                  },
+                  "sourceSha256": {
+                    "const": "d3f9bce6b6f0723db49ddb4681fdee2a332492bfd1238a305b0fbdb7825e786f"
+                  },
+                  "license": {
+                    "const": "MIT"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "id": {
+                    "const": "package.balena-etcher"
+                  },
+                  "sourceId": {
+                    "const": "balena-etcher-release"
+                  },
+                  "packageName": {
+                    "const": "balena-etcher"
+                  },
+                  "version": {
+                    "const": "2.1.9"
+                  },
+                  "sourceUri": {
+                    "const": "https://github.com/balena-io/etcher/releases/download/v2.1.9/balena-etcher-2.1.9-1.x86_64.rpm"
+                  },
+                  "sourceSha256": {
+                    "const": "7921555a7e3bdd7a2d020574d237a0aade2a112d9132ceb53af1f703abd9212d"
+                  },
+                  "license": {
+                    "const": "Apache-2.0"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "id": {
+                    "const": "package.discord"
+                  },
+                  "sourceId": {
+                    "const": "discord-release"
+                  },
+                  "packageName": {
+                    "const": "discord"
+                  },
+                  "version": {
+                    "const": "1.0.168"
+                  },
+                  "sourceUri": {
+                    "const": "https://stable.dl2.discordapp.net/apps/linux/1.0.168/discord-1.0.168.rpm"
+                  },
+                  "sourceSha256": {
+                    "const": "ade5550aa86cb4562116d5f5731d5af6110c7865d0712da5b25cdaf9d4137b61"
+                  },
+                  "license": {
+                    "const": "Proprietary"
+                  },
+                  "verification": {
+                    "const": "publisher-https-observed-sha256"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "publisher-repo-rpm"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName",
+              "repositoryId",
+              "repositoryFile",
+              "repositoryBaseUrl",
+              "repositoryKeyUri",
+              "repositoryConfigUri",
+              "acceptanceEvidence"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "package.visual-studio-code",
+                  "package.brave",
+                  "package.plaso",
+                  "package.tailscale",
+                  "package.plex-server"
+                ]
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "local-installed"
+              },
+              "artifactFormat": {
+                "const": "rpm"
+              },
+              "sourceId": {
+                "enum": [
+                  "microsoft-vscode",
+                  "brave-release",
+                  "gift-stable-copr",
+                  "tailscale-stable",
+                  "plex-stable-v2"
+                ]
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "verification": {
+                "const": "publisher-repository-rpm-signature"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "snap-store-package"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName",
+              "snapChannel",
+              "dependencies"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.autopsy"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "packageName": {
+                "const": "autopsy"
+              },
+              "snapChannel": {
+                "const": "latest/stable"
+              },
+              "sourceId": {
+                "const": "snap-store"
+              },
+              "verification": {
+                "const": "snap-store-assertion"
+              },
+              "dependencies": {
+                "const": [
+                  "package.snapd"
+                ]
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "scope": {
+                "const": "system"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "local-installed"
+              },
+              "artifactFormat": {
+                "const": "snap"
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "sourceId"
+            ],
+            "properties": {
+              "sourceId": {
+                "const": "rpmfusion-free-updates"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "enum": [
+                  "package.gstreamer1-plugins-bad-freeworld",
+                  "package.handbrake-cli"
+                ]
+              },
+              "handler": {
+                "const": "dnf-package"
+              },
+              "packageName": {
+                "enum": [
+                  "gstreamer1-plugins-bad-freeworld",
+                  "HandBrake"
+                ]
+              },
+              "verification": {
+                "const": "fedora-rpmfusion-signatures-and-owned-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "systemd-service"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "serviceName"
+            ],
+            "properties": {
+              "kind": {
+                "const": "setting"
+              },
+              "states": {
+                "const": [
+                  "enabled",
+                  "disabled"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "plex-server-service"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "serviceName",
+              "dependencies",
+              "acceptanceEvidence"
+            ],
+            "properties": {
+              "id": {
+                "const": "setting.plex-server-service"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "serviceName": {
+                "const": "plexmediaserver.service"
+              },
+              "states": {
+                "const": [
+                  "enabled",
+                  "disabled"
+                ]
+              },
+              "dependencies": {
+                "const": [
+                  "package.plex-server"
+                ]
+              },
+              "verification": {
+                "const": "plex-unit-and-active-enabled-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "nsswitch-mdns"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": { "const": "setting" },
+              "id": { "const": "setting.multicast-dns" },
+              "scope": { "const": "system" },
+              "states": { "const": ["enabled", "disabled"] },
+              "verification": { "const": "authselect-feature-state" },
+              "recovery": { "const": "exact-state" },
+              "status": { "const": "candidate" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "dnf5-automatic"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": { "const": "setting" },
+              "id": { "const": "setting.dnf5-automatic" },
+              "scope": { "const": "system" },
+              "states": { "const": ["enabled", "disabled"] },
+              "verification": { "const": "dnf5-automatic-owned-systemd-dropin" },
+              "recovery": { "const": "exact-state" },
+              "status": { "const": "candidate" },
+              "dependencies": { "const": ["package.dnf5-plugin-automatic"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "gsettings-boolean"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "enabled",
+                  "disabled"
+                ]
+              },
+              "id": {
+                "enum": [
+                  "setting.gnome-clock-date",
+                  "setting.gnome-calendar-week-numbers",
+                  "setting.gnome-primary-paste",
+                  "setting.gnome-location",
+                  "setting.gnome-problem-reporting"
+                ]
+              },
+              "verification": {
+                "const": "local-gsettings-state"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "ibus-emoji-hotkey"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.ibus-emoji-hotkey"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "enabled"
+                ]
+              },
+              "verification": {
+                "const": "local-gsettings-state"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "gsettings-string"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "valueKind"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "setting.gnome-region",
+                  "setting.gnome-window-buttons",
+                  "setting.gnome-favorite-apps",
+                  "setting.gnome-favorite-apps"
+                ]
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "valueKind": {
+                "enum": [
+                  "locale",
+                  "window-buttons",
+                  "desktop-id-list",
+                  "desktop-id-list"
+                ]
+              },
+              "verification": {
+                "const": "local-gsettings-state"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "upower-threshold"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "valueKind"
+            ],
+            "properties": {
+              "id": {
+                "const": "setting.upower-percentage-low"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured"
+                ]
+              },
+              "valueKind": {
+                "const": "percentage-low"
+              },
+              "verification": {
+                "const": "local-upower-config"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "gnome-custom-shortcuts"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "valueKind"
+            ],
+            "properties": {
+              "id": {
+                "const": "setting.gnome-custom-shortcuts"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "valueKind": {
+                "const": "custom-shortcut-list"
+              },
+              "verification": {
+                "const": "local-gsettings-state"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "bash-aliases"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.bash-aliases"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "exact-state"
+              },
+              "valueKind": {
+                "const": "bash-alias-list"
+              },
+              "verification": {
+                "const": "local-owned-shell-config"
+              },
+              "status": {
+                "const": "candidate"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "scope",
+              "states",
+              "recovery",
+              "valueKind",
+              "verification",
+              "status"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "chrome-preferences"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.chrome-preferences"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "exact-state"
+              },
+              "valueKind": {
+                "const": "chrome-policy-list"
+              },
+              "verification": {
+                "const": "local-owned-chrome-policy"
+              },
+              "status": {
+                "const": "candidate"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "scope",
+              "states",
+              "recovery",
+              "valueKind",
+              "verification",
+              "status"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {"handler": {"const": "system-hostname"}}
+          },
+          "then": {
+            "required": ["valueKind"],
+            "properties": {
+              "id": {"const": "setting.hostname"},
+              "kind": {"const": "setting"},
+              "scope": {"const": "system"},
+              "states": {"const": ["configured"]},
+              "valueKind": {"const": "hostname"},
+              "verification": {"const": "local-systemd-static-hostname"},
+              "recovery": {"const": "exact-state"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"handler": {"const": "dnf5-fast-tuning"}}
+          },
+          "then": {
+            "properties": {
+              "id": {"const": "setting.dnf5-fast-tuning"},
+              "kind": {"const": "setting"},
+              "scope": {"const": "system"},
+              "states": {"const": ["configured", "absent"]},
+              "verification": {"const": "local-dnf5-config"},
+              "recovery": {"const": "exact-state"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "wireguard-keypair"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.wireguard-keypair"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "verification": {
+                "const": "local-wireguard-keypair"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-remote"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.flathub-system-remote"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "verification": {
+                "const": "local-flatpak-remote"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "rpmfusion-repositories"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.rpmfusion-repositories"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "verification": {
+                "const": "fedora-rpmfusion-signatures-and-owned-state"
+              },
+              "recovery": {
+                "const": "exact-state"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"handler": {"const": "dnf5-system-update"}}
+          },
+          "then": {
+            "properties": {
+              "id": {"const": "system.update-all-packages"},
+              "kind": {"const": "system"},
+              "scope": {"const": "system"},
+              "states": {"const": ["current"]},
+              "verification": {"const": "dnf5-system-update-report"},
+              "recovery": {"const": "none"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"handler": {"const": "docker-engine"}}
+          },
+          "then": {
+            "properties": {
+              "id": {"const": "system.docker-engine"},
+              "kind": {"const": "system"},
+              "scope": {"const": "system"},
+              "states": {"const": ["configured", "absent"]},
+              "verification": {"const": "docker-ce-local-key-and-data-preservation"},
+              "recovery": {"const": "none"},
+              "signingFingerprint": {"const": "060A61C51B558A7F742B77AAC52FEB6B621E9F35"},
+              "status": {"const": "supported"}
+            },
+            "required": ["signingFingerprint"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "dnf-package-set-update"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageNames",
+              "acceptanceEvidence"
+            ],
+            "properties": {
+              "id": {
+                "const": "system.update-multimedia-codecs"
+              },
+              "kind": {
+                "const": "system"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "current"
+                ]
+              },
+              "recovery": {
+                "const": "none"
+              },
+              "verification": {
+                "const": "dnf5-scoped-package-updates"
+              },
+              "packageNames": {
+                "const": [
+                  "PackageKit-gstreamer-plugin",
+                  "alsa-ucm",
+                  "alsa-utils",
+                  "gstreamer1-plugin-dav1d",
+                  "gstreamer1-plugin-libav",
+                  "gstreamer1-plugin-openh264",
+                  "gstreamer1-plugins-bad-free",
+                  "gstreamer1-plugins-good",
+                  "gstreamer1-plugins-ugly-free",
+                  "libva-intel-media-driver",
+                  "pipewire-alsa",
+                  "pipewire-gstreamer",
+                  "pipewire-pulseaudio",
+                  "pipewire-utils",
+                  "wireplumber",
+                  "gstreamer-plugins-espeak"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "github-asset"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "githubRepository",
+              "assetSuffix",
+              "maxBytes"
+            ],
+            "properties": {
+              "kind": {
+                "const": "artifact"
+              },
+              "states": {
+                "const": [
+                  "downloaded"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "python-venv"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "enum": [
+                  "package.volatility3",
+                  "package.dfir-unfurl",
+                  "package.chepy"
+                ]
+              },
+              "kind": {
+                "const": "package"
+              },
+              "artifactFormat": {
+                "enum": [
+                  "wheel",
+                  "sdist"
+                ]
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.chepy"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceSha256"
+            ],
+            "properties": {
+              "handler": {
+                "const": "python-venv"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "artifactFormat": {
+                "const": "sdist"
+              },
+              "sourceId": {
+                "const": "pypi-sdist-venv"
+              },
+              "verification": {
+                "const": "pypi-sdist-sha256"
+              },
+              "sourceUri": {
+                "const": "https://files.pythonhosted.org/packages/3f/4c/b8bc1607c96e1df206912e4db82ace5adfb2fe9dce5926fd7860d265fa58/chepy-7.6.0.tar.gz"
+              },
+              "sourceSha256": {
+                "const": "f6084689e43d128748c18f79c79d75539abb67ac8245e950b678cfa0da2f5010"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-script"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceSha256",
+              "licenseSha256"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.asn"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "artifactFormat": {
+                "const": "script"
+              },
+              "sourceId": {
+                "const": "github-raw-pinned"
+              },
+              "verification": {
+                "const": "github-commit-sha256-observed"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "sourceUri": {
+                "pattern": "^https://raw\\.githubusercontent\\.com/nitefood/asn/[0-9a-f]{40}/asn$"
+              },
+              "licenseUri": {
+                "pattern": "^https://raw\\.githubusercontent\\.com/nitefood/asn/[0-9a-f]{40}/LICENSE$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-zip"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "sourceSha256",
+              "licenseSha256"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.cyberchef"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "artifactFormat": {
+                "const": "zip"
+              },
+              "sourceId": {
+                "const": "github-release-pinned"
+              },
+              "verification": {
+                "const": "github-release-api-sha256"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "sourceUri": {
+                "const": "https://github.com/gchq/CyberChef/releases/download/v11.5.0/CyberChef_8cd426dd4f40f1423912d5fad91b578a86a65112.zip"
+              },
+              "licenseUri": {
+                "const": "https://raw.githubusercontent.com/gchq/CyberChef/v11.5.0/LICENSE"
+              },
+              "sourceSha256": {
+                "const": "f6478925d3eaa16ec08626a85f5b85eed10d531a5e18700615fed7ecb024cccf"
+              },
+              "licenseSha256": {
+                "const": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "id": {
+                "const": "package.xmind"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "handler": {
+                "const": "flatpak-app"
+              },
+              "applicationId": {
+                "const": "net.xmind.XMind"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "user-directories"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.user-default-directories"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "exact-state"
+              },
+              "verification": {
+                "const": "local-owned-user-directories"
+              },
+              "status": {
+                "const": "candidate"
+              },
+              "targets": {
+                "const": {
+                  "fedora": {
+                    "releases": [
+                      "44"
+                    ],
+                    "architectures": [
+                      "x86_64"
+                    ],
+                    "variantIds": [
+                      "workstation"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "firefox-preferences"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.firefox-preferences"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "exact-state"
+              },
+              "verification": {
+                "const": "local-owned-firefox-config"
+              },
+              "status": {
+                "const": "candidate"
+              },
+              "targets": {
+                "const": {
+                  "fedora": {
+                    "releases": [
+                      "44"
+                    ],
+                    "architectures": [
+                      "x86_64"
+                    ],
+                    "variantIds": [
+                      "workstation"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "ferium-portable"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "assetName",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.ferium-portable"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "user-local-bin"
+              },
+              "artifactFormat": {
+                "const": "zip"
+              },
+              "sourceId": {
+                "const": "github-release-tagged"
+              },
+              "version": {
+                "const": "4.7.1"
+              },
+              "assetName": {
+                "const": "ferium-linux-nogui.zip"
+              },
+              "sourceUri": {
+                "const": "https://github.com/gorilla-devs/ferium/releases/download/v4.7.1/ferium-linux-nogui.zip"
+              },
+              "license": {
+                "const": "MPL-2.0"
+              },
+              "verification": {
+                "const": "github-release-version-and-observed-sha256"
+              },
+              "status": {
+                "const": "candidate"
+              },
+              "targets": {
+                "const": {
+                  "fedora": {
+                    "releases": ["44"],
+                    "architectures": ["x86_64"],
+                    "variantIds": ["server"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "firefox-extensions"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {
+                "const": "setting.firefox-addons"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "removal-pending",
+                  "absent"
+                ]
+              },
+              "verification": {
+                "const": "local-owned-firefox-extension-policy"
+              },
+              "recovery": {
+                "const": "exact-state"
+              },
+              "status": {
+                "const": "blocked"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "gnome-lock-timing"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "id",
+              "kind",
+              "scope",
+              "states",
+              "recovery",
+              "valueKind",
+              "verification",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "const": "setting.gnome-lock-timing"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "user"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "exact-state"
+              },
+              "valueKind": {
+                "const": "screensaver-lock-timing"
+              },
+              "verification": {
+                "const": "local-gsettings-state"
+              },
+              "status": {
+                "enum": [
+                  "candidate",
+                  "supported"
+                ]
+              }
+            }
+          }
+        }
       ]
     }
   }

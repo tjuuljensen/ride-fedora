@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-bitwarden-appimage",
+  "description": "Pinned Bitwarden portable AppImage; keeps its user vault data and any separate RPM deployment.",
+  "operations": [
+    {
+      "id": "package.bitwarden-appimage",
+      "state": "installed"
+    }
+  ]
+}

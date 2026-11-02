@@ -13,17 +13,17 @@ from outcomes the owner excluded as obsolete or host-specific.
 | Legacy action | Disposition | v3 target or rationale |
 | --- | --- | --- |
 | `DisableScreensaver` | retired | Conflicts with EnableScreenSaver in the same legacy preset; review a single desired state later. |
-| `SetupUserDefaultDirs` | deferred | Review directory ownership and user scope. |
-| `EnableFastDNF` | unsupported | DNF5 still defaults to three parallel downloads; the v2 file edit has no owned inverse. See the [system review](migrations/system-security-core.md). |
+| `SetupUserDefaultDirs` | opt-in candidate | `setting.user-default-directories` creates only absent `~/bin` and `~/git`, records RIDE-owned identities, and restores only unchanged empty directories; Fedora 44 Workstation VM evidence is in progress. |
+| `EnableFastDNF` | candidate | Migrated to an owned DNF5 drop-in with exact removal and effective-config verification; Fedora 44 Workstation acceptance is pending. See the [system review](migrations/system-security-core.md). |
 | `UpdateFedora` | deferred | Add explicit non-reversible system update operation after VM acceptance. |
-| `InstallRequired` | replaced | The global seven-package bundle is replaced by bootstrap and handler prerequisite checks. Optional developer tools need a separate requested profile; see [provider foundation batch 01](migrations/provider-foundation-01.md). |
+| `InstallRequired` | operable opt-in candidate | Seven individual Fedora RPM operations passed Fedora 44 Workstation lifecycle checks in `required-tools`; all remain installed on profile removal. The separate generic Server bundle is operable in two opt-in profiles; its Server nano operation is installed-only and H035 tracks the observed DNF upgrades. See [Workstation provider foundation batch 01](migrations/provider-foundation-01.md), [Server migration](migrations/generic-server-required.md), and [Server VM acceptance](acceptance/generic-server-required.md). |
 | `InstallShellTools` | supported | Split into supported `package.pv` and `package.strace` in the opt-in `shell-tools` profile; see [VM acceptance](acceptance/provider-shell-tools.md). |
-| `InstallRPMfusionRepos` | unsupported | [Provider batch 02](migrations/provider-foundation-02.md) records the signing-key and owned-recovery work required before a runnable operation. |
+| `InstallRPMfusionRepos` | supported opt-in | Fedora 44 Workstation x86_64 lifecycle, exact inverse, and focused signature/digest/rollback failures pass. Upstream uses `gpgcheck=1` and `repo_gpgcheck=0`; see [provider batch 02](migrations/provider-foundation-02.md) and [acceptance](acceptance/setting.rpmfusion-repositories.md). |
 | `InstallKernelTools` | supported | Split into signed Fedora `kernel-devel` and `kernel-headers` package installs; [VM evidence](acceptance/provider-kernel-tools.md) does not establish a matching module-build environment. |
 | `InstallDNFutils` | replaced | Fedora 44 Workstation has DNF5 and plugins; current `config-manager` and `download` commands passed the disposable-VM check. See [provider foundation batch 03](migrations/provider-foundation-03.md). |
-| `InstallEzaGitHub` | replaced | The unpinned ZIP path is a [non-runnable replacement](migrations/provider-foundation-08.md); Fedora `package.eza` passed [VM acceptance](acceptance/package.eza.md) for an installed Eza. |
+| `InstallEzaGitHub` | operable opt-in candidate | `package.eza-portable` pins the upstream GNU x86_64 release and owns `~/.local/bin/eza`; it passed [VM acceptance](acceptance/package.eza-portable.md) beside the Fedora RPM. |
 | `InstallFlathub` | unsupported | [Flathub remote ownership](migrations/provider-foundation-09.md) needs a scoped handler, app preservation, and inverse evidence before it is runnable. |
-| `InstallAppImageLauncher` | deferred | Review maintained source and current desktop integration. |
+| `InstallAppImageLauncher` | opt-in candidate in progress | Migrate the capability through Flathub Gear Lever after the operator removes the old `appimagelauncher` RPM; preserve `~/Applications`, AppImages, and launcher state. See [publisher batch 01](migrations/publisher-apps-01.md) and H070. |
 | `InstallExif` | deferred | Review product identity and official package. |
 | `InstallMd5deep` | deferred | Review current package and forensic use case. |
 | `InstallLibEWF` | replaced | package.ewftools covers EWF utilities; verify library intent separately. |
@@ -33,7 +33,7 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallCyberChef` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned offline artifact and owned desktop destination. |
 | `InstallChepy` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned isolated build and owned inverse. |
 | `InstallNetworkMiner` | deferred | Align product identity with Windows; review Linux packaging. |
-| `InstallVeraCrypt` | deferred | Review publisher verification and licensing. |
+| `InstallVeraCrypt` | supported opt-in | The pinned Fedora 44 Workstation GUI RPM passed detached-signature refusal, failed-transaction cleanup, mounted-volume refusal, and encrypted test-volume preservation across removal and reinstall. See [batch 02](migrations/publisher-apps-02.md) and [acceptance](acceptance/package.veracrypt.md). |
 | `InstallPwgen` | deferred | Candidate native repository package. |
 | `InstallHtop` | deferred | Candidate native repository package. |
 | `InstallBat` | deferred | Candidate native repository package. |
@@ -53,13 +53,13 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallNetworkTools` | deferred | Split broad network bundle into focused packages. |
 | `InstallNetCommsTools` | deferred | Split broad communications bundle. |
 | `InstallNetMgrLibreswan` | deferred | Optional VPN role. |
-| `InstallSpeedtestCLI` | deferred | Review current upstream and source. |
+| `InstallSpeedtestCLI` | supported, with opt-in alternative | Keep Fedora `speedtest-cli` RPM and offer digest-pinned LibreSpeed CLI as an operable opt-in candidate; see [native RPM batch 03](migrations/native-rpm-03.md). |
 | `InstallTecmintMonitorSh` | retired | Default profile must not fetch and execute remote scripts. |
-| `InstallGnomeExtInstaller` | unsupported | [Archived upstream](migrations/provider-foundation-10.md), unpinned clone, and unowned path removal lack Fedora 44 compatibility and safe recovery. |
+| `InstallGnomeExtInstaller` | operable opt-in candidate | Fedora's signed browser connector RPM passed the Workstation lifecycle and preserves user extension state; browser add-on installation remains user controlled. See [provider foundation batch 10](migrations/provider-foundation-10.md) and [acceptance](acceptance/package.gnome-browser-connector.md). |
 | `InstallBrave` | deferred | Third-party repository and license review. |
 | `InstallChromium` | deferred | Candidate distro repository package. |
-| `SetFirefoxPreferences` | replaced | Review settings against current Firefox policy; avoid legacy file overwrite. |
-| `InstallFirefoxAddons` | deferred | Keep existing verified policy helper; integrate with v3 lifecycle later. |
+| `SetFirefoxPreferences` | opt-in candidate | `setting.firefox-preferences` uses Mozilla AutoConfig with ownership hashes and guarded removal; Firefox startup acceptance is in progress and H083 tracks preference freshness. |
+| `InstallFirefoxAddons` | blocked implementation | The owner kept v3-managed add-on policy. The v3 envelope models configured, removal-pending, and absent states, but remains non-runnable until focused Fedora 44 Workstation restart, profile cleanup, and restoration evidence passes; see [publisher batch 04](migrations/publisher-apps-04.md). |
 | `InstallYouTubeDownloader` | replaced | Review maintained yt-dlp packaging instead of legacy youtube-dl. |
 | `InstallGnomeTools` | opt-in candidate | Fedora printer UI and GNOME Tweaks passed [package VM acceptance](acceptance/provider-gnome-tools.md); visual checks remain v3.1, and v2's unowned `gparted` removal is excluded. |
 | `InstallSystemMonitor` | deferred | Review current GNOME extension support. |
@@ -69,22 +69,22 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `SetWindowCtlMinMaxClose` | opt-in candidate | One [GNOME string-setting operation](migrations/desktop-user-string-01.md) selects this or either alternative layout and restores the exact prior user override; [Workstation VM evidence](acceptance/setting.gnome-string-values.md). |
 | `DisableMiddleButtonPaste` | deferred | Setting handler needs baseline and restore. |
 | `SetGnomeRegionDaDK` | opt-in candidate | The [region operation](migrations/desktop-user-string-01.md) takes an explicit validated locale value; the Danish profile passed [Workstation VM acceptance](acceptance/setting.gnome-string-values.md). |
-| `SetScreensaverSlp10Lgn5` | deferred | Resolve conflict with other screensaver operations. |
-| `SetCustomKeyboardShortcut` | deferred | User-owned shortcut state needs exact restore. |
-| `SetGnomeCustomFavorites` | deferred | User-specific favorites need profile data. |
+| `SetScreensaverSlp10Lgn5` | supported on Fedora 44 Workstation | `setting.gnome-lock-timing` carries both retained 10/5 and 15/5 variants through exact four-key recovery; the Workstation VM verified both profiles, status, repeat, and restore. H092 tracks brief visible idle/lock behavior review. |
+| `SetCustomKeyboardShortcut` | opt-in candidate | `setting.gnome-custom-shortcuts` merges owned GNOME entries and restores only RIDE-owned shortcut state; Fedora 44 Workstation lifecycle and preservation checks passed. H089 tracks visible dispatch and conflict review. |
+| `SetGnomeCustomFavorites` | opt-in candidate | `setting.gnome-favorite-apps` accepts a configurable desktop-ID list and restores the exact prior dconf value; Fedora 44 Workstation plan/apply/repeat/conflict/restore acceptance passed. H085 tracks visual app-ID review. |
 | `SetGnmLocationServiceOff` | deferred | Review current GNOME setting and scope. |
 | `SetGnmAutoProblemRptOff` | deferred | Review current GNOME setting and scope. |
 | `SetPowerPercentageLow15` | opt-in candidate | The [shared UPower threshold operation](migrations/desktop-user-upower-01.md) selects 15 or 20 through an owned drop-in and exact restore; [Workstation VM evidence](acceptance/setting.upower-percentage-low.md). |
-| `EnableBashAliases` | deferred | User shell configuration must preserve unowned content. |
-| `SetAliasLsEza` | deferred | User shell configuration must preserve unowned content. |
-| `SetAliasWanIP` | deferred | User shell configuration must preserve unowned content. |
-| `InstallBitwardenAppImage` | deferred | Review publisher signature and platform artifact. |
+| `EnableBashAliases` | opt-in candidate | `setting.bash-aliases` manages exact marked loader and alias blocks; Fedora 44 Workstation interactive use and preservation passed. See [alias batch](migrations/desktop-user-aliases-01.md) and [VM acceptance](acceptance/setting.bash-aliases.md). |
+| `SetAliasLsEza` | opt-in candidate | The owned alias operation invokes Eza only after checking the executable; its Workstation lifecycle passed. H090 tracks public-service review for the alias family. |
+| `SetAliasWanIP` | opt-in candidate | Fixed `wanip`, `wanip4`, and `wanip6` aliases use ipify HTTPS endpoints only when invoked; the VM verified their definitions without making network requests. |
+| `InstallBitwardenAppImage` | opt-in candidate in progress | The [pinned Bitwarden AppImage operation](migrations/publisher-apps-06.md) checks the official release manifest and SHA-512, owns one user file, and preserves vault data; Fedora 44 Workstation acceptance is pending. |
 | `InstallCheat` | deferred | Review current upstream and source. |
 | `InstallUnifyingOnLaptop` | deferred | Hardware-dependent operation. |
 | `InstallVMtoolsOnVM` | deferred | VM-specific provider after detection test. |
 | `InstallYubikeyManager` | deferred | Hardware-dependent optional package. |
 | `InstallSonosPlayer` | deferred | Review publisher source and architecture. |
-| `SetHostname` | deferred | Host-specific value belongs in private profile. |
+| `SetHostname` | supported | Private `--value` operation journals and restores the exact prior static hostname; Fedora 44 Workstation and Server VM acceptance passed. See the [system review](migrations/system-security-core.md). |
 | `EnableScreenSaver` | retired | Conflicts with DisableScreensaver in the same legacy preset; review one desired state. |
 | `PressAnyKeyToContinue` | retired | Interaction belongs in CLI flow, not an operation. |
 | `Restart` | retired | Reboot remains an explicit separate user action. |
@@ -134,6 +134,12 @@ exclusion list, outside the 185-outcome denominator. The three
 already supported base package operations remain valid release-envelope
 evidence but do not automatically resolve a v2 outcome with different intent.
 
+[OpenCTI Community Edition](migrations/opencti-server.md) is a separately
+planned generic server operation for after v3.0. It has no v2 source
+function, adds nothing to this denominator, and does not gate v3.0 release
+review. Its eventual deployment will be opt-in and requires the stated
+container-runtime, data, and security recovery evidence.
+
 `migration/outcomes.json` assigns every outcome exactly one small batch, a
 planned Fedora 44 x86_64 target, risk, source function mapping, current
 disposition and progress, v3 operation IDs, evidence, blocker, and next action.
@@ -148,6 +154,12 @@ changes are isolated, while related user-state checks may share a batch. The fam
 repository packages, package-source foundations, forensic and isolated tools,
 publisher applications, desktop and user state, system/network/security,
 generic server, and explicit resolution decisions.
+
+System Security 06 now migrates the kept MulticastDNS setting through Fedora
+authselect's `with-mdns4` feature. Its exact profile selection and resolver
+line recovery passed the pinned Fedora 44 Workstation VM; alternate authselect
+profiles remain in H100, with the setting available only through an opt-in
+profile.
 
 From the repository root as a regular user, these commands read the ledger,
 source inventory, catalog, and evidence without changing the host or writing
@@ -173,8 +185,9 @@ those outcomes as installs. [Native RPM batch 02](migrations/native-rpm-02.md)
 passed four more exact-target packages. Its investigated `alien` recovery
 retains one named DNF dependency without losing or changing pre-existing RPMs;
 that cleanup question is in the v3.1 queue.
-[Native RPM batch 03](migrations/native-rpm-03.md) accepted Speedtest CLI as supported,
-and recorded HexChat and Chromium as operable opt-in candidates with desktop
+[Native RPM batch 03](migrations/native-rpm-03.md) accepted Speedtest CLI as supported
+and LibreSpeed CLI as an operable opt-in candidate; HexChat and Chromium are
+operable opt-in candidates with desktop
 hardening in v3.1. The owner later retired its two unavailable Nautilus
 integrations individually. [Native RPM batch 04](migrations/native-rpm-04.md) passed
 `dc3dd` as supported and four desktop RPMs as operable opt-in candidates;
@@ -183,48 +196,148 @@ each passed install and inverse checks in the disposable Workstation VM.
 supported and Dia, Wine, and VLC as opt-in candidates. Dia retained named
 GTK2 dependencies; Wine and VLC updated named pre-existing RPMs without
 losing their package identities.
-[Provider foundation batch 01](migrations/provider-foundation-01.md) replaced
-the global `Required` install bundle with explicit prerequisite checks and
-accepted `pv` and `strace` as supported operations in the opt-in
-`shell-tools` profile. [RPM Fusion provider batch 02](migrations/provider-foundation-02.md)
-is a non-runnable v3.0 decision pending trust and owned recovery.
+[Provider foundation batch 01](migrations/provider-foundation-01.md) accepted
+`pv` and `strace` as supported operations in the opt-in `shell-tools` profile.
+The owner later clarified that every v2 package remains in v3.0 scope, so its
+earlier workstation `Required` replacement decision is reopened: seven
+separate opt-in Fedora RPM operations now preserve those package capabilities.
+The generic Server `Required` bundle remains a separate in-scope migration
+batch. [RPM Fusion provider batch 02](migrations/provider-foundation-02.md)
+is supported on Fedora 44 Workstation x86_64 with an opt-in profile. Its
+verified trust path uses Fedora-packaged signing keys and exact owned recovery;
+the release RPMs use `gpgcheck=1` and `repo_gpgcheck=0`.
 [Provider foundation batch 03](migrations/provider-foundation-03.md) accepted
 kernel development and Python pip RPM installs, documented DNF5 as the
 replacement for `dnf-utils`, and accepted Fedora 7zip/unar package operations
-as a changed-CLI archive replacement.
+as a changed-CLI archive replacement. DNF5 replaces the obsolete DNFutils
+bundle on the declared Fedora 44 Workstation target; see its [acceptance
+record](acceptance/dnf5-utilities.md).
 [Provider foundation batch 04](migrations/provider-foundation-04.md) accepted
 the editor RPMs as supported, the GNOME utility RPMs as opt-in candidates,
 and DNF5 versionlock as a non-runnable replacement. The archived GNOME
 extension installer was resolved as unsupported. Flathub and snapd remain
 isolated for their data, service, and source gates.
-[Provider foundation batch 05](migrations/provider-foundation-05.md) resolved
-the commented broad codec bundle as unsupported for v3.0 because its wildcard
-and optional group transactions lack a safe owned inverse. [Batch 08](migrations/provider-foundation-08.md)
-accepted the Fedora Eza RPM while documenting the active GitHub ZIP path as
-a non-runnable replacement. Neither decision adds to the base profiles.
-[Provider batch 02](migrations/provider-foundation-02.md) closed the active
-RPM Fusion repository pair as unsupported for v3.0 pending authenticated
-repository ownership and recovery. [Batch 06](migrations/provider-foundation-06.md)
-found 137 default Security Lab group packages in the pinned Workstation VM
-and closed that broad group operation without changing individual tool
-outcomes. [Batch 07](migrations/provider-foundation-07.md) closed the
-commented HandBrake RPM path pending the RPM Fusion provider and a chosen
-CLI or GUI deployment. The owner retained HandBrake for migration. These are
-documented non-runnable dispositions.
+[Provider foundation batch 05](migrations/provider-foundation-05.md) completed
+its v3.0 migration outcome: the owner-kept codec set has Fedora package
+operations, the RPM Fusion alternative remains an explicit opt-in candidate,
+and the fixed-list Multimedia update action passed Fedora 44 Workstation
+acceptance. That action is opt-in and non-reversible; H037 tracks broader
+dependency-impact and recovery reporting for v3.1. [Batch 08](migrations/provider-foundation-08.md)
+retains both Eza paths: the supported Fedora RPM and a pinned portable x86_64
+GNU release deployed separately in the user's local bin. Disposable Fedora 44
+Workstation acceptance verified coexistence and independent removal. Neither
+is in a base profile; H068 tracks release refresh and architecture expansion.
+[Provider batch 02](migrations/provider-foundation-02.md) records passing
+Fedora 44 repository and package-use lifecycle evidence; the supported source
+profile remains opt-in and documents its upstream metadata-signature boundary.
+[Batch 06](migrations/provider-foundation-06.md) maps all 137 observed Fedora
+Security Lab group members across forty-three opt-in profiles. The Tripwire
+and USB capture/replay RPM-presence candidates passed their declared Fedora
+44 Workstation lifecycle checks; USB device behavior remains outside RIDE.
+Batch 06AI's nano-default-editor candidate passed package and Bash default /
+override checks; CSH and fish runtime checks remain in H061. Batch 06AJ's
+Nebula package-presence candidate passed Fedora 44 Workstation lifecycle with
+no dependency or pre-existing package changes; its service remained inactive
+and disabled. H062 tracks Nebula network/service configuration and H063 tracks NTPsec
+sysuser, service, and clock recovery for v3.1. Accepted batches 06E through
+06AH remain documented in the detailed batch record.
+Batches 06J, 06K, and 06L passed
+candidate and supported VM acceptance; 06M and 06N passed candidate acceptance
+and remain candidate-gated pending H038 and H039, respectively. Batch 06N comprises five host integrity and compliance packages and passed
+candidate VM acceptance; the operations remain candidate-gated pending H039.
+Batch 06O adds four SNMP packages and passed candidate VM acceptance; the
+operations remain candidate-gated pending H040. Batch 06P adds five offline password and credential recovery packages and
+passed candidate VM acceptance; those operations remain candidate-gated pending
+H041. Batch 06Q adds four wireless auditing packages and passed candidate VM
+acceptance; the operations remain candidate-gated pending H042. Batch 06R adds
+five SIP and network-load tools and passed candidate VM acceptance; those
+operations remain candidate-gated pending H043 review of later authorized
+traffic and recovery. Batch 06S adds five credential auditing and interception
+tools and passed candidate VM acceptance; Hydra updated preinstalled expat,
+which remains at the Fedora repository version after restore, and H044 tracks
+later authorized-use review. Batch 06T adds four network monitoring packages
+and passed candidate acceptance; vnStat stayed inactive and created no database,
+but its system account persisted after package restore. H045 tracks later data
+and service review. Batch 06U adds five packet-crafting/replay utilities; hping3
+has inactive upstream development, and Scapy or Nping are alternatives to
+review in v3.1. DNF retained packETH's `gtk2`, `ibus-gtk2`, and weak
+`libcanberra-gtk2` dependencies after restore; H046 tracks later dependency and
+packet-scope review. Batch 06V adds five network observation and packet
+analysis tools; the candidate VM lifecycle passed, PADS remained inactive, and
+the two named dependencies were removed on restore. H047 tracks capture and
+packet-data recovery review. Batch 06W adds four filesystem utility packages;
+the candidate lifecycle passed with an unchanged mount table, and two packages
+were already installed. H048 tracks data-preserving recovery review. Thirty-six
+group RPMs remain unmapped. Batch 06X isolates Dislocker; its candidate
+lifecycle and alternatives inverse passed, and all 16 dependencies were
+removed on restore. H049 tracks key and encrypted-volume recovery review.
+Thirty-five group RPMs remained unmapped after 06X. Batch 06Y adds four console
+clients and passed its Workstation package lifecycle; all seven added
+dependencies were removed on restore. H050 tracks client protocol and
+user-data review. Thirty-one group RPMs remained unmapped after 06Y. Batch 06Z
+adds four web and HTTP tools and passed its package lifecycle; `httpd.service`
+stayed inactive and two initially present packages were preserved. H051 tracks
+private log and authorized retrieval review. Twenty-seven group RPMs remained
+unmapped before batch 06AA. Batch 06AA isolates three disk/file sanitizers; package lifecycle
+passed with an unchanged mount table, and its three added dependencies were
+removed on restore. H052 retains the deeper safety gate. Twenty-four group
+RPMs remained unmapped after 06AA. Batch 06AB isolates four ARP/TCP/TLS interception
+and manipulation packages; the RPM lifecycle is package-only and candidate-gated.
+No packet or connection behavior was exercised; H053 tracks later authorization
+and network recovery. Twenty group RPMs remained unmapped after 06AB. Batch 06AC adds four network and security diagnostics tools as candidate RPM-only operations; package lifecycle passed with 15 dependencies removed and no pre-existing RPM changes. No source scans, endpoint connections, or SMTP transactions were performed. H054 tracks the behavioral gate. Sixteen group RPMs remained unmapped after 06AC. Batch 06AD isolates GParted as a candidate RPM-only storage application; its package lifecycle passed with no dependency changes and an unchanged mount table. No device enumeration or partition action occurred; H055 retains the deeper storage safety gate. Fifteen group RPMs remained unmapped after 06AD. Batch 06AE isolates the AFF forensic-image utilities RPM; package lifecycle passed, `afflib` was removed on restore, and no evidence image was accessed. H056 retains the deeper image provenance and recovery gate. Fourteen group RPMs remained unmapped after 06AE. Batch 06AF adds ProxyChains-NG and Scapy as candidate RPM-only operations. Fedora 44 Workstation apply/repeat/restore passed; Scapy's DNF transaction installed 357 packages and left `python3-tkinter` and `tk` after restore, with no pre-existing RPM updates. Neither tool or any network/packet behavior was run. H046, H057, and H058 track those v3.1 gates and dependency residue. Twelve Security Lab RPMs remained unmapped after 06AF. Batch 06AG adds the Security Lab menu package and SETools GUI as candidate operations. Fedora 44 Workstation lifecycle passed; DNF installed 8 and 29 packages and upgraded 11 pre-existing Qt/GStreamer RPMs, which restore did not reverse. No GUI or policy behavior was run; the menu contains launchers for the wider group, including absent packages. H059 tracks visibility, launchers, Apol behavior, and update recovery. Ten group RPMs remained unmapped after 06AG. Batch 06AH adds scanmem and unhide as candidate RPM-only operations; their package lifecycles passed on Fedora 44 Workstation, no scans were run, and H060 tracks later behavior review. Eight group RPMs remained unmapped after 06AH. Batch 06AI maps the Fedora default-editor member to the nano-default-editor RPM. Its package lifecycle and Bash default/override checks passed on Fedora 44 Workstation; CSH and fish runtime behavior remains in H061. Seven group RPMs remained
+unmapped after 06AI. Batch 06AJ maps Nebula as an opt-in package-presence
+candidate; the signed RPM lifecycle passed with no dependency or pre-existing
+package changes, and the service remained inactive and disabled. H062 tracks
+network and service configuration for v3.1. Six group RPMs remained after
+06AJ. Batch 06AK maps NTPsec as package presence only; its RPM lifecycle passed,
+chronyd was preserved, and `ntpd` remained inactive/disabled. The persistent
+`ntp` nologin account is recorded for H063. Five group RPMs remained after
+06AK. Batch 06AL maps the OpenSSH core outcome to the existing supported
+`package.openssh-clients` operation and reuses unchanged Workstation/Server VM
+evidence; no SSH server configuration is added. Four group RPMs remained after 06AL. Batch 06AM adds PSAD as an opt-in RPM-only
+candidate; its 15-RPM transaction restored exactly and left nftables unchanged.
+Three group RPMs remained after 06AM. Batch 06AN adds Fedora 44 RATS as an
+opt-in legacy analyzer package; its signed RPM lifecycle passed without
+dependencies or side effects. Flawfinder remains a narrower C/C++ alternative.
+Two group RPMs remained after 06AN. Batch 06AO adds Tripwire as package
+presence only. The Fedora 44 Workstation lifecycle passed after acceptance
+was taught to verify Fedora's intentional hostname substitution in the sample
+policy. Removal preserves that sample as `.rpmsave`; the candidate documents
+and checks this config residue, while keys, policy signing, and baseline
+behavior remain deferred to H066. Batch 06AP adds the Fedora USB capture/replay
+RPM as an opt-in candidate; package lifecycle and exact removal recovery passed
+without operating USB hardware. All 137 observed Security Lab members are
+profiled across forty-three opt-in profiles.
+continue through focused batches; the broad DNF group operation
+remains excluded while profiles are built without dropping package
+capabilities. [Batch 07](migrations/provider-foundation-07.md) now provides an
+operable opt-in HandBrake CLI candidate from the accepted RPM Fusion provider.
+The Fedora 44 Workstation lifecycle passed; imported RPM Fusion signing-key
+trust remains after package removal, while the HandBrake RPMs and dependencies
+return to baseline. GUI/Flatpak conflict review remains in H067.
 [Provider batch 09](migrations/provider-foundation-09.md) closed the active
-Flathub remote until an ownership-aware handler is tested. [Batch 11](migrations/provider-foundation-11.md)
-replaced the commented Flatpak package pair with Fedora Workstation's
-supplied runtime, without claiming a RIDE install. [Batch 12](migrations/provider-foundation-12.md)
-closed the commented Snapd RPM pair pending service, confinement, and
-seeded-data recovery evidence.
+Flathub remote as an opt-in candidate pending broader ownership recovery.
+[Batch 11](migrations/provider-foundation-11.md) now supports an opt-in,
+installed-only Flatpak runtime on Fedora 44 Workstation; its unsafe v2
+removal is not exposed. [Batch 12](migrations/provider-foundation-12.md)
+adds an opt-in candidate Snap runtime. Fedora's signed RPM, socket activation,
+repeat apply, state preservation, and `hello-world` execution passed on Fedora
+44 Workstation. The host reports partial Snap confinement because AppArmor is
+not enabled; RIDE does not manage Snap apps or data. H034 tracks confinement,
+application lifecycle, and coexistence review.
 [Forensic isolated batch 01](migrations/forensic-isolated-01.md) accepted
 Fedora ExifTool and four opt-in forensic tools. The old VMFS no-op is
 retired, while [its kept access capability](migrations/forensic-isolated-07-vmfs.md)
 remains a high-risk v3.0 gap pending a genuine VMFS6 fixture.
 [Forensic isolated batch 02](migrations/forensic-isolated-02.md) passed a
-non-root, hash-pinned Volatility 3 core venv as an opt-in candidate, retired
-the archived Volatility 2 line, and recorded Plaso and Autopsy as
-non-runnable pending their separate Linux package and data contracts.
+non-root, hash-pinned Volatility 3 core venv and Plaso's GIFT COPR path as
+opt-in candidates. The owner kept Plaso, Autopsy, and Volatility 2 for v3.0.
+Autopsy's Sleuth Kit Labs Snap path is isolated in
+[batch 09](migrations/forensic-isolated-09-autopsy.md) because the publisher
+auto-connects privileged disk and FUSE interfaces. Volatility 2 uses the
+documented isolated PyPy 2.7 compatibility path, now an opt-in candidate after
+its pinned core CLI lifecycle passed Fedora 44 Workstation acceptance; H088
+carries plugin compatibility and broader integrity checks.
 [Forensic isolated batch 03](migrations/forensic-isolated-03.md) promoted
 Fedora Binwalk and autopep8 after a shared exact-target RPM lifecycle and
 documented standalone MAC vendor lookup as a non-runnable replacement.
@@ -236,23 +349,26 @@ tree, and email-header service as non-runnable in v3.0; each has a specific
 source, ownership, and recovery trigger for reconsideration.
 The remaining outcomes stay visible in the progress report.
 
-The first [publisher application](migrations/publisher-apps-01.md) and
-[encryption application](migrations/publisher-apps-02.md) reviews close the
-active AppImageLauncher and VeraCrypt v2 source outcomes as non-runnable in
-v3.0 until publisher artifact, owned destination, and user-data recovery
-evidence meet their stated gates.
-[Publisher batch 03](migrations/publisher-apps-03.md) records VS Code and
-Brave as non-runnable until an owned external-repository/key handler has a
-Fedora 44 VM happy path. [Batch 04](migrations/publisher-apps-04.md) records
-the existing Firefox extension policy tool as a standalone replacement,
-without counting it as a v3 install.
+The first [publisher application](migrations/publisher-apps-01.md) review
+migrates the kept AppImage integration capability through the current Flathub
+Gear Lever manager; its package lifecycle is in progress and AppImage file
+operations remain user-controlled. The separate
+[encryption application](migrations/publisher-apps-02.md) review migrates the
+publisher-signed VeraCrypt GUI RPM. Its high-risk gate passed on Fedora 44
+Workstation x86_64, and the operation is supported in its opt-in profile.
+[Publisher batch 03](migrations/publisher-apps-03.md) implements opt-in
+Microsoft VS Code and Brave RPM operations with fingerprint/signature checks,
+owned repository-file cleanup, and preserved browser/editor profiles; both
+remain candidate-gated pending their Fedora 44 VM lifecycle. [Batch 04](migrations/publisher-apps-04.md) keeps the Firefox extension policy outcome open until the maintained helper is integrated into the v3 lifecycle and its seeded-policy recovery gate passes.
 [Publisher batch 05](migrations/publisher-apps-05.md) supports the Fedora
 `youtube-dl` RPM and accepts System Monitor Next plus hardware sensors as a
 curated opt-in package/profile candidate. The broad GNOME extension script
 is a separate [high-risk outcome](migrations/publisher-apps-17.md),
 non-runnable until user-owned extension recovery is proved.
-[Publisher batches 06-08](migrations/publisher-apps-06.md) close the broken
-Bitwarden AppImage path as non-runnable, accept Solaar and ACPI as a curated
+[Publisher batch 06](migrations/publisher-apps-06.md) replaces the broken
+Bitwarden AppImage path with a pinned publisher asset and an owned user-file
+inverse; high-risk VM acceptance remains pending. Publisher batches 07-08
+accept Solaar and ACPI as a curated
 opt-in package/profile candidate after the Fedora 44 VM lifecycle, defer
 conditional VM guest tools until a hypervisor-specific owned inverse is
 proved, and document the discontinued YubiKey Manager GUI handoff to
@@ -351,9 +467,9 @@ identifies 169 in-scope package/setting capabilities including six formerly
 excluded server package outcomes; only 54 currently have operable v3 mappings.
 Exact old products may be replaced, and the owner may explicitly retire a
 capability through the fast-track review. The owner retired both GNOME Files
-context actions and deferred the Required bundle choice. The owner also kept
-RPM Fusion and archive-tool capabilities and deferred the DNFutils replacement
-decision in the next fast-track group. Historical "reopen only" review triggers
+context actions. The owner also kept
+RPM Fusion and archive-tool capabilities and specified DNF5 as the DNFutils
+replacement. Historical "reopen only" review triggers
 in batch records now describe the evidence needed for a v3.0 path, not
 optional deferrals.
 The [v3.0 review note](release-v3.0-review.md) identifies opt-in candidates
@@ -372,7 +488,7 @@ The original 99 non-runnable `unsupported` rows have a separate
 [decision triage](migrations/unsupported-triage.md): 10 original retirement
 proposals, 38 individual keep-or-drop choices, and 51 original migration-design
 decisions. The owner retired NautilusHash and NautilusImageTools; deferred
-GnomeExtInstaller, GnomeRegion, and AppImageLauncher; and retained portable
+GnomeExtInstaller and GnomeRegion; and retained portable
 Bitwarden, six R2 inverse outcomes, BalenaEtcher, ArduinoIDE, Discord, Joplin,
 Xmind, Chrome, Edge, SpotifyClient, HandBrake, PowerShell, and WoeUSB for
 migration. The owner also deferred Vivaldi and Pidgin/OTR and retired the
@@ -402,6 +518,12 @@ inverse evidence before becoming runnable. Unsupported or private decisions
 need a documented reason and review trigger. Keep candidate operations out of
 `default` and `server-base`; add curated opt-in profiles as related operations
 are ready. Manual checks are limited to behavior automation cannot observe.
+
+The `high` risk label alone does not impose that deeper gate. For an opt-in
+outcome outside those named safety domains, explicitly record its
+`safetyDomains`, pass its exact-target lifecycle, and name its v3.1 hardening
+item. The progress checker rejects unclassified high-risk candidates and any
+high-risk candidate in a deep-safety domain without the required evidence.
 
 The full v3.0 migration is ready for release review when every scoped v2 package and
 setting capability has an operable v3 implementation, evidence-backed
@@ -583,10 +705,10 @@ default profile also passed with `package.openssh-clients`.
 ### Workstation package batch 2: completion criteria
 
 Scope: `package.openssh-clients` on Fedora 44 x86_64 Workstation only, with the
-default `fedora-rpm` source and system scope. The selected v3 baseline is not
-an equivalent replacement for legacy `InstallRequired`. Its seven-package
-bundle was later resolved as a non-runnable prerequisite-check replacement in
-[provider foundation batch 01](migrations/provider-foundation-01.md). Fedora's [OpenSSH client package](https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/)
+default `fedora-rpm` source and system scope. Legacy `InstallRequired` is
+preserved by the separate package operations in
+[provider foundation batch 01](migrations/provider-foundation-01.md); it is
+not part of this OpenSSH outcome. Fedora's [OpenSSH client package](https://packages.fedoraproject.org/pkgs/openssh/openssh-clients/)
 provides `ssh`, `scp`, `sftp`, and client configuration; the catalog records its
 Fedora license expression and repository GPG verification. RIDE owns the
 selection, DNF handler, and run journal, not existing SSH configuration.
@@ -698,6 +820,30 @@ catalog only in their edition target declarations; the edition gate and
 current Server pilots cover those additions. The owner confirmed there are no
 non-disposable v3 runs; the declared targets are accepted after this review.
 
+### Generic Server Required batch: completion status
+
+Scope: the eleven RPMs in the pinned generic Server v2 `InstallRequired`
+function. v3 maps them to ten one-way package operations in the opt-in
+`server-required-tools` profile and isolates `firewalld` in
+`server-firewall-package`. Neither profile changes `server-base`.
+
+Status: **PASS as operable opt-in candidates** on Fedora 44 Server x86_64. The
+disposable VM run passed candidate gating, apply, repeat, status, package
+signature and file verification, command probes, and profile removal while
+preserving all installed packages and the complete post-apply RPM inventory.
+The pinned image digest is
+`efb75956d6dbde0801059fdac4a8a1451f06ecc843344ecdb71bb3e8d247af90`; the
+[acceptance record](acceptance/generic-server-required.md) contains the
+transcript path, checksum, and run IDs.
+
+DNF added 82 RPM identities and upgraded six existing identities without
+losing any starting package identity. Installing `open-vm-tools` enabled its
+two units but left them inactive under KVM. Firewalld was already installed,
+active, and enabled; its operation completed unchanged and its configuration
+hash did not change. H035 tracks the observed DNF transaction effects. H036
+retains a deeper absent-package firewalld install check because that transition
+was not exercised on the pinned image.
+
 ### Supported-state promotion check
 
 The owner confirmed on 2026-10-30 that no non-disposable machine has run v3.
@@ -745,10 +891,10 @@ result are recorded. No entry below is part of the v3 default profile.
 
 | Preset install/remove pair | Preset state | v3 burndown item |
 | --- | --- | --- |
-| `InstallGalleta` / `RemoveGalleta` | commented out | Find maintained Fedora packaging or a verifiable upstream release; define real install and removal. |
-| `InstallPlaso` / `RemovePlaso` | commented out | [Unsupported for v3.0](migrations/forensic-isolated-02.md) pending a chosen packaged source, isolated dependencies, and VM inverse. |
-| `InstallAutopsy` / `RemoveAutopsy` | commented out | [Unsupported for v3.0](migrations/forensic-isolated-02.md) pending signed Linux ZIP, Java dependencies, case-data recovery, and VM evidence. |
-| `InstallXplico` / `RemoveXplico` | commented out | Review current upstream maintenance, dependencies, and a trusted package source before adding an operation. |
-| `InstallVolatility` / `RemoveVolatility` | commented out | [Retired](migrations/forensic-isolated-02.md): the v2 pair was a no-op and upstream Volatility 2 is archived; reopen for a concrete legacy need. |
+| `InstallGalleta` / `RemoveGalleta` | commented out | Candidate [`package.galleta`](acceptance/package.galleta.md) pins Debian 1.0+20040505-12, installs the x86_64 CLI user-locally, and removes only unchanged owned files; H099 covers representative parser fixtures. |
+| `InstallPlaso` / `RemovePlaso` | commented out | Operable opt-in candidate [`package.plaso`](acceptance/package.plaso.md) uses the owned GIFT stable COPR/RPM path; Fedora 44 Workstation package lifecycle and case-output preservation passed. |
+| `InstallAutopsy` / `RemoveAutopsy` | commented out | High-risk opt-in [`package.autopsy`](acceptance/package.autopsy.md) uses the Sleuth Kit Labs Snap Store stable channel; publisher-granted auto-connect activates block-device, dm-crypt, and fuse-support. Complete removal snapshot recovery and interface review before promotion. |
+| `InstallXplico` / `RemoveXplico` | commented out | v3.0 opt-in replacement is Fedora `zeek-core` for offline PCAP analysis and file extraction; Xplico-specific protocol parity remains in H098. |
+| `InstallVolatility` / `RemoveVolatility` | commented out | Kept v3.0 migration gap, distinct from Volatility 3; assess an isolated legacy Python 2.7 runtime and plugin compatibility. |
 | `InstallVolatility3` / `RemoveVolatility3` | commented out | Isolated `package.volatility3` passed a [non-root VM happy path](acceptance/package.volatility3.md) as an opt-in core candidate; plugin and broader recovery work is queued for v3.1. |
 | `InstallVMFStools` / `RemoveVMFStools` | both commented out in this block; install also active later in the preset | The v2 no-op is retired, while [the kept VMFS access gap](migrations/forensic-isolated-07-vmfs.md) needs a genuine VMFS6 fixture and read-only Fedora evidence. |

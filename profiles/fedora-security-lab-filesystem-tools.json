@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-filesystem-tools",
+  "description": "Opt-in Fedora 44 Workstation filesystem utilities and file recovery tools.",
+  "operations": [
+    {
+      "id": "package.extundelete",
+      "state": "installed"
+    },
+    {
+      "id": "package.hfsutils",
+      "state": "installed"
+    },
+    {
+      "id": "package.ntfs-3g",
+      "state": "installed"
+    },
+    {
+      "id": "package.ntfsprogs",
+      "state": "installed"
+    }
+  ]
+}

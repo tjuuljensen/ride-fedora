@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-host-integrity",
+  "description": "Opt-in Fedora 44 Workstation host integrity and compliance packages.",
+  "operations": [
+    {
+      "id": "package.aide",
+      "state": "installed"
+    },
+    {
+      "id": "package.chkrootkit",
+      "state": "installed"
+    },
+    {
+      "id": "package.openscap-scanner",
+      "state": "installed"
+    },
+    {
+      "id": "package.rkhunter",
+      "state": "installed"
+    },
+    {
+      "id": "package.scap-security-guide",
+      "state": "installed"
+    }
+  ]
+}

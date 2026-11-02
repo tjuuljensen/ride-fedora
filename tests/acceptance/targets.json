@@ -26,7 +26,9 @@
       "variantId": "workstation",
       "architecture": "x86_64",
       "imageFormat": "qcow2",
-      "imageSha256": "49bb3c03b52f43325e5c7d5cf0ec83f2222b7170e3738baad1e0e5440bb6bf9a",
+      "vmSmp": 4,
+      "vmMemoryMiB": 6144,
+      "imageSha256": "78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178",
       "imageSource": "https://download.fedoraproject.org/pub/fedora/linux/releases/44/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-44-1.7.iso",
       "imageRelease": "44-1.7",
       "imageInstallerSha256": "bd285201494dd0ba09b54d05ac707de1401668b8512a573edb5922dcf9d7067e",
@@ -38,7 +40,26 @@
       "pilotPackage": "exfatprogs",
       "additionalPilots": [
         {"operationId": "package.less", "package": "less"},
-        {"operationId": "package.openssh-clients", "package": "openssh-clients"}
+        {"operationId": "package.openssh-clients", "package": "openssh-clients"},
+        {"operationId": "package.scanmem", "package": "scanmem"},
+        {"operationId": "package.unhide", "package": "unhide"},
+        {"operationId": "package.nano-default-editor", "package": "nano-default-editor"},
+        {"operationId": "package.nebula", "package": "nebula"},
+        {"operationId": "package.ntpsec", "package": "ntpsec"},
+        {"operationId": "package.psad", "package": "psad"},
+        {"operationId": "package.rats", "package": "rats"},
+        {"operationId": "package.tripwire", "package": "tripwire"},
+        {"operationId": "package.usbsniff", "package": "usbsniff"},
+        {"operationId": "package.handbrake-cli", "package": "HandBrake"},
+        {"operationId": "package.eza-portable", "package": "eza-portable"},
+        {"operationId": "package.gnome-browser-connector", "package": "gnome-browser-connector"},
+        {"operationId": "package.volatility2", "package": "volatility2-pypy-bundle"},
+        {"operationId": "package.veracrypt", "package": "veracrypt"},
+        {"operationId": "package.glances", "package": "glances"},
+        {"operationId": "package.zeek-core", "package": "zeek-core"},
+        {"operationId": "package.galleta", "package": "galleta"},
+        {"operationId": "setting.gnome-custom-shortcuts", "package": "gsettings-desktop-schemas"},
+        {"operationId": "setting.bash-aliases", "package": "bash"}
       ],
       "packageDatabase": "rpm",
       "packageVerification": "rpm-signature-and-files"
@@ -62,7 +83,10 @@
       "pilotOperation": "package.less",
       "pilotPackage": "less",
       "additionalPilots": [
-        {"operationId": "package.openssh-clients", "package": "openssh-clients"}
+        {"operationId": "package.openssh-clients", "package": "openssh-clients"},
+        {"operationId": "package.ferium-portable", "package": "ferium-portable"},
+        {"operationId": "package.java-25-openjdk-headless", "package": "java-25-openjdk-headless"},
+        {"operationId": "package.minecraft-server", "package": "minecraft-server"}
       ],
       "packageDatabase": "rpm",
       "packageVerification": "rpm-signature-and-files"

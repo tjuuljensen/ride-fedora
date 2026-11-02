@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-powershell",
+  "description": "Opt-in PowerShell 7.6.6 from Microsoft's pinned universal RPM release.",
+  "operations": [
+    {
+      "id": "package.powershell",
+      "state": "installed"
+    }
+  ]
+}

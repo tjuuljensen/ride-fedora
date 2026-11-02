@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-rpmfusion",
+  "description": "Opt-in RPM Fusion HEVC/H.265 GStreamer plugins; activate the rpmfusion profile first.",
+  "operations": [
+    {
+      "id": "package.gstreamer1-plugins-bad-freeworld",
+      "state": "installed"
+    }
+  ]
+}

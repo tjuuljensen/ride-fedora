@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-updates",
+  "description": "Opt-in non-reversible Fedora Multimedia package updates for the fixed Fedora 44 Workstation group inventory.",
+  "operations": [
+    {
+      "id": "system.update-multimedia-codecs",
+      "state": "current"
+    }
+  ]
+}

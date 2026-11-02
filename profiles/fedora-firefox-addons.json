@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-firefox-addons",
+  "description": "Opt-in Firefox extensions managed with an owned system policy and explicit restart-aware removal.",
+  "operations": [
+    {
+      "id": "setting.firefox-addons",
+      "state": "configured"
+    }
+  ]
+}

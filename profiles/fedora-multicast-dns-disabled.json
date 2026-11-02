@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-multicast-dns-disabled",
+  "description": "Opt-in Fedora 44 Workstation authselect profile with mDNS name resolution disabled.",
+  "operations": [
+    {
+      "id": "setting.multicast-dns",
+      "state": "disabled"
+    }
+  ]
+}

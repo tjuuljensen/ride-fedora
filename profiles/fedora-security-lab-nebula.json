@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-nebula",
+  "description": "Opt-in Fedora 44 Workstation candidate for installing Nebula package presence without network configuration or service activation.",
+  "operations": [
+    {
+      "id": "package.nebula",
+      "state": "installed"
+    }
+  ]
+}

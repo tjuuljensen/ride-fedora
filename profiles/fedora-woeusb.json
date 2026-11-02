@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-woeusb",
+  "description": "Opt-in private user installation of WoeUSB 5.2.4. Install fedora-woeusb-runtime first; this profile does not write USB media.",
+  "operations": [
+    {
+      "id": "package.woeusb",
+      "state": "installed"
+    }
+  ]
+}

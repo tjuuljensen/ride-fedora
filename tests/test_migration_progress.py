@@ -34,6 +34,22 @@ class MigrationProgressTests(unittest.TestCase):
             {item["sourceFunction"] for item in data["exclusions"] if item["source"] == "workstation"},
             {"InstallCitrixClient", "RemoveCitrixClient", "InstallOpera", "RemoveOpera"})
 
+    def test_security_lab_member_inventory_is_visible_and_reconciled(self):
+        report = migration_progress.summarize(self.data)
+        self.assertEqual(report["securityLab"], {
+            "total": 137, "profiled": 137, "catalogOnly": 0, "unmapped": 0,
+        })
+
+    def test_security_lab_duplicate_inventory_member_is_rejected(self):
+        inventory = migration_progress.read_json(migration_progress.SECURITY_LAB_INVENTORY)
+        inventory["packages"][1]["packageName"] = inventory["packages"][0]["packageName"]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "security-lab-inventory.json"
+            path.write_text(json.dumps(inventory), encoding="utf-8")
+            with patch.object(migration_progress, "SECURITY_LAB_INVENTORY", path):
+                with self.assertRaisesRegex(ValueError, "duplicate or invalid Security Lab package"):
+                    migration_progress.validate()
+
     def test_missing_or_duplicate_outcome_is_rejected(self):
         data = copy.deepcopy(self.data)
         data["outcomes"].pop()
@@ -50,7 +66,7 @@ class MigrationProgressTests(unittest.TestCase):
         row.update(disposition="migrate", progress="operable", blocker="",
                    v3Ids=["package.exfatprogs"],
                    evidence=["docs/acceptance/package.volatility3.md"], v31Hardening=["H002"])
-        with self.assertRaisesRegex(ValueError, "catalog status or target disagrees"):
+        with self.assertRaisesRegex(ValueError, "no candidate operation requiring opt-in"):
             self.validate_copy(data)
         row["v3Ids"] = ["package.volatility3"]
         row["evidence"] = ["docs/acceptance/package.exfatprogs.md"]
@@ -61,13 +77,31 @@ class MigrationProgressTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "catalog status or target disagrees"):
             self.validate_copy(data)
 
-    def test_high_risk_candidate_cannot_count_as_complete(self):
+    def test_unclassified_high_risk_candidate_cannot_count_as_complete(self):
         data = copy.deepcopy(self.data)
         row = next(item for item in data["outcomes"] if item["risk"] == "high")
         row.update(disposition="migrate", progress="operable", blocker="",
                    v3Ids=["package.less"], evidence=["docs/MIGRATION-PLAN.md"])
-        with self.assertRaisesRegex(ValueError, "high-risk"):
+        with self.assertRaisesRegex(ValueError, "explicit safety-domain classification"):
             self.validate_copy(data)
+
+    def test_deep_safety_domain_still_requires_deeper_gate(self):
+        data = copy.deepcopy(self.data)
+        row = next(item for item in data["outcomes"] if item["key"] == "server:package.AutoUpdate")
+        row["safetyDomains"] = ["security"]
+        with self.assertRaisesRegex(ValueError, "deep safety gate"):
+            self.validate_copy(data)
+
+    def test_operable_outcome_can_combine_supported_and_candidate_operations(self):
+        data = copy.deepcopy(self.data)
+        row = next(item for item in data["outcomes"]
+                   if item["key"] == "workstation:package.Codecs")
+        row.update(risk="medium", progress="operable", blocker="",
+                   v31Hardening=["H037"])
+        self.validate_copy(data)
+        report = migration_progress.summarize(data)
+        self.assertEqual(report["v30PackageSetting"]["operable"], 133)
+        self.assertEqual(report["v30PackageSetting"]["gap"], 22)
 
     def test_non_operable_resolution_needs_evidence(self):
         data = copy.deepcopy(self.data)
@@ -99,12 +133,12 @@ class MigrationProgressTests(unittest.TestCase):
         self.assertEqual(coverage["ledgered"], 169)
         self.assertEqual(coverage["excludedPackages"], 0)
         self.assertEqual(coverage["total"], 169)
-        self.assertEqual(coverage["operable"], 70)
+        self.assertEqual(coverage["operable"], 133)
         self.assertEqual(coverage["retired"], 9)
-        self.assertEqual(coverage["kept"], 90)
-        self.assertEqual(coverage["deferred"], 16)
-        self.assertEqual(coverage["replaced"], 1)
-        self.assertEqual(coverage["gap"], 89)
+        self.assertEqual(coverage["kept"], 97)
+        self.assertEqual(coverage["deferred"], 8)
+        self.assertEqual(coverage["replaced"], 5)
+        self.assertEqual(coverage["gap"], 22)
         server_batch = next(batch for batch in report["batches"] if batch["id"] == "generic-server-15")
         self.assertEqual(server_batch["complete"], 1)
         self.assertEqual(server_batch["v30Operable"], 1)

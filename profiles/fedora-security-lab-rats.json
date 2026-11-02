@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-rats",
+  "description": "Opt-in Fedora 44 Workstation candidate for legacy RATS tool presence; code scanning remains operator-directed.",
+  "operations": [
+    {
+      "id": "package.rats",
+      "state": "installed"
+    }
+  ]
+}

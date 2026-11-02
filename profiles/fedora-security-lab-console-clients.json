@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-console-clients",
+  "description": "Opt-in Fedora 44 Workstation console messaging and terminal session clients.",
+  "operations": [
+    {
+      "id": "package.mcabber",
+      "state": "installed"
+    },
+    {
+      "id": "package.mutt",
+      "state": "installed"
+    },
+    {
+      "id": "package.screen",
+      "state": "installed"
+    },
+    {
+      "id": "package.telnet",
+      "state": "installed"
+    }
+  ]
+}

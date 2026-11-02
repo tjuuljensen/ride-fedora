@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-vivaldi",
+  "description": "Opt-in Vivaldi Flatpak from the verified Flathub remote.",
+  "operations": [{"id": "package.vivaldi", "state": "installed"}]
+}

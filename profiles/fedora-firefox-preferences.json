@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-firefox-preferences",
+  "description": "Opt-in Firefox preferences through owned AutoConfig files.",
+  "operations": [
+    {
+      "id": "setting.firefox-preferences",
+      "state": "configured"
+    }
+  ]
+}

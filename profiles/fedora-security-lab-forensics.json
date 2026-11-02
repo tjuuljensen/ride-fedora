@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-forensics",
+  "description": "Opt-in Fedora Security Lab forensic image and recovery utilities; no evidence image is mounted or modified.",
+  "operations": [
+    {"id": "package.ewftools", "state": "installed"},
+    {"id": "package.sleuthkit", "state": "installed"},
+    {"id": "package.testdisk", "state": "installed"}
+  ]
+}

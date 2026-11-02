@@ -10,7 +10,7 @@ Inputs: migration/outcomes.json, legacy source names, catalog, and evidence file
 Side effects: --write-docs replaces only docs/migrations/progress.md; other modes read only.
 Prerequisites: Run from any directory with this repository available.
 Owner: RIDE Linux repository. Provenance: local v2 migration inventory.
-Version: 0.3.0.
+Version: 0.4.0.
 """
 
 from __future__ import annotations
@@ -31,10 +31,16 @@ else:
 ROOT = Path(__file__).resolve().parent.parent
 LEDGER = ROOT / "migration" / "outcomes.json"
 REPORT = ROOT / "docs" / "migrations" / "progress.md"
-VERSION = "0.3.0"
+SECURITY_LAB_INVENTORY = ROOT / "migration" / "security-lab-inventory.json"
+VERSION = "0.4.0"
 PROGRESS = {"unresolved", "assessed", "implemented", "operable", "supported", "resolved"}
 DISPOSITIONS = {"review", "migrate", "replace", "retire", "private", "unsupported"}
 RISK = {"low", "medium", "high"}
+SAFETY_DOMAINS = {
+    "data", "storage", "encryption", "security", "difficult-recovery",
+    "system-update", "service-lifecycle", "network",
+}
+DEEP_SAFETY_DOMAINS = {"data", "storage", "encryption", "security", "difficult-recovery"}
 KEY = re.compile(r"^(workstation|server):(action|package|setting)\.[A-Za-z0-9_]+$")
 
 
@@ -77,6 +83,96 @@ def catalog_matches_target(entry: dict, target_id: str) -> bool:
     return ("44" in fedora.get("releases", [])
             and "x86_64" in fedora.get("architectures", [])
             and variant in fedora.get("variantIds", []))
+
+
+def validate_security_lab_inventory(catalog: dict[str, dict], outcomes: list[dict]) -> dict:
+    inventory_data = read_json(SECURITY_LAB_INVENTORY)
+    packages = inventory_data.get("packages")
+    if (inventory_data.get("schemaVersion") != 1 or
+            inventory_data.get("target") != "fedora-44-workstation-x86_64" or
+            inventory_data.get("groupId") != "security-lab" or
+            inventory_data.get("observedDefaultMemberCount") != 137 or
+            not isinstance(packages, list) or len(packages) != 137):
+        raise ValueError("invalid Fedora Security Lab package inventory header or count")
+    names = [item.get("packageName") for item in packages]
+    if any(not isinstance(name, str) or not name for name in names) or len(names) != len(set(names)):
+        raise ValueError("duplicate or invalid Security Lab package name")
+    stages = Counter()
+    for item in packages:
+        stage = item.get("migrationStage")
+        if stage not in {"profiled-06A", "profiled-06B", "profiled-06C", "profiled-06D", "profiled-06E", "profiled-06F", "profiled-06G", "profiled-06H", "profiled-06I", "profiled-06J", "profiled-06K", "profiled-06L", "profiled-06M", "profiled-06N", "profiled-06O", "profiled-06P", "profiled-06Q", "profiled-06R", "profiled-06S", "profiled-06T", "profiled-06U", "profiled-06V", "profiled-06W", "profiled-06X", "profiled-06Y", "profiled-06Z", "profiled-06AA", "profiled-06AB", "profiled-06AC", "profiled-06AD", "profiled-06AE", "profiled-06AF", "profiled-06AG", "profiled-06AH", "profiled-06AI", "profiled-06AJ", "profiled-06AK", "profiled-06AL", "profiled-06AM", "profiled-06AN", "profiled-06AO", "profiled-06AP", "catalog-only", "unmapped"}:
+            raise ValueError(f"invalid Security Lab migration stage: {stage!r}")
+        stages[stage] += 1
+        identifier = item.get("operationId")
+        if stage == "unmapped":
+            if identifier is not None or item.get("catalogStatus") is not None:
+                raise ValueError(f"unmapped Security Lab package has a v3 operation: {item['packageName']}")
+            continue
+        entry = catalog.get(identifier)
+        if (not entry or entry.get("handler") != "dnf-package" or
+                entry.get("packageName") != item.get("v3PackageName", item["packageName"]) or
+                entry.get("status") != item.get("catalogStatus")):
+            raise ValueError(f"Security Lab package mapping disagrees with catalog: {item['packageName']}")
+        if stage == "profiled-06A" and entry.get("status") != "supported":
+            raise ValueError(f"Security Lab 06A profile contains a non-supported operation: {identifier}")
+    stage_profiles = {
+        "profiled-06A": "fedora-security-lab-core",
+        "profiled-06B": "fedora-security-lab-network",
+        "profiled-06C": "fedora-security-lab-forensics",
+        "profiled-06D": "fedora-security-lab-network-diagnostics",
+        "profiled-06E": "fedora-security-lab-network-utilities",
+        "profiled-06F": "fedora-security-lab-network-clients",
+        "profiled-06G": "fedora-security-lab-dns-tools",
+        "profiled-06H": "fedora-security-lab-network-discovery",
+        "profiled-06I": "fedora-security-lab-network-traffic",
+        "profiled-06J": "fedora-security-lab-forensic-media",
+        "profiled-06K": "fedora-security-lab-system-monitoring",
+        "profiled-06L": "fedora-security-lab-packet-observation",
+        "profiled-06M": "fedora-security-lab-network-probing",
+        "profiled-06N": "fedora-security-lab-host-integrity",
+        "profiled-06O": "fedora-security-lab-snmp",
+        "profiled-06P": "fedora-security-lab-password-recovery",
+        "profiled-06Q": "fedora-security-lab-wireless",
+        "profiled-06R": "fedora-security-lab-network-load-tools",
+        "profiled-06S": "fedora-security-lab-network-credential-tools",
+        "profiled-06T": "fedora-security-lab-network-monitoring",
+        "profiled-06U": "fedora-security-lab-packet-generation",
+        "profiled-06V": "fedora-security-lab-network-observation",
+        "profiled-06W": "fedora-security-lab-filesystem-tools",
+        "profiled-06X": "fedora-security-lab-dislocker",
+        "profiled-06Y": "fedora-security-lab-console-clients",
+        "profiled-06Z": "fedora-security-lab-web-tools",
+        "profiled-06AA": "fedora-security-lab-data-sanitizers",
+        "profiled-06AB": "fedora-security-lab-network-interception",
+        "profiled-06AC": "fedora-security-lab-network-diagnostics-2",
+        "profiled-06AD": "fedora-security-lab-storage-tools",
+        "profiled-06AE": "fedora-security-lab-forensic-images",
+        "profiled-06AF": "fedora-security-lab-network-path-tools",
+        "profiled-06AG": "fedora-security-lab-security-desktop-tools",
+        "profiled-06AH": "fedora-security-lab-process-inspection",
+        "profiled-06AI": "fedora-security-lab-default-editor",
+        "profiled-06AJ": "fedora-security-lab-nebula",
+        "profiled-06AK": "fedora-security-lab-ntpsec",
+        "profiled-06AL": "fedora-security-lab-openssh-core",
+        "profiled-06AM": "fedora-security-lab-psad",
+        "profiled-06AN": "fedora-security-lab-rats",
+        "profiled-06AO": "fedora-security-lab-tripwire",
+        "profiled-06AP": "fedora-security-lab-usbsniff",
+    }
+    profiled_ids = []
+    for stage, profile_id in stage_profiles.items():
+        profile = read_json(ROOT / "profiles" / f"{profile_id}.json")
+        profile_ids = [item.get("id") for item in profile.get("operations", [])]
+        stage_ids = [item["operationId"] for item in packages if item["migrationStage"] == stage]
+        if (profile.get("id") != profile_id or not profile_ids or
+                len(profile_ids) != len(set(profile_ids)) or set(profile_ids) != set(stage_ids)):
+            raise ValueError(f"Security Lab profile and inventory disagree for {stage}")
+        profiled_ids.extend(profile_ids)
+    row = next((item for item in outcomes if item.get("key") == "workstation:package.SecurityLab"), None)
+    if not row or set(row.get("v3Ids", [])) != set(profiled_ids):
+        raise ValueError("Security Lab profile, inventory, and outcome ledger disagree")
+    return {"total": len(packages), "profiled": sum(stages[stage] for stage in stage_profiles),
+            "catalogOnly": stages["catalog-only"], "unmapped": stages["unmapped"]}
 
 
 def validate() -> dict:
@@ -143,6 +239,11 @@ def validate() -> dict:
         batch_members[batch_id] += 1
         if row.get("risk") not in RISK or row.get("progress") not in PROGRESS:
             raise ValueError(f"invalid risk or progress for {key}")
+        safety_domains = row.get("safetyDomains", [])
+        if (not isinstance(safety_domains, list) or
+                any(domain not in SAFETY_DOMAINS for domain in safety_domains) or
+                len(safety_domains) != len(set(safety_domains))):
+            raise ValueError(f"invalid safety-domain classification for {key}")
         if row.get("disposition") not in DISPOSITIONS:
             raise ValueError(f"invalid disposition for {key}")
         if row.get("v30Decision") not in {None, "keep", "retire", "defer"}:
@@ -183,23 +284,34 @@ def validate() -> dict:
             if disposition != "migrate" or not row["v3Ids"] or not row["evidence"]:
                 raise ValueError(f"{key} claims an operation without mapping and evidence")
             if progress == "operable" and row["risk"] == "high":
-                raise ValueError(f"high-risk {key} cannot count as opt-in operable")
+                if not safety_domains:
+                    raise ValueError(f"high-risk {key} needs an explicit safety-domain classification")
+                if DEEP_SAFETY_DOMAINS.intersection(safety_domains):
+                    raise ValueError(f"high-risk {key} needs its deep safety gate before runnable status")
             if progress == "operable" and not row["v31Hardening"]:
                 raise ValueError(f"opt-in {key} lacks a named v3.1 hardening follow-up")
+            evidence_records = []
+            has_candidate = False
             for identifier in row["v3Ids"]:
                 entry = catalog[identifier]
-                expected_status = "supported" if progress == "supported" else "candidate"
-                if entry["status"] != expected_status or not catalog_matches_target(entry, row["target"]):
+                allowed_statuses = {"supported"} if progress == "supported" else {"supported", "candidate"}
+                if entry["status"] not in allowed_statuses or not catalog_matches_target(entry, row["target"]):
                     raise ValueError(f"{key} catalog status or target disagrees with progress")
+                has_candidate = has_candidate or entry["status"] == "candidate"
                 if progress == "supported":
                     checked_path(entry.get("acceptanceEvidence", ""))
+            if progress == "operable" and not has_candidate:
+                raise ValueError(f"operable {key} has no candidate operation requiring opt-in")
+            for link in row["evidence"]:
+                if link.startswith("docs/acceptance/"):
+                    record = checked_path(link).read_text(encoding="utf-8")
+                    if "pass" in record.lower() and "Fedora 44" in record and (
+                        "Workstation" if source == "workstation" else "Server"
+                    ) in record:
+                        evidence_records.append(record)
             target_edition = "Workstation" if source == "workstation" else "Server"
-            if not any(
-                link.startswith("docs/acceptance/") and
-                (record := checked_path(link).read_text(encoding="utf-8")) and
-                "PASS" in record and "Fedora 44" in record and target_edition in record and
-                all(identifier in record for identifier in row["v3Ids"])
-                for link in row["evidence"]
+            if target_edition not in " ".join(evidence_records) or not all(
+                identifier in " ".join(evidence_records) for identifier in row["v3Ids"]
             ):
                 raise ValueError(f"{key} lacks passing VM acceptance evidence")
         if progress == "resolved":
@@ -216,6 +328,7 @@ def validate() -> dict:
         if count > 6 or (count > 1 and batch_map[batch_id]["family"] != "desktop-user"
                          and any(row["batch"] == batch_id and row["risk"] == "high" for row in rows)):
             raise ValueError(f"oversized or mixed high-risk batch: {batch_id}")
+    validate_security_lab_inventory(catalog, rows)
     return data
 
 
@@ -261,6 +374,8 @@ def summarize(data: dict) -> dict:
                         "v30Gap": len(capability_members) - capability_operable - capability_retired - capability_replaced,
                         "risk": dict(Counter(row["risk"] for row in members)),
                         "nextAction": batch["nextAction"]})
+    security_lab = validate_security_lab_inventory(
+        {row["id"]: row for row in read_json(ROOT / "catalog" / "operations.json")["operations"]}, rows)
     return {"total": len(rows), "complete": complete, "percent": round(100*complete/len(rows), 1),
             "supported": progress["supported"], "operableCandidate": progress["operable"],
             "replaced": disposition["replace"],
@@ -275,6 +390,7 @@ def summarize(data: dict) -> dict:
                                   "deferred": v30_deferred, "kept": v30_kept,
                                   "gap": v30_total-v30_operable-v30_retired-v30_replaced,
                                   "percent": round(100*v30_operable/v30_total, 1)},
+            "securityLab": security_lab,
             "risk": dict(Counter(row["risk"] for row in rows)), "batches": batches,
             "v31Hardening": data["v31Hardening"]}
 
@@ -298,6 +414,10 @@ def render(data: dict) -> str:
              f"{report['v30PackageSetting']['ledgered']} are tracked in the ledger; "
              f"{report['v30PackageSetting']['excludedPackages']} in-scope package outcomes remain unledgered. "
              "Documented decisions do not count as operable behavior.", "",
+             f"**Security Lab group mapping: {report['securityLab']['profiled']}/"
+             f"{report['securityLab']['total']} packages profiled; "
+             f"{report['securityLab']['catalogOnly']} already have catalog operations awaiting profile placement; "
+             f"{report['securityLab']['unmapped']} still need v3 operations.**", "",
              "For package and setting gaps, historical batch review triggers are v3.0 design prerequisites, not optional deferrals.", "",
              f"Runnable outcomes: {report['runnable']}; {report['requiresAllowCandidate']} require `--allow-candidate`. "
              "Owner exclusions: 2 Citrix functions, 2 Opera functions, and 7 host-specific server actions, outside the 185 outcomes.", "",
@@ -349,6 +469,9 @@ def main() -> int:
                   f"({coverage['percent']}%) retired={coverage['retired']} replaced={coverage['replaced']} "
                   f"kept={coverage['kept']} deferred={coverage['deferred']} gap={coverage['gap']} "
                   f"in-scope-unledgered-packages={coverage['excludedPackages']}")
+            security_lab = report["securityLab"]
+            print(f"Security Lab group members={security_lab['profiled']}/{security_lab['total']} profiled, "
+                  f"{security_lab['catalogOnly']} catalog-only, {security_lab['unmapped']} unmapped")
             for batch in report["batches"]:
                 print(f"{batch['id']}: dispositioned={batch['complete']}/{batch['total']} "
                       f"v3.0-operable={batch['v30Operable']}/{batch['v30CapabilityTotal']} "

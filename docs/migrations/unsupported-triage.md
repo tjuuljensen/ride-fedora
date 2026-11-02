@@ -119,8 +119,8 @@ Verify each edition and source; a current product does not validate the old inst
 
 Choose a concrete case workflow or bounded tool set before implementation.
 
-- `workstation:package.Plaso` (medium risk): The v2 pair only prints a URL; current Plaso has a broad Python dependency set and no pinned isolated Fedora 44 handler or lifecycle acceptance.
-- `workstation:package.Autopsy` (medium risk): The v2 pair only prints a URL; publisher Linux ZIP and Java/Sleuth Kit requirements lack a Linux v3 portable handler and case-data-preserving inverse.
+- `workstation:package.Plaso` (medium risk; **keep for v3.0**): upstream documents `@gift/stable` COPR for Fedora 43/44; implement owned repository/package recovery and protect case output.
+- `workstation:package.Autopsy` (medium risk; **keep for v3.0**): use the Sleuth Kit Labs Snap Store stable channel; verify disconnected privileged interfaces and the native data snapshot/restore path.
 - `workstation:package.BulkExtractor` (high risk): The v2 moving-branch source build writes untracked files to /usr/local, removes shared dependencies, and has no owned inverse or seeded forensic-output recovery evidence.
 - `workstation:package.EmailHeaderAnlzr` (high risk): The v2 clone and global pip steps create an unpinned persistent Flask service; service identity, bind scope, unit ownership, and Python/data inverse are unproven.
 - `workstation:package.SecurityLab` (medium risk): The Fedora 44 security-lab group has 137 default packages and group state outside the per-package v3 journal; no safe group ownership or inverse is established.

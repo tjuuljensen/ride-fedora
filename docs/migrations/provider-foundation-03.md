@@ -1,9 +1,9 @@
 # Provider foundation batch 03: kernel, DNF, Python, and archive tools
 
-Status: **kernel, Python, and archive packages supported; DNFutils decision
-deferred**, 2026-10-30.
-The owner deferred the v3.0 DNFutils capability decision and kept the
-PackagingTools capability in the fast-track review on 2026-10-30. The accepted
+Status: **DNF5 replacement recorded; kernel, Python, and archive package
+paths supported**, reviewed 2026-10-31.
+The owner kept DNFutils for migration and specified replacement with DNF5 on
+2026-10-30. PackagingTools also remains in scope. The accepted
 7zip and unar lifecycles remain valid; the later
 [unrar wrapper follow-up](provider-foundation-03-unrar.md) restores the
 command choice through a separate supported RPM.
@@ -13,7 +13,7 @@ to [its own batch](provider-foundation-09.md).
 | v2 outcome | Current Fedora 44 treatment |
 | --- | --- |
 | `KernelTools` | Split `kernel-devel` and `kernel-headers` into exact Fedora RPM operations. They install build files, not a guarantee that they match the running kernel. [kernel-devel](https://packages.fedoraproject.org/pkgs/kernel/kernel-devel/), [kernel-headers](https://packages.fedoraproject.org/pkgs/kernel-headers/kernel-headers/) |
-| `DNFutils` | The v2 `dnf-utils` package is a DNF4-era bundle. Fedora 44 ships [DNF5](https://packages.fedoraproject.org/pkgs/dnf5/dnf5/) and [DNF5 plugins](https://packages.fedoraproject.org/pkgs/dnf5/dnf5-plugins/) on the pinned Workstation image; the required `download` and `config-manager` commands have [current DNF5 documentation](https://dnf5.readthedocs.io/en/stable/dnf5.8.html). Review as a non-runnable replacement, without changing DNF configuration. |
+| `DNFutils` | The v2 `dnf-utils` package is a DNF4-era bundle. Fedora 44 ships [DNF5](https://packages.fedoraproject.org/pkgs/dnf5/dnf5/) and [DNF5 plugins](https://packages.fedoraproject.org/pkgs/dnf5/dnf5-plugins/) on the pinned Workstation image; its `download` and `config-manager` commands passed read-only checks on the declared target and have [current DNF5 documentation](https://dnf5.readthedocs.io/en/stable/dnf5.8.html). Record DNF5 as the v3 replacement; do not install the obsolete bundle or change repository configuration. |
 | `PythonPip` | Replace the v2 `python-pip` RPM and unscoped `pip install --upgrade pip` with Fedora's signed [python3-pip](https://packages.fedoraproject.org/pkgs/python-pip/python3-pip/) RPM. Do not mutate the system Python environment after DNF installation. |
 | `PackagingTools` | Fedora 44 no longer lists a `p7zip` build; Fedora [7zip](https://packages.fedoraproject.org/pkgs/7zip/7zip/) and the [unrar-free wrapper](https://packages.fedoraproject.org/pkgs/unrar-free/unrar/) now provide an operable v3 path for the archive and `unrar` commands. [Unar](https://packages.fedoraproject.org/pkgs/unar/unar/) remains an independent extractor option. |
 
@@ -32,8 +32,9 @@ to [its own batch](provider-foundation-09.md).
 - Count `KernelTools` as supported only if both RPM operations pass; count
   `PythonPip` as supported only if its RPM passes and no global pip upgrade
   occurs. A failure is investigated before retrying.
-- Resolve `DNFutils` only after confirming current DNF5 and plugin commands
-  on the declared VM target; document that this is not a v2 package install.
+- Resolve `DNFutils` by documenting the current DNF5/plugin commands on the
+  declared target and confirming the v3 provider uses current DNF behavior;
+  the replacement does not add a package install or alter repository state.
 - For `PackagingTools`, add independent Fedora `package.7zip` and
   `package.unar` operations. In a disposable Workstation VM, verify that
   removing pre-installed `7zip` for the test affects no other pre-existing
@@ -52,9 +53,9 @@ DNF5 plugins. In disposable Workstation overlay
 `rpm -q dnf5 dnf5-plugins`, `dnf5 config-manager --help`, and
 `dnf5 download --help` all passed before any package change. The v3 client
 uses current DNF commands and does not install the obsolete v2 bundle or
-alter repository configuration to supply it. This is a documented,
-**non-runnable replacement**, not an accepted `dnf-utils` installation.
-Revisit if DNF5 plugin availability or the declared Fedora target changes.
+alter repository configuration to supply it. This is the completed DNFutils
+replacement for the declared Fedora 44 Workstation target. Revisit if DNF5
+plugin availability or the declared Fedora target changes.
 
 ## Package VM results
 

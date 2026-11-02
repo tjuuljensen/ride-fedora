@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-workstation-glances",
+  "description": "Opt-in Fedora 44 Workstation Glances terminal system monitor; does not enable its Web UI service.",
+  "operations": [
+    {
+      "id": "package.glances",
+      "state": "installed"
+    }
+  ]
+}

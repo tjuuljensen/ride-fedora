@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-good-plugins",
+  "description": "Opt-in Fedora GStreamer good-family extension plugins. Existing packages and system codec choices are preserved.",
+  "operations": [
+    {
+      "id": "package.gstreamer1-plugins-good-extras",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-good-gtk",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-good-qt",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-good-qt6",
+      "state": "installed"
+    }
+  ]
+}

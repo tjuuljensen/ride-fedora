@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-spotify",
+  "description": "Opt-in Spotify Flatpak from the verified Flathub remote.",
+  "operations": [{"id": "package.spotify", "state": "installed"}]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-tripwire",
+  "description": "Opt-in Fedora 44 Workstation candidate for Tripwire package presence without key generation, policy initialization, baseline creation, or filesystem checks.",
+  "operations": [
+    {
+      "id": "package.tripwire",
+      "state": "installed"
+    }
+  ]
+}

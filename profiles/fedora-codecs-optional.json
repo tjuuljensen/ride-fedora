@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-codecs-optional",
+  "description": "Opt-in Fedora GStreamer optional plugins and LAME encoder. Existing packages and system codec choices are preserved.",
+  "operations": [
+    {
+      "id": "package.gstreamer1-plugins-bad-free-extras",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-bad-free-fluidsynth",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-bad-free-lv2",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-bad-free-wildmidi",
+      "state": "installed"
+    },
+    {
+      "id": "package.gstreamer1-plugins-bad-free-zbar",
+      "state": "installed"
+    },
+    {
+      "id": "package.lame",
+      "state": "installed"
+    }
+  ]
+}

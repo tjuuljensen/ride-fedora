@@ -3,7 +3,8 @@
 Fast-track owner decisions: keep Chrome, Edge, and Spotify. Opera remains
 outside v3 scope.
 
-Status: **two opt-in candidates, three unsupported decisions, and one owner exclusion**, 2026-10-30. The v2 source family includes
+Status: **five opt-in outcomes operable; one owner exclusion**, updated
+2026-11-01. The v2 source family includes
 `Chrome`, `Opera`, `Edge`, `SpotifyClient`, `ClementinePlayer`, and
 `PulseAudioEq`; Opera is outside the current five-outcome batch. The first three add external browser RPM repositories and
 keys with broad removal. Spotify requests `lpf-spotify-client` without
@@ -34,13 +35,13 @@ and its inverse removes it; no equalizer is installed.
 
 ## External-source decisions
 
-- **Chrome: unsupported and non-runnable in v3.0.**
-  [Google ships a Fedora RPM](https://support.google.com/chrome/answer/95346)
-  that adds its own update repository. The v2 function writes an HTTP
-  repository URL directly and its inverse removes the repository path
-  without checking ownership. Migrate via an official RPM with
-  verified publisher source, repository/key collision handling, and
-  browser-profile-preserving Fedora VM lifecycle.
+- **Chrome: owner-kept, implemented as an opt-in Flathub candidate.** Google
+  publishes a Fedora RPM, but RIDE uses Flathub's signed system remote and its
+  `com.google.Chrome` community package for v3.0. Flathub marks the package
+  unverified and unaffiliated with Google; the selected source carries the
+  proprietary browser. The application profile remains under
+  `~/.var/app/com.google.Chrome` when the Flatpak is removed. A separate RPM
+  deployment can be added independently after RIDE owns its repository/key.
 - **Opera: excluded from v3 by owner decision on 2026-10-30.**
   [Opera ships a Linux RPM and repository](https://rpm.opera.com/), but v2
   imports a global key, installs a developer-channel package, then removes
@@ -48,28 +49,29 @@ and its inverse removes it; no equalizer is installed.
   excluded Opera due to vendor ownership concerns. No v3 operation or
   acquisition path is planned. The v2 source and existing machine state remain
   untouched.
-- **Edge: unsupported and non-runnable.**
-  [Microsoft supports Fedora 39+](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-supported-operating-systems)
-  for Edge Linux. The v2 function selects the developer channel from a
-  mutable repository; its inverse deletes a fixed repo file but does not
-  own the system key. Choose a channel and pinned publisher
-  source with collision-safe repository/key handling and Fedora 44 VM
-  evidence.
-- **SpotifyClient: unsupported and non-runnable.** v2 requests
-  `lpf-spotify-client` with no source declaration. The
-  [LPF mechanism](https://packages.fedoraproject.org/pkgs/lpf/lpf/) is
-  interactive and builds a local package from a licensed download; the
-  [negativo17 Fedora repackaging](https://negativo17.org/spotify-client/)
-  is a different source with its own repository and terms. Choose an
-  acquisition method with license/terms, owned state,
-  unattended-install decision, and profile-preserving VM lifecycle.
+- **Edge: owner-kept, implemented as an opt-in Flathub candidate.** Microsoft
+  supports Fedora 39+, but its current published RPM repository file sets
+  `gpgcheck=0`. RIDE uses Flathub's signed system remote and the
+  `com.microsoft.Edge` community package rather than v2's mutable developer
+  repository. Flathub marks this package unverified and unaffiliated with
+  Microsoft. Its profile remains under `~/.var/app/com.microsoft.Edge` after
+  Flatpak removal. Revisit the publisher RPM if Microsoft provides a verifiable
+  repository signature lifecycle.
+- **SpotifyClient: owner-kept, implemented as an opt-in Flathub candidate.**
+  v2 requests `lpf-spotify-client` without declaring a source; Spotify says its
+  Linux desktop build is not actively supported. Flathub packages official
+  Spotify binaries and uses the signed Flathub system remote, but its package
+  is community-maintained and unverified by Spotify. The application profile
+  remains under `~/.var/app/com.spotify.Client` after remove. Spotify also
+  documents Snap for Linux; a Snap deployment can be added as a distinct
+  operation if its source and recovery contract are selected.
 
-The owner retained optional Chrome for migration on 2026-10-30. Its v3.0
-status remains non-runnable until the official source, repository/key
-ownership, and seeded browser-profile recovery pass on Fedora 44 Workstation.
-The owner also retained optional Edge and SpotifyClient on 2026-10-30. Choose
-Edge's channel and Spotify's acquisition provider, then prove their distinct
-owned-state and profile-preserving lifecycles before runnable status.
+The owner retained Chrome, Edge, and SpotifyClient for v3.0 on 2026-10-30.
+Their Flathub paths have separate operation IDs and profiles, allowing these
+Flatpaks to coexist with independently managed RPM or Snap deployments after
+product conflict review. The combined VM test checks package presence, status,
+repeat, removal, and profile preservation. Launch, sign-in, sync, playback,
+and audio behavior are queued as H078-H079 in v3.1.
 
 The [Fedora 44 PipeWire PulseAudio implementation](https://packages.fedoraproject.org/pkgs/pipewire/pipewire-pulseaudio/)
 is already present in the pinned Workstation image; `pulseaudio` and
@@ -98,3 +100,13 @@ PipeWire-compatible **operable opt-in candidate** as the intended equalizer,
 without changing sound servers. Actual audio processing, presets, and
 desktop visuals are H016 in v3.1. Both profiles require
 `--allow-candidate` and stay outside `default`.
+
+Source review: [Google Chrome Fedora package guidance](https://support.google.com/chrome/answer/95346),
+[Google signing key](https://www.google.com/linuxrepositories/),
+[Chrome Flathub package](https://flathub.org/en/apps/com.google.Chrome),
+[Microsoft Fedora support](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-supported-operating-systems),
+[Microsoft RPM repository config](https://packages.microsoft.com/yumrepos/edge/config.repo),
+[Edge Flathub package](https://flathub.org/en/apps/com.microsoft.Edge),
+[Spotify Linux guidance](https://www.spotify.com/download/linux/),
+[Spotify Flathub package](https://flathub.org/en/apps/com.spotify.Client),
+[Spotify Flathub source](https://github.com/flathub/com.spotify.Client).

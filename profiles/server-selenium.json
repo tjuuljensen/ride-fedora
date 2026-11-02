@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "server-selenium",
+  "description": "Opt-in Fedora Server Selenium Python bindings, with browser and driver lifecycle managed separately.",
+  "operations": [
+    {"id": "package.python3-selenium", "state": "installed"}
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-observation",
+  "description": "Opt-in Fedora 44 Workstation network observation and packet-analysis utilities.",
+  "operations": [
+    {
+      "id": "package.etherape",
+      "state": "installed"
+    },
+    {
+      "id": "package.p0f",
+      "state": "installed"
+    },
+    {
+      "id": "package.pads",
+      "state": "installed"
+    },
+    {
+      "id": "package.pcapdiff",
+      "state": "installed"
+    },
+    {
+      "id": "package.ssldump",
+      "state": "installed"
+    }
+  ]
+}

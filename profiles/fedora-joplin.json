@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-joplin",
+  "description": "Opt-in Joplin 3.7.22 AppImage. Notes, configuration, and sync state remain outside RIDE management.",
+  "operations": [
+    {
+      "id": "package.joplin",
+      "state": "installed"
+    }
+  ]
+}

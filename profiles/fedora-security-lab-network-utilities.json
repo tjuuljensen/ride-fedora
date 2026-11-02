@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-utilities",
+  "description": "Opt-in Fedora Security Lab network and terminal utilities; package lifecycle tests do not generate traffic or inspect user logs.",
+  "operations": [
+    {
+      "id": "package.bmon",
+      "state": "installed"
+    },
+    {
+      "id": "package.fping",
+      "state": "installed"
+    },
+    {
+      "id": "package.iftop",
+      "state": "installed"
+    },
+    {
+      "id": "package.lnav",
+      "state": "installed"
+    },
+    {
+      "id": "package.nload",
+      "state": "installed"
+    }
+  ]
+}

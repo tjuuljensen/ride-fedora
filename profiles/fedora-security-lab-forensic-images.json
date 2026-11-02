@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-forensic-images",
+  "description": "Isolated opt-in Fedora 44 Workstation RPM for AFF forensic image utilities; installing the package does not process evidence.",
+  "operations": [
+    {
+      "id": "package.afftools",
+      "state": "installed"
+    }
+  ]
+}

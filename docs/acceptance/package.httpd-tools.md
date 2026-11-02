@@ -1,0 +1,5 @@
+# httpd-tools package acceptance
+
+Fedora 44 Workstation x86_64 lifecycle evidence is recorded in the
+[Security Lab web tools report](security-lab-web-tools.md). The operation
+manages the Fedora tools RPM only; it does not start Apache HTTP Server.

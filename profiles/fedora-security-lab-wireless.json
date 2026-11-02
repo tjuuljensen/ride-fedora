@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-wireless",
+  "description": "Opt-in Fedora 44 Workstation wireless auditing and capture packages.",
+  "operations": [
+    {
+      "id": "package.aircrack-ng",
+      "state": "installed"
+    },
+    {
+      "id": "package.cowpatty",
+      "state": "installed"
+    },
+    {
+      "id": "package.kismet",
+      "state": "installed"
+    },
+    {
+      "id": "package.reaver",
+      "state": "installed"
+    }
+  ]
+}

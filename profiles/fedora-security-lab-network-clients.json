@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-clients",
+  "description": "Opt-in Fedora 44 Workstation command-line network clients and relay tools.",
+  "operations": [
+    {
+      "id": "package.httpie",
+      "state": "installed"
+    },
+    {
+      "id": "package.iperf",
+      "state": "installed"
+    },
+    {
+      "id": "package.irssi",
+      "state": "installed"
+    },
+    {
+      "id": "package.socat",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-workstation-galleta",
+  "description": "Opt-in legacy Internet Explorer cookie parser for Fedora 44 Workstation; install and remove the CLI only, without processing evidence.",
+  "operations": [
+    {
+      "id": "package.galleta",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-edge",
+  "description": "Opt-in Microsoft Edge Flatpak from the verified Flathub remote.",
+  "operations": [{"id": "package.edge", "state": "installed"}]
+}

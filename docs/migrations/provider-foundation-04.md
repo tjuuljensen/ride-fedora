@@ -2,8 +2,7 @@
 
 Status: **complete: editors supported, GNOME utilities operable opt-in,
 versionlock replaced**, 2026-10-30.
-The owner deferred deciding whether the DNF5 versionlock command fully covers
-the v2 capability in the v3.0 fast-track review.
+The owner later clarified that all retained v2 capabilities remain in v3.0 scope. Fedora 44 DNF5 versionlock is the replacement for the old plugin; no separate RIDE-managed policy mutation is requested.
 The active v2 `BasicEditors` bundle installs/removes `nano` and `vim`.
 Fedora 44 provides [`nano`](https://packages.fedoraproject.org/pkgs/nano/nano/)
 and the concrete [`vim-enhanced`](https://packages.fedoraproject.org/pkgs/vim/vim-enhanced/)
@@ -92,6 +91,8 @@ inverses; no pre-existing RPM identity was lost.
 | [`BasicEditors`](../acceptance/provider-basic-editors.md) | supported package installs | `nano` introduced only its own RPM; `vim-enhanced` updated pre-existing `vim-data` and `vim-minimal` versions. |
 | [`GnomeTools`](../acceptance/provider-gnome-tools.md) | operable opt-in candidate | `system-config-printer` updated pre-existing printer library/udev RPM versions; `gnome-tweaks` introduced only its own RPM. Neither operation touched `gparted`. |
 | `VersionLock` | documented replacement | DNF5 versionlock command was present; no policy was changed. |
+
+The owner-level v3.0 scope instruction confirms the DNF5 versionlock command as the kept replacement for the v2 plugin installation capability. If managed policy entries are requested later, that is a separate operation with explicit exact-state recovery.
 
 The package inverse does not downgrade DNF-updated RPMs. Removing a
 pre-existing `nano` on a real host can also remove its default-editor

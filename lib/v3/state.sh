@@ -49,6 +49,12 @@ ride_journal_update_last() {
     --arg result "$result" --arg observed "$observed"
 }
 
+ride_journal_update_last_report() {
+  local report=$1
+  jq -e 'type == "object"' <<< "$report" >/dev/null || ride_die "invalid journal report"
+  ride_journal_write "$RIDE_RUN_FILE" '.steps[-1].updateReport = $report' --argjson report "$report"
+}
+
 ride_journal_finish() {
   local status=$1
   ride_journal_write "$RIDE_RUN_FILE" '.status = $status | .finishedAt = $finished' \

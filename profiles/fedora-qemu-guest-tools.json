@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-qemu-guest-tools",
+  "description": "Opt-in Fedora SPICE guest packages for a QEMU/SPICE virtual machine. This installs packages only and does not configure host integration or user state.",
+  "operations": [
+    {
+      "id": "package.spice-vdagent",
+      "state": "installed"
+    },
+    {
+      "id": "package.spice-webdavd",
+      "state": "installed"
+    }
+  ]
+}

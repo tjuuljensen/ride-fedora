@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "flatpak-runtime",
+  "description": "Opt-in Fedora Flatpak runtime install; it does not remove apps, remotes, or user data.",
+  "operations": [
+    {"id": "package.flatpak", "state": "installed"}
+  ]
+}

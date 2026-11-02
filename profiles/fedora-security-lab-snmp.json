@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-snmp",
+  "description": "Opt-in Fedora 44 Workstation SNMP agent and inspection packages.",
+  "operations": [
+    {
+      "id": "package.net-snmp",
+      "state": "installed"
+    },
+    {
+      "id": "package.net-snmp-utils",
+      "state": "installed"
+    },
+    {
+      "id": "package.onesixtyone",
+      "state": "installed"
+    },
+    {
+      "id": "package.snmpcheck",
+      "state": "installed"
+    }
+  ]
+}

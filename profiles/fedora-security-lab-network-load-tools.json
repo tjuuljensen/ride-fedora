@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-load-tools",
+  "description": "Opt-in Fedora 44 Workstation HTTP, SIP, and socket performance tools.",
+  "operations": [
+    {
+      "id": "package.siege",
+      "state": "installed"
+    },
+    {
+      "id": "package.sipp",
+      "state": "installed"
+    },
+    {
+      "id": "package.sipsak",
+      "state": "installed"
+    },
+    {
+      "id": "package.sockperf",
+      "state": "installed"
+    },
+    {
+      "id": "package.uperf",
+      "state": "installed"
+    }
+  ]
+}

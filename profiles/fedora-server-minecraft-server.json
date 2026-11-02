@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-server-minecraft-server",
+  "description": "Optional user-local official Minecraft 26.3 server JAR for Fedora 44 Server. Select the separate system-scope fedora-server-java-25-runtime profile for the required runtime. Does not start the server or manage worlds, EULA, service, or network settings.",
+  "operations": [
+    {
+      "id": "package.minecraft-server",
+      "state": "installed"
+    }
+  ]
+}

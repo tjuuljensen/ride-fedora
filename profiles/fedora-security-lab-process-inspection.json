@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-process-inspection",
+  "description": "Opt-in Fedora 44 Workstation candidates for process and host visibility tools.",
+  "operations": [
+    {
+      "id": "package.scanmem",
+      "state": "installed"
+    },
+    {
+      "id": "package.unhide",
+      "state": "installed"
+    }
+  ]
+}

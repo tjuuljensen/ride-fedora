@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-vm-keyboard-shortcuts",
+  "description": "Opt-in shortcut layout retained from the v2 VM function; uses owned GNOME keybinding entries with exact removal.",
+  "operations": [
+    {
+      "id": "setting.gnome-custom-shortcuts",
+      "state": "configured",
+      "value": "{\"global\":{\"showDesktop\":[\"<Control><Alt>d\"],\"switchWindows\":[]},\"shortcuts\":[{\"name\":\"Nautilus - home folder\",\"command\":\"nautilus\",\"binding\":\"<Control><Alt>e\"},{\"name\":\"Terminator\",\"command\":\"terminator\",\"binding\":\"<Control><Alt>t\"}]}"
+    }
+  ]
+}

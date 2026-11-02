@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-vscode",
+  "description": "Opt-in Microsoft Visual Studio Code RPM from its publisher repository.",
+  "operations": [
+    {
+      "id": "package.visual-studio-code",
+      "state": "installed"
+    }
+  ]
+}

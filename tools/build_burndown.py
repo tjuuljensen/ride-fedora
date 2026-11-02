@@ -110,6 +110,8 @@ def workstation_disposition(members: list[str], active: set[str], ledger: dict) 
             return f"{disposition}: {reason}"
     names = set(members)
     special = {
+        "InstallCodecs": "operable opt-in v3.0 outcome: fixed Fedora codec package set, RPM Fusion alternative candidate and bounded Multimedia update; see provider-foundation-05 and hardening item H037",
+        "InstallSnap": "implemented candidate `package.snapd`; Fedora 44 Workstation socket and install lifecycle passed, while host confinement is partial",
         "InstallVolatility3": "implemented candidate `package.volatility3`; isolated pinned core, VM acceptance pending",
         "InstallPlaso": "deferred candidate; opt-in COPR and removal need VM evidence",
         "InstallAutopsy": "deferred candidate; upstream Linux setup and removal need VM evidence",
@@ -137,7 +139,9 @@ def server_disposition(members: list[str]) -> str:
         return "private overlay for host values or key material; extract generic behavior only after ownership review"
     if name in {"InstallPythonPip", "InstallSelenium"}:
         return "replace global Python installation with isolated, pinned per-tool environment"
-    if name in {"UpdateFedora", "InstallRequired", "InstallAutoUpdate"}:
+    if name == "InstallRequired":
+        return "operable opt-in: eleven Fedora RPM operations in the separated `server-required-tools` and `server-firewall-package` profiles; see the Server acceptance record"
+    if name in {"UpdateFedora", "InstallAutoUpdate"}:
         return "deferred generic server baseline; split package/update/timer behavior and record recovery limits"
     if name == "SetNoRootLogin":
         return "deferred SSH policy setting; preserve existing file content and test exact restore"

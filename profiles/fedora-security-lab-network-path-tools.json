@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-security-lab-network-path-tools",
+  "description": "Isolated opt-in Fedora 44 Workstation candidate RPMs for proxy routing and packet tooling; applying the profile does not configure proxies or send traffic.",
+  "operations": [
+    {
+      "id": "package.proxychains-ng",
+      "state": "installed"
+    },
+    {
+      "id": "package.python3-scapy",
+      "state": "installed"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "snap-runtime",
+  "description": "Opt-in Fedora Snap runtime; application confinement may be partial on this target, and users manage their own Snap apps and data.",
+  "operations": [
+    {"id": "package.snapd", "state": "installed"}
+  ]
+}

@@ -130,3 +130,73 @@ ride_flathub_change() {
     rm -f -- "$marker"
   fi
 }
+
+ride_flatpak_halloy_remote_valid() {
+  local remotes
+  remotes=$(flatpak remotes --system --columns=name,url,options --json) || return 1
+  jq -e '
+    [.[] | select(.name == "flathub")] as $rows |
+    ($rows | length) == 1 and
+    $rows[0].url == "https://dl.flathub.org/repo/" and
+    (($rows[0].options // "") | contains("no-gpg-verify") | not)
+  ' <<< "$remotes" >/dev/null
+}
+
+ride_flatpak_app_id() { jq -r '.applicationId' <<< "$1"; }
+
+ride_flatpak_app_state() {
+  local entry=$1 app_id apps rows count origin
+  app_id=$(ride_flatpak_app_id "$entry")
+  apps=$(flatpak list --system --columns=application,origin --json) || return 1
+  [[ -n "$apps" ]] || apps='[]'
+  rows=$(jq --arg id "$app_id" '[.[] | select((.application_id // .application) == $id)]' <<< "$apps") || return 1
+  count=$(jq 'length' <<< "$rows") || return 1
+  if [[ "$count" == 0 ]]; then
+    printf 'absent\n'
+    return
+  fi
+  [[ "$count" == 1 ]] || { printf 'unowned\n'; return; }
+  origin=$(jq -r '.[0].origin // ""' <<< "$rows") || return 1
+  [[ "$origin" == flathub ]] || { printf 'unowned\n'; return; }
+  printf 'installed\n'
+}
+
+ride_flatpak_app_preflight() {
+  local entry=$1 desired=$2 current app_id rpm_status
+  ride_require_command flatpak
+  app_id=$(ride_flatpak_app_id "$entry")
+  current=$(ride_flatpak_app_state "$entry") || ride_die "cannot inspect system Flatpak application"
+  [[ "$current" != unowned ]] || ride_die "Flatpak application is installed from an unexpected origin"
+  if [[ "$desired" == installed && "$current" == absent ]]; then
+    ride_flatpak_halloy_remote_valid ||
+      ride_die "a GPG-verified system Flathub remote is required for this application"
+    if [[ "$app_id" == it.mijorus.gearlever ]]; then
+      ride_require_command rpm
+      if rpm -q --quiet appimagelauncher; then
+        ride_die "AppImageLauncher RPM is installed; remove it before installing Gear Lever to avoid competing AppImage handlers"
+      else
+        rpm_status=$?
+        [[ "$rpm_status" == 1 ]] || ride_die "cannot determine whether the AppImageLauncher RPM is installed"
+      fi
+    fi
+  fi
+}
+
+ride_flatpak_app_change() {
+  local entry=$1 state=$2 app_id
+  app_id=$(ride_flatpak_app_id "$entry")
+  ride_flatpak_app_preflight "$entry" "$state"
+  case "$state" in
+    installed) flatpak install --system --noninteractive flathub "$app_id" ;;
+    absent) flatpak uninstall --system --noninteractive "$app_id" ;;
+    *) ride_die "invalid Flatpak application state" ;;
+  esac
+}
+
+ride_flatpak_halloy_entry() {
+  printf '%s\n' '{"applicationId":"org.squidowl.halloy"}'
+}
+
+ride_flatpak_halloy_state() { ride_flatpak_app_state "$(ride_flatpak_halloy_entry)"; }
+ride_flatpak_halloy_preflight() { ride_flatpak_app_preflight "$(ride_flatpak_halloy_entry)" "$1"; }
+ride_flatpak_halloy_change() { ride_flatpak_app_change "$(ride_flatpak_halloy_entry)" "$1"; }
