@@ -1,5 +1,11 @@
 # Alignment with the Windows v3 development branch
 
+Current adopted contract: **1.1.0**, pinned by the
+[consumer reference](models/ride-behavior-contract-ref.json). See the
+[initial show pipeline adoption](#show-pipeline-contract-110-2026-11-02) and
+[current Fedora implementation](#fedora-show-stream-and-result-schema-2026-11-03).
+Earlier dated entries below retain their original review baseline.
+
 ## Shared contract adoption, 2026-11-01
 
 ### Plex Server package batch, 2026-11-02
@@ -2371,3 +2377,59 @@ returned catalog IDs without loading the operational engine. The difference
 register remains temporary until native focused tests run. Paired profile and
 state-preview examples are in both READMEs and are linked from these alignment
 records.
+
+## Show pipeline contract 1.1.0, 2026-11-02
+
+Historical adoption snapshot from 2026-11-02. The pending implementation and
+scenario statements below describe that review date; the 2026-11-03
+[Fedora implementation](#fedora-show-stream-and-result-schema-2026-11-03) and
+[shared scenario expansion](#align-05-shared-scenario-expansion-2026-11-03)
+above record subsequent progress.
+
+ALIGN-08-F / owner: RIDE Fedora maintainer. Adopt the compatible RB-02/03/10/11
+extension in the canonical Windows-hosted
+[show pipeline contract](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/models/ride-behavior-contract.md#show-pipelines-and-native-structured-output).
+The updated consumer reference pins contract 1.1.0 as a completion target, not
+implemented behavior. Do not copy the canonical contract into this repository.
+
+Current Fedora behavior: show requires a positional catalog ID and emits catalog
+JSON plus observedState and availableSources. Input streaming and a versioned
+native result schema remain pending. Windows is implementing ID-string/object
+input and one native object per result under
+[ALIGN-08-W](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/fedora-alignment.md#show-pipeline-contract-110-2026-11-02).
+Native Bash text/JSON and PowerShell objects are intentional platform differences;
+field meanings must be mapped explicitly rather than assuming identical names or
+values. Source selection and Windows variant selection remain separate concepts.
+
+Next action: implement explicit show --stdin using literal newline-delimited IDs
+and compact JSON records; reject mixed positional/stream input and irrelevant
+flags. Preserve existing single-ID JSON fields and semantics. Define the native
+schema marker and stable fields before advertising it for automation. Follow the
+canonical ordering, duplicate, empty-input, CRLF, final-line and first-error
+rules; keep diagnostics on stderr and return nonzero on failure. Add help and
+completion from their authoritative sources and regenerate affected references.
+Do not claim that search/list already offer a JSON mode; their current TSV can
+supply IDs through a documented projection. Saved runs and recovery are unchanged.
+
+Acceptance: native Bash tests plus paired ALIGN-05 scenarios must cover the
+canonical input/error/output matrix, JSON parsing and framing, status propagation,
+source selection and absence of mutation calls. Existing positional consumers
+must keep working. Implementation and cross-platform conformance remain open;
+this documentation-only adoption does not run handlers or confer native support.
+
+Reviewed Fedora commit 3d9406e3888122d1407652336859e6217c09bcaa and ride.sh
+SHA-256 49C3F8D987C98F5C8E7FA1F1EBCA662A9AD4CF56B638C43D642A2AB2965E3266.
+Windows review snapshots: ride.ps1 SHA-256
+6D31628643179E352C465590389116EDEEE65B845C504416C676EDC2BC4424AF and
+modules/RIDE.Engine.psm1 SHA-256
+2391564E3028AA32CA74241ACC513B5D87D10C7B58E1B062B8AACFD4BBD4F905.
+The previous contract digest was
+80B912E668F948F77EE9EF05F2D10254F83F08EB42C5FA504FE737AEC25BD645;
+the new exact digest is in docs/models/ride-behavior-contract-ref.json. Windows
+scenario cases remain at revision 1.0.0 with only their contract pin advanced;
+no new paired show coverage is claimed.
+
+Review trigger: either client's selection/output/error semantics change, paired
+fixtures are added, or final v3 release review. Resolve or explicitly disposition
+this gap before promoting the affected capability. No legacy outcome, package
+status or migration estimate changes in this documentation run.
