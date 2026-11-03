@@ -1,51 +1,52 @@
 # Forensic Isolated 08: Firefox profile analysis successor
 
-Status: **kept v3.0 capability, successor selection pending VM evidence**,
-2026-10-30. The v2 `InstallDumpzilla` downloads an unpinned discontinued
-script to `/usr/local/bin`; its inverse removes that path without checking
-ownership. The owner kept Firefox forensic parsing in scope. Retirement of
-the old script does not retire that capability.
+Status: **kept v3.0 capability; operable opt-in candidate passed Fedora 44
+Workstation acceptance**, 2026-11-02. The v2 `InstallDumpzilla` downloads a discontinued,
+mutable script to `/usr/local/bin`; its inverse removes that path without
+checking ownership. The owner kept Firefox forensic analysis in scope. The
+old script's retirement does not retire the capability.
 
 ## Completion checks defined before implementation
 
 - Compare replacement coverage with Dumpzilla's history, cookies, downloads,
   bookmarks, forms, preferences, extensions, sessions, and login artifacts.
-  Record unsupported artifact types explicitly. Choose a current licensed
-  source with fixed version or commit, locked dependencies or an exact
-  artifact digest, and an owned destination. Keep this operation opt-in.
-- The installer must not scan browser profiles or reveal credentials.
-  Detection must identify only the owned tool. Restore and remove must
-  preserve Firefox profiles, case inputs, generated reports, credentials,
-  and unrelated files. A product that can reveal secrets must require an
-  explicit separate user command and output destination; apply cannot
-  enable decryption or export.
-- In a disposable Fedora 44 Workstation x86_64 VM, test plan, opt-in gate,
-  apply, repeat, status, restore, and explicit remove. Use a seeded
-  disposable Firefox profile with representative history and another
-  artifact type; compare input hashes before and after read-only parsing.
-  Test secret output isolation separately with synthetic credentials if
-  the selected tool supports it. Focused mocked tests must reject bad
-  source bytes, occupied destinations, failed build cleanup, and unowned
-  removal. A `--help` result alone is insufficient.
-- Record the replacement's functional limits and exact target in the
-  catalog, ledger, generated docs, Windows alignment, and acceptance record.
-  Retain a v3.0 gap until the seeded-data and recovery evidence passes.
-  Broader browsers and artifact coverage may move to v3.1 after this gate.
+  Record unverified artifact types explicitly. Choose a licensed source with
+  an immutable revision or exact artifact digest, locked dependencies, and an
+  owned destination. Keep the tool opt-in.
+- Installation and detection must not inspect Firefox profiles or reveal
+  credentials. Restore and remove must preserve profiles, case inputs,
+  reports, credentials, and unrelated files. Secret reveal must be a separate
+  explicit CLI action with a caller-selected file and restrictive permissions.
+- In a disposable Fedora 44 Workstation x86_64 VM, check plan, candidate gate,
+  apply, repeat, status, restore, and explicit remove. Use a seeded synthetic
+  Firefox profile containing history, a bookmark, and a cookie; compare input
+  hashes before and after parsing. Exercise upstream synthetic login data,
+  verify that plaintext does not reach stdout, and verify a secret file under
+  `umask 077`. Focused mocked tests must reject bad source bytes, occupied
+  destinations, failed build cleanup, and unowned removal.
+- Record functional limits and exact target in the catalog, ledger, generated
+  docs, Windows alignment, and acceptance record. Keep a v3.0 gap until the
+  seeded-data and recovery evidence passes. Broader artifact coverage remains
+  separately visible for hardening.
 
 ## Candidate comparison
 
 | Candidate | Current evidence | Decision for this batch |
 | --- | --- | --- |
-| [Dumpzilla](https://github.com/Busindre/dumpzilla) | Upstream labels it discontinued; the v2 download was mutable and no current Firefox compatibility or owned inverse was accepted. | Retire this exact script path only. |
-| [browser-forensic](https://github.com/SecurityRonin/browser-forensic) | Apache-2.0 source; the earlier proposed commit `10e2f70bd53d50144edcff849749efd0095c9a03` is an old pin. The repository has no published GitHub release. Its current README describes broad Firefox artifact coverage, read-only SQLite access, and a separate secret-reveal command. | Do not build from the stale proposed pin. Re-evaluate only after recording a current immutable source revision and checking its current CLI and build inputs. |
-| [Hindsight](https://github.com/obsidianforensics/hindsight) | Released Firefox support in `v2026.06` (signed release commit `25bfb16`). The official README documents Firefox history, bookmarks, downloads, cookies, and form history, with JSONL, XLSX, or SQLite output. Its tagged requirements still include an unpinned `ccl_chromium_reader` Git dependency. The documented Firefox subset does not establish Dumpzilla parity for extensions, sessions, preferences, or login artifacts. | Better released candidate for a narrower first path. Pin and verify the wheel plus every transitive dependency, then probe synthetic profiles and secret behavior before deciding whether it can serve as the opt-in v3.0 successor. |
-| [Plaso](https://github.com/log2timeline/plaso/blob/main/docs/sources/user/Parsers-and-plugins.md) | Maintained Firefox history, cookies, downloads, and cache parsers. Plaso is already a separate kept v2 outcome in `forensic-isolated-02`. | Reuse its future accepted path for timeline analysis, but do not silently treat that subset as complete Dumpzilla coverage. |
+| [Dumpzilla](https://github.com/Busindre/dumpzilla) | Upstream labels it discontinued; the v2 download was mutable and has no accepted current Firefox compatibility or owned inverse. | Retire this exact script path only; preserve its Firefox-analysis capability through a successor. |
+| [browser-forensic](https://github.com/SecurityRonin/browser-forensic) | Apache-2.0. The current main/tag source revision is `10e2f70bd53d50144edcff849749efd0095c9a03`, not an obsolete pin. The source archive SHA-256 is `0493a03c0564a712a536fdd345c3eefec561c3ffd040f4ecc776ecdec398649c`; version `0.3.0` includes `Cargo.lock`. The CLI has Firefox artifact parsers and keeps decrypted passwords out of stdout. Its source writes the optional secret file using the process umask, so reveal must run under `umask 077`. | Selected as the pinned candidate. Build only the CLI; RIDE does not run analysis during apply. Leave opt-in pending Fedora 44 lifecycle and seeded-profile acceptance. |
+| [Hindsight](https://github.com/obsidianforensics/hindsight) | The pinned `v2026.06` wheel and dependency set installed. Its synthetic Firefox fixture exported XLSX successfully without changing source files, while JSONL export failed on an upstream missing `expires_utc` field for a session cookie. Its documented Firefox subset does not establish extensions, sessions, preferences, and login parity. | Do not select for this batch: the JSONL failure and narrower artifact set make it a weaker current path. Retain as a possible future alternative if upstream fixes the export issue. |
+| [Plaso](https://github.com/log2timeline/plaso/blob/main/docs/sources/user/Parsers-and-plugins.md) | Already a separate kept v2 outcome in `forensic-isolated-02`; it has Firefox timeline parsers. | Reuse its accepted path for timeline analysis, but do not count its subset as this complete profile-analysis capability. |
 
-Both candidates remain investigation inputs, not accepted installation
-evidence. Hindsight currently has the clearer released Firefox path but needs
-its Git dependency pinned and its actual profile-read behavior checked. The
-next action is to pin a complete dependency set and run a synthetic-profile
-probe in the disposable Fedora 44 target; proceed to an owned opt-in operation
-only if read-only input and secret-handling checks pass. Keep the remaining
-Dumpzilla artifact gaps explicit if the first v3 path covers only the Hindsight
-Firefox subset.
+The acceptance run uses synthetic SQLite history, bookmarks, and cookies, then
+the synthetic NSS credentials distributed with the pinned upstream source.
+It does not use a real Firefox profile. `br4n6 artifact ...` commands are
+read-only for these inputs; broader commands that reconstruct, export, or
+checkpoint evidence are outside the v3.0 operation's install contract. Preserve
+unverified Dumpzilla artifact parity in v3.1 review instead of claiming full
+coverage from package installation alone.
+
+
+## Fedora acceptance result
+
+The pinned browser-forensic CLI and signed Cargo prerequisite passed the exact Fedora 44 Workstation x86_64 lifecycle. The VM verified candidate gating, locked release build, CLI version, synthetic history/bookmark/cookie parsing, unchanged Firefox database hashes, synthetic login secret isolation and 0600 output, repeat, status, active restore, reinstall, and explicit remove. The test completed 1/1 in 6740 seconds under TCG; the image digest, catalog digest, source bundle, and full transcript are recorded in [the acceptance record](../acceptance/package.browser-forensic.md). The operation is now an operable opt-in candidate. H116 keeps broader Dumpzilla artifact parity and real-profile review visible as v3.1 hardening.

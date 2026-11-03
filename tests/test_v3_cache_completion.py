@@ -169,6 +169,16 @@ class CompletionTests(unittest.TestCase):
         self.assertEqual(set(result.stdout.splitlines()),
                          {":minimize,maximize,close", ":appmenu:close", "close,minimize,maximize:"})
 
+    def test_status_completes_dynamic_value_option_without_enumerating_users(self):
+        script = ('source "$RIDE_ROOT/completion/ride.bash"; '
+                  'COMP_WORDS=(./ride.sh status setting.ssh-reboot --); COMP_CWORD=3; '
+                  '_ride_complete; printf "%s\\n" "${COMPREPLY[@]}"')
+        env = os.environ | {"RIDE_ROOT": str(ROOT)}
+        result = subprocess.run(["bash", "-c", script], env=env, text=True,
+                                capture_output=True, check=True)
+        self.assertEqual(set(result.stdout.splitlines()),
+                         {"--id", "--view", "--value", "--source", "--profile"})
+
     def test_run_ids_from_client_state_store(self):
         with tempfile.TemporaryDirectory() as temp:
             run_id = "20261014T000000Z-12-34"

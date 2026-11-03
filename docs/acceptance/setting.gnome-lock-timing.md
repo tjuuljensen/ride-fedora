@@ -20,3 +20,20 @@ Status: PASS.
 
 The VM check did not wait for the configured idle period. H092 tracks a brief
 visible confirmation of screen blanking and automatic lock behavior.
+
+The v2 `EnableScreenSaver` and `DisableScreensaver` states also passed their
+separate Fedora 44 Workstation lifecycle on 2026-11-02. The test applied each
+opt-in profile, verified effective GNOME values and unchanged `lock-delay`,
+confirmed repeat and status, and restored the exact seeded values.
+
+- Test: `tests/acceptance/test_screensaver_states.py`
+- Result: 1 passed in 462.56 seconds
+- Transcript: `.acceptance-runs/fedora-44-workstation-x86_64/20261102T140149Z-test-legacy-screensaver-states-preserve-lock-delay-and-restore-52fc6028/transcript.jsonl`
+- Transcript SHA-256: `63455a3037b1d8f1fd49074f6c3e38223e371c9ff3ca232380b72a609599ea16`
+- Overlay SHA-256: `a2c6e793d7758ae0f9bce74e2f46b98e51acf9ba2eafb12dc34654923b665cf0`
+- Source bundle SHA-256: `6968bd25c83157bf566d002cc44a970dccb471df4d5a527d09fb98efbc4b9553`
+- Base image SHA-256: `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`
+
+These states are operable on the declared Workstation target. H092 retains
+the brief visible confirmation because headless VM evidence does not establish
+the user-visible blanking and locking experience.

@@ -66,7 +66,7 @@ assessment, not an automatic retirement decision.
 
 | Source outcome | Path assessment | Evidence |
 | --- | --- | --- |
-| `server:package.ExpressVPN` | Private publisher package, activation, and profile recovery need an owned path. | [Batch review](generic-server-decisions.md) |
+| `server:package.ExpressVPN` | The owner-supplied v14.3.1.15429 `.run` signature matches the published key fingerprint; verify package, service, user-state, profile, routing, and DNS recovery on Server. | [Signed installer review](system-security-10-expressvpn.md) |
 | `server:package.Selenium` | Use an isolated, pinned environment with a declared browser and driver. | [Batch review](generic-server-decisions.md) |
 | `server:package.Tailscale` | Use a verified package source with private node identity and service recovery. | [Batch review](generic-server-decisions.md) |
 | `workstation:package.ASN` | The pinned MIT script and separately owned Fedora prerequisites now pass an opt-in lifecycle; live lookup checks remain H027. | [Acceptance](../acceptance/package.asn.md) |
@@ -106,12 +106,12 @@ assessment, not an automatic retirement decision.
 | `workstation:package.Codecs` | Replace wildcard/group install with explicit packages and trusted source. | [Batch review](provider-foundation-05.md) |
 | `workstation:package.CustomKbrdShortcut` | Make removal the exact inverse of journaled owned shortcuts. | [Batch review](desktop-user-remaining.md) |
 | `workstation:package.Docker` | Separate package, repository, daemon, group, and container data state. | [Batch review](system-security-core.md) |
-| `workstation:package.ExpressVPN` | Keep activation and profiles private; own package, service, and inverse. | [Batch review](system-security-risk-decisions.md) |
+| `workstation:package.ExpressVPN` | The owner-supplied v14.3.1.15429 `.run` signature matches the published key fingerprint; verify package, service, user-state, profile, routing, and DNS recovery on Workstation. | [Signed installer review](system-security-10-expressvpn.md) |
 | `workstation:package.ExpressVPNProfiles` | Remove only recorded owned connection UUIDs. | [Batch review](system-security-risk-decisions.md) |
 | `workstation:package.ExpressVPNafterBoot` | Replace text-based crontab filtering with an owned schedule inverse. | [Batch review](system-security-risk-decisions.md) |
 | `workstation:package.Flathub` | Own remote trust and preserve apps installed through the remote. | [Batch review](provider-foundation-09.md) |
 | `workstation:package.GnomeExtensions` | Split extension selection, acquisition, per-user state, and restore. | [Batch review](publisher-apps-17.md) |
-| `workstation:package.GnomeRegion` | Decide inverse only after an owned locale setting records prior state. | [Batch review](desktop-user-configuration.md) |
+| `workstation:package.GnomeRegion` | Migrated as an opt-in candidate: owned region setting supports the explicit empty value and exact prior-state recovery. | [Batch review](desktop-user-configuration.md) |
 | `workstation:package.KeyfileMounts` | Scope each mapping and prove backup, boot, and mount recovery. | [Batch review](system-security-risk-decisions.md) |
 | `workstation:package.RPMfusionRepos` | Own signing keys and repository files before dependent packages. | [Batch review](provider-foundation-02.md) |
 | `workstation:package.ScheduleExpVPNChange` | Remove only a journaled schedule and preserve unrelated jobs. | [Batch review](system-security-risk-decisions.md) |
@@ -130,7 +130,7 @@ assessment, not an automatic retirement decision.
 | `workstation:package.AppImageLauncher` | Project still publishes beta builds; Fedora 44 integration and seeded AppImage recovery are unverified. | [Batch review](publisher-apps-01.md) |
 | `workstation:package.EmailHeaderAnlzr` | Verify the v2 source's current owner, maintenance, license, and service identity. | [Batch review](forensic-isolated-06.md) |
 | `workstation:package.OpenconnectVPN` | Identify the intended VPN client and current package before replacing the unpinned source build. | [Batch review](system-security-risk-decisions.md) |
-| `workstation:package.Pidgin` | Fedora 44 packages Pidgin and OTR, but combined messaging and key recovery remain unverified. | [Batch review](system-security-27.md) |
+| `workstation:package.Pidgin` | Retired from v3 by explicit owner direction; Fedora package availability does not change the portfolio decision. | [Batch review](system-security-27.md) |
 | `workstation:package.Xmind` | Choose the current publisher edition and package identity before pinning an install. | [Batch review](publisher-apps-15.md) |
 
 ## Original replacement assessments (10; nine remain)

@@ -74,9 +74,17 @@ def test_gnome_region_and_three_window_layouts(vm):
     assert dconf(vm, region_path) == ""
     changed = user_ride(vm, "apply", "--profile", "gnome-region-da-dk", "--allow-candidate")
     second = journal(vm, changed.stdout)
-    assert second["steps"][0]["observedBefore"] == "unset"
+    assert second["steps"][0]["observedBefore"] == "absent"
     user_ride(vm, "restore", "--run-id", second["runId"], "--allow-candidate")
     assert dconf(vm, region_path) == ""
+
+    gsettings(vm, "set", region_schema, region_key, "'en_US.UTF-8'")
+    reset = user_ride(vm, "apply", "--profile", "gnome-region-reset", "--allow-candidate")
+    reset_record = journal(vm, reset.stdout)
+    assert reset_record["steps"][0]["selectedValue"] == ""
+    assert dconf(vm, region_path) == "''"
+    user_ride(vm, "restore", "--run-id", reset_record["runId"], "--allow-candidate")
+    assert dconf(vm, region_path) == "'en_US.UTF-8'"
 
     gsettings(vm, "set", button_schema, button_key, "'menu:minimize,close'")
     assert dconf(vm, button_path) == "'menu:minimize,close'"

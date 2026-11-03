@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "scenarioRevision": "1.1.0",
+  "contractVersion": "1.1.0",
+  "contractSha256": "B88967EA5BDE29E0141BCA15134E2DAC63E02FAF7931CB18E83BA08CF5262938",
+  "scenarios": [
+    {
+      "id": "RB02-01-explicit-remove-selection",
+      "rules": [
+        "RB-02",
+        "RB-07"
+      ],
+      "intent": "Reject a direct package ID combined with a profile before planning or mutation.",
+      "input": {
+        "command": "remove",
+        "id": "fixture.package",
+        "profile": "fixture.psd1"
+      },
+      "expected": {
+        "outcome": "Refused",
+        "mutationCalls": 0
+      }
+    },
+    {
+      "id": "RB03-01-candidate-preview-without-opt-in",
+      "rules": [
+        "RB-03",
+        "RB-08"
+      ],
+      "intent": "Preview a pending operation on a declared candidate target without candidate opt-in; report pending acceptance and invoke no mutation handler.",
+      "input": {
+        "command": "set",
+        "target": "Windows 11",
+        "pendingAcceptance": true,
+        "candidateTarget": true,
+        "allowCandidate": false,
+        "preview": true
+      },
+      "expected": {
+        "outcome": "Previewed",
+        "warningContains": "acceptance remains pending",
+        "mutationCalls": 0,
+        "runRecords": 0
+      }
+    },
+    {
+      "id": "RB03-02-preview-preserves-availability-check",
+      "rules": [
+        "RB-03",
+        "RB-08",
+        "RB-11"
+      ],
+      "intent": "Allow candidate preview preflight but refuse an unavailable live-state observation without invoking a mutation handler.",
+      "input": {
+        "command": "set",
+        "target": "Windows 11",
+        "pendingAcceptance": true,
+        "candidateTarget": true,
+        "preview": true,
+        "liveStateAvailable": false
+      },
+      "expected": {
+        "outcome": "Refused",
+        "reason": "Availability",
+        "mutationCalls": 0
+      }
+    },
+    {
+      "id": "RB04-01-candidate-change-requires-fresh-opt-in",
+      "rules": [
+        "RB-04"
+      ],
+      "intent": "Refuse a real candidate change without per-invocation opt-in before live-state inspection.",
+      "input": {
+        "command": "set",
+        "target": "Windows 11",
+        "pendingAcceptance": true,
+        "candidateTarget": true,
+        "allowCandidate": false,
+        "preview": false
+      },
+      "expected": {
+        "outcome": "Refused",
+        "reason": "PendingAcceptance",
+        "mutationCalls": 0,
+        "runRecords": 0
+      }
+    },
+    {
+      "id": "RB04-02-opt-in-does-not-widen-targets",
+      "rules": [
+        "RB-04",
+        "RB-08"
+      ],
+      "intent": "Even with opt-in, refuse a target not listed as supported or a candidate target.",
+      "input": {
+        "command": "set",
+        "target": "Windows Server 2025",
+        "pendingAcceptance": true,
+        "candidateTarget": false,
+        "allowCandidate": true,
+        "preview": true
+      },
+      "expected": {
+        "outcome": "Refused",
+        "reason": "UnsupportedTarget",
+        "mutationCalls": 0
+      }
+    },
+    {
+      "id": "RB04-03-installed-package-desired-state-no-op",
+      "rules": [
+        "RB-04",
+        "RB-08"
+      ],
+      "intent": "Permit presence inspection to return an already-installed desired-state package as a no-op, without broadening target support.",
+      "input": {
+        "command": "apply",
+        "target": "Windows 11",
+        "packageInstalled": true,
+        "desiredState": "Present",
+        "supportedTarget": false
+      },
+      "expected": {
+        "outcome": "AlreadyDesired",
+        "mutationCalls": 0,
+        "targetDeclarationChanged": false
+      }
+    },
+    {
+      "id": "RB05-01-download-preview-does-not-acquire",
+      "rules": [
+        "RB-03",
+        "RB-05"
+      ],
+      "intent": "Preview an eligible declared download without resolving or acquiring an artifact.",
+      "input": {
+        "command": "download",
+        "declaredDownloadAction": true,
+        "preview": true
+      },
+      "expected": {
+        "outcome": "Previewed",
+        "networkCalls": 0,
+        "fileWrites": 0,
+        "installCalls": 0
+      }
+    },
+    {
+      "id": "RB06-01-unset-retains-declared-meaning",
+      "rules": [
+        "RB-06"
+      ],
+      "intent": "Unsetting a setting removes the declared override and restores its declared baseline, rather than translating generically to Disabled.",
+      "input": {
+        "command": "unset",
+        "declaredBaseline": "Enabled"
+      },
+      "expected": {
+        "outcome": "OverrideRemoved",
+        "genericDisabledTranslation": false
+      }
+    },
+    {
+      "id": "RB09-01-partial-failure-retains-recovery-identity",
+      "rules": [
+        "RB-09",
+        "RB-11"
+      ],
+      "intent": "Report a partial apply failure with the run ID and saved operations so recovery remains actionable.",
+      "input": {
+        "command": "apply",
+        "operationFailsAfterSnapshot": true
+      },
+      "expected": {
+        "outcome": "PartialFailure",
+        "runIdReturned": true,
+        "snapshotRetained": true
+      }
+    },
+    {
+      "id": "RB10-01-completion-is-read-only",
+      "rules": [
+        "RB-10"
+      ],
+      "intent": "Complete commands, IDs, fields and views from local catalog data without invoking handlers or changing state.",
+      "input": {
+        "command": "completion",
+        "catalogAvailable": true
+      },
+      "expected": {
+        "outcome": "SuggestionsReturned",
+        "mutationCalls": 0,
+        "networkCalls": 0
+      }
+    },
+    {
+      "id": "RB08-01-privilege-refuses-before-inspection",
+      "rules": [
+        "RB-03",
+        "RB-04",
+        "RB-08"
+      ],
+      "intent": "Refuse a real system-scoped candidate change without mutation privilege before live-state observation, handlers, or run-state creation.",
+      "input": {
+        "command": "apply",
+        "scope": "system",
+        "status": "candidate",
+        "targetDeclared": true,
+        "identityHasMutationPrivilege": false,
+        "allowCandidate": true,
+        "preview": false
+      },
+      "expected": {
+        "outcome": "Refused",
+        "reason": "Privilege",
+        "stateObservations": 0,
+        "mutationCalls": 0,
+        "runRecords": 0
+      }
+    },
+    {
+      "id": "RB07-01-profile-removal-reverses-package-dependencies",
+      "rules": [
+        "RB-07"
+      ],
+      "intent": "Remove only selected reversible package operations and remove a dependent before its selected prerequisite.",
+      "input": {
+        "command": "remove",
+        "selection": "profile",
+        "selectedPackages": [
+          "fixture.prerequisite",
+          "fixture.dependent"
+        ],
+        "dependency": {
+          "dependent": "fixture.dependent",
+          "requires": "fixture.prerequisite"
+        }
+      },
+      "expected": {
+        "outcome": "Removed",
+        "removalOrder": [
+          "fixture.dependent",
+          "fixture.prerequisite"
+        ],
+        "unselectedOperationsChanged": 0
+      }
+    }
+  ]
+}

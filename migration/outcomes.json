@@ -106,7 +106,7 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "operable",
       "v3Ids": [
         "system.update-all-packages"
       ],
@@ -116,11 +116,16 @@
         "tests/test_v3_dnf5_system_update.py",
         "tests/acceptance/test_system_update_all.py"
       ],
-      "blocker": "Disposable Fedora 44 Workstation and Server acceptance has not yet run.",
-      "nextAction": "Run both disposable Fedora 44 edition pilots, record transcript hashes and reboot assessment, then promote only the verified target behavior.",
-      "v31Hardening": [],
-      "reason": "Migrated from the broad v2 DNF action to an explicit DNF5 update command with a transaction preview, no automatic reboot, journal inventory, and no restore inverse.",
-      "reviewTrigger": "Revisit if DNF5 transaction or reboot JSON changes, or acceptance identifies a removals/downgrades preview gap."
+      "blocker": "",
+      "nextAction": "Keep the explicit whole-system update opt-in candidate; revisit if Fedora or DNF5 changes the transaction or reboot-report format.",
+      "v31Hardening": [
+        "H111"
+      ],
+      "reason": "Fedora 44 Workstation x86_64 completed the full update transaction; a disposable child replayed the real 1,691-package DNF history through the fixed report and journal path. Plan, report, current status, and non-restorable behavior are evidenced.",
+      "reviewTrigger": "Revisit if DNF5 transaction or reboot JSON changes, or acceptance identifies a removals/downgrades preview gap.",
+      "safetyDomains": [
+        "system-update"
+      ]
     },
     {
       "key": "workstation:package.Required",
@@ -579,7 +584,7 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "operable",
       "v3Ids": [
         "package.autopsy"
       ],
@@ -591,12 +596,29 @@
         "tests/test_v3_snap_package.py",
         "tests/acceptance/test_autopsy_snap.py"
       ],
-      "blocker": "Fedora 44 acceptance passed, but installing the Snap automatically enables publisher-granted block-device, dm-crypt, and FUSE access. Complete the H087 high-risk interface and case-data review before promotion.",
-      "nextAction": "Keep package.autopsy as an explicitly opted-in high-risk candidate; review channel freshness, publisher-granted privileged interfaces, and broader case-data recovery under H087.",
+      "safetyDomains": [
+        "data"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "data"
+        ],
+        "checks": [
+          "private-output-boundary",
+          "no-evidence-processing",
+          "exact-output-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/package.autopsy.md"
+        ]
+      },
+      "blocker": "",
+      "nextAction": "Complete as an operable opt-in candidate for the package-presence lifecycle on Fedora 44 Workstation x86_64. Disclose Store 4.22.1 lagging signed upstream 4.23.1; H087 tracks app GUI and forensic workflow hardening.",
       "v31Hardening": [
         "H087"
       ],
-      "reason": "The v2 pair only printed a URL. The Fedora 44 Snap Store path passes candidate gating, install, repeat/status, removal snapshot, reinstall, and restore. Installation also activates publisher-granted block-device, dm-crypt, and fuse-support interfaces, so it remains a high-risk opt-in candidate pending deeper review.",
+      "reason": "The v2 pair only printed a URL. The Fedora 44 Snap Store path passes candidate gating, install, repeat/status, actual interface inspection, empty-case SQLite integrity, exact case-tree preservation, removal snapshot, reinstall, and restore. Installation automatically connects block-device, dm-crypt, and fuse-support, so retain explicit candidate gating. The v3.0 claim is package presence only; app-level forensic workflows and newer upstream parity remain in H087.",
       "reviewTrigger": "The stable channel is no longer current, the Snap Store changes publisher identity or connected interfaces, case data is touched by package lifecycle, or the snapshot recovery check fails.",
       "v30Decision": "keep",
       "v30Coverage": null
@@ -644,17 +666,22 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
+      "progress": "implemented",
+      "v3Ids": [
+        "package.vmfs6-reader"
+      ],
       "evidence": [
         "docs/migrations/forensic-isolated-01.md",
-        "docs/migrations/forensic-isolated-07-vmfs.md"
+        "docs/migrations/forensic-isolated-07-vmfs.md",
+        "docs/acceptance/package.vmfs6-reader.md"
       ],
-      "blocker": "The v2 installer only echoes two URLs. A pinned VMFS6 source built on Fedora 44, but its bundled image is VMFS3 and was rejected; no genuine VMFS6 image read or read-only runtime trace yet supports a runnable claim. The requested access capability remains a v3.0 gap.",
-      "nextAction": "Obtain a licensed genuine VMFS6 image fixture; the pinned source builds on Fedora 44 but its bundled test.img is VMFS3. Then implement and test an owned read-only reader. Review VMFS5 separately.",
-      "v31Hardening": [],
-      "reason": "The v2 installer only echoes two URLs. A pinned VMFS6 source built on Fedora 44, but its bundled image is VMFS3 and was rejected; no genuine VMFS6 image read or read-only runtime trace yet supports a runnable claim. The requested access capability remains a v3.0 gap.",
-      "reviewTrigger": "A pinned licensed VMFS6 reader that opens a verified image read-only on Fedora 44 and has an owned inverse; review VMFS5 separately.",
+      "blocker": "The opt-in install operation can build and own the pinned CLI, but the owner cannot supply a genuine VMFS6 fixture now. The earlier reader probe rejected its bundled VMFS3 image; no genuine VMFS6 contents have been read and the candidate has no fixture-backed runtime evidence. The owner deferred that test to v3.1.",
+      "nextAction": "The opt-in forensic-vmfs6-reader profile now installs the experimental CLI for owner testing. Keep VMFS6 access unverified and outside base profiles. In v3.1, obtain an authorized fixture with a known file manifest and complete H118 read-only and unchanged-digest validation. Review VMFS5 separately.",
+      "v31Hardening": [
+        "H118"
+      ],
+      "reason": "The owner kept VMFS access in scope and requested an explicit install option for manual testing. RIDE now offers the pinned experimental reader and signed build prerequisites as an opt-in candidate profile; no genuine VMFS6 fixture has been read, so image-access behavior remains unverified and the source outcome remains unresolved.",
+      "reviewTrigger": "In v3.1, use an owner-authorized VMFS6 image fixture with known contents; verify the manually installed pinned reader opens it read-only on Fedora 44, preserves the input digest, and passes the owned RIDE apply/status/restore/remove lifecycle. Review VMFS5 separately.",
       "v30Decision": "keep"
     },
     {
@@ -755,16 +782,42 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/forensic-isolated-04.md"
+      "progress": "operable",
+      "v3Ids": [
+        "package.bulk-extractor"
       ],
-      "blocker": "The v2 moving-branch source build writes untracked files to /usr/local, removes shared dependencies, and has no owned inverse or seeded forensic-output recovery evidence.",
-      "nextAction": "Owner kept BulkExtractor for v3.0 on 2026-10-30. Pin a reviewed release and prove build cleanup and seeded case-data preservation.",
-      "v31Hardening": [],
-      "reason": "The v2 moving-branch source build writes untracked files to /usr/local, removes shared dependencies, and has no owned inverse or seeded forensic-output recovery evidence.",
-      "reviewTrigger": "A requested pinned release build has a fully inventoried prefix, source license record, failed-build cleanup, and seeded-data VM recovery.",
+      "evidence": [
+        "docs/migrations/forensic-isolated-04.md",
+        "docs/acceptance/package.bulk-extractor.md",
+        "profiles/forensic-bulk-extractor.json",
+        "tests/test_v3_bulk_extractor_snap.py",
+        "tests/acceptance/test_bulk_extractor_snap.py",
+        "docs/windows-alignment.md"
+      ],
+      "blocker": "",
+      "nextAction": "Operable opt-in candidate passed focused Fedora 44 Workstation x86_64 install, repeat, exact-version, Snap confinement, disconnected block-device, and automatic-snapshot recovery checks. Keep H113 before claiming evidence-processing support.",
+      "v31Hardening": [
+        "H113"
+      ],
+      "safetyDomains": [
+        "data"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "data"
+        ],
+        "checks": [
+          "private-output-boundary",
+          "no-evidence-processing",
+          "exact-output-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/package.bulk-extractor.md"
+        ]
+      },
+      "reason": "The unsafe moving-branch build and shared-dependency removal are replaced by a SHA-256-pinned official 2.2.0 Snap with strict confinement and automatic Snap data snapshots. The v3.0 operation only installs/removes the package; it does not process evidence.",
+      "reviewTrigger": "Before enabling evidence processing, live device access, or another target; review authorized inputs, hostile files, interface connections, output limits, and case-data recovery with disposable fixtures.",
       "v30Decision": "keep"
     },
     {
@@ -779,17 +832,43 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/forensic-isolated-06.md"
+      "progress": "operable",
+      "v3Ids": [
+        "package.email-header-analyzer"
       ],
-      "blocker": "The v2 clone and global pip steps create an unpinned persistent Flask service; service identity, bind scope, unit ownership, and Python/data inverse are unproven.",
-      "nextAction": "Owner kept EmailHeaderAnlzr for v3.0 on 2026-10-30. Verify a licensed pinned local analyzer, isolated dependencies, loopback-only service, and seeded-data recovery.",
-      "v31Hardening": [],
+      "evidence": [
+        "docs/migrations/forensic-isolated-06.md",
+        "docs/acceptance/package.email-header-analyzer.md",
+        "profiles/fedora-email-header-analyzer.json",
+        "tests/test_v3_email_header_analyzer.py",
+        "tests/acceptance/test_email_header_analyzer.py",
+        "docs/windows-alignment.md"
+      ],
+      "blocker": "",
+      "nextAction": "Operable as an opt-in Fedora 44 Workstation x86_64 candidate after pinned-source build and live loopback lifecycle acceptance; H114 tracks browser parser fixtures and transitive dependency-license review.",
+      "v31Hardening": [
+        "H114"
+      ],
       "reason": "The v2 clone and global pip steps create an unpinned persistent Flask service; service identity, bind scope, unit ownership, and Python/data inverse are unproven.",
-      "reviewTrigger": "A requested local analyzer has a licensed pinned source, isolated dependencies, loopback service, and seeded-data start/failure/removal VM evidence.",
-      "v30Decision": "keep"
+      "reviewTrigger": "Source commit/license or npm lock changes, source begins using runtime network/storage APIs, loopback/CSP behavior changes, or exact owned recovery fails.",
+      "v30Decision": "keep",
+      "safetyDomains": [
+        "data"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "data"
+        ],
+        "checks": [
+          "private-output-boundary",
+          "no-evidence-processing",
+          "exact-output-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/package.email-header-analyzer.md"
+        ]
+      }
     },
     {
       "key": "workstation:package.LibEWF",
@@ -1438,18 +1517,47 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/forensic-isolated-03.md",
-        "docs/migrations/forensic-isolated-08-firefox.md"
+      "progress": "operable",
+      "v3Ids": [
+        "package.browser-forensic"
       ],
-      "blocker": "The original Dumpzilla script is discontinued and has no accepted current Firefox compatibility or owned inverse. The owner kept Firefox forensic analysis, and no replacement has yet passed seeded-profile, secret-handling, and recovery checks.",
-      "nextAction": "Pin Hindsight v2026.06 and its complete dependency graph, then probe its documented Firefox subset on a synthetic Fedora 44 profile with unchanged-input hashes and secret isolation; retain the broader Dumpzilla gap explicitly.",
-      "v31Hardening": [],
-      "reason": "The original Dumpzilla script is discontinued and has no accepted current Firefox compatibility or owned inverse. The owner kept Firefox forensic analysis, and no replacement has yet passed seeded-profile, secret-handling, and recovery checks.",
-      "reviewTrigger": "A licensed pinned successor covers representative Firefox artifacts on a seeded profile, preserves inputs and secrets, and passes owned Fedora 44 lifecycle checks.",
-      "v30Decision": "keep"
+      "evidence": [
+        "docs/migrations/forensic-isolated-08-firefox.md",
+        "docs/acceptance/package.browser-forensic.md",
+        "docs/acceptance/package.cargo.md",
+        "profiles/fedora-browser-forensics.json",
+        "profiles/fedora-rust-build-tools.json",
+        "tests/test_v3_browser_forensic.py",
+        "tests/acceptance/test_browser_forensic.py",
+        "docs/windows-alignment.md",
+        ".acceptance-runs/browser-forensic/fedora-44-workstation-x86_64/20261102T200204Z-test-browser-forensic-pinned-build-and-read-only-firefox-analysis-b8cba6b0/transcript.jsonl",
+        ".acceptance-runs/browser-forensic/fedora-44-workstation-x86_64/20261102T200204Z-test-browser-forensic-pinned-build-and-read-only-firefox-analysis-b8cba6b0/metadata.json"
+      ],
+      "blocker": "",
+      "nextAction": "The pinned CLI passed its Fedora 44 Workstation x86_64 lifecycle and seeded read-only history, bookmark, cookie, and synthetic login checks. Keep it opt-in; H116 covers broader Dumpzilla artifact parity and real-profile review.",
+      "v31Hardening": [
+        "H116"
+      ],
+      "reason": "The discontinued mutable Dumpzilla script is replaced by the Apache-2.0 pinned browser-forensic CLI. The opt-in package passed a pinned-source build, candidate gate, signed Cargo prerequisite lifecycle, read-only synthetic profile parsing, secret-output isolation under umask 077, repeat, status, restore, explicit remove, and input preservation on Fedora 44 Workstation x86_64.",
+      "reviewTrigger": "A source pin changes, a parser touches profile data, secret output reaches stdout or weak permissions, or the candidate is proposed for promotion or a new target.",
+      "v30Decision": "keep",
+      "safetyDomains": [
+        "data"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "data"
+        ],
+        "checks": [
+          "private-output-boundary",
+          "no-evidence-processing",
+          "exact-output-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/package.browser-forensic.md"
+        ]
+      }
     },
     {
       "key": "workstation:package.NetworkMiner",
@@ -1463,23 +1571,46 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/forensic-isolated-05-networkminer.md"
+      "progress": "operable",
+      "v3Ids": [
+        "package.networkminer"
       ],
-      "blocker": "The current Netresec Linux deployment uses Mono and a fixed 3.2 ZIP, but the product-page digest and linked current-hash endpoint disagreed and the artifact host was not accessible here.",
-      "nextAction": "Verify the SHA-256 of the fixed NetworkMiner 3.2 ZIP and its safe file list, then implement a user-local opt-in lifecycle that leaves capture and PCAP processing outside package apply.",
+      "evidence": [
+        "docs/migrations/forensic-isolated-05-networkminer.md",
+        "docs/acceptance/package.networkminer.md",
+        "docs/acceptance/networkminer-runtime.md",
+        "docs/windows-alignment.md",
+        "catalog/operations.json",
+        "profiles/forensic-networkminer-runtime.json",
+        "profiles/forensic-networkminer.json",
+        "tests/test_v3_networkminer.py",
+        "tests/acceptance/test_networkminer.py"
+      ],
+      "blocker": "",
+      "nextAction": "The user-local install and exact inverse are operable as an opt-in candidate on Fedora 44 Workstation x86_64; keep H110 before adding PCAP analysis, capture, or broader evidence handling.",
       "v31Hardening": [
         "H110"
       ],
-      "reason": "Owner kept NetworkMiner for v3.0. Netresec publishes a current Linux/Mono install route and GPLv2 source; a verified fixed artifact and exact owned recovery are still required before implementation is operable.",
-      "reviewTrigger": "Before launching capture, opening PCAPs, extracting artifacts, or choosing output paths, review authorization, hostile-input isolation, credentials, and local output-data recovery.",
+      "reason": "NetworkMiner is kept as an opt-in Linux user-local deployment with pinned publisher bytes and separate private output data. The Mono/GTK Fedora packages are separately owned runtime operations; removing the app leaves both runtime packages and captures/output untouched.",
+      "reviewTrigger": "Before opening PCAP files, starting live capture, extracting evidence, or changing output paths, review authorization, hostile-input isolation, credential exposure, and output-data recovery under H110.",
       "v30Decision": "keep",
       "safetyDomains": [
-        "data",
-        "security"
-      ]
+        "data"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "data"
+        ],
+        "checks": [
+          "private-output-boundary",
+          "no-evidence-processing",
+          "exact-output-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/package.networkminer.md"
+        ]
+      }
     },
     {
       "key": "workstation:package.Pwgen",
@@ -2244,18 +2375,18 @@
       "batch": "system-security-27",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "migrate",
-      "progress": "unresolved",
+      "disposition": "retire",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
         "docs/migrations/system-security-27.md"
       ],
-      "blocker": "Owner reaffirmed deferral of the combined Pidgin/OTR capability on 2026-10-30; package availability alone does not prove secure messaging or profile recovery.",
-      "nextAction": "Owner deferred the combined Pidgin/OTR capability; revisit current plugin compatibility, two-party messaging, and seeded account/key recovery.",
+      "blocker": "",
+      "nextAction": "Retired from the v3 portfolio by owner direction on 2026-11-02; reopen only on a new explicit owner request.",
       "v31Hardening": [],
-      "reason": "Owner reaffirmed deferral of the combined Pidgin/OTR capability on 2026-10-30; package availability alone does not prove secure messaging or profile recovery.",
-      "reviewTrigger": "Owner deferred the combined Pidgin/OTR capability; revisit current plugin compatibility, two-party messaging, and seeded account/key recovery.",
-      "v30Decision": "defer"
+      "reason": "Owner directed dropping Pidgin and OTR from v3 on 2026-11-02.",
+      "reviewTrigger": "Reopen only if the owner explicitly requests Pidgin/OTR in v3 again.",
+      "v30Decision": "retire"
     },
     {
       "key": "workstation:package.Thunderbird",
@@ -2851,7 +2982,7 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "operable",
       "v3Ids": [
         "setting.firefox-preferences"
       ],
@@ -2862,11 +2993,16 @@
         "tests/test_v3_firefox_preferences.py",
         "tests/acceptance/test_firefox_preferences.py"
       ],
-      "blocker": "Review the high-impact v2 preference values and verify effective preferences before counting this high-risk candidate as operable.",
-      "nextAction": "The Fedora 44 Workstation candidate lifecycle and startup smoke passed; inspect effective preference behavior and keep H083 queued for current-value review.",
-      "v31Hardening": [],
-      "reason": "v2 overwrites three Firefox installation files with security and startup preferences and blindly deletes them on inverse.",
-      "reviewTrigger": "Firefox upstream removes AutoConfig, a config file conflicts, or the candidate VM lifecycle fails.",
+      "blocker": "",
+      "nextAction": "The opt-in Firefox AutoConfig lifecycle, startup smoke, and owned-file inverse passed on Fedora 44 Workstation. Keep H083 for current-value freshness and visible behavior review before changing values or promoting beyond candidate.",
+      "v31Hardening": [
+        "H083"
+      ],
+      "safetyDomains": [
+        "network"
+      ],
+      "reason": "All v2 values remain in the opt-in AutoConfig operation, including its Google homepage, Sync/WebRTC/telemetry choices. The profile is not selected by a base profile; apply/remove uses three exact owned system files and the disposable Firefox startup smoke passed.",
+      "reviewTrigger": "Firefox upstream removes AutoConfig, a config file conflicts, a major Firefox change alters one of the retained values, or the owner requests a visible preference review.",
       "v30Decision": "keep"
     },
     {
@@ -2903,7 +3039,7 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "operable",
       "v3Ids": [
         "setting.firefox-addons"
       ],
@@ -2911,14 +3047,39 @@
         "docs/migrations/publisher-apps-04.md",
         "docs/acceptance/setting.firefox-addons.md",
         "profiles/fedora-firefox-addons.json",
-        "tests/acceptance/test_firefox_addons.py"
+        "tests/test_manage_firefox_global_xpis.py",
+        "tests/test_v3_firefox_addons.py",
+        "tests/acceptance/test_firefox_addons.py",
+        "tests/acceptance/test_firefox_addon_deployment_probe.py"
       ],
-      "blocker": "Fedora 44 Workstation acceptance applied the policy but Firefox installed none of the 16 managed add-ons; inspect effective policy and browser install diagnostics before a changed retry.",
-      "nextAction": "Diagnose why Firefox 150 did not install policy-managed AMO add-ons on the disposable Fedora 44 target; revise the install path before another acceptance run.",
-      "v31Hardening": [],
-      "reason": "The owner kept this capability for v3.0. The opt-in v3 catalog operation and explicit removal-pending state now wrap the maintained policy helper; the high-risk recovery gate remains open pending exact-target evidence.",
-      "reviewTrigger": "Close only after all configured add-ons install from the current policy and the complete removal, pending restore, and unrelated profile/policy preservation lifecycle passes.",
-      "v30Decision": "keep"
+      "blocker": "",
+      "nextAction": "The complete 16-add-on Fedora 44 Workstation lifecycle passed. Keep this system-wide XPI deployment as an opt-in candidate; H115 reviews AMO license metadata and add-on update/profile migration behavior.",
+      "v31Hardening": [
+        "H115"
+      ],
+      "reason": "The prior ExtensionSettings path did not install add-ons. The Mozilla global XPI path verifies current AMO identity, hash, and embedded ID; the exact-target lifecycle proves install, restart-aware removal, restoration, and preservation of unrelated policy and profile data.",
+      "reviewTrigger": "Recheck if AMO removes a listed add-on, changes ID or metadata behavior, Mozilla changes global XPI discovery, or update and per-profile ownership behavior is expanded.",
+      "v30Decision": "keep",
+      "safetyDomains": [
+        "security"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "security"
+        ],
+        "checks": [
+          "scoped-privilege",
+          "conflict-refusal",
+          "real-action",
+          "reconnect",
+          "exact-recovery",
+          "unrelated-policy-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/setting.firefox-addons.md"
+        ]
+      }
     },
     {
       "key": "workstation:action.FinalizeFirefoxAddonRemoval",
@@ -3375,17 +3536,25 @@
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/resolution-decisions.md"
+      "progress": "supported",
+      "v3Ids": [
+        "setting.gnome-lock-timing"
       ],
-      "blocker": "Owner deferred a separate ScreenSaver capability on 2026-10-30 pending reconciliation with configurable lock timing.",
-      "nextAction": "Owner deferred ScreenSaver; determine whether the kept configurable lock-timing setting covers the enabled state with atomic prior-value and partial-failure recovery.",
-      "v31Hardening": [],
-      "reason": "Owner deferred a separate ScreenSaver capability on 2026-10-30 pending reconciliation with configurable lock timing.",
-      "reviewTrigger": "Owner deferred ScreenSaver; determine whether the kept configurable lock-timing setting covers the enabled state with atomic prior-value and partial-failure recovery.",
-      "v30Decision": "defer"
+      "evidence": [
+        "docs/migrations/desktop-user-screensaver-states.md",
+        "docs/acceptance/setting.gnome-lock-timing.md",
+        "profiles/fedora-screensaver-enabled.json",
+        "tests/test_v3_gnome_lock_timing.py",
+        "tests/acceptance/test_screensaver_states.py"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation x86_64; keep both profiles opt-in and retain H092 for brief visible screen blanking and automatic-lock behavior review.",
+      "v31Hardening": [
+        "H092"
+      ],
+      "reason": "EnableScreenSaver is represented by the fedora-screensaver-enabled profile using setting.gnome-lock-timing. The handler owns only idle delay, idle activation, and lock enabled for this state, preserving lock-delay and restoring the exact prior three-key snapshot.",
+      "reviewTrigger": "A visible behavior issue or a proposed change to the three owned GNOME settings requires review; the handler must continue preserving lock-delay and exact prior state.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.Screensaver",
@@ -3398,17 +3567,25 @@
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/resolution-decisions.md"
+      "progress": "supported",
+      "v3Ids": [
+        "setting.gnome-lock-timing"
       ],
-      "blocker": "Owner deferred the lock-disabled Screensaver capability on 2026-10-30; it must not be selected silently.",
-      "nextAction": "Owner deferred Screensaver; decide whether an explicit lock-disabled state is needed within the configurable lock policy, subject to session-safety review and atomic recovery.",
-      "v31Hardening": [],
-      "reason": "Owner deferred the lock-disabled Screensaver capability on 2026-10-30; it must not be selected silently.",
-      "reviewTrigger": "Owner deferred Screensaver; decide whether an explicit lock-disabled state is needed within the configurable lock policy, subject to session-safety review and atomic recovery.",
-      "v30Decision": "defer"
+      "evidence": [
+        "docs/migrations/desktop-user-screensaver-states.md",
+        "docs/acceptance/setting.gnome-lock-timing.md",
+        "profiles/fedora-screensaver-disabled.json",
+        "tests/test_v3_gnome_lock_timing.py",
+        "tests/acceptance/test_screensaver_states.py"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation x86_64; keep both profiles opt-in and retain H092 for brief visible screen blanking and automatic-lock behavior review.",
+      "v31Hardening": [
+        "H092"
+      ],
+      "reason": "DisableScreensaver is represented by the fedora-screensaver-disabled profile using setting.gnome-lock-timing. The handler owns only idle delay, idle activation, and lock enabled for this state, preserving lock-delay and restoring the exact prior three-key snapshot.",
+      "reviewTrigger": "A visible behavior issue or a proposed change to the three owned GNOME settings requires review; the handler must continue preserving lock-delay and exact prior state.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.DateInTaskbar",
@@ -3603,18 +3780,25 @@
       "risk": "medium",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/desktop-user-configuration.md",
-        "docs/migrations/desktop-user-string-01.md"
+      "progress": "operable",
+      "v3Ids": [
+        "setting.gnome-region"
       ],
-      "blocker": "The v2 remove-only function writes an empty region without a distinct desired install or prior-state journal. The kept configurable region operation does not imply that every user wants an explicit reset-to-default command.",
-      "nextAction": "Owner deferred this remove-only use case; now that configurable region is operable, decide whether an explicit reset-to-default action is still needed.",
-      "v31Hardening": [],
-      "reason": "The v2 remove-only function writes an empty region without a distinct desired install or prior-state journal. The kept configurable region operation does not imply that every user wants an explicit reset-to-default command.",
+      "evidence": [
+        "docs/migrations/desktop-user-string-01.md",
+        "docs/acceptance/setting.gnome-string-values.md",
+        "profiles/gnome-region-reset.json",
+        "tests/test_v3_cli.py",
+        "tests/acceptance/test_gnome_strings.py"
+      ],
+      "blocker": "",
+      "nextAction": "Keep the explicit empty region value opt-in; H003 retains the short visual and region-dependent behavior review for v3.1.",
+      "v31Hardening": [
+        "H003"
+      ],
+      "reason": "The opt-in gnome-region-reset profile carries forward the v2 empty-string result through the owned setting.gnome-region operation. Fedora 44 Workstation acceptance verified empty-value apply and exact restore to a seeded locale, alongside conflict refusal and the configurable locale lifecycle.",
       "reviewTrigger": "Owner decides whether reset-to-default is a separate desired action; if kept, add an explicit owned reset with exact prior-state recovery.",
-      "v30Decision": "defer"
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:setting.ScreensaverSlp10Lgn5",
@@ -4179,13 +4363,20 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/system-security-28.md"
+      "progress": "operable",
+      "v3Ids": [
+        "package.clamav"
       ],
-      "blocker": "The kept v2 apply installs ClamAV, installs its updater, and runs freshclam. The Fedora 44 package split, signature database ownership, pre-existing database preservation, service state, and failed-update reporting need an owned v3 path.",
-      "nextAction": "Implement the Fedora 44 clamav-freshclam path as a bounded one-shot signature update with preserved existing database and service state, then prove the lifecycle in a disposable Workstation VM.",
+      "evidence": [
+        "docs/migrations/system-security-28.md",
+        "docs/acceptance/package.clamav.md",
+        "tests/acceptance/test_clamav_package_and_update.py",
+        "tests/acceptance/test_clamav_v3_lifecycle.py",
+        "tests/test_v3_clamav.py",
+        "tests/test_clamav_state.py"
+      ],
+      "blocker": "",
+      "nextAction": "Operable opt-in Fedora 44 Workstation x86_64 candidate after exact-target lifecycle acceptance; keep H109 for broader signature database and update behavior.",
       "v31Hardening": [
         "H109"
       ],
@@ -4193,9 +4384,22 @@
       "reviewTrigger": "Before adding automatic freshclam service scheduling, scans, quarantine, or user-file access, complete the separate security and database-ownership safety review.",
       "v30Decision": "keep",
       "safetyDomains": [
-        "security",
         "data"
-      ]
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "data"
+        ],
+        "checks": [
+          "private-output-boundary",
+          "no-evidence-processing",
+          "exact-output-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/package.clamav.md"
+        ]
+      }
     },
     {
       "key": "workstation:package.KeepassXC",
@@ -4293,7 +4497,8 @@
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-20-vpn-profiles.md"
       ],
       "blocker": "",
       "nextAction": "Choose explicit private input and prove name/UUID conflict, secret, and exact rollback behavior.",
@@ -4312,17 +4517,30 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+      "progress": "supported",
+      "v3Ids": [
+        "setting.networkmanager-vpn-profiles"
       ],
-      "blocker": "Owner deferred the standalone VPNProfiles inverse capability on 2026-10-30; the v2 broad deletion remains prohibited.",
-      "nextAction": "Owner deferred a separate VPNProfiles inverse decision; determine whether owned VPN deployment inverses cover it, preserving all unrelated connection UUIDs.",
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-20-vpn-profiles.md",
+        "docs/acceptance/setting.networkmanager-vpn-profiles.md",
+        "catalog/operations.json",
+        "lib/v3/networkmanager-vpn-profiles.sh",
+        "tools/networkmanager-vpn-state.py",
+        "tests/test_networkmanager_vpn_profiles.py",
+        "tests/acceptance/test_networkmanager_vpn_profiles.py",
+        "docs/windows-alignment.md"
+      ],
+      "blocker": "",
+      "nextAction": "Supported on Fedora 44 Workstation x86_64 after mocked failure/recovery coverage and the exact-target lifecycle passed; reopen only for a target, protocol, user-scope, activation, or routing expansion.",
       "v31Hardening": [],
-      "reason": "Owner deferred the standalone VPNProfiles inverse capability on 2026-10-30; the v2 broad deletion remains prohibited.",
-      "reviewTrigger": "Owner deferred a separate VPNProfiles inverse decision; determine whether owned VPN deployment inverses cover it, preserving all unrelated connection UUIDs.",
-      "v30Decision": "defer"
+      "reason": "The v2 delete-all function is replaced by an operator-selected UUID list, private exact keyfile snapshots, immediate pre-delete activity and content checks, rollback on partial failure, and exact restore. Mocked safety cases and Fedora 44 Workstation lifecycle passed.",
+      "reviewTrigger": "Before supporting more VPN protocols, credential prompts, profile sharing, activation, routing changes, user-scoped keyfiles, or another target, review protocol-specific secrets, ownership, and network recovery.",
+      "v30Decision": "keep",
+      "safetyDomains": [
+        "network"
+      ]
     },
     {
       "key": "workstation:package.ExpressVPNProfiles",
@@ -4335,17 +4553,29 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+      "progress": "supported",
+      "v3Ids": [
+        "setting.networkmanager-vpn-profiles"
       ],
-      "blocker": "Owner deferred a separate ExpressVPNProfiles inverse decision on 2026-10-30; the v2 name-based deletion remains prohibited.",
-      "nextAction": "Owner deferred a separate ExpressVPNProfiles inverse; determine whether the kept private ExpressVPN deployment owns the needed UUID-scoped removal, preserving unrelated connections.",
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-20-vpn-profiles.md",
+        "docs/acceptance/setting.networkmanager-vpn-profiles.md",
+        "lib/v3/networkmanager-vpn-profiles.sh",
+        "tools/networkmanager-vpn-state.py",
+        "tests/test_networkmanager_vpn_profiles.py",
+        "tests/acceptance/test_networkmanager_vpn_profiles.py",
+        "docs/windows-alignment.md"
+      ],
+      "blocker": "",
+      "nextAction": "Mapped to the supported UUID-scoped NetworkManager VPN profile operation. Select the ExpressVPN profile UUIDs explicitly; reopen only if profile format, credential storage, or supported keyfile backends change.",
       "v31Hardening": [],
-      "reason": "Owner deferred a separate ExpressVPNProfiles inverse decision on 2026-10-30; the v2 name-based deletion remains prohibited.",
-      "reviewTrigger": "Owner deferred a separate ExpressVPNProfiles inverse; determine whether the kept private ExpressVPN deployment owns the needed UUID-scoped removal, preserving unrelated connections.",
-      "v30Decision": "defer"
+      "reason": "The v2 name-substring removal is replaced by explicit UUID selection, private exact keyfile snapshots, immediate active/content checks, rollback on partial failure, and exact restore. The unchanged shared operation passed focused mocked coverage and Fedora 44 Workstation x86_64 acceptance.",
+      "reviewTrigger": "ExpressVPN changes its NetworkManager profile format or credential storage, or the v3 operation adds profile discovery, activation, routing changes, user scope, or another keyfile backend.",
+      "v30Decision": "keep",
+      "safetyDomains": [
+        "network"
+      ]
     },
     {
       "key": "workstation:package.ExpressVPN",
@@ -4358,18 +4588,22 @@
       "batch": "system-security-10",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "private",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["package.expressvpn"],
       "evidence": [
-        "docs/migrations/system-security-10-expressvpn.md"
+        "docs/migrations/system-security-10-expressvpn.md",
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/windows-alignment.md",
+        "docs/acceptance/package.expressvpn.md"
       ],
       "blocker": "",
-      "nextAction": "Keep ExpressVPN visible as a private publisher handoff; use the authenticated vendor setup and uninstaller until a verifiable acquisition source and exact-target package-only recovery can be established.",
-      "v31Hardening": [],
-      "reason": "Owner kept ExpressVPN. The current official Linux path is an account-portal .run installer; activation and network behavior are vendor-managed and security-sensitive, with no public pinned Fedora artifact or RIDE recovery evidence. The v2 moving RPM URL is obsolete for the current app. This is a private handoff, not retirement.",
-      "reviewTrigger": "Reopen when a permitted authenticated artifact can be pinned with publisher verification and disposable Fedora 44 Workstation/Server tests prove package-only install and inverse while preserving credentials, profiles, routing, DNS, and connection state.",
-      "v30Decision": "keep"
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Workstation x86_64. Extend failure injection, upgrades, and broader publisher recovery checks under H002.",
+      "v31Hardening": ["H002"],
+      "reason": "The owner kept ExpressVPN. The signed local v14.3.1.15429 installer passed the RIDE wrapper's headless install, repeat, status, and exact removal lifecycle in a fresh Fedora 44 Workstation VM. Seeded NetworkManager, route-table, root config, and unrelated policy-rule state were restored; no activation or connection occurred. Seven focused mocked safety tests also pass.",
+      "reviewTrigger": "Reopen if ExpressVPN changes installer signature format, required service paths, policy rules, activation boundary, or the Fedora 44 target contract.",
+      "v30Decision": "keep",
+      "safetyDomains": ["network"]
     },
     {
       "key": "workstation:action.StartExpressVPNafterBoot",
@@ -4381,17 +4615,20 @@
       "batch": "system-security-11",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
+      "disposition": "replace",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
+        "reference/expressvpn-autoconnect.md",
+        "docs/migrations/system-security-vpn-automation.md",
         "docs/migrations/system-security-risk-decisions.md"
       ],
       "blocker": "",
-      "nextAction": "Use an owned service/timer after accepting the VPN deployment and pass crontab recovery.",
+      "nextAction": "Use the publisher-managed Linux GUI auto-connect preference. Review any matching legacy v2 crontab line manually with its owner; preserve unrelated entries.",
       "v31Hardening": [],
-      "reason": "v2 appends an unowned crontab reboot job.",
-      "reviewTrigger": "Use an owned service/timer after accepting the VPN deployment and pass crontab recovery."
+      "reason": "The owner kept startup auto-connect. ExpressVPN documents reconnecting to the last location on startup and network-specific auto-connect rules in its current Linux GUI. This replaces the v2 boot-connect function without RIDE owning VPN state or creating a custom job.",
+      "reviewTrigger": "The publisher removes Linux startup auto-connect, or the user requests RIDE-managed preference state and a supported getter, setter, exact restore, and network recovery can be proven.",
+      "v30Decision": "keep"
     },
     {
       "key": "workstation:package.ExpressVPNafterBoot",
@@ -4403,18 +4640,21 @@
       "batch": "system-security-22",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "migrate",
-      "progress": "unresolved",
+      "disposition": "replace",
+      "progress": "resolved",
       "v3Ids": [],
       "evidence": [
+        "reference/expressvpn-autoconnect.md",
+        "docs/migrations/system-security-vpn-automation.md",
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "blocker": "Owner kept ExpressVPNafterBoot for v3.0 on 2026-10-30; the v2 crontab text filter remains unsafe.",
-      "nextAction": "Owner kept the boot connection schedule inverse; tie it to a reviewed owned schedule and prove exact prior-state and unrelated-job recovery.",
+      "blocker": "",
+      "nextAction": "Use the publisher GUI replacement. Existing v2 cron cleanup remains a manual owner-reviewed step because v2 wrote no ownership marker; do not remove a matching line automatically.",
       "v31Hardening": [],
-      "reason": "Owner kept ExpressVPNafterBoot for v3.0 on 2026-10-30; the v2 crontab text filter remains unsafe.",
-      "reviewTrigger": "Owner kept the boot connection schedule inverse; tie it to a reviewed owned schedule and prove exact prior-state and unrelated-job recovery.",
-      "v30Decision": "keep"
+      "reason": "The startup-connect capability is replaced by ExpressVPN GUI auto-connect. The v2 remove-only helper can delete an unowned matching crontab line, so RIDE does not reproduce that destructive cleanup. The owner retains the feature through the publisher-managed preference.",
+      "reviewTrigger": "The publisher removes Linux startup auto-connect, or an ownership marker and supported v14 preference API make a RIDE-managed exact inverse possible.",
+      "v30Decision": "keep",
+      "v30Coverage": "replacement"
     },
     {
       "key": "workstation:action.CreateExpVPNrandomizer",
@@ -4426,17 +4666,18 @@
       "batch": "system-security-12",
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
-      "disposition": "unsupported",
+      "disposition": "replace",
       "progress": "resolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-risk-decisions.md",
+        "reference/expressvpn-rotation.md"
       ],
       "blocker": "",
-      "nextAction": "Define reviewed owned script with bounded VPN choice and private-state recovery.",
+      "nextAction": "Use the user-scoped allowlist utility for manual rotation. Keep unattended scheduling separate until v14 connection and network recovery are verified.",
       "v31Hardening": [],
-      "reason": "v2 appends executable script text without provenance, idempotence, or inverse.",
-      "reviewTrigger": "Define reviewed owned script with bounded VPN choice and private-state recovery."
+      "reason": "The mutable v2 helper is replaced by a checked-in user-scoped utility that previews by default and submits a configured location through the current CLI. It does not install a schedule or verify route/DNS recovery.",
+      "reviewTrigger": "Reopen before adding unattended scheduling, or if ExpressVPN changes its Linux CLI location-connect interface."
     },
     {
       "key": "workstation:action.ScheduleRandomExpVPNChange",
@@ -4474,13 +4715,14 @@
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-vpn-automation.md"
       ],
-      "blocker": "Owner kept ScheduleExpVPNChange for v3.0 on 2026-10-30, subject to behavior review and rewrite; the v2 broad crontab deletion remains unsafe.",
-      "nextAction": "Owner kept the VPN change schedule inverse; review current intended behavior, rewrite as needed, and preserve unrelated jobs with exact owned-schedule recovery.",
+      "blocker": "The v2 six-hour job depends on a legacy CLI and mutable disconnect-first randomizer. The owner-supplied v14.3.1.15429 installer is signature-verified but not installed; current expressvpnctl location switching, safe connection replacement, and network recovery remain untested.",
+      "nextAction": "After package-only install/remove acceptance, inspect current expressvpnctl behavior on the disposable Fedora 44 Workstation; verify location selection, connection replacement, and recovery before implementing an owned timer.",
       "v31Hardening": [],
-      "reason": "Owner kept ScheduleExpVPNChange for v3.0 on 2026-10-30, subject to behavior review and rewrite; the v2 broad crontab deletion remains unsafe.",
-      "reviewTrigger": "Owner kept the VPN change schedule inverse; review current intended behavior, rewrite as needed, and preserve unrelated jobs with exact owned-schedule recovery.",
+      "reason": "The owner kept the six-hour VPN location rotation. Replace the unsafe legacy disconnect-first cron script only after current v14 CLI behavior, route preservation, and failure recovery are established.",
+      "reviewTrigger": "After package-only install/remove acceptance, verify current expressvpnctl location selection, connection replacement, and recovery on Fedora 44 Workstation before implementing an owned timer.",
       "v30Decision": "keep"
     },
     {
@@ -4843,17 +5085,48 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+      "progress": "operable",
+      "v3Ids": [
+        "setting.keyfile-mounts"
       ],
-      "blocker": "Owner deferred the separate KeyfileMounts inverse capability on 2026-10-30; the v2 broad crypttab/fstab deletion remains prohibited.",
-      "nextAction": "Owner deferred a separate KeyfileMounts inverse decision; determine whether individually owned encrypted-mount operations cover it, with boot and unrelated-mount preservation.",
-      "v31Hardening": [],
-      "reason": "Owner deferred the separate KeyfileMounts inverse capability on 2026-10-30; the v2 broad crypttab/fstab deletion remains prohibited.",
-      "reviewTrigger": "Owner deferred a separate KeyfileMounts inverse decision; determine whether individually owned encrypted-mount operations cover it, with boot and unrelated-mount preservation.",
-      "v30Decision": "defer"
+      "evidence": [
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-25-keyfile-mounts.md",
+        "docs/acceptance/setting.keyfile-mounts.md",
+        "tests/test_keyfile_mount_state.py",
+        "tests/acceptance/test_keyfile_mounts.py",
+        "docs/windows-alignment.md"
+      ],
+      "blocker": "",
+      "nextAction": "Operable opt-in candidate on Fedora 44 Workstation x86_64; keep outside base profiles. H117 tracks expanded crypttab/fstab variants and concurrency review.",
+      "v31Hardening": [
+        "H117"
+      ],
+      "reason": "The v3 operation requires one explicit mapper, snapshots only configuration, refuses active or mounted targets, and passed focused rollback tests plus a Fedora 44 Workstation LUKS data and reboot recovery lifecycle. It does not create keys or volumes or modify encrypted contents.",
+      "reviewTrigger": "Reopen if the supported keyfile path/mode, crypttab/fstab record format, active-mount check, declared Fedora target, or exact restore behavior changes.",
+      "v30Decision": "keep",
+      "safetyDomains": [
+        "storage",
+        "encryption"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "storage",
+          "encryption"
+        ],
+        "checks": [
+          "exact-configuration-recovery",
+          "unrelated-entry-preservation",
+          "active-or-mounted-refusal",
+          "keyfile-preservation",
+          "encrypted-data-preservation",
+          "boot-recovery"
+        ],
+        "evidence": [
+          "docs/acceptance/setting.keyfile-mounts.md"
+        ]
+      }
     },
     {
       "key": "workstation:setting.SSHreboot",
@@ -4867,17 +5140,44 @@
       "risk": "high",
       "target": "fedora-44-workstation-x86_64",
       "disposition": "migrate",
-      "progress": "unresolved",
-      "v3Ids": [],
-      "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+      "progress": "operable",
+      "v3Ids": [
+        "setting.ssh-reboot"
       ],
-      "blocker": "Owner kept SSH reboot policy for v3.0 on 2026-10-30; the broad v2 passwordless sudoers edit remains unsafe.",
-      "nextAction": "Owner kept SSH reboot policy; use a private principal, validated scoped sudoers rule, and exact seeded-policy recovery.",
-      "v31Hardening": [],
-      "reason": "Owner kept SSH reboot policy for v3.0 on 2026-10-30; the broad v2 passwordless sudoers edit remains unsafe.",
-      "reviewTrigger": "Owner kept SSH reboot policy; use a private principal, validated scoped sudoers rule, and exact seeded-policy recovery.",
-      "v30Decision": "keep"
+      "evidence": [
+        "docs/migrations/system-security-18-ssh-reboot.md",
+        "docs/acceptance/setting.ssh-reboot.md",
+        "tests/test_v3_ssh_reboot.py",
+        "tests/acceptance/test_ssh_reboot.py"
+      ],
+      "blocker": "",
+      "nextAction": "Keep as an opt-in Fedora 44 Workstation candidate; H112 tracks broader sshd Match and multi-account policy coverage.",
+      "v31Hardening": [
+        "H112"
+      ],
+      "reason": "The v2 capability is implemented with an explicit per-invocation non-root principal and a sudoers rule limited to /usr/bin/systemctl reboot. Mocked lifecycle tests and Fedora 44 Workstation acceptance passed exact scope, conflict refusal, non-TTY reboot, reconnect, status, restore, and unrelated-policy preservation.",
+      "reviewTrigger": "Reopen if sudoers command matching, systemctl reboot behavior, sshd authentication or account policy changes, or exact owned-rule recovery fails on the declared target.",
+      "v30Decision": "keep",
+      "safetyDomains": [
+        "security"
+      ],
+      "safetyReview": {
+        "status": "passed",
+        "domains": [
+          "security"
+        ],
+        "checks": [
+          "scoped-privilege",
+          "conflict-refusal",
+          "real-action",
+          "reconnect",
+          "exact-recovery",
+          "unrelated-policy-preservation"
+        ],
+        "evidence": [
+          "docs/acceptance/setting.ssh-reboot.md"
+        ]
+      }
     },
     {
       "key": "server:action.UpdateFedora",
@@ -4890,7 +5190,7 @@
       "risk": "high",
       "target": "fedora-44-server-x86_64",
       "disposition": "migrate",
-      "progress": "implemented",
+      "progress": "operable",
       "v3Ids": [
         "system.update-all-packages"
       ],
@@ -4900,11 +5200,16 @@
         "tests/test_v3_dnf5_system_update.py",
         "tests/acceptance/test_system_update_all.py"
       ],
-      "blocker": "Disposable Fedora 44 Workstation and Server acceptance has not yet run.",
-      "nextAction": "Run both disposable Fedora 44 edition pilots, record transcript hashes and reboot assessment, then promote only the verified target behavior.",
-      "v31Hardening": [],
-      "reason": "Migrated from the broad v2 DNF action to an explicit DNF5 update command with a transaction preview, no automatic reboot, journal inventory, and no restore inverse.",
-      "reviewTrigger": "Revisit if DNF5 transaction or reboot JSON changes, or acceptance identifies a removals/downgrades preview gap."
+      "blocker": "",
+      "nextAction": "Keep the explicit whole-system update opt-in candidate; revisit if Fedora or DNF5 changes the transaction or reboot-report format.",
+      "v31Hardening": [
+        "H111"
+      ],
+      "reason": "Fedora 44 Server x86_64 completed a full DNF5 update with transaction ID 2, 735 reported package NEVRAs, available reboot assessment, current status, and expected restore refusal.",
+      "reviewTrigger": "Revisit if DNF5 transaction or reboot JSON changes, or acceptance identifies a removals/downgrades preview gap.",
+      "safetyDomains": [
+        "system-update"
+      ]
     },
     {
       "key": "server:package.Required",
@@ -5246,18 +5551,22 @@
       "batch": "generic-server-09",
       "risk": "high",
       "target": "fedora-44-server-x86_64",
-      "disposition": "private",
-      "progress": "resolved",
-      "v3Ids": [],
+      "disposition": "migrate",
+      "progress": "operable",
+      "v3Ids": ["package.expressvpn"],
       "evidence": [
-        "docs/migrations/system-security-10-expressvpn.md"
+        "docs/migrations/system-security-10-expressvpn.md",
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/windows-alignment.md",
+        "docs/acceptance/package.expressvpn.md"
       ],
       "blocker": "",
-      "nextAction": "Keep ExpressVPN visible as a private publisher handoff; use the authenticated vendor setup and uninstaller until a verifiable acquisition source and exact-target package-only recovery can be established.",
-      "v31Hardening": [],
-      "reason": "Owner kept ExpressVPN. The current official Linux path is an account-portal .run installer; activation and network behavior are vendor-managed and security-sensitive, with no public pinned Fedora artifact or RIDE recovery evidence. The v2 moving RPM URL is obsolete for the current app. This is a private handoff, not retirement.",
-      "reviewTrigger": "Reopen when a permitted authenticated artifact can be pinned with publisher verification and disposable Fedora 44 Workstation/Server tests prove package-only install and inverse while preserving credentials, profiles, routing, DNS, and connection state.",
-      "v30Decision": "keep"
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Server x86_64. Extend failure injection, upgrades, and broader publisher recovery checks under H002.",
+      "v31Hardening": ["H002"],
+      "reason": "The owner kept ExpressVPN. The signed local v14.3.1.15429 installer passed the RIDE wrapper's headless install, repeat, status, and exact removal lifecycle in a fresh Fedora 44 Server VM. Seeded NetworkManager, route-table, root config, and unrelated policy-rule state were restored; no activation or connection occurred. Seven focused mocked safety tests also pass.",
+      "reviewTrigger": "Reopen if ExpressVPN changes installer signature format, required service paths, policy rules, activation boundary, or the Fedora 44 target contract.",
+      "v30Decision": "keep",
+      "safetyDomains": ["network"]
     },
     {
       "key": "server:action.CreateVPNrandomizer",
@@ -5295,13 +5604,15 @@
       "progress": "unresolved",
       "v3Ids": [],
       "evidence": [
-        "docs/migrations/generic-server-decisions.md"
+        "docs/migrations/generic-server-decisions.md",
+        "docs/migrations/system-security-vpn-automation.md",
+        "docs/windows-alignment.md"
       ],
-      "blocker": "Owner kept server VPNRandomizerPersistent for v3.0 on 2026-10-30; the v2 broad crontab rewrite remains unsafe.",
-      "nextAction": "Owner kept persistent VPN randomization; design an owned timer with private connection state and prove unrelated crontab, routing, and VPN recovery on Fedora 44 Server.",
+      "blocker": "Code-level consumers are confirmed in network-devices master dfcda01: complete and streambox select the function, while plexserver comments it out. That checkout has no preset executor or RequireAdmin implementation; actual deployed hosts, executor/runtime identity, crontab owner, deployment path, rollback, and owner handoff remain unverified. The owner-supplied v14.3.1.15429 installer is signature-verified but not installed; v14 network recovery is unverified on Fedora 44 Server.",
+      "nextAction": "Ask the network-devices owner to confirm deployed consumers, identify the external preset executor and its runtime/crontab identity, and record deployment and rollback. Then verify current v14 location switching and test an owned six-hour timer on disposable Fedora 44 Server with route, DNS, reconnect, and failure recovery.",
       "v31Hardening": [],
-      "reason": "Owner kept server VPNRandomizerPersistent for v3.0 on 2026-10-30; the v2 broad crontab rewrite remains unsafe.",
-      "reviewTrigger": "Owner kept persistent VPN randomization; design an owned timer with private connection state and prove unrelated crontab, routing, and VPN recovery on Fedora 44 Server.",
+      "reason": "The owner kept the server rotation capability. Code-level consumers are confirmed in network-devices master, but runtime identity, deployed use, publication/deployment path, handoff, and current v14 recovery are unverified.",
+      "reviewTrigger": "The network-devices owner confirms deployed consumers, the external preset executor and its runtime/crontab identity, deployment and rollback; current v14 location switching and an owned six-hour timer pass Fedora 44 Server route, DNS, reconnect, and failure-recovery checks.",
       "v30Decision": "keep"
     },
     {
@@ -5765,7 +6076,7 @@
       "evidence": [
         "docs/migrations/forensic-isolated-07-vmfs.md"
       ],
-      "nextAction": "Find a genuine licensed VMFS6 fixture, then prove read-only access and owned Fedora 44 lifecycle; determine VMFS5 need separately."
+      "nextAction": "The opt-in forensic-vmfs6-reader profile is available for manual owner testing. Keep VMFS6 access unverified. In v3.1, obtain an authorized fixture with a known file manifest and run H118 read-only and unchanged-digest acceptance. VMFS5 remains separate."
     },
     {
       "id": "forensic-isolated-02",
@@ -5796,34 +6107,51 @@
       "evidence": [
         "docs/migrations/forensic-isolated-08-firefox.md"
       ],
-      "nextAction": "Pin and probe browser-forensic against a seeded Firefox profile, then add an owned opt-in path if read-only data and secret recovery gates pass."
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Workstation x86_64. Continue to the next unresolved v3.0 gap; H116 tracks broader Dumpzilla artifact parity and real-profile review."
     },
     {
       "id": "forensic-isolated-04",
       "family": "forensic-isolated",
-      "title": "BulkExtractor source build and owned artifact",
+      "title": "BulkExtractor pinned Snap package and owned recovery",
       "evidence": [
-        "docs/migrations/forensic-isolated-04.md"
+        "docs/migrations/forensic-isolated-04.md",
+        "docs/acceptance/package.bulk-extractor.md",
+        "profiles/forensic-bulk-extractor.json",
+        "tests/test_v3_bulk_extractor_snap.py",
+        "tests/acceptance/test_bulk_extractor_snap.py",
+        "docs/windows-alignment.md"
       ],
-      "nextAction": "Owner kept BulkExtractor and NetworkMiner; pin current Linux releases and prove seeded case/capture recovery."
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Workstation x86_64. H113 gates actual evidence-processing behavior; continue with the next unresolved forensic batch."
     },
     {
       "id": "forensic-isolated-05",
       "family": "forensic-isolated",
       "title": "NetworkMiner publisher artifact and evidence data",
       "evidence": [
-        "docs/migrations/forensic-isolated-05-networkminer.md"
+        "docs/migrations/forensic-isolated-05-networkminer.md",
+        "docs/acceptance/package.networkminer.md",
+        "docs/acceptance/networkminer-runtime.md",
+        "docs/windows-alignment.md",
+        "profiles/forensic-networkminer-runtime.json",
+        "profiles/forensic-networkminer.json",
+        "tests/test_v3_networkminer.py",
+        "tests/acceptance/test_networkminer.py"
       ],
-      "nextAction": "Reconcile Netresec’s fixed 3.2 ZIP digest and verify the archive, then implement its user-local opt-in deployment without capture or PCAP processing."
+      "nextAction": "Complete as an opt-in candidate on Fedora 44 Workstation x86_64; proceed to forensic-isolated-04 BulkExtractor and keep H110 before adding evidence-processing behavior."
     },
     {
       "id": "forensic-isolated-06",
       "family": "forensic-isolated",
-      "title": "Email header analyzer service and Python environment",
+      "title": "Email header analyzer local SPA",
       "evidence": [
-        "docs/migrations/forensic-isolated-06.md"
+        "docs/migrations/forensic-isolated-06.md",
+        "docs/acceptance/package.email-header-analyzer.md",
+        "profiles/fedora-email-header-analyzer.json",
+        "tests/test_v3_email_header_analyzer.py",
+        "tests/acceptance/test_email_header_analyzer.py",
+        "docs/windows-alignment.md"
       ],
-      "nextAction": "Owner kept EmailHeaderAnlzr; verify licensed pinned source, loopback-only service, and seeded-data recovery."
+      "nextAction": "Complete as an operable opt-in Fedora 44 Workstation x86_64 candidate; H114 covers actual browser parser fixtures and transitive dependency-license review."
     },
     {
       "id": "publisher-apps-01",
@@ -5863,9 +6191,10 @@
         "docs/migrations/publisher-apps-04.md",
         "docs/acceptance/setting.firefox-addons.md",
         "profiles/fedora-firefox-addons.json",
+        "tests/test_manage_firefox_global_xpis.py",
         "tests/acceptance/test_firefox_addons.py"
       ],
-      "nextAction": "Investigate effective Firefox policy and add-on install diagnostics, change the installation path, then rerun the full disposable lifecycle."
+      "nextAction": "Full 16-add-on lifecycle passed on Fedora 44 Workstation; retain the opt-in candidate and continue with publisher-apps-05. H115 tracks update, license metadata, and profile migration review."
     },
     {
       "id": "publisher-apps-05",
@@ -6198,7 +6527,7 @@
         "tests/test_v3_dnf5_system_update.py",
         "tests/acceptance/test_system_update_all.py"
       ],
-      "nextAction": "Run the disposable Workstation and Server update pilots and record transaction, reboot, and restore-refusal evidence; host TCG boot is currently stalled before SSH."
+      "nextAction": "Complete on Fedora 44 Workstation and Server. Keep the whole-system update explicitly invoked and non-restorable; H111 tracks broader failure and reboot hardening."
     },
     {
       "id": "system-security-03",
@@ -6278,27 +6607,30 @@
       "family": "system-security",
       "title": "System Security 10: ExpressVPN",
       "evidence": [
-        "docs/migrations/system-security-10-expressvpn.md"
+        "docs/migrations/system-security-10-expressvpn.md",
+        "docs/windows-alignment.md"
       ],
-      "nextAction": "Current vendor portal installer remains a kept private handoff; continue with system-security-18 scoped SSH reboot policy."
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Workstation x86_64. Continue with system-security-11; H002 tracks broader publisher failure, upgrade, and recovery checks."
     },
     {
       "id": "system-security-11",
       "family": "system-security",
       "title": "System Security 11: StartExpressVPNafterBoot",
       "evidence": [
+        "reference/expressvpn-autoconnect.md",
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Completed as a documented replacement: ExpressVPN GUI auto-connect reconnects to the last location on startup. Review any old unowned v2 cron line manually with its owner; continue to the next security batch."
     },
     {
       "id": "system-security-12",
       "family": "system-security",
       "title": "System Security 12: CreateExpVPNrandomizer",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-risk-decisions.md",
+        "reference/expressvpn-rotation.md"
       ],
-      "nextAction": "Keep non-runnable; reopen only on its documented owner, source, and safety/recovery trigger."
+      "nextAction": "Use the new user-scoped utility for manual rotation. Verify Fedora 44 v14 connection and network recovery before adding unattended scheduling; the schedule is tracked separately in system-security-24."
     },
     {
       "id": "system-security-13",
@@ -6350,9 +6682,10 @@
       "family": "system-security",
       "title": "System Security 18: SSHreboot",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-18-ssh-reboot.md",
+        "docs/acceptance/setting.ssh-reboot.md"
       ],
-      "nextAction": "Owner kept SSH reboot policy; design private principal, scoped sudoers validation, and seeded-policy recovery."
+      "nextAction": "Operable opt-in candidate passed Fedora 44 Workstation acceptance, including actual non-TTY reboot and reconnect; continue to system-security-20 VPNProfiles. H112 tracks broader sshd Match and multi-account policy coverage."
     },
     {
       "id": "system-security-19",
@@ -6367,11 +6700,16 @@
     {
       "id": "system-security-20",
       "family": "system-security",
-      "title": "System Security 20: VPNProfiles",
+      "title": "System Security 20: NetworkManager VPN profile removal",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-20-vpn-profiles.md",
+        "docs/acceptance/setting.networkmanager-vpn-profiles.md",
+        "tests/test_networkmanager_vpn_profiles.py",
+        "tests/acceptance/test_networkmanager_vpn_profiles.py",
+        "docs/windows-alignment.md"
       ],
-      "nextAction": "Owner deferred a separate VPNProfiles inverse; determine whether owned deployment inverses cover it while preserving unrelated profiles."
+      "nextAction": "Complete on Fedora 44 Workstation x86_64. Continue to the next kept, unresolved system-security outcome; leave deferred ExpressVPN profile ownership visible for owner review."
     },
     {
       "id": "system-security-21",
@@ -6380,16 +6718,18 @@
       "evidence": [
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Owner deferred a separate ExpressVPNProfiles inverse; determine whether the kept deployment covers UUID-scoped removal."
+      "nextAction": "Closed by reusing the supported setting.networkmanager-vpn-profiles operation. Supply only the chosen ExpressVPN profile UUIDs; no separate name-based handler is needed."
     },
     {
       "id": "system-security-22",
       "family": "system-security",
       "title": "System Security 22: ExpressVPNafterBoot",
       "evidence": [
+        "reference/expressvpn-autoconnect.md",
+        "docs/migrations/system-security-vpn-automation.md",
         "docs/migrations/system-security-risk-decisions.md"
       ],
-      "nextAction": "Owner kept ExpressVPNafterBoot; design an exact inverse of an owned boot schedule that preserves unrelated jobs."
+      "nextAction": "Completed as a documented publisher-GUI replacement. RIDE does not manage the preference or delete unowned legacy cron lines. Continue with the separate six-hour rotation outcome in system-security-23."
     },
     {
       "id": "system-security-23",
@@ -6405,18 +6745,24 @@
       "family": "system-security",
       "title": "System Security 24: ScheduleExpVPNChange",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-vpn-automation.md"
       ],
-      "nextAction": "Owner kept ScheduleExpVPNChange; review and rewrite current behavior as an owned schedule with a scoped inverse."
+      "nextAction": "After package-only install/remove acceptance, confirm deployed consumers and identify the external preset executor/runtime identity with the network-devices owner. Then verify current v14 location switching and an owned timer on Fedora 44 Server, including route, DNS, reconnect, and failure recovery."
     },
     {
       "id": "system-security-25",
       "family": "system-security",
       "title": "System Security 25: KeyfileMounts",
       "evidence": [
-        "docs/migrations/system-security-risk-decisions.md"
+        "docs/migrations/system-security-risk-decisions.md",
+        "docs/migrations/system-security-25-keyfile-mounts.md",
+        "docs/acceptance/setting.keyfile-mounts.md",
+        "tests/test_keyfile_mount_state.py",
+        "tests/acceptance/test_keyfile_mounts.py",
+        "docs/windows-alignment.md"
       ],
-      "nextAction": "Owner deferred a separate KeyfileMounts inverse; determine whether owned mount mappings cover it and preserve bootability."
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Workstation x86_64; H117 tracks broader crypttab/fstab format and concurrency coverage."
     },
     {
       "id": "system-security-26",
@@ -6435,16 +6781,22 @@
       "evidence": [
         "docs/migrations/system-security-27.md"
       ],
-      "nextAction": "Owner reaffirmed deferral of combined Pidgin/OTR; review plugin compatibility, message behavior, and account/key recovery."
+      "nextAction": "Pidgin and OTR are owner-retired from v3; reopen only on an explicit owner request."
     },
     {
       "id": "system-security-28",
       "family": "system-security",
       "title": "ClamAV package and signature state",
       "evidence": [
-        "docs/migrations/system-security-28.md"
+        "docs/acceptance/package.clamav.md",
+        "tests/acceptance/test_clamav_package_and_update.py",
+        "tests/acceptance/test_clamav_v3_lifecycle.py",
+        "tests/test_v3_clamav.py",
+        "tests/test_clamav_state.py",
+        "docs/migrations/system-security-28.md",
+        "docs/windows-alignment.md"
       ],
-      "nextAction": "Implement the current Fedora package split and one-shot signed database update, then verify database preservation and failed-update reporting on a disposable Workstation VM."
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Workstation x86_64; retain H109 for broader signature database and update hardening."
     },
     {
       "id": "system-security-29",
@@ -6465,7 +6817,7 @@
         "docs/acceptance/system.update-all-packages.md",
         "tests/acceptance/test_system_update_all.py"
       ],
-      "nextAction": "Complete Fedora 44 Server acceptance for the shared explicit DNF5 system update operation."
+      "nextAction": "Complete on Fedora 44 Server. Keep the shared whole-system update explicitly invoked and non-restorable; H111 tracks broader failure and reboot hardening."
     },
     {
       "id": "generic-server-02",
@@ -6552,9 +6904,11 @@
       "family": "generic-server",
       "title": "Generic Server 09: ExpressVPN",
       "evidence": [
-        "docs/migrations/system-security-10-expressvpn.md"
+        "docs/migrations/system-security-10-expressvpn.md",
+        "docs/windows-alignment.md",
+        "docs/acceptance/package.expressvpn.md"
       ],
-      "nextAction": "The kept Server ExpressVPN outcome shares the private publisher handoff; continue with the next Server gap."
+      "nextAction": "Complete as an operable opt-in candidate on Fedora 44 Server x86_64. Continue to generic-server-10; H002 tracks broader publisher failure, upgrade, and recovery checks."
     },
     {
       "id": "generic-server-10",
@@ -6570,9 +6924,10 @@
       "family": "generic-server",
       "title": "Generic Server 11: VPNRandomizerPersistent",
       "evidence": [
-        "docs/migrations/generic-server-decisions.md"
+        "docs/migrations/generic-server-decisions.md",
+        "docs/migrations/system-security-vpn-automation.md"
       ],
-      "nextAction": "Owner kept VPNRandomizerPersistent; use an owned timer and prove routing, connection, and unrelated-job preservation."
+      "nextAction": "Ask the network-devices owner to confirm deployed consumers, identify the external preset executor and its runtime/crontab identity, and record deployment and rollback. Then verify current v14 location switching and test an owned six-hour timer on disposable Fedora 44 Server with route, DNS, reconnect, and failure recovery."
     },
     {
       "id": "generic-server-12",
@@ -6718,7 +7073,7 @@
         "docs/migrations/forensic-isolated-09-autopsy.md",
         "docs/acceptance/package.autopsy.md"
       ],
-      "nextAction": "Autopsy lifecycle passed on Fedora 44 Workstation, including Snap automatic snapshot and restore. Keep the operation high-risk and opt-in; review publisher-granted interfaces and case-data behavior under H087 before promotion."
+      "nextAction": "Complete: the package-presence lifecycle and empty-case preservation are operable as a high-risk opt-in candidate on Fedora 44 Workstation. Disclose Store 4.22.1 lagging upstream 4.23.1; H087 tracks GUI and forensic workflow hardening."
     }
   ],
   "exclusions": [
@@ -7297,8 +7652,8 @@
     },
     {
       "id": "H087",
-      "title": "Autopsy Snap interface, channel freshness, and case-data recovery review",
-      "trigger": "Before promoting package.autopsy beyond opt-in candidate or changing its Snap channel; verify the publisher release, connected interfaces and an exported/restored disposable case fixture on Fedora 44 Workstation.",
+      "title": "Autopsy Snap interface exposure, Store lag, and case-data recovery review",
+      "trigger": "Before promoting package.autopsy beyond opt-in candidate or changing its Snap channel; recheck the Store version against upstream, record connected interfaces, and export/restore a disposable Autopsy case fixture on Fedora 44 Workstation.",
       "status": "queued"
     },
     {
@@ -7437,6 +7792,54 @@
       "id": "H110",
       "title": "NetworkMiner capture scope and extracted evidence handling",
       "trigger": "Before enabling PCAP analysis or live capture, require authorized input/source scope, a disposable hostile-input fixture, private output location and size limits, credential and certificate handling, and cleanup/recovery evidence. v3.0 package setup only installs the verified application and does not open captures or listen for network traffic.",
+      "status": "queued"
+    },
+    {
+      "id": "H111",
+      "title": "Whole-system update target, reboot, and failure-path hardening",
+      "trigger": "Before widening Fedora target coverage or changing update policy, add exact-target evidence for repository outages, interrupted DNF transactions, reboot-required reporting and recovery guidance. Preserve the explicit preview, no-auto-reboot, and non-restorable contract; never retry a failed transaction before investigating its journal and DNF state.",
+      "status": "queued"
+    },
+    {
+      "id": "H112",
+      "title": "SSH reboot policy across sshd Match and account contexts",
+      "trigger": "Before expanding SSH reboot policy beyond the current named-principal Fedora 44 Workstation opt-in flow, test representative sshd Match and Include layouts, multiple named accounts, principal removal, and recovery when sshd policy or authorized_keys changes. The v3.0 operation remains opt-in and grants only /usr/bin/systemctl reboot to one explicitly supplied local user.",
+      "status": "queued"
+    },
+    {
+      "id": "H113",
+      "title": "BulkExtractor scan behavior, Snap interfaces, and evidence recovery",
+      "trigger": "Before RIDE processes forensic evidence with BulkExtractor or supports another target; verify the pinned Snap's declared and connected interfaces, use authorized synthetic disk-image fixtures including malformed inputs, bound outputs and resource use, and prove recovery without changing the source image. v3.0 installs the strict-confinement package only and does not open evidence.",
+      "status": "queued"
+    },
+    {
+      "id": "H114",
+      "title": "Email header analyzer parser, browser, and npm license review",
+      "trigger": "Before promoting package.email-header-analyzer beyond its v3.0 opt-in candidate: test synthetic normal, malformed, and large headers in a real browser; verify the route/hop analysis and confirm storage/network behavior stays local. Review resolved npm package licenses and install-script metadata against the pinned lockfile.",
+      "status": "queued"
+    },
+    {
+      "id": "H115",
+      "title": "Firefox global add-on updates, license metadata, and profile migration",
+      "trigger": "Before promoting setting.firefox-addons beyond an opt-in candidate or widening beyond Fedora 44 Workstation: review current AMO license metadata for the full 16-item list, test how Firefox updates and removes globally installed add-ons in seeded profiles, and verify replacement/update recovery without changing unrelated profile data.",
+      "status": "queued"
+    },
+    {
+      "id": "H116",
+      "title": "Browser forensic artifact parity and real-profile review",
+      "trigger": "Before promoting package.browser-forensic beyond an opt-in candidate or changing its source pin: add synthetic fixtures for downloads, form history, extensions, preferences, and sessions where the upstream CLI supports them; verify parser coverage and unchanged input hashes; review profile-copy and secret-output recovery using disposable user data. Keep real profile data out of automated transcripts.",
+      "status": "queued"
+    },
+    {
+      "id": "H117",
+      "title": "Keyfile mount record variants and concurrent configuration recovery",
+      "trigger": "Before supporting mapper names, keyfile paths or fstab/crypttab record forms outside the v3.0 contract, test escaped fields, optional key source suffixes, multiple related records, and concurrent system configuration writers on a disposable encrypted data volume. Preserve active/mounted refusal and exact recovery.",
+      "status": "queued"
+    },
+    {
+      "id": "H118",
+      "title": "VMFS6 reader lifecycle and fixture-backed validation",
+      "trigger": "The owner deferred the genuine VMFS6 fixture test from v3.0 to v3.1. Before claiming VMFS6 access, obtain an authorized image with a known file manifest, pin and review the reader source, prove Fedora 44 opens the image read-only and leaves its digest unchanged, and exercise plan, opt-in gate, apply, repeat, status, restore, and explicit removal in a disposable VM. Keep the experimental archived reader isolated, reject block devices and symlinks, and review VMFS5 separately. The v3.0 opt-in install candidate does not establish VMFS6 access.",
       "status": "queued"
     }
   ]

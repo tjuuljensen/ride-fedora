@@ -1,0 +1,613 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "1.1.0",
+  "reviewedOn": "2026-11-03",
+  "reviewedSources": {
+    "rideWindows": {
+      "commit": "1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5",
+      "branch": "codex/ride-v3-migration",
+      "workingTreeClean": false,
+      "paths": [
+        "ride.ps1",
+        "modules/RIDE.Engine.psm1",
+        "modules/RIDE.UserHandoff.psm1",
+        "docs/models/behavior-scenarios.json",
+        "tests/fixtures/behavior-scenario-windows-adapter.json",
+        "tests/BehaviorContract.Tests.ps1",
+        "TODO.md",
+        "docs/fedora-alignment.md",
+        "tests/CliShouldProcess.Tests.ps1",
+        "tests/SettingPresentation.Tests.ps1",
+        "README.md"
+      ],
+      "sha256": {
+        "ride.ps1": "2A06F47B24AE5EF5DE87480EEC7384A030DBC67139924409DE14426BAA2C68F9",
+        "modules/RIDE.Engine.psm1": "053D90011AC0D7C480208DDC2816DFA249CF171B3295EC0CC74F5A9ED8A9BA9D",
+        "modules/RIDE.UserHandoff.psm1": "95E334B34461CDFDE75DB5EA2C32BF23E64BDBFADE64A0C6400CB9D339596AE6",
+        "docs/models/behavior-scenarios.json": "9353770486CFC7768F8D2DD4BF0DB646FFF894E591974F07409035DF7F2D3632",
+        "tests/fixtures/behavior-scenario-windows-adapter.json": "362629860E819BFF7AB1F81CEF82AFBD4D2C41CC334C15B5AD74A87C05D27C23",
+        "tests/BehaviorContract.Tests.ps1": "AD83329784A8CA35F3892CB4F83D1B47B0064585FFDCDFF42C385225479BA177",
+        "TODO.md": "DF529CEF6C29F94C60AD66A1F2FE6A8E685742425CE31AC976F0E38D5002D9B2",
+        "docs/fedora-alignment.md": "CBAB4AF610FF4EB3B8F00D57CF4F34E0F43CFF03C6A2367099B3D43964BA8362",
+        "tests/CliShouldProcess.Tests.ps1": "8CE6B1DE3EEAA37C041A3512E3134A72514C27B84A39F820A5E54D6BA4B5AF42",
+        "tests/SettingPresentation.Tests.ps1": "97BC0AF11C33C5042796C52E0AE67A62E0CD3043FE3468644616BC9ABB3F8AA1",
+        "README.md": "4C7011AA3641A41ADE5CDA3ECE8929144840B9E3104142455751168B3D3D249E"
+      }
+    },
+    "rideFedora": {
+      "commit": "1243f36cc27c4b9ef9569cb7f168bd79e1e92c8a",
+      "branch": "codex/ride-v3-migration",
+      "workingTreeClean": false,
+      "paths": [
+        "ride.sh",
+        "lib/v3/common.sh",
+        "lib/v3/catalog.sh",
+        "completion/ride.bash",
+        "docs/models/behavior-scenarios.json",
+        "tests/fixtures/behavior-scenario-fedora-adapter.json",
+        "tests/test_v3_cli.py",
+        "tests/test_v3_identity_preflight.py",
+        "tests/test_behavior_scenarios.py",
+        "docs/windows-alignment.md",
+        "README.md"
+      ],
+      "sha256": {
+        "ride.sh": "3365E3FD5C5A2EEB316E12D483D7CBC33AF971707701747CE2743F8EB118C5AA",
+        "lib/v3/common.sh": "3205EA10B2E28F6D93CB3835C2EA4F8B071567F9EEC025B7A08C23F023944265",
+        "lib/v3/catalog.sh": "A621249DAC96D792A56C81064021C6856855A9F5E85FC18D8DBBBB33A0A6A7F4",
+        "completion/ride.bash": "411F32F26BA3DD932C8968726EDD7F517E8A1F062AA8D0449EEB70F3FE97D15D",
+        "docs/models/behavior-scenarios.json": "9353770486CFC7768F8D2DD4BF0DB646FFF894E591974F07409035DF7F2D3632",
+        "tests/fixtures/behavior-scenario-fedora-adapter.json": "B02FB9CE3FF6B65BA0D52324C77119D37B83622EEBF2CD6776CAD31C36280260",
+        "tests/test_v3_cli.py": "EBA08A614F89E10A72D0B999720C9F8E1DBEA01DF1F87E68AF09481127408F9A",
+        "tests/test_v3_identity_preflight.py": "8C1EABD350EE7D206D0BFDB5C943AAA2652B3745FB8324F196BDEA3F22AD568F",
+        "tests/test_behavior_scenarios.py": "F8C0F4788ECBD3E6CAE4A21750CBB9BEE87AA85282DDFC2825F3A33DA4D2586B",
+        "docs/windows-alignment.md": "CDCD5D2D41EFDB8AA65C0AEE77EB76059E3491FC3A4A0730BE4CE9FAE3A3E3B7",
+        "README.md": "A73C2167A4EA3746A8CF1C8A8EE3F7385BDD5B324445923D2F7029CA8CBF3BBF"
+      }
+    }
+  },
+  "dispositions": [
+    "aligned",
+    "temporary-gap",
+    "permanent-platform-difference"
+  ],
+  "entries": [
+    {
+      "id": "cli.native-syntax-and-default",
+      "capability": "Native command spelling and default invocation",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Windows uses PowerShell parameters and Fedora uses Bash options; both use list when no command is supplied. RB-01 explicitly permits native switch spellings.",
+      "ruleIds": [
+        "RB-01"
+      ],
+      "evidence": [
+        {
+          "windows": "ride.ps1#L188",
+          "fedora": "ride.sh at reviewed source revision"
+        }
+      ],
+      "linkedWork": [],
+      "reviewRemovalTrigger": "Review if a shared launcher or command-default change alters the no-command list behavior; keep native option spelling while both clients remain native-shell tools."
+    },
+    {
+      "id": "cli.shared-verbs",
+      "capability": "Shared command verbs",
+      "disposition": "aligned",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Both clients expose the contract's shared verbs; additional native commands remain client capabilities.",
+      "ruleIds": [
+        "RB-01",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "ride.ps1#L191",
+          "fedora": "ride.sh at reviewed source revision"
+        }
+      ],
+      "linkedWork": [],
+      "reviewRemovalTrigger": "Review when a shared verb is added, removed, or changes meaning in either CLI."
+    },
+    {
+      "id": "cli.ambiguous-and-irrelevant-options",
+      "capability": "Command argument preflight",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Fedora now rejects conflicting selectors and irrelevant options before catalog or target work. Windows still has declared ALIGN-03 argument, bare-remove and exclusion-help work open.",
+      "ruleIds": [
+        "RB-02",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "TODO.md ALIGN-03; tests/CliShouldProcess.Tests.ps1",
+          "fedora": "ride.sh; tests/test_v3_cli.py::test_remove_and_command_options_refuse_ambiguity_before_mutation"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-03"
+      ],
+      "reviewRemovalTrigger": "Remove after both adapters reject conflicting selectors and irrelevant options before live observation or mutation, with compatibility tests for retained published forms."
+    },
+    {
+      "id": "cli.bare-remove-default-profile",
+      "capability": "Default selector for remove",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Fedora requires an explicit package ID or profile. Windows still tracks a compatibility transition away from selecting its default profile for a bare remove.",
+      "ruleIds": [
+        "RB-02",
+        "RB-07"
+      ],
+      "evidence": [
+        {
+          "windows": "TODO.md ALIGN-03",
+          "fedora": "ride.sh remove dispatch; tests/test_v3_cli.py::test_remove_and_command_options_refuse_ambiguity_before_mutation"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-03"
+      ],
+      "reviewRemovalTrigger": "Remove after a versioned alias/deprecation transition is documented and tests prove bare remove cannot unexpectedly act on a default profile."
+    },
+    {
+      "id": "settings.unset-meaning",
+      "capability": "Unset versus explicit Disabled state",
+      "disposition": "aligned",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Both clients use declared override-removal semantics or refuse; Fedora catalog unsetState declares the absent state where an exact inverse exists. Unset remains distinct from explicit Disabled.",
+      "ruleIds": [
+        "RB-06"
+      ],
+      "evidence": [
+        {
+          "windows": "modules/RIDE-Settings.psm1 unset handlers at reviewed source revision",
+          "fedora": "catalog/operations.json unsetState; ride.sh unset dispatch; tests/test_v3_cli.py"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-03"
+      ],
+      "reviewRemovalTrigger": "Review whenever either client changes declared baseline or override-removal semantics; retain paired tests distinguishing unset from explicit Disabled."
+    },
+    {
+      "id": "profiles.remove-eligibility",
+      "capability": "Profile removal operation classes",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Fedora limits profile removal to reversible packages with a declared absent state and keeps ordinary settings in place. Windows still needs full-plan eligibility and recovery preflight for its removable operation classes.",
+      "ruleIds": [
+        "RB-02",
+        "RB-07",
+        "RB-09"
+      ],
+      "evidence": [
+        {
+          "windows": "TODO.md ALIGN-03; modules/RIDE.Engine.psm1 profile removal planning",
+          "fedora": "ride.sh profile removal planning; tests/test_v3_cli.py::test_profile_removal_keeps_one_way_prerequisite"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-03"
+      ],
+      "reviewRemovalTrigger": "Remove when both clients filter to declared removable classes, preserve reverse dependency order, and refuse the whole plan before mutation on an ineligible member."
+    },
+    {
+      "id": "candidate.preview",
+      "capability": "Read-only preview on pending candidate targets",
+      "disposition": "aligned",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Both clients allow candidate plan and restore previews without opt-in; Fedora validates targets and user identity for each changed restore step, including iBus. Actual candidate changes and recovery still require per-invocation opt-in.",
+      "ruleIds": [
+        "RB-03",
+        "RB-04",
+        "RB-08"
+      ],
+      "evidence": [
+        {
+          "windows": "tests/CandidateExecution.Tests.ps1; tests/BehaviorContract.Tests.ps1",
+          "fedora": "ride.sh restore preview; lib/v3/common.sh identity check; tests/test_v3_cli.py::test_ibus_hotkey_restores_custom_and_unset_values; tests/test_v3_identity_preflight.py"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-04",
+        "ALIGN-05"
+      ],
+      "reviewRemovalTrigger": "Review when preview target, availability, privilege, acceptance reporting or restore planning changes; keep the paired scenarios passing before release."
+    },
+    {
+      "id": "candidate.acquisition-eligibility",
+      "capability": "Download eligibility versus execution acceptance",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Fedora no longer gates acquisition on VM execution acceptance. Its RPM and GitHub handlers verify the acquired artifact, while dry-run resolves neither payload nor network request. Paired native acquisition behavior remains part of ALIGN-04/05 review.",
+      "ruleIds": [
+        "RB-03",
+        "RB-05",
+        "RB-08"
+      ],
+      "evidence": [
+        {
+          "windows": "tests/Catalog.Tests.ps1; tests/BehaviorContract.Tests.ps1",
+          "fedora": "ride.sh download dispatch; lib/v3/providers.sh::ride_download_package; lib/v3/github.sh::ride_github_download_asset; tests/test_v3_cli.py::test_candidate_download_does_not_require_vm_acceptance_or_install"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-04",
+        "ALIGN-05"
+      ],
+      "reviewRemovalTrigger": "Remove when Fedora separates declared source/action/artifact verification from execution target acceptance and both adapters prove preview has zero network and file writes."
+    },
+    {
+      "id": "target-and-privilege-identities",
+      "capability": "Native target and privilege model",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Windows uses supported Windows release/build/edition and elevation or an explicit user handoff; Fedora uses distribution/release/architecture and root versus the signed-in user. These native dimensions cannot be inferred or made identical.",
+      "ruleIds": [
+        "RB-08",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "modules/RIDE.Engine.psm1 target and privilege checks",
+          "fedora": "lib/v3/common.sh target and privilege checks at reviewed source revision"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-04",
+        "ALIGN-05"
+      ],
+      "reviewRemovalTrigger": "Review when either platform adds a target, edition, architecture, privilege context or handoff mode; require evidence for that native dimension."
+    },
+    {
+      "id": "user-context-handoff",
+      "capability": "Elevated Windows to desktop-user handoff",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers"
+      ],
+      "reason": "Windows provides a bounded explicit desktop-user handoff for selected user-only operations; Fedora runs user operations from the intended non-root account. The handoff is a Windows execution capability, not a shared verb requirement.",
+      "ruleIds": [
+        "RB-03",
+        "RB-08",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "modules/RIDE.UserHandoff.psm1",
+          "fedora": "no equivalent handoff in reviewed ride.sh dispatcher"
+        }
+      ],
+      "linkedWork": [],
+      "reviewRemovalTrigger": "Review if Fedora adds session handoff or Windows changes child identity, receipt, preview or completion boundaries."
+    },
+    {
+      "id": "package.source-and-variant",
+      "capability": "Package edition versus acquisition source selection",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Windows -Variant selects a catalog-declared product edition; Fedora --source selects a declared acquisition provider for a deployment. These are different concepts and must not be aliased.",
+      "ruleIds": [
+        "RB-07"
+      ],
+      "evidence": [
+        {
+          "windows": "ride.ps1 Variant parameter and package resolver",
+          "fedora": "ride.sh --source and lib/v3 catalog helpers at reviewed source revision"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-08"
+      ],
+      "reviewRemovalTrigger": "Review when either client adds editions, providers, distributions or deployment scopes; retain separate typed fields and examples."
+    },
+    {
+      "id": "status.id-and-view-selectors",
+      "capability": "Status selector meanings",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Compatible CLI extension under RB-01/02/10/12: both clients now expose explicit operation-ID and view status selectors while preserving their existing positional form. Fedora uses --id/--view; Windows uses -OperationId/-View. Windows validates profile membership and rejects conflicts before engine dispatch; native Pester execution remains pending.",
+      "ruleIds": [
+        "RB-01",
+        "RB-02",
+        "RB-10",
+        "RB-12"
+      ],
+      "evidence": [
+        {
+          "windows": "ride.ps1 status dispatch, modules/RIDE.Engine.psm1 Get-RideStatus, tests/CliShouldProcess.Tests.ps1, tests/SettingPresentation.Tests.ps1",
+          "fedora": "ride.sh status dispatch, completion/ride.bash, tests/test_v3_cli.py"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-08"
+      ],
+      "reviewRemovalTrigger": "Remove when focused Linux CLI tests and Windows CLI/engine/completion Pester tests pass on their native test environments and both clients document the paired profile/status examples."
+    },
+    {
+      "id": "cli.output-forms",
+      "capability": "Native human-readable and redirected output",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "PowerShell objects and Bash JSON/TSV are platform-native output forms. Native formatting may differ; stable show pipeline and machine-output behavior remains a separate temporary gap under ALIGN-08.",
+      "ruleIds": [
+        "RB-10",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "ride.ps1 output dispatch at reviewed source revision",
+          "fedora": "ride.sh output dispatch at reviewed source revision"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-08"
+      ],
+      "reviewRemovalTrigger": "Review when adding a supported machine-output interface or changing stable native output fields."
+    },
+    {
+      "id": "cli.completion-data-and-scope",
+      "capability": "Local read-only command and parameter completion",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Windows completion is catalog/profile/state driven for supported parameters; Fedora includes static command suggestions and local JSON completion. Both must remain read-only and useful values should follow the execution source.",
+      "ruleIds": [
+        "RB-10"
+      ],
+      "evidence": [
+        {
+          "windows": "ride.ps1 completion registration",
+          "fedora": "completion/ride.bash at reviewed source revision"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-05",
+        "ALIGN-08"
+      ],
+      "reviewRemovalTrigger": "Remove when paired tests verify current commands and discoverable values from each client's own catalog, profile and state sources, with no handler calls."
+    },
+    {
+      "id": "capability.groups-dependencies-and-offline",
+      "capability": "Executable groups, dependency plans, local libraries and offline bundle execution",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "proposed-owner-review",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Windows offers ordered groups, dependency expansion, local libraries and explicit offline bundle execution; Fedora exposes profile selection and categories, but not equivalent local-library/offline bundle actions. RB-11 permits declared differences, pending owner review of the capability boundary.",
+      "ruleIds": [
+        "RB-07",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "modules/RIDE.Engine.psm1 group/dependency/offline planning",
+          "fedora": "ride.sh list and install dispatch at reviewed source revision"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-06",
+        "ALIGN-09"
+      ],
+      "reviewRemovalTrigger": "Retain as a declared difference unless both owners approve a native capability addition or a shared contract change; review before either client advertises unsupported workflows."
+    },
+    {
+      "id": "state.native-record-formats",
+      "capability": "Recovery journal and artifact/cache storage formats",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Windows and Fedora use platform-native state stores, schemas and cache layout. The shared contract requires equivalent recovery guarantees and identity checks, not byte-identical records or paths.",
+      "ruleIds": [
+        "RB-05",
+        "RB-09",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "modules/RIDE.Engine.psm1 saved run manifest and artifact state",
+          "fedora": "lib/v3/common.sh run journal and cache helpers at reviewed source revision"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-05",
+        "ALIGN-09"
+      ],
+      "reviewRemovalTrigger": "Review when state schemas, artifact ownership or recovery guarantees change; require cross-version recovery and identity checks for that client."
+    },
+    {
+      "id": "candidate.installed-package-outside-target-noop",
+      "capability": "Already-installed package no-op outside the declared target",
+      "disposition": "aligned",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "For an already-present package, both clients can report the desired state without widening target support or invoking a mutator. Fedora limits this to eligible RPM-presence handlers on Fedora; absent packages and other handlers fail closed.",
+      "ruleIds": [
+        "RB-04",
+        "RB-08"
+      ],
+      "evidence": [
+        {
+          "windows": "tests/CandidateExecution.Tests.ps1 installed-package no-op case",
+          "fedora": "ride.sh::ride_package_noop_outside_target; tests/test_v3_cli.py::test_installed_package_noop_outside_target_is_allowed_without_mutation"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-04",
+        "ALIGN-05"
+      ],
+      "reviewRemovalTrigger": "Review if the package presence observer, eligible handler list, no-op reporting, or target support behavior changes; keep tests proving no mutation and no target declaration change."
+    },
+    {
+      "id": "cli.shared-scenario-coverage",
+      "capability": "Shared contract scenario and native adapter coverage",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "The canonical set is revision 1.1.0 with privilege-refusal and reverse dependency-removal cases mapped in both adapters. Fedora CLI and UID 0 namespace preview tests pass; Windows Pester execution remains unverified.",
+      "ruleIds": [
+        "RB-03",
+        "RB-04",
+        "RB-07",
+        "RB-08",
+        "RB-09",
+        "RB-10",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "tests/fixtures/behavior-scenario-windows-adapter.json; tests/CandidateExecution.Tests.ps1; tests/PackageDependencyPlanning.Tests.ps1; tests/BehaviorContract.Tests.ps1",
+          "fedora": "tests/fixtures/behavior-scenario-fedora-adapter.json; tests/test_v3_cli.py; tests/test_v3_identity_preflight.py; tests/test_behavior_scenarios.py; tools/check_behavior_scenarios.py"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-05"
+      ],
+      "reviewRemovalTrigger": "Remove when Windows Pester 5 passes the current 1.1.0 adapter and source hashes are refreshed at a reviewed commit."
+    },
+    {
+      "id": "cli.show-pipeline-contract",
+      "capability": "Versioned show pipeline and structured output interface",
+      "disposition": "temporary-gap",
+      "decisionStatus": "open",
+      "owner": [
+        "RIDE-Windows maintainers",
+        "RIDE-Fedora maintainers"
+      ],
+      "reason": "Fedora now implements explicit show --stdin selection, compact ordered JSON records, and schemaVersion 1 while preserving catalog fields and positional output. The shared temporary gap remains until paired Windows/Fedora tests and the rest of ALIGN-08 are reviewed.",
+      "ruleIds": [
+        "RB-02",
+        "RB-03",
+        "RB-10",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "docs/models/ride-behavior-contract.md show pipeline section; TODO.md ALIGN-08-F",
+          "fedora": "ride.sh show dispatch; docs/windows-alignment.md ALIGN-08-F"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-08"
+      ],
+      "reviewRemovalTrigger": "Remove when Fedora implements or explicitly dispositions the versioned show pipeline contract and paired tests cover valid/invalid selectors and stable fields."
+    },
+    {
+      "id": "setting.expressvpn-startup-autoconnect",
+      "capability": "ExpressVPN publisher-managed startup auto-connect",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Fedora maintainers",
+        "RIDE-Windows maintainers"
+      ],
+      "reason": "Fedora preserves the kept Workstation startup-connect capability through the current publisher Linux GUI preference. Windows has no ExpressVPN catalog product or equivalent VPN startup setting. Fedora leaves the vendor preference user-managed and does not add unsupported state writes, an unowned job, or shared catalog/run-state fields.",
+      "ruleIds": [
+        "RB-05",
+        "RB-07",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "catalog/operations.psd1 has no ExpressVPN product or VPN startup setting",
+          "fedora": "reference/expressvpn-autoconnect.md; current official ExpressVPN Linux GUI and CLI guides"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-08",
+        "system-security-11",
+        "system-security-22"
+      ],
+      "reviewRemovalTrigger": "Revisit if Windows adds ExpressVPN support, ExpressVPN adds a supported Linux preference getter/setter, or the owner requests RIDE-managed startup state or legacy-job cleanup."
+    },
+    {
+      "id": "package.portfolio-specific-migration-facts",
+      "capability": "Fedora-specific package, publisher and deployment facts in migration batches",
+      "disposition": "permanent-platform-difference",
+      "decisionStatus": "source-reviewed",
+      "owner": [
+        "RIDE-Fedora maintainers",
+        "RIDE-Windows maintainers"
+      ],
+      "reason": "The dated Fedora batch reviews own Linux package names, publishers, licenses, provider sources, destinations, Fedora targets and native recovery evidence. A missing or differently implemented Windows counterpart is not evidence of shared installer or product identity. Shared source selection, deployment identity, lifecycle and state behavior are covered by the corresponding register entries; product-specific facts remain in each native catalog and migration record.",
+      "ruleIds": [
+        "RB-05",
+        "RB-07",
+        "RB-11"
+      ],
+      "evidence": [
+        {
+          "windows": "catalog/operations.psd1; docs/fedora-alignment.md package batch reviews",
+          "fedora": "catalog/operations.json; docs/windows-alignment.md reconciliation index and dated package batch reviews"
+        }
+      ],
+      "linkedWork": [
+        "ALIGN-06"
+      ],
+      "reviewRemovalTrigger": "Review when a Fedora-migrated product gains a Windows catalog counterpart or a package review changes shared source, deployment, lifecycle, or recovery semantics; add product-specific evidence instead of inferring an installer from the peer catalog."
+    }
+  ]
+}

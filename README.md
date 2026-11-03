@@ -24,6 +24,20 @@ declared Fedora 44 x86_64 editions after disposable VM acceptance. Other
 catalog operations remain candidates and require `--allow-candidate` for a
 real change. System operations need root. Review a plan before applying one:
 
+### Explicit profile and setting examples
+
+These read-only commands compare one declared profile and preview a configurable
+setting without applying it:
+
+```bash
+./ride.sh plan --profile profiles/fedora-custom-favorites.json
+./ride.sh status --profile profiles/fedora-custom-favorites.json \
+  --id setting.gnome-favorite-apps
+./ride.sh set setting.gnome-favorite-apps --state configured \
+  --value '["firefox.desktop","org.gnome.Nautilus.desktop","libreoffice-writer.desktop"]' \
+  --dry-run
+```
+
 The [v2 migration progress report](docs/migrations/progress.md) tracks all 185
 scoped workstation and generic server outcomes separately from the catalog.
 From this checkout as a regular user, run

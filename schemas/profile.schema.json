@@ -12,10 +12,17 @@
       "type": "array",
       "items": {
         "type": "object", "required": ["id", "state"], "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {"properties": {"id": {"const": "setting.gnome-region"}}, "required": ["id"]},
+            "then": {},
+            "else": {"properties": {"value": {"minLength": 1}}}
+          }
+        ],
         "properties": {
           "id": {"type": "string", "pattern": "^(package|setting|system)\\.[a-z0-9.-]+$"},
           "state": {"enum": ["installed", "absent", "enabled", "disabled", "configured", "removal-pending", "current"]},
-          "value": {"type": "string", "minLength": 1, "maxLength": 2048},
+          "value": {"type": "string", "maxLength": 2048},
           "source": {"type": "string", "pattern": "^[a-z0-9-]+$"}
         }
       }

@@ -110,6 +110,7 @@ def workstation_disposition(members: list[str], active: set[str], ledger: dict) 
             return f"{disposition}: {reason}"
     names = set(members)
     special = {
+        "InstallPidgin": "owner retired Pidgin and OTR from v3 on 2026-11-02; reopen only on explicit owner request",
         "InstallCodecs": "operable opt-in v3.0 outcome: fixed Fedora codec package set, RPM Fusion alternative candidate and bounded Multimedia update; see provider-foundation-05 and hardening item H037",
         "InstallSnap": "implemented candidate `package.snapd`; Fedora 44 Workstation socket and install lifecycle passed, while host confinement is partial",
         "InstallVolatility3": "implemented candidate `package.volatility3`; isolated pinned core, VM acceptance pending",
@@ -120,6 +121,7 @@ def workstation_disposition(members: list[str], active: set[str], ledger: dict) 
         "InstallFirefoxAddons": "deferred v3 integration; existing policy helper remains tested separately",
         "CheckFirefoxAddons": "deferred v3 integration; existing policy helper remains tested separately",
         "FinalizeFirefoxAddonRemoval": "deferred v3 integration; restart-dependent policy lifecycle needs journal ownership",
+        "RemoveKeyfileMounts": "operable opt-in candidate `setting.keyfile-mounts`; Fedora 44 Workstation LUKS data and reboot recovery passed; see system-security-25 and its acceptance record",
     }
     for name, decision in special.items():
         if name in names:

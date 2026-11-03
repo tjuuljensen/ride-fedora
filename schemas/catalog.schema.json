@@ -174,24 +174,33 @@
           "enum": [
             "dnf-package",
             "smartmontools-package",
+            "clamav-initial-signatures",
             "systemd-service",
             "plex-server-service",
             "glances-web-service",
             "sshd-root-login",
+            "ssh-reboot-sudoers",
+            "keyfile-mounts",
             "dnf5-automatic",
             "nsswitch-mdns",
             "github-asset",
             "python-venv",
+            "rust-source-build",
+            "vmfs6-source-build",
             "pinned-script",
             "pinned-woeusb-script",
             "pinned-zip",
+            "networkminer-portable",
             "pinned-binary",
             "pinned-eza-binary",
             "pinned-appimage",
+            "pinned-snap-package",
             "pinned-publisher-appimage",
+            "pinned-email-header-spa",
             "pinned-yubico-tarball",
             "pinned-volatility2-bundle",
             "pinned-deb-binary",
+            "expressvpn-wrapper",
             "ferium-portable",
             "minecraft-server-jar",
             "veracrypt-signed-rpm",
@@ -203,6 +212,7 @@
             "dnf5-fast-tuning",
             "system-hostname",
             "wireguard-keypair",
+            "networkmanager-vpn-profiles",
             "flatpak-remote",
             "flatpak-app",
             "rpmfusion-repositories",
@@ -248,7 +258,9 @@
             "tar.gz",
             "AppImage",
             "jar",
-            "deb"
+            "deb",
+            "source-tree",
+            "run"
           ]
         },
         "sourceId": {
@@ -287,7 +299,27 @@
           "type": "string",
           "pattern": "^[a-z0-9-]+/[a-z0-9-]+$"
         },
+        "releaseVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "snapArchiveUri": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
         "assetName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "signatureAssetName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "signingKeyAssetName": {
           "type": "string",
           "pattern": "^[A-Za-z0-9._-]+$"
         },
@@ -341,7 +373,10 @@
             "chrome-policy-list",
             "percentage-low",
             "screensaver-lock-timing",
-            "hostname"
+            "hostname",
+            "linux-user-principal",
+            "networkmanager-vpn-uuid-list",
+            "linux-mapper-name"
           ]
         },
         "allowedValues": {
@@ -382,6 +417,9 @@
               "current"
             ]
           }
+        },
+        "unsetState": {
+          "enum": ["absent", "disabled"]
         },
         "scope": {
           "enum": [
@@ -474,6 +512,18 @@
           "type": "string",
           "pattern": "^[0-9a-f]{40}$"
         },
+        "sourceCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "sourceTree": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "lockfileBlobSha1": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
         "runtimeSha256": {
           "type": "string",
           "pattern": "^[0-9a-f]{64}$"
@@ -482,6 +532,7 @@
           "enum": [
             "fedora-repository-gpg",
             "fedora-rpm-gpg-smartd-disabled",
+            "fedora-rpm-gpg-clamav-initial-signatures-and-exact-recovery",
             "local-systemd-state",
             "authselect-feature-state",
             "dnf5-automatic-owned-systemd-dropin",
@@ -492,6 +543,8 @@
             "local-dnf5-config",
             "local-systemd-static-hostname",
             "local-wireguard-keypair",
+            "local-networkmanager-vpn-keyfiles",
+            "crypttab-fstab-explicit-mapper-recovery",
             "local-flatpak-remote",
             "flathub-system-gpg",
             "fedora-rpmfusion-signatures-and-owned-state",
@@ -500,9 +553,11 @@
             "docker-ce-local-key-and-data-preservation",
             "glances-loopback-web-service",
             "sshd-tested-root-login-dropin",
+            "sudoers-tested-reboot-rule",
             "plex-unit-and-active-enabled-state",
             "github-release-sha256-observed",
             "github-release-api-sha256",
+            "https-fixed-url-sha256",
             "github-release-manifest-sha256",
             "github-release-pinned-sha256",
             "github-release-version-and-observed-sha256",
@@ -515,16 +570,69 @@
             "publisher-repository-rpm-signature",
             "publisher-release-manifest-and-sha512",
             "yubico-detached-pgp-and-sha256",
+            "expressvpn-detached-pgp-and-sha256",
             "dual-pinned-archive-sha256-sha512",
             "local-owned-firefox-config",
             "local-owned-firefox-extension-policy",
+            "local-owned-firefox-global-xpis",
             "local-owned-chrome-policy",
             "snap-store-assertion",
-            "debian-package-index-sha256"
+            "pinned-upstream-release-sha256",
+            "debian-package-index-sha256",
+            "github-pinned-source-tree-and-npm-lock-integrity",
+            "github-pinned-source-tree-and-cargo-lock",
+            "github-pinned-source-sha256-build-without-vmfs-write"
           ]
         }
       },
       "allOf": [
+        {
+          "if": {"properties": {"handler": {"const": "expressvpn-wrapper"}}},
+          "then": {
+            "required": [
+              "assetName", "signatureAssetName", "signingKeyAssetName", "sourceSha256",
+              "signingFingerprint", "version", "signatureUri", "signingKeyUri"
+            ],
+            "properties": {
+              "id": {"const": "package.expressvpn"},
+              "artifactFormat": {"const": "run"},
+              "sourceId": {"const": "expressvpn-signed-local"},
+              "signingFingerprint": {"const": "1D0B09AD6C93FEE93FDDBD9DAFF2A1415F6A3A38"},
+              "sourceSha256": {"const": "f784af6628564f4fcb0a82064d4dc1f22520c3c917bb1c882bd61eb621b31efb"},
+              "version": {"const": "14.3.1.15429"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {"const": "pinned-email-header-spa"}
+            }
+          },
+          "then": {
+            "required": ["sourceCommit", "sourceTree", "lockfileBlobSha1", "version"],
+            "properties": {
+              "id": {"const": "package.email-header-analyzer"},
+              "kind": {"const": "package"},
+              "scope": {"const": "user"},
+              "status": {"const": "candidate"},
+              "states": {"const": ["installed", "absent"]},
+              "recovery": {"const": "remove-new-install"},
+              "distribution": {"const": "portable"},
+              "deploymentId": {"const": "user-local-opt"},
+              "artifactFormat": {"const": "source-tree"},
+              "sourceId": {"const": "github-source-pinned"},
+              "version": {"const": "0.0.1"},
+              "sourceUri": {"const": "https://github.com/mailtower-app/email-header-analyzer"},
+              "sourceCommit": {"const": "ccaf044dfe964215656966013feaaea705726048"},
+              "sourceTree": {"const": "69ec6b8a3c078a0f952e04ddea47f0a0ebf3ce49"},
+              "lockfileBlobSha1": {"const": "7e8a00e275c2253e6ffe29f42a9aac8dc00aee41"},
+              "license": {"const": "MIT (frontend source; npm dependencies are separately licensed)"},
+              "verification": {"const": "github-pinned-source-tree-and-npm-lock-integrity"},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}}
+            }
+          }
+        },
         {
           "if": {
             "properties": {
@@ -591,6 +699,13 @@
                   "recovery": {
                     "const": "none"
                   }
+                }
+              },
+              {
+                "properties": {
+                  "handler": {"const": "clamav-initial-signatures"},
+                  "states": {"const": ["installed", "absent"]},
+                  "recovery": {"const": "exact-state"}
                 }
               }
             ]
@@ -733,6 +848,28 @@
               "states": {"const": ["installed", "absent"]},
               "recovery": {"const": "remove-new-install"}
             }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {"const": "clamav-initial-signatures"}
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {"const": "package.clamav"},
+              "kind": {"const": "package"},
+              "packageName": {"const": "clamav"},
+              "artifactFormat": {"const": "rpm"},
+              "sourceId": {"const": "fedora-rpm"},
+              "verification": {"const": "fedora-rpm-gpg-clamav-initial-signatures-and-exact-recovery"},
+              "status": {"const": "candidate"},
+              "scope": {"const": "system"},
+              "states": {"const": ["installed", "absent"]},
+              "recovery": {"const": "exact-state"}
+            },
+            "required": ["packageName"]
           }
         },
         {
@@ -1811,6 +1948,88 @@
         },
         {
           "if": {
+            "properties": {
+              "handler": {
+                "const": "pinned-snap-package"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "packageName",
+              "releaseVersion",
+              "snapArchiveUri",
+              "sha256",
+              "dependencies"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.bulk-extractor"
+              },
+              "kind": {
+                "const": "package"
+              },
+              "packageName": {
+                "const": "bulk-extractor"
+              },
+              "releaseVersion": {
+                "const": "2.2.0"
+              },
+              "snapArchiveUri": {
+                "const": "https://github.com/simsong/bulk_extractor/releases/download/v2.2.0/bulk-extractor_2.2.0_amd64.snap"
+              },
+              "sha256": {
+                "const": "dbc0749a7a84e2710c104a09fd921b93c1db9e2147bb11da978dea7af0e16c67"
+              },
+              "sourceId": {
+                "const": "github-release-snap"
+              },
+              "verification": {
+                "const": "pinned-upstream-release-sha256"
+              },
+              "dependencies": {
+                "const": [
+                  "package.snapd"
+                ]
+              },
+              "states": {
+                "const": [
+                  "installed",
+                  "absent"
+                ]
+              },
+              "scope": {
+                "const": "system"
+              },
+              "distribution": {
+                "const": "installed"
+              },
+              "deploymentId": {
+                "const": "local-installed"
+              },
+              "artifactFormat": {
+                "const": "snap"
+              },
+              "recovery": {
+                "const": "remove-new-install"
+              },
+              "status": {
+                "const": "candidate"
+              },
+              "targets": {
+                "const": {
+                  "fedora": {
+                    "releases": ["44"],
+                    "architectures": ["x86_64"],
+                    "variantIds": ["workstation"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
             "required": [
               "sourceId"
             ],
@@ -2325,6 +2544,52 @@
           "if": {
             "properties": {
               "handler": {
+                "const": "networkmanager-vpn-profiles"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {"const": "setting.networkmanager-vpn-profiles"},
+              "kind": {"const": "setting"},
+              "scope": {"const": "system"},
+              "states": {"const": ["configured", "absent"]},
+              "valueKind": {"const": "networkmanager-vpn-uuid-list"},
+              "status": {"enum": ["blocked", "supported"]},
+              "verification": {"const": "local-networkmanager-vpn-keyfiles"},
+              "recovery": {"const": "exact-state"},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}}
+            },
+            "required": ["valueKind"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "keyfile-mounts"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": {"const": "setting.keyfile-mounts"},
+              "kind": {"const": "setting"},
+              "scope": {"const": "system"},
+              "states": {"const": ["configured", "absent"]},
+              "valueKind": {"const": "linux-mapper-name"},
+              "status": {"enum": ["blocked", "candidate"]},
+              "verification": {"const": "crypttab-fstab-explicit-mapper-recovery"},
+              "recovery": {"const": "exact-state"},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}}
+            },
+            "required": ["valueKind"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
                 "const": "flatpak-remote"
               }
             }
@@ -2543,6 +2808,63 @@
         {
           "if": {
             "properties": {
+              "handler": {"const": "rust-source-build"}
+            }
+          },
+          "then": {
+            "required": ["sourceSha256", "version", "dependencies"],
+            "properties": {
+              "id": {"const": "package.browser-forensic"},
+              "kind": {"const": "package"},
+              "scope": {"const": "user"},
+              "states": {"const": ["installed", "absent"]},
+              "recovery": {"const": "remove-new-install"},
+              "distribution": {"const": "installed"},
+              "deploymentId": {"const": "local-installed"},
+              "artifactFormat": {"const": "source-tree"},
+              "sourceId": {"const": "github-source-pinned"},
+              "sourceUri": {"const": "https://github.com/SecurityRonin/browser-forensic/archive/10e2f70bd53d50144edcff849749efd0095c9a03.tar.gz"},
+              "sourceSha256": {"const": "0493a03c0564a712a536fdd345c3eefec561c3ffd040f4ecc776ecdec398649c"},
+              "version": {"const": "0.3.0"},
+              "license": {"const": "Apache-2.0"},
+              "verification": {"const": "github-pinned-source-tree-and-cargo-lock"},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}},
+              "dependencies": {"const": ["package.cargo"]}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {"const": "vmfs6-source-build"}
+            }
+          },
+          "then": {
+            "required": ["sourceSha256", "version", "dependencies"],
+            "properties": {
+              "id": {"const": "package.vmfs6-reader"},
+              "kind": {"const": "package"},
+              "scope": {"const": "user"},
+              "states": {"const": ["installed", "absent"]},
+              "status": {"const": "candidate"},
+              "recovery": {"const": "remove-new-install"},
+              "distribution": {"const": "portable"},
+              "deploymentId": {"const": "user-local-opt"},
+              "artifactFormat": {"const": "source-tree"},
+              "sourceId": {"const": "github-source-pinned"},
+              "sourceUri": {"const": "https://github.com/teward/vmfs6-tools/archive/refs/tags/0.2.1.tar.gz"},
+              "sourceSha256": {"const": "a022a75f6c31611d1142c9d3692f2180b22d76a9d786809a5719e74f2e965c0a"},
+              "version": {"const": "0.2.1"},
+              "license": {"const": "GPL-2.0-only"},
+              "verification": {"const": "github-pinned-source-sha256-build-without-vmfs-write"},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}},
+              "dependencies": {"const": ["package.gcc", "package.libuuid-devel", "package.make"]}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
               "id": {
                 "const": "package.chepy"
               }
@@ -2674,6 +2996,37 @@
               "licenseSha256": {
                 "const": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
               }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "networkminer-portable"
+              }
+            }
+          },
+          "then": {
+            "required": ["sourceSha256", "version", "dependencies"],
+            "properties": {
+              "id": {"const": "package.networkminer"},
+              "kind": {"const": "package"},
+              "scope": {"const": "user"},
+              "status": {"enum": ["candidate", "supported"]},
+              "states": {"const": ["installed", "absent"]},
+              "recovery": {"const": "remove-new-install"},
+              "distribution": {"const": "portable"},
+              "deploymentId": {"const": "user-local-opt"},
+              "artifactFormat": {"const": "zip"},
+              "sourceId": {"const": "netresec-static-pinned"},
+              "version": {"const": "3.2"},
+              "sourceUri": {"const": "https://download.netresec.com/networkminer/NetworkMiner_3-2.zip"},
+              "sourceSha256": {"const": "daceec649fb4fe59b11e4a9e4ecd5f51c1dd37824280dfbeac67bec27b6b6d60"},
+              "verification": {"const": "https-fixed-url-sha256"},
+              "license": {"const": "GPL-2.0"},
+              "dependencies": {"const": ["package.gtk2", "package.mono-core", "package.mono-winforms"]},
+              "targets": {"const": {"fedora": {"releases": ["44"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}}
             }
           }
         },
@@ -2901,13 +3254,13 @@
                 ]
               },
               "verification": {
-                "const": "local-owned-firefox-extension-policy"
+                "const": "local-owned-firefox-global-xpis"
               },
               "recovery": {
                 "const": "exact-state"
               },
               "status": {
-                "const": "blocked"
+                "enum": ["blocked", "candidate"]
               }
             }
           }
@@ -2961,6 +3314,56 @@
                   "candidate",
                   "supported"
                 ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handler": {
+                "const": "ssh-reboot-sudoers"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "id",
+              "kind",
+              "scope",
+              "states",
+              "recovery",
+              "valueKind",
+              "verification",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "const": "setting.ssh-reboot"
+              },
+              "kind": {
+                "const": "setting"
+              },
+              "scope": {
+                "const": "system"
+              },
+              "states": {
+                "const": [
+                  "configured",
+                  "absent"
+                ]
+              },
+              "recovery": {
+                "const": "exact-state"
+              },
+              "valueKind": {
+                "const": "linux-user-principal"
+              },
+              "verification": {
+                "const": "sudoers-tested-reboot-rule"
+              },
+              "status": {
+                "const": "candidate"
               }
             }
           }

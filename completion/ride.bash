@@ -67,6 +67,14 @@ _ride_complete() {
       mapfile -t words < <(jq -r --arg id "$id" '.operations[] | select(.id == $id and .kind == "package") | .sourceId, .sourceProviders[]?.sourceId' "$catalog")
       COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
       return ;;
+    --id)
+      mapfile -t words < <(jq -r '.operations[].id' "$catalog")
+      COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      return ;;
+    --view)
+      mapfile -t words < <(jq -r '(["all", "packages", "artifacts", "settings", "systems", "groups"] + [.operations[].group // empty] | unique[])' "$catalog")
+      COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      return ;;
   esac
   case "$command" in
     set)
@@ -76,7 +84,21 @@ _ride_complete() {
         mapfile -t words < <(jq -r '.operations[] | select(.kind == "setting") | .id' "$catalog")
         COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
       fi ;;
-    show|install|unset|download|remove|status)
+    status)
+      if [[ "$current" == --* ]]; then
+        COMPREPLY=($(compgen -W '--id --view --value --source --profile' -- "$current"))
+      else
+        mapfile -t words < <(jq -r '.operations[].id' "$catalog")
+        COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      fi ;;
+    show)
+      if [[ "$current" == --* ]]; then
+        mapfile -t COMPREPLY < <(compgen -W '--stdin --source' -- "$current")
+      else
+        mapfile -t words < <(jq -r '.operations[].id' "$catalog")
+        COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      fi ;;
+    install|unset|download|remove)
       mapfile -t words < <(jq -r '.operations[].id' "$catalog")
       COMPREPLY=($(compgen -W "${words[*]}" -- "$current")) ;;
     list)

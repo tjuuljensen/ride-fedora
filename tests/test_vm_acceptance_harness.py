@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from tools.vm_acceptance import (VM, ROOT, assert_guest_target, load_target,
+from tools.vm_acceptance import (VM, ROOT, SOURCE_PATHS, assert_guest_target, load_target,
                                  qemu_command, select_pilot, verify_image)
 
 
@@ -67,6 +67,9 @@ class VmHarnessTests(unittest.TestCase):
         setting = select_pilot(target, "setting.gnome-custom-shortcuts")
         self.assertEqual((setting["pilotOperation"], setting["pilotPackage"]),
                          ("setting.gnome-custom-shortcuts", "gsettings-desktop-schemas"))
+        keyfile = select_pilot(target, "setting.keyfile-mounts")
+        self.assertEqual((keyfile["pilotOperation"], keyfile["pilotPackage"]),
+                         ("setting.keyfile-mounts", "cryptsetup"))
         self.assertEqual(target["pilotOperation"], "package.exfatprogs")
         with self.assertRaisesRegex(ValueError, "not declared"):
             select_pilot(target, "package.unknown")
@@ -84,6 +87,13 @@ class VmHarnessTests(unittest.TestCase):
                                    self.root / "serial.log", 2222, accel="tcg",
                                    smp=4, memory_mib=6144)
         self.assertEqual(workstation[7:11], ["-smp", "4", "-m", "6144"])
+        self.assertIn("virtio-blk-pci,drive=ridesystem,bootindex=1", workstation)
+        extra = qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",
+                             self.root / "serial.log", 2222,
+                             extra_disks=[self.root / "extra.qcow2"])
+        self.assertIn(f"if=none,id=rideextra0,file={self.root / 'extra.qcow2'},format=qcow2", extra)
+        self.assertIn("virtio-blk-pci,drive=rideextra0,serial=rideextra0", extra)
+        self.assertIn("tools/keyfile-mount-state.py", SOURCE_PATHS)
         with self.assertRaises(ValueError):
             qemu_command(self.root / "overlay.qcow2", self.root / "seed.iso",
                          self.root / "serial.log", 0)

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-screensaver-disabled",
+  "description": "Optional GNOME idle and lock disable state, matching the v2 disabled state while preserving lock delay.",
+  "operations": [
+    {"id": "setting.gnome-lock-timing", "state": "configured", "value": "screensaver-disabled"}
+  ]
+}

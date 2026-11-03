@@ -54,12 +54,18 @@
         {"operationId": "package.eza-portable", "package": "eza-portable"},
         {"operationId": "package.gnome-browser-connector", "package": "gnome-browser-connector"},
         {"operationId": "package.volatility2", "package": "volatility2-pypy-bundle"},
+        {"operationId": "package.clamav", "package": "clamav"},
         {"operationId": "package.veracrypt", "package": "veracrypt"},
         {"operationId": "package.glances", "package": "glances"},
         {"operationId": "package.zeek-core", "package": "zeek-core"},
         {"operationId": "package.galleta", "package": "galleta"},
+        {"operationId": "package.email-header-analyzer", "package": "email-header-analyzer"},
         {"operationId": "setting.gnome-custom-shortcuts", "package": "gsettings-desktop-schemas"},
-        {"operationId": "setting.bash-aliases", "package": "bash"}
+        {"operationId": "setting.bash-aliases", "package": "bash"},
+        {"operationId": "setting.networkmanager-vpn-profiles", "package": "NetworkManager"},
+        {"operationId": "setting.firefox-addons", "package": "firefox"},
+        {"operationId": "setting.keyfile-mounts", "package": "cryptsetup"},
+        {"operationId": "package.expressvpn", "package": "expressvpn"}
       ],
       "packageDatabase": "rpm",
       "packageVerification": "rpm-signature-and-files"
@@ -86,7 +92,8 @@
         {"operationId": "package.openssh-clients", "package": "openssh-clients"},
         {"operationId": "package.ferium-portable", "package": "ferium-portable"},
         {"operationId": "package.java-25-openjdk-headless", "package": "java-25-openjdk-headless"},
-        {"operationId": "package.minecraft-server", "package": "minecraft-server"}
+        {"operationId": "package.minecraft-server", "package": "minecraft-server"},
+        {"operationId": "package.expressvpn", "package": "expressvpn"}
       ],
       "packageDatabase": "rpm",
       "packageVerification": "rpm-signature-and-files"

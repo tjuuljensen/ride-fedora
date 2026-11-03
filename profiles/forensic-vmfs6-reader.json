@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "forensic-vmfs6-reader",
+  "description": "Explicit opt-in Fedora 44 Workstation profile for the experimental pinned VMFS6 image reader and its signed source-build prerequisites. Reader behavior against genuine VMFS6 fixtures remains unverified.",
+  "operations": [
+    {"id": "package.gcc", "state": "installed"},
+    {"id": "package.libuuid-devel", "state": "installed"},
+    {"id": "package.make", "state": "installed"},
+    {"id": "package.vmfs6-reader", "state": "installed"}
+  ]
+}

@@ -57,6 +57,7 @@ DEFAULT_TARGET = Path("/etc/firefox/policies/policies.json")
 DEFAULT_STATE = Path("/var/lib/ride-fedora/firefox-extensions.json")
 AMO_API = "https://addons.mozilla.org/api/v5/addons/addon/{slug}/"
 AMO_XPI = "https://addons.mozilla.org/firefox/downloads/latest/{slug}/latest.xpi"
+AMO_POLICY_XPI = "https://addons.mozilla.org/firefox/downloads/latest/{addon_id}/latest.xpi"
 USER_AGENT = "ride-fedora-firefox-policy/1.0"
 MAX_XPI_BYTES = 100 * 1024 * 1024
 ALLOWED_MODES = {"normal_installed", "force_installed"}
@@ -124,7 +125,7 @@ def desired_settings(manifest: dict[str, Any]) -> dict[str, dict[str, str]]:
     for extension in manifest["extensions"]:
         settings[extension["id"]] = {
             "installation_mode": extension.get("installation_mode", default_mode),
-            "install_url": AMO_XPI.format(slug=extension["slug"]),
+            "install_url": AMO_POLICY_XPI.format(addon_id=extension["id"]),
         }
     return settings
 

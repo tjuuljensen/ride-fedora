@@ -64,6 +64,19 @@ ride_require_privilege() {
   fi
 }
 
+ride_effective_uid() {
+  printf '%s\n' "$EUID"
+}
+
+ride_require_preview_identity() {
+  local entry=$1 scope uid
+  scope=$(jq -r '.scope' <<< "$entry")
+  uid=$(ride_effective_uid)
+  if [[ "$scope" == user && "$uid" -eq 0 ]]; then
+    ride_die "this operation is per-user; preview it from the intended non-root account"
+  fi
+}
+
 ride_target_matches() {
   local entry=$1
   jq -e --arg os "$RIDE_OS_ID" --arg arch "$RIDE_ARCH" --arg release "$RIDE_OS_VERSION" \

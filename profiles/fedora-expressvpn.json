@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-expressvpn",
+  "description": "Opt-in ExpressVPN v14.3.1.15429 install from publisher-signed files staged from the account portal.",
+  "operations": [
+    {
+      "id": "package.expressvpn",
+      "state": "installed"
+    }
+  ]
+}

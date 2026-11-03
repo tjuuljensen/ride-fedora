@@ -41,7 +41,7 @@ fallback execution path.
 | Outcome | Decision and reason | Reopen when |
 | --- | --- | --- |
 | `SetupUserDefaultDirs` | **Opt-in candidate implemented.** [`setting.user-default-directories`](../../catalog/operations.json) creates only absent `~/git` and `~/bin`, records the device/inode of RIDE-created paths, and restores only unchanged empty paths. Existing directories and contents are preserved. See the [profile](../../profiles/fedora-user-default-directories.json), [focused tests](../../tests/test_v3_user_default_directories.py), and [acceptance record](../acceptance/setting.user-default-directories.md). | Finish Fedora 44 Workstation acceptance, including symlink conflict and nonempty recovery. |
-| `FirefoxPreferences` | **Opt-in candidate implemented.** [`setting.firefox-preferences`](../../catalog/operations.json) uses Mozilla's currently documented AutoConfig files with an exact file hash record. It refuses any pre-existing target and preserves modified files on removal. See the [profile](../../profiles/fedora-firefox-preferences.json), [focused tests](../../tests/test_v3_firefox_preferences.py), and [acceptance record](../acceptance/setting.firefox-preferences.md). The old values include WebRTC and Sync changes and a Google startup page; keep this opt-in pending a Workstation startup check. | Finish Firefox startup and owned-file recovery acceptance. H083 tracks obsolete preference review and behavior coverage. |
+| `FirefoxPreferences` | **Operable opt-in candidate.** [`setting.firefox-preferences`](../../catalog/operations.json) uses Mozilla AutoConfig files with exact file hashes. It refuses pre-existing targets and preserves modified files on removal. The Fedora 44 Workstation startup and owned-file lifecycle passed. All v2 values remain in the opt-in profile, including WebRTC/Sync and homepage choices; Mozilla documents that AutoConfig `pref()` values are reapplied at each startup but are not locked. H083 tracks current-value freshness and visible behavior review before changing values or promoting beyond candidate. See the [profile](../../profiles/fedora-firefox-preferences.json), [focused tests](../../tests/test_v3_firefox_preferences.py), and [acceptance record](../acceptance/setting.firefox-preferences.md). | Keep this outcome opt-in; review current Firefox values and a brief visible session under H083. |
 
 ## Batches 03 and 08: shortcuts and favorites
 
@@ -102,6 +102,14 @@ Chrome preferences now have an opt-in candidate with Fedora 44 Workstation polic
 Both retained lock-timing variants are runnable on the declared Workstation
 target. They remain outside the base profile; future timing choices require
 the same exact-state and lock-safety review.
+
+The separately retained v2 `EnableScreenSaver` and `DisableScreensaver`
+outcomes are being added as `fedora-screensaver-enabled` and
+`fedora-screensaver-disabled` profiles. They change only idle delay, idle
+activation, and lock enabled; they preserve `lock-delay` exactly. Mocked tests
+and Fedora 44 Workstation acceptance passed for apply, repeat, status,
+unchanged `lock-delay`, and exact restore. H092 retains the brief visible
+behavior review.
 
 ## Batch 10: Terminator composite
 

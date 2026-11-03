@@ -34,6 +34,12 @@ def validate() -> dict:
     if len(by_id) != len(entries):
         raise ValueError("duplicate catalog ID")
     for entry in entries:
+        if "unsetState" in entry and (
+            entry.get("kind") != "setting"
+            or entry.get("recovery") != "exact-state"
+            or entry["unsetState"] not in entry.get("states", [])
+        ):
+            raise ValueError(f"{entry['id']} has an invalid declared unset state")
         if entry["kind"] == "package":
             sources = [entry["sourceId"], *(source["sourceId"] for source in entry.get("sourceProviders", []))]
             if len(sources) != len(set(sources)):
@@ -102,8 +108,8 @@ def render_docs(catalog: dict) -> str:
         "Generated from `catalog/operations.json` by `tools/validate_v3.py`.",
         "Candidate operations need explicit `--allow-candidate` until disposable VM acceptance.",
         "",
-        "| ID | Group | Outcome | Targets | Product / source | License | Verification | Recovery | Status |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| ID | Group | Outcome | Targets | Product / source | License | Verification | Recovery | Unset | Status |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for entry in catalog["operations"]:
         targets = ", ".join(
@@ -127,7 +133,7 @@ def render_docs(catalog: dict) -> str:
             f"| `{entry['id']}` | {entry['group']} | {description} | {targets} | "
             f"[{entry['productId']}]({entry['productUri']}) / [source]({entry['sourceUri']}){source_label} | "
             f"[{entry['license']}]({entry['licenseUri']}) | {entry['verification']} | "
-            f"{entry['recovery']} | {entry['status']} |"
+            f"{entry['recovery']} | {entry.get('unsetState', 'refuses')} | {entry['status']} |"
         )
     lines += [
         "",

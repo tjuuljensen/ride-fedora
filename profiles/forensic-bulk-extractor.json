@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "forensic-bulk-extractor",
+  "description": "Opt-in BulkExtractor 2.2.0 Snap on Fedora 44 Workstation; apply snap-runtime first. This profile manages application presence only and never processes evidence.",
+  "operations": [
+    {"id": "package.bulk-extractor", "state": "installed"}
+  ]
+}

@@ -177,8 +177,8 @@ Status is a v3 disposition: **implemented candidate** means cataloged but not VM
 | Security related | `RemoveKeepassXC` | no | Fedora legacy | deferred: compare legacy behavior before migration |
 | Security related | `InstallAIDE` | no | none | deferred: outside focused v3 scope |
 | Security related | `RemoveAIDE` | no | none | deferred: outside focused v3 scope |
-| Security related | `InstallClamAV` | no | Fedora legacy | deferred: compare legacy behavior before migration |
-| Security related | `RemoveClamAV` | no | Fedora legacy | deferred: compare legacy behavior before migration |
+| Security related | `InstallClamAV` | no | Fedora legacy | kept for v3.0; Fedora package/update path probed, owned signature-database recovery remains in `system-security-28` |
+| Security related | `RemoveClamAV` | no | Fedora legacy | kept for v3.0; exact signature-database and package restore behavior remains in `system-security-28` |
 | Security related | `InstallRootkitCheckers` | no | none | deferred: outside focused v3 scope |
 | Security related | `RemoveRootkitCheckers` | no | none | deferred: outside focused v3 scope |
 | Security related | `InstallLynis` | no | Fedora legacy | deferred: compare legacy behavior before migration |

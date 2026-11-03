@@ -3,6 +3,44 @@
   "clientVersion": "3.0.0",
   "operations": [
     {
+      "id": "package.expressvpn",
+      "kind": "package",
+      "name": "ExpressVPN Linux app",
+      "group": "vpn",
+      "description": "Install the publisher-signed ExpressVPN Linux client from locally staged account-portal files without logging in, activating, or connecting. RIDE records and restores the affected NetworkManager, routing registry, and root configuration state on removal.",
+      "handler": "expressvpn-wrapper",
+      "states": ["installed", "absent"],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": ["44"],
+          "architectures": ["x86_64"],
+          "variantIds": ["workstation", "server"]
+        }
+      },
+      "productId": "expressvpn",
+      "productUri": "https://www.expressvpn.com/",
+      "license": "Proprietary",
+      "licenseUri": "https://www.expressvpn.com/legal/terms",
+      "sourceUri": "https://www.expressvpn.com/support/vpn-setup/pgp-for-linux/",
+      "signatureUri": "https://www.expressvpn.com/support/vpn-setup/pgp-for-linux/",
+      "signingKeyUri": "https://www.expressvpn.com/expressvpn_release_public_key_0xAFF2A1415F6A3A38.asc",
+      "signingFingerprint": "1D0B09AD6C93FEE93FDDBD9DAFF2A1415F6A3A38",
+      "sourceSha256": "f784af6628564f4fcb0a82064d4dc1f22520c3c917bb1c882bd61eb621b31efb",
+      "version": "14.3.1.15429",
+      "assetName": "expressvpn-linux-universal-14.3.1.15429_release.run",
+      "signatureAssetName": "expressvpn-linux-universal-14.3.1.15429_release.run.asc",
+      "signingKeyAssetName": "expressvpn_release_public_key_0xAFF2A1415F6A3A38.asc",
+      "verification": "expressvpn-detached-pgp-and-sha256",
+      "recovery": "remove-new-install",
+      "sourceId": "expressvpn-signed-local",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "run",
+      "acceptanceEvidence": "docs/acceptance/package.expressvpn.md"
+    },
+    {
       "id": "artifact.capa-linux",
       "kind": "artifact",
       "name": "capa Linux archive",
@@ -728,7 +766,7 @@
       "kind": "package",
       "name": "Autopsy digital forensics platform",
       "group": "forensics",
-      "description": "Install the highly privileged Sleuth Kit Labs Autopsy Snap from the Snap Store stable channel. The publisher currently auto-connects block-device, dm-crypt, and fuse-support interfaces; RIDE manages app presence only and does not process case data. Snap preserves application data in a recoverable snapshot when removed.",
+      "description": "Install the highly privileged Sleuth Kit Labs Autopsy Snap from the Snap Store stable channel. The Snap Store currently authorizes automatic connections for block-device, dm-crypt, and fuse-support; RIDE manages app presence only and does not process case data. Snap preserves application data in a recoverable snapshot when removed.",
       "handler": "snap-store-package",
       "packageName": "autopsy",
       "states": [
@@ -766,6 +804,52 @@
         "package.snapd"
       ],
       "acceptanceEvidence": "docs/acceptance/package.autopsy.md"
+    },
+    {
+      "id": "package.bulk-extractor",
+      "kind": "package",
+      "name": "BulkExtractor forensic artifact analyzer",
+      "group": "forensics",
+      "description": "Install the pinned x86_64 BulkExtractor 2.2.0 Snap from its upstream GitHub release after SHA-256 verification. Its artifact declares strict confinement, while Fedora's Snap host confinement may be partial. RIDE manages presence only and does not open evidence or connect raw-device interfaces.",
+      "handler": "pinned-snap-package",
+      "packageName": "bulk-extractor",
+      "releaseVersion": "2.2.0",
+      "snapArchiveUri": "https://github.com/simsong/bulk_extractor/releases/download/v2.2.0/bulk-extractor_2.2.0_amd64.snap",
+      "sha256": "dbc0749a7a84e2710c104a09fd921b93c1db9e2147bb11da978dea7af0e16c67",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "bulk-extractor",
+      "productUri": "https://github.com/simsong/bulk_extractor",
+      "license": "GPL-3.0-or-later",
+      "licenseUri": "https://github.com/simsong/bulk_extractor/blob/main/COPYING",
+      "sourceUri": "https://github.com/simsong/bulk_extractor/releases/tag/v2.2.0",
+      "verification": "pinned-upstream-release-sha256",
+      "recovery": "remove-new-install",
+      "sourceId": "github-release-snap",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "snap",
+      "dependencies": [
+        "package.snapd"
+      ],
+      "acceptanceEvidence": "docs/acceptance/package.bulk-extractor.md"
     },
     {
       "id": "package.balena-etcher",
@@ -1056,6 +1140,212 @@
       "acceptanceEvidence": "docs/acceptance/package.bmon.md"
     },
     {
+      "id": "package.libuuid-devel",
+      "kind": "package",
+      "name": "Linux UUID development headers",
+      "group": "developer-tools",
+      "description": "Install Fedora's signed libuuid development package as a build prerequisite for the opt-in VMFS6 reader.",
+      "handler": "dnf-package",
+      "packageName": "libuuid-devel",
+      "states": [
+        "installed"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "recovery": "none",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "libuuid-devel",
+      "productUri": "https://packages.fedoraproject.org/pkgs/util-linux/libuuid-devel/",
+      "license": "BSD-3-Clause AND LGPL-2.1-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/util-linux/libuuid-devel/fedora-44.html",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/util-linux/libuuid-devel/fedora-44.html",
+      "verification": "fedora-repository-gpg",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.make",
+      "kind": "package",
+      "name": "GNU Make build tool",
+      "group": "developer-tools",
+      "description": "Install Fedora's signed GNU Make package as a build prerequisite for opt-in source-built tools.",
+      "handler": "dnf-package",
+      "packageName": "make",
+      "states": [
+        "installed"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "recovery": "none",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "make",
+      "productUri": "https://www.gnu.org/software/make/",
+      "license": "GPL-3.0-or-later AND LGPL-2.1-or-later AND GFDL-1.3-or-later AND FSFULLR",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/make/make/fedora-44.html",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/make/make/fedora-44.html",
+      "verification": "fedora-repository-gpg",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.browser-forensic",
+      "kind": "package",
+      "name": "Browser profile forensic analyzer",
+      "group": "forensics",
+      "description": "Build the pinned browser-forensic CLI in an owned user directory. Installing it does not inspect browser profiles; analysis and secret reveal require explicit br4n6 commands.",
+      "handler": "rust-source-build",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "dependencies": [
+        "package.cargo"
+      ],
+      "productId": "browser-forensic",
+      "productUri": "https://github.com/SecurityRonin/browser-forensic",
+      "license": "Apache-2.0",
+      "licenseUri": "https://github.com/SecurityRonin/browser-forensic/blob/10e2f70bd53d50144edcff849749efd0095c9a03/LICENSE",
+      "sourceUri": "https://github.com/SecurityRonin/browser-forensic/archive/10e2f70bd53d50144edcff849749efd0095c9a03.tar.gz",
+      "sourceSha256": "0493a03c0564a712a536fdd345c3eefec561c3ffd040f4ecc776ecdec398649c",
+      "sourceId": "github-source-pinned",
+      "version": "0.3.0",
+      "verification": "github-pinned-source-tree-and-cargo-lock",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "source-tree",
+      "acceptanceEvidence": "docs/acceptance/package.browser-forensic.md"
+    },
+    {
+      "id": "package.vmfs6-reader",
+      "kind": "package",
+      "name": "Experimental read-only VMFS6 image reader",
+      "group": "forensics",
+      "description": "Build the pinned archived VMFS6 debug reader into an owned user-local path for explicit manual testing. RIDE does not open or modify images. This experimental reader has not passed a genuine VMFS6 fixture test; do not use on live datastores or block devices. The source build omits VMFS_WRITE.",
+      "handler": "vmfs6-source-build",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "acceptanceEvidence": "docs/acceptance/package.vmfs6-reader.md",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "dependencies": [
+        "package.gcc",
+        "package.libuuid-devel",
+        "package.make"
+      ],
+      "productId": "vmfs6-tools",
+      "productUri": "https://github.com/teward/vmfs6-tools",
+      "version": "0.2.1",
+      "license": "GPL-2.0-only",
+      "licenseUri": "https://github.com/teward/vmfs6-tools/blob/0.2.1/LICENSE",
+      "sourceUri": "https://github.com/teward/vmfs6-tools/archive/refs/tags/0.2.1.tar.gz",
+      "sourceSha256": "a022a75f6c31611d1142c9d3692f2180b22d76a9d786809a5719e74f2e965c0a",
+      "sourceId": "github-source-pinned",
+      "distribution": "portable",
+      "deploymentId": "user-local-opt",
+      "artifactFormat": "source-tree",
+      "verification": "github-pinned-source-sha256-build-without-vmfs-write"
+    },
+    {
+      "id": "package.cargo",
+      "kind": "package",
+      "name": "Rust Cargo build tools",
+      "group": "developer-tools",
+      "description": "Install Fedora's signed Cargo and Rust compiler packages as build dependencies for opt-in Rust source tools.",
+      "handler": "dnf-package",
+      "packageName": "cargo",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "cargo",
+      "productUri": "https://www.rust-lang.org/tools/install",
+      "license": "Apache-2.0 OR MIT",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/rust/cargo/fedora-44.html",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/rust/cargo/fedora-44.html",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.cargo.md"
+    },
+    {
       "id": "package.brave",
       "kind": "package",
       "name": "Brave Browser",
@@ -1139,6 +1429,46 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.cheat.md"
+    },
+    {
+      "id": "package.clamav",
+      "kind": "package",
+      "name": "ClamAV with initial signatures",
+      "group": "security",
+      "description": "Install Fedora's signed ClamAV RPMs and run one initial FreshClam signature update without enabling recurring services or scanning files.",
+      "handler": "clamav-initial-signatures",
+      "packageName": "clamav",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "clamav",
+      "productUri": "https://www.clamav.net/",
+      "license": "GPL-2.0-only",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/clamav/clamav/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/clamav/clamav/",
+      "verification": "fedora-rpm-gpg-clamav-initial-signatures-and-exact-recovery",
+      "recovery": "exact-state",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.clamav.md"
     },
     {
       "id": "package.chepy",
@@ -2574,6 +2904,49 @@
       "deploymentId": "local-installed",
       "artifactFormat": "rpm",
       "acceptanceEvidence": "docs/acceptance/package.extundelete.md"
+    },
+    {
+      "id": "package.email-header-analyzer",
+      "kind": "package",
+      "name": "MailTower Email Header Analyzer (local static app)",
+      "group": "forensics",
+      "description": "Build and launch the pinned MailTower static analyzer locally. Header text stays in the browser; the launcher serves only on IPv4 loopback. Install requires git, Node.js/npm, and Python 3.",
+      "handler": "pinned-email-header-spa",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "acceptanceEvidence": "docs/acceptance/package.email-header-analyzer.md",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "email-header-analyzer",
+      "productUri": "https://github.com/mailtower-app/email-header-analyzer",
+      "license": "MIT (frontend source; npm dependencies are separately licensed)",
+      "licenseUri": "https://github.com/mailtower-app/email-header-analyzer/blob/ccaf044dfe964215656966013feaaea705726048/LICENSE",
+      "sourceUri": "https://github.com/mailtower-app/email-header-analyzer",
+      "sourceCommit": "ccaf044dfe964215656966013feaaea705726048",
+      "sourceTree": "69ec6b8a3c078a0f952e04ddea47f0a0ebf3ce49",
+      "lockfileBlobSha1": "7e8a00e275c2253e6ffe29f42a9aac8dc00aee41",
+      "version": "0.0.1",
+      "verification": "github-pinned-source-tree-and-npm-lock-integrity",
+      "sourceId": "github-source-pinned",
+      "distribution": "portable",
+      "deploymentId": "user-local-opt",
+      "artifactFormat": "source-tree"
     },
     {
       "id": "package.eza",
@@ -12164,7 +12537,7 @@
       "kind": "package",
       "name": "YubiKey Manager CLI",
       "group": "security-tools",
-      "description": "Install Fedora’s signed YubiKey Manager CLI without configuring or changing any connected YubiKey.",
+      "description": "Install Fedora\u2019s signed YubiKey Manager CLI without configuring or changing any connected YubiKey.",
       "handler": "dnf-package",
       "packageName": "yubikey-manager",
       "states": [
@@ -12388,9 +12761,9 @@
     {
       "id": "setting.firefox-addons",
       "kind": "setting",
-      "name": "Firefox extension policy",
+      "name": "Firefox managed add-ons",
       "group": "desktop-user",
-      "description": "Manage the kept Firefox add-on list through an owned system ExtensionSettings policy; removal has a pending-restart state and does not alter unrelated browser policy or profile data.",
+      "description": "Manage the kept Firefox add-on list as verified XPI files in Firefox's global Linux extension directory; removal has a pending-restart state and preserves unrelated policy and profile data.",
       "handler": "firefox-extensions",
       "states": [
         "configured",
@@ -12398,7 +12771,7 @@
         "absent"
       ],
       "scope": "system",
-      "status": "blocked",
+      "status": "candidate",
       "targets": {
         "fedora": {
           "releases": [
@@ -12416,8 +12789,8 @@
       "productUri": "https://www.mozilla.org/firefox/",
       "license": "MPL-2.0",
       "licenseUri": "https://www.mozilla.org/en-US/MPL/2.0/",
-      "sourceUri": "https://mozilla.github.io/policy-templates/#extensions",
-      "verification": "local-owned-firefox-extension-policy",
+      "sourceUri": "https://support.mozilla.org/en-US/kb/cannot-uninstall-add-on-extension-or-theme",
+      "verification": "local-owned-firefox-global-xpis",
       "recovery": "exact-state",
       "acceptanceEvidence": "docs/acceptance/setting.firefox-addons.md"
     },
@@ -12489,7 +12862,8 @@
       "licenseUri": "https://packages.fedoraproject.org/pkgs/flatpak/flatpak/",
       "sourceUri": "https://dl.flathub.org/repo/flathub.flatpakrepo",
       "verification": "local-flatpak-remote",
-      "recovery": "exact-state"
+      "recovery": "exact-state",
+      "unsetState": "absent"
     },
     {
       "id": "setting.gnome-calendar-week-numbers",
@@ -12628,7 +13002,8 @@
       "license": "GPL-2.0-or-later",
       "licenseUri": "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/COPYING",
       "sourceUri": "https://gitlab.gnome.org/GNOME/gnome-shell",
-      "verification": "local-gsettings-state"
+      "verification": "local-gsettings-state",
+      "unsetState": "absent"
     },
     {
       "id": "setting.gnome-location",
@@ -12669,7 +13044,7 @@
       "kind": "setting",
       "name": "GNOME idle and lock timing",
       "group": "desktop-user",
-      "description": "Select a retained idle activation and automatic lock timing pair while preserving exact prior user settings.",
+      "description": "Select a retained GNOME idle and lock timing pair or explicit enabled/disabled state while preserving exact prior user settings.",
       "handler": "gnome-lock-timing",
       "states": [
         "configured",
@@ -12773,7 +13148,7 @@
       "kind": "setting",
       "name": "GNOME user region",
       "group": "desktop-user",
-      "description": "Set the current user's region to the explicit locale selected in a profile or command.",
+      "description": "Set the current user's region to an explicit locale or empty string selected in a profile; the empty value preserves the legacy reset behavior with exact prior-state recovery.",
       "handler": "gsettings-string",
       "states": [
         "configured",
@@ -12801,7 +13176,8 @@
       "license": "LGPL-2.1-or-later",
       "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
       "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
-      "verification": "local-gsettings-state"
+      "verification": "local-gsettings-state",
+      "unsetState": "absent"
     },
     {
       "id": "setting.gnome-window-buttons",
@@ -12841,7 +13217,8 @@
       "license": "LGPL-2.1-or-later",
       "licenseUri": "https://packages.fedoraproject.org/pkgs/gsettings-desktop-schemas/gsettings-desktop-schemas/",
       "sourceUri": "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas",
-      "verification": "local-gsettings-state"
+      "verification": "local-gsettings-state",
+      "unsetState": "absent"
     },
     {
       "id": "setting.ibus-emoji-hotkey",
@@ -13056,6 +13433,42 @@
       "acceptanceEvidence": "docs/acceptance/setting.wireguard-keypair.md"
     },
     {
+      "id": "setting.networkmanager-vpn-profiles",
+      "kind": "setting",
+      "name": "NetworkManager VPN profiles",
+      "group": "vpn",
+      "description": "Remove explicitly selected inactive VPN profile UUIDs and restore their exact NetworkManager keyfiles.",
+      "handler": "networkmanager-vpn-profiles",
+      "states": [
+        "configured",
+        "absent"
+      ],
+      "valueKind": "networkmanager-vpn-uuid-list",
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "networkmanager",
+      "productUri": "https://networkmanager.dev/",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/main/COPYING",
+      "sourceUri": "https://networkmanager.dev/docs/api/latest/nm-settings-keyfile.html",
+      "verification": "local-networkmanager-vpn-keyfiles",
+      "recovery": "exact-state",
+      "acceptanceEvidence": "docs/acceptance/setting.networkmanager-vpn-profiles.md"
+    },
+    {
       "id": "system.update-multimedia-codecs",
       "kind": "system",
       "name": "Fedora Multimedia package updates",
@@ -13178,7 +13591,8 @@
       "sourceUri": "https://dnf5.readthedocs.io/en/stable/dnf5.conf.5.html",
       "verification": "local-dnf5-config",
       "recovery": "exact-state",
-      "acceptanceEvidence": "docs/acceptance/setting.dnf5-fast-tuning.md"
+      "acceptanceEvidence": "docs/acceptance/setting.dnf5-fast-tuning.md",
+      "unsetState": "absent"
     },
     {
       "id": "setting.hostname",
@@ -13403,6 +13817,77 @@
       "acceptanceEvidence": "docs/acceptance/setting.ssh-root-login.md"
     },
     {
+      "id": "setting.ssh-reboot",
+      "kind": "setting",
+      "name": "Allow a named user to reboot through SSH",
+      "group": "system-security",
+      "description": "Grant one explicitly selected non-root local user passwordless sudo for exactly /usr/bin/systemctl reboot. Does not grant broader systemctl access or execute a reboot.",
+      "handler": "ssh-reboot-sudoers",
+      "states": [
+        "configured",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "valueKind": "linux-user-principal",
+      "productId": "sudo",
+      "productUri": "https://www.sudo.ws/",
+      "license": "ISC",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/sudo/sudo/",
+      "sourceUri": "https://www.sudo.ws/docs/man/sudoers.man/",
+      "verification": "sudoers-tested-reboot-rule",
+      "recovery": "exact-state",
+      "acceptanceEvidence": "docs/acceptance/setting.ssh-reboot.md"
+    },
+    {
+      "id": "setting.keyfile-mounts",
+      "kind": "setting",
+      "name": "Selected keyfile encrypted mount",
+      "group": "system-security",
+      "description": "Remove or restore one explicitly selected keyfile-backed crypttab mapping and matching fstab row. Never changes a keyfile, LUKS header, or encrypted data; refuses active or mounted targets.",
+      "handler": "keyfile-mounts",
+      "states": [
+        "configured",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "valueKind": "linux-mapper-name",
+      "productId": "systemd-crypttab",
+      "productUri": "https://systemd.io/",
+      "license": "LGPL-2.1-or-later",
+      "licenseUri": "https://github.com/systemd/systemd/blob/main/LICENSE.LGPL2.1",
+      "sourceUri": "https://man7.org/linux/man-pages/man5/crypttab.5.html",
+      "verification": "crypttab-fstab-explicit-mapper-recovery",
+      "recovery": "exact-state"
+    },
+    {
       "id": "package.tailscale",
       "kind": "package",
       "name": "Tailscale client",
@@ -13575,6 +14060,172 @@
       "verification": "plex-unit-and-active-enabled-state",
       "recovery": "exact-state",
       "acceptanceEvidence": "docs/acceptance/setting.plex-server-service.md"
+    },
+    {
+      "id": "package.gtk2",
+      "kind": "package",
+      "name": "GTK+ 2 runtime",
+      "group": "forensics",
+      "description": "Install the Fedora gtk2 runtime package for opt-in NetworkMiner use.",
+      "handler": "dnf-package",
+      "packageName": "gtk2",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gtk2",
+      "productUri": "https://packages.fedoraproject.org/pkgs/gtk2/gtk2/",
+      "license": "Multiple SPDX licenses; see Fedora package metadata",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/gtk2/gtk2/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/gtk2/gtk2/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/networkminer-runtime.md"
+    },
+    {
+      "id": "package.mono-core",
+      "kind": "package",
+      "name": "Mono runtime",
+      "group": "forensics",
+      "description": "Install the Fedora mono-core runtime package for opt-in NetworkMiner use.",
+      "handler": "dnf-package",
+      "packageName": "mono-core",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "mono-core",
+      "productUri": "https://packages.fedoraproject.org/pkgs/mono/mono-core/",
+      "license": "Multiple SPDX licenses; see Fedora package metadata",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/mono-core/mono-core/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/mono-core/mono-core/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/networkminer-runtime.md"
+    },
+    {
+      "id": "package.mono-winforms",
+      "kind": "package",
+      "name": "Mono Windows Forms runtime",
+      "group": "forensics",
+      "description": "Install the Fedora mono-winforms runtime package for opt-in NetworkMiner use.",
+      "handler": "dnf-package",
+      "packageName": "mono-winforms",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "system",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "mono-winforms",
+      "productUri": "https://packages.fedoraproject.org/pkgs/mono/mono-winforms/",
+      "license": "Multiple SPDX licenses; see Fedora package metadata",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/mono-winforms/mono-winforms/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/mono-winforms/mono-winforms/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/networkminer-runtime.md"
+    },
+    {
+      "id": "package.networkminer",
+      "kind": "package",
+      "name": "NetworkMiner network forensic analyzer",
+      "group": "forensics",
+      "description": "Install the pinned NetworkMiner 3.2 Linux archive in user-local program paths. Captures and assembled-file output stay in private user data outside RIDE removal.",
+      "handler": "networkminer-portable",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "recovery": "remove-new-install",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "networkminer",
+      "productUri": "https://www.netresec.com/?page=NetworkMiner",
+      "license": "GPL-2.0",
+      "licenseUri": "https://www.netresec.com/?page=NetworkMinerSourceCode",
+      "sourceUri": "https://download.netresec.com/networkminer/NetworkMiner_3-2.zip",
+      "sourceSha256": "daceec649fb4fe59b11e4a9e4ecd5f51c1dd37824280dfbeac67bec27b6b6d60",
+      "verification": "https-fixed-url-sha256",
+      "sourceId": "netresec-static-pinned",
+      "distribution": "portable",
+      "deploymentId": "user-local-opt",
+      "artifactFormat": "zip",
+      "version": "3.2",
+      "dependencies": [
+        "package.gtk2",
+        "package.mono-core",
+        "package.mono-winforms"
+      ],
+      "acceptanceEvidence": "docs/acceptance/package.networkminer.md"
     }
   ]
 }

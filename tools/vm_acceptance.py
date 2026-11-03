@@ -25,8 +25,13 @@ TARGETS = ROOT / "tests" / "acceptance" / "targets.json"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 SOURCE_PATHS = ("ride.sh", "catalog", "profiles", "lib/v3", "requirements",
-                "tools/manage-firefox-extensions.py", "tools/manage-ferium.py",
+                "tools/manage-firefox-extensions.py", "tools/manage-firefox-global-xpis.py",
+                "tools/manage-ferium.py",
                 "tools/manage-minecraft-server.py", "tools/manage-galleta.py",
+                "tools/ride-email-header-analyzer.py",
+                "tools/clamav-state.py",
+                "tools/networkmanager-vpn-state.py",
+                "tools/keyfile-mount-state.py",
                 "policies/firefox-extensions.json")
 
 
@@ -139,7 +144,8 @@ def free_loopback_port() -> int:
 
 def qemu_command(overlay: Path, seed: Path, serial: Path, port: int,
                  *, accel: str = "kvm", smp: int = 2,
-                 memory_mib: int = 3072) -> list[str]:
+                 memory_mib: int = 3072,
+                 extra_disks: list[Path] | None = None) -> list[str]:
     if not 1 <= port <= 65535:
         raise ValueError("invalid SSH forward port")
     if accel not in {"kvm", "tcg"}:
@@ -148,16 +154,24 @@ def qemu_command(overlay: Path, seed: Path, serial: Path, port: int,
             not isinstance(memory_mib, int) or isinstance(memory_mib, bool) or
             not 1024 <= memory_mib <= 65536):
         raise ValueError("invalid VM resource settings")
-    return [
+    command = [
         "qemu-system-x86_64", "-accel", accel, "-machine", "q35",
         "-cpu", "host" if accel == "kvm" else "max,-svm",
         "-smp", str(smp), "-m", str(memory_mib), "-display", "none", "-monitor", "none",
         "-serial", f"file:{serial}",
-        "-drive", f"file={overlay},if=virtio,format=qcow2",
+        "-drive", f"if=none,id=ridesystem,file={overlay},format=qcow2",
+        "-device", "virtio-blk-pci,drive=ridesystem,bootindex=1",
         "-drive", f"file={seed},media=cdrom,readonly=on",
         "-netdev", f"user,id=net0,hostfwd=tcp:127.0.0.1:{port}-:22",
         "-device", "virtio-net-pci,netdev=net0",
     ]
+    for index, disk in enumerate(extra_disks or []):
+        drive_id = f"rideextra{index}"
+        command.extend((
+            "-drive", f"if=none,id={drive_id},file={disk},format=qcow2",
+            "-device", f"virtio-blk-pci,drive={drive_id},serial={drive_id}",
+        ))
+    return command
 
 
 def assert_guest_target(os_release: str, architecture: str,
@@ -174,13 +188,21 @@ class VM:
     """One isolated scenario, always created from a clean verified base image."""
 
     def __init__(self, target: dict[str, str], image: Path, artifacts: Path,
-                 *, accel: str = "kvm"):
+                 *, accel: str = "kvm", extra_disks: list[Path] | None = None,
+                 extra_disk_sizes_mib: list[int] | None = None):
         if accel not in {"kvm", "tcg"}:
             raise ValueError("unsupported QEMU acceleration mode")
         self.target = target
         self.image = image.resolve()
         self.artifacts = artifacts.resolve()
         self.accel = accel
+        self.extra_disks = [disk.resolve() for disk in (extra_disks or [])]
+        self.extra_disk_sizes_mib = list(extra_disk_sizes_mib or [])
+        if self.extra_disks and self.extra_disk_sizes_mib:
+            raise ValueError("provide extra disks or sizes, not both")
+        if any(not isinstance(size, int) or isinstance(size, bool) or size < 16
+               for size in self.extra_disk_sizes_mib):
+            raise ValueError("extra disk sizes must be integers of at least 16 MiB")
         for source in SOURCE_PATHS[1:]:
             if self.artifacts.is_relative_to(ROOT / source):
                 raise ValueError("VM output cannot be inside bundled source directories")
@@ -244,6 +266,20 @@ class VM:
         guest = f"/home/ride-test/{name}.json"
         self._command(["scp", *self._ssh_options(), "-P", str(self.port),
                        str(local), f"ride-test@127.0.0.1:{guest}"], timeout=60)
+        return guest
+
+    def put_file(self, name: str, source: Path) -> str:
+        """Copy one regular local fixture file into the disposable guest user home."""
+        if not ID_PATTERN.fullmatch(name):
+            raise ValueError("invalid guest fixture name")
+        if not source.is_file() or source.is_symlink():
+            raise ValueError(f"fixture must be a regular, non-symlink file: {source}")
+        local = self.artifacts / f"fixture-{name}"
+        shutil.copyfile(source, local)
+        local.chmod(0o600)
+        guest = f"/home/ride-test/fixture-{name}"
+        self._command(["scp", *self._ssh_options(), "-P", str(self.port),
+                       str(local), f"ride-test@127.0.0.1:{guest}"], timeout=600)
         return guest
 
     def _seed(self) -> Path:
@@ -351,6 +387,12 @@ class VM:
                     "verifiedImageSha256": digest, "sourceRevision": revision,
                     "sourceHasUncommittedChanges": dirty,
                     "catalogSha256": file_sha256(ROOT / "catalog" / "operations.json")}
+        for index, size_mib in enumerate(self.extra_disk_sizes_mib):
+            disk = self.artifacts / f"extra-{index}.qcow2"
+            self._command(["qemu-img", "create", "-f", "qcow2", str(disk), f"{size_mib}M"],
+                          timeout=30)
+            self.extra_disks.append(disk)
+        metadata["extraDisks"] = [str(disk) for disk in self.extra_disks]
         (self.artifacts / "metadata.json").write_text(
             json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         self._record(metadata)
@@ -363,7 +405,8 @@ class VM:
         self.process = subprocess.Popen(
             qemu_command(overlay, seed, self.artifacts / "serial.log", self.port,
                          accel=self.accel, smp=self.target.get("vmSmp", 2),
-                         memory_mib=self.target.get("vmMemoryMiB", 3072)),
+                         memory_mib=self.target.get("vmMemoryMiB", 3072),
+                         extra_disks=self.extra_disks),
             stdin=subprocess.DEVNULL, stdout=self._qemu_log, stderr=subprocess.STDOUT,
         )
         try:

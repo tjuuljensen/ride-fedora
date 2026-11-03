@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-rust-build-tools",
+  "description": "System-scoped Fedora Cargo and Rust build tools for opt-in source-built applications",
+  "operations": [
+    {"id": "package.cargo", "state": "installed"}
+  ]
+}

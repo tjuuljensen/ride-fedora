@@ -9,6 +9,7 @@ Usage: ./ride.sh <command> [argument] [options]
   list [all|packages|artifacts|settings|profiles|groups]
   search <literal query>
   show <operation-id> [--source source-id]
+  show --stdin [--source source-id]  # one operation ID per input line
   plan [--profile name-or-path]
   apply [--profile name-or-path]
   download <package-or-artifact-id> [--source source-id] [--destination directory]
@@ -17,13 +18,16 @@ Usage: ./ride.sh <command> [argument] [options]
   deploy <system-operation-id> --state <declared-state>
   update <system-operation-id>
   unset <setting-id>
-  status [operation-id] [--source source-id] [--profile name-or-path]
+  status [operation-id] [--source source-id] [--value declared-value] [--profile name-or-path]
+  status --id <operation-id> | --view <view> [--profile name-or-path]
   restore --run-id <id>
   remove <package-id> [--source source-id] | remove --profile name-or-path
   completion bash
 
 Options: --dry-run previews state-changing commands; --allow-candidate enables
 development-only operations without VM acceptance. System changes need sudo.
+unset uses only a catalog-declared unset state. Profile removal removes only
+reversible packages; settings remain in place. remove requires an ID or profile.
 No command defaults to list. Profiles and catalog are JSON data, never shell.
 Package source selection is explicit; profiles may declare a source per package.
 Download does not install. Installing from a retained local artifact is pending.

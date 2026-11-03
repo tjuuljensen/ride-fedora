@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "forensic-networkminer",
+  "description": "Opt-in user-local NetworkMiner 3.2. Install forensic-networkminer-runtime first; captures and assembled-file output remain user-owned after removal.",
+  "operations": [
+    {
+      "id": "package.networkminer",
+      "state": "installed"
+    }
+  ]
+}

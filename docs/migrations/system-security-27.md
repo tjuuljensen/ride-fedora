@@ -1,21 +1,14 @@
 # System and security batch 27: Pidgin with OTR
 
-Status: **unsupported for v3.0**, 2026-10-30. The v2 pair installs and removes both
-`pidgin` and `pidgin-otr`. Both have [Fedora 44 package
-records](https://packages.fedoraproject.org/pkgs/pidgin/pidgin/) and the
-[OTR plugin](https://packages.fedoraproject.org/pkgs/pidgin-otr/pidgin-otr/)
-is a separate security-sensitive product. Before a runnable v3 profile,
-review plugin compatibility, installation and activation, security claims,
-user data and key ownership, removal, and recovery in an isolated VM batch.
-An RPM transaction alone does not establish correct encrypted messaging.
-The v2 function gives no account, key, plugin activation, protocol test, or
-user-data inverse. If retained, a runnable operation needs a Pidgin and OTR
-deployment, current upstream and license review, isolated key store,
-two-party encrypted-message test, and seeded-profile recovery on a disposable
-Workstation. Reopen on that evidence; do not put a security claim behind a
-package-only success result. No state-changing VM test was run for this
-non-runnable decision.
+Status: **retired from v3 by owner direction**, 2026-11-02. The v2 functions
+installed and removed Fedora's `pidgin` and `pidgin-otr` RPMs. The owner
+explicitly directed that Pidgin/OTR be dropped from v3. No v3 operations or
+profiles are provided, and the outcome remains in the v2 inventory as an
+owner-retired capability. Reopen only if the owner explicitly requests it.
 
-The owner deferred the combined Pidgin/OTR keep-or-retire choice on
-2026-10-30. Revisit it after plugin compatibility and account/key recovery
-are reviewed; the pair remains non-runnable.
+This retires the whole Pidgin/OTR outcome from v3; it does not make a claim
+about Fedora package availability, OTR compatibility, or encrypted messaging
+security. Historical review found Fedora 44 package records for the client and
+plugin, but did not establish account, key, plugin activation, message, or user
+data recovery behavior. That review is retained here as context, not as an
+active migration blocker.

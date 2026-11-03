@@ -4,8 +4,8 @@ Status: **four kept outcomes operable as opt-in candidates**, 2026-10-30.
 The owner kept `GnomeRegionDaDK` and three exclusive window-button layouts
 for v3.0. Their v2 functions write one user GSettings string each without
 capturing a prior value or its unset/default provenance. The separate
-remove-only `GnomeRegion` function remains owner-deferred; it does not define
-a default for the kept region setting.
+remove-only `GnomeRegion` behavior now uses an explicit empty-string value in
+the opt-in `gnome-region-reset` profile and the same exact prior-state journal.
 
 GNOME documents that GSettings and dconf changes apply to the current user's
 database, not root's. The live schema keys are
@@ -31,14 +31,13 @@ hard-coded Danish policy.
 - Mock plan, candidate refusal, apply, repeat, conflict, locked-key refusal,
   a write that fails after mutation, missing observation, and restore of both
   custom and unset baselines. In one disposable Workstation overlay, exercise
-  all three window choices and one declared region, with an existing custom
-  value and an unset value. A brief visual check may move to v3.1 after the
-  stored-value lifecycle passes; do not claim visual behavior from headless
-  evidence.
-- Record separate result and evidence for each of the four source outcomes;
+  all three window choices, one declared locale, and the legacy explicit empty
+  region value, with existing custom and unset baselines. A brief visual check
+  may move to v3.1 after stored-value lifecycles pass; do not claim visual
+  behavior from headless evidence.
+- Record separate result and evidence for each kept source outcome;
   compare Windows catalog, profile, and run-state semantics, update generated
-  docs, and investigate a failed VM run before retrying. The owner-deferred
-  remove-only region outcome stays separate until its use case is decided.
+  docs, and investigate a failed VM run before retrying.
 
 The implementation extends the profile's data-only value field and the
 trusted GSettings provider. It does not source profile JSON or turn a saved
@@ -59,7 +58,7 @@ applied in one profile transaction. The private journal stores the selected
 value and exact prior dconf override; restore verifies the source signature
 and refuses a changed current value.
 
-All four kept source outcomes are **operable opt-in candidates** on Fedora 44
-x86_64 Workstation. The headless test did not render window controls or
-region-dependent formats; those checks remain H003 in v3.1. The separate
-owner-deferred `GnomeRegion` removal outcome remains a distinct decision.
+The region and window source outcomes, including the separate `GnomeRegion`
+empty reset behavior, are **operable opt-in candidates** on Fedora 44 x86_64
+Workstation. The headless test does not render window controls or
+region-dependent formats; those checks remain H003 in v3.1.

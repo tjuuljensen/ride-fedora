@@ -64,7 +64,7 @@ journaled, RIDE-owned state.
 
 | Source outcome | Owner decision | Unsafe v2 behavior | Migration requirement |
 | --- | --- | --- | --- |
-| `workstation:package.GnomeRegion` | **Decide later** | `RemoveGnomeRegion` writes an empty region, not the user's prior value. | Revisit after the owned GNOME region operation is designed. |
+| `workstation:package.GnomeRegion` | **Migrated as an opt-in candidate** | `RemoveGnomeRegion` writes an empty region, not the user's prior value. | `gnome-region-reset` applies that explicit value and restores only the journaled prior dconf override; H003 retains visual and locale-format review. |
 | `workstation:package.CustomKbrdShortcut` | **Keep for migration** | `RemoveCustomKbrdShortcut` clears the complete custom shortcut list and fixed slots, including unowned entries. | Scope the inverse to shortcuts created and journaled by v3. |
 | `workstation:package.VPNProfiles` | **Keep for migration** | `RemoveVPNProfiles` deletes every NetworkManager VPN connection. | Delete only recorded RIDE-owned UUIDs and preserve unrelated connections. |
 | `workstation:package.ExpressVPNProfiles` | **Keep for migration** | `RemoveExpressVPNProfiles` deletes name-matched connections without proving ownership. | Tie removal to an accepted private client deployment and exact owned UUIDs. |
@@ -110,7 +110,7 @@ Verify each edition and source; a current product does not validate the old inst
 
 - `workstation:package.PowerShell` (medium risk; **keep for migration** on 2026-10-30): The v2 function imports a system Microsoft key and a RHEL 7 repository; current Microsoft RPM guidance does not establish Fedora 44 support or an owned inverse. Review a current source and exact recovery.
 - `workstation:package.WoeUSB` (medium risk; **keep for migration** on 2026-10-30): Fedora WoeUSB is orphaned and has no Fedora 44 package; the v2 DNF name cannot install on the declared target. Review a maintained WoeUSB-ng source and keep USB writing user-initiated.
-- `workstation:package.Pidgin` (high risk; **decide later** on 2026-10-30): v2 installs Pidgin and OTR but has no account, key, plugin activation, encrypted-message, or user-data recovery contract. Revisit the combined outcome after compatibility and recovery review.
+- `workstation:package.Pidgin` (high risk; **retired from v3** on 2026-11-02): the owner directed dropping Pidgin and OTR from the v3 portfolio. The source outcome remains in the ledger as retired; no v3 package operation or profile is planned. Reopen only on a new explicit owner request.
 - `workstation:package.Bitwarden` (high risk): The v2 latest RPM scrape lacks pinned publisher verification and a vault-preserving inverse; no v3 external-RPM handler satisfies the deeper credential/data gate.
 - `workstation:package.VMwareWorkstation` (high risk): v2 follows a moving publisher installer redirect and uses host-specific serial data without pinned provenance or full recovery.
 - `workstation:action.PatchVMwareModules` (high risk): v2 pulls moving third-party kernel module source, stops service, and lacks module rollback.

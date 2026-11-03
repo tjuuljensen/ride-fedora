@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "forensic-networkminer-runtime",
+  "description": "Opt-in signed Fedora Mono and GTK runtime packages required by the NetworkMiner user application. Apply as a separate system profile; removing NetworkMiner does not remove these packages.",
+  "operations": [
+    {
+      "id": "package.gtk2",
+      "state": "installed"
+    },
+    {
+      "id": "package.mono-core",
+      "state": "installed"
+    },
+    {
+      "id": "package.mono-winforms",
+      "state": "installed"
+    }
+  ]
+}

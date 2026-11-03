@@ -82,6 +82,10 @@ class FirefoxPolicyTests(unittest.TestCase):
             settings["example@example.invalid"]["installation_mode"],
             "normal_installed",
         )
+        self.assertEqual(
+            settings["example@example.invalid"]["install_url"],
+            "https://addons.mozilla.org/firefox/downloads/latest/example@example.invalid/latest.xpi",
+        )
 
         target_before = self.target.read_bytes()
         state_before = self.state.read_bytes()

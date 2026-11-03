@@ -40,11 +40,14 @@ ride_gsettings() {{
 }}
 dconf() {{ local path=$2 key=${{path##*/}}; jq -r --arg key "$key" '.[$key] // ""' <<< "$GNOME_OVERRIDES"; }}
 ride_gnome_lock_timing_paths() {{
+  local selected
+  selected=$(jq -r '.selectedValue // ""' <<< "$1")
   printf '%s\\n' \\
     'org.gnome.desktop.session idle-delay /org/gnome/desktop/session/idle-delay' \\
     'org.gnome.desktop.screensaver idle-activation-enabled /org/gnome/desktop/screensaver/idle-activation-enabled' \\
-    'org.gnome.desktop.screensaver lock-enabled /org/gnome/desktop/screensaver/lock-enabled' \\
-    'org.gnome.desktop.screensaver lock-delay /org/gnome/desktop/screensaver/lock-delay'
+    'org.gnome.desktop.screensaver lock-enabled /org/gnome/desktop/screensaver/lock-enabled'
+  [[ "$selected" == screensaver-enabled || "$selected" == screensaver-disabled ]] ||
+    printf '%s\\n' 'org.gnome.desktop.screensaver lock-delay /org/gnome/desktop/screensaver/lock-delay'
 }}
 {body}
 printf 'STATE=%s\\nOVERRIDES=%s\\n' "$GNOME_STATE" "$GNOME_OVERRIDES"
@@ -61,7 +64,7 @@ printf 'STATE=%s\\nOVERRIDES=%s\\n' "$GNOME_STATE" "$GNOME_OVERRIDES"
             '[[ "$before" == prior:* ]]\n'
             'ride_gnome_lock_timing_change "$ENTRY" configured\n'
             '[[ "$(ride_gnome_lock_timing_observe "$ENTRY")" == configured ]]\n'
-            'STATUS_ENTRY={"id":"setting.gnome-lock-timing"}\n'
+            'STATUS_ENTRY=\'{"id":"setting.gnome-lock-timing"}\'\n'
             '[[ "$(ride_gnome_lock_timing_observe "$STATUS_ENTRY")" == configured ]]\n'
             'ride_gnome_lock_timing_change "$ENTRY" "$before"\n'
             '[[ "$(ride_gnome_lock_timing_observe "$ENTRY")" == "$before" ]]',
@@ -83,6 +86,36 @@ printf 'STATE=%s\\nOVERRIDES=%s\\n' "$GNOME_STATE" "$GNOME_OVERRIDES"
         overrides = json.loads(result.stdout.split("OVERRIDES=", 1)[1].splitlines()[0])
         self.assertEqual(state, initial)
         self.assertEqual(overrides, initial)
+
+    def test_legacy_enabled_and_disabled_states_preserve_lock_delay(self):
+        initial = {"idle-delay": "uint32 720", "idle-activation-enabled": "false",
+                   "lock-enabled": "false", "lock-delay": "uint32 40"}
+        for selection, expected in (
+            ("screensaver-enabled", {"idle-delay": "uint32 300",
+                                      "idle-activation-enabled": "true",
+                                      "lock-enabled": "true", "lock-delay": "uint32 40"}),
+            ("screensaver-disabled", {"idle-delay": "uint32 0",
+                                       "idle-activation-enabled": "false",
+                                       "lock-enabled": "false", "lock-delay": "uint32 40"}),
+        ):
+            entry = {"id": "setting.gnome-lock-timing", "selectedValue": selection}
+            result = self.run_provider(
+                'before=$(ride_gnome_lock_timing_observe "$ENTRY")\n'
+                'ride_gnome_lock_timing_change "$ENTRY" configured\n'
+                '[[ "$(ride_gnome_lock_timing_observe "$ENTRY")" == configured ]]\n'
+                + f'[[ "$(jq -r ".\\\"idle-delay\\\"" <<< "$GNOME_STATE")" == {shlex.quote(expected["idle-delay"])} ]]\n'
+                + f'[[ "$(jq -r ".\\\"idle-activation-enabled\\\"" <<< "$GNOME_STATE")" == {shlex.quote(expected["idle-activation-enabled"])} ]]\n'
+                + f'[[ "$(jq -r ".\\\"lock-enabled\\\"" <<< "$GNOME_STATE")" == {shlex.quote(expected["lock-enabled"])} ]]\n'
+                '[[ "$(jq -r ".\\\"lock-delay\\\"" <<< "$GNOME_STATE")" == "uint32 40" ]]\n'
+                'ride_gnome_lock_timing_change "$ENTRY" "$before"\n'
+                '[[ "$(ride_gnome_lock_timing_observe "$ENTRY")" == "$before" ]]',
+                entry=entry, state=initial, overrides=initial)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            state = json.loads(result.stdout.split("STATE=", 1)[1].splitlines()[0])
+            self.assertEqual(state, initial)
+            # The mock lifecycle verifies the configured state before restore;
+            # the lock-delay remains the seeded user value throughout apply.
+            self.assertIn('"lock-delay":"uint32 40"', result.stdout)
 
     def test_snapshot_rejects_unknown_keys_and_untyped_values(self):
         entry = {"id": "setting.gnome-lock-timing", "selectedValue": "idle-10-lock-5"}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-browser-forensics",
+  "description": "Opt-in browser forensic CLI built from pinned Apache-2.0 Rust source",
+  "operations": [
+    {"id": "package.browser-forensic", "state": "installed"}
+  ]
+}

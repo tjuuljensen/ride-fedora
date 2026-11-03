@@ -34,8 +34,8 @@ class FirefoxAddonEngineTests(unittest.TestCase):
                 "productUri": "https://www.mozilla.org/firefox/",
                 "license": "MPL-2.0",
                 "licenseUri": "https://www.mozilla.org/en-US/MPL/2.0/",
-                "sourceUri": "https://mozilla.github.io/policy-templates/#extensions",
-                "verification": "local-owned-firefox-extension-policy",
+                "sourceUri": "https://support.mozilla.org/en-US/kb/cannot-uninstall-add-on-extension-or-theme",
+                "verification": "local-owned-firefox-global-xpis",
             }
             entry_path = root / "entry.json"
             entry_path.write_text(json.dumps(entry), encoding="utf-8")
@@ -43,6 +43,10 @@ class FirefoxAddonEngineTests(unittest.TestCase):
             script = f"""
 set -euo pipefail
 source {str(CLI)!r}
+RIDE_OS_ID=fedora
+RIDE_OS_VERSION=44
+RIDE_ARCH=x86_64
+RIDE_OS_VARIANT=workstation
 RIDE_STATE_DIR={str(runs)!r}
 RIDE_DRY_RUN=0
 ride_entry_or_die() {{ cat {str(entry_path)!r}; }}

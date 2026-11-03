@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "gnome-region-reset",
+  "description": "Optional explicit empty GNOME region value for compatibility with the v2 reset action; restore returns the previous user value.",
+  "operations": [
+    {"id": "setting.gnome-region", "state": "configured", "value": ""}
+  ]
+}

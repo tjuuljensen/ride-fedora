@@ -37,6 +37,8 @@ jobs:
           python3 tools/validate_v3.py --check-docs
           python3 tools/build_burndown.py --check
           python3 tools/migration_progress.py --check
+          python3 tools/check_behavior_scenarios.py --check
+          python3 tools/check_alignment_register.py
       - name: Mocked CLI, cache, completion, and Firefox policy tests
         run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Collect VM acceptance contract without starting guests

@@ -79,9 +79,12 @@ class MigrationProgressTests(unittest.TestCase):
 
     def test_unclassified_high_risk_candidate_cannot_count_as_complete(self):
         data = copy.deepcopy(self.data)
-        row = next(item for item in data["outcomes"] if item["risk"] == "high")
+        row = next(item for item in data["outcomes"] if item["key"] == "workstation:package.Autopsy")
+        row.pop("safetyDomains", None)
         row.update(disposition="migrate", progress="operable", blocker="",
-                   v3Ids=["package.less"], evidence=["docs/MIGRATION-PLAN.md"])
+                   v3Ids=["package.autopsy"],
+                   evidence=["docs/acceptance/package.autopsy.md"],
+                   v31Hardening=["H087"])
         with self.assertRaisesRegex(ValueError, "explicit safety-domain classification"):
             self.validate_copy(data)
 
@@ -92,6 +95,59 @@ class MigrationProgressTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "deep safety gate"):
             self.validate_copy(data)
 
+    def test_deep_security_review_can_count_with_linked_domain_evidence(self):
+        data = copy.deepcopy(self.data)
+        row = next(item for item in data["outcomes"] if item["key"] == "workstation:setting.SSHreboot")
+        row.update(progress="operable", blocker="", v3Ids=["setting.ssh-reboot"],
+                   safetyDomains=["security"], v31Hardening=["H112"],
+                   evidence=["docs/migrations/system-security-18-ssh-reboot.md",
+                             "docs/acceptance/setting.ssh-reboot.md",
+                             "tests/test_v3_ssh_reboot.py", "tests/acceptance/test_ssh_reboot.py"],
+                   safetyReview={
+                       "status": "passed", "domains": ["security"],
+                       "checks": ["scoped-privilege", "conflict-refusal", "real-action",
+                                  "reconnect", "exact-recovery",
+                                  "unrelated-policy-preservation"],
+                       "evidence": ["docs/acceptance/setting.ssh-reboot.md"],
+                   })
+        validated = self.validate_copy(data)
+        report = migration_progress.summarize(validated)
+        self.assertEqual(report["v30PackageSetting"]["operable"], 148)
+        self.assertEqual(report["v30PackageSetting"]["gap"], 5)
+
+    def test_storage_and_encryption_candidate_requires_domain_specific_evidence(self):
+        data = copy.deepcopy(self.data)
+        row = next(item for item in data["outcomes"]
+                   if item["key"] == "workstation:package.KeyfileMounts")
+        row.update(progress="operable", blocker="", v3Ids=["setting.keyfile-mounts"],
+                   v31Hardening=["H117"],
+                   evidence=["docs/migrations/system-security-risk-decisions.md",
+                             "docs/migrations/system-security-25-keyfile-mounts.md",
+                             "docs/acceptance/setting.keyfile-mounts.md",
+                             "tests/test_keyfile_mount_state.py",
+                             "tests/acceptance/test_keyfile_mounts.py"],
+                   safetyDomains=["storage", "encryption"],
+                   safetyReview={
+                       "status": "passed", "domains": ["storage", "encryption"],
+                       "checks": ["exact-configuration-recovery", "unrelated-entry-preservation",
+                                  "active-or-mounted-refusal", "keyfile-preservation",
+                                  "encrypted-data-preservation", "boot-recovery"],
+                       "evidence": ["docs/acceptance/setting.keyfile-mounts.md"],
+                   })
+        validated = self.validate_copy(data)
+        report = migration_progress.summarize(validated)
+        self.assertEqual(report["v30PackageSetting"]["operable"], 148)
+        self.assertEqual(report["v30PackageSetting"]["gap"], 5)
+
+    def test_deep_data_review_requires_output_boundary_evidence(self):
+        data = copy.deepcopy(self.data)
+        row = next(item for item in data["outcomes"]
+                   if item["key"] == "workstation:package.NetworkMiner")
+        row.pop("safetyReview", None)
+        with self.assertRaisesRegex(ValueError, "deep safety gate"):
+            self.validate_copy(data)
+        self.validate_copy(self.data)
+
     def test_operable_outcome_can_combine_supported_and_candidate_operations(self):
         data = copy.deepcopy(self.data)
         row = next(item for item in data["outcomes"]
@@ -100,8 +156,8 @@ class MigrationProgressTests(unittest.TestCase):
                    v31Hardening=["H037"])
         self.validate_copy(data)
         report = migration_progress.summarize(data)
-        self.assertEqual(report["v30PackageSetting"]["operable"], 133)
-        self.assertEqual(report["v30PackageSetting"]["gap"], 22)
+        self.assertEqual(report["v30PackageSetting"]["operable"], 148)
+        self.assertEqual(report["v30PackageSetting"]["gap"], 5)
 
     def test_non_operable_resolution_needs_evidence(self):
         data = copy.deepcopy(self.data)
@@ -133,12 +189,17 @@ class MigrationProgressTests(unittest.TestCase):
         self.assertEqual(coverage["ledgered"], 169)
         self.assertEqual(coverage["excludedPackages"], 0)
         self.assertEqual(coverage["total"], 169)
-        self.assertEqual(coverage["operable"], 133)
-        self.assertEqual(coverage["retired"], 9)
-        self.assertEqual(coverage["kept"], 97)
-        self.assertEqual(coverage["deferred"], 8)
-        self.assertEqual(coverage["replaced"], 5)
-        self.assertEqual(coverage["gap"], 22)
+        self.assertEqual(coverage["operable"], 148)
+        self.assertEqual(coverage["retired"], 10)
+        self.assertEqual(coverage["kept"], 103)
+        self.assertEqual(coverage["deferred"], 1)
+        self.assertEqual(coverage["replaced"], 6)
+        self.assertEqual(coverage["gap"], 5)
+        startup = next(item for item in self.data["outcomes"]
+                       if item["key"] == "workstation:package.ExpressVPNafterBoot")
+        self.assertEqual((startup["disposition"], startup["progress"],
+                          startup["v30Coverage"]), ("replace", "resolved", "replacement"))
+        self.assertIn("reference/expressvpn-autoconnect.md", startup["evidence"])
         server_batch = next(batch for batch in report["batches"] if batch["id"] == "generic-server-15")
         self.assertEqual(server_batch["complete"], 1)
         self.assertEqual(server_batch["v30Operable"], 1)

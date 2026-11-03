@@ -1,5 +1,18 @@
 # Standalone script references
 
+## ExpressVPN startup auto-connect
+
+[ExpressVPN's publisher-managed GUI auto-connect](expressvpn-autoconnect.md)
+is the documented v3.0 Workstation replacement for the v2 boot-connect
+crontab job. It preserves the capability without RIDE managing VPN state or
+removing an unowned legacy job.
+
+## ExpressVPN location rotation
+
+[ExpressVPN location rotation](expressvpn-rotation.md) documents the new
+user-scoped allowlist tool. It previews by default and does not install a
+timer or claim network-recovery verification.
+
 ## MAC vendor lookup
 
 `mac-vendor.py` and `mac-vendor.sh` are standalone copies from the owner's

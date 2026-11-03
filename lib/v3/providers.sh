@@ -4,6 +4,7 @@ ride_observe() {
   local entry=$1 handler name result
   handler=$(jq -r '.handler' <<< "$entry")
   case "$handler" in
+    clamav-initial-signatures) ride_clamav_observe ;;
     dnf-package|smartmontools-package)
       ride_require_command rpm
       name=$(jq -r '.packageName' <<< "$entry")
@@ -39,14 +40,18 @@ ride_observe() {
     plex-server-service) ride_plex_server_service_observe ;;
     glances-web-service) ride_glances_web_service_observe ;;
     sshd-root-login) ride_sshd_root_login_observe ;;
+    ssh-reboot-sudoers) ride_ssh_reboot_observe "$entry" ;;
+    keyfile-mounts) ride_keyfile_mounts_observe "$entry" ;;
     github-asset) printf 'not-applicable\n' ;;
     pinned-script) ride_observe_asn "$entry" ;;
     pinned-woeusb-script) ride_observe_woeusb "$entry" ;;
     pinned-zip) ride_observe_cyberchef "$entry" ;;
+    networkminer-portable) ride_observe_networkminer "$entry" ;;
     pinned-binary) ride_observe_librespeed "$entry" ;;
     pinned-eza-binary) ride_observe_eza_portable "$entry" ;;
     pinned-appimage) ride_observe_bitwarden_appimage "$entry" ;;
     pinned-publisher-appimage) ride_observe_publisher_appimage "$entry" ;;
+    pinned-email-header-spa) ride_observe_email_header_analyzer ;;
     pinned-yubico-tarball) ride_observe_yubico_authenticator "$entry" ;;
     pinned-volatility2-bundle) ride_observe_volatility2 "$entry" ;;
     pinned-deb-binary) ride_galleta_state observe ;;
@@ -74,6 +79,8 @@ ride_observe() {
         *) ride_die "unknown isolated Python operation" ;;
       esac
       ;;
+    rust-source-build) ride_observe_browser_forensic "$entry" ;;
+    vmfs6-source-build) ride_observe_vmfs6_reader "$entry" ;;
     gsettings-boolean)
       local schema key value
       read -r schema key < <(ride_gsettings_target "$entry")
@@ -97,6 +104,8 @@ ride_observe() {
     dnf5-fast-tuning) ride_dnf5_fast_tuning_observe ;;
     system-hostname) ride_system_hostname_observe "$entry" ;;
     wireguard-keypair) ride_wireguard_observe ;;
+    networkmanager-vpn-profiles) ride_vpn_profiles_observe "$entry" ;;
+    expressvpn-wrapper) ride_expressvpn_observe ;;
     flatpak-remote) ride_flathub_remote_state ;;
     flatpak-app) ride_flatpak_app_state "$entry" ;;
     rpmfusion-repositories) ride_rpmfusion_state ;;
@@ -106,6 +115,7 @@ ride_observe() {
     nsswitch-mdns) ride_nsswitch_mdns_observe ;;
     dnf5-automatic) ride_dnf5_automatic_observe ;;
     snap-store-package) ride_snap_store_package_observe "$entry" ;;
+    pinned-snap-package) ride_bulk_extractor_observe "$entry" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -114,6 +124,7 @@ ride_change() {
   local entry=$1 state=$2 handler name source_id
   handler=$(jq -r '.handler' <<< "$entry")
   case "$handler" in
+    clamav-initial-signatures) ride_clamav_change "$entry" "$state" ;;
     dnf-package)
       [[ "$RIDE_OS_ID" == fedora ]] || ride_die "DNF handler requires Fedora"
       ride_require_command dnf
@@ -184,6 +195,8 @@ ride_change() {
     plex-server-service) ride_plex_server_service_change "$state" ;;
     glances-web-service) ride_glances_web_service_change "$state" ;;
     sshd-root-login) ride_sshd_root_login_change "$state" ;;
+    ssh-reboot-sudoers) ride_ssh_reboot_change "$entry" "$state" ;;
+    keyfile-mounts) ride_keyfile_mounts_change "$entry" "$state" ;;
     python-venv)
       case "$(jq -r '.id' <<< "$entry")" in
         package.volatility3) ride_change_volatility "$state" ;;
@@ -191,6 +204,14 @@ ride_change() {
         package.chepy) ride_change_chepy "$entry" "$state" ;;
         *) ride_die "unknown isolated Python operation" ;;
       esac
+      ;;
+    rust-source-build)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.browser-forensic ]] || ride_die "unknown pinned Rust source build"
+      ride_change_browser_forensic "$entry" "$state"
+      ;;
+    vmfs6-source-build)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.vmfs6-reader ]] || ride_die "unknown VMFS6 source build"
+      ride_change_vmfs6_reader "$entry" "$state"
       ;;
     pinned-script)
       [[ "$(jq -r '.id' <<< "$entry")" == package.asn ]] || ride_die "unknown pinned script operation"
@@ -203,6 +224,10 @@ ride_change() {
     pinned-zip)
       [[ "$(jq -r '.id' <<< "$entry")" == package.cyberchef ]] || ride_die "unknown pinned ZIP operation"
       ride_change_cyberchef "$entry" "$state"
+      ;;
+    networkminer-portable)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.networkminer ]] || ride_die "unknown NetworkMiner operation"
+      ride_change_networkminer "$entry" "$state"
       ;;
     pinned-binary)
       [[ "$(jq -r '.id' <<< "$entry")" == package.librespeed-cli ]] || ride_die "unknown pinned binary operation"
@@ -220,6 +245,10 @@ ride_change() {
       [[ "$(jq -r '.id' <<< "$entry")" == package.arduino-ide ||
          "$(jq -r '.id' <<< "$entry")" == package.joplin ]] || ride_die "unknown pinned publisher AppImage operation"
       ride_change_publisher_appimage "$entry" "$state"
+      ;;
+    pinned-email-header-spa)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.email-header-analyzer ]] || ride_die "unknown pinned email header analyzer operation"
+      ride_change_email_header_analyzer "$entry" "$state"
       ;;
     pinned-yubico-tarball)
       [[ "$(jq -r '.id' <<< "$entry")" == package.yubico-authenticator ]] || ride_die "unknown pinned Yubico archive operation"
@@ -268,6 +297,11 @@ ride_change() {
     dnf5-fast-tuning) ride_dnf5_fast_tuning_change "$state" ;;
     system-hostname) ride_system_hostname_change "$entry" "$state" ;;
     wireguard-keypair) ride_wireguard_change "$state" ;;
+    networkmanager-vpn-profiles) ride_vpn_profiles_change "$entry" "$state" ;;
+    expressvpn-wrapper)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.expressvpn ]] || ride_die "unknown ExpressVPN wrapper operation"
+      ride_expressvpn_change "$entry" "$state"
+      ;;
     flatpak-remote) ride_flathub_change "$state" ;;
     flatpak-app) ride_flatpak_app_change "$entry" "$state" ;;
     rpmfusion-repositories) ride_rpmfusion_change "$state" ;;
@@ -277,6 +311,7 @@ ride_change() {
     nsswitch-mdns) ride_nsswitch_mdns_change "$state" ;;
     dnf5-automatic) ride_dnf5_automatic_change "$state" ;;
     snap-store-package) ride_snap_store_package_change "$entry" "$state" ;;
+    pinned-snap-package) ride_bulk_extractor_change "$entry" "$state" ;;
     *) ride_die "untrusted handler: $handler" ;;
   esac
 }
@@ -311,6 +346,68 @@ ride_snap_store_package_change() {
       snap remove "$package"
       ;;
     *) ride_die "invalid Snap Store package state: $state" ;;
+  esac
+}
+
+ride_bulk_extractor_observe() {
+  local entry=$1 package expected listing version
+  [[ "$(jq -r '.id' <<< "$entry")" == package.bulk-extractor ]] ||
+    ride_die "unknown pinned Snap package operation"
+  ride_require_command snap
+  package=$(jq -r '.packageName' <<< "$entry")
+  expected=$(jq -r '.releaseVersion' <<< "$entry")
+  listing=$(snap list 2>/dev/null) || ride_die "cannot query Snap package state"
+  version=$(awk -v package="$package" 'NR > 1 && $1 == package { print $2 }' <<< "$listing")
+  [[ -n "$version" ]] || { printf 'absent\n'; return 0; }
+  [[ "$version" == "$expected" ]] ||
+    ride_die "$package is installed at version ${version:-unknown}; expected pinned version $expected"
+  printf 'installed\n'
+}
+
+ride_bulk_extractor_install() (
+  local entry=$1 package url expected temporary actual
+  [[ "$(jq -r '.id' <<< "$entry")" == package.bulk-extractor ]] ||
+    ride_die "unknown pinned Snap package operation"
+  [[ "$RIDE_OS_ID" == fedora ]] || ride_die "BulkExtractor Snap requires Fedora"
+  ride_require_command snap
+  ride_require_command curl
+  ride_require_command sha256sum
+  package=$(jq -r '.packageName' <<< "$entry")
+  url=$(jq -r '.snapArchiveUri' <<< "$entry")
+  expected=$(jq -r '.sha256' <<< "$entry")
+  temporary=$(mktemp -d "${TMPDIR:-/tmp}/ride-bulk-extractor.XXXXXXXX") ||
+    ride_die "cannot create temporary BulkExtractor download directory"
+  trap 'rm -rf -- "$temporary"' EXIT
+  curl --fail --location --silent --show-error --proto '=https' --tlsv1.2 \
+    --output "$temporary/$package.snap" "$url" || ride_die "BulkExtractor download failed"
+  actual=$(sha256sum "$temporary/$package.snap" | awk '{print $1}')
+  [[ "$actual" == "$expected" ]] || ride_die "BulkExtractor Snap SHA-256 mismatch"
+  snap install --dangerous "$temporary/$package.snap" || ride_die "BulkExtractor Snap installation failed"
+)
+
+ride_bulk_extractor_change() {
+  local entry=$1 state=$2 package current_state
+  [[ "$(jq -r '.id' <<< "$entry")" == package.bulk-extractor ]] ||
+    ride_die "unknown pinned Snap package operation"
+  [[ "$RIDE_OS_ID" == fedora ]] || ride_die "BulkExtractor Snap requires Fedora"
+  ride_require_command snap
+  package=$(jq -r '.packageName' <<< "$entry")
+  case "$state" in
+    installed)
+      current_state=$(ride_bulk_extractor_observe "$entry") || return $?
+      if [[ "$current_state" == installed ]]; then return 0; fi
+      ride_bulk_extractor_install "$entry"
+      current_state=$(ride_bulk_extractor_observe "$entry") || return $?
+      [[ "$current_state" == installed ]] ||
+        ride_die "BulkExtractor did not reach its pinned installed state"
+      ;;
+    absent)
+      current_state=$(ride_bulk_extractor_observe "$entry") || return $?
+      if [[ "$current_state" == absent ]]; then return 0; fi
+      # Keep Snap's automatic data snapshot; never use --purge.
+      snap remove "$package"
+      ;;
+    *) ride_die "invalid BulkExtractor state: $state" ;;
   esac
 }
 
@@ -854,10 +951,11 @@ ride_dnf5_system_update_change() {
   fi
   reboot=$(ride_dnf5_system_update_reboot_assessment)
   report=$(jq -cn --arg status "$status" --argjson transactionId "$after_id" \
-    --argjson historyInfo "$info" --argjson reboot "$reboot" \
-    '{status:$status, transactionId:$transactionId,
+    --argjson reboot "$reboot" \
+    'input as $historyInfo | {status:$status, transactionId:$transactionId,
       transactionStatus:(if $transactionId == 0 then "no-transaction" else ($historyInfo[0].status // "unknown") end),
-      packages:(if $transactionId == 0 then [] else ($historyInfo[0].packages | map(.nevra)) end), reboot:$reboot}') || return 1
+      packages:(if $transactionId == 0 then [] else ($historyInfo[0].packages | map(.nevra)) end), reboot:$reboot}' \
+    <<< "$info") || return 1
   RIDE_DNF5_SYSTEM_UPDATE_REPORT=$report
   printf 'DNF5 system update report: %s\n' "$report"
   [[ "$status" == success ]] || return 1
@@ -2064,18 +2162,23 @@ ride_gsettings_string_target() {
 
 ride_gnome_lock_timing_values() {
   case "$(jq -r '.selectedValue // ""' <<< "$1")" in
-    idle-10-lock-5) printf '600 300\n' ;;
-    idle-15-lock-5) printf '900 300\n' ;;
+    idle-10-lock-5) printf '600 300 true true\n' ;;
+    idle-15-lock-5) printf '900 300 true true\n' ;;
+    screensaver-enabled) printf '300 - true true\n' ;;
+    screensaver-disabled) printf '0 - false false\n' ;;
     *) ride_die "invalid GNOME lock timing selection" ;;
   esac
 }
 
 ride_gnome_lock_timing_paths() {
+  local entry=${1:-'{}'} selected
+  selected=$(jq -r '.selectedValue // ""' <<< "$entry")
   printf '%s\n' \
     'org.gnome.desktop.session idle-delay /org/gnome/desktop/session/idle-delay' \
     'org.gnome.desktop.screensaver idle-activation-enabled /org/gnome/desktop/screensaver/idle-activation-enabled' \
-    'org.gnome.desktop.screensaver lock-enabled /org/gnome/desktop/screensaver/lock-enabled' \
-    'org.gnome.desktop.screensaver lock-delay /org/gnome/desktop/screensaver/lock-delay'
+    'org.gnome.desktop.screensaver lock-enabled /org/gnome/desktop/screensaver/lock-enabled'
+  [[ "$selected" == screensaver-enabled || "$selected" == screensaver-disabled ]] ||
+    printf '%s\n' 'org.gnome.desktop.screensaver lock-delay /org/gnome/desktop/screensaver/lock-delay'
 }
 
 ride_gnome_lock_timing_snapshot_valid() {
@@ -2084,59 +2187,65 @@ ride_gnome_lock_timing_snapshot_valid() {
   encoded=${state#prior:}
   raw=$(printf '%s' "$encoded" | base64 --decode 2>/dev/null) || return 1
   jq -e '
-    type == "object" and (keys | sort) == ["idle-activation-enabled", "idle-delay", "lock-delay", "lock-enabled"] and
+    type == "object" and
+    ((keys | sort) == ["idle-activation-enabled", "idle-delay", "lock-enabled"] or
+     (keys | sort) == ["idle-activation-enabled", "idle-delay", "lock-delay", "lock-enabled"]) and
     all(.[]; type == "string" and length <= 64) and
     ((."idle-delay" == "") or
       ((."idle-delay" | test("^uint32 (0|[1-9][0-9]{0,9})$")) and
        ((."idle-delay" | sub("^uint32 "; "") | tonumber) <= 4294967295))) and
     (."idle-activation-enabled" == "" or ."idle-activation-enabled" == "true" or ."idle-activation-enabled" == "false") and
     (."lock-enabled" == "" or ."lock-enabled" == "true" or ."lock-enabled" == "false") and
-    ((."lock-delay" == "") or
+    ((."lock-delay" == null or ."lock-delay" == "") or
       ((."lock-delay" | test("^uint32 (0|[1-9][0-9]{0,9})$")) and
        ((."lock-delay" | sub("^uint32 "; "") | tonumber) <= 4294967295)))
   ' <<< "$raw" >/dev/null 2>&1
 }
 
 ride_gnome_lock_timing_observe() {
-  local entry=$1 idle_delay lock_delay schema key path value expected_idle effective_idle selected
-  local effective_activation effective_lock effective_lock_delay snapshot
-  local -a idle_seconds
+  local entry=$1 candidate_entry idle_delay lock_delay activation lock_enabled schema key path value
+  local effective_idle effective_activation effective_lock effective_lock_delay snapshot selected
+  local -a candidates
   ride_require_command dconf
   ride_require_command base64
   ride_require_command gsettings
   selected=$(jq -r '.selectedValue // ""' <<< "$entry")
   if [[ -n "$selected" ]]; then
-    read -r idle_delay lock_delay < <(ride_gnome_lock_timing_values "$entry")
-    expected_idle="uint32 $idle_delay"
-    expected_lock_delay="uint32 $lock_delay"
-    idle_seconds=("$idle_delay")
+    candidates=("$selected")
   else
-    idle_seconds=(600 900)
+    candidates=(idle-10-lock-5 idle-15-lock-5 screensaver-enabled screensaver-disabled)
   fi
   effective_idle=$(ride_gsettings get org.gnome.desktop.session idle-delay) || ride_die "cannot observe GNOME idle delay"
   effective_activation=$(ride_gsettings get org.gnome.desktop.screensaver idle-activation-enabled) || ride_die "cannot observe GNOME idle activation"
   effective_lock=$(ride_gsettings get org.gnome.desktop.screensaver lock-enabled) || ride_die "cannot observe GNOME lock setting"
   effective_lock_delay=$(ride_gsettings get org.gnome.desktop.screensaver lock-delay) || ride_die "cannot observe GNOME lock delay"
-  snapshot='{}'
-  while read -r schema key path; do
-    value=$(dconf read "$path") || ride_die "cannot observe GNOME lock timing override: $path"
-    snapshot=$(jq -c --arg key "$key" --arg value "$value" '. + {($key):$value}' <<< "$snapshot") || return 1
-  done < <(ride_gnome_lock_timing_paths)
-  for idle_delay in "${idle_seconds[@]}"; do
-    expected_idle="uint32 $idle_delay"
-    expected_lock_delay='uint32 300'
-    [[ "$selected" == idle-10-lock-5 || "$selected" == idle-15-lock-5 ]] &&
-      expected_lock_delay="uint32 $lock_delay"
-    if [[ "$effective_idle" == "$expected_idle" && "$effective_activation" == true &&
-          "$effective_lock" == true && "$effective_lock_delay" == "$expected_lock_delay" &&
-          "$(jq -r '."idle-delay"' <<< "$snapshot")" == "$expected_idle" &&
-          "$(jq -r '."idle-activation-enabled"' <<< "$snapshot")" == true &&
-          "$(jq -r '."lock-enabled"' <<< "$snapshot")" == true &&
-          "$(jq -r '."lock-delay"' <<< "$snapshot")" == "$expected_lock_delay" ]]; then
+  for selected in "${candidates[@]}"; do
+    candidate_entry=$(jq -c --arg selected "$selected" '. + {selectedValue:$selected}' <<< "$entry") || return 1
+    read -r idle_delay lock_delay activation lock_enabled < <(ride_gnome_lock_timing_values "$candidate_entry")
+    snapshot='{}'
+    while read -r schema key path; do
+      value=$(dconf read "$path") || ride_die "cannot observe GNOME lock timing override: $path"
+      snapshot=$(jq -c --arg key "$key" --arg value "$value" '. + {($key):$value}' <<< "$snapshot") || return 1
+    done < <(ride_gnome_lock_timing_paths "$candidate_entry")
+    if [[ "$effective_idle" == "uint32 $idle_delay" &&
+          "$effective_activation" == "$activation" && "$effective_lock" == "$lock_enabled" &&
+          "$(jq -r '."idle-delay"' <<< "$snapshot")" == "uint32 $idle_delay" &&
+          "$(jq -r '."idle-activation-enabled"' <<< "$snapshot")" == "$activation" &&
+          "$(jq -r '."lock-enabled"' <<< "$snapshot")" == "$lock_enabled" ]]; then
+      if [[ "$lock_delay" != - &&
+            ("$effective_lock_delay" != "uint32 $lock_delay" ||
+             "$(jq -r '."lock-delay"' <<< "$snapshot")" != "uint32 $lock_delay") ]]; then
+        continue
+      fi
       printf 'configured\n'
       return 0
     fi
   done
+  snapshot='{}'
+  while read -r schema key path; do
+    value=$(dconf read "$path") || ride_die "cannot observe GNOME lock timing override: $path"
+    snapshot=$(jq -c --arg key "$key" --arg value "$value" '. + {($key):$value}' <<< "$snapshot") || return 1
+  done < <(ride_gnome_lock_timing_paths "$entry")
   if [[ -z "$(jq -r '[.[] | select(length > 0)] | length' <<< "$snapshot")" ]]; then
     printf 'absent\n'
   else
@@ -2145,16 +2254,16 @@ ride_gnome_lock_timing_observe() {
 }
 
 ride_gnome_lock_timing_write() {
-  local entry=$1 state=$2 idle_delay lock_delay raw snapshot schema key path value
+  local entry=$1 state=$2 idle_delay lock_delay activation lock_enabled raw snapshot schema key path value
   case "$state" in
     configured)
-      read -r idle_delay lock_delay < <(ride_gnome_lock_timing_values "$entry")
+      read -r idle_delay lock_delay activation lock_enabled < <(ride_gnome_lock_timing_values "$entry")
       ride_gsettings set org.gnome.desktop.session idle-delay "uint32 $idle_delay" &&
-        ride_gsettings set org.gnome.desktop.screensaver idle-activation-enabled true &&
-        ride_gsettings set org.gnome.desktop.screensaver lock-enabled true &&
-        ride_gsettings set org.gnome.desktop.screensaver lock-delay "uint32 $lock_delay"
+        ride_gsettings set org.gnome.desktop.screensaver idle-activation-enabled "$activation" &&
+        ride_gsettings set org.gnome.desktop.screensaver lock-enabled "$lock_enabled" || return 1
+      [[ "$lock_delay" == - ]] || ride_gsettings set org.gnome.desktop.screensaver lock-delay "uint32 $lock_delay"
       ;;
-    absent) while read -r schema key path; do ride_gsettings reset "$schema" "$key" || return 1; done < <(ride_gnome_lock_timing_paths) ;;
+    absent) while read -r schema key path; do ride_gsettings reset "$schema" "$key" || return 1; done < <(ride_gnome_lock_timing_paths "$entry") ;;
     prior:*)
       ride_gnome_lock_timing_snapshot_valid "$state" || ride_die "invalid saved GNOME lock timing state"
       raw=$(printf '%s' "${state#prior:}" | base64 --decode) || return 1
@@ -2163,7 +2272,7 @@ ride_gnome_lock_timing_write() {
         if [[ -n "$value" ]]; then ride_gsettings set "$schema" "$key" "$value" || return 1
         else ride_gsettings reset "$schema" "$key" || return 1
         fi
-      done < <(ride_gnome_lock_timing_paths)
+      done < <(ride_gnome_lock_timing_paths "$entry")
       ;;
     *) ride_die "invalid GNOME lock timing state" ;;
   esac
@@ -2182,7 +2291,7 @@ ride_gnome_lock_timing_change() {
     fi
     writable=$(ride_gsettings writable "$schema" "$key") || ride_die "cannot check GNOME lock timing writability: $schema $key"
     [[ "$writable" == true ]] || ride_die "GNOME lock timing key is locked: $schema $key"
-  done < <(ride_gnome_lock_timing_paths)
+  done < <(ride_gnome_lock_timing_paths "$entry")
   before=$(ride_gnome_lock_timing_observe "$entry") || return 1
   if [[ "$before" == prior:* ]]; then
     ride_gnome_lock_timing_snapshot_valid "$before" || ride_die "existing GNOME lock timing cannot be safely journaled"
@@ -2207,11 +2316,12 @@ ride_gsettings_favorite_variant() {
 }
 
 ride_gsettings_string_observe() {
-  local entry=$1 schema key path selected effective override expected
+  local entry=$1 schema key path selected effective override expected selected_present
   ride_require_command dconf
   ride_require_command base64
   read -r schema key path < <(ride_gsettings_string_target "$entry")
   selected=$(jq -r '.selectedValue // ""' <<< "$entry")
+  selected_present=$(jq -r 'has("selectedValue")' <<< "$entry")
   effective=$(ride_gsettings get "$schema" "$key") || ride_die "cannot observe GNOME string setting"
   override=$(dconf read "$path") || ride_die "cannot read GNOME string override"
   if [[ "$(jq -r '.id' <<< "$entry")" == setting.gnome-favorite-apps ]]; then
@@ -2223,7 +2333,7 @@ ride_gsettings_string_observe() {
   else
     expected="'$selected'"
   fi
-  if [[ -n "$selected" && "$effective" == "$expected" && "$override" == "$expected" ]]; then
+  if [[ "$selected_present" == true && "$effective" == "$expected" && "$override" == "$expected" ]]; then
     printf 'configured\n'
   elif [[ -z "$override" ]]; then
     printf 'absent\n'
@@ -2238,7 +2348,10 @@ ride_gsettings_string_write() {
   case "$state" in
     configured)
       selected=$(jq -r '.selectedValue // ""' <<< "$entry")
-      [[ -n "$selected" ]] || ride_die "GNOME string setting needs a selected value"
+      if [[ "$(jq -r '.id' <<< "$entry")" != setting.gnome-region ||
+            "$(jq -r 'has("selectedValue")' <<< "$entry")" != true ]]; then
+        [[ -n "$selected" ]] || ride_die "GNOME string setting needs a selected value"
+      fi
       if [[ "$(jq -r '.id' <<< "$entry")" == setting.gnome-favorite-apps ]]; then
         ride_gsettings set "$schema" "$key" "$(ride_gsettings_favorite_variant "$selected")"
       else
@@ -2270,9 +2383,11 @@ ride_gsettings_string_change() {
   [[ "$writable" == true ]] || ride_die "GNOME string setting is locked"
   if [[ "$state" == configured && "$(jq -r '.id' <<< "$entry")" == setting.gnome-region ]]; then
     selected=$(jq -r '.selectedValue' <<< "$entry")
-    locale_name=${selected/.UTF-8/.utf8}
-    listed=$(LC_ALL=C locale -a) || ride_die "cannot list installed locales"
-    grep -Fxiq -- "$locale_name" <<< "$listed" || ride_die "selected GNOME region locale is unavailable: $selected"
+    if [[ -n "$selected" ]]; then
+      locale_name=${selected/.UTF-8/.utf8}
+      listed=$(LC_ALL=C locale -a) || ride_die "cannot list installed locales"
+      grep -Fxiq -- "$locale_name" <<< "$listed" || ride_die "selected GNOME region locale is unavailable: $selected"
+    fi
   fi
   before=$(ride_gsettings_string_observe "$entry") || return 1
   if [[ "$before" == user:* ]]; then
@@ -2810,6 +2925,261 @@ ride_change_chepy() {
       fi
       ;;
     *) ride_die "invalid Chepy state: $state" ;;
+  esac
+}
+
+ride_browser_forensic_environment() {
+  printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/browser-forensic"
+}
+
+ride_browser_forensic_link() {
+  printf '%s\n' "$HOME/.local/bin/br4n6"
+}
+
+ride_browser_forensic_owned_contents() {
+  local environment=$1
+  [[ "$(find "$environment" -mindepth 1 -maxdepth 1 -printf '%f\n' | LC_ALL=C sort)" == \
+    $'.ride-owned\nbr4n6\nbrowser-forensic-10e2f70.tar.gz' ]]
+}
+
+ride_browser_forensic_marker() {
+  local environment=$1 source_sha=$2 binary_sha
+  [[ -d "$environment" && ! -L "$environment" && -f "$environment/br4n6" &&
+     ! -L "$environment/br4n6" && -x "$environment/br4n6" ]] || return 1
+  binary_sha=$(sha256sum -- "$environment/br4n6" | cut -d' ' -f1)
+  printf 'ride-fedora package.browser-forensic 0.3.0 %s %s\n' "$source_sha" "$binary_sha"
+}
+
+ride_observe_browser_forensic() {
+  local entry=$1 environment link source_sha marker
+  environment=$(ride_browser_forensic_environment)
+  link=$(ride_browser_forensic_link)
+  source_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  marker=$(ride_browser_forensic_marker "$environment" "$source_sha" 2>/dev/null) || {
+    printf 'absent\n'
+    return 0
+  }
+  if [[ -d "$environment" && ! -L "$environment" ]] &&
+     ride_browser_forensic_owned_contents "$environment" &&
+     [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+        "$(cat "$environment/.ride-owned")" == "$marker" &&
+        -f "$environment/browser-forensic-10e2f70.tar.gz" && ! -L "$environment/browser-forensic-10e2f70.tar.gz" &&
+        "$(sha256sum -- "$environment/browser-forensic-10e2f70.tar.gz" | cut -d' ' -f1)" == "$source_sha" &&
+        -x "$environment/br4n6" && -L "$link" && "$(readlink -- "$link")" == "$environment/br4n6" ]] &&
+     "$environment/br4n6" --version >/dev/null 2>&1; then
+    printf 'installed\n'
+  else
+    printf 'absent\n'
+  fi
+}
+
+ride_change_browser_forensic() {
+  local entry=$1 state=$2 environment link base source_uri source_sha marker
+  local build_dir archive extracted_binary
+  environment=$(ride_browser_forensic_environment)
+  link=$(ride_browser_forensic_link)
+  base=$(dirname "$environment")
+  source_uri=$(jq -r '.sourceUri' <<< "$entry")
+  source_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  case "$state" in
+    installed)
+      ride_require_command cargo
+      ride_require_command rustc
+      ride_require_command curl
+      ride_require_command sha256sum
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        ride_die "browser-forensic destination already exists; refusing to overwrite"
+      fi
+      umask 077
+      mkdir -p "$base" "$(dirname "$link")"
+      mkdir "$environment" || ride_die "cannot create browser-forensic destination"
+      archive="$environment/browser-forensic-10e2f70.tar.gz"
+      if ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 120 --max-filesize 10000000 \
+          "$source_uri" -o "$archive"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      if [[ "$(sha256sum -- "$archive" | cut -d' ' -f1)" != "$source_sha" ]]; then
+        rm -rf -- "$environment"
+        ride_error "browser-forensic source digest verification failed"
+        return 1
+      fi
+      build_dir="$environment/.build"
+      mkdir "$build_dir" "$build_dir/source" || { rm -rf -- "$environment"; return 1; }
+      if ! tar -xzf "$archive" --strip-components=1 -C "$build_dir/source"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      if ! CARGO_HOME="$build_dir/cargo-home" CARGO_TARGET_DIR="$build_dir/target" \
+          cargo build --locked --release --package browser-forensic-cli --bin br4n6 \
+          --manifest-path "$build_dir/source/Cargo.toml"; then
+        rm -rf -- "$environment"
+        ride_error "browser-forensic pinned Cargo build failed"
+        return 1
+      fi
+      extracted_binary="$build_dir/target/release/br4n6"
+      if [[ ! -x "$extracted_binary" ]] || ! "$extracted_binary" --version >/dev/null 2>&1; then
+        rm -rf -- "$environment"
+        ride_error "browser-forensic CLI build verification failed"
+        return 1
+      fi
+      if ! install -m 0755 -- "$extracted_binary" "$environment/br4n6"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      rm -rf -- "$build_dir"
+      marker=$(ride_browser_forensic_marker "$environment" "$source_sha") || {
+        rm -rf -- "$environment"
+        return 1
+      }
+      printf '%s' "$marker" > "$environment/.ride-owned"
+      if ! ln -s -- "$environment/br4n6" "$link"; then
+        rm -rf -- "$environment"
+        return 1
+      fi
+      ;;
+    absent)
+      if [[ -e "$environment" || -L "$environment" || -e "$link" || -L "$link" ]]; then
+        marker=$(ride_browser_forensic_marker "$environment" "$source_sha" 2>/dev/null) ||
+          ride_die "refusing to remove modified or unowned browser-forensic files"
+        if ! { [[ -d "$environment" && ! -L "$environment" ]] &&
+               ride_browser_forensic_owned_contents "$environment" &&
+               [[ -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+                  "$(cat "$environment/.ride-owned")" == "$marker" &&
+                  -f "$environment/browser-forensic-10e2f70.tar.gz" && ! -L "$environment/browser-forensic-10e2f70.tar.gz" &&
+                  "$(sha256sum -- "$environment/browser-forensic-10e2f70.tar.gz" | cut -d' ' -f1)" == "$source_sha" &&
+                  -x "$environment/br4n6" && -L "$link" && "$(readlink -- "$link")" == "$environment/br4n6" ]]; }; then
+          ride_die "refusing to remove modified or unowned browser-forensic files"
+        fi
+        rm -- "$link"
+        rm -rf -- "$environment"
+      fi
+      ;;
+    *) ride_die "invalid browser-forensic state: $state" ;;
+  esac
+}
+
+ride_vmfs6_reader_directory() {
+  printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}/ride-fedora/tools/vmfs6-reader"
+}
+
+ride_vmfs6_reader_link() {
+  printf '%s\n' "$HOME/.local/bin/debugvmfs6"
+}
+
+ride_vmfs6_reader_owned_contents() {
+  local directory=$1
+  [[ "$(find "$directory" -mindepth 1 -maxdepth 1 -printf '%f\n' | LC_ALL=C sort)" == \
+    $'.ride-owned\ndebugvmfs6\nvmfs6-tools-0.2.1.tar.gz' ]]
+}
+
+ride_vmfs6_reader_marker() {
+  local directory=$1 source_sha=$2 binary_sha
+  [[ -d "$directory" && ! -L "$directory" && -f "$directory/debugvmfs6" &&
+     ! -L "$directory/debugvmfs6" && -x "$directory/debugvmfs6" &&
+     -f "$directory/vmfs6-tools-0.2.1.tar.gz" && ! -L "$directory/vmfs6-tools-0.2.1.tar.gz" ]] || return 1
+  [[ "$(sha256sum -- "$directory/vmfs6-tools-0.2.1.tar.gz" | cut -d' ' -f1)" == "$source_sha" ]] || return 1
+  binary_sha=$(sha256sum -- "$directory/debugvmfs6" | cut -d' ' -f1)
+  printf 'ride-fedora package.vmfs6-reader 0.2.1 %s %s\n' "$source_sha" "$binary_sha"
+}
+
+ride_observe_vmfs6_reader() {
+  local entry=$1 directory link source_sha marker
+  directory=$(ride_vmfs6_reader_directory)
+  link=$(ride_vmfs6_reader_link)
+  source_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  marker=$(ride_vmfs6_reader_marker "$directory" "$source_sha" 2>/dev/null) || {
+    printf 'absent\n'
+    return 0
+  }
+  if ride_vmfs6_reader_owned_contents "$directory" &&
+     [[ -f "$directory/.ride-owned" && ! -L "$directory/.ride-owned" &&
+        "$(cat "$directory/.ride-owned")" == "$marker" &&
+        -L "$link" && "$(readlink -- "$link")" == "$directory/debugvmfs6" ]]; then
+    printf 'installed\n'
+  else
+    printf 'absent\n'
+  fi
+}
+
+ride_change_vmfs6_reader() {
+  local entry=$1 state=$2 directory link base source_uri source_sha stage source_tree archive binary marker
+  directory=$(ride_vmfs6_reader_directory)
+  link=$(ride_vmfs6_reader_link)
+  base=$(dirname "$directory")
+  source_uri=$(jq -r '.sourceUri' <<< "$entry")
+  source_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  case "$state" in
+    installed)
+      local command_name
+      for command_name in curl sha256sum tar gcc make pkg-config install; do
+        ride_require_command "$command_name"
+      done
+      if [[ -e "$directory" || -L "$directory" || -e "$link" || -L "$link" ]]; then
+        ride_die "VMFS6 reader destination already exists; refusing to overwrite"
+      fi
+      umask 077
+      mkdir -p "$base" "$(dirname "$link")"
+      stage=$(mktemp -d "$base/.vmfs6-reader.XXXXXX") || ride_die "cannot create VMFS6 reader staging directory"
+      archive="$stage/vmfs6-tools-0.2.1.tar.gz"
+      if ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 120 --max-filesize 10000000 "$source_uri" -o "$archive"; then
+        rm -rf -- "$stage"
+        return 1
+      fi
+      if [[ "$(sha256sum -- "$archive" | cut -d' ' -f1)" != "$source_sha" ]]; then
+        rm -rf -- "$stage"
+        ride_error "VMFS6 reader source digest verification failed"
+        return 1
+      fi
+      source_tree="$stage/source"
+      mkdir "$source_tree" || { rm -rf -- "$stage"; return 1; }
+      if ! tar -xzf "$archive" --strip-components=1 -C "$source_tree"; then
+        rm -rf -- "$stage"
+        return 1
+      fi
+      if ! (cd "$source_tree" && env -u VMFS_WRITE -u CPPFLAGS -u CFLAGS ./configure &&
+            env -u VMFS_WRITE -u CPPFLAGS -u CFLAGS make debugvmfs6/debugvmfs6); then
+        rm -rf -- "$stage"
+        ride_error "pinned VMFS6 reader build failed"
+        return 1
+      fi
+      binary="$source_tree/debugvmfs6/debugvmfs6"
+      if [[ ! -f "$binary" || ! -x "$binary" || -L "$binary" ]] ||
+         ! install -m 0755 -- "$binary" "$stage/debugvmfs6"; then
+        rm -rf -- "$stage"
+        ride_error "pinned VMFS6 reader build output is missing or invalid"
+        return 1
+      fi
+      rm -rf -- "$source_tree"
+      if ! mv -- "$stage" "$directory"; then
+        rm -rf -- "$stage"
+        return 1
+      fi
+      marker=$(ride_vmfs6_reader_marker "$directory" "$source_sha") || {
+        rm -rf -- "$directory"
+        return 1
+      }
+      printf '%s' "$marker" > "$directory/.ride-owned"
+      if ! ln -s -- "$directory/debugvmfs6" "$link"; then
+        rm -rf -- "$directory"
+        return 1
+      fi
+      ;;
+    absent)
+      if [[ -e "$directory" || -L "$directory" || -e "$link" || -L "$link" ]]; then
+        marker=$(ride_vmfs6_reader_marker "$directory" "$source_sha" 2>/dev/null) ||
+          ride_die "refusing to remove modified or unowned VMFS6 reader files"
+        if ! ride_vmfs6_reader_owned_contents "$directory" ||
+           [[ ! -f "$directory/.ride-owned" || -L "$directory/.ride-owned" ||
+              "$(cat "$directory/.ride-owned")" != "$marker" ||
+              ! -L "$link" || "$(readlink -- "$link")" != "$directory/debugvmfs6" ]]; then
+          ride_die "refusing to remove modified or unowned VMFS6 reader files"
+        fi
+        rm -- "$link"
+        rm -rf -- "$directory"
+      fi
+      ;;
+    *) ride_die "invalid VMFS6 reader state: $state" ;;
   esac
 }
 
@@ -3928,6 +4298,149 @@ DESKTOP
       fi
       ;;
     *) ride_die "invalid CyberChef state: $state" ;;
+  esac
+}
+
+ride_networkminer_environment() { printf '%s\n' "$HOME/.local/opt/ride-fedora/networkminer/3.2"; }
+ride_networkminer_data() { printf '%s\n' "$HOME/.local/share/networkminer"; }
+ride_networkminer_launcher() { printf '%s\n' "$HOME/.local/bin/networkminer"; }
+ride_networkminer_desktop() { printf '%s\n' "$HOME/.local/share/applications/networkminer.desktop"; }
+
+ride_networkminer_wrapper_content() {
+  cat <<'WRAPPER'
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+data="$HOME/.local/share/networkminer"
+[[ ! -L "$HOME/.local" && ! -L "$HOME/.local/share" && ! -L "$data" ]] || {
+  printf 'NetworkMiner data path contains a symlink\n' >&2
+  exit 1
+}
+if [[ -e "$data" ]]; then
+  [[ -d "$data" && "$(stat -c '%u:%a' -- "$data")" == "$(id -u):700" ]] || {
+    printf 'NetworkMiner data path must be a private user-owned directory\n' >&2
+    exit 1
+  }
+else
+  mkdir -m 0700 -- "$data"
+fi
+cd -- "$data"
+exec mono "$HOME/.local/opt/ride-fedora/networkminer/3.2/payload/NetworkMiner.exe" "$@"
+WRAPPER
+}
+
+ride_networkminer_desktop_content() {
+  local launcher=$1
+  printf '[Desktop Entry]\nType=Application\nName=NetworkMiner\nComment=Network forensic analysis tool\nExec=%s\nTerminal=false\nCategories=Network;Security;\n' "$launcher"
+}
+
+ride_networkminer_safe_parents() {
+  local path
+  for path in "$HOME/.local" "$HOME/.local/opt" "$HOME/.local/opt/ride-fedora" \
+    "$HOME/.local/opt/ride-fedora/networkminer" "$HOME/.local/share/networkminer" "$HOME/.local/bin" \
+    "$HOME/.local/share" "$HOME/.local/share/applications" "$HOME/.local/share/ride-fedora"; do
+    [[ ! -L "$path" ]] || return 1
+  done
+}
+
+ride_observe_networkminer() {
+  local entry=$1 environment launcher desktop expected_sha version marker
+  environment=$(ride_networkminer_environment)
+  launcher=$(ride_networkminer_launcher)
+  desktop=$(ride_networkminer_desktop)
+  expected_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  version=$(jq -r '.version' <<< "$entry")
+  marker="ride-fedora package.networkminer $version $expected_sha"
+  [[ -d "$environment" && ! -L "$environment" && -d "$environment/payload" &&
+     ! -L "$environment/payload" && -f "$environment/.ride-owned" && ! -L "$environment/.ride-owned" &&
+     "$(cat -- "$environment/.ride-owned")" == "$marker" &&
+     -L "$launcher" && "$(readlink -- "$launcher")" == "$environment/bin/networkminer" &&
+     -L "$desktop" && "$(readlink -- "$desktop")" == "$environment/networkminer.desktop" &&
+     -f "$environment/manifest.json" && ! -L "$environment/manifest.json" &&
+     "$(stat -c '%u:%g:%a:%h' -- "$environment/manifest.json")" == "$(id -u):$(id -g):600:1" ]] || {
+    printf 'absent\n'; return;
+  }
+  if cmp -s <(ride_networkminer_wrapper_content) "$environment/bin/networkminer" &&
+     cmp -s <(ride_networkminer_desktop_content "$launcher") "$environment/networkminer.desktop" &&
+     diff -u <(printf '.ride-owned\nbin\nbin/networkminer\nmanifest.json\nnetworkminer.desktop\npayload\n';
+               find "$environment/payload" -mindepth 1 -printf 'payload/%P\n' | LC_ALL=C sort) \
+       <(find "$environment" -mindepth 1 -printf '%P\n' | LC_ALL=C sort) >/dev/null &&
+     python3 "$RIDE_ROOT/lib/v3/networkminer_archive.py" verify "$environment/payload" "$environment/manifest.json" >/dev/null 2>&1; then
+    printf 'installed\n'
+  else
+    printf 'unowned\n'
+  fi
+}
+
+ride_change_networkminer() {
+  local entry=$1 state=$2 current environment launcher desktop data parent version source expected_sha temporary actual_sha
+  environment=$(ride_networkminer_environment)
+  launcher=$(ride_networkminer_launcher)
+  desktop=$(ride_networkminer_desktop)
+  data=$(ride_networkminer_data)
+  version=$(jq -r '.version' <<< "$entry")
+  source=$(jq -r '.sourceUri' <<< "$entry")
+  expected_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  ride_networkminer_safe_parents || ride_die "NetworkMiner destination parent is a symlink"
+  current=$(ride_observe_networkminer "$entry") || ride_die "cannot inspect NetworkMiner files"
+  [[ "$current" != unowned ]] || ride_die "NetworkMiner program files are modified or not RIDE-owned"
+  [[ ! ( "$state" == installed && "$current" == installed ) &&
+     ! ( "$state" == absent && "$current" == absent ) ]] || return 0
+  case "$state" in
+    installed)
+      [[ "$version" == 3.2 && "$expected_sha" == daceec649fb4fe59b11e4a9e4ecd5f51c1dd37824280dfbeac67bec27b6b6d60 &&
+         "$source" == https://download.netresec.com/networkminer/NetworkMiner_3-2.zip ]] ||
+        ride_die "unrecognized NetworkMiner source identity"
+      ride_require_command curl; ride_require_command sha256sum; ride_require_command python3
+      ride_require_command mono
+      ride_networkminer_safe_parents || ride_die "NetworkMiner destination parent is a symlink"
+      if [[ -e "$data" || -L "$data" ]]; then
+        [[ -d "$data" && ! -L "$data" && "$(stat -c '%u:%a' -- "$data")" == "$(id -u):700" ]] ||
+          ride_die "existing NetworkMiner output directory is not private and user-owned: $data"
+      fi
+      [[ ! -e "$environment" && ! -L "$environment" && ! -e "$launcher" && ! -L "$launcher" &&
+         ! -e "$desktop" && ! -L "$desktop" ]] || ride_die "NetworkMiner destination exists; refusing to overwrite"
+      mkdir -p -- "$(dirname "$environment")" || ride_die "cannot create NetworkMiner program parent"
+      temporary=$(mktemp -d "$(dirname "$environment")/.networkminer.XXXXXXXX") || return 1
+      if ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 300 --max-filesize 300000000 "$source" -o "$temporary/release.zip"; then
+        rm -rf -- "$temporary"; ride_error "NetworkMiner download failed"; return 1
+      fi
+      actual_sha=$(sha256sum -- "$temporary/release.zip" | cut -d' ' -f1) || { rm -rf -- "$temporary"; return 1; }
+      if [[ "$actual_sha" != "$expected_sha" ]] ||
+         ! python3 "$RIDE_ROOT/lib/v3/networkminer_archive.py" extract "$temporary/release.zip" "$temporary/payload"; then
+        rm -rf -- "$temporary"; ride_error "NetworkMiner archive digest or contents failed verification"; return 1
+      fi
+      python3 "$RIDE_ROOT/lib/v3/networkminer_archive.py" manifest "$temporary/payload" "$temporary/manifest.json" || {
+        rm -rf -- "$temporary"; return 1;
+      }
+      rm -- "$temporary/release.zip"
+      mkdir -m 0700 "$temporary/bin"
+      ride_networkminer_wrapper_content > "$temporary/bin/networkminer"
+      ride_networkminer_desktop_content "$launcher" > "$temporary/networkminer.desktop"
+      chmod 0700 "$temporary/bin/networkminer"
+      printf 'ride-fedora package.networkminer %s %s\n' "$version" "$expected_sha" > "$temporary/.ride-owned"
+      chmod 0600 "$temporary/.ride-owned" "$temporary/manifest.json"
+      mkdir -p -- "$(dirname "$launcher")" "$(dirname "$desktop")"
+      [[ ! -L "$(dirname "$environment")" && ! -e "$environment" &&
+         ! -e "$launcher" && ! -L "$launcher" && ! -e "$desktop" && ! -L "$desktop" ]] || {
+        rm -rf -- "$temporary"; ride_die "NetworkMiner destination changed during download";
+      }
+      mv -T -- "$temporary" "$environment" || { rm -rf -- "$temporary"; return 1; }
+      if ! ln -s -- "$environment/bin/networkminer" "$launcher"; then
+        rm -rf -- "$environment"; return 1
+      fi
+      if ! ln -s -- "$environment/networkminer.desktop" "$desktop"; then
+        rm -f -- "$launcher"; rm -rf -- "$environment"; return 1
+      fi
+      if [[ ! -e "$data" ]]; then mkdir -m 0700 -- "$data" || { rm -f -- "$launcher" "$desktop"; rm -rf -- "$environment"; return 1; }; fi
+      ;;
+    absent)
+      if [[ "$current" == installed ]]; then
+        rm -f -- "$launcher" "$desktop"
+        rm -rf -- "$environment"
+      fi
+      ;;
+    *) ride_die "invalid NetworkMiner state: $state" ;;
   esac
 }
 

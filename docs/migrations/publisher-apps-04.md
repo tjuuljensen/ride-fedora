@@ -1,56 +1,48 @@
-# Publisher Apps 04: Firefox extension policy
+# Publisher Apps 04: Firefox managed add-ons
 
-Status: **v3 envelope implemented but blocked; Fedora 44 acceptance pending**,
-2026-11-02. The owner kept v3-managed Firefox add-on policy capability. The
-existing standalone tool is now called through `setting.firefox-addons` and
-the opt-in `fedora-firefox-addons` profile. The catalog marks it `blocked` until
-the policy, browser restart, profile cleanup, and restoration checks below
-pass. The candidate override cannot bypass this gate.
-This isolated active-preset outcome maps `InstallFirefoxAddons` and
-`RemoveFirefoxAddons`. The current v2 functions already delegate to the
-repository's maintained [`manage-firefox-extensions.py`](../../tools/manage-firefox-extensions.py).
-That tool validates a manifest, checks Mozilla Add-ons and XPI IDs before
-install, merges `ExtensionSettings` into `/etc/firefox/policies/policies.json`,
-backs up prior policy, and records ownership. Removal writes blocked
-tombstones for Firefox to process; a separate finalizer removes them.
+Status: **opt-in v3 candidate; full Fedora 44 lifecycle passed**, 2026-11-02.
+The owner kept this active-preset outcome. The v3 operation wraps the exact
+16-item `policies/firefox-extensions.json` list and remains outside base
+profiles.
 
-## Completion criteria defined before a runnable v3 operation
+The v2 helper used Firefox `ExtensionSettings`. Fedora 44 Firefox 150 loaded
+that policy but did not install any of its add-ons, even after the AMO install
+URL was corrected to use extension IDs. The chosen v3 path downloads each
+current public AMO XPI, verifies publisher metadata, SHA-256, and embedded ID,
+then installs owned XPI files in Firefox's global Linux extensions directory.
+Mozilla recognizes that directory for all Firefox profiles. RIDE keeps exact
+recovery copies while removal is pending a Firefox restart and removes only
+its own files and state.
 
-- Represent the exact manifest and policy ownership in the v3 catalog and
-  run journal. Observe `configured`, `removal-pending`, and `absent` as distinct
-  states. Refuse conflicts with unrelated administrator policy.
-- On `configured -> absent`, write Mozilla's `blocked` entries and journal a
-  pending restart. Do not report absence until Firefox has restarted, all
-  discovered profiles no longer contain the managed extension IDs, no Firefox
-  process is running, and the policy tombstones can be removed safely.
-- Test AMO acquisition failure, interrupted writes, modified-policy refusal,
-  restoration from the pending state, and preservation of seeded administrator
-  policy and browser profile data.
-- Run the full lifecycle on disposable Fedora 44 x86_64 Workstation. One
-  automated headless startup checks that Firefox consumes policy and removes
-  the extensions; reserve a brief manual session only if the declared behavior
-  cannot be observed through profile and policy state.
-- Keep this security-policy operation non-runnable until the deep ownership
-  and recovery evidence is established. XPI data is never evaluated as code.
+## Batch completion checks
 
-The Python helper remains the policy implementation. The v3 handler now calls
-its `observe` and `set-state` interface and keeps the complete Firefox restart
-boundary inside the catalog state machine. Focused Python tests cover policy
-ownership and phases; exact-target engine and browser recovery remains pending.
+- Keep the 16 add-ons and their stable IDs from the v2 manifest.
+- Refuse any pre-existing target file, conflicting managed ExtensionSettings
+  entry, tampered owned XPI, unsafe symlink, or incomplete recovery copy.
+- Check, configure, observe, repeat, remove, restore, and finalize behavior
+  uses the explicit `configured`, `removal-pending`, and `absent` states.
+- Prove all configured add-ons install into a seeded Fedora 44 Firefox profile
+  and disappear after the owned source files are removed and Firefox restarts.
+- Preserve unrelated ExtensionSettings policy and seeded profile data.
+- Keep the operation opt-in. The complete disposable-VM lifecycle passed, so
+  candidate status is appropriate; broader add-on UI and update behavior
+  remain separate hardening.
 
-## v3 lifecycle design constraint
+## Evidence and next action
 
-This policy has three meaningful states: configured, removal pending, and
-absent. The catalog now exposes each state. When a configured-to-absent change
-first writes Mozilla's `blocked` entries, RIDE journals the observed
-`removal-pending` state and marks the run pending. The operator restarts
-Firefox, then reapplies the absent profile state; the finalizer verifies that
-Firefox is stopped and the managed IDs have left discovered Firefox profiles
-before it removes only the owned tombstones. Restore from a pending state
-returns the managed policy to configured. Unrelated administrator policy and
-profile content remain outside RIDE ownership.
+A disposable Fedora 44 Workstation probe proved the global-directory mechanism
+for uBlock Origin: the current AMO artifact's SHA-256 and embedded ID matched,
+Firefox installed it into a seeded profile, and removing the source removed
+the profile add-on on restart. Seeded user data remained intact. A separate
+distribution-directory attempt did not install it. This is evidence for the
+mechanism only, not for the RIDE state machine or the full bundle.
 
-The opt-in profile is not runnable while the catalog operation is blocked. The
-catalog may move to candidate only after focused Fedora 44 Workstation
-acceptance proves the policy and profile recovery behavior; candidate status
-then remains explicit opt-in.
+Five focused mock tests cover idempotent install, exact ownership,
+conflict/tamper refusal, removal recovery, and restart-aware finalization. The
+full 16-add-on target lifecycle passed in
+[`setting.firefox-addons.md`](../acceptance/setting.firefox-addons.md) and
+[`test_firefox_addons.py`](../../tests/acceptance/test_firefox_addons.py).
+The one-add-on mechanism probe was used only to select the deployment path;
+the full RIDE test independently verified the complete list and lifecycle.
+H115 tracks current AMO license metadata, version/update behavior, and profile
+migration as v3.1 hardening.

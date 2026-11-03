@@ -1,6 +1,6 @@
 # Host identity, DNF tuning, update, and Docker decisions
 
-Status: **Hostname is supported on Fedora 44 Workstation and Server; FastDNF is an opt-in candidate; UpdateFedora is implemented pending target acceptance; Docker Engine is supported as an opt-in explicit operation on Fedora 44 Workstation and Server.**
+Status: **Hostname is supported on Fedora 44 Workstation and Server; FastDNF is an opt-in candidate; UpdateFedora is an opt-in candidate accepted on Fedora 44 Workstation and Server; Docker Engine is supported as an opt-in explicit operation on Fedora 44 Workstation and Server.**
 
 ## Completion criteria defined for this review
 

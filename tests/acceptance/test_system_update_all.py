@@ -21,9 +21,12 @@ def verify_system_update(vm):
     journal = vm.run(f"sudo jq -c '.steps[0]' /var/lib/ride-fedora/runs/{shlex.quote(run_id)}.json").stdout
     assert '"updateReport"' in journal
     assert '"transactionId"' in journal
-    assert vm.run(
+    status = vm.run(
         f"sudo {shlex.quote(ride)} status system.update-all-packages", timeout=900
-    ).stdout.rstrip().endswith("current")
+    ).stdout.splitlines()
+    status_rows = [line.split("\t") for line in status
+                   if line.startswith("system.update-all-packages\t")]
+    assert len(status_rows) == 1 and status_rows[0][2] == "current"
     restore = vm.run(f"sudo {shlex.quote(ride)} restore --run-id {shlex.quote(run_id)}", check=False)
     assert restore.returncode != 0
     assert "exact recovery is unavailable" in restore.stderr

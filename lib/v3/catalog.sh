@@ -16,14 +16,21 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "smartmontools-package", "systemd-service", "plex-server-service", "glances-web-service", "sshd-root-login", "github-asset", "python-venv", "pinned-script", "pinned-woeusb-script", "pinned-zip", "pinned-binary", "pinned-eza-binary", "pinned-appimage", "pinned-publisher-appimage", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "ferium-portable", "minecraft-server-jar", "pinned-rpm", "amp-pinned-rpm", "veracrypt-signed-rpm", "publisher-repo-rpm", "snap-store-package", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "dnf5-fast-tuning", "system-hostname", "wireguard-keypair", "flatpak-remote", "flatpak-app", "rpmfusion-repositories", "dnf-package-set-update", "dnf5-system-update", "docker-engine", "user-directories", "firefox-preferences", "firefox-extensions", "nsswitch-mdns", "dnf5-automatic")) and
+      (.handler | IN("dnf-package", "smartmontools-package", "clamav-initial-signatures", "systemd-service", "plex-server-service", "glances-web-service", "sshd-root-login", "ssh-reboot-sudoers", "keyfile-mounts", "github-asset", "python-venv", "rust-source-build", "vmfs6-source-build", "pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-appimage", "pinned-publisher-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "ferium-portable", "minecraft-server-jar", "pinned-rpm", "amp-pinned-rpm", "veracrypt-signed-rpm", "publisher-repo-rpm", "snap-store-package", "pinned-snap-package", "expressvpn-wrapper", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "dnf5-fast-tuning", "system-hostname", "wireguard-keypair", "networkmanager-vpn-profiles", "flatpak-remote", "flatpak-app", "rpmfusion-repositories", "dnf-package-set-update", "dnf5-system-update", "docker-engine", "user-directories", "firefox-preferences", "firefox-extensions", "nsswitch-mdns", "dnf5-automatic")) and
       (.scope | IN("system", "user")) and
       (.status | IN("blocked", "candidate", "supported")) and
-      (.status != "blocked" or .handler == "firefox-extensions") and
+      (.status != "blocked" or (.handler | IN("firefox-extensions", "networkmanager-vpn-profiles", "keyfile-mounts"))) and
       (.recovery | IN("remove-new-install", "exact-state", "none")) and
+      (.unsetState == null or
+        (.unsetState as $unset |
+          .kind == "setting" and .recovery == "exact-state" and
+          (.states | index($unset) != null))) and
       (if .kind == "package" then
-         ((.states == ["installed", "absent"] and .recovery == "remove-new-install") or
-          (.states == ["installed"] and .recovery == "none"))
+         (if .handler == "clamav-initial-signatures" then
+            (.states == ["installed", "absent"] and .recovery == "exact-state")
+          else
+            ((.states == ["installed", "absent"] and .recovery == "remove-new-install") or
+             (.states == ["installed"] and .recovery == "none")) end)
        elif .kind == "setting" then .recovery == "exact-state"
        elif .kind == "artifact" then .recovery == "none"
        else true end) and
@@ -33,9 +40,9 @@ ride_validate_catalog() {
       (.sourceUri | type == "string" and startswith("https://")) and
       (.licenseUri | type == "string" and startswith("https://")) and
       (if .kind == "package" then
-        ((.distribution == "installed") or ((.handler | IN("pinned-appimage", "pinned-publisher-appimage", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary")) and .distribution == "portable")) and
+        ((.distribution == "installed") or ((.handler | IN("pinned-appimage", "pinned-publisher-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "networkminer-portable", "vmfs6-source-build")) and .distribution == "portable")) and
         (.deploymentId | IN("local-installed", "system-flatpak", "user-local-bin", "user-applications-appimage", "user-local-opt")) and
-        (.artifactFormat | IN("rpm", "wheel", "script", "zip", "sdist", "flatpak-ref", "tar.gz", "AppImage", "snap", "jar", "deb")) and
+        (.artifactFormat | IN("rpm", "wheel", "script", "zip", "sdist", "flatpak-ref", "tar.gz", "AppImage", "snap", "jar", "deb", "source-tree", "run")) and
         (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
         (.sourceId as $defaultSource | (.sourceProviders // []) | type == "array" and
           ([.[].sourceId] | length == (unique | length)) and
@@ -69,6 +76,12 @@ ride_validate_catalog() {
          .sourceId == "fedora-rpm" and .artifactFormat == "rpm" and
          .states == ["installed", "absent"] and .recovery == "remove-new-install" and
          .verification == "fedora-rpm-gpg-smartd-disabled" and .status == "candidate")
+       elif .handler == "clamav-initial-signatures" then (.kind == "package" and
+         .id == "package.clamav" and .packageName == "clamav" and .sourceId == "fedora-rpm" and
+         .artifactFormat == "rpm" and .scope == "system" and
+         .states == ["installed", "absent"] and .recovery == "exact-state" and
+         .verification == "fedora-rpm-gpg-clamav-initial-signatures-and-exact-recovery" and
+         .status == "candidate")
        elif .handler == "systemd-service" then (.kind == "setting" and (.serviceName | type == "string" and test("^[A-Za-z0-9_.@-]+\\.service$")))
        elif .handler == "plex-server-service" then (.kind == "setting" and .scope == "system" and
          .id == "setting.plex-server-service" and .serviceName == "plexmediaserver.service" and
@@ -84,6 +97,18 @@ ride_validate_catalog() {
          .id == "setting.ssh-root-login" and .states == ["configured", "absent"] and
          .recovery == "exact-state" and .verification == "sshd-tested-root-login-dropin" and
          (.status == "candidate" or .status == "supported"))
+       elif .handler == "ssh-reboot-sudoers" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.ssh-reboot" and .states == ["configured", "absent"] and
+         .valueKind == "linux-user-principal" and .recovery == "exact-state" and
+         .verification == "sudoers-tested-reboot-rule" and .status == "candidate")
+       elif .handler == "networkmanager-vpn-profiles" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.networkmanager-vpn-profiles" and .states == ["configured", "absent"] and
+         .valueKind == "networkmanager-vpn-uuid-list" and .recovery == "exact-state" and
+         .verification == "local-networkmanager-vpn-keyfiles" and (.status == "blocked" or .status == "supported"))
+       elif .handler == "keyfile-mounts" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.keyfile-mounts" and .states == ["configured", "absent"] and
+         .valueKind == "linux-mapper-name" and .recovery == "exact-state" and
+         .verification == "crypttab-fstab-explicit-mapper-recovery" and (.status == "blocked" or .status == "candidate"))
        elif .handler == "nsswitch-mdns" then (.kind == "setting" and .scope == "system" and
          .id == "setting.multicast-dns" and .states == ["enabled", "disabled"] and
          .recovery == "exact-state" and .verification == "authselect-feature-state" and
@@ -108,7 +133,7 @@ ride_validate_catalog() {
          .status == "candidate")
        elif .handler == "firefox-extensions" then (.kind == "setting" and .scope == "system" and
          .id == "setting.firefox-addons" and .states == ["configured", "removal-pending", "absent"] and
-         .recovery == "exact-state" and .verification == "local-owned-firefox-extension-policy" and
+         .recovery == "exact-state" and .verification == "local-owned-firefox-global-xpis" and
         (.status == "blocked" or .status == "candidate"))
        elif .handler == "ferium-portable" then (.kind == "package" and
          .id == "package.ferium-portable" and .scope == "user" and
@@ -164,6 +189,14 @@ ride_validate_catalog() {
        elif .handler == "wireguard-keypair" then (.kind == "setting" and .scope == "system" and
          .id == "setting.wireguard-keypair" and .states == ["configured", "absent"] and
          .recovery == "exact-state" and .verification == "local-wireguard-keypair")
+       elif .handler == "networkmanager-vpn-profiles" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.networkmanager-vpn-profiles" and .states == ["configured", "absent"] and
+         .valueKind == "networkmanager-vpn-uuid-list" and .recovery == "exact-state" and
+         .verification == "local-networkmanager-vpn-keyfiles" and (.status == "blocked" or .status == "supported"))
+       elif .handler == "keyfile-mounts" then (.kind == "setting" and .scope == "system" and
+         .id == "setting.keyfile-mounts" and .states == ["configured", "absent"] and
+         .valueKind == "linux-mapper-name" and .recovery == "exact-state" and
+         .verification == "crypttab-fstab-explicit-mapper-recovery" and (.status == "blocked" or .status == "candidate"))
        elif .handler == "flatpak-remote" then (.kind == "setting" and .scope == "system" and
          .id == "setting.flathub-system-remote" and .states == ["configured", "absent"] and
          .recovery == "exact-state" and .verification == "local-flatpak-remote")
@@ -204,6 +237,21 @@ ride_validate_catalog() {
            .sourceUri == "https://files.pythonhosted.org/packages/3f/4c/b8bc1607c96e1df206912e4db82ace5adfb2fe9dce5926fd7860d265fa58/chepy-7.6.0.tar.gz" and
            .sourceSha256 == "f6084689e43d128748c18f79c79d75539abb67ac8245e950b678cfa0da2f5010"
           else .artifactFormat == "wheel" and (.id | IN("package.volatility3", "package.dfir-unfurl")) end))
+       elif .handler == "rust-source-build" then (.kind == "package" and .id == "package.browser-forensic" and
+         .scope == "user" and .artifactFormat == "source-tree" and .sourceId == "github-source-pinned" and
+         .verification == "github-pinned-source-tree-and-cargo-lock" and
+         .sourceUri == "https://github.com/SecurityRonin/browser-forensic/archive/10e2f70bd53d50144edcff849749efd0095c9a03.tar.gz" and
+         .sourceSha256 == "0493a03c0564a712a536fdd345c3eefec561c3ffd040f4ecc776ecdec398649c" and
+         .version == "0.3.0" and .dependencies == ["package.cargo"] and .license == "Apache-2.0")
+       elif .handler == "vmfs6-source-build" then (.kind == "package" and .id == "package.vmfs6-reader" and
+         .scope == "user" and .states == ["installed", "absent"] and .status == "candidate" and
+         .recovery == "remove-new-install" and .artifactFormat == "source-tree" and
+         .distribution == "portable" and .deploymentId == "user-local-opt" and
+         .sourceId == "github-source-pinned" and .version == "0.2.1" and
+         .sourceUri == "https://github.com/teward/vmfs6-tools/archive/refs/tags/0.2.1.tar.gz" and
+         .sourceSha256 == "a022a75f6c31611d1142c9d3692f2180b22d76a9d786809a5719e74f2e965c0a" and
+         .dependencies == ["package.gcc", "package.libuuid-devel", "package.make"] and
+         .verification == "github-pinned-source-sha256-build-without-vmfs-write")
       elif .handler == "pinned-script" then (.kind == "package" and .id == "package.asn" and
          .scope == "user" and .artifactFormat == "script" and
          .sourceId == "github-raw-pinned" and .verification == "github-commit-sha256-observed" and
@@ -225,6 +273,14 @@ ride_validate_catalog() {
          .licenseUri == "https://raw.githubusercontent.com/gchq/CyberChef/v11.5.0/LICENSE" and
          .sourceSha256 == "f6478925d3eaa16ec08626a85f5b85eed10d531a5e18700615fed7ecb024cccf" and
          .licenseSha256 == "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd")
+       elif .handler == "networkminer-portable" then (.kind == "package" and .id == "package.networkminer" and
+         .scope == "user" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
+         .distribution == "portable" and .deploymentId == "user-local-opt" and .artifactFormat == "zip" and
+         .sourceId == "netresec-static-pinned" and .version == "3.2" and
+         .sourceUri == "https://download.netresec.com/networkminer/NetworkMiner_3-2.zip" and
+         .sourceSha256 == "daceec649fb4fe59b11e4a9e4ecd5f51c1dd37824280dfbeac67bec27b6b6d60" and
+         .verification == "https-fixed-url-sha256" and .license == "GPL-2.0" and
+         .dependencies == ["package.gtk2", "package.mono-core", "package.mono-winforms"])
        elif .handler == "pinned-binary" then (.kind == "package" and .id == "package.librespeed-cli" and
          .scope == "user" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
          .distribution == "installed" and .deploymentId == "user-local-bin" and .artifactFormat == "tar.gz" and
@@ -271,6 +327,28 @@ ride_validate_catalog() {
            .license == "AGPL-3.0-or-later (distribution includes separately licensed components)" and
            .licenseUri == "https://github.com/laurent22/joplin/tree/v3.7.22"
           end))
+       elif .handler == "pinned-email-header-spa" then (.kind == "package" and .id == "package.email-header-analyzer" and
+         .scope == "user" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
+         .status == "candidate" and .distribution == "portable" and .deploymentId == "user-local-opt" and
+         .artifactFormat == "source-tree" and .sourceId == "github-source-pinned" and
+         .version == "0.0.1" and .sourceCommit == "ccaf044dfe964215656966013feaaea705726048" and
+         .sourceTree == "69ec6b8a3c078a0f952e04ddea47f0a0ebf3ce49" and
+         .lockfileBlobSha1 == "7e8a00e275c2253e6ffe29f42a9aac8dc00aee41" and
+         .sourceUri == "https://github.com/mailtower-app/email-header-analyzer" and
+         .license == "MIT (frontend source; npm dependencies are separately licensed)" and
+         .verification == "github-pinned-source-tree-and-npm-lock-integrity" and
+         .targets == {fedora:{releases:["44"],architectures:["x86_64"],variantIds:["workstation"]}})
+       elif .handler == "expressvpn-wrapper" then (.kind == "package" and .id == "package.expressvpn" and
+         .scope == "system" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
+         .distribution == "installed" and .deploymentId == "local-installed" and .artifactFormat == "run" and
+         .sourceId == "expressvpn-signed-local" and .version == "14.3.1.15429" and
+         .assetName == "expressvpn-linux-universal-14.3.1.15429_release.run" and
+         .signatureAssetName == "expressvpn-linux-universal-14.3.1.15429_release.run.asc" and
+         .signingKeyAssetName == "expressvpn_release_public_key_0xAFF2A1415F6A3A38.asc" and
+         .sourceSha256 == "f784af6628564f4fcb0a82064d4dc1f22520c3c917bb1c882bd61eb621b31efb" and
+         .signingFingerprint == "1D0B09AD6C93FEE93FDDBD9DAFF2A1415F6A3A38" and
+         .verification == "expressvpn-detached-pgp-and-sha256" and .status == "candidate" and
+         .targets == {fedora:{releases:["44"],architectures:["x86_64"],variantIds:["workstation","server"]}})
        elif .handler == "pinned-yubico-tarball" then (.kind == "package" and .id == "package.yubico-authenticator" and
          .scope == "user" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
          .distribution == "portable" and .deploymentId == "user-local-opt" and .artifactFormat == "tar.gz" and
@@ -378,6 +456,15 @@ ride_validate_catalog() {
          .scope == "system" and .recovery == "remove-new-install" and
          .distribution == "installed" and .deploymentId == "local-installed" and
          .artifactFormat == "snap" and .verification == "snap-store-assertion")
+       elif .handler == "pinned-snap-package" then (.kind == "package" and
+         .id == "package.bulk-extractor" and .sourceId == "github-release-snap" and
+         .packageName == "bulk-extractor" and .releaseVersion == "2.2.0" and
+         .snapArchiveUri == "https://github.com/simsong/bulk_extractor/releases/download/v2.2.0/bulk-extractor_2.2.0_amd64.snap" and
+         .sha256 == "dbc0749a7a84e2710c104a09fd921b93c1db9e2147bb11da978dea7af0e16c67" and
+         .dependencies == ["package.snapd"] and .states == ["installed", "absent"] and
+         .scope == "system" and .recovery == "remove-new-install" and
+         .distribution == "installed" and .deploymentId == "local-installed" and
+         .artifactFormat == "snap" and .verification == "pinned-upstream-release-sha256")
        else (.kind == "artifact" and (.githubRepository | type == "string" and test("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")) and
              (.assetSuffix | type == "string" and test("^-[A-Za-z0-9_.-]+$")) and
              (.maxBytes | type == "number" and . > 0 and . <= 104857600)) end)
@@ -407,12 +494,12 @@ ride_entry() {
 }
 
 ride_entry_or_die() {
-  local id=$1 requested=${2:-} value=${3:-} base selected
+  local id=$1 requested=${2:-} value=${3:-} value_provided=${4:-false} base selected
   base=$(ride_entry "$id") || ride_die "unknown catalog ID: $id"
   if [[ "$(jq -r '.kind' <<< "$base")" != package ]]; then
     [[ -z "$requested" ]] || ride_die "source selection requires a package: $id"
-    if [[ -n "$value" ]]; then
-      [[ "$(jq -r '.handler' <<< "$base")" == gsettings-string || "$(jq -r '.handler' <<< "$base")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$base")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$base")" == bash-aliases || "$(jq -r '.handler' <<< "$base")" == chrome-preferences || "$(jq -r '.handler' <<< "$base")" == upower-threshold || "$(jq -r '.handler' <<< "$base")" == system-hostname ]] ||
+    if [[ "$value_provided" == true || -n "$value" ]]; then
+      [[ "$(jq -r '.handler' <<< "$base")" == gsettings-string || "$(jq -r '.handler' <<< "$base")" == gnome-lock-timing || "$(jq -r '.handler' <<< "$base")" == gnome-custom-shortcuts || "$(jq -r '.handler' <<< "$base")" == bash-aliases || "$(jq -r '.handler' <<< "$base")" == chrome-preferences || "$(jq -r '.handler' <<< "$base")" == upower-threshold || "$(jq -r '.handler' <<< "$base")" == system-hostname || "$(jq -r '.handler' <<< "$base")" == ssh-reboot-sudoers || "$(jq -r '.handler' <<< "$base")" == networkmanager-vpn-profiles || "$(jq -r '.handler' <<< "$base")" == keyfile-mounts ]] ||
         ride_die "value selection requires a configurable setting: $id"
       ride_setting_value_valid "$base" "$value" || ride_die "invalid value for $id: $value"
       jq -c --arg value "$value" '. + {selectedValue:$value}' <<< "$base"
@@ -438,10 +525,11 @@ ride_setting_value_valid() {
   local entry=$1 value=$2
   case "$(jq -r '.id' <<< "$entry")" in
     setting.gnome-region)
-      [[ "$value" =~ ^[a-z]{2,3}_[A-Z]{2}\.UTF-8$ ]]
+      [[ -z "$value" || "$value" =~ ^[a-z]{2,3}_[A-Z]{2}\.UTF-8$ ]]
       ;;
     setting.gnome-lock-timing)
-      [[ "$value" == idle-10-lock-5 || "$value" == idle-15-lock-5 ]]
+      [[ "$value" == idle-10-lock-5 || "$value" == idle-15-lock-5 ||
+         "$value" == screensaver-enabled || "$value" == screensaver-disabled ]]
       ;;
     setting.gnome-favorite-apps)
       [[ ${#value} -le 700 ]] || return 1
@@ -486,6 +574,26 @@ ride_setting_value_valid() {
     setting.hostname)
       ride_system_hostname_value "$value"
       ;;
+    setting.ssh-reboot)
+      [[ "$value" =~ ^[a-z_][a-z0-9_.-]{0,31}$ && "$value" != root ]]
+      ;;
+    setting.networkmanager-vpn-profiles)
+      [[ ${#value} -le 2048 ]] || return 1
+      local -a uuids=()
+      local -A seen=()
+      local uuid
+      IFS=',' read -r -a uuids <<< "$value"
+      (( ${#uuids[@]} > 0 && ${#uuids[@]} <= 32 )) || return 1
+      for uuid in "${uuids[@]}"; do
+        [[ "$uuid" =~ ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$ ]] || return 1
+        uuid=${uuid,,}
+        [[ -z "${seen[$uuid]+present}" ]] || return 1
+        seen[$uuid]=1
+      done
+      ;;
+    setting.keyfile-mounts)
+      [[ "$value" =~ ^[A-Za-z0-9][A-Za-z0-9_.+-]{0,63}$ ]]
+      ;;
     *) return 1 ;;
   esac
 }
@@ -510,16 +618,27 @@ ride_source_signature() {
   local version=${2:-2} fields
   case "$version" in
     1) fields='{id, sourceId, handler, packageName, serviceName, scope, sourceUri, verification, targets, recovery}' ;;
-    2) fields='if (.handler | IN("gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "system-hostname")) then
+    2) fields='if (.handler | IN("gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "system-hostname", "ssh-reboot-sudoers", "networkmanager-vpn-profiles", "keyfile-mounts")) then
          {id, handler, scope, sourceUri, verification, targets, recovery, valueKind, allowedValues, selectedValue}
-       elif (.handler | IN("pinned-script", "pinned-woeusb-script", "pinned-zip", "pinned-binary", "pinned-eza-binary", "pinned-publisher-appimage")) or .id == "package.chepy" then
+       elif .handler == "pinned-email-header-spa" then
+         {id, distribution, deploymentId, sourceId, handler, artifactFormat, scope, sourceUri,
+          sourceCommit, sourceTree, lockfileBlobSha1, version, license, licenseUri,
+          verification, targets, recovery}
+       elif (.handler | IN("rust-source-build", "vmfs6-source-build")) then
+         {id, distribution, deploymentId, sourceId, handler, artifactFormat, scope, sourceUri,
+          sourceSha256, version, license, licenseUri, verification, targets, recovery, dependencies}
+       elif (.handler | IN("pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-publisher-appimage")) or .id == "package.chepy" then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
           scope, sourceUri, sourceSha256, sourceManifestUri, manifestSha256, licenseUri, licenseSha256,
-          version, assetName, verification, targets, recovery}
+          version, assetName, verification, targets, recovery, dependencies}
        elif .handler == "pinned-appimage" then
          {id, distribution, deploymentId, sourceId, handler, artifactFormat, scope, sourceUri,
           sourceManifestUri, sourceSha512, manifestSha256, license, licenseUri, version, assetName,
           verification, targets, recovery}
+       elif .handler == "expressvpn-wrapper" then
+         {id, distribution, deploymentId, sourceId, handler, artifactFormat, scope, sourceUri,
+          signatureUri, signingKeyUri, signingFingerprint, sourceSha256, version, assetName,
+          signatureAssetName, signingKeyAssetName, license, licenseUri, verification, targets, recovery}
        elif .handler == "pinned-yubico-tarball" then
          {id, distribution, deploymentId, sourceId, handler, artifactFormat, scope, sourceUri,
           signatureUri, signingKeyUri, signingFingerprint, sourceSha256, version, license, licenseUri,
@@ -537,6 +656,9 @@ ride_source_signature() {
        elif .handler == "amp-pinned-rpm" then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat,
           scope, sourceUri, sourceSha256, version, license, licenseUri, verification, targets, recovery}
+       elif .handler == "clamav-initial-signatures" then
+         {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat,
+          scope, sourceUri, verification, targets, recovery}
        elif .handler == "flatpak-app" then
          {id, distribution, deploymentId, sourceId, handler, applicationId, artifactFormat,
           scope, sourceUri, verification, targets, recovery}
@@ -550,6 +672,8 @@ ride_source_signature() {
          {id, handler, scope, sourceUri, verification, targets, recovery, dependencies}
        elif .handler == "sshd-root-login" then
          {id, handler, scope, sourceUri, verification, targets, recovery}
+       elif .handler == "ssh-reboot-sudoers" then
+         {id, handler, scope, sourceUri, verification, targets, recovery, valueKind, selectedValue}
        elif .handler == "plex-server-service" then
          {id, handler, serviceName, scope, sourceUri, verification, targets, recovery, dependencies}
        elif .handler == "veracrypt-signed-rpm" then
@@ -581,33 +705,39 @@ ride_profile_path() {
 }
 
 ride_validate_profile() {
-  local profile=$1 id state source value entry handler
+  local profile=$1 id state source value value_provided entry handler
   [[ -r "$profile" ]] || ride_die "profile not readable: $profile"
   jq -e '
     .schemaVersion == 1 and (.id | type == "string" and test("^[a-z0-9-]+$")) and
     (.operations | type == "array") and
     ([.operations[].id] | length == (unique | length)) and
     all(.operations[]; (.id | type == "string") and (.state | type == "string") and
-      (.value == null or (.value | type == "string" and length > 0 and length <= 2048)) and
+      (.value == null or ((.value | type == "string") and (.value | length <= 2048) and
+        ((.value | length > 0) or .id == "setting.gnome-region"))) and
       (.source == null or (.source | type == "string" and test("^[a-z0-9-]+$"))))
   ' "$profile" >/dev/null || ride_die "invalid v3 profile: $profile"
-  while IFS=$'\t' read -r id state source value; do
+  while IFS=$'\t' read -r id state source value value_provided; do
     [[ -z "$id" ]] && continue
     [[ "$source" != '~' ]] || source=
     [[ "$value" != '~' ]] || value=
-    entry=$(ride_entry_or_die "$id" "$source" "$value")
+    if [[ "$value" == __RIDE_EMPTY_VALUE__ ]]; then value=; fi
+    entry=$(ride_entry_or_die "$id" "$source" "$value" "$value_provided")
     [[ "$(jq -r '.kind' <<< "$entry")" != artifact ]] || ride_die "download-only artifact cannot appear in a profile: $id"
     handler=$(jq -r '.handler' <<< "$entry")
     [[ "$handler" != dnf5-system-update ]] || ride_die "whole-system updates require the explicit update command: $id"
     [[ "$handler" != docker-engine ]] || ride_die "Docker Engine changes require the explicit deploy command: $id"
     jq -e --arg state "$state" '.states | index($state) != null' <<< "$entry" >/dev/null ||
       ride_die "invalid state $state for $id"
-    if [[ "$handler" == gsettings-string || "$handler" == gnome-lock-timing || "$handler" == gnome-custom-shortcuts || "$handler" == bash-aliases || "$handler" == chrome-preferences || "$handler" == upower-threshold ]]; then
-      [[ -n "$value" ]] || ride_die "configurable setting requires a profile value: $id"
+    if [[ "$handler" == gsettings-string || "$handler" == gnome-lock-timing || "$handler" == gnome-custom-shortcuts || "$handler" == bash-aliases || "$handler" == chrome-preferences || "$handler" == upower-threshold || "$handler" == ssh-reboot-sudoers || "$handler" == networkmanager-vpn-profiles || "$handler" == keyfile-mounts ]]; then
+      if [[ "$id" == setting.gnome-region ]]; then
+        [[ "$value_provided" == true ]] || ride_die "configurable setting requires a profile value: $id"
+      else
+        [[ -n "$value" ]] || ride_die "configurable setting requires a profile value: $id"
+      fi
     else
       [[ -z "$value" ]] || ride_die "profile value is not valid for $id"
     fi
-  done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (.value // "~")] | @tsv' "$profile")
+  done < <(jq -r '.operations[] | [.id, .state, (.source // "~"), (if has("value") then (if .value == "" then "__RIDE_EMPTY_VALUE__" else .value end) else "~" end), (if has("value") then "true" else "false" end)] | @tsv' "$profile")
 }
 
 ride_dependencies_ready() {

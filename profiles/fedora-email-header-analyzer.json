@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-email-header-analyzer",
+  "description": "Opt-in local email header analysis using the pinned MailTower static app. Header content is analyzed in the browser and the serving process binds only to loopback.",
+  "operations": [
+    {
+      "id": "package.email-header-analyzer",
+      "state": "installed"
+    }
+  ]
+}

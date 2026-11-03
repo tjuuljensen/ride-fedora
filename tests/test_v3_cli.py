@@ -42,10 +42,23 @@ class CliTests(unittest.TestCase):
             "rpm": """#!/bin/sh
 test -f "$RIDE_TEST_PACKAGES/$3"
 """,
+            "rpmkeys": """#!/bin/sh
+printf '%s\\n' "$*" >> "$RIDE_TEST_RPMKEYS_LOG"
+[ "${RIDE_TEST_RPMKEYS_FAIL:-0}" != 1 ]
+""",
             "dnf": """#!/bin/sh
 printf '%s\\n' "$*" >> "$RIDE_TEST_DNF_LOG"
 for arg do last=$arg; done
 case " $* " in
+  *' download '*)
+    destination=
+    previous=
+    for arg do
+      if [ "$previous" = --destdir ]; then destination=$arg; fi
+      previous=$arg
+    done
+    mkdir -p "$destination"
+    : > "$destination/$last-1.0-1.fc44.x86_64.rpm" ;;
   *' install '*)
     [ "$last" != "beta" ] || [ "${RIDE_TEST_FAIL_BETA:-0}" != 1 ] || exit 13
     touch "$RIDE_TEST_PACKAGES/$last" ;;
@@ -75,12 +88,13 @@ esac
             "RIDE_TEST_MODE": "1", "RIDE_OS_RELEASE_FILE": str(os_release),
             "RIDE_CATALOG_PATH": str(catalog), "RIDE_TEST_PACKAGES": str(packages),
             "RIDE_TEST_DNF_LOG": str(self.root / "dnf.log"),
+            "RIDE_TEST_RPMKEYS_LOG": str(self.root / "rpmkeys.log"),
             "RIDE_STATE_DIR": str(self.root / "runs"),
             "RIDE_CACHE_DIR": str(self.root / "cache"),
         })
 
-    def run_ride(self, *args, success=True):
-        completed = subprocess.run([str(CLI), *args], env=self.env, text=True,
+    def run_ride(self, *args, success=True, input_text=None):
+        completed = subprocess.run([str(CLI), *args], env=self.env, input=input_text, text=True,
                                    capture_output=True, check=False)
         if success:
             self.assertEqual(completed.returncode, 0, completed.stderr)
@@ -126,6 +140,7 @@ esac
         catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
         catalog["operations"] = [entry for entry in catalog["operations"]
                                  if entry["id"] == "setting.firefox-addons"]
+        catalog["operations"][0]["status"] = "blocked"
         path = self.root / "blocked-catalog.json"
         path.write_text(json.dumps(catalog))
         self.env["RIDE_CATALOG_PATH"] = str(path)
@@ -313,6 +328,24 @@ esac
         result = self.run_ride("restore", "--run-id", first["runId"], "--allow-candidate", success=False)
         self.assertIn("already been restored", result.stderr)
 
+    def test_candidate_download_does_not_require_vm_acceptance_or_install(self):
+        destination = self.root / "downloaded"
+        preview = self.run_ride("download", "package.alpha", "--destination",
+                                str(destination), "--dry-run")
+        self.assertIn("would download package.alpha", preview.stdout)
+        self.assertFalse(destination.exists())
+        self.assertEqual(self.journals(), [])
+
+        downloaded = self.run_ride("download", "package.alpha", "--destination",
+                                   str(destination))
+        artifact = destination / "alpha-1.0-1.fc44.x86_64.rpm"
+        self.assertEqual(downloaded.stdout.strip(), str(artifact))
+        self.assertTrue(artifact.is_file())
+        self.assertTrue((destination / f"{artifact.name}.sha256").is_file())
+        self.assertIn("--checksig", (self.root / "rpmkeys.log").read_text())
+        self.assertFalse((self.root / "packages" / "alpha").exists())
+        self.assertEqual(self.journals(), [])
+
     def test_partial_failure_is_recorded(self):
         self.env["RIDE_TEST_FAIL_BETA"] = "1"
         result = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate", success=False)
@@ -353,6 +386,112 @@ esac
         self.run_ride("status", "package.unknown", success=False)
         (self.root / "os-release").write_text("ID=debian\nVERSION_ID=13\n")
         self.run_ride("plan", "--profile", str(self.profile), success=False)
+
+    def test_show_stdin_emits_versioned_compact_records_in_input_order(self):
+        shown = self.run_ride(
+            "show", "--stdin", input_text="package.beta\r\npackage.alpha\npackage.beta")
+        records = [json.loads(line) for line in shown.stdout.splitlines()]
+        self.assertEqual([record["id"] for record in records],
+                         ["package.beta", "package.alpha", "package.beta"])
+        for record in records:
+            self.assertEqual(record["schemaVersion"], 1)
+            self.assertIsInstance(record["name"], str)
+            self.assertIsInstance(record["kind"], str)
+            self.assertIsInstance(record["observedState"], str)
+            self.assertIsInstance(record["availableSources"], list)
+        positional = json.loads(self.run_ride("show", "package.alpha").stdout)
+        self.assertEqual(positional["schemaVersion"], 1)
+        self.assertEqual(positional["observedState"], "absent")
+        self.assertEqual(self.journals(), [])
+        self.assertFalse((self.root / "dnf.log").exists())
+
+    def test_show_stdin_empty_and_final_unterminated_line(self):
+        self.assertEqual(self.run_ride("show", "--stdin", input_text="").stdout, "")
+        shown = self.run_ride("show", "--stdin", input_text="package.alpha")
+        self.assertEqual(json.loads(shown.stdout)["id"], "package.alpha")
+
+    def test_show_stdin_rejects_blank_unknown_and_conflicting_selection(self):
+        blank = self.run_ride(
+            "show", "--stdin", input_text="package.alpha\n\npackage.beta", success=False)
+        self.assertIn("blank operation ID", blank.stderr)
+        self.assertEqual([json.loads(line)["id"] for line in blank.stdout.splitlines()],
+                         ["package.alpha"])
+        unknown = self.run_ride(
+            "show", "--stdin", input_text="package.alpha\npackage.unknown\npackage.beta",
+            success=False)
+        self.assertIn("unknown", unknown.stderr)
+        self.assertEqual([json.loads(line)["id"] for line in unknown.stdout.splitlines()],
+                         ["package.alpha"])
+        self.run_ride("show", "--stdin", "package.alpha", success=False)
+        self.run_ride("show", "package.alpha", "--stdin", success=False)
+        self.run_ride("list", "--stdin", success=False)
+
+    def test_show_stdin_source_selector_is_applied_to_each_id(self):
+        catalog = self.root / "catalog.json"
+        data = json.loads(catalog.read_text())
+        data["operations"][0]["sourceProviders"] = [{
+            "sourceId": "alternate-rpm", "handler": "dnf-package", "packageName": "alpha-alt",
+            "artifactFormat": "rpm", "status": "candidate", "recovery": "remove-new-install",
+            "targets": {"fedora": {"releases": ["44"], "architectures": ["x86_64"]}},
+            "sourceUri": "https://example.org/alternate", "verification": "fedora-repository-gpg",
+        }]
+        catalog.write_text(json.dumps(data))
+        selected = self.run_ride("show", "--stdin", "--source", "alternate-rpm",
+                                 input_text="package.alpha")
+        self.assertEqual(json.loads(selected.stdout)["sourceId"], "alternate-rpm")
+        invalid = self.run_ride("show", "--stdin", "--source", "alternate-rpm",
+                                input_text="package.beta", success=False)
+        self.assertIn("source", invalid.stderr)
+        self.assertEqual(invalid.stdout, "")
+
+    def test_status_has_explicit_id_and_view_selectors(self):
+        positional = self.run_ride("status", "package.alpha")
+        named = self.run_ride("status", "--id", "package.alpha")
+        self.assertEqual(named.stdout, positional.stdout)
+
+        packages = self.run_ride("status", "--view", "packages")
+        self.assertIn("package.alpha\tfedora-rpm", packages.stdout)
+        self.assertIn("package.beta\tfedora-rpm", packages.stdout)
+        settings = self.run_ride("status", "--view", "settings")
+        self.assertEqual(len(settings.stdout.splitlines()), 1)
+        self.assertIn("package.alpha\tfedora-rpm", self.run_ride("status", "--view", "test").stdout)
+
+        profiled_id = self.run_ride("status", "--profile", str(self.profile),
+                                    "--id", "package.alpha")
+        self.assertIn("package.alpha\tfedora-rpm", profiled_id.stdout)
+        self.assertNotIn("package.beta\tfedora-rpm", profiled_id.stdout)
+        profiled_packages = self.run_ride("status", "--profile", str(self.profile),
+                                          "--view", "packages")
+        self.assertIn("package.alpha\tfedora-rpm", profiled_packages.stdout)
+
+        invalid = self.run_ride("status", "--view", "missing-group", success=False)
+        self.assertIn("unknown status view", invalid.stderr)
+        self.run_ride("status", "package.alpha", "--id", "package.beta", success=False)
+        self.run_ride("status", "--id", "package.alpha", "--view", "packages", success=False)
+        self.assertEqual(self.journals(), [])
+        self.assertFalse((self.root / "dnf.log").exists())
+
+    def test_installed_package_noop_outside_target_is_allowed_without_mutation(self):
+        (self.root / "packages" / "alpha").write_text("already installed\n")
+        (self.root / "os-release").write_text(
+            "ID=fedora\nVERSION_ID=45\nVARIANT_ID=workstation\n")
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "test", "description": "Installed package no-op",
+            "operations": [{"id": "package.alpha", "state": "installed"}],
+        }))
+        status = json.loads(self.run_ride("show", "package.alpha").stdout)
+        self.assertEqual(status["observedState"], "unsupported")
+        planned = self.run_ride("plan", "--profile", str(self.profile))
+        self.assertIn("package.alpha\tfedora-rpm\tinstalled\tinstalled\tunsupported", planned.stdout)
+        installed = self.run_ride("install", "package.alpha")
+        self.assertIn("target remains unsupported and no action was taken", installed.stdout)
+        profile_apply = self.run_ride("apply", "--profile", str(self.profile))
+        self.assertIn("target remains unsupported and no action was taken", profile_apply.stdout)
+        self.assertTrue((self.root / "packages" / "alpha").is_file())
+        self.assertEqual(self.journals(), [])
+        self.assertFalse((self.root / "dnf.log").exists())
+        catalog = json.loads((self.root / "catalog.json").read_text())
+        self.assertEqual(catalog["operations"][0]["targets"]["fedora"]["releases"], ["44"])
 
     def test_variant_scoped_target_fails_closed_on_other_or_missing_edition(self):
         catalog = self.root / "catalog.json"
@@ -578,6 +717,13 @@ esac
 
         planned = self.run_ride("plan", "--profile", str(self.profile)).stdout
         self.assertIn("setting.ibus-emoji-hotkey", planned)
+        self.env["RIDE_TEST_IBUS_GET_FAIL"] = "1"
+        unavailable_preview = self.run_ride(
+            "plan", "--profile", str(self.profile), success=False)
+        self.assertIn("cannot observe iBus emoji hotkey", unavailable_preview.stderr)
+        self.assertEqual(self.journals(), [])
+        self.assertEqual(override.read_text(), "['<Alt>F8']\n")
+        del self.env["RIDE_TEST_IBUS_GET_FAIL"]
         self.run_ride("apply", "--profile", str(self.profile), success=False)
         first = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
         changed = next(row for row in self.journals() if row["runId"] in first.stdout)
@@ -592,7 +738,22 @@ esac
         self.assertIn("restore conflict", conflict.stderr)
         self.assertEqual(override.read_text(), "['<Alt>F9']\n")
         override.write_text("['<Control><Alt><Shift>e']\n")
+        run_count = len(self.journals())
+        (self.root / "os-release").write_text(
+            "ID=fedora\nVERSION_ID=45\nVARIANT_ID=workstation\n")
+        unsupported_preview = self.run_ride(
+            "restore", "--run-id", changed["runId"], "--dry-run", success=False)
+        self.assertIn("operation is not declared", unsupported_preview.stderr)
+        self.assertEqual(len(self.journals()), run_count)
+        self.assertEqual(override.read_text(), "['<Control><Alt><Shift>e']\n")
+        (self.root / "os-release").write_text(
+            "ID=fedora\nVERSION_ID=44\nVARIANT_ID=workstation\n")
         self.run_ride("restore", "--run-id", changed["runId"], "--dry-run")
+        candidate_restore = self.run_ride(
+            "restore", "--run-id", changed["runId"], success=False)
+        self.assertIn("candidate without VM acceptance", candidate_restore.stderr)
+        self.assertEqual(override.read_text(), "['<Control><Alt><Shift>e']\n")
+        self.assertEqual(len(self.journals()), run_count)
         self.run_ride("restore", "--run-id", changed["runId"], "--allow-candidate")
         self.assertEqual(override.read_text(), "['<Alt>F8']\n")
 
@@ -702,6 +863,18 @@ printf 'en_US.utf8\\nda_DK.utf8\\n'
         self.run_ride("plan", "--profile", str(self.profile), success=False)
 
         self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "region-reset-test", "description": "Reset region",
+            "operations": [{"id": "setting.gnome-region", "state": "configured", "value": ""}],
+        }))
+        self.assertIn("configured:<empty>", self.run_ride("plan", "--profile", str(self.profile)).stdout)
+        reset = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        reset_journal = next(row for row in self.journals() if row["runId"] in reset.stdout)
+        self.assertEqual(reset_journal["steps"][0]["selectedValue"], "")
+        self.assertEqual(region.read_text(), "''\n")
+        self.run_ride("restore", "--run-id", reset_journal["runId"], "--allow-candidate")
+        self.assertEqual(region.read_text(), "'en_US.UTF-8'\n")
+
+        self.profile.write_text(json.dumps({
             "schemaVersion": 1, "id": "buttons-test", "description": "Test layout",
             "operations": [{"id": "setting.gnome-window-buttons", "state": "configured",
                             "value": ":minimize,maximize,close"}],
@@ -739,6 +912,107 @@ printf 'en_US.utf8\\nda_DK.utf8\\n'
         locked = self.run_ride("set", "setting.gnome-window-buttons", "--state", "configured",
                                "--value", ":appmenu:close", "--allow-candidate", success=False)
         self.assertIn("locked", locked.stderr)
+
+        del self.env["RIDE_TEST_STRING_LOCK"]
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "region-profile-removal", "description": "Keep settings",
+            "operations": [{"id": "setting.gnome-region", "state": "configured",
+                            "value": "da_DK.UTF-8"}],
+        }))
+        applied = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        applied_journal = next(row for row in self.journals() if row["runId"] in applied.stdout)
+        self.assertEqual(region.read_text(), "'da_DK.UTF-8'\n")
+        count_before_remove = len(self.journals())
+        removed = self.run_ride("remove", "--profile", str(self.profile), "--allow-candidate")
+        self.assertIn("kept non-package profile operation setting.gnome-region", removed.stdout)
+        self.assertEqual(region.read_text(), "'da_DK.UTF-8'\n")
+        self.assertEqual(len(self.journals()), count_before_remove)
+
+        unset = self.run_ride("unset", "setting.gnome-region", "--allow-candidate")
+        unset_journal = next(row for row in self.journals() if row["runId"] in unset.stdout)
+        self.assertNotIn("selectedValue", unset_journal["steps"][0])
+        self.assertFalse(region.exists())
+        self.run_ride("restore", "--run-id", unset_journal["runId"], "--allow-candidate")
+        self.assertEqual(region.read_text(), "'da_DK.UTF-8'\n")
+        self.assertEqual(applied_journal["steps"][0]["selectedValue"], "da_DK.UTF-8")
+
+        explicit_empty = self.run_ride("set", "setting.gnome-region", "--state", "configured",
+                                       "--value", "", "--allow-candidate")
+        empty_journal = next(row for row in self.journals() if row["runId"] in explicit_empty.stdout)
+        self.assertEqual(empty_journal["steps"][0]["selectedValue"], "")
+        self.assertEqual(region.read_text(), "''\n")
+        self.run_ride("restore", "--run-id", empty_journal["runId"], "--allow-candidate")
+        self.assertEqual(region.read_text(), "'da_DK.UTF-8'\n")
+
+    def test_system_package_change_requires_root_before_state_or_mutation(self):
+        catalog_path = Path(self.env["RIDE_CATALOG_PATH"])
+        catalog = json.loads(catalog_path.read_text())
+        for entry in catalog["operations"]:
+            entry["scope"] = "system"
+        catalog_path.write_text(json.dumps(catalog))
+
+        refused = self.run_ride("install", "package.alpha", "--allow-candidate", success=False)
+
+        self.assertIn("this operation needs root", refused.stderr)
+        self.assertFalse((self.root / "runs").exists())
+        self.assertFalse((self.root / "dnf.log").exists())
+        self.assertFalse(any((self.root / "packages").iterdir()))
+
+    def test_profile_removal_orders_selected_dependent_before_prerequisite(self):
+        catalog_path = Path(self.env["RIDE_CATALOG_PATH"])
+        catalog = json.loads(catalog_path.read_text())
+        beta = next(entry for entry in catalog["operations"] if entry["id"] == "package.beta")
+        beta["dependencies"] = ["package.alpha"]
+        catalog_path.write_text(json.dumps(catalog))
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1,
+            "id": "dependency-removal-order",
+            "description": "Remove a dependent before its prerequisite",
+            "operations": [
+                {"id": "package.alpha", "state": "installed"},
+                {"id": "package.beta", "state": "installed"},
+            ],
+        }))
+
+        applied = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        applied_run = next(row for row in self.journals() if row["runId"] in applied.stdout)
+        self.assertEqual([step["id"] for step in applied_run["steps"]],
+                         ["package.alpha", "package.beta"])
+
+        removed = self.run_ride("remove", "--profile", str(self.profile), "--allow-candidate")
+        removed_run = next(row for row in self.journals() if row["runId"] in removed.stdout)
+        self.assertEqual([step["id"] for step in removed_run["steps"]],
+                         ["package.beta", "package.alpha"])
+        self.assertFalse(any((self.root / "packages").iterdir()))
+
+    def test_remove_and_command_options_refuse_ambiguity_before_mutation(self):
+        missing_selector = self.run_ride("remove", success=False)
+        self.assertIn("remove requires a package ID or an explicit --profile", missing_selector.stderr)
+        self.assertFalse((self.root / "runs").exists())
+
+        conflicting_selector = self.run_ride("remove", "package.alpha", "--profile",
+                                             str(self.profile), success=False)
+        self.assertIn("cannot be combined", conflicting_selector.stderr)
+        irrelevant = self.run_ride("list", "--state", "installed", success=False)
+        self.assertIn("list does not accept options", irrelevant.stderr)
+        irrelevant_set = self.run_ride("install", "package.alpha", "--destination",
+                                       str(self.root / "elsewhere"), success=False)
+        self.assertIn("install requires an ID and accepts only", irrelevant_set.stderr)
+        irrelevant_status = self.run_ride("status", "--value", "locale", success=False)
+        self.assertIn("status --value requires an ID", irrelevant_status.stderr)
+        self.assertFalse((self.root / "runs").exists())
+        self.assertFalse((self.root / "dnf.log").exists())
+
+    def test_unset_refuses_when_operation_has_no_declared_unset_state(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        entry = next(row for row in catalog["operations"]
+                     if row["id"] == "setting.gnome-calendar-week-numbers")
+        (self.root / "catalog.json").write_text(json.dumps({
+            "schemaVersion": 3, "clientVersion": "3.0.0", "operations": [entry],
+        }))
+        refused = self.run_ride("unset", entry["id"], "--allow-candidate", success=False)
+        self.assertIn("no declared unset state", refused.stderr)
+        self.assertFalse((self.root / "runs").exists())
 
     def test_profile_removal_keeps_one_way_prerequisite(self):
         catalog = json.loads((self.root / "catalog.json").read_text())

@@ -41,6 +41,22 @@ SAFETY_DOMAINS = {
     "system-update", "service-lifecycle", "network",
 }
 DEEP_SAFETY_DOMAINS = {"data", "storage", "encryption", "security", "difficult-recovery"}
+DEEP_DOMAIN_CHECKS = {
+    "data": {
+        "private-output-boundary", "no-evidence-processing", "exact-output-preservation",
+    },
+    "storage": {
+        "exact-configuration-recovery", "unrelated-entry-preservation",
+        "active-or-mounted-refusal",
+    },
+    "encryption": {
+        "keyfile-preservation", "encrypted-data-preservation", "boot-recovery",
+    },
+    "security": {
+        "scoped-privilege", "conflict-refusal", "real-action", "reconnect",
+        "exact-recovery", "unrelated-policy-preservation",
+    },
+}
 KEY = re.compile(r"^(workstation|server):(action|package|setting)\.[A-Za-z0-9_]+$")
 
 
@@ -286,8 +302,35 @@ def validate() -> dict:
             if progress == "operable" and row["risk"] == "high":
                 if not safety_domains:
                     raise ValueError(f"high-risk {key} needs an explicit safety-domain classification")
-                if DEEP_SAFETY_DOMAINS.intersection(safety_domains):
-                    raise ValueError(f"high-risk {key} needs its deep safety gate before runnable status")
+                deep_domains = DEEP_SAFETY_DOMAINS.intersection(safety_domains)
+                if deep_domains:
+                    review = row.get("safetyReview")
+                    if not isinstance(review, dict) or review.get("status") != "passed":
+                        raise ValueError(f"high-risk {key} needs its deep safety gate before runnable status")
+                    review_domains = review.get("domains", [])
+                    review_checks = review.get("checks", [])
+                    review_evidence = review.get("evidence", [])
+                    if (not isinstance(review_domains, list) or
+                            any(domain not in DEEP_SAFETY_DOMAINS for domain in review_domains) or
+                            not isinstance(review_checks, list) or
+                            any(not isinstance(check, str) for check in review_checks) or
+                            not isinstance(review_evidence, list) or
+                            any(not isinstance(link, str) for link in review_evidence)):
+                        raise ValueError(f"{key} has an invalid deep safety review record")
+                    if not deep_domains <= set(review_domains):
+                        raise ValueError(f"{key} deep safety review omits a classified domain")
+                    required_checks = set().union(*(DEEP_DOMAIN_CHECKS.get(domain, set())
+                                                    for domain in deep_domains))
+                    if (not required_checks or not required_checks <= set(review_checks) or
+                            not review_evidence or
+                            any(link not in row["evidence"] for link in review_evidence)):
+                        raise ValueError(f"{key} deep safety review lacks required checks or linked evidence")
+                    review_text = "\n".join(
+                        checked_path(link).read_text(encoding="utf-8").lower()
+                        for link in review_evidence
+                    )
+                    if any(f"`{check}`" not in review_text for check in required_checks):
+                        raise ValueError(f"{key} deep safety evidence does not document every required check")
             if progress == "operable" and not row["v31Hardening"]:
                 raise ValueError(f"opt-in {key} lacks a named v3.1 hardening follow-up")
             evidence_records = []

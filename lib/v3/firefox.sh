@@ -165,7 +165,7 @@ ride_firefox_preferences_change() {
 }
 
 ride_firefox_extensions_tool() {
-  local tool="$RIDE_ROOT/tools/manage-firefox-extensions.py"
+  local tool="$RIDE_ROOT/tools/manage-firefox-global-xpis.py"
   [[ -f "$tool" && ! -L "$tool" ]] || ride_die "Firefox extension policy helper is missing or unsafe: $tool"
   printf '%s\n' "$tool"
 }
@@ -175,8 +175,10 @@ ride_firefox_extensions_observe() {
   tool=$(ride_firefox_extensions_tool)
   ride_require_command python3
   python3 "$tool" --manifest "$RIDE_ROOT/policies/firefox-extensions.json" \
-    --target /etc/firefox/policies/policies.json \
-    --state /var/lib/ride-fedora/firefox-extensions.json observe
+    --target '/usr/lib64/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}' \
+    --policy /etc/firefox/policies/policies.json \
+    --state /var/lib/ride-fedora/firefox-global-xpis.json \
+    --backup-dir /var/lib/ride-fedora/firefox-global-xpi-removal observe
 }
 
 ride_firefox_extensions_change() {
@@ -184,6 +186,8 @@ ride_firefox_extensions_change() {
   tool=$(ride_firefox_extensions_tool)
   ride_require_command python3
   python3 "$tool" --manifest "$RIDE_ROOT/policies/firefox-extensions.json" \
-    --target /etc/firefox/policies/policies.json \
-    --state /var/lib/ride-fedora/firefox-extensions.json set-state "$state"
+    --target '/usr/lib64/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}' \
+    --policy /etc/firefox/policies/policies.json \
+    --state /var/lib/ride-fedora/firefox-global-xpis.json \
+    --backup-dir /var/lib/ride-fedora/firefox-global-xpi-removal set-state "$state"
 }

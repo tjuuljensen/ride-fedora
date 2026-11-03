@@ -14,7 +14,9 @@ class Dnf5SystemUpdateTests(unittest.TestCase):
     def run_shell(self, body, *, status="0", checkups='{}', preview="Nothing to do.", history='[]', info='[]', reboot='[{"type":"reboot","reboot_required":false,"packages":[]}]'):
         with tempfile.TemporaryDirectory() as directory:
             state = Path(directory) / "history"
+            transaction_info = Path(directory) / "transaction-info"
             state.write_text(history, encoding="utf-8")
+            transaction_info.write_text(info, encoding="utf-8")
             script = f'''set -euo pipefail
 source {PROVIDER}
 ride_die() {{ printf '%s\\n' "$*" >&2; return 1; }}
@@ -24,7 +26,7 @@ dnf5() {{
     'check-upgrade --json'|'--refresh check-upgrade --json') printf '%s\\n' {checkups!r}; return {status} ;;
     'upgrade --assumeno --no-allow-downgrade') printf '%s\\n' {preview!r}; if [[ {preview!r} == 'Nothing to do.' ]]; then return 0; else return 1; fi ;;
     'history list --json') cat {str(state)!r};;
-    'history info '* ) printf '%s\\n' {info!r};;
+    'history info '* ) cat {str(transaction_info)!r};;
     'upgrade --no-allow-downgrade --assumeyes') printf '%s\\n' '[mock upgrade]'; printf '[{{"id":5,"status":"Ok"}}]\\n' > {str(state)!r};;
     'needs-restarting --json') printf '%s\\n' {reboot!r};;
     *) printf 'unexpected dnf5 call: %s\\n' "$*" >&2; return 9;;
@@ -81,6 +83,23 @@ dnf5() {
 ride_dnf5_system_update_change current
 ''')
         self.assertNotEqual(result.returncode, 0)
+
+    def test_large_transaction_history_is_streamed_into_report(self):
+        import json
+
+        count = 2000
+        packages = [{"nevra": f"package-{index}:1.0-1.x86_64"}
+                    for index in range(count)]
+        info = json.dumps([{"id": 5, "status": "Ok", "packages": packages}])
+        result = self.run_shell('''
+ride_dnf5_system_update_change current
+printf 'REPORT=%s\\n' "$RIDE_DNF5_SYSTEM_UPDATE_REPORT"
+''', history='[{"id":4,"status":"Ok"}]', info=info)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report_text = result.stdout.split("REPORT=", 1)[1].splitlines()[0]
+        report = json.loads(report_text)
+        self.assertEqual(len(report["packages"]), count)
+        self.assertEqual(report["packages"][-1], "package-1999:1.0-1.x86_64")
 
 
 if __name__ == "__main__":

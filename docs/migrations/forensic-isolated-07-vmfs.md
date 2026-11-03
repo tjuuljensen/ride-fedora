@@ -1,7 +1,7 @@
 # Forensic Isolated 07: VMFS6 image reader
 
-Status: **source and safety investigation; no runnable v3 operation yet**,
-2026-10-30. `InstallVMFStools` in `lib-fedora.sh` only printed two URLs;
+Status: **opt-in install candidate available; VMFS6 access unverified; fixture test deferred to v3.1**,
+2026-11-03. `InstallVMFStools` in `lib-fedora.sh` only printed two URLs;
 `RemoveVMFStools` did nothing. The owner kept VMFS access for v3.0, while
 the link-only v2 function remains a retired placeholder. This follow-up
 seeks a working, opt-in VMFS6 *image inspection* path on Fedora 44
@@ -29,10 +29,11 @@ mounts, and writing are separate claims.
   Focused mocks must cover wrong source digest, occupied destination,
   failed build cleanup, and unowned removal. Investigate failures before
   retrying. A build or `--help` check alone cannot establish VMFS access.
-- Keep the operation out of `default`. If the fixture or read-only evidence
-  cannot be established, retain the v3.0 gap with a specific blocker and
-  next action. Update the ledger, generated docs, Windows alignment, and
-  named v3.1 hardening only after the evidence supports a runnable claim.
+- Keep the operation out of `default`. The owner cannot supply the fixture now
+  and explicitly deferred this fixture-backed runtime test to v3.1. Keep VMFS6
+  non-runnable and out of v3.0 profiles; this deferral does not authorize the
+  pinned reader as a candidate operation. Resume with the fixture and checks
+  above before claiming access.
 
 The [upstream VMFS6 fork](https://github.com/teward/vmfs6-tools) is archived
 and its [0.2.1 release](https://github.com/teward/vmfs6-tools/releases/tag/0.2.1)
@@ -76,3 +77,70 @@ therefore remains non-runnable and the kept capability remains a v3.0 gap.
 The next test needs a genuine VMFS6 image, an independently recorded digest,
 expected directory/file contents, an `O_RDONLY` trace, and unchanged input
 digest. VMFS5 needs its own source and fixture if required.
+
+## Fixture acquisition investigation, 2026-11-03
+
+The original [Weafon VMFS6 fork](https://github.com/weafon/vmfs6-tool) remains
+marked experimental in its README; it says only `debugvmfs` and `vmfsfuse`
+were applied to a few cases. The later [teward fork](https://github.com/teward/vmfs6-tools)
+is archived and carries the same experimental limitation. This review found
+no maintained Linux reader with stronger VMFS6 validation evidence.
+
+The archived upstream [TODO](https://github.com/teward/vmfs6-tools/blob/0.2.1/TODO)
+lists `mkfs.vmfs` only as expected for v0.5.0 and full write support for
+v1.0.0. Neither exists in the pinned v0.2.1 source. The bundled `imager`
+regenerates the existing VMFS3 fixture, so it cannot produce the required
+VMFS6 image. Debian carries the same source fixture.
+
+Broadcom [KB 316475](https://knowledge.broadcom.com/external/article/316475/migrating-vmfs-5-datastore-to-vmfs-6-dat.html)'s
+attachment is a VMFS5-to-VMFS6 migration PowerShell script, not a datastore
+image. Broadcom [KB 399823](https://knowledge.broadcom.com/external/article/399823)
+documents a free ESXi 8.0U3e hypervisor download through its support portal,
+subject to sign-in and non-production license terms. This is a plausible
+legitimate fixture path: create a disposable VMFS6 datastore on a virtual
+disk using ESXi, seed known files, then export the virtual disk as a
+read-only test fixture. No portal download or fixture is present in this
+workspace, so this is an acquisition path, not evidence of VMFS6 access. The
+batch remains blocked on an owner-authorized ESXi installer or licensed
+fixture and its expected file manifest.
+
+## Current reader maintenance status, 2026-11-03
+
+The `teward/vmfs6-tools` GitHub repository is archived and read-only as of
+2025-11-16. Its maintainer's [Debian removal request](https://bugs.debian.org/1120780)
+states that both `vmfs-tools` and the VMFS6 fork are unmaintained and fail to
+build with FUSE 3; Debian removed `vmfs6-tools` from unstable on 2025-11-23.
+The older stable Debian package entry does not change that upstream status.
+The base [`vmfs-tools` project](https://glandium.org/projects/vmfs-tools/)
+still describes itself as work in progress and not intended for production;
+it is the VMFS5 path and does not replace VMFS6 support. This review found no
+maintained Linux reader with stronger VMFS6 validation evidence.
+
+This closes the source-maintenance question for the old reader, not the kept
+VMFS access outcome. The archived fork remains useful only as a pinned,
+isolated candidate pending a genuine licensed VMFS6 fixture, known manifest,
+and read-only Fedora 44 trace; it cannot yet be advertised as an operable
+v3.0 capability. A remote ESXi/vSphere datastore workflow would be a separate
+access method and has not been accepted as a replacement for inspecting a
+VMFS image on Fedora.
+
+## General image-mounting alternative review, 2026-11-03
+
+The newer [MountIR](https://github.com/m1tcch/MountIR) utility was reviewed as
+a possible replacement path. Its current driver table maps VMFS6 to
+`vmfs6-fuse` from `vmfs6-tools`; it does not provide an independent VMFS6
+reader. Its general image workflow also uses privileged loop-device and mount
+operations across many filesystem types, which exceeds the narrow image-file
+`show`/`ls`/`cat` interface defined for this RIDE outcome. It is therefore not
+a migration alternative for the current batch. This review does not establish
+MountIR's Fedora 44 support or runtime behavior.
+
+## v3.1 fixture acceptance deferral
+
+The owner cannot supply a genuine VMFS6 image now and asked to defer the
+fixture-backed runtime test to v3.1. RIDE offers `package.vmfs6-reader` as an
+explicit install candidate so the owner can use the pinned CLI for manual
+testing. That install path does not claim that VMFS6 images are correctly read.
+The v3.1 test must use an authorized fixture with a known manifest, verify
+`O_RDONLY` access and an unchanged input digest, and complete the RIDE install
+and removal checks above. VMFS5 remains a separate review.

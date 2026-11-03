@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-clamav-initial-signatures",
+  "description": "Opt-in Fedora 44 ClamAV package install and one initial signature update.",
+  "operations": [
+    {
+      "id": "package.clamav",
+      "state": "installed"
+    }
+  ]
+}

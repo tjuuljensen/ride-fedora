@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "scenarioRevision": "1.1.0",
+  "scenarioSha256": "9353770486CFC7768F8D2DD4BF0DB646FFF894E591974F07409035DF7F2D3632",
+  "adapter": "Python unittest and Bash CLI",
+  "mappings": [
+    {
+      "scenarioId": "RB02-01-explicit-remove-selection",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_remove_and_command_options_refuse_ambiguity_before_mutation"
+    },
+    {
+      "scenarioId": "RB03-01-candidate-preview-without-opt-in",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_plan_is_read_only_and_candidate_is_gated"
+    },
+    {
+      "scenarioId": "RB03-02-preview-preserves-availability-check",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_ibus_hotkey_restores_custom_and_unset_values"
+    },
+    {
+      "scenarioId": "RB04-01-candidate-change-requires-fresh-opt-in",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_plan_is_read_only_and_candidate_is_gated"
+    },
+    {
+      "scenarioId": "RB04-02-opt-in-does-not-widen-targets",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_variant_scoped_target_fails_closed_on_other_or_missing_edition"
+    },
+    {
+      "scenarioId": "RB04-03-installed-package-desired-state-no-op",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_installed_package_noop_outside_target_is_allowed_without_mutation"
+    },
+    {
+      "scenarioId": "RB05-01-download-preview-does-not-acquire",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_candidate_download_does_not_require_vm_acceptance_or_install"
+    },
+    {
+      "scenarioId": "RB06-01-unset-retains-declared-meaning",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_gnome_string_profile_value_and_exact_recovery"
+    },
+    {
+      "scenarioId": "RB09-01-partial-failure-retains-recovery-identity",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_partial_failure_is_recorded"
+    },
+    {
+      "scenarioId": "RB10-01-completion-is-read-only",
+      "testFile": "tests/test_v3_cache_completion.py",
+      "testClass": "CompletionTests",
+      "testMethod": "test_profile_ids_and_catalog_ids"
+    },
+    {
+      "scenarioId": "RB08-01-privilege-refuses-before-inspection",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_system_package_change_requires_root_before_state_or_mutation"
+    },
+    {
+      "scenarioId": "RB07-01-profile-removal-reverses-package-dependencies",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_profile_removal_orders_selected_dependent_before_prerequisite"
+    }
+  ],
+  "supportingTests": [
+    {
+      "area": "dependency-order",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_native_cli_tools_profile_uses_candidate_gate_and_dnf_lifecycle"
+    },
+    {
+      "area": "source-ownership-conflict",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_source_selection_conflict_and_journal"
+    },
+    {
+      "area": "profile-removal-eligibility",
+      "testFile": "tests/test_v3_cli.py",
+      "testClass": "CliTests",
+      "testMethod": "test_profile_removal_keeps_one_way_prerequisite"
+    },
+    {
+      "area": "source-digest-verification",
+      "testFile": "tests/test_v3_cache_completion.py",
+      "testClass": "CacheTests",
+      "testMethod": "test_artifact_digest_verification"
+    },
+    {
+      "area": "root-user-preview-identity-helper",
+      "testFile": "tests/test_v3_identity_preflight.py",
+      "testClass": "PreviewIdentityTests",
+      "testMethod": "test_root_cannot_preview_user_scope"
+    },
+    {
+      "area": "restore-preview-identity-flow",
+      "testFile": "tests/test_v3_identity_preflight.py",
+      "testClass": "PreviewIdentityTests",
+      "testMethod": "test_restore_preview_refuses_root_identity_before_observation_or_journaling"
+    },
+    {
+      "area": "uid-zero-namespace-preview",
+      "testFile": "tests/test_v3_identity_preflight.py",
+      "testClass": "PreviewIdentityTests",
+      "testMethod": "test_uid_zero_namespace_restore_preview_refuses_before_observation_or_journaling"
+    }
+  ],
+  "coverageGaps": [
+    "The restore --dry-run path is tested with a simulated identity seam and in an isolated user/mount namespace where Bash EUID is 0; host-root execution is not needed for this read-only guard.",
+    "The shared privilege and dependency-order scenarios are mapped to both adapters; Windows Pester execution remains pending in an environment with Pester 5."
+  ]
+}

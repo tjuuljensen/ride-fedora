@@ -30,6 +30,7 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     config.addinivalue_line("markers", "recovery(mode): package recovery contract required by the scenario")
     config.addinivalue_line("markers", "vm_target(id): VM target required by the scenario")
+    config.addinivalue_line("markers", "vm_extra_disk(size_mib): create a disposable qcow2 disk and attach it as virtio")
 
 
 @pytest.fixture
@@ -53,7 +54,14 @@ def vm(request):
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     artifacts = Path(request.config.getoption("--vm-output")).expanduser().resolve()
     artifacts = artifacts / target_id / f"{stamp}-{name}-{uuid4().hex[:8]}"
-    machine = VM(target, Path(image), artifacts, accel=request.config.getoption("--vm-accel"))
+    extra_disk_sizes = []
+    for marker in request.node.iter_markers("vm_extra_disk"):
+        size_mib = marker.kwargs.get("size_mib")
+        if marker.args or not isinstance(size_mib, int) or isinstance(size_mib, bool) or size_mib < 16:
+            pytest.fail("vm_extra_disk requires size_mib >= 16")
+        extra_disk_sizes.append(size_mib)
+    machine = VM(target, Path(image), artifacts, accel=request.config.getoption("--vm-accel"),
+                 extra_disk_sizes_mib=extra_disk_sizes)
     machine.start()
     try:
         yield machine

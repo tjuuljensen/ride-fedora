@@ -46,10 +46,12 @@ Fedora 44 acceptance observed publisher-granted connections for
 platform security difference under review, not a shared installer contract.
 
 The user requested a versioned shared behavior contract and reciprocal maintainer
-rules while both clients are under active development. Contract **1.0.0** is
+rules while both clients are under active development. Contract **1.1.0** is
 canonical in [ride-windows](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/models/ride-behavior-contract.md);
 the [local reference](models/ride-behavior-contract-ref.json) pins its exact UTF-8
-LF bytes by SHA-256. Both repos adopt the same version/digest. Neither the mutable
+LF bytes by SHA-256. Fedora reviewed Windows commit
+`1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5`; both repos adopt the same
+version/digest. Neither the mutable
 development branch nor the peer implementation is automatically authoritative
 for new behavior. Either repo can propose a versioned change.
 
@@ -60,18 +62,112 @@ The contract owns the procedure; this register records Fedora's implementation
 and evidence. No duplicate contract is maintained here.
 
 The [updated Windows comparison](https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/fedora-alignment.md)
-includes Windows' new candidate execution/preview/restore switch. Remaining gaps
-include candidate preview/download rules, generic disabled mapping for unset,
-profile removal eligibility, ignored/conflicting arguments, status selectors and
-completion. The special iBus restore-preview path needs common target/identity
-preflight review. Native Bash/PowerShell syntax, provider implementations and
+includes Windows' new candidate execution/preview/restore switch. Fedora's
+2026-11-03 ALIGN-03 work declares per-operation `unsetState`, restricts profile
+removal to reversible package entries, requires an explicit remove selector,
+and rejects irrelevant/conflicting CLI options before catalog or target work.
+Focused mocked tests cover refusal before mutation, settings preservation, and
+saved unset recovery. Windows still needs its corresponding unset, profile
+removal, bare-remove, option-validation, and exclusion-help changes; ALIGN-03
+remains open until both implementations and contract wording align. The
+[CLI regression tests](../tests/test_v3_cli.py) capture the Fedora-side cases.
+
+Fedora's 2026-11-03 ALIGN-04 work removes VM acceptance as a download gate;
+downloads still require a declared target, eligible handler/source, and the
+handler's package-signature or artifact-digest verification. Restore previews
+now validate declared targets for every changed step, including iBus, and
+reject user-scoped previews from root. Focused tests cover a candidate download
+without `--allow-candidate`, write-free download preview, and unsupported-target
+iBus preview with no journal or setting mutation. Windows still needs its
+flag-free preview behavior and installed-package no-op exception review;
+ALIGN-04 remains open until paired cases are reviewed. Fedora now permits a
+read-only installed-state no-op for eligible RPM package handlers on Fedora
+outside their declared release, edition, or architecture. The target declaration
+is unchanged; absent packages and non-RPM handlers still fail closed. Focused
+tests prove no handler call or run creation. Remaining gaps include status
+selectors, completion, and show pipelines. Native Bash/PowerShell syntax, provider implementations and
 support evidence remain intentional platform boundaries.
+
+### ALIGN-05 shared scenarios and Fedora adapter, 2026-11-03
+
+Fedora now vendors the exact ten-case shared scenario set from Windows commit
+`1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5`, revision `1.0.0`, SHA-256
+`EA62E4B23A0FE6415730D9C81863A38B8D23EA32BFFFB43255410B9E9491AC1F`. The
+scenario set pins contract 1.1.0 at digest
+`B88967EA5BDE29E0141BCA15134E2DAC63E02FAF7931CB18E83BA08CF5262938`.
+`tools/check_behavior_scenarios.py` validates the pins and ensures each shared
+scenario and supplemental coverage item maps to a real Fedora unittest case;
+the v3 CI workflow runs this check. Unit tests reject a seeded revision mismatch
+and a missing case mapping. The shared settings remain data-only and contain no
+platform adapter fields.
+
+This was initial adapter coverage; the current set and remaining review are
+recorded below.
+
+### ALIGN-05 shared scenario expansion, 2026-11-03
+
+The Windows-owned canonical data is now revision `1.1.0`, pinned to contract
+1.1.0 digest
+`B88967EA5BDE29E0141BCA15134E2DAC63E02FAF7931CB18E83BA08CF5262938` and
+scenario SHA-256
+`9353770486CFC7768F8D2DD4BF0DB646FFF894E591974F07409035DF7F2D3632`. It adds
+RB08-01 for refusal of a system-scoped change without mutation privilege and
+RB07-01 for reverse dependency order during explicit profile removal. Windows
+maps these to existing Pester cases in `CandidateExecution.Tests.ps1` and
+`PackageDependencyPlanning.Tests.ps1`. Fedora adds mocked CLI cases proving
+pre-observation privilege refusal and dependent-before-prerequisite removal.
+The Fedora adapters and tests pass. Fedora also exercises the full
+`restore --dry-run` path in an isolated user/mount namespace where Bash has
+actual EUID 0; tmpfs contains the run journal and the test proves refusal before
+the settings observer or journal writer runs. A helper-seam test remains as a
+focused unit case. Pester 5 is unavailable in this Linux environment, so Windows
+execution remains unverified; its working-tree hashes are recorded as dirty
+review inputs. ALIGN-05 remains open until the Windows suite runs.
+
+### ALIGN-06 structured capability register, 2026-11-03
+
+Fedora now has a 20-entry machine-readable register at
+[`docs/models/capability-differences.json`](models/capability-differences.json).
+It records stable IDs, disposition, decision status, owners, contract rules,
+source evidence, linked work, and review triggers. The snapshot pins Windows
+commit `1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5` and hashes for the reviewed
+Fedora worktree files. `tools/check_alignment_register.py` validates the
+register shape, contract pin, and Fedora file hashes; CI runs it, and unit tests
+reject duplicate IDs and incomplete review records.
+
+#### Reconciliation of earlier batch comparisons
+
+The dated per-batch sections below are evidence snapshots for Linux-owned
+products and handlers. Their product names, publisher facts, license evidence,
+and Fedora target results remain in the catalog, outcome ledger, and batch
+records. They do not establish a Windows installer or shared product identity.
+Current shared behavior and intentional platform differences are represented
+by these stable entries:
+
+| Earlier comparison notes | Current register entries | Reconciled meaning |
+| --- | --- | --- |
+| Native RPM batches 01-05; Fedora provider foundation and Security Lab provider batches | `package.portfolio-specific-migration-facts`, `package.source-and-variant`, `cli.native-syntax-and-default` | Fedora package names, repository sources, Snap/Flatpak/RPM Fusion providers, and Linux handlers remain native catalog facts. A missing Windows counterpart is an intentional catalog difference; shared source selection and lifecycle rules remain separately registered. |
+| Forensic-isolated and publisher-application batches, including Eza and portable deployments | `package.portfolio-specific-migration-facts`, `package.source-and-variant`, `state.native-record-formats` | Linux artifact identity, license, destination, and recovery stay with each operation. The experimental VMFS6 reader is a Linux-only pinned source-build install candidate; it does not create a shared Windows installer or prove image-reading behavior. Windows package facts or portable handlers are not inferred from a Linux source review. H118 tracks fixture-backed VMFS6 access validation. |
+| Desktop settings, system/security operations, and generic-server batches | `settings.unset-meaning`, `target-and-privilege-identities`, `user-context-handoff`, `profiles.remove-eligibility`, `state.native-record-formats` | Native settings, privilege, handoff, profile-removal, and journal semantics are compared through their shared lifecycle rules; platform-specific handlers and target evidence remain local. |
+| CLI and completion comparisons across all batches | `cli.shared-verbs`, `cli.ambiguous-and-irrelevant-options`, `cli.bare-remove-default-profile`, `status.id-and-view-selectors`, `cli.completion-data-and-scope`, `cli.output-forms`, `cli.show-pipeline-contract` | Differences are aligned or remain named temporary gaps; the dated package reviews do not silently disposition them. |
+
+This index reconciles the older package-specific comparison notes with the
+register rather than treating every Linux-only product as an unexplained
+contract difference. Add a dedicated register entry if a future review finds a
+new shared behavior, source, deployment, or recovery difference.
+
+The register reconciles the current CLI, lifecycle, target, state, and scenario
+comparisons, including Fedora's declared-unset behavior and installed-package
+no-op. Open entries remain named temporary gaps or proposed owner decisions.
+Rebuild source hashes and re-review dispositions when either client changes a
+listed capability.
 
 The [final-v3 tasks](MIGRATION-PLAN.md#cross-platform-alignment-for-final-v3)
 track ALIGN-03 through ALIGN-09 with owners and completion criteria. Existing
-comparison rows below are dated evidence, not proof of full 1.0.0 conformance.
+comparison rows below are dated evidence, not proof of full 1.1.0 conformance.
 The contract is not published at an immutable commit yet; ALIGN-09 tracks that
-release step. Adoption changes no CLI, target support, catalog or migration count.
+release step. Contract adoption itself changed no CLI, target support, catalog,
+or migration count.
 Review triggers: every affected shared change, package batch and release candidate.
 
 ## Earlier comparison baseline
@@ -467,12 +563,18 @@ change, or release review begins.
 
 ### Fedora Autopsy and Volatility 2 follow-up, 2026-11-01
 
-The Fedora Autopsy path is now the Sleuth Kit Labs Snap Store package and is
+The Fedora Autopsy path is the Sleuth Kit Labs Snap Store package and is
 tracked separately as a high-risk Linux candidate. Fedora 44 acceptance
-observed publisher-granted connections for `block-devices`, `dm-crypt`, and
+observed automatic connections for `block-devices`, `dm-crypt`, and
 `fuse-support`; the Snap runtime and those interfaces do not transfer to
-Windows. Windows' existing MSI path remains a separate platform-native
-deployment. The retained Linux Volatility 2 outcome is an opt-in user-local
+Windows. A 2026-11-02 source review found the Store's stable 4.22.1 channel
+lags upstream's signed 4.23.1 release; this remains a Linux candidate
+limitation tracked under H087. A follow-up Fedora 44 VM run created an empty
+Autopsy case, passed SQLite integrity, and preserved the complete case-tree
+hash through Linux package removal and Snap restore. This validates only the
+Linux package-presence operation; GUI and evidence-processing behavior remain
+separate opt-in hardening. Windows' existing MSI path remains a separate
+platform-native deployment. The retained Linux Volatility 2 outcome is an opt-in user-local
 PyPy 2.7 plus pinned upstream source bundle, accepted for the core CLI on
 Fedora 44 Workstation. Windows has no corresponding Volatility 2 operation in
 the reviewed development branch. Linux added an operation-specific handler
@@ -497,6 +599,18 @@ schema/handler changes, or release review begins.
 
 ### Fedora forensic isolated decisions 04-06, 2026-10-30
 
+#### BulkExtractor operation update, 2026-11-02
+
+Compared the Linux implementation with Windows `codex/ride-v3-migration` at
+`69ccbb0`. Windows has no BulkExtractor catalog operation. Linux now offers
+`package.bulk-extractor` as an opt-in Fedora 44 Workstation candidate using a
+SHA-256-pinned x86_64 Snap release asset and Snap's package-data snapshot on
+removal. This Fedora acquisition handler and target-specific recovery are
+intentional platform differences; no shared catalog, profile, or run-state
+schema changed. H113 tracks forensic scan behavior and broader evidence
+recovery. Recheck if Windows adds BulkExtractor, the upstream asset or license
+facts change, or either client changes shared schemas.
+
 Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
 Windows `codex/ride-v3-migration` at `0ff139f` before the isolated
 [BulkExtractor](migrations/forensic-isolated-04.md),
@@ -507,11 +621,31 @@ product identity and GPL-2.0 source fact but Windows-specific runtime,
 destination, and capture-preserving recovery. Linux has no equivalent
 portable handler or data inverse, so its active v2 outcome remains
 non-runnable in v3.0. Windows has no corresponding BulkExtractor or email
-header analyzer catalog operation in this revision. These decisions add no
-Linux operation, profile, or run-state field. The platform deployment and
-evidence difference is intentional, and no unexplained shared-contract
-drift was found. Recheck at first Linux portable/service implementation,
-product fact change, or release review.
+header analyzer catalog operation in this revision. At this review point,
+these decisions added no Linux operation, profile, or run-state field; the
+later BulkExtractor operation is recorded above. The platform deployment and
+evidence difference is intentional, and no unexplained shared-contract drift
+was found. Recheck at first Linux portable/service implementation, product
+fact change, or release review.
+
+#### Email header analyzer operation, 2026-11-02
+
+Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
+Windows `codex/ride-v3-migration` at `69ccbb08570205407f5fae13329b8eac6b1abcd8`. Windows has no matching email
+header analyzer operation in its catalog. Linux now has the candidate
+`package.email-header-analyzer` and opt-in profile
+`fedora-email-header-analyzer`. The operation uses a Fedora-specific user-local
+build and loopback static launcher for the MIT MailTower SPA pinned to commit
+`ccaf044dfe964215656966013feaaea705726048`; its frontend source contains no
+header network or browser-persistence APIs. Linux added handler-specific
+source pin fields to its catalog validation; the shared lifecycle fields and
+profile/run contracts did not change. Windows has no matching operation. The Linux acquisition handler and destination are intentional
+platform-specific behavior. Fedora 44 Workstation x86_64 lifecycle acceptance
+passes; the operation remains an opt-in candidate. Windows would need a
+separately reviewed native launch/deployment path before claiming parity. H114
+tracks browser parser fixtures and transitive npm license review. Recheck if
+Windows adds the product, the upstream source changes, the shared lifecycle
+contract changes, or release review begins.
 
 ### Fedora publisher application batches 01-02, 2026-10-30
 
@@ -744,6 +878,45 @@ proves their Linux recovery. No unexplained shared-contract drift was found.
 Recheck if a shared product identity or private-state contract is proposed,
 or before release review.
 
+### ExpressVPN autoconnect CLI observation, 2026-11-03
+
+The local vendor CLI is `4.0.1-beta+9292`; its help exposes `get` and `set
+autoconnect`, and a read-only query returned `false`. The same help says
+startup autoconnect requires background mode; disabling background mode while
+the GUI is stopped disconnects VPN and deactivates Split Tunnel. Current v14
+behavior and network recovery remain unverified. This is Linux-only product
+behavior; no Windows catalog, profile, or run-state contract changed.
+Recompare shared schemas after a v14-backed operation is designed.
+
+### ExpressVPN signed installer path, 2026-11-03
+
+Compared with Windows `codex/ride-v3-migration` at commit
+`1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5`; its checkout has unrelated
+uncommitted work and is 35 commits behind its remote-tracking branch. Its
+PowerShell catalog has no ExpressVPN product operation. Fedora now has an opt-in Linux-only
+`package.expressvpn` wrapper with local signed-artifact fields and no shared
+package lifecycle fields. Installer execution, activation, service, and
+network recovery remain Linux-specific. Recompare both package schemas before
+target promotion and at release review.
+
+The owner supplied the current v14.3.1.15429 `.run` and detached `.asc`; its
+signature verifies against the full fingerprint published by ExpressVPN. The
+artifact remains outside the repository and has been tested in disposable
+Fedora 44 vendor-install probes. Fedora's wrapper pins its digest and signing
+fingerprint and stages all three local inputs. Windows has no corresponding
+product operation. Preserve this as an intentional platform difference, then
+recompare at target promotion.
+
+### Keyfile mount removal contract, 2026-11-03
+
+Compared Fedora schema 3/profile schema 1 with Windows
+`codex/ride-v3-migration` at `1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5`.
+Windows has no encrypted-mount catalog/profile operation, and both Windows
+schemas are clean at that commit. Fedora now has the Linux-specific,
+root-scoped `setting.keyfile-mounts` candidate and handler. It adds no shared
+field or lifecycle behavior. Keep that difference intentional; recompare at
+release review and if Windows adds an encrypted-mount operation.
+
 ### Generic Server and resolution decisions, 2026-10-30
 
 Compared Linux catalog schema 3, profile schema 1, and run schema 2 with
@@ -932,6 +1105,15 @@ profile, or shared data contract changed. A future Linux image reader would
 be a platform-specific acquisition and storage-safety path. Recheck
 Windows product identity and shared run-state behavior before adding it
 to the Linux catalog or claiming cross-platform alignment.
+
+### VMFS6 fixture-source follow-up, 2026-11-03
+
+The source review confirmed the archived reader has no VMFS6 formatter. An
+official free ESXi 8.0U3e download is documented, but requires support-portal
+sign-in; no fixture was acquired. This does not change the Linux or Windows
+catalog, profile, or run-state contracts. If an authorized installer or
+licensed VMFS6 image becomes available, repeat the platform-contract review
+before adding the Linux-only image reader.
 
 ### Fedora Firefox forensic successor preflight, 2026-10-30
 
@@ -2044,3 +2226,148 @@ no corresponding Linux RPM or shared handler contract, so this provider-specific
 side-effect guard adds no shared operation ID, profile format, or journal
 schema. Revisit if Windows adds a SMART-management outcome or Linux adds
 RIDE-owned device selection and monitoring.
+
+### Fedora GNOME empty-region reset, 2026-11-02
+
+Linux carries the v2 `RemoveGnomeRegion` behavior as an explicit empty-string
+value in the opt-in `gnome-region-reset` profile. The existing region operation
+records the selected value, prior dconf override, and conflict-aware restore;
+the selected empty string remains data in the run journal. Windows has no
+matching GNOME user-setting operation on branch `d91c44b`, so this adds no
+shared operation ID or lifecycle contract. Revisit if Windows adds a desktop
+locale override or Linux changes selected-value journal semantics.
+
+### Fedora GNOME screensaver states, 2026-11-02
+
+Linux keeps the v2 enabled and disabled screen-lock settings through two
+explicit values of `setting.gnome-lock-timing`. Each value writes and journals
+only the three GNOME keys changed by its v2 function; `lock-delay` remains
+unmodified. The values are opt-in Fedora profiles and add no shared profile or
+journal schema. Windows branch `d91c44b` has no corresponding GNOME setting.
+Revisit if Windows adds a comparable screen-lock policy or Linux adds more
+managed GNOME lock states.
+
+### Fedora ClamAV initial signatures, 2026-11-02
+
+Compared Linux with Windows `codex/ride-v3-migration` at
+`69ccbb08570205407f5fae13329b8eac6b1abcd8`. The Windows catalog has no ClamAV
+package or signature-database lifecycle. Linux adds the opt-in candidate
+`package.clamav`, using a Fedora-only handler to snapshot and restore
+`/var/lib/clamav`, perform one verified initial signature update, and preserve
+the prior package-root and FreshClam unit states. Its ownership manifest and
+snapshot stay in Fedora system state; no shared operation, profile, or journal
+fields changed. Focused mocks and the exact Fedora 44 Workstation x86_64 RIDE
+VM lifecycle pass; the operation remains an opt-in candidate. Recheck if
+Windows adds ClamAV or Linux needs shared recovery fields for this operation.
+
+### Fedora SSH reboot sudo policy, 2026-11-02
+
+Compared Linux with Windows `codex/ride-v3-migration` at `69ccbb0`. Windows has
+no matching sudoers/reboot operation or `status --value` contract. Linux adds
+`setting.ssh-reboot` as a Fedora-specific system policy and accepts a
+host-specific principal per invocation; it adds no shared catalog IDs, profile
+format, or journal fields. Revisit if Windows adds a comparable remote reboot
+capability or the shared CLI begins defining a common value parameter.
+
+### NetworkMiner 3.2 artifact and Linux deployment review, 2026-11-02
+
+Compared Linux with Windows `codex/ride-v3-migration` at
+`69ccbb08570205407f5fae13329b8eac6b1abcd8`. Windows already defines
+`package.networkminer` for the official free 3.2 ZIP and records the same
+SHA-256 observed from the fixed Netresec URL on Linux. Linux now has a
+candidate user-local Mono/GTK deployment with capture/output data separated
+from program removal; Fedora runtime packages use their own system profile.
+Windows retains its machine portable deployment and .NET Framework. Keep
+runtime handlers and recovery platform specific; this introduces no shared
+catalog/profile or run-state fields. Fedora 44 Workstation VM acceptance is
+still pending. Revisit if the publisher changes the archive, version/hash,
+notice files, or if either client changes the portable deployment or
+output-data contract.
+
+### Fedora NetworkManager VPN profile cleanup, 2026-11-02
+
+Compared Linux with Windows `codex/ride-v3-migration` at
+`69ccbb08570205407f5fae13329b8eac6b1abcd8`. Windows has no corresponding
+NetworkManager profile cleanup operation. Linux adds the Fedora-only system
+setting `setting.networkmanager-vpn-profiles`, requiring explicit profile
+UUIDs and restoring exact system keyfiles, which can contain credentials. It
+uses existing selected-value envelope fields and adds no shared operation,
+profile, or journal contract. The Fedora 44 Workstation recovery acceptance
+passed on 2026-11-02. The operation is supported on that target only. Revisit
+if Windows adds a comparable VPN profile capability or Linux adds user-scoped
+profiles, activation, or routing behavior.
+
+### Fedora Firefox managed add-ons, 2026-11-02
+
+Compared Linux with Windows `codex/ride-v3-migration` at
+`69ccbb08570205407f5fae13329b8eac6b1abcd8`. Windows has no Firefox add-on
+management operation; its HashCheck shell extension is a separate product and
+Explorer integration. Linux keeps its existing setting ID and three-state
+restart-aware lifecycle, but changes deployment from failed ExtensionSettings
+installs to verified XPI files in Mozilla's system-wide Linux directory. The
+16-add-on Fedora 44 Workstation lifecycle passed; the operation is an opt-in
+candidate. No shared catalog, profile, or journal schema changes. H115 tracks
+add-on update, licensing metadata, and profile migration review. Recheck when
+Windows adds browser add-on management or Linux changes its global XPI
+ownership/recovery contract.
+
+### Fedora show stream and result schema, 2026-11-03
+
+Fedora implements the explicit `show --stdin` form from shared behavior contract
+1.1.0. It reads one catalog ID per line without evaluating input, supports LF,
+CRLF, and a final line without a newline, preserves order and duplicates, treats
+an empty stream as success, and stops on blank or unknown IDs. Each successful
+stream result is one compact JSON record. Both stream and positional results
+retain the catalog fields and add `schemaVersion: 1`; stable fields are `id`,
+`name`, `kind`, `observedState`, and `availableSources`. `--source` applies to
+each selected package. The path is read-only and does not write run state or
+perform an elevation handoff. Focused CLI tests cover framing, selection errors,
+ordering, and no-mutation behavior.
+
+The native Fedora syntax remains distinct from PowerShell's object pipeline.
+This implementation closes the Fedora source gap, but ALIGN-08 remains open for
+paired Windows/Fedora contract verification and the remaining usage and
+status-selector requirements. Keep `cli.show-pipeline-contract` temporary until
+the paired tests and both client results are reviewed.
+
+### ExpressVPN startup auto-connect replacement, 2026-11-03
+
+Fedora closes the kept Workstation boot-connect outcomes with the documented
+publisher GUI preference in
+[`reference/expressvpn-autoconnect.md`](../reference/expressvpn-autoconnect.md).
+The current ExpressVPN GUI supports 64-bit Fedora 39 and newer and documents
+auto-connect to the last location on startup, plus optional network-specific
+rules. Fedora 44 Workstation is in that declared publisher range. RIDE does not
+manage this preference, install or activate the client, connect, or remove
+unowned v2 crontab lines. The current Fedora CLI guide does not document a v14
+preference getter/setter, so no catalog operation or run-state field is added.
+
+The current Windows catalog has no ExpressVPN product or equivalent VPN
+startup setting. This is an intentional Linux product-specific replacement,
+not shared catalog behavior. Revisit if Windows adds ExpressVPN support, Linux
+adds a supported and recoverable vendor preference API, or the user requests
+automated legacy crontab cleanup.
+
+### Fedora and Windows status selectors, 2026-11-03
+
+ALIGN-08 is a compatible CLI extension under RB-01, RB-02, RB-10, and RB-12.
+The pinned 1.1.0 contract requires documented native selectors and preserving
+published positional syntax; it does not prescribe matching option spelling.
+Both clients now have source implementations for explicit status operation and
+view selection. Fedora keeps positional operation-ID status and adds
+`status --id <operation-id>` / `status --view <view>`. Windows keeps positional
+view status and adds `status -OperationId <id>` / `status -View <view>`.
+Windows exact-ID status can pair with `-Profile` only when the profile selects
+that operation; the CLI rejects conflicting selectors before engine dispatch.
+Both clients preserve their existing positional forms. Native option spelling
+is an intentional platform difference.
+
+Focused Fedora CLI tests already cover selector dispatch and conflicts. Windows
+mocked CLI routing, engine-filter, and local-catalog completion Pester cases were
+added. Pester 5 is unavailable in this environment, so Windows suite execution
+remains unverified; a separate PowerShell 7 fake-engine smoke check passed three
+accepted and three refused selector cases, and a local `TabExpansion2` check
+returned catalog IDs without loading the operational engine. The difference
+register remains temporary until native focused tests run. Paired profile and
+state-preview examples are in both READMEs and are linked from these alignment
+records.

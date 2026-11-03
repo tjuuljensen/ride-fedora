@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "contractVersion": "1.0.0",
+  "contractVersion": "1.1.0",
   "canonicalRepository": "tjuuljensen/ride-windows",
   "canonicalPath": "docs/models/ride-behavior-contract.md",
   "sourceUrl": "https://github.com/tjuuljensen/ride-windows/blob/codex/ride-v3-migration/docs/models/ride-behavior-contract.md",
-  "sha256": "80B912E668F948F77EE9EF05F2D10254F83F08EB42C5FA504FE737AEC25BD645",
+  "sha256": "B88967EA5BDE29E0141BCA15134E2DAC63E02FAF7931CB18E83BA08CF5262938",
   "publishedCommit": null,
   "publicationTask": "ALIGN-09",
-  "adoptedOn": "2026-11-01",
+  "adoptedOn": "2026-11-03",
   "adoption": "v3 completion target; known implementation gaps remain tracked"
 }
