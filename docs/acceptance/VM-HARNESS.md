@@ -20,20 +20,44 @@ The target digests are recorded in
 [`targets.json`](../../tests/acceptance/targets.json). Do not use an image of a
 different release under the same target ID.
 
-Create a host-only test environment, then run the suite with an absolute local
+From the repository root as the regular user, create an ignored, private,
+disk-backed host directory for the virtual environment and run artifacts. Check
+that it is not on tmpfs before running a large suite, then use an absolute local
 image path:
 
 ```bash
-python3 -m venv /tmp/ride-acceptance-venv
-/tmp/ride-acceptance-venv/bin/python -m pip install -r tests/acceptance/requirements.txt
-mkdir -p /tmp/ride-acceptance-runs
-/tmp/ride-acceptance-venv/bin/python -m pytest tests/acceptance -v \
+install -d -m 700 .acceptance-runs
+chmod 700 .acceptance-runs
+findmnt -T .acceptance-runs -o TARGET,FSTYPE,SIZE,AVAIL
+python3 -m venv .acceptance-runs/venv
+.acceptance-runs/venv/bin/python -m pip install -r tests/acceptance/requirements.txt
+.acceptance-runs/venv/bin/python -m pytest tests/acceptance -v \
   -p no:cacheprovider --rootdir=. \
   --vm-target fedora-44-cloud-x86_64 \
   --vm-image /absolute/path/to/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2 \
-  --vm-output /tmp/ride-acceptance-runs \
-  --junitxml=/tmp/ride-acceptance-runs/fedora-44-cloud-results.xml
+  --vm-output .acceptance-runs/runs \
+  --junitxml=.acceptance-runs/fedora-44-cloud-results.xml
 ```
+
+`--vm-output` selects the host-side directory for VM overlays, seed files,
+logs, metadata, and transcripts. The runner's current default is
+`/tmp/ride-acceptance-runs`; on hosts where `/tmp` is tmpfs, repeated runs can
+exhaust memory-backed storage. Pass an explicit disk-backed output path for
+substantial or repeated testing. The repository's `.acceptance-runs/` directory
+is already Git-ignored and is a portable example, provided the checkout is on
+disk; if `findmnt` reports `tmpfs`, choose a different host directory. A personal
+wrapper or configuration under `~/.local` can select another host-specific path,
+but the runner reads only the `--vm-output` argument, so the wrapper must pass
+that path explicitly. Keep personal paths and configuration outside committed
+files. `TMPDIR` controls incidental temporary files but does not override an
+explicit `--vm-output` path. Historical evidence records that name
+`/tmp/ride-acceptance-runs` describe those past runs, not the recommended
+location for new ones.
+
+Pending harness improvement: make an unflagged acceptance run safe on hosts
+with tmpfs-backed `/tmp`. Decide whether to require `--vm-output` or select a
+verified disk-backed default, then update the runner and copy-ready examples
+together. Until that change is implemented, pass `--vm-output` explicitly.
 
 The command boots one fresh VM per test from a read-only base and a new qcow2
 overlay with the base image's virtual size. cloud-init creates or configures
@@ -55,11 +79,12 @@ investigation before retrying.
 Each scenario writes its overlay, seed, serial log, QEMU log, target metadata,
 and `transcript.jsonl` under `--vm-output`. This directory can be large and
 contains a temporary SSH private key and command output; review it before sharing.
-The VM process is stopped
-after the scenario. Its overlay is retained for investigation. Delete the
-output directory when evidence is no longer needed; this does not affect the
-verified base image. A failed test must stay failed in the JUnit result and
-must not be treated as accepted behavior.
+The VM process is stopped after the scenario. Its overlay is retained for
+investigation. Delete reviewed, unneeded run directories to recover disk space;
+this does not affect the verified base image. Check `du -sh .acceptance-runs`
+after repeated runs and retain only evidence needed for investigation or the
+acceptance record. A failed test must stay failed in the JUnit result and must
+not be treated as accepted behavior.
 
 For reversible package operations, the suite checks `package.exfatprogs` from an absent state:
 read-only plan, apply, repeated apply, status, RPM signature and file
