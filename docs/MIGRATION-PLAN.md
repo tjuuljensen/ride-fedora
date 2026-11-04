@@ -1,20 +1,20 @@
 # Legacy Fedora default migration ledger
 
-Source: `default.preset` on `master` at `43ba467`. All 76 active lines have an
-initial disposition below. The v3 default profile is intentionally small;
+Source: `default.preset` on `master` at `43ba467`. All 76 active lines have a
+summary below. The v3 default profile is intentionally small; candidates and
 deferred items are not silently executed. Current progress for the full scoped
 v2 inventory is authoritative in `migration/outcomes.json` and its
-[generated report](migrations/progress.md), not in these initial decisions.
+[generated report](migrations/progress.md); this table is a navigation summary.
 
 The [scoped workstation and server burndown](workstation-server-burndown.md)
 also covers non-active library functions and the three server presets, apart
 from outcomes the owner excluded as obsolete or host-specific.
 
-| Legacy action | Disposition | v3 target or rationale |
+| Legacy action | Current disposition | v3 target or rationale |
 | --- | --- | --- |
 | `DisableScreensaver` | supported opt-in state | Fedora 44 Workstation acceptance verified the explicit `screensaver-disabled` value, unchanged `lock-delay`, and exact recovery; no base profile selects it. |
-| `SetupUserDefaultDirs` | opt-in candidate | `setting.user-default-directories` creates only absent `~/bin` and `~/git`, records RIDE-owned identities, and restores only unchanged empty directories; Fedora 44 Workstation VM evidence is in progress. |
-| `EnableFastDNF` | candidate | Migrated to an owned DNF5 drop-in with exact removal and effective-config verification; Fedora 44 Workstation acceptance is pending. See the [system review](migrations/system-security-core.md). |
+| `SetupUserDefaultDirs` | operable opt-in candidate | `setting.user-default-directories` passed Fedora 44 Workstation lifecycle and recovery; H084 tracks path identity and empty-only restore. |
+| `EnableFastDNF` | operable opt-in candidate | `setting.dnf5-fast-tuning` passed Fedora 44 Workstation lifecycle and effective-config checks; H093 tracks future DNF5 precedence changes. See the [system review](migrations/system-security-core.md). |
 | `UpdateFedora` | opt-in candidate | `system.update-all-packages` passed full Fedora 44 Workstation and Server DNF5 transactions, report/journal checks, current status, reboot assessment, and non-restorable refusal. It remains explicitly invoked and outside profiles; H111 tracks broader failure/reboot hardening. See [acceptance](acceptance/system.update-all-packages.md). |
 | `InstallRequired` | operable opt-in candidate | Seven individual Fedora RPM operations passed Fedora 44 Workstation lifecycle checks in `required-tools`; all remain installed on profile removal. The separate generic Server bundle is operable in two opt-in profiles; its Server nano operation is installed-only and H035 tracks the observed DNF upgrades. See [Workstation provider foundation batch 01](migrations/provider-foundation-01.md), [Server migration](migrations/generic-server-required.md), and [Server VM acceptance](acceptance/generic-server-required.md). |
 | `InstallShellTools` | supported | Split into supported `package.pv` and `package.strace` in the opt-in `shell-tools` profile; see [VM acceptance](acceptance/provider-shell-tools.md). |
@@ -22,67 +22,67 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `InstallKernelTools` | supported | Split into signed Fedora `kernel-devel` and `kernel-headers` package installs; [VM evidence](acceptance/provider-kernel-tools.md) does not establish a matching module-build environment. |
 | `InstallDNFutils` | replaced | Fedora 44 Workstation has DNF5 and plugins; current `config-manager` and `download` commands passed the disposable-VM check. See [provider foundation batch 03](migrations/provider-foundation-03.md). |
 | `InstallEzaGitHub` | operable opt-in candidate | `package.eza-portable` pins the upstream GNU x86_64 release and owns `~/.local/bin/eza`; it passed [VM acceptance](acceptance/package.eza-portable.md) beside the Fedora RPM. |
-| `InstallFlathub` | unsupported | [Flathub remote ownership](migrations/provider-foundation-09.md) needs a scoped handler, app preservation, and inverse evidence before it is runnable. |
-| `InstallAppImageLauncher` | opt-in candidate in progress | Migrate the capability through Flathub Gear Lever after the operator removes the old `appimagelauncher` RPM; preserve `~/Applications`, AppImages, and launcher state. See [publisher batch 01](migrations/publisher-apps-01.md) and H070. |
-| `InstallExif` | deferred | Review product identity and official package. |
-| `InstallMd5deep` | deferred | Review current package and forensic use case. |
+| `InstallFlathub` | operable opt-in candidate | `setting.flathub-system-remote` owns the signed Flathub remote lifecycle; app deployments remain separate. H033 tracks broader app and GUI behavior. See [provider batch 09](migrations/provider-foundation-09.md). |
+| `InstallAppImageLauncher` | operable opt-in candidate | Gear Lever passed Fedora 44 Workstation package lifecycle and preserved existing AppImages and launcher state. Remove the legacy `appimagelauncher` RPM first; H070 tracks visual integration and desktop conflicts. See [publisher batch 01](migrations/publisher-apps-01.md). |
+| `InstallExif` | supported | `package.exif` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallMd5deep` | supported | `package.md5deep` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
 | `InstallLibEWF` | replaced | package.ewftools covers EWF utilities; verify library intent separately. |
 | `InstallExifTool` | supported | Fedora `perl-Image-ExifTool` passed [VM lifecycle acceptance](acceptance/package.exiftool.md); the v2 GitHub/CPAN build path is not adopted. |
-| `InstallASN` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned owned script and shared-dependency-safe inverse. |
-| `InstallUnfURL` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned isolated Python environment. |
-| `InstallCyberChef` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned offline artifact and owned desktop destination. |
-| `InstallChepy` | unsupported | [Forensic batch 01](migrations/forensic-isolated-01.md) requires a pinned isolated build and owned inverse. |
+| `InstallASN` | operable opt-in candidate | `package.asn` and its declared Fedora dependencies passed Workstation lifecycle checks; H027 and H008 track live lookup and wider DNF effects. See [acceptance](acceptance/package.asn.md). |
+| `InstallUnfURL` | operable opt-in candidate | `package.dfir-unfurl` uses an isolated Python environment and passed Fedora 44 Workstation acceptance; H025 tracks UI and wider parser coverage. See [acceptance](acceptance/package.dfir-unfurl.md). |
+| `InstallCyberChef` | operable opt-in candidate | `package.cyberchef` passed Fedora 44 Workstation acceptance; H028 tracks visual interaction, browser compatibility, and updates. See [acceptance](acceptance/package.cyberchef.md). |
+| `InstallChepy` | operable opt-in candidate | `package.chepy` passed Fedora 44 Workstation acceptance; H029 tracks dependency locking, plugin compatibility, wider transformations, and updates. See [acceptance](acceptance/package.chepy.md). |
 | `InstallNetworkMiner` | operable opt-in candidate (`RemoveNetworkMiner` shares the outcome) | Fedora 44 Workstation lifecycle and Xvfb startup passed; restore/removal preserved seeded output. Mono/GTK remain a separate opt-in runtime profile. H110 gates any evidence processing or live capture. See [batch 05](migrations/forensic-isolated-05-networkminer.md) and [acceptance](acceptance/package.networkminer.md). |
 | `InstallVeraCrypt` | supported opt-in | The pinned Fedora 44 Workstation GUI RPM passed detached-signature refusal, failed-transaction cleanup, mounted-volume refusal, and encrypted test-volume preservation across removal and reinstall. See [batch 02](migrations/publisher-apps-02.md) and [acceptance](acceptance/package.veracrypt.md). |
-| `InstallPwgen` | deferred | Candidate native repository package. |
-| `InstallHtop` | deferred | Candidate native repository package. |
-| `InstallBat` | deferred | Candidate native repository package. |
-| `InstallNcdu` | deferred | Candidate native repository package. |
-| `InstallRipgrep` | deferred | Candidate native repository package. |
-| `InstallFd` | deferred | Candidate native repository package. |
-| `InstallDocker` | deferred | Generic server role only after provider and repository review. |
+| `InstallPwgen` | supported | `package.pwgen` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallHtop` | supported | `package.htop` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallBat` | supported | `package.bat` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallNcdu` | supported | `package.ncdu` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallRipgrep` | supported | `package.ripgrep` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallFd` | supported | `package.fd-find` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallDocker` | supported opt-in | `system.docker-engine` passed Workstation and Server lifecycle acceptance, preserves Docker data on removal, and does not add users to the `docker` group. See [acceptance](acceptance/system.docker-engine.md). |
 | `InstallVMFStools` | kept gap | The active v2 function only prints URLs. An opt-in [VMFS6 reader install candidate](acceptance/package.vmfs6-reader.md) is available for manual testing; its genuine VMFS6 fixture and read-only access test remain deferred to v3.1. |
 | `InstallPythonPip` | supported | Fedora `python3-pip` passed [VM lifecycle acceptance](acceptance/package.python3-pip.md); omit the v2 global pip self-upgrade. |
 | `InstallPackagingTools` | replaced | Fedora `7zip` and `unar` passed [VM package acceptance](acceptance/provider-archive-tools.md); `unar` is a different CLI from `unrar`. |
 | `InstallBasicEditors` | supported | Split into Fedora `nano` and `vim-enhanced` package installs with [VM evidence](acceptance/provider-basic-editors.md). |
 | `InstallTerminator` | opt-in candidate | Fedora [`package.terminator`](acceptance/package.terminator.md) and the separate [iBus hotkey setting](acceptance/setting.ibus-emoji-hotkey.md) passed Workstation VM lifecycles; use the root package command and per-user hotkey profile with `--allow-candidate`. See [batch 10](migrations/desktop-user-10-terminator.md). |
-| `InstallAlien` | deferred | Review relevance and support. |
-| `InstallSmartMonTools` | deferred | Optional system tools profile. |
-| `InstallVisualStudioCode` | deferred | Align product facts with Windows; Fedora source stays local. |
-| `InstallHexchat` | deferred | Review upstream maintenance before reintroduction. |
-| `InstallNetworkTools` | deferred | Split broad network bundle into focused packages. |
-| `InstallNetCommsTools` | deferred | Split broad communications bundle. |
-| `InstallNetMgrLibreswan` | deferred | Optional VPN role. |
+| `InstallAlien` | supported | `package.alien` is supported on Fedora 44 Workstation; see the [generated migration progress](migrations/progress.md). |
+| `InstallSmartMonTools` | operable opt-in candidate | `package.smartmontools` is limited to signed RPM presence and its observed `smartd` side effect; H108 tracks hardware access, device selection, and monitoring recovery. |
+| `InstallVisualStudioCode` | operable opt-in candidate | The owned Microsoft repository and RPM lifecycle passed Fedora 44 Workstation checks; broader desktop and update review remains in v3.1. See [publisher batch 03](migrations/publisher-apps-03.md). |
+| `InstallHexchat` | operable opt-in candidate | Keep Fedora `package.hexchat` as a separate RPM deployment and Halloy as an opt-in successor; H007 tracks visual behavior, configuration import, and profile review. |
+| `InstallNetworkTools` | operable opt-in candidates | The broad bundle is split across focused operations and profiles; H019 tracks capture, connection, and desktop behavior. |
+| `InstallNetCommsTools` | operable opt-in candidates | The communications bundle is split into focused package operations and profiles; H019 tracks connection and desktop behavior. |
+| `InstallNetMgrLibreswan` | supported opt-in | Fedora 44 Workstation package lifecycle is supported; keep application use in an opt-in profile pending v3.1 review. |
 | `InstallSpeedtestCLI` | supported, with opt-in alternative | Keep Fedora `speedtest-cli` RPM and offer digest-pinned LibreSpeed CLI as an operable opt-in candidate; see [native RPM batch 03](migrations/native-rpm-03.md). |
 | `InstallTecmintMonitorSh` | retired | Default profile must not fetch and execute remote scripts. |
 | `InstallGnomeExtInstaller` | operable opt-in candidate | Fedora's signed browser connector RPM passed the Workstation lifecycle and preserves user extension state; browser add-on installation remains user controlled. See [provider foundation batch 10](migrations/provider-foundation-10.md) and [acceptance](acceptance/package.gnome-browser-connector.md). |
-| `InstallBrave` | deferred | Third-party repository and license review. |
-| `InstallChromium` | deferred | Candidate distro repository package. |
+| `InstallBrave` | operable opt-in candidate | The owned Brave repository and RPM lifecycle passed Fedora 44 Workstation checks; broader desktop and update review remains in v3.1. See [publisher batch 03](migrations/publisher-apps-03.md). |
+| `InstallChromium` | operable opt-in candidate | `package.chromium` passed its Fedora 44 Workstation package lifecycle; broader desktop, failure, recovery, and accessibility checks remain in v3.1. |
 | `SetFirefoxPreferences` | operable opt-in candidate | `setting.firefox-preferences` keeps the v2 values in an opt-in Mozilla AutoConfig profile, owns three files with guarded recovery, and passed Fedora 44 Workstation startup acceptance. H083 tracks value freshness and a brief visible review before promotion or value changes. |
-| `InstallFirefoxAddons` | blocked implementation | The owner kept v3-managed add-on policy. The v3 envelope models configured, removal-pending, and absent states, but remains non-runnable until focused Fedora 44 Workstation restart, profile cleanup, and restoration evidence passes; see [publisher batch 04](migrations/publisher-apps-04.md). |
+| `InstallFirefoxAddons` | operable opt-in candidate | `setting.firefox-addons` passed the full 16-XPI Fedora 44 Workstation apply, restart, recovery, and removal lifecycle. Keep candidate-gated; H115 tracks publisher license metadata, update behavior, and profile migration. See [publisher batch 04](migrations/publisher-apps-04.md) and [acceptance](acceptance/setting.firefox-addons.md). |
 | `InstallYouTubeDownloader` | replaced | Review maintained yt-dlp packaging instead of legacy youtube-dl. |
 | `InstallGnomeTools` | opt-in candidate | Fedora printer UI and GNOME Tweaks passed [package VM acceptance](acceptance/provider-gnome-tools.md); visual checks remain v3.1, and v2's unowned `gparted` removal is excluded. |
-| `InstallSystemMonitor` | deferred | Review current GNOME extension support. |
+| `InstallSystemMonitor` | operable opt-in candidate | The monitoring packages passed their Fedora 44 Workstation package lifecycle; keep the profile opt-in while H012 tracks GNOME activation, visual behavior, and broader recovery. |
 | `InstallGnomeExtensions` | deferred | Review current GNOME extension IDs and API. |
-| `ShowDateInTaskbar` | deferred | Setting handler needs baseline and restore. |
-| `ShowWeekNumbersInTaskbar` | deferred | Setting handler needs baseline and restore. |
+| `ShowDateInTaskbar` | operable opt-in candidate | `setting.gnome-clock-date` passed lifecycle checks; H018 tracks visual behavior and implicit-default recovery before promotion. |
+| `ShowWeekNumbersInTaskbar` | operable opt-in candidate | `setting.gnome-calendar-week-numbers` passed lifecycle checks; H018 tracks visual behavior and implicit-default recovery before promotion. |
 | `SetWindowCtlMinMaxClose` | opt-in candidate | One [GNOME string-setting operation](migrations/desktop-user-string-01.md) selects this or either alternative layout and restores the exact prior user override; [Workstation VM evidence](acceptance/setting.gnome-string-values.md). |
-| `DisableMiddleButtonPaste` | deferred | Setting handler needs baseline and restore. |
+| `DisableMiddleButtonPaste` | operable opt-in candidate | `setting.gnome-primary-paste` passed lifecycle checks; H018 tracks visual behavior and implicit-default recovery before promotion. |
 | `SetGnomeRegionDaDK` | opt-in candidate | The [region operation](migrations/desktop-user-string-01.md) takes an explicit validated locale value; the Danish profile passed [Workstation VM acceptance](acceptance/setting.gnome-string-values.md). |
 | `SetScreensaverSlp10Lgn5` | supported on Fedora 44 Workstation | `setting.gnome-lock-timing` carries both retained 10/5 and 15/5 variants through exact four-key recovery; the Workstation VM verified both profiles, status, repeat, and restore. H092 tracks brief visible idle/lock behavior review. |
 | `SetCustomKeyboardShortcut` | opt-in candidate | `setting.gnome-custom-shortcuts` merges owned GNOME entries and restores only RIDE-owned shortcut state; Fedora 44 Workstation lifecycle and preservation checks passed. H089 tracks visible dispatch and conflict review. |
 | `SetGnomeCustomFavorites` | opt-in candidate | `setting.gnome-favorite-apps` accepts a configurable desktop-ID list and restores the exact prior dconf value; Fedora 44 Workstation plan/apply/repeat/conflict/restore acceptance passed. H085 tracks visual app-ID review. |
-| `SetGnmLocationServiceOff` | deferred | Review current GNOME setting and scope. |
-| `SetGnmAutoProblemRptOff` | deferred | Review current GNOME setting and scope. |
+| `SetGnmLocationServiceOff` | operable opt-in candidate | `setting.gnome-location` passed lifecycle checks; H018 tracks visual behavior and implicit-default recovery before promotion. |
+| `SetGnmAutoProblemRptOff` | operable opt-in candidate | `setting.gnome-problem-reporting` passed lifecycle checks; H018 tracks visual behavior and implicit-default recovery before promotion. |
 | `SetPowerPercentageLow15` | opt-in candidate | The [shared UPower threshold operation](migrations/desktop-user-upower-01.md) selects 15 or 20 through an owned drop-in and exact restore; [Workstation VM evidence](acceptance/setting.upower-percentage-low.md). |
 | `EnableBashAliases` | opt-in candidate | `setting.bash-aliases` manages exact marked loader and alias blocks; Fedora 44 Workstation interactive use and preservation passed. See [alias batch](migrations/desktop-user-aliases-01.md) and [VM acceptance](acceptance/setting.bash-aliases.md). |
 | `SetAliasLsEza` | opt-in candidate | The owned alias operation invokes Eza only after checking the executable; its Workstation lifecycle passed. H090 tracks public-service review for the alias family. |
 | `SetAliasWanIP` | opt-in candidate | Fixed `wanip`, `wanip4`, and `wanip6` aliases use ipify HTTPS endpoints only when invoked; the VM verified their definitions without making network requests. |
-| `InstallBitwardenAppImage` | opt-in candidate in progress | The [pinned Bitwarden AppImage operation](migrations/publisher-apps-06.md) checks the official release manifest and SHA-512, owns one user file, and preserves vault data; Fedora 44 Workstation acceptance is pending. |
-| `InstallCheat` | deferred | Review current upstream and source. |
-| `InstallUnifyingOnLaptop` | deferred | Hardware-dependent operation. |
-| `InstallVMtoolsOnVM` | deferred | VM-specific provider after detection test. |
-| `InstallYubikeyManager` | deferred | Hardware-dependent optional package. |
+| `InstallBitwardenAppImage` | supported opt-in | The pinned AppImage and manifest passed Fedora 44 Workstation high-risk lifecycle acceptance, including synthetic vault preservation. Keep the user-scoped deployment opt-in; see [publisher batch 06](migrations/publisher-apps-06.md). |
+| `InstallCheat` | supported | `package.cheat` is supported on Fedora 44 Workstation; keep it out of profiles until optional CLI profile review. |
+| `InstallUnifyingOnLaptop` | operable opt-in candidate | The Solaar and ACPI package paths passed Fedora 44 Workstation lifecycle checks; H013 tracks receiver pairing and desktop behavior. |
+| `InstallVMtoolsOnVM` | operable opt-in candidates | QEMU/SPICE and VMware package profiles are explicit and opt-in; H071 tracks display, clipboard, and shared-folder behavior on real guests. |
+| `InstallYubikeyManager` | operable opt-in candidates | The maintained Authenticator GUI and `ykman` paths passed Fedora 44 Workstation package checks; H072 tracks optional GUI launch and test-key visibility. |
 | `InstallSonosPlayer` | deferred | Review publisher source and architecture. |
 | `SetHostname` | supported | Private `--value` operation journals and restores the exact prior static hostname; Fedora 44 Workstation and Server VM acceptance passed. See the [system review](migrations/system-security-core.md). |
 | `EnableScreenSaver` | supported opt-in state | Fedora 44 Workstation acceptance verified the explicit `screensaver-enabled` value, unchanged `lock-delay`, and exact recovery; no base profile selects it. |
@@ -367,17 +367,19 @@ connections with CSP. Focused mocked lifecycle tests pass. Dependency license
 review, a real upstream build, and Fedora 44 acceptance remain. The remaining
 outcomes stay visible in the progress report.
 
-The first [publisher application](migrations/publisher-apps-01.md) review
-migrates the kept AppImage integration capability through the current Flathub
-Gear Lever manager; its package lifecycle is in progress and AppImage file
-operations remain user-controlled. The separate
+The first [publisher application](migrations/publisher-apps-01.md) replaces
+the kept AppImage integration capability with Flathub Gear Lever. Its Fedora
+44 Workstation package lifecycle passed; keep it opt-in while H070 tracks
+visual integration and desktop-conflict review. AppImage file operations
+remain user-controlled. The separate
 [encryption application](migrations/publisher-apps-02.md) review migrates the
 publisher-signed VeraCrypt GUI RPM. Its high-risk gate passed on Fedora 44
 Workstation x86_64, and the operation is supported in its opt-in profile.
 [Publisher batch 03](migrations/publisher-apps-03.md) implements opt-in
 Microsoft VS Code and Brave RPM operations with fingerprint/signature checks,
-owned repository-file cleanup, and preserved browser/editor profiles; both
-remain candidate-gated pending their Fedora 44 VM lifecycle. [Batch 04](migrations/publisher-apps-04.md) keeps the Firefox extension policy outcome open until the maintained helper is integrated into the v3 lifecycle and its seeded-policy recovery gate passes.
+owned repository-file cleanup, and preserved browser/editor profiles. Both
+passed Fedora 44 Workstation lifecycle checks and remain candidate-gated;
+broader failure and recovery review is in H002. [Batch 04](migrations/publisher-apps-04.md) now has an operable opt-in `setting.firefox-addons` lifecycle: all 16 XPIs passed Fedora 44 Workstation apply, restart, staged recovery, and removal checks. Keep it candidate-gated while H115 reviews publisher metadata, updates, and profile migration; see the [acceptance record](acceptance/setting.firefox-addons.md).
 [Publisher batch 05](migrations/publisher-apps-05.md) supports the Fedora
 `youtube-dl` RPM and accepts System Monitor Next plus hardware sensors as a
 curated opt-in package/profile candidate. The broad GNOME extension script
@@ -385,8 +387,9 @@ is a separate [high-risk outcome](migrations/publisher-apps-17.md),
 non-runnable until user-owned extension recovery is proved.
 [Publisher batch 06](migrations/publisher-apps-06.md) replaces the broken
 Bitwarden AppImage path with a pinned publisher asset and an owned user-file
-inverse; high-risk VM acceptance remains pending. Publisher batches 07-08
-accept Solaar and ACPI as a curated
+inverse; Fedora 44 Workstation acceptance passed and the operation is
+supported. Review launcher visibility, desktop integration, and profile
+coexistence before extending its scope. Publisher batches 07-08 accept Solaar and ACPI as a curated
 opt-in package/profile candidate after the Fedora 44 VM lifecycle, defer
 conditional VM guest tools until a hypervisor-specific owned inverse is
 proved, and document the discontinued YubiKey Manager GUI handoff to
@@ -661,7 +664,9 @@ closure remains outstanding.
   explicit change. An implemented outcome counts as operable only after its
   risk-appropriate focused evidence; support still requires a passing VM on
   the exact declared target.
-- The Firefox extension manager remains maintained and tested, but its v3 catalog lifecycle is pending. Its legacy direct function call is not reused.
+- The Firefox add-on operation has an operable opt-in catalog lifecycle on Fedora 44 Workstation; it remains candidate-gated while H115 reviews publisher metadata, updates, and profile migration.
+- Three package/setting gaps remain in the generated [migration progress report](migrations/progress.md): VMFS6 access, Workstation ExpressVPN scheduled rotation, and Server VPN randomizer ownership and recovery. Close each with evidence or record an explicit owner-approved v3.0 deferral before freezing release scope.
+- The supplementary [legacy source audit](legacy-source-audit.md) identifies helper libraries outside the 185-row outcome ledger. Record whether each group is reference-only, standalone, or in a later migration; do not infer migration from a matching product name.
 - Generic server actions remain in `network-devices` until source, consumers, ownership, and rollback are reconciled. No host-specific preset is moved into this repository.
 - Debian and Ubuntu adapters remain outside the supported target matrix until their own VM checks pass.
 

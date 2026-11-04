@@ -32,6 +32,6 @@ Operations: `package.httping`, `package.httpry`, `package.tcpflow`, and
 The lifecycle is automated by
 [`test_fedora_security_lab_network_traffic_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 The corrected candidate transcript is retained under
-`.tmp-vm-acceptance-security-06i-retry/fedora-44-workstation-x86_64/20261031T124555Z-test-fedora-security-lab-network-traffic-batch-and-profile-ecb4fc3a/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06i-retry/fedora-44-workstation-x86_64/20261031T124555Z-test-fedora-security-lab-network-traffic-batch-and-profile-ecb4fc3a/`.
 The passing supported-path transcript is retained under
-`.tmp-vm-acceptance-security-06i-supported/fedora-44-workstation-x86_64/20261031T125541Z-test-fedora-security-lab-network-traffic-batch-and-profile-581e8769/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06i-supported/fedora-44-workstation-x86_64/20261031T125541Z-test-fedora-security-lab-network-traffic-batch-and-profile-581e8769/`.

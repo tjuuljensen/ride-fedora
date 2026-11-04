@@ -14,7 +14,7 @@ added no dependencies. Restore removed all new packages and retained Fedora's
 expat update because RPM downgrade is not a safe recovery. No other existing
 RPM changed. Scripts and file-capability metadata were inspected. No login was
 attempted and no traffic was captured or intercepted. Transcript and overlay:
-`.tmp-vm-acceptance-security-06s/fedora-44-workstation-x86_64/20261031T143242Z-test-fedora-security-lab-network-credential-batch-and-profile-217e2d1b/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06s/fedora-44-workstation-x86_64/20261031T143242Z-test-fedora-security-lab-network-credential-batch-and-profile-217e2d1b/`.
 
 All operations remain opt-in and candidate-gated pending H044 review of
 authorized targets, attempt limits, captured data handling, and recovery.

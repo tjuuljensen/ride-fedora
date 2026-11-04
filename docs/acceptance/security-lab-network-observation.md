@@ -35,7 +35,7 @@ registration/removal helpers; its unit was not enabled or started. No capture
 file was opened, traffic captured, or tool executed.
 
 The retained command transcript is
-`.tmp-vm-acceptance-security-06v/fedora-44-workstation-x86_64/20261031T144726Z-test-fedora-security-lab-network-observation-batch-and-profile-f5e66a5c/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06v/fedora-44-workstation-x86_64/20261031T144726Z-test-fedora-security-lab-network-observation-batch-and-profile-f5e66a5c/transcript.jsonl`
 (SHA-256 `0a03e059e26a71ef9a9fe2215bdb8c0687ebf980cb826b3fe305dd06b700ce74`);
 pytest reported `1 passed`.
 

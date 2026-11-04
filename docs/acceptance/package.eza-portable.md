@@ -30,7 +30,7 @@ VM evidence: Fedora 44 Workstation x86_64; pinned image SHA-256
 overlay `20261101T143112Z-test-eza-portable-pinned-user-install-coexists-with-fedora-rpm-640ef901`;
 catalog SHA-256
 `d76d51216b6ea4c647ff70b8ef51ac9b2a4da7aada440a66618729aa09cc33fc`;
-transcript [transcript.jsonl](../../.tmp-vm-acceptance-provider-08-eza-portable/fedora-44-workstation-x86_64/20261101T143112Z-test-eza-portable-pinned-user-install-coexists-with-fedora-rpm-640ef901/transcript.jsonl)
+transcript [transcript.jsonl](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-provider-08-eza-portable/fedora-44-workstation-x86_64/20261101T143112Z-test-eza-portable-pinned-user-install-coexists-with-fedora-rpm-640ef901/transcript.jsonl)
 SHA-256 `1c609e945ec30d205a484480031ed01a9435a14bcaac0049e155fbe82a255b8a`.
 Run IDs: apply `20261101T143156Z-2699-22741`, repeat
 `20261101T143158Z-3224-9275`, remove `20261101T143159Z-3444-12885`. Fedora's

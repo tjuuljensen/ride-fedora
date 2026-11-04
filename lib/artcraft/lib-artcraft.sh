@@ -1,5 +1,6 @@
 #!/bin/bash
-# Source this library from ride.sh or Bash. Downloads never install the apps.
+# Source this standalone utility from Bash; the v3 CLI does not load it.
+# Downloads never install apps.
 ARTCRAFT_REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 CheckArtCraftDownloads(){

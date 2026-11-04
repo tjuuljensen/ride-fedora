@@ -18,7 +18,7 @@ Completion evidence: `test_woeusb.py::test_woeusb_private_tool_lifecycle`
 passed on 2026-11-01 against Fedora 44 Workstation x86_64, using TCG and image
 SHA-256 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
 Transcript:
-`.tmp-vm-acceptance-publisher-apps-09-woeusb-final-2/fedora-44-workstation-x86_64/20261101T184213Z-test-woeusb-private-tool-lifecycle-10adf3d1/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-apps-09-woeusb-final-2/fedora-44-workstation-x86_64/20261101T184213Z-test-woeusb-private-tool-lifecycle-10adf3d1/transcript.jsonl`
 (SHA-256 `8586535e863c13f53a471477e2ef25769489a71a0e3ecbbc9cb6bde1946b0791`).
 The checked catalog SHA-256 was
 `f7da519847ff239f3a3cd6447f2ffa11f12c637c1b09d227c9bdd159a63429c9`.

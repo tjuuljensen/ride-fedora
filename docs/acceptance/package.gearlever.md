@@ -29,7 +29,7 @@ catalog SHA-256
 `b43cc3771732ee6379493541a649280f1b7307fecb09b0d01218bb8dcf186b36`;
 source revision `9da0526d412343076d6327c6cb3c5331be6d773a` with uncommitted
 migration changes. TCG transcript:
-[transcript.jsonl](../../.tmp-vm-acceptance-publisher-01-gearlever-final/fedora-44-workstation-x86_64/20261101T150144Z-test-gearlever-flatpak-lifecycle-preserves-existing-appimages-and-user-state-505bd929/transcript.jsonl),
+[transcript.jsonl](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-01-gearlever-final/fedora-44-workstation-x86_64/20261101T150144Z-test-gearlever-flatpak-lifecycle-preserves-existing-appimages-and-user-state-505bd929/transcript.jsonl),
 SHA-256 `f2dacde4c664261bb0e57dd673f17a7e7a1fe6a79291bc76a51ec498ef293be2`.
 Run IDs: Flathub setup `20261101T150411Z-2948-22083`, apply
 `20261101T150433Z-3551-7336`, repeat `20261101T150648Z-4243-24779`,

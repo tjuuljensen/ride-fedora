@@ -7,7 +7,7 @@ Operation: `system.update-multimedia-codecs`.
 The verified image SHA-256 was
 `49bb3c03b52f43325e5c7d5cf0ec83f2222b7170e3738baad1e0e5440bb6bf9a`.
 The run transcript and VM metadata were retained under
-`.tmp-vm-acceptance/fedora-44-workstation-x86_64/` for this workspace session.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance/fedora-44-workstation-x86_64/` for this workspace session.
 
 The operation used the fixed Fedora 44 package-name allowlist and queried only
 members already installed in the image. Plan reported the operation as

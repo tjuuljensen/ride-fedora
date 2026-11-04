@@ -17,7 +17,7 @@ Completion evidence: `test_pinned_publisher_rpm_lifecycle` passed on
 2026-11-01 against Fedora 44 Workstation x86_64 using TCG and image SHA-256
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
 Transcript:
-`.tmp-vm-acceptance-publisher-apps-10-discord-final/fedora-44-workstation-x86_64/20261101T190131Z-test-pinned-publisher-rpm-lifecycle-fedora-discord-package-discord-discord-none-f2ff995b/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-apps-10-discord-final/fedora-44-workstation-x86_64/20261101T190131Z-test-pinned-publisher-rpm-lifecycle-fedora-discord-package-discord-discord-none-f2ff995b/transcript.jsonl`
 (SHA-256 `9c4796d486cdd0d414a083843f9eea16f4d26df7f7404baa666b63d78ae8c0bd`).
 The checked catalog SHA-256 was
 `87b9894d56f5661e589b24cf97b6bdbc80496602076cf5dbdddf015a374fbd83`.

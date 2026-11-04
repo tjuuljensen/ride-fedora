@@ -19,6 +19,6 @@ no claim about hardware access or user-visible key behavior.
 
 Exact target: Fedora 44 Workstation x86_64, image SHA-256
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
-Transcript: `.tmp-vm-acceptance-publisher-08-yubico-gui-final/fedora-44-workstation-x86_64/20261101T174434Z-test-yubico-authenticator-owned-archive-lifecycle-146c4cc8/transcript.jsonl`, SHA-256
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-08-yubico-gui-final/fedora-44-workstation-x86_64/20261101T174434Z-test-yubico-authenticator-owned-archive-lifecycle-146c4cc8/transcript.jsonl`, SHA-256
 `0adc637de1789b294242dfcfabde888666eb97f3b5a5abfde042d50610c1343e`.
 Candidate catalog SHA-256: `eb84fbfc8c7dfe6170318d565968771d6fad7e93f1a1df42e701879fc3853fab`.

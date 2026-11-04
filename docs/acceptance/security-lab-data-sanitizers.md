@@ -30,7 +30,7 @@ scriptlets. The mount table was identical before, during, and after. No device
 was enumerated and no sanitizer was run.
 
 The retained transcript is
-`.tmp-vm-acceptance-security-06aa/fedora-44-workstation-x86_64/20261031T150517Z-test-fedora-security-lab-data-sanitizers-batch-and-profile-207300c9/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06aa/fedora-44-workstation-x86_64/20261031T150517Z-test-fedora-security-lab-data-sanitizers-batch-and-profile-207300c9/transcript.jsonl`
 (SHA-256 `56651aa78f098e3e5e75cfd8607e83dad193b5299ccc8070a69ac33beb024309`);
 pytest reported `1 passed`. H052 tracks explicit-target confirmation, media
 limitations, authorization, and recovery before these tools are operated.

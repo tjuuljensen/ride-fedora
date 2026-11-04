@@ -13,7 +13,7 @@ Workstation x86_64 TCG acceptance passed candidate gating, plan, apply with
 RPM signature verification, package and repository checks, CLI version, repeat,
 status, remove, and case-output sentinel preservation.
 
-- Transcript: `.tmp-vm-acceptance-forensic-02-plaso/fedora-44-workstation-x86_64/20261101T201703Z-test-plaso-copr-package-lifecycle-preserves-case-output-19dcd3f8/transcript.jsonl`
+- Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-forensic-02-plaso/fedora-44-workstation-x86_64/20261101T201703Z-test-plaso-copr-package-lifecycle-preserves-case-output-19dcd3f8/transcript.jsonl`
 - Transcript SHA-256: `6adf65ecd3172d4a2de28e40177448c5bce2e38286bf9154cd8832b01b199ed3`
 - Fedora 44 Workstation image SHA-256: `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`
 - Catalog SHA-256: `b6212663ff8bdbe6ef5c2d52e1a5632c19c858423c01f1700808dec1da68eef3`

@@ -30,7 +30,7 @@ were observed. `httpd.service` stayed `not-found / inactive` before, during,
 and after. No logs were read and no site or server was accessed.
 
 The retained command transcript is
-`.tmp-vm-acceptance-security-06z/fedora-44-workstation-x86_64/20261031T150249Z-test-fedora-security-lab-web-tools-batch-and-profile-04f11a1b/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06z/fedora-44-workstation-x86_64/20261031T150249Z-test-fedora-security-lab-web-tools-batch-and-profile-04f11a1b/transcript.jsonl`
 (SHA-256 `41d3a8d833a070d24ea7eb8bc00e8d6cbc69c8c72d278ca373e78daef36f6533`);
 pytest reported `1 passed`. H051 tracks private-log handling, approved
 retrieval scope, download controls, and output cleanup before client behavior

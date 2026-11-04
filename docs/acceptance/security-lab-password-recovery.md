@@ -25,5 +25,5 @@ authorized evidence scope and private input/output handling.
 Automated by
 [`test_fedora_security_lab_password_recovery_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 Transcript and target metadata:
-`.tmp-vm-acceptance-security-06p/fedora-44-workstation-x86_64/20261031T142320Z-test-fedora-security-lab-password-recovery-batch-and-profile-8402bebe/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06p/fedora-44-workstation-x86_64/20261031T142320Z-test-fedora-security-lab-password-recovery-batch-and-profile-8402bebe/`.
 Catalog operation IDs in this accepted profile: `package.bkhive`, `package.cmospwd`, `package.john`, `package.ophcrack`, `package.pdfcrack`.

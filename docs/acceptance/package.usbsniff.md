@@ -22,5 +22,5 @@ Evidence: apply `20261101T140757Z-2572-11324`, repeat
 `20261101T140809Z-3593-18052`, restore `20261101T140810Z-4029-10309`, explicit
 install `20261101T140813Z-4633-13494`, and remove
 `20261101T140816Z-4904-21166`. Transcript:
-`../.tmp-vm-acceptance-security-06ap/fedora-44-workstation-x86_64/20261101T140728Z-test-package-apply-repeat-status-restore-and-remove-9c5a8607/transcript.jsonl`
+`../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ap/fedora-44-workstation-x86_64/20261101T140728Z-test-package-apply-repeat-status-restore-and-remove-9c5a8607/transcript.jsonl`
 (SHA-256 `ce15cc22cf106e858768b21f0a70aa8b0edb5695af93c57f7c4e8221262a5e47`).

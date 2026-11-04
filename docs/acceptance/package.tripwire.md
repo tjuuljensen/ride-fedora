@@ -28,5 +28,5 @@ the residue contains the expected hostname and no private keys or baseline.
 This behavior is documented for the opt-in candidate. H066 tracks baseline,
 key, policy, and scheduled-check recovery for v3.1.
 
-Transcript: `../.tmp-vm-acceptance-security-06ao-verified/fedora-44-workstation-x86_64/20261101T125939Z-test-package-apply-repeat-status-restore-and-remove-69bfa7b3/transcript.jsonl`
+Transcript: `../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ao-verified/fedora-44-workstation-x86_64/20261101T125939Z-test-package-apply-repeat-status-restore-and-remove-69bfa7b3/transcript.jsonl`
 (SHA-256 `432eb5613b45126f39716642445080c0302140c9884c39dd0fd47064cbd7eccb`).

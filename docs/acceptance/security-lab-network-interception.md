@@ -29,7 +29,7 @@ No interface, route, firewall, capture, TLS, or tool behavior was exercised.
 
 Run IDs: apply `20261031T151035Z-2845-9650`, repeat
 `20261031T151058Z-5082-1379`, restore `20261031T151059Z-5686-27475`. Retained
-transcript: `.tmp-vm-acceptance-security-06ab/fedora-44-workstation-x86_64/20261031T151005Z-test-fedora-security-lab-network-interception-batch-and-profile-e281b8f9/transcript.jsonl` (SHA-256 `65bee067d51cd1165a98b0a2eae20e0a3c246de048268dd6f90b61a959dcc2d2`). Pytest reported
+transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ab/fedora-44-workstation-x86_64/20261031T151005Z-test-fedora-security-lab-network-interception-batch-and-profile-e281b8f9/transcript.jsonl` (SHA-256 `65bee067d51cd1165a98b0a2eae20e0a3c246de048268dd6f90b61a959dcc2d2`). Pytest reported
 `1 passed`. H053 tracks authorized use and network recovery before behavior
 is offered.
 Catalog operation IDs in this accepted profile: `package.arpon`, `package.hunt`, `package.netsed`, `package.sslsplit`.

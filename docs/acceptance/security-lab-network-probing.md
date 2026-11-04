@@ -27,4 +27,4 @@ authorized-scope behavior review.
 
 Automated by
 [`test_fedora_security_lab_network_probing_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
-Transcript: `.tmp-vm-acceptance-security-06m/fedora-44-workstation-x86_64/20261031T135912Z-test-fedora-security-lab-network-probing-batch-and-profile-be1a3891/`.
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06m/fedora-44-workstation-x86_64/20261031T135912Z-test-fedora-security-lab-network-probing-batch-and-profile-be1a3891/`.

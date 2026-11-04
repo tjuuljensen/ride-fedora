@@ -19,7 +19,7 @@ gating, apply, journaled value and mode-0600 owner record, status, repeat,
 conflict refusal, restore, and profile removal. It verified that shortcuts
 added by the user after RIDE apply remain after removal. The captured transcript
 is
-`.tmp-vm-acceptance-desktop-user-03-shortcuts-verified/fedora-44-workstation-x86_64/20261101T221533Z-test-custom-shortcuts-merge-and-restore-only-ride-owned-entries-9d825a87/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-desktop-user-03-shortcuts-verified/fedora-44-workstation-x86_64/20261101T221533Z-test-custom-shortcuts-merge-and-restore-only-ride-owned-entries-9d825a87/transcript.jsonl`
 (SHA-256
 `518b38d9530ce89839646d156ed6d4fce2f9309e947b4fb476129eda1beed4a3`); the
 Fedora 44 Workstation image SHA-256 is

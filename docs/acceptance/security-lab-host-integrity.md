@@ -29,5 +29,5 @@ recovery.
 Automated by
 [`test_fedora_security_lab_host_integrity_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 Transcript and target metadata:
-`.tmp-vm-acceptance-security-06n-final/fedora-44-workstation-x86_64/20261031T141243Z-test-fedora-security-lab-host-integrity-batch-and-profile-57d36e57/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06n-final/fedora-44-workstation-x86_64/20261031T141243Z-test-fedora-security-lab-host-integrity-batch-and-profile-57d36e57/`.
 Catalog operation IDs in this accepted profile: `package.aide`, `package.chkrootkit`, `package.openscap-scanner`, `package.rkhunter`, `package.scap-security-guide`.

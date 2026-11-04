@@ -25,7 +25,7 @@ VM evidence: Fedora 44 Workstation x86_64; pinned image SHA-256
 overlay `20261101T141928Z-test-package-apply-repeat-status-restore-and-remove-a18728a1`;
 catalog SHA-256
 `e27bbc6c962f229e681700f11ca3a52a837ee602c5b0179b6aeb4aaa222f2bcf`;
-transcript [transcript.jsonl](../../.tmp-vm-acceptance-provider-07-complete-rerun/fedora-44-workstation-x86_64/20261101T141928Z-test-package-apply-repeat-status-restore-and-remove-a18728a1/transcript.jsonl)
+transcript [transcript.jsonl](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-provider-07-complete-rerun/fedora-44-workstation-x86_64/20261101T141928Z-test-package-apply-repeat-status-restore-and-remove-a18728a1/transcript.jsonl)
 SHA-256 `2ebd80854f76d977a8391aeb5514f27f43b67a26f617b057fabf152efac42e77`.
 The test installed the signed `HandBrake` RPM and dependencies, verified the
 CLI and candidate status, repeated without changes, restored, then exercised

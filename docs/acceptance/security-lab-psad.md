@@ -40,7 +40,7 @@ were accessed or changed.
 Apply run ID `20261101T124703Z-2733-17419`, repeat
 `20261101T124721Z-3785-32355`, restore `20261101T124722Z-4223-23246`, explicit
 install `20261101T124730Z-5119-26126`, remove `20261101T124740Z-5524-9326`.
-Transcript: `.tmp-vm-acceptance-security-06am/fedora-44-workstation-x86_64/20261101T124633Z-test-package-apply-repeat-status-restore-and-remove-4d9717dd/transcript.jsonl`
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06am/fedora-44-workstation-x86_64/20261101T124633Z-test-package-apply-repeat-status-restore-and-remove-4d9717dd/transcript.jsonl`
 (SHA-256 `e9172d44c4e2e4d40f94e4be1bfb4a813e11ec6c75f4403ca42d5d58e06a9612`).
 The focused result was `1 passed` in 74.61 seconds. H064 tracks later PSAD
 configuration, firewall ownership, log and alert behavior, and recovery.

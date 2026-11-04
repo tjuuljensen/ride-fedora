@@ -30,6 +30,6 @@ Operations: `package.dcfldd`, `package.ddrescue`, `package.foremost`, and
 The lifecycle is automated by
 [`test_fedora_security_lab_forensic_media_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 The passing candidate transcript and disposable overlay are under
-`.tmp-vm-acceptance-security-06j/fedora-44-workstation-x86_64/20261031T130644Z-test-fedora-security-lab-forensic-media-batch-and-profile-e513f638/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06j/fedora-44-workstation-x86_64/20261031T130644Z-test-fedora-security-lab-forensic-media-batch-and-profile-e513f638/`.
 The passing supported-path transcript and overlay are under
-`.tmp-vm-acceptance-security-06j-supported-retry/fedora-44-workstation-x86_64/20261031T131809Z-test-fedora-security-lab-forensic-media-batch-and-profile-45e4f2a2/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06j-supported-retry/fedora-44-workstation-x86_64/20261031T131809Z-test-fedora-security-lab-forensic-media-batch-and-profile-45e4f2a2/`.

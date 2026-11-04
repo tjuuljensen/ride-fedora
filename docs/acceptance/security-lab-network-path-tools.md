@@ -50,7 +50,7 @@ was `1 passed, 72 deselected`.
 
 Run IDs: apply `20261101T121203Z-2547-14388`, repeat
 `20261101T121412Z-4813-970`, restore `20261101T121413Z-5193-2504`. Transcript:
-`.tmp-vm-acceptance-security-06af-final/fedora-44-workstation-x86_64/20261101T121133Z-test-fedora-security-lab-network-path-tools-batch-and-profile-b6af65da/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06af-final/fedora-44-workstation-x86_64/20261101T121133Z-test-fedora-security-lab-network-path-tools-batch-and-profile-b6af65da/transcript.jsonl`
 (SHA-256 `522f2ff908d411b6e74ba171d2ea776d0b36217513449d8957b35409fcd0271d`).
 H046 gates Scapy packet behavior; H057 gates ProxyChains endpoint and routing
 behavior; H058 records the DNF dependency residue.

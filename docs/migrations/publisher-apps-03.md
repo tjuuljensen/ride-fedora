@@ -61,7 +61,7 @@ Windows has a
 separately accepted VS Code **user setup** deployment, which shares product
 identity but not the Fedora system RPM installer or recovery.
 
-Transcript: [transcript.jsonl](../../.tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl)
+Transcript: [transcript.jsonl](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl)
 (SHA-256 `6084265f71cc0fd5db3926a0cc5a01921d4c85fe3428cc84e07576caa2696cb7`)
 on Fedora 44 Workstation x86_64 image SHA-256
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.

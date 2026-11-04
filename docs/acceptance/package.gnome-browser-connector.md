@@ -21,7 +21,7 @@ VM evidence: Fedora 44 Workstation x86_64; pinned image SHA-256
 overlay `20261101T143807Z-test-package-apply-repeat-status-restore-and-remove-9723361e`;
 catalog SHA-256
 `d0c504e3c5643413ddd85ea3cfd67f5947415378b53c7e5cb334487b3ee9409f`;
-transcript [transcript.jsonl](../../.tmp-vm-acceptance-provider-10-gnome-connector-complete/fedora-44-workstation-x86_64/20261101T143807Z-test-package-apply-repeat-status-restore-and-remove-9723361e/transcript.jsonl)
+transcript [transcript.jsonl](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-provider-10-gnome-connector-complete/fedora-44-workstation-x86_64/20261101T143807Z-test-package-apply-repeat-status-restore-and-remove-9723361e/transcript.jsonl)
 SHA-256 `b4ecb3ac6117a95f05b072e43e635f493523061344ffab0a9bfbb0e49ce8affb`.
 Run IDs: apply `20261101T143839Z-3061-11252`, repeat
 `20261101T143852Z-3973-7678`, restore `20261101T143853Z-4407-15789`,

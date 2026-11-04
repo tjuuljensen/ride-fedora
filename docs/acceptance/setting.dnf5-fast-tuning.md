@@ -4,7 +4,7 @@ Status: **PASS for the Fedora 44 Workstation x86_64 target; operation remains op
 
 Acceptance run: `tests/acceptance/test_dnf5_fast_tuning.py` passed on 2026-11-02
 using the pinned `fedora-44-workstation-x86_64` target and TCG acceleration.
-Transcript: `.tmp-vm-acceptance-system-security-01-fastdnf-fixed/fedora-44-workstation-x86_64/20261102T001931Z-test-owned-dnf5-tuning-profile-applies-repeats-and-restores-0db652ff/transcript.jsonl`
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-system-security-01-fastdnf-fixed/fedora-44-workstation-x86_64/20261102T001931Z-test-owned-dnf5-tuning-profile-applies-repeats-and-restores-0db652ff/transcript.jsonl`
 SHA-256: `595f0fa1a0302f0e761851cabf187330ffee1ef60127e0d07bc9e17993dbd5c5`.
 Image SHA-256: `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
 

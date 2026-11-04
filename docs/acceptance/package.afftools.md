@@ -25,6 +25,6 @@ run and no evidence image was accessed. Pytest reported `1 passed`.
 
 Run IDs: apply `20261031T152052Z-2480-29204`, repeat
 `20261031T152104Z-3261-26303`, restore `20261031T152105Z-3528-22584`. Transcript:
-`.tmp-vm-acceptance-security-06ae/fedora-44-workstation-x86_64/20261031T152023Z-test-fedora-security-lab-forensic-images-batch-and-profile-47311ff1/transcript.jsonl` (SHA-256 `14eac5aa43580daf4f34a4921127a8e08442a9ed122a7aac29bb2976ea3a6c8d`). H056 tracks image provenance,
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ae/fedora-44-workstation-x86_64/20261031T152023Z-test-fedora-security-lab-forensic-images-batch-and-profile-47311ff1/transcript.jsonl` (SHA-256 `14eac5aa43580daf4f34a4921127a8e08442a9ed122a7aac29bb2976ea3a6c8d`). H056 tracks image provenance,
 read-only handling, cryptographic material, and recovery before AFF behavior
 is managed.

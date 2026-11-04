@@ -29,7 +29,7 @@ mail sent.
 
 Run IDs: apply `20261031T151607Z-2800-27667`, repeat
 `20261031T151633Z-5251-4834`, restore `20261031T151634Z-5854-2914`. Pytest
-reported `1 passed`. Transcript: `.tmp-vm-acceptance-security-06ac-retry/fedora-44-workstation-x86_64/20261031T151537Z-test-fedora-security-lab-network-diagnostics-batch-and-profile-1c7a75c3/transcript.jsonl` (SHA-256 `a31f2f5d6e26875f2701370faac136fd544122579562456afd4c011132bb176c`).
+reported `1 passed`. Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ac-retry/fedora-44-workstation-x86_64/20261031T151537Z-test-fedora-security-lab-network-diagnostics-batch-and-profile-1c7a75c3/transcript.jsonl` (SHA-256 `a31f2f5d6e26875f2701370faac136fd544122579562456afd4c011132bb176c`).
 
 The first attempt failed only on a whole-VM active-service-list comparison: a
 NetworkManager dispatcher unit disappeared while transient PackageKit and

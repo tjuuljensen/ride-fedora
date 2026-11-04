@@ -33,4 +33,4 @@ The automated lifecycle is
 [`test_fedora_security_lab_network_discovery_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 The passing supported-operation transcript and disposable overlay are retained
 under
-`.tmp-vm-acceptance-security-06h-supported/fedora-44-workstation-x86_64/20261031T122547Z-test-fedora-security-lab-network-discovery-batch-and-profile-09cc226b/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06h-supported/fedora-44-workstation-x86_64/20261031T122547Z-test-fedora-security-lab-network-discovery-batch-and-profile-09cc226b/`.

@@ -1,16 +1,19 @@
 # v3.0 capability and v3.1 hardening reassessment
 
-Status: **migration-path analysis in progress**, 2026-10-30. The owner clarified
-that scoped v2 packages and settings remain in scope for v3.0 because their behavior
-has proved useful. An obsolete product or unsafe v2 installer calls for a
+Status: **historical migration-path assessment**, 2026-10-30. This document
+records the scope clarification and progress snapshot from that review; the
+counts below are not current. See the [generated progress report](progress.md)
+and [v3.0 release review](../release-v3.0-review.md) for current status.
+The owner clarified that scoped v2 packages and settings remain in scope for
+v3.0 because their behavior has proved useful. An obsolete product or unsafe v2 installer calls for a
 working successor or a safer owned method, not a package/setting outcome
 silently closed by a retirement or unsupported label. An exact legacy product
 can be retired as an implementation once its intended capability has a v3.0
 path. Earlier individual retirement choices remain historical decisions about
 those exact implementations; this review reopens their capability coverage.
 
-The current ledger has 133 package and 36 setting outcomes. Only 59 of those
-169 have operable v3 catalog mappings. Six server `Install...` package outcomes
+At the time of this review, the ledger had 133 package and 36 setting outcomes.
+Only 59 of those 169 had operable v3 catalog mappings. Six server `Install...` package outcomes
 were previously excluded and are now assigned review batches. That makes
 **169 in-scope package/setting capabilities, 59 currently operable, nine
 owner-retired, one standalone functional replacement, and 100 still needing

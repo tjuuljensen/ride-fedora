@@ -34,7 +34,7 @@ certificate tools were run and no network behavior was exercised.
 
 Apply run ID `20261101T123725Z-2567-29780`, repeat
 `20261101T123739Z-3612-28031`, restore `20261101T123740Z-4048-17177`.
-Transcript: `.tmp-vm-acceptance-security-06aj/fedora-44-workstation-x86_64/20261101T123655Z-test-package-apply-repeat-status-restore-and-remove-a7614119/transcript.jsonl`
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06aj/fedora-44-workstation-x86_64/20261101T123655Z-test-package-apply-repeat-status-restore-and-remove-a7614119/transcript.jsonl`
 (SHA-256 `4cba687cb5906636290a15bd8b6b2b544b981937776bec7ee2f81130eb5cf219`).
 The focused result was `1 passed` in 55.70 seconds. H062 tracks later
 configuration, certificate, overlay, and service recovery work.

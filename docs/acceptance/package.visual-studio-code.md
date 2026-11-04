@@ -22,6 +22,6 @@ remains installed, and seeded profile preservation.
 The shared test passed the candidate gate, signed RPM install, `code
 --version`, repeat apply, removal, repo cleanup, preservation of Brave during
 Code removal, and seeded user-file preservation. See the [batch
-transcript](../../.tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl)
+transcript](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl)
 (SHA-256 `6084265f71cc0fd5db3926a0cc5a01921d4c85fe3428cc84e07576caa2696cb7`)
 and [batch record](../migrations/publisher-apps-03.md).

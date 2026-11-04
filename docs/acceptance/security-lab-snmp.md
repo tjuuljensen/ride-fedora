@@ -28,5 +28,5 @@ query scope, daemon ownership/configuration, and recovery.
 Automated by
 [`test_fedora_security_lab_snmp_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 Transcript and target metadata:
-`.tmp-vm-acceptance-security-06o-final2/fedora-44-workstation-x86_64/20261031T142033Z-test-fedora-security-lab-snmp-batch-and-profile-7f1a7302/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06o-final2/fedora-44-workstation-x86_64/20261031T142033Z-test-fedora-security-lab-snmp-batch-and-profile-7f1a7302/`.
 Catalog operation IDs in this accepted profile: `package.net-snmp`, `package.net-snmp-utils`, `package.onesixtyone`, `package.snmpcheck`.

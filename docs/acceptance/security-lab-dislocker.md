@@ -29,7 +29,7 @@ removed the `/usr/bin/dislocker` alternatives entry. No key or volume was
 provided, and no encrypted data was accessed.
 
 The retained transcript is
-`.tmp-vm-acceptance-security-06x-verified/fedora-44-workstation-x86_64/20261031T145523Z-test-fedora-security-lab-dislocker-package-only-91313e50/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06x-verified/fedora-44-workstation-x86_64/20261031T145523Z-test-fedora-security-lab-dislocker-package-only-91313e50/transcript.jsonl`
 (SHA-256 `f901669891415e38b847cf762e7553039a93dc0783bfe1b82ab6dad5e0842aed`);
 pytest reported `1 passed`. H049 tracks key handling, source-volume access,
 decrypted-output ownership and sizing, mount isolation, and cleanup before any

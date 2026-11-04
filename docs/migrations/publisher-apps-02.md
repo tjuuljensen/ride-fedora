@@ -52,7 +52,7 @@ the next run passed after the guard fix. An intervening setup attempt timed out
 while Fedora loaded package repositories; the setup timeout was raised from
 120 to 300 seconds and the final run completed.
 
-Acceptance transcript: `.tmp-vm-acceptance-publisher-02-veracrypt-final-check/fedora-44-workstation-x86_64/20261101T214026Z-test-veracrypt-rpm-lifecycle-preserves-mounted-and-unmounted-test-volume-bd9cd157/transcript.jsonl`
+Acceptance transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-02-veracrypt-final-check/fedora-44-workstation-x86_64/20261101T214026Z-test-veracrypt-rpm-lifecycle-preserves-mounted-and-unmounted-test-volume-bd9cd157/transcript.jsonl`
 (SHA-256 `fa06c6d43b553abe2b696c885121a7607ae853fee05959450bef46d90abcddf4`).
 The pinned VM image SHA-256 is
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.

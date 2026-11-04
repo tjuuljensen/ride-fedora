@@ -12,7 +12,7 @@ no dependencies and changed no existing RPM. `vnstat.service` remained
 The vnStat RPM created user/group `vnstat` (UID/GID 964), and the account
 persisted after package removal. No services or monitoring tools were started.
 No traffic was captured. Transcript and overlay:
-`.tmp-vm-acceptance-security-06t/fedora-44-workstation-x86_64/20261031T143654Z-test-fedora-security-lab-network-monitoring-batch-and-profile-e0a34d84/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06t/fedora-44-workstation-x86_64/20261031T143654Z-test-fedora-security-lab-network-monitoring-batch-and-profile-e0a34d84/`.
 
 All four operations remain opt-in and candidate-gated pending H045 review of
 authorized interfaces, service ownership, and data recovery.

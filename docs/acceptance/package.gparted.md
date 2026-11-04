@@ -26,6 +26,6 @@ invoked. Pytest reported `1 passed`.
 
 Run IDs: apply `20261031T151852Z-2490-3335`, repeat
 `20261031T151904Z-3275-18567`, restore `20261031T151904Z-3542-17949`. Transcript:
-`.tmp-vm-acceptance-security-06ad/fedora-44-workstation-x86_64/20261031T151823Z-test-fedora-security-lab-storage-tools-batch-and-profile-5dbc7580/transcript.jsonl` (SHA-256 `42a3b49f4f862e4c2132ed7f496047b9531f2a3cb074d0301fa0d4b3865f1956`). H055 retains the storage behavior
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ad/fedora-44-workstation-x86_64/20261031T151823Z-test-fedora-security-lab-storage-tools-batch-and-profile-5dbc7580/transcript.jsonl` (SHA-256 `42a3b49f4f862e4c2132ed7f496047b9531f2a3cb074d0301fa0d4b3865f1956`). H055 retains the storage behavior
 safety and recovery gate and reviews Fedora's 1.7.0 package against upstream
 1.8.1.

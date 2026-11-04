@@ -2164,7 +2164,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-03.md",
         "docs/acceptance/package.visual-studio-code.md",
-        ".tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl"
+        ".acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl"
       ],
       "blocker": "",
       "nextAction": "Keep this as an opt-in candidate; complete broader desktop and update review in v3.1.",
@@ -2838,7 +2838,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-03.md",
         "docs/acceptance/package.brave.md",
-        ".tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl"
+        ".acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-03-from-repo-retry/fedora-44-workstation-x86_64/20261101T161819Z-test-publisher-repository-rpm-lifecycle-and-user-profile-recovery-92c61583/transcript.jsonl"
       ],
       "blocker": "",
       "nextAction": "Keep this as an opt-in candidate; complete broader desktop and update review in v3.1.",
@@ -4446,7 +4446,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-12.md",
         "docs/acceptance/package.bitwarden-rpm.md",
-        ".tmp-vm-acceptance-publisher-12-bitwarden-rpm-retry/fedora-44-workstation-x86_64/20261101T165509Z-test-bitwarden-rpm-coexists-with-appimage-and-preserves-vault-f33217e7/transcript.jsonl"
+        ".acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-12-bitwarden-rpm-retry/fedora-44-workstation-x86_64/20261101T165509Z-test-bitwarden-rpm-coexists-with-appimage-and-preserves-vault-f33217e7/transcript.jsonl"
       ],
       "blocker": "",
       "nextAction": "Keep the RPM and AppImage deployment paths independently selectable; revisit only for a publisher release update, profile coexistence change, or a recovery regression.",
@@ -4474,7 +4474,7 @@
       "evidence": [
         "docs/migrations/publisher-apps-06.md",
         "docs/acceptance/package.bitwarden-appimage.md",
-        ".tmp-vm-acceptance-publisher-06-supported/fedora-44-workstation-x86_64/20261101T163802Z-test-bitwarden-appimage-lifecycle-preserves-vault-files-79623341/transcript.jsonl"
+        ".acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-06-supported/fedora-44-workstation-x86_64/20261101T163802Z-test-bitwarden-appimage-lifecycle-preserves-vault-files-79623341/transcript.jsonl"
       ],
       "blocker": "",
       "nextAction": "Keep the user-scoped portable deployment opt-in; review UI launch, desktop integration, and profile coexistence separately before extending this operation.",

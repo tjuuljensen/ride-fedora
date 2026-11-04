@@ -32,4 +32,4 @@ base profile selects these tools.
   packages before apply, 1,962 after apply, and 1,913 after restore.
 
 The automated lifecycle is
-[`test_fedora_security_lab_dns_tools_batch_and_profile`](../../tests/acceptance/test_package_contract.py). VM transcripts and overlays are retained under `.tmp-vm-acceptance-security-06g/`.
+[`test_fedora_security_lab_dns_tools_batch_and_profile`](../../tests/acceptance/test_package_contract.py). VM transcripts and overlays are retained under `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06g/`.

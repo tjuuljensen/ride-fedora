@@ -26,7 +26,7 @@ authorized radio scope, privileges, service ownership, and recovery.
 Automated by
 [`test_fedora_security_lab_wireless_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 Transcript and target metadata:
-`.tmp-vm-acceptance-security-06q/fedora-44-workstation-x86_64/20261031T142543Z-test-fedora-security-lab-wireless-batch-and-profile-2c701672/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06q/fedora-44-workstation-x86_64/20261031T142543Z-test-fedora-security-lab-wireless-batch-and-profile-2c701672/`.
 
 Catalog operation IDs in this accepted profile: `package.aircrack-ng`,
 `package.cowpatty`, `package.kismet`, and `package.reaver`.

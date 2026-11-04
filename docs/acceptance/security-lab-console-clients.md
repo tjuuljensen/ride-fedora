@@ -33,7 +33,7 @@ declared scriptlets or file capabilities. No client was launched, and no
 network connection or user data was accessed.
 
 The retained command transcript is
-`.tmp-vm-acceptance-security-06y/fedora-44-workstation-x86_64/20261031T145939Z-test-fedora-security-lab-console-clients-batch-and-profile-28349d55/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06y/fedora-44-workstation-x86_64/20261031T145939Z-test-fedora-security-lab-console-clients-batch-and-profile-28349d55/transcript.jsonl`
 (SHA-256 `2ada5bd4bcd10840109dc45cbd7e2a10e7e3c163edacd36cabc28d8f91964015`);
 pytest reported `1 passed`. The new Workstation install/remove path for
 `package.screen` passed. Its unchanged Server install/restore behavior is

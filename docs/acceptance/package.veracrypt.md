@@ -35,7 +35,7 @@ and fails closed for other unknown responses. The passing
 used the pinned image SHA-256
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
 Its transcript is
-`.tmp-vm-acceptance-publisher-02-veracrypt-final-check/fedora-44-workstation-x86_64/20261101T214026Z-test-veracrypt-rpm-lifecycle-preserves-mounted-and-unmounted-test-volume-bd9cd157/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-02-veracrypt-final-check/fedora-44-workstation-x86_64/20261101T214026Z-test-veracrypt-rpm-lifecycle-preserves-mounted-and-unmounted-test-volume-bd9cd157/transcript.jsonl`
 with SHA-256 `fa06c6d43b553abe2b696c885121a7607ae853fee05959450bef46d90abcddf4`.
 The encrypted test container digest was identical before removal, after
 removal, and after reinstall:

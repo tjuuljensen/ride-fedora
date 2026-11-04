@@ -29,7 +29,7 @@ hostname and confirms no private keys or `.twd` baseline remain. The daily
 check script requires the absent host database before scanning. No key
 generation, baseline initialization, or scan was performed.
 
-Transcript: `../.tmp-vm-acceptance-security-06ao-verified/fedora-44-workstation-x86_64/20261101T125939Z-test-package-apply-repeat-status-restore-and-remove-69bfa7b3/transcript.jsonl`
+Transcript: `../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ao-verified/fedora-44-workstation-x86_64/20261101T125939Z-test-package-apply-repeat-status-restore-and-remove-69bfa7b3/transcript.jsonl`
 (SHA-256 `432eb5613b45126f39716642445080c0302140c9884c39dd0fd47064cbd7eccb`).
 
 ## VM evidence

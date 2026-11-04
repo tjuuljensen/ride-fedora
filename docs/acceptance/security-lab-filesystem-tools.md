@@ -30,7 +30,7 @@ identical before, during, and after the lifecycle. Run IDs were
 (repeat), and `20261031T145244Z-5606-18004` (restore).
 
 The retained command transcript is
-`.tmp-vm-acceptance-security-06w/fedora-44-workstation-x86_64/20261031T145154Z-test-fedora-security-lab-filesystem-tools-batch-and-profile-564ebe0e/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06w/fedora-44-workstation-x86_64/20261031T145154Z-test-fedora-security-lab-filesystem-tools-batch-and-profile-564ebe0e/transcript.jsonl`
 (SHA-256 `d51013d1666ee6d875c41f4ac28573de066eb7ca41f45f09eeadd5fc4a49609d`);
 pytest reported `1 passed`. No filesystem, recovery workflow, or user data was
 accessed. H048 tracks the separate review needed before removing candidate

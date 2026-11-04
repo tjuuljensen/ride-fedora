@@ -1545,7 +1545,7 @@ Evidence: Fedora 44 Workstation x86_64, 2026-11-01, apply
 `20261101T130008Z-2567-28474`, repeat `20261101T130021Z-3740-30519`, restore
 `20261101T130022Z-4178-21261`, explicit install
 `20261101T130026Z-5014-31011`, and remove `20261101T130029Z-5291-17346`.
-Transcript: `../.tmp-vm-acceptance-security-06ao-verified/fedora-44-workstation-x86_64/20261101T125939Z-test-package-apply-repeat-status-restore-and-remove-69bfa7b3/transcript.jsonl`
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ao-verified/fedora-44-workstation-x86_64/20261101T125939Z-test-package-apply-repeat-status-restore-and-remove-69bfa7b3/transcript.jsonl`
 (SHA-256 `432eb5613b45126f39716642445080c0302140c9884c39dd0fd47064cbd7eccb`).
 Forty-two opt-in profiles map 136 of 137 observed Security Lab group members;
 one remains unmapped.
@@ -1590,7 +1590,7 @@ Evidence: apply `20261101T140757Z-2572-11324`, repeat
 `20261101T140809Z-3593-18052`, restore `20261101T140810Z-4029-10309`, explicit
 install `20261101T140813Z-4633-13494`, and remove
 `20261101T140816Z-4904-21166`. Transcript:
-`../.tmp-vm-acceptance-security-06ap/fedora-44-workstation-x86_64/20261101T140728Z-test-package-apply-repeat-status-restore-and-remove-9c5a8607/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ap/fedora-44-workstation-x86_64/20261101T140728Z-test-package-apply-repeat-status-restore-and-remove-9c5a8607/transcript.jsonl`
 (SHA-256 `ce15cc22cf106e858768b21f0a70aa8b0edb5695af93c57f7c4e8221262a5e47`).
 The Security Lab group now has all 137 members mapped across 43 opt-in
 profiles.

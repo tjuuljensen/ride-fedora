@@ -19,7 +19,7 @@ candidate-gating, apply, journal value, interactive alias visibility, Eza
 execution, status, repeat, and removal while preserving later user edits. The
 WAN aliases were inspected but not invoked, so this run made no request to the
 public ipify service. Transcript:
-`.tmp-vm-acceptance-desktop-user-05-aliases/fedora-44-workstation-x86_64/20261101T222729Z-test-bash-aliases-interactive-lifecycle-and-user-content-c0a1009e/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-desktop-user-05-aliases/fedora-44-workstation-x86_64/20261101T222729Z-test-bash-aliases-interactive-lifecycle-and-user-content-c0a1009e/transcript.jsonl`
 (SHA-256
 `001205de18a44337b3237ee061237f57a05bcf429d0bad03dd57641eb189033a`); image
 SHA-256:

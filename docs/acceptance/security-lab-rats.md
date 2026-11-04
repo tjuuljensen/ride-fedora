@@ -34,7 +34,7 @@ recovery passed. RATS was not executed and no source code was scanned.
 Apply run ID `20261101T124940Z-2567-3472`, repeat
 `20261101T124951Z-3456-21382`, restore `20261101T124953Z-3892-18065`, explicit
 install `20261101T124956Z-4504-32009`, remove `20261101T124958Z-4806-2250`.
-Transcript: `.tmp-vm-acceptance-security-06an/fedora-44-workstation-x86_64/20261101T124910Z-test-package-apply-repeat-status-restore-and-remove-1ec61e3b/transcript.jsonl`
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06an/fedora-44-workstation-x86_64/20261101T124910Z-test-package-apply-repeat-status-restore-and-remove-1ec61e3b/transcript.jsonl`
 (SHA-256 `2cb52f348573b9e0d1042fab2bc90793a3a2e09929cffd8a82d79dcbac85dc0a`).
 The focused result was `1 passed` in 50.51 seconds. H065 tracks the old
 upstream and the maintained alternative review.

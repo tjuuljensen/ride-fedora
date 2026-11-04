@@ -12,7 +12,7 @@ DNF added `libjoedog`, `gsl`, and `pugixml`; it changed no preexisting RPM
 identity or version. Package scripts and file-capability metadata were
 inspected. The tools were not executed, HTTP/SIP traffic was not sent, and
 benchmark sockets were not opened. The run transcript and overlay are under
-`.tmp-vm-acceptance-security-06r/fedora-44-workstation-x86_64/20261031T142904Z-test-fedora-security-lab-network-load-batch-and-profile-fed044db/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06r/fedora-44-workstation-x86_64/20261031T142904Z-test-fedora-security-lab-network-load-batch-and-profile-fed044db/`.
 
 All operations remain opt-in and candidate-gated pending H043 review of
 authorized endpoints, bounded traffic, capture effects, and recovery.

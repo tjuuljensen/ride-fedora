@@ -3,9 +3,9 @@
 Status: **PASS on Fedora 44 Workstation and Server x86_64**.
 
 - Workstation image SHA-256: `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
-- Workstation transcript: `.tmp-vm-acceptance-system-security-01-hostname-workstation-fixed/fedora-44-workstation-x86_64/20261102T003348Z-test-workstation-private-hostname-value-restores-exactly-d5927d6f/transcript.jsonl` (SHA-256 `10ffeeb45ee8df53035e2a2bf3486eea3e0b0c26de6ca66795533f8c627e4259`).
+- Workstation transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-system-security-01-hostname-workstation-supported/fedora-44-workstation-x86_64/20261102T003348Z-test-workstation-private-hostname-value-restores-exactly-d5927d6f/transcript.jsonl` (SHA-256 `10ffeeb45ee8df53035e2a2bf3486eea3e0b0c26de6ca66795533f8c627e4259`).
 - Server image SHA-256: `efb75956d6dbde0801059fdac4a8a1451f06ecc843344ecdb71bb3e8d247af90`.
-- Server transcript: `.tmp-vm-acceptance-system-security-01-hostname-server/fedora-44-server-x86_64/20261102T003632Z-test-server-private-hostname-value-restores-exactly-7a298bcc/transcript.jsonl` (SHA-256 `ec31c64dfbceb55f1b152baaa15e7e55800ba072089775f13ee29271ef58d186`).
+- Server transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-system-security-01-hostname-server-supported/fedora-44-server-x86_64/20261102T003632Z-test-server-private-hostname-value-restores-exactly-7a298bcc/transcript.jsonl` (SHA-256 `ec31c64dfbceb55f1b152baaa15e7e55800ba072089775f13ee29271ef58d186`).
 
 ## Declared behavior
 

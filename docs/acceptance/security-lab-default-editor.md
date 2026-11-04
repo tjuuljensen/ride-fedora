@@ -39,7 +39,7 @@ files were written.
 
 Apply run ID `20261101T123337Z-2987-2640`, repeat
 `20261101T123350Z-4078-136`, restore `20261101T123351Z-4515-30886`.
-Transcript: `.tmp-vm-acceptance-security-06ai/fedora-44-workstation-x86_64/20261101T123303Z-test-package-apply-repeat-status-restore-and-remove-fd462103/transcript.jsonl`
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ai/fedora-44-workstation-x86_64/20261101T123303Z-test-package-apply-repeat-status-restore-and-remove-fd462103/transcript.jsonl`
 (SHA-256 `fd47f316a2f396cdc9e4c293b70af12add59b411bd0e85f2c154d8e5aa0bef6b`).
 The final focused result was `1 passed`. The first run used the shorthand
 expected value `nano` and stopped after observing Fedora's actual `/usr/bin/nano`

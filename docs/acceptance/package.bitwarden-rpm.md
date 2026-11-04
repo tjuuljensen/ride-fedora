@@ -21,7 +21,7 @@ transcript contains no vault contents. Mocked tests cover hash and
 package-identity mismatch, existing-install no-op, temporary-file cleanup,
 and exact package removal.
 
-Transcript: [transcript.jsonl](../../.tmp-vm-acceptance-publisher-12-bitwarden-rpm-retry/fedora-44-workstation-x86_64/20261101T165509Z-test-bitwarden-rpm-coexists-with-appimage-and-preserves-vault-f33217e7/transcript.jsonl)
+Transcript: [transcript.jsonl](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-12-bitwarden-rpm-retry/fedora-44-workstation-x86_64/20261101T165509Z-test-bitwarden-rpm-coexists-with-appimage-and-preserves-vault-f33217e7/transcript.jsonl)
 (SHA-256 `5dee4214d474c6013a0ef9f185a75b5df41f49793da822bfc0fa6ca8cdbbab02`)
 on Fedora 44 Workstation x86_64 image SHA-256
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.

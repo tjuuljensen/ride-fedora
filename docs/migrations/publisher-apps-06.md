@@ -54,7 +54,7 @@ supported only for this user-scoped file placement lifecycle; it does not
 launch the app or inspect account data. The RPM outcome remains independently tracked in
 publisher-apps-12.
 
-The accepted supported-path transcript is [transcript.jsonl](../../.tmp-vm-acceptance-publisher-06-supported/fedora-44-workstation-x86_64/20261101T163802Z-test-bitwarden-appimage-lifecycle-preserves-vault-files-79623341/transcript.jsonl)
+The accepted supported-path transcript is [transcript.jsonl](../../.acceptance-runs/legacy-vm/.tmp-vm-acceptance-publisher-06-supported/fedora-44-workstation-x86_64/20261101T163802Z-test-bitwarden-appimage-lifecycle-preserves-vault-files-79623341/transcript.jsonl)
 (SHA-256 `07031bcc0b334f6f6bb0b13daa7585c302edfa7182d824520a0b1464a1036653`)
 on the pinned image SHA-256
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.

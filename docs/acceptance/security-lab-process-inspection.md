@@ -41,7 +41,7 @@ memory, port, rootkit indicator, or user data was inspected.
 | `package.unhide` | `20261101T122639Z-2571-8057` | `20261101T122650Z-3409-7219` | `20261101T122651Z-3846-27656` | `2dc88d78053357163e99b12be309fbf8235c55d9434a66cac422f998dfecf85b` |
 
 Transcripts are retained under
-`.tmp-vm-acceptance-security-06ah/fedora-44-workstation-x86_64/` in the
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ah/fedora-44-workstation-x86_64/` in the
 corresponding timestamped run directories. The focused result was `1 passed`
 for each package. Two earlier harness setup attempts stopped before guest
 startup: the first found the new pilots absent from the target matrix; the

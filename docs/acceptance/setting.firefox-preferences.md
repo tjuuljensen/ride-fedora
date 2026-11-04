@@ -21,7 +21,7 @@ legacy Windows-only preference that has no Fedora effect. H083 tracks value
 freshness and a brief visible preference review before values change or the
 operation is promoted beyond candidate.
 
-- Transcript: `.tmp-vm-acceptance-desktop-user-01-firefox-final/fedora-44-workstation-x86_64/20261101T195916Z-test-firefox-preferences-lifecycle-and-startup-441e0a71/transcript.jsonl`
+- Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-desktop-user-01-firefox-final/fedora-44-workstation-x86_64/20261101T195916Z-test-firefox-preferences-lifecycle-and-startup-441e0a71/transcript.jsonl`
 - Transcript SHA-256: `86499dd9878d7d5d8a1c36a03de585293ac953d17982366c322d9ac1cc7bff85`
 - VM image SHA-256: `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`
 - Catalog SHA-256: `b082751c382af1d02f53ae2bb319bb77b0e2e22e2fb4d56976f3fca0680dce6e`

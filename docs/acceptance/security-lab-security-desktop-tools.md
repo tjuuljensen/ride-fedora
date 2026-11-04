@@ -47,7 +47,7 @@ Pytest reported `1 passed, 73 deselected`.
 
 Run IDs: apply `20261101T121855Z-2547-1510`, repeat
 `20261101T121927Z-3938-7124`, restore `20261101T121927Z-4317-28113`. Transcript:
-`.tmp-vm-acceptance-security-06ag/fedora-44-workstation-x86_64/20261101T121826Z-test-fedora-security-lab-security-desktop-tools-batch-and-profile-8e32bd08/transcript.jsonl`
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ag/fedora-44-workstation-x86_64/20261101T121826Z-test-fedora-security-lab-security-desktop-tools-batch-and-profile-8e32bd08/transcript.jsonl`
 (SHA-256 `1c049961ccd818573189be71ed4b65b5538d5e7e201131a971f4ee34b1d109af`).
 H059 holds menu visibility, uninstalled-launcher behavior, Apol fixture tests,
 and package-update recovery review for v3.1.

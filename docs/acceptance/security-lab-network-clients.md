@@ -31,4 +31,4 @@ profile.
   existing RPM changed and no introduced dependency remained.
 
 The complete automated test is
-[`test_fedora_security_lab_network_clients_batch_and_profile`](../../tests/acceptance/test_package_contract.py). Its VM transcript and overlay are retained under `.tmp-vm-acceptance-security-06f/`.
+[`test_fedora_security_lab_network_clients_batch_and_profile`](../../tests/acceptance/test_package_contract.py). Its VM transcript and overlay are retained under `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06f/`.

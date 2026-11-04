@@ -32,6 +32,6 @@ base profile.
   upgrades or other residue remained.
 
 The exact command transcript and VM overlay for this session are retained
-under `.tmp-vm-acceptance-security-06e/` in the working tree. The profile
+under `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06e/` in the working tree. The profile
 acceptance is implemented by
 [`test_fedora_security_lab_network_utilities_batch_and_profile`](../../tests/acceptance/test_package_contract.py).

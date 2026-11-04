@@ -40,7 +40,7 @@ daemon, peer, time source, or clock behavior was run.
 Apply run ID `20261101T124331Z-2787-31144`, repeat
 `20261101T124345Z-4161-13520`, restore `20261101T124346Z-4600-23873`, explicit
 install `20261101T124350Z-5539-13625`, remove `20261101T124354Z-5994-13240`.
-Transcript: `.tmp-vm-acceptance-security-06ak/fedora-44-workstation-x86_64/20261101T124300Z-test-package-apply-repeat-status-restore-and-remove-d20725f9/transcript.jsonl`
+Transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06ak/fedora-44-workstation-x86_64/20261101T124300Z-test-package-apply-repeat-status-restore-and-remove-d20725f9/transcript.jsonl`
 (SHA-256 `68c7b678f498230e7e3b60596d05507589e924734d5aa9317f758233bb6c66fc`).
 The focused result was `1 passed` in 57.20 seconds. H063 tracks exact sysuser,
 configuration, service, network, and clock recovery.

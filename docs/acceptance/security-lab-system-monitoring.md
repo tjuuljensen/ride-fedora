@@ -36,5 +36,5 @@ transcripts stored on the repository filesystem.
 Automated by
 [`test_fedora_security_lab_system_monitoring_batch_and_profile`](../../tests/acceptance/test_package_contract.py).
 Candidate transcript:
-`.tmp-vm-acceptance-security-06k-retry/fedora-44-workstation-x86_64/20261031T133325Z-test-fedora-security-lab-system-monitoring-batch-and-profile-f2d9e93e/`.
-Supported transcript: `.tmp-vm-acceptance-security-06k-final/fedora-44-workstation-x86_64/20261031T134011Z-test-fedora-security-lab-system-monitoring-batch-and-profile-baf5c992/`.
+`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06k-retry/fedora-44-workstation-x86_64/20261031T133325Z-test-fedora-security-lab-system-monitoring-batch-and-profile-f2d9e93e/`.
+Supported transcript: `.acceptance-runs/legacy-vm/.tmp-vm-acceptance-security-06k-final/fedora-44-workstation-x86_64/20261031T134011Z-test-fedora-security-lab-system-monitoring-batch-and-profile-baf5c992/`.

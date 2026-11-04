@@ -16,7 +16,6 @@ __pycache__/
 .acceptance-runs/
 # Local VM acceptance run artifacts
 /.tmp-vm-*/
-TODO.md
 
 # Generated ArtCraft inventories and local download archives
 artcraft-catalog.json
