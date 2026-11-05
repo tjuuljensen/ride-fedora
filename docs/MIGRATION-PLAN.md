@@ -345,8 +345,9 @@ application lifecycle, and coexistence review.
 [Forensic isolated batch 01](migrations/forensic-isolated-01.md) accepted
 Fedora ExifTool and four opt-in forensic tools. The old VMFS no-op is
 retired, while [its kept access capability](migrations/forensic-isolated-07-vmfs.md)
-remains a high-risk, non-runnable v3.0 gap; the owner deferred the genuine
-VMFS6 fixture and read-only lifecycle test to v3.1.
+has an opt-in install candidate available for owner testing. The owner deferred
+the genuine VMFS6 fixture and read-only lifecycle test to v3.1 under H118;
+actual image access remains unverified until that evidence is collected.
 [Forensic isolated batch 02](migrations/forensic-isolated-02.md) passed a
 non-root, hash-pinned Volatility 3 core venv and Plaso's GIFT COPR path as
 opt-in candidates. The owner kept Plaso, Autopsy, and Volatility 2 for v3.0.

@@ -19,7 +19,7 @@ outcomes, installation behavior, or acceptance claims. Pack priorities are not
 adopted. Upstream, license, Fedora source, and target compatibility still need
 review for each selected item.
 
-## Already represented in v3
+## Existing catalog coverage (not necessarily release-ready)
 
 These pack entries already have a matching operation or are covered by a
 broader existing operation. They are not new migration requests. Their current
@@ -29,7 +29,7 @@ status may still be `candidate`; check the generated
 
 | Area | Pack entries | Current catalog coverage |
 | --- | --- | --- |
-| Core | Python, pip, Git, jq, 7-Zip, ExifTool, CyberChef, hashdeep, ripgrep, Chepy, Unfurl, PowerShell | `package.python-command`, `package.python3-pip`, `package.git`, `package.jq`, `package.7zip`, `package.exiftool`, `package.cyberchef`, `package.md5deep`, `package.ripgrep`, `package.chepy`, `package.dfir-unfurl`, and `package.powershell` |
+| Core | Python, pip, Git, jq, 7-Zip, ExifTool, CyberChef, hashdeep, ripgrep, Chepy, Unfurl, PowerShell, OpenJDK (partial target coverage) | `package.python-command`, `package.python3-pip`, `package.git`, `package.jq`, `package.7zip`, `package.exiftool`, `package.cyberchef`, `package.md5deep`, `package.ripgrep`, `package.chepy`, `package.dfir-unfurl`, `package.powershell`, and `package.java-25-openjdk-headless` |
 | Acquisition | dc3dd, libewf | `package.dc3dd`, `package.libewf`, and `package.ewftools` |
 | Disk | The Sleuth Kit, Autopsy, bulk_extractor, Binwalk, TestDisk, PhotoRec, dislocker, ewfmount | `package.sleuthkit`, `package.autopsy`, `package.bulk-extractor`, `package.binwalk`, `package.testdisk` (includes PhotoRec), `package.dislocker`, and EWF tools |
 | Memory and timeline | Volatility 2, Volatility 3, Plaso | `package.volatility2`, `package.volatility3`, and `package.plaso` |
@@ -42,8 +42,9 @@ not claim full Xplico protocol or output parity; H098 tracks the remaining
 fixture-based review. See the [resolution](resolution-decisions.md) and
 [acceptance record](../acceptance/package.zeek-core.md).
 
-The catalog's `package.java-25-openjdk-headless` is Server-only, so it does
-not represent a Workstation GUI runtime for tools such as Ghidra.
+The catalog's `package.java-25-openjdk-headless` is Server-only. It does not
+cover a Workstation GUI runtime for tools such as Ghidra; consider that a
+separate scoped candidate only if a selected tool needs it.
 
 ## Linux-labelled entries without a clear dedicated operation
 
@@ -55,7 +56,7 @@ Fedora 44 Workstation is a useful target before opening a migration batch.
 
 | Area | Candidate entries | Initial review note |
 | --- | --- | --- |
-| Core | SQLite, DB Browser for SQLite, `pipx` | Check Fedora package availability, user/system scope, and whether SQLite is a standalone user requirement or only an application data dependency. |
+| Core | SQLite, DB Browser for SQLite, `pipx`; a Workstation Java GUI runtime if needed | Check Fedora package availability, user/system scope, and whether SQLite is a standalone user requirement or only an application data dependency. The existing Java operation is headless and Server-only. |
 | Acquisition | AVML, Guymager, F-Response | AVML performs privileged live-memory acquisition; F-Response requires vendor entitlement. Review data handling and scope before considering either. |
 | Disk and image formats | xmount, libvshadow, libfsntfs, libvmdk, libvhdi, libbde | Check Fedora packaging and whether each library should be a dependency/capability of a workflow instead of a standalone profile item. |
 | Windows artifacts on Linux | RegRipper, Hindsight, libesedb, liblnk | Verify current upstream maintenance, Linux support, and license for the exact project/release; distinguish parsers from acquired evidence. |

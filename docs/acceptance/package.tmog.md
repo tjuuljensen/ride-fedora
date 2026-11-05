@@ -90,3 +90,6 @@ Wayland session. The user confirmed that the app-grid tile launches TMOG
 after signing out and back in. The earlier generic icon showed as missing;
 the desktop entry now points to the bundled icon. The user confirmed that
 the launcher and icon work on this host.
+After promotion, a read-only restore dry run of the host's earlier TMOG run
+completed successfully. No host restore was applied; the disposable VM and
+mocked tests provide the state-changing recovery evidence above.

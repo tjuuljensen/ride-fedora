@@ -1,6 +1,6 @@
 # v3.0 migration release review
 
-Status: **not ready for a release tag**, reviewed 2026-11-04. No v3 tag has
+Status: **not ready for a release tag**, reviewed 2026-11-05. No v3 tag has
 been published; master remains the release line. The checked-in
 [migration progress report](migrations/progress.md), generated from
 migration/outcomes.json, is authoritative for batch counts and next actions.
@@ -9,9 +9,14 @@ The current ledger has **182/185 outcomes dispositioned**: 51 supported, 102
 opt-in candidates, 10 replaced, 11 retired, 8 unsupported, and 3 unresolved.
 For package and setting capabilities, **150/169 have an operable v3.0 path**;
 10 are owner-retired, 6 have a functional replacement, and 3 remain gaps.
-The exact target matrix is Fedora 44 x86_64 by declared edition. The accepted
+The currently tested target matrix is Fedora 44 x86_64 by declared edition.
+Fedora Linux 45 was released on 2026-11-03, so v3.0 must make an explicit
+support-target decision before the scope is frozen: either add Fedora 45 for
+each claimed edition and rerun the applicable acceptance, or retain Fedora 44
+as the only supported release with a recorded reason and follow-up. The accepted
 default Workstation and server-base Server profiles remain small; Cloud Base
-acceptance covers package.exfatprogs only.
+acceptance covers package.exfatprogs only. Fedora 45 release status is confirmed
+by the [Fedora Linux 45 announcement](https://fedoramagazine.org/announcing-fedora-linux-45/).
 
 ## Current v3.0 gaps
 
@@ -22,7 +27,7 @@ of the source capability.
 
 | Outcome | Remaining issue | Recommendation |
 | --- | --- | --- |
-| [workstation:package.VMFStools](MIGRATION-PLAN.md#full-scoped-v2-migration-program) | The experimental VMFS6 reader can be installed, but no authorized genuine VMFS6 fixture has been read. Read-only behavior and unchanged image digest are unverified. | Obtain a fixture with a known file manifest and complete H118 read-only lifecycle evidence. If that cannot happen before v3.0, get an explicit owner decision to defer the capability and keep VMFS6 access non-runnable. |
+| [workstation:package.VMFStools](MIGRATION-PLAN.md#full-scoped-v2-migration-program) | The experimental reader installer is available as an opt-in candidate for owner testing. No genuine VMFS6 fixture has been read; image access, read-only behavior, and unchanged digest are unverified. | The owner approved deferring H118 fixture testing to v3.1 while keeping the opt-in install candidate available. Keep actual VMFS6 access unverified; complete fixture-backed read-only lifecycle evidence under H118 before claiming it. |
 | workstation:package.ScheduleExpVPNChange | The old six-hour ExpressVPN rotation depends on mutable disconnect-first behavior. Current v14 location changes, safe connection replacement, and route/DNS recovery have not been verified on Workstation. | Do not recreate an unattended timer yet. Verify the current client and recovery on a disposable Workstation VM, or record an owner-approved retirement/deferral for v3.0. Keep manual rotation separate. |
 | server:setting.VPNRandomizerPersistent | Source consumers exist in network-devices, but deployed hosts, executor identity, crontab owner, publication path, and rollback are unverified. VPN recovery is also unverified on Server. | Reconcile runtime ownership with the network-devices owner before moving behavior. Then test an owned timer and network recovery on disposable Server, or explicitly defer it while leaving the authoritative source in place. |
 
@@ -73,23 +78,42 @@ failure-matrix work remains in the v3.1 hardening queue.
 
 ## Recommended release sequence
 
-1. Resolve the three package/setting gaps above, or record explicit
-   owner-approved v3.0 deferrals and keep the affected behavior non-runnable.
+1. Resolve the remaining package/setting gaps above, or carry forward
+   explicit owner-approved deferrals. The VMFS6 reader install candidate may
+   remain opt-in for owner testing; VMFS6 image access stays unverified until
+   H118 passes in v3.1.
 2. Close ALIGN-03 through ALIGN-09 or document approved deferrals with owners,
    reasons, evidence, and review triggers.
 3. Confirm supplementary source groups are not advertised or executed as v3
    operations; add a checked inventory or explicit reference/standalone
    classification before freezing the scope.
-4. Regenerate the progress, burndown, command, and operation references from
+4. Resolve the Fedora 45 target decision above. If Fedora 45 is supported,
+   update the pinned image matrix and run acceptance for every claimed edition;
+   retain Fedora 44 regression coverage if it remains in the support matrix.
+   If support stays on Fedora 44, state why and record the Fedora 45 follow-up.
+5. Regenerate the progress, burndown, command, and operation references from
    their sources. Run the repository's required syntax, ShellCheck, schema,
    mocked, Firefox, executable-mode, and generated-documentation checks.
-5. Recheck CI and the declared Fedora VM acceptance records against the final
+6. Recheck CI and the declared Fedora VM acceptance records against the final
    release source. A previous source revision or a different Fedora edition
    does not establish the final target result.
-6. Update release/bootstrap metadata and publish the immutable contract
+7. Update release/bootstrap metadata and publish the immutable contract
    reference before creating the v3.0 tag. Do not move master as a side
    effect of preparing that tag.
 
 The accepted base profiles and per-operation evidence are recorded in the
 [migration plan](MIGRATION-PLAN.md) and [acceptance records](acceptance/README.md).
-No new automated or VM validation is claimed by this documentation review.
+No new VM acceptance is claimed by this documentation review.
+
+## Local validation follow-up, 2026-11-05
+
+Two required checks still fail on this branch. `tools/check-shell-executable.sh`
+reports Git mode `100644` for `lib/v3/email_header_analyzer.sh`,
+`lib/v3/keyfile_mounts.sh`, and `lib/v3/networkmanager-vpn-profiles.sh`; the
+repository policy requires `100755` for tracked `.sh` files. Full ShellCheck
+on `ride.sh`, `lib/v3/catalog.sh`, and `lib/v3/providers.sh` reports only
+existing diagnostics in `lib/v3/providers.sh` outside the TMOG handler
+(SC2034, SC2016, SC2015, and SC2174). The earlier TMOG-focused run passed
+with those codes excluded, which does not close the full ShellCheck gate.
+The RIDE Fedora maintainer should fix the file modes and assess the specific
+diagnostics, then rerun both checks before the v3.0 release review closes.

@@ -58,6 +58,16 @@ The [acceptance record](../acceptance/package.tmog.md) records the failed first
 VM run, prerequisite correction, passing candidate run, and passing supported
 rerun. Neither opt-in profile changes the default Workstation profile.
 
+Follow-up owned by the RIDE Fedora maintainer: the VM exercised `AppRun` under
+Xvfb, but did not check a visible GNOME app-grid launch or run with
+AppImageLauncher 2.2.0 installed. The reported host supplied separate positive
+observations after a sign-out/sign-in. If launcher integration or the pinned
+TMOG release changes, repeat those checks on a disposable Fedora 44 Workstation
+x86_64 VM with AppImageLauncher present and record the desktop entry, icon,
+daemon behavior, and whether user settings survive. Do not infer that result
+from the headless VM test or extend support to another target without its own
+acceptance.
+
 Shared behavior review: canonical contract 1.1.0 at SHA-256
 `b88967ea5bde29e0141bca15134e2dac63e02faf7931cb18e83ba08cf5262938`;
 Windows `codex/ride-v3-migration` at
