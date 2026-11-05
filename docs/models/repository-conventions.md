@@ -56,11 +56,15 @@ consumers and recovery material until closure.
 
 ## Script maintenance and exceptions
 
-The client is Bash; only the bootstrapper is POSIX `sh`. New or materially
-changed entry-point scripts need a concise English header covering purpose,
-behavior, compatibility, usage, inputs, side effects, prerequisites, owner,
-provenance when adapted, version, and change history. Keep `--help` and
-`--version` aligned with one version constant where the script has a CLI.
+The client is Bash; only the bootstrapper is POSIX `sh`. Every maintained
+script, including standalone utilities and sourced modules, needs a current
+structured English header with spaced, labeled blocks for Purpose, Behavior,
+Compatibility, Usage, Inputs / environment, Outputs / side effects,
+Prerequisites, Author, Based on
+when adapted, Version, and Changelog. Update it when behavior changes. Keep
+`--help` and `--version` aligned with one version constant where the script
+has a CLI. Document standalone tool inputs, publisher and verification limits,
+owned outputs, validation, and cleanup under `docs/`.
 Use `set -euo pipefail` for Bash and `set -eu` for POSIX `sh` when control flow
 supports it. Quote variables, use arrays for Bash argument lists, avoid `eval`
 on data, use bounded temporary files and cleanup, and keep secrets out of

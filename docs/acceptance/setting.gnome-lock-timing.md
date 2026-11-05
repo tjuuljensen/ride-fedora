@@ -37,3 +37,23 @@ confirmed repeat and status, and restored the exact seeded values.
 These states are operable on the declared Workstation target. H092 retains
 the brief visible confirmation because headless VM evidence does not establish
 the user-visible blanking and locking experience.
+
+## ALIGN-03 override removal, 2026-11-05
+
+Status: PASS on a disposable Fedora 44 Workstation x86_64 VM using QEMU TCG.
+The test seeded four distinct user dconf overrides, ran
+`unset setting.gnome-lock-timing` without a value, and verified that all four
+overrides were removed and status reported `absent`. A repeated `unset` was
+unchanged. Saved-run `restore` recovered the exact four overrides. Explicit
+`set setting.gnome-lock-timing --state absent` reached the same reset state;
+restoring that run again recovered the original overrides. The guest installed
+`dbus-daemon` to provide a headless session bus for the test.
+
+- Test: `tests/acceptance/test_desktop_user_defaults.py::test_gnome_lock_unset_resets_overrides_and_restores_prior_values` (1 passed).
+- Transcript: `.acceptance-runs/align03-gnome-lock-unset/fedora-44-workstation-x86_64/20261105T134111Z-test-gnome-lock-unset-resets-overrides-and-restores-prior-values-a4fbfd46/transcript.jsonl`.
+- Transcript SHA-256: `4f951c5adfa435234cdc8087882a25663f6d22398a715c2aaba717159fecac9d`.
+- Source: uncommitted working tree based on `cd67fa3ae134fceac06cbea72a4467132dcce8ce`; source bundle SHA-256 `de16d921f07166f930cafc225b05fb5705d30ed403d9fd379dfcbd86cca6a9d1` and catalog SHA-256 `eac802934d182c0411ca89af995ec8b4a0dbc232b235e280654207bf235ee866`.
+- Verified base image SHA-256: `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
+
+This establishes the override-removal lifecycle only for Fedora 44 Workstation
+x86_64. It does not establish visible screen locking or another target.

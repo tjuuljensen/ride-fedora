@@ -6,6 +6,23 @@ Current adopted contract: **1.1.0**, pinned by the
 [current Fedora implementation](#fedora-show-stream-and-result-schema-2026-11-03).
 Earlier dated entries below retain their original review baseline.
 
+## Standalone image downloaders, 2026-11-05
+
+Linux adds [distribution image](linux-image-downloads.md) and
+[VM image](vm-image-downloads.md) download utilities outside the v3 operation
+catalog, profiles, run journal, and `ride download` command. The Linux repository
+owns their publisher resolution, destination manifest, checksum verification,
+and rotation. This is an intentional platform utility boundary: the Windows
+client's `ride.ps1 download` dispatches catalog IDs to `Save-RidePackage`, while
+these tools retain complete boot or VM media without installing packages.
+Review compared Windows `aae0059a872ac072efcdc5392e5ae8c9e3426784` and the
+adopted contract 1.1.0 source SHA-256
+`b88967ea5bde29e0141bca15134e2dac63e02faf7931cb18e83ba08cf5262938`.
+RB-05's package/artifact acquisition meaning is unchanged; no shared CLI,
+catalog, schema, preview, or recovery behavior changes. Revisit this boundary
+if either repository proposes adding complete operating-system or VM media to
+its catalog acquisition command or a shared image manifest.
+
 ## Shared contract adoption, 2026-11-01
 
 ### Plex Server package batch, 2026-11-02
@@ -73,10 +90,61 @@ includes Windows' new candidate execution/preview/restore switch. Fedora's
 removal to reversible package entries, requires an explicit remove selector,
 and rejects irrelevant/conflicting CLI options before catalog or target work.
 Focused mocked tests cover refusal before mutation, settings preservation, and
-saved unset recovery. Windows still needs its corresponding unset, profile
-removal, bare-remove, option-validation, and exclusion-help changes; ALIGN-03
-remains open until both implementations and contract wording align. The
+saved unset recovery. Comparing Windows revision
+`aae0059a872ac072efcdc5392e5ae8c9e3426784` with the Fedora working tree
+based on `cd67fa3ae134fceac06cbea72a4467132dcce8ce` against contract
+version 1.1.0: Windows also routes `unset` through the ordinary setting plan
+after selecting a removal state, but infers that state for some operation kinds
+instead of declaring it per operation. Windows still needs per-operation unset
+declaration, profile removal, bare-remove, option-validation, and
+exclusion-help review. ALIGN-03 remains open until both implementations and
+user-facing wording align with RB-06. The
 [CLI regression tests](../tests/test_v3_cli.py) capture the Fedora-side cases.
+
+### ALIGN-03 setting lifecycle decision, 2026-11-05
+
+Owner: RIDE Fedora maintainers; Windows counterpart: RIDE Windows maintainers.
+This decision applies contract 1.1.0 RB-02, RB-06, and RB-07 to the compared
+revisions above. It does not change the pinned contract or require identical
+native state names.
+
+- `set` applies an explicitly selected catalog state. A baseline is a declared
+  configuration, not a guess about the current platform default.
+- `unset` selects the operation's declared override-removal state, or refuses
+  before creating a run when the operation has no such state. It never
+  generically selects `disabled`. `set` of that removal state and `unset` may
+  use the same handler, but `unset` has the additional declaration guard.
+- `restore` recovers the captured prior state within that operation's recovery
+  limits, including explicit values and absence. It does not infer a default.
+- Profile removal leaves ordinary settings in place. `remove` requires an
+  explicit package ID or profile, and invalid or irrelevant options fail before
+  mutation. Native command syntax may differ between clients.
+
+Fedora records the override-removal choice in each applicable catalog entry's
+`unsetState`. The reviewed GNOME lock-timing handler already had an `absent`
+reset for its four owned keys, but that state was not declared for `unset` and
+fully reset keys were not observed as `absent`. Fedora now declares the state
+and recognizes the reset result; the
+[disposable Workstation acceptance](acceptance/setting.gnome-lock-timing.md#align-03-override-removal-2026-11-05)
+passed on Fedora 44 x86_64. Other
+`absent` states are not automatically `unset` actions: some remove packages,
+generated keys, VPN profiles, or other selected objects and need individual
+ownership and recovery review.
+Fedora Bash completion now offers only settings with a declared `unsetState`.
+Before closing Fedora's setting portion of ALIGN-03, review the remaining
+owned-file settings with an `absent` state but no `unsetState`: Bash aliases,
+Chrome preferences, GNOME custom shortcuts, Firefox preferences, and the SSH
+root-login drop-in. The first three need their selected configuration to
+recover a previous `configured` state. Keep `unset` refusing each operation
+until its removal meaning and saved-run recovery are both verified.
+
+Windows already routes `unset` through its normal setting plan, with an
+explicit `UnsetState` on profile settings and inferred states for other kinds.
+Its ALIGN-03 follow-up is to declare each eligible override-removal state,
+refuse unsupported cases, and align help and paired tests with these meanings.
+Review this decision when either catalog changes an unset or baseline meaning,
+when an operation gains a new removal action, or at the final v3 alignment
+review.
 
 Fedora's 2026-11-03 ALIGN-04 work removes VM acceptance as a download gate;
 downloads still require a declared target, eligible handler/source, and the
@@ -2462,3 +2530,32 @@ before final v3 release. Fedora promotion used the disposable Workstation
 checks in [TMOG acceptance](acceptance/package.tmog.md); Windows promotion
 requires its own Windows 11 acceptance. The canonical contract and digest
 reference do not change for this native package addition.
+
+## ArtCraft publisher Flatpak batch, 2026-11-05
+
+Owner: RIDE Fedora maintainer. Compared Fedora `codex/ride-v3-migration` at
+`cd67fa3ae134fceac06cbea72a4467132dcce8ce` with Windows
+`codex/ride-v3-migration` at `aae0059a872ac072efcdc5392e5ae8c9e3426784`
+(Windows catalog SHA-256
+`2e6dbb15a9563e4c6ffc5a2ac002f2457e98e0964448c15efe719a4f9626f7c9`)
+and canonical contract 1.1.0 (SHA-256
+`b88967ea5bde29e0141bca15134e2dac63e02faf7931cb18e83ba08cf5262938`).
+Both clients identify ArtCraft Launcher and twelve shared Craft products with
+the same `package.*` IDs. Fedora additionally selects the published FigCraft
+ref; Windows has no FigCraft catalog operation in the compared revision.
+
+Fedora's [batch](migrations/artcraft-flatpaks.md) uses separate per-user
+Flatpak refs from the publisher's unsigned OCI preview remote. Windows uses
+machine-scoped pinned MSI packages for the twelve Craft apps and a separate
+current-user Launcher MSI. Source, artifact, scope, destination, version
+resolution, and recovery are intentional native differences. Fedora's
+candidate operations remove only their own Flatpak refs and preserve user
+data; they do not choose or replace a Windows variant. This adds no shared
+CLI, profile, run-journal, or behavior-contract field, so the adopted contract
+digest is unchanged.
+
+Review trigger: either client changes ArtCraft product IDs, source selection,
+installation scope, deployment identity, app-data recovery, or target support;
+the publisher signs the OCI remote; or the final v3 release review. Native
+Fedora 44 acceptance [passed](acceptance/package.artcraft-oci.md) on the
+disposable Workstation VM; Fedora 45 remains pending a verified image.

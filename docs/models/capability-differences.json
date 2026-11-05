@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "contractVersion": "1.1.0",
-  "reviewedOn": "2026-11-04",
+  "reviewedOn": "2026-11-05",
   "reviewedSources": {
     "rideWindows": {
-      "commit": "1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5",
+      "commit": "aae0059a872ac072efcdc5392e5ae8c9e3426784",
       "branch": "codex/ride-v3-migration",
-      "workingTreeClean": false,
+      "workingTreeClean": true,
       "paths": [
         "ride.ps1",
         "modules/RIDE.Engine.psm1",
@@ -21,21 +21,21 @@
         "README.md"
       ],
       "sha256": {
-        "ride.ps1": "2A06F47B24AE5EF5DE87480EEC7384A030DBC67139924409DE14426BAA2C68F9",
-        "modules/RIDE.Engine.psm1": "053D90011AC0D7C480208DDC2816DFA249CF171B3295EC0CC74F5A9ED8A9BA9D",
+        "ride.ps1": "79217041BACB39633CEFA93621C057056A4557452C24E4587BCADD26BFC61271",
+        "modules/RIDE.Engine.psm1": "40454D32AB7B2236F4B4D87E758DD6961FE8D144E2EBCB14308140722240D8A8",
         "modules/RIDE.UserHandoff.psm1": "95E334B34461CDFDE75DB5EA2C32BF23E64BDBFADE64A0C6400CB9D339596AE6",
         "docs/models/behavior-scenarios.json": "9353770486CFC7768F8D2DD4BF0DB646FFF894E591974F07409035DF7F2D3632",
         "tests/fixtures/behavior-scenario-windows-adapter.json": "362629860E819BFF7AB1F81CEF82AFBD4D2C41CC334C15B5AD74A87C05D27C23",
         "tests/BehaviorContract.Tests.ps1": "AD83329784A8CA35F3892CB4F83D1B47B0064585FFDCDFF42C385225479BA177",
-        "TODO.md": "DF529CEF6C29F94C60AD66A1F2FE6A8E685742425CE31AC976F0E38D5002D9B2",
-        "docs/fedora-alignment.md": "CBAB4AF610FF4EB3B8F00D57CF4F34E0F43CFF03C6A2367099B3D43964BA8362",
+        "TODO.md": "67ABB87BC58083473D26194E0CF056FB37513EB99E83E294D0FAC943B9E8C241",
+        "docs/fedora-alignment.md": "E92B51E8E0455C40921E73C2448B814571F56ECA052379A604C33646B0D43AF8",
         "tests/CliShouldProcess.Tests.ps1": "8CE6B1DE3EEAA37C041A3512E3134A72514C27B84A39F820A5E54D6BA4B5AF42",
         "tests/SettingPresentation.Tests.ps1": "97BC0AF11C33C5042796C52E0AE67A62E0CD3043FE3468644616BC9ABB3F8AA1",
-        "README.md": "4C7011AA3641A41ADE5CDA3ECE8929144840B9E3104142455751168B3D3D249E"
+        "README.md": "AB9CD352BF7F2C6DBAF04CA986460B7E3018A09CDBE0C2F390FEB8727AA21AAD"
       }
     },
     "rideFedora": {
-      "commit": "7659f9c9f7fbf2ddb3e6fd00eece2ad0171dd43d",
+      "commit": "cd67fa3ae134fceac06cbea72a4467132dcce8ce",
       "branch": "codex/ride-v3-migration",
       "workingTreeClean": false,
       "paths": [
@@ -52,17 +52,17 @@
         "README.md"
       ],
       "sha256": {
-        "ride.sh": "FA851E70A8ACA150354C52DB8CFDB54FA2176C1D5BAFBB899EB4F8B8C4984E31",
+        "ride.sh": "BAF20C83E4382072A001D7E373F3C8C28A3487EAF04093CE12706F05F5E68DD5",
         "lib/v3/common.sh": "3205EA10B2E28F6D93CB3835C2EA4F8B071567F9EEC025B7A08C23F023944265",
-        "lib/v3/catalog.sh": "3418F7CA84555E030C95532FEE1AD8F7FCC502A97DA674E4BBE00768570BBC93",
-        "completion/ride.bash": "411F32F26BA3DD932C8968726EDD7F517E8A1F062AA8D0449EEB70F3FE97D15D",
+        "lib/v3/catalog.sh": "AF9AD42484FCD5160AB2C53C2793F1F82ECFDBABB8C70B727B5A2251EA7B8354",
+        "completion/ride.bash": "8270E8213130114CB9DE2687092884E56E0DDA69AC68BC8621314D062C328AD9",
         "docs/models/behavior-scenarios.json": "9353770486CFC7768F8D2DD4BF0DB646FFF894E591974F07409035DF7F2D3632",
         "tests/fixtures/behavior-scenario-fedora-adapter.json": "B02FB9CE3FF6B65BA0D52324C77119D37B83622EEBF2CD6776CAD31C36280260",
         "tests/test_v3_cli.py": "EBA08A614F89E10A72D0B999720C9F8E1DBEA01DF1F87E68AF09481127408F9A",
         "tests/test_v3_identity_preflight.py": "8C1EABD350EE7D206D0BFDB5C943AAA2652B3745FB8324F196BDEA3F22AD568F",
         "tests/test_behavior_scenarios.py": "F8C0F4788ECBD3E6CAE4A21750CBB9BEE87AA85282DDFC2825F3A33DA4D2586B",
-        "docs/windows-alignment.md": "58F982E3D4263FDD3AAB403B321374DD14069559E177383A7723296D0AA3F607",
-        "README.md": "6D8C9B1550A519828F478E25238B42325D76F31C5836F0626D6C295937757F04"
+        "docs/windows-alignment.md": "00155E9299C635CCDD0B7ABAEDF2708716F638DD8F2FD7134F4D39CCCA3689EB",
+        "README.md": "21B366AF364BB09F27E5D429A4FA826E5F79AAEF3C1CB0A82210FB0F2E1CF84B"
       }
     }
   },
@@ -606,6 +606,10 @@
         {
           "windows": "catalog/operations.psd1 package.tmog Windows 1.0.1 installer candidate",
           "fedora": "catalog/operations.json package.tmog Linux 1.1.1 AppImage supported on Fedora 44 Workstation x86_64; docs/acceptance/package.tmog.md"
+        },
+        {
+          "windows": "catalog/operations.psd1 ArtCraft Launcher and twelve Craft app MSI candidates at aae0059a872ac072efcdc5392e5ae8c9e3426784",
+          "fedora": "catalog/operations.json ArtCraft Launcher and thirteen Craft app per-user OCI Flatpak candidates for Fedora 44 and 45 Workstation x86_64; docs/migrations/artcraft-flatpaks.md"
         }
       ],
       "linkedWork": [

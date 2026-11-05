@@ -606,8 +606,11 @@ owns the rules; [Windows alignment](windows-alignment.md) owns local differences
   transition bare remove to require an explicit selector. Coordinate the Windows
   argument/default-remove and exclusion-help changes. Done when mocked tests
   prove refusal before mutation and preserve explicit set and saved recovery.
-  Fedora implementation and focused tests are recorded in
-  [Windows alignment](windows-alignment.md); the Windows counterpart remains open.
+  Fedora's core implementation and focused tests are recorded in
+  [Windows alignment](windows-alignment.md#align-03-setting-lifecycle-decision-2026-11-05).
+  Fedora still needs per-operation review of the remaining owned-file `absent`
+  states before closing its setting portion; the Windows counterpart remains
+  open.
 - [ ] **ALIGN-04:** Separate download eligibility from VM execution acceptance;
   unify target/identity preflight for all restore previews, including the iBus
   branch. Coordinate Windows flag-free candidate preview and installed-package
@@ -675,7 +678,7 @@ closure remains outstanding.
   risk-appropriate focused evidence; support still requires a passing VM on
   the exact declared target.
 - The Firefox add-on operation has an operable opt-in catalog lifecycle on Fedora 44 Workstation; it remains candidate-gated while H115 reviews publisher metadata, updates, and profile migration.
-- Three package/setting gaps remain in the generated [migration progress report](migrations/progress.md): VMFS6 access, Workstation ExpressVPN scheduled rotation, and Server VPN randomizer ownership and recovery. Close each with evidence or record an explicit owner-approved v3.0 deferral before freezing release scope.
+- The owner keeps Workstation ExpressVPN scheduled rotation and Server VPN rotation in v3.0 scope; implement and accept both on their declared targets. The VMFS6 reader installer may ship as an opt-in candidate, while genuine fixture-backed VMFS6 access testing is deferred to v3.1 under H118 and must not be claimed in v3.0. The generated [migration progress report](migrations/progress.md) still reflects the prior disposition until its source ledger is reconciled.
 - The supplementary [legacy source audit](legacy-source-audit.md) identifies helper libraries outside the 185-row outcome ledger. Record whether each group is reference-only, standalone, or in a later migration; do not infer migration from a matching product name.
 - Generic server actions remain in `network-devices` until source, consumers, ownership, and rollback are reconciled. No host-specific preset is moved into this repository.
 - Debian and Ubuntu adapters remain outside the supported target matrix until their own VM checks pass.
@@ -960,6 +963,21 @@ The v3 job passed shell syntax and ShellCheck, catalog and generated docs,
 package envelope is accepted on its declared Fedora targets; optional and
 unsupported outcomes remain scoped separately above. A v3 release tag has
 not been published and `master` remains the v2 release line.
+
+## ArtCraft Flatpak candidates
+
+The owner selected the official per-user [ArtCraft OCI Flatpak path](migrations/artcraft-flatpaks.md)
+for ArtCraft Launcher and the 13 Craft apps currently published as x86_64
+refs. All 14 are opt-in candidates for Fedora 44 and 45 Workstation. The
+legacy ArtCraft archive functions remain standalone reference utilities and
+do not become v3 installation operations. The publisher's OCI remote is an
+unsigned preview; RIDE records that trust limit and does not claim a signed
+source. Each target needs disposable-VM evidence that every selected app
+installs, launches without errors, and can be uninstalled before that target's
+package lifecycle is counted as accepted. ArtCraft Studio has no Linux
+installer in its current release. The [Fedora 44 Workstation VM run](acceptance/package.artcraft-oci.md)
+passed all 14 refs on 2026-11-05; Fedora 45 remains unaccepted pending a
+verified and pinned Workstation image.
 
 ## Former CERT forensic repository burndown
 

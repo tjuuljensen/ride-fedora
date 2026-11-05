@@ -26,8 +26,10 @@ Usage: ./ride.sh <command> [argument] [options]
 
 Options: --dry-run previews state-changing commands; --allow-candidate enables
 development-only operations without VM acceptance. System changes need sudo.
-unset uses only a catalog-declared unset state. Profile removal removes only
-reversible packages; settings remain in place. remove requires an ID or profile.
+set applies a declared state. unset removes a declared override or refuses;
+it never generically means disabled. restore recovers saved prior state.
+Profile removal removes only reversible packages; settings remain in place.
+remove requires an ID or profile.
 No command defaults to list. Profiles and catalog are JSON data, never shell.
 Package source selection is explicit; profiles may declare a source per package.
 Download does not install. Installing from a retained local artifact is pending.

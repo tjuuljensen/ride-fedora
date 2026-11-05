@@ -24,6 +24,12 @@ profile's desired states to live observations without changing the machine.
 acquisition. `status` reports live state; `restore --run-id` uses a saved
 journal and refuses to overwrite a state changed by something else.
 
+The [Linux image downloader](linux-image-downloads.md) is a separate utility for
+retaining complete publisher images. Its image manifest and rotation do not
+represent installed package state or run through the v3 operation catalog.
+The [VM image downloader](vm-image-downloads.md) shares the storage lifecycle
+for complete publisher appliances, including a manual SIFT import path.
+
 Every operation declares an ID, kind, handler, supported targets, available
 states, privilege, provenance, and verification method. Profiles contain IDs,
 desired states, and optional package source IDs. The engine validates targets

@@ -10,26 +10,29 @@ opt-in candidates, 10 replaced, 11 retired, 8 unsupported, and 3 unresolved.
 For package and setting capabilities, **150/169 have an operable v3.0 path**;
 10 are owner-retired, 6 have a functional replacement, and 3 remain gaps.
 The currently tested target matrix is Fedora 44 x86_64 by declared edition.
-Fedora Linux 45 was released on 2026-11-03, so v3.0 must make an explicit
-support-target decision before the scope is frozen: either add Fedora 45 for
-each claimed edition and rerun the applicable acceptance, or retain Fedora 44
-as the only supported release with a recorded reason and follow-up. The accepted
-default Workstation and server-base Server profiles remain small; Cloud Base
-acceptance covers package.exfatprogs only. Fedora 45 release status is confirmed
-by the [Fedora Linux 45 announcement](https://fedoramagazine.org/announcing-fedora-linux-45/).
+The owner selected Fedora 44 and Fedora 45 x86_64 for v3.0. Fedora Linux 45
+was released on 2026-11-03; its Workstation and Server targets still need
+pinned images and edition-specific acceptance before support can be claimed.
+The accepted default Workstation and server-base Server profiles remain small;
+Cloud Base acceptance covers package.exfatprogs only. Fedora 45 release status
+is confirmed by the [Fedora Linux 45 announcement](https://fedoramagazine.org/announcing-fedora-linux-45/).
+The owner selected local offline Fedora repository mirrors or DVD media,
+combined with downloaded install files, as the travel-work architecture.
+Whether offline acceptance and offline installation are part of the v3.0
+release promise remains undecided; do not claim that capability until scope,
+implementation, and acceptance are settled.
 
 ## Current v3.0 gaps
 
-Each gap needs a working, risk-appropriate v3 path or an explicit
-owner-approved disposition before the release scope is frozen. Do not count
-an implemented installer, similar product name, or candidate profile as proof
-of the source capability.
+Each in-scope gap needs a working, risk-appropriate v3 path before the release
+scope is frozen. An implemented installer, similar product name, or candidate
+profile does not prove the source capability.
 
 | Outcome | Remaining issue | Recommendation |
 | --- | --- | --- |
-| [workstation:package.VMFStools](MIGRATION-PLAN.md#full-scoped-v2-migration-program) | The experimental reader installer is available as an opt-in candidate for owner testing. No genuine VMFS6 fixture has been read; image access, read-only behavior, and unchanged digest are unverified. | The owner approved deferring H118 fixture testing to v3.1 while keeping the opt-in install candidate available. Keep actual VMFS6 access unverified; complete fixture-backed read-only lifecycle evidence under H118 before claiming it. |
-| workstation:package.ScheduleExpVPNChange | The old six-hour ExpressVPN rotation depends on mutable disconnect-first behavior. Current v14 location changes, safe connection replacement, and route/DNS recovery have not been verified on Workstation. | Do not recreate an unattended timer yet. Verify the current client and recovery on a disposable Workstation VM, or record an owner-approved retirement/deferral for v3.0. Keep manual rotation separate. |
-| server:setting.VPNRandomizerPersistent | Source consumers exist in network-devices, but deployed hosts, executor identity, crontab owner, publication path, and rollback are unverified. VPN recovery is also unverified on Server. | Reconcile runtime ownership with the network-devices owner before moving behavior. Then test an owned timer and network recovery on disposable Server, or explicitly defer it while leaving the authoritative source in place. |
+| [workstation:package.VMFStools](MIGRATION-PLAN.md#full-scoped-v2-migration-program) | The experimental reader installer is available as an opt-in candidate for owner testing. No genuine VMFS6 fixture has been read; image access, read-only behavior, and unchanged digest are unverified. | Owner decision: keep the installer as an opt-in v3.0 candidate and defer genuine VMFS6 fixture/access testing to v3.1 under H118. Do not claim VMFS6 image access in v3.0. |
+| workstation:package.ScheduleExpVPNChange | The old six-hour ExpressVPN rotation depends on mutable disconnect-first behavior. Current v14 location changes, safe connection replacement, and route/DNS recovery have not been verified on Workstation. | Owner decision: keep this outcome in v3 scope. Verify the current client, safe connection replacement, route/DNS behavior, and recovery on a disposable Workstation VM before implementation and support claims. |
+| server:setting.VPNRandomizerPersistent | Source consumers exist in network-devices, but deployed hosts, executor identity, crontab owner, publication path, and rollback are unverified. VPN recovery is also unverified on Server. | Owner decision: keep this outcome in v3 scope. Reconcile runtime ownership with the network-devices owner, then test the owned timer and VPN recovery on disposable Server. Do not move or replace the authoritative source until consumers and rollback are recorded. |
 
 The [v3.0 path reassessment](migrations/v30-path-reassessment.md) records why
 kept package and setting capabilities need a working path or an explicit
@@ -78,19 +81,16 @@ failure-matrix work remains in the v3.1 hardening queue.
 
 ## Recommended release sequence
 
-1. Resolve the remaining package/setting gaps above, or carry forward
-   explicit owner-approved deferrals. The VMFS6 reader install candidate may
-   remain opt-in for owner testing; VMFS6 image access stays unverified until
-   H118 passes in v3.1.
+1. Implement and accept Workstation ExpressVPN rotation and Server VPN
+   rotation. Keep the VMFS6 reader install candidate opt-in; VMFS6 image access
+   stays unverified until H118 passes in v3.1.
 2. Close ALIGN-03 through ALIGN-09 or document approved deferrals with owners,
    reasons, evidence, and review triggers.
 3. Confirm supplementary source groups are not advertised or executed as v3
    operations; add a checked inventory or explicit reference/standalone
    classification before freezing the scope.
-4. Resolve the Fedora 45 target decision above. If Fedora 45 is supported,
-   update the pinned image matrix and run acceptance for every claimed edition;
-   retain Fedora 44 regression coverage if it remains in the support matrix.
-   If support stays on Fedora 44, state why and record the Fedora 45 follow-up.
+4. Add Fedora 45 Workstation and Server to the pinned image matrix and run
+   acceptance for each claimed edition. Retain Fedora 44 regression coverage.
 5. Regenerate the progress, burndown, command, and operation references from
    their sources. Run the repository's required syntax, ShellCheck, schema,
    mocked, Firefox, executable-mode, and generated-documentation checks.
