@@ -494,6 +494,23 @@ ride_restore_entry() {
   fi
 }
 
+ride_restore_signature_matches() {
+  local id=$1 source=$2 signature=$3 version=$4 entry=$5 original=$6
+  [[ "$signature" == - || "$signature" == "$(ride_source_signature "$entry" "$version")" ]] && return 0
+  [[ "$id" == package.tmog && "$source" == tmog-publisher-appimage-pinned &&
+     "$version" == 2 &&
+     "$signature" == 8ca372bf3ad0402e022ade54114679a22ba195c8d8353c571aae73dab93266c3 &&
+     "$(jq -r '.handler' <<< "$entry")" == tmog-appimage ]] || return 1
+  jq -e --arg signature "$signature" '
+    [.steps[] | select(.id == "package.tmog" and
+      .sourceId == "tmog-publisher-appimage-pinned" and
+      .sourceSignature == $signature and .sourceSignatureVersion == 2 and
+      .deploymentId == "user-applications-appimage" and
+      .observedBefore == "absent" and .observedAfter == "installed" and
+      .result == "changed")] | length == 1
+  ' "$original" >/dev/null
+}
+
 ride_restore() {
   local original_id=$1 original id before after result source signature signature_version entry current recovery
   [[ -n "$original_id" ]] || ride_die "restore requires --run-id"
@@ -511,7 +528,7 @@ ride_restore() {
     if [[ "$RIDE_DRY_RUN" == 1 ]]; then
       ride_require_preview_identity "$entry"
     fi
-    [[ "$signature" == - || "$signature" == "$(ride_source_signature "$entry" "$signature_version")" ]] ||
+    ride_restore_signature_matches "$id" "$source" "$signature" "$signature_version" "$entry" "$original" ||
       ride_die "source definition changed since run for $id; exact recovery is unavailable"
     recovery=$(jq -r '.recovery' <<< "$entry")
     if [[ "$recovery" == none || ( "$recovery" == remove-new-install && ( "$before" != absent || "$after" != installed ) ) ]]; then

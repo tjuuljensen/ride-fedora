@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-tmog-runtime",
+  "description": "Opt-in Fedora squashfs-tools prerequisite for the TMOG user AppImage. Apply as a separate root-scoped profile before fedora-tmog.",
+  "operations": [
+    {
+      "id": "package.squashfs-tools",
+      "state": "installed"
+    }
+  ]
+}

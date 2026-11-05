@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "fedora-tmog",
+  "description": "Opt-in TMOG 1.1.1 x86_64 AppImage with an extracted local desktop launcher. TMOG settings and license data remain outside RIDE management.",
+  "operations": [
+    {
+      "id": "package.tmog",
+      "state": "installed"
+    }
+  ]
+}

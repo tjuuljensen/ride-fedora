@@ -23,6 +23,10 @@ sources of truth. This file is a short release checklist.
   groups in the [legacy source audit](docs/legacy-source-audit.md). Classify
   them as reference-only, standalone, or later migrations; do not port them
   one-for-one by default.
+- [ ] Decide whether any DFIR tools should enter v3.0 or explicitly defer the
+  unselected candidates. Follow the screening, source/license, lifecycle, and
+  Fedora 44 acceptance gates in the
+  [DFIR expansion backlog](docs/migrations/dfir-expansion-backlog.md).
 - [ ] Regenerate migration and CLI references, run the required local checks
   and CI, and recheck acceptance on the exact Fedora 44 targets in the final
   release source.

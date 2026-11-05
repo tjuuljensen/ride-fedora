@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contractVersion": "1.1.0",
-  "reviewedOn": "2026-11-03",
+  "reviewedOn": "2026-11-04",
   "reviewedSources": {
     "rideWindows": {
       "commit": "1871f7bcf0a9374351ffda2f8fc443c4a68cdcf5",
@@ -35,7 +35,7 @@
       }
     },
     "rideFedora": {
-      "commit": "1243f36cc27c4b9ef9569cb7f168bd79e1e92c8a",
+      "commit": "7659f9c9f7fbf2ddb3e6fd00eece2ad0171dd43d",
       "branch": "codex/ride-v3-migration",
       "workingTreeClean": false,
       "paths": [
@@ -52,17 +52,17 @@
         "README.md"
       ],
       "sha256": {
-        "ride.sh": "3365E3FD5C5A2EEB316E12D483D7CBC33AF971707701747CE2743F8EB118C5AA",
+        "ride.sh": "FA851E70A8ACA150354C52DB8CFDB54FA2176C1D5BAFBB899EB4F8B8C4984E31",
         "lib/v3/common.sh": "3205EA10B2E28F6D93CB3835C2EA4F8B071567F9EEC025B7A08C23F023944265",
-        "lib/v3/catalog.sh": "A621249DAC96D792A56C81064021C6856855A9F5E85FC18D8DBBBB33A0A6A7F4",
+        "lib/v3/catalog.sh": "3418F7CA84555E030C95532FEE1AD8F7FCC502A97DA674E4BBE00768570BBC93",
         "completion/ride.bash": "411F32F26BA3DD932C8968726EDD7F517E8A1F062AA8D0449EEB70F3FE97D15D",
         "docs/models/behavior-scenarios.json": "9353770486CFC7768F8D2DD4BF0DB646FFF894E591974F07409035DF7F2D3632",
         "tests/fixtures/behavior-scenario-fedora-adapter.json": "B02FB9CE3FF6B65BA0D52324C77119D37B83622EEBF2CD6776CAD31C36280260",
         "tests/test_v3_cli.py": "EBA08A614F89E10A72D0B999720C9F8E1DBEA01DF1F87E68AF09481127408F9A",
         "tests/test_v3_identity_preflight.py": "8C1EABD350EE7D206D0BFDB5C943AAA2652B3745FB8324F196BDEA3F22AD568F",
         "tests/test_behavior_scenarios.py": "F8C0F4788ECBD3E6CAE4A21750CBB9BEE87AA85282DDFC2825F3A33DA4D2586B",
-        "docs/windows-alignment.md": "CDCD5D2D41EFDB8AA65C0AEE77EB76059E3491FC3A4A0730BE4CE9FAE3A3E3B7",
-        "README.md": "A73C2167A4EA3746A8CF1C8A8EE3F7385BDD5B324445923D2F7029CA8CBF3BBF"
+        "docs/windows-alignment.md": "58F982E3D4263FDD3AAB403B321374DD14069559E177383A7723296D0AA3F607",
+        "README.md": "6D8C9B1550A519828F478E25238B42325D76F31C5836F0626D6C295937757F04"
       }
     }
   },
@@ -602,6 +602,10 @@
         {
           "windows": "catalog/operations.psd1; docs/fedora-alignment.md package batch reviews",
           "fedora": "catalog/operations.json; docs/windows-alignment.md reconciliation index and dated package batch reviews"
+        },
+        {
+          "windows": "catalog/operations.psd1 package.tmog Windows 1.0.1 installer candidate",
+          "fedora": "catalog/operations.json package.tmog Linux 1.1.1 AppImage supported on Fedora 44 Workstation x86_64; docs/acceptance/package.tmog.md"
         }
       ],
       "linkedWork": [

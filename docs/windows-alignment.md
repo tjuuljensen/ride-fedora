@@ -2433,3 +2433,32 @@ Review trigger: either client's selection/output/error semantics change, paired
 fixtures are added, or final v3 release review. Resolve or explicitly disposition
 this gap before promoting the affected capability. No legacy outcome, package
 status or migration estimate changes in this documentation run.
+
+## TMOG Linux AppImage, 2026-11-04
+
+Owner: RIDE Fedora maintainer. Compared canonical behavior contract 1.1.0
+(SHA-256 `b88967ea5bde29e0141bca15134e2dac63e02faf7931cb18e83ba08cf5262938`)
+and Windows `codex/ride-v3-migration` at
+`8d073bcc536d6e0e4df6b193f2ded7396dcaf79d` (catalog SHA-256
+`cfe9224f677fc10bc3eff24ffb6acd9578f851c775dbb66efc12ef7e9f7ae8be`).
+Both clients identify the logical product as `package.tmog`, keep it opt-in,
+preserve user settings and license data, and leave PRO activation to the user.
+Fedora is supported on Fedora 44 Workstation x86_64 after the disposable VM
+lifecycle and headless GUI startup checks; Windows remains a candidate pending
+native acceptance. Fedora uses the publisher's 1.1.1 x86_64 AppImage as a
+user-scoped portable deployment under `~/.local/opt/ride-fedora/tmog/1.1.1/`
+and an owned desktop entry for the extracted payload. Extraction avoids the
+observed FUSE mount failure and declares Fedora `package.squashfs-tools` as a
+separate root-scoped prerequisite. Windows has a
+1.0.1 x64 machine installer.
+Their version, installer, scope, destination, and recovery mechanisms are
+intentional native differences. Fedora's inverse removes a matching owned
+AppImage, extracted payload, desktop entry, and manifest; Windows' installer lifecycle remains pending native
+acceptance. Neither implementation claims cross-platform runtime parity.
+
+Review trigger: either client's TMOG version, edition, license handling,
+deployment identity, recovery semantics, or supported target changes, and
+before final v3 release. Fedora promotion used the disposable Workstation
+checks in [TMOG acceptance](acceptance/package.tmog.md); Windows promotion
+requires its own Windows 11 acceptance. The canonical contract and digest
+reference do not change for this native package addition.

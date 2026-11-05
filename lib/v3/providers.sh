@@ -51,6 +51,7 @@ ride_observe() {
     pinned-eza-binary) ride_observe_eza_portable "$entry" ;;
     pinned-appimage) ride_observe_bitwarden_appimage "$entry" ;;
     pinned-publisher-appimage) ride_observe_publisher_appimage "$entry" ;;
+    tmog-appimage) ride_observe_tmog_appimage "$entry" ;;
     pinned-email-header-spa) ride_observe_email_header_analyzer ;;
     pinned-yubico-tarball) ride_observe_yubico_authenticator "$entry" ;;
     pinned-volatility2-bundle) ride_observe_volatility2 "$entry" ;;
@@ -245,6 +246,10 @@ ride_change() {
       [[ "$(jq -r '.id' <<< "$entry")" == package.arduino-ide ||
          "$(jq -r '.id' <<< "$entry")" == package.joplin ]] || ride_die "unknown pinned publisher AppImage operation"
       ride_change_publisher_appimage "$entry" "$state"
+      ;;
+    tmog-appimage)
+      [[ "$(jq -r '.id' <<< "$entry")" == package.tmog ]] || ride_die "unknown TMOG AppImage operation"
+      ride_change_tmog_appimage "$entry" "$state"
       ;;
     pinned-email-header-spa)
       [[ "$(jq -r '.id' <<< "$entry")" == package.email-header-analyzer ]] || ride_die "unknown pinned email header analyzer operation"
@@ -3956,7 +3961,168 @@ ride_change_publisher_appimage() {
     absent)
       if [[ "$current" == installed ]]; then rm -- "$path"; rm -- "$manifest"; fi
       ;;
-    *) ride_die "invalid Arduino IDE AppImage state: $state" ;;
+    *) ride_die "invalid publisher AppImage state: $state" ;;
+  esac
+}
+
+ride_tmog_appimage_path() {
+  printf '%s\n' "$HOME/.local/opt/ride-fedora/tmog/1.1.1/TaskManagerOG-1.1.1-x86_64.AppImage"
+}
+
+ride_tmog_appimage_appdir() {
+  printf '%s\n' "$HOME/.local/opt/ride-fedora/tmog/1.1.1/appdir"
+}
+
+ride_tmog_appimage_desktop() {
+  printf '%s\n' "$HOME/.local/share/applications/com.tmog.taskmanager.desktop"
+}
+
+ride_tmog_appimage_manifest() {
+  printf '%s\n' "$HOME/.local/share/ride-fedora/owned-tools/package.tmog.json"
+}
+
+ride_tmog_appimage_desktop_content() {
+  printf '[Desktop Entry]\nType=Application\nName=Task Manager TMOG\nComment=Native system monitor and task manager\nExec="%s/AppRun"\nIcon=%s/usr/share/icons/hicolor/256x256/apps/tmog-task-manager.png\nTerminal=false\nCategories=System;Monitor;\n' "$1" "$1"
+}
+
+ride_tmog_appimage_tree_sha256() {
+  tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner \
+    -cf - -C "$1" . | sha256sum | cut -d' ' -f1
+}
+
+ride_observe_tmog_appimage() {
+  local entry=$1 path appdir desktop manifest expected_sha version value parent tree_sha
+  path=$(ride_tmog_appimage_path)
+  appdir=$(ride_tmog_appimage_appdir)
+  desktop=$(ride_tmog_appimage_desktop)
+  manifest=$(ride_tmog_appimage_manifest)
+  expected_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  version=$(jq -r '.version' <<< "$entry")
+  for parent in "$HOME" "$HOME/.local" "$HOME/.local/opt" "$HOME/.local/opt/ride-fedora" \
+    "$HOME/.local/opt/ride-fedora/tmog" "$(dirname "$path")" "$HOME/.local/share" \
+    "$(dirname "$desktop")" "$HOME/.local/share/ride-fedora" "$(dirname "$manifest")"; do
+    [[ ! -L "$parent" ]] || { printf 'unowned\n'; return; }
+  done
+  if [[ ! -e "$path" && ! -L "$path" && ! -e "$appdir" && ! -L "$appdir" &&
+        ! -e "$desktop" && ! -L "$desktop" &&
+        ! -e "$manifest" && ! -L "$manifest" ]]; then
+    printf 'absent\n'; return
+  fi
+  [[ -f "$path" && ! -L "$path" && -x "$path" &&
+     -d "$appdir" && ! -L "$appdir" && -f "$appdir/AppRun" &&
+     ! -L "$appdir/AppRun" && -x "$appdir/AppRun" &&
+     -f "$appdir/usr/share/icons/hicolor/256x256/apps/tmog-task-manager.png" &&
+     ! -L "$appdir/usr/share/icons/hicolor/256x256/apps/tmog-task-manager.png" &&
+     -f "$desktop" && ! -L "$desktop" &&
+     -f "$manifest" && ! -L "$manifest" &&
+     "$(stat -c '%u:%a:%h' -- "$path")" == "$(id -u):755:1" &&
+     "$(stat -c '%u:%a:%h' -- "$desktop")" == "$(id -u):644:1" &&
+     "$(stat -c '%u:%g:%a:%h' -- "$manifest")" == "$(id -u):$(id -g):600:1" ]] || {
+    printf 'unowned\n'; return
+  }
+  [[ -z "$(find "$appdir" -xdev ! -user "$(id -u)" -print -quit)" ]] || {
+    printf 'unowned\n'; return
+  }
+  tree_sha=$(ride_tmog_appimage_tree_sha256 "$appdir") || return 1
+  value=$(jq -r '.id + " " + .version + " " + .sha256 + " " + .destination + " " + .appDir + " " + .treeSha256 + " " + .desktop + " " + .launchMode' -- "$manifest") || return 1
+  if [[ "$(sha256sum -- "$path" | cut -d' ' -f1)" == "$expected_sha" &&
+        "$value" == "package.tmog $version $expected_sha $path $appdir $tree_sha $desktop extracted-appdir" ]] &&
+     cmp -s <(ride_tmog_appimage_desktop_content "$appdir") "$desktop"; then
+    printf 'installed\n'
+  else
+    printf 'unowned\n'
+  fi
+}
+
+ride_change_tmog_appimage() {
+  local entry=$1 state=$2 path appdir desktop manifest current source expected_sha temporary desktop_temp manifest_temp parent tree_sha
+  path=$(ride_tmog_appimage_path)
+  appdir=$(ride_tmog_appimage_appdir)
+  desktop=$(ride_tmog_appimage_desktop)
+  manifest=$(ride_tmog_appimage_manifest)
+  source=$(jq -r '.sourceUri' <<< "$entry")
+  expected_sha=$(jq -r '.sourceSha256' <<< "$entry")
+  current=$(ride_observe_tmog_appimage "$entry") || ride_die "cannot inspect TMOG AppImage"
+  [[ "$current" != unowned ]] || ride_die "TMOG files are modified or not RIDE-owned"
+  [[ ! ( "$state" == installed && "$current" == installed ) &&
+     ! ( "$state" == absent && "$current" == absent ) ]] || return 0
+  case "$state" in
+    installed)
+      ride_require_command curl; ride_require_command sha256sum
+      ride_require_command unsquashfs; ride_require_command tar
+      for parent in "$HOME" "$HOME/.local" "$HOME/.local/opt" "$HOME/.local/opt/ride-fedora" \
+        "$HOME/.local/opt/ride-fedora/tmog" "$(dirname "$path")" "$HOME/.local/share" \
+        "$(dirname "$desktop")" "$HOME/.local/share/ride-fedora" "$(dirname "$manifest")"; do
+        [[ ! -L "$parent" ]] || ride_die "TMOG destination parent is a symlink: $parent"
+      done
+      [[ ! -e "$path" && ! -L "$path" && ! -e "$appdir" && ! -L "$appdir" &&
+         ! -e "$desktop" && ! -L "$desktop" &&
+         ! -e "$manifest" && ! -L "$manifest" ]] || ride_die "TMOG destination already exists; refusing to overwrite"
+      temporary=$(mktemp -d "${TMPDIR:-/tmp}/ride-tmog.XXXXXXXX") || return 1
+      if ! curl --proto '=https' --tlsv1.2 -fsSL --max-time 300 --max-filesize 240000000 \
+          "$source" -o "$temporary/tmog.AppImage"; then
+        rm -rf -- "$temporary"; return 1
+      fi
+      if [[ "$(sha256sum -- "$temporary/tmog.AppImage" | cut -d' ' -f1)" != "$expected_sha" ||
+            "$(head -c4 -- "$temporary/tmog.AppImage")" != $'\177ELF' ]]; then
+        rm -rf -- "$temporary"
+        ride_error "TMOG AppImage digest or executable format verification failed"
+        return 1
+      fi
+      # SquashFS starts at this offset in the pinned, SHA-256-verified TMOG 1.1.1 image.
+      if ! unsquashfs -no-progress -d "$temporary/appdir" -o 944632 \
+          "$temporary/tmog.AppImage" >/dev/null ||
+         [[ ! -f "$temporary/appdir/AppRun" || ! -x "$temporary/appdir/AppRun" ||
+            ! -f "$temporary/appdir/usr/share/icons/hicolor/256x256/apps/tmog-task-manager.png" ]]; then
+        rm -rf -- "$temporary"
+        ride_error "TMOG AppImage payload extraction failed"
+        return 1
+      fi
+      tree_sha=$(ride_tmog_appimage_tree_sha256 "$temporary/appdir") || {
+        rm -rf -- "$temporary"; return 1
+      }
+      chmod 0755 "$temporary/tmog.AppImage"
+      mkdir -p -- "$(dirname "$path")" "$(dirname "$desktop")" "$(dirname "$manifest")" || {
+        rm -rf -- "$temporary"; return 1
+      }
+      for parent in "$(dirname "$path")" "$(dirname "$desktop")" "$(dirname "$manifest")"; do
+        [[ ! -L "$parent" ]] || { rm -rf -- "$temporary"; ride_die "TMOG destination parent changed to a symlink"; }
+      done
+      [[ ! -e "$path" && ! -L "$path" && ! -e "$appdir" && ! -L "$appdir" &&
+         ! -e "$desktop" && ! -L "$desktop" &&
+         ! -e "$manifest" && ! -L "$manifest" ]] || {
+        rm -rf -- "$temporary"; ride_die "TMOG destination changed during install"
+      }
+      mv -T -- "$temporary/tmog.AppImage" "$path" || { rm -rf -- "$temporary"; return 1; }
+      mv -T -- "$temporary/appdir" "$appdir" || { rm -- "$path"; rm -rf -- "$temporary"; return 1; }
+      rm -rf -- "$temporary"
+      desktop_temp=$(mktemp "$(dirname "$desktop")/.com.tmog.taskmanager.XXXXXXXX") || {
+        rm -rf -- "$appdir"; rm -- "$path"; return 1
+      }
+      if ! ride_tmog_appimage_desktop_content "$appdir" > "$desktop_temp" ||
+         ! chmod 0644 "$desktop_temp" || ! mv -T -- "$desktop_temp" "$desktop"; then
+        rm -f -- "$desktop_temp" "$path"; rm -rf -- "$appdir"; return 1
+      fi
+      manifest_temp=$(mktemp "$(dirname "$manifest")/.package.tmog.XXXXXXXX") || {
+        rm -- "$desktop" "$path"; rm -rf -- "$appdir"; return 1
+      }
+      if ! jq -nc --arg version "$(jq -r '.version' <<< "$entry")" --arg sha256 "$expected_sha" \
+          --arg destination "$path" --arg appDir "$appdir" --arg treeSha256 "$tree_sha" \
+          --arg desktop "$desktop" \
+          '{schemaVersion:1,id:"package.tmog",version:$version,sha256:$sha256,destination:$destination,appDir:$appDir,treeSha256:$treeSha256,desktop:$desktop,launchMode:"extracted-appdir"}' > "$manifest_temp" ||
+         ! chmod 0600 "$manifest_temp" || ! mv -T -- "$manifest_temp" "$manifest"; then
+        rm -f -- "$manifest_temp" "$desktop" "$path"; rm -rf -- "$appdir"; return 1
+      fi
+      ;;
+    absent)
+      if [[ "$current" == installed ]]; then
+        rm -- "$desktop"
+        rm -rf -- "$appdir"
+        rm -- "$path"
+        rm -- "$manifest"
+      fi
+      ;;
+    *) ride_die "invalid TMOG AppImage state: $state" ;;
   esac
 }
 

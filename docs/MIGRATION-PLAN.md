@@ -89,6 +89,15 @@ from outcomes the owner excluded as obsolete or host-specific.
 | `PressAnyKeyToContinue` | retired | Interaction belongs in CLI flow, not an operation. |
 | `Restart` | retired | Reboot remains an explicit separate user action. |
 
+## New v3 package outside the v2 outcome ledger
+
+`package.tmog` is a [supported opt-in Fedora 44 Workstation x86_64 AppImage
+package](migrations/tmog-appimage.md). The pinned publisher download and
+extracted desktop launcher passed [disposable VM acceptance](acceptance/package.tmog.md)
+after `package.squashfs-tools` was added as a separate root-scoped prerequisite.
+The supported-state VM rerun passed without candidate flags. This new v3
+package does not close a v2 migration row.
+
 ## V3 release envelope and target matrix
 
 The initial v3 release envelope is the small, data-only Linux client and its

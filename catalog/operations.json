@@ -10483,6 +10483,37 @@
       "acceptanceEvidence": "docs/acceptance/package.sslsplit.md"
     },
     {
+      "id": "package.squashfs-tools",
+      "kind": "package",
+      "name": "SquashFS extraction tools",
+      "group": "desktop-apps",
+      "description": "Install Fedora squashfs-tools as the separate system prerequisite for the user-scoped TMOG AppImage extraction; RIDE does not mount or modify other images.",
+      "handler": "dnf-package",
+      "packageName": "squashfs-tools",
+      "states": ["installed", "absent"],
+      "scope": "system",
+      "status": "supported",
+      "targets": {
+        "fedora": {
+          "releases": ["44"],
+          "architectures": ["x86_64"],
+          "variantIds": ["workstation"]
+        }
+      },
+      "productId": "squashfs-tools",
+      "productUri": "https://github.com/plougher/squashfs-tools",
+      "license": "GPL-2.0-or-later",
+      "licenseUri": "https://packages.fedoraproject.org/pkgs/squashfs-tools/squashfs-tools/",
+      "sourceUri": "https://packages.fedoraproject.org/pkgs/squashfs-tools/squashfs-tools/",
+      "verification": "fedora-repository-gpg",
+      "recovery": "remove-new-install",
+      "sourceId": "fedora-rpm",
+      "distribution": "installed",
+      "deploymentId": "local-installed",
+      "artifactFormat": "rpm",
+      "acceptanceEvidence": "docs/acceptance/package.squashfs-tools.md"
+    },
+    {
       "id": "package.strace",
       "kind": "package",
       "name": "strace system call tracer",
@@ -11154,6 +11185,49 @@
       "distribution": "installed",
       "deploymentId": "local-installed",
       "artifactFormat": "rpm"
+    },
+    {
+      "id": "package.tmog",
+      "kind": "package",
+      "name": "Task Manager TMOG",
+      "group": "desktop-apps",
+      "description": "Install the pinned TMOG 1.1.1 x86_64 AppImage and extract its payload for a FUSE-free RIDE-owned desktop launcher. RIDE does not activate PRO, store license keys, select a screensaver, or remove TMOG settings and license data.",
+      "handler": "tmog-appimage",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "supported",
+      "recovery": "remove-new-install",
+      "dependencies": ["package.squashfs-tools"],
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "tmog",
+      "productUri": "https://tmog.org/",
+      "license": "Proprietary; free features with optional individually licensed PRO features",
+      "licenseUri": "https://tmog.org/pro-info.html#commercial-product-license",
+      "sourceUri": "https://tmog.org/downloads/TaskManagerOG-1.1.1-x86_64.AppImage",
+      "sourceSha256": "12a1f2ed60c28b0749a13eeaec4696f241a425fb6715d9e7747807ce62d3b139",
+      "verification": "publisher-web-published-sha256",
+      "sourceId": "tmog-publisher-appimage-pinned",
+      "distribution": "portable",
+      "deploymentId": "user-local-opt",
+      "artifactFormat": "AppImage",
+      "version": "1.1.1",
+      "assetName": "TaskManagerOG-1.1.1-x86_64.AppImage",
+      "acceptanceEvidence": "docs/acceptance/package.tmog.md"
     },
     {
       "id": "package.tripwire",

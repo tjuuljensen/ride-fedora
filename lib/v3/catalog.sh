@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "smartmontools-package", "clamav-initial-signatures", "systemd-service", "plex-server-service", "glances-web-service", "sshd-root-login", "ssh-reboot-sudoers", "keyfile-mounts", "github-asset", "python-venv", "rust-source-build", "vmfs6-source-build", "pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-appimage", "pinned-publisher-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "ferium-portable", "minecraft-server-jar", "pinned-rpm", "amp-pinned-rpm", "veracrypt-signed-rpm", "publisher-repo-rpm", "snap-store-package", "pinned-snap-package", "expressvpn-wrapper", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "dnf5-fast-tuning", "system-hostname", "wireguard-keypair", "networkmanager-vpn-profiles", "flatpak-remote", "flatpak-app", "rpmfusion-repositories", "dnf-package-set-update", "dnf5-system-update", "docker-engine", "user-directories", "firefox-preferences", "firefox-extensions", "nsswitch-mdns", "dnf5-automatic")) and
+      (.handler | IN("dnf-package", "smartmontools-package", "clamav-initial-signatures", "systemd-service", "plex-server-service", "glances-web-service", "sshd-root-login", "ssh-reboot-sudoers", "keyfile-mounts", "github-asset", "python-venv", "rust-source-build", "vmfs6-source-build", "pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-appimage", "pinned-publisher-appimage", "tmog-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "ferium-portable", "minecraft-server-jar", "pinned-rpm", "amp-pinned-rpm", "veracrypt-signed-rpm", "publisher-repo-rpm", "snap-store-package", "pinned-snap-package", "expressvpn-wrapper", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "dnf5-fast-tuning", "system-hostname", "wireguard-keypair", "networkmanager-vpn-profiles", "flatpak-remote", "flatpak-app", "rpmfusion-repositories", "dnf-package-set-update", "dnf5-system-update", "docker-engine", "user-directories", "firefox-preferences", "firefox-extensions", "nsswitch-mdns", "dnf5-automatic")) and
       (.scope | IN("system", "user")) and
       (.status | IN("blocked", "candidate", "supported")) and
       (.status != "blocked" or (.handler | IN("firefox-extensions", "networkmanager-vpn-profiles", "keyfile-mounts"))) and
@@ -40,7 +40,7 @@ ride_validate_catalog() {
       (.sourceUri | type == "string" and startswith("https://")) and
       (.licenseUri | type == "string" and startswith("https://")) and
       (if .kind == "package" then
-        ((.distribution == "installed") or ((.handler | IN("pinned-appimage", "pinned-publisher-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "networkminer-portable", "vmfs6-source-build")) and .distribution == "portable")) and
+        ((.distribution == "installed") or ((.handler | IN("pinned-appimage", "pinned-publisher-appimage", "tmog-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "networkminer-portable", "vmfs6-source-build")) and .distribution == "portable")) and
         (.deploymentId | IN("local-installed", "system-flatpak", "user-local-bin", "user-applications-appimage", "user-local-opt")) and
         (.artifactFormat | IN("rpm", "wheel", "script", "zip", "sdist", "flatpak-ref", "tar.gz", "AppImage", "snap", "jar", "deb", "source-tree", "run")) and
         (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
@@ -314,19 +314,31 @@ ride_validate_catalog() {
        elif .handler == "pinned-publisher-appimage" then (.kind == "package" and (.id | IN("package.arduino-ide", "package.joplin")) and
          .scope == "user" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
          .distribution == "portable" and .deploymentId == "user-applications-appimage" and .artifactFormat == "AppImage" and
-         .sourceId == "github-release-pinned" and .verification == "github-release-api-sha256" and
          (if .id == "package.arduino-ide" then .version == "2.3.10" and
+           .sourceId == "github-release-pinned" and .verification == "github-release-api-sha256" and
            .assetName == "arduino-ide_2.3.10_Linux_64bit.AppImage" and
            .sourceUri == "https://github.com/arduino/arduino-ide/releases/download/2.3.10/arduino-ide_2.3.10_Linux_64bit.AppImage" and
            .sourceSha256 == "79c8590a1744c220d72cbed0ea91c6e2a7f4594292699b2fb3364ebd713cd566" and
            .license == "AGPL-3.0-or-later (distribution includes separately licensed components)" and
            .licenseUri == "https://raw.githubusercontent.com/arduino/arduino-ide/2.3.10/LICENSE.txt"
-          else .version == "3.7.22" and .assetName == "Joplin-3.7.22.AppImage" and
+          else .version == "3.7.22" and
+           .sourceId == "github-release-pinned" and .verification == "github-release-api-sha256" and
+           .assetName == "Joplin-3.7.22.AppImage" and
            .sourceUri == "https://github.com/laurent22/joplin/releases/download/v3.7.22/Joplin-3.7.22.AppImage" and
            .sourceSha256 == "2b0b1ee82999f00883d21d950c2fb5dff28ccc3d2f570248b3abd40e5100dfdc" and
            .license == "AGPL-3.0-or-later (distribution includes separately licensed components)" and
            .licenseUri == "https://github.com/laurent22/joplin/tree/v3.7.22"
           end))
+       elif .handler == "tmog-appimage" then (.kind == "package" and .id == "package.tmog" and
+         .scope == "user" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
+         .dependencies == ["package.squashfs-tools"] and
+         .distribution == "portable" and .deploymentId == "user-local-opt" and .artifactFormat == "AppImage" and
+         .version == "1.1.1" and .assetName == "TaskManagerOG-1.1.1-x86_64.AppImage" and
+         .sourceId == "tmog-publisher-appimage-pinned" and .verification == "publisher-web-published-sha256" and
+         .sourceUri == "https://tmog.org/downloads/TaskManagerOG-1.1.1-x86_64.AppImage" and
+         .sourceSha256 == "12a1f2ed60c28b0749a13eeaec4696f241a425fb6715d9e7747807ce62d3b139" and
+         .license == "Proprietary; free features with optional individually licensed PRO features" and
+         .licenseUri == "https://tmog.org/pro-info.html#commercial-product-license")
        elif .handler == "pinned-email-header-spa" then (.kind == "package" and .id == "package.email-header-analyzer" and
          .scope == "user" and .states == ["installed", "absent"] and .recovery == "remove-new-install" and
          .status == "candidate" and .distribution == "portable" and .deploymentId == "user-local-opt" and
@@ -627,7 +639,7 @@ ride_source_signature() {
        elif (.handler | IN("rust-source-build", "vmfs6-source-build")) then
          {id, distribution, deploymentId, sourceId, handler, artifactFormat, scope, sourceUri,
           sourceSha256, version, license, licenseUri, verification, targets, recovery, dependencies}
-       elif (.handler | IN("pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-publisher-appimage")) or .id == "package.chepy" then
+       elif (.handler | IN("pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-publisher-appimage", "tmog-appimage")) or .id == "package.chepy" then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat, serviceName,
           scope, sourceUri, sourceSha256, sourceManifestUri, manifestSha256, licenseUri, licenseSha256,
           version, assetName, verification, targets, recovery, dependencies}

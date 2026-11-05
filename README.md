@@ -68,6 +68,9 @@ of the shell bootstrap.
   recommendations.
 - [Migration plan](docs/MIGRATION-PLAN.md) and [generated progress](docs/migrations/progress.md):
   scoped v2 outcomes, current status, and next actions.
+- [DFIR software expansion backlog](docs/migrations/dfir-expansion-backlog.md):
+  Linux-labelled research-pack entries screened against the current catalog;
+  candidates remain unselected until reviewed and accepted.
 - [Supplementary legacy source audit](docs/legacy-source-audit.md): older
   libraries and scripts not covered by the main outcome ledger.
 - [Windows alignment](docs/windows-alignment.md): shared behavior decisions
