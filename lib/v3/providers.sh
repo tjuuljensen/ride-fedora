@@ -109,6 +109,8 @@ ride_observe() {
     expressvpn-wrapper) ride_expressvpn_observe ;;
     flatpak-remote) ride_flathub_remote_state ;;
     flatpak-app) ride_flatpak_app_state "$entry" ;;
+    artcraft-oci-remote) ride_artcraft_remote_state ;;
+    artcraft-oci-app) ride_artcraft_app_state "$entry" ;;
     rpmfusion-repositories) ride_rpmfusion_state ;;
     dnf-package-set-update) ride_dnf5_package_set_update_observe "$entry" ;;
     dnf5-system-update) ride_dnf5_system_update_observe ;;
@@ -309,6 +311,8 @@ ride_change() {
       ;;
     flatpak-remote) ride_flathub_change "$state" ;;
     flatpak-app) ride_flatpak_app_change "$entry" "$state" ;;
+    artcraft-oci-remote) ride_artcraft_remote_change "$state" ;;
+    artcraft-oci-app) ride_artcraft_app_change "$entry" "$state" ;;
     rpmfusion-repositories) ride_rpmfusion_change "$state" ;;
     dnf-package-set-update) ride_dnf5_package_set_update_change "$entry" "$state" ;;
     dnf5-system-update) ride_dnf5_system_update_change "$state" ;;
@@ -2251,7 +2255,7 @@ ride_gnome_lock_timing_observe() {
     value=$(dconf read "$path") || ride_die "cannot observe GNOME lock timing override: $path"
     snapshot=$(jq -c --arg key "$key" --arg value "$value" '. + {($key):$value}' <<< "$snapshot") || return 1
   done < <(ride_gnome_lock_timing_paths "$entry")
-  if [[ -z "$(jq -r '[.[] | select(length > 0)] | length' <<< "$snapshot")" ]]; then
+  if jq -e 'all(.[]; . == "")' <<< "$snapshot" >/dev/null; then
     printf 'absent\n'
   else
     printf 'prior:%s\n' "$(printf '%s' "$snapshot" | base64 -w0)"

@@ -3,6 +3,566 @@
   "clientVersion": "3.0.0",
   "operations": [
     {
+      "id": "package.artcraft-launcher",
+      "kind": "package",
+      "name": "ArtCraft Launcher",
+      "group": "artcraft",
+      "description": "Install the ArtCraft Launcher per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.artcraft-launcher",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "artcraft-launcher",
+      "productUri": "https://github.com/storytold/craft-launcher",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/craft-launcher/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.photocraft",
+      "kind": "package",
+      "name": "PhotoCraft",
+      "group": "artcraft",
+      "description": "Install the PhotoCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.photocraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "photocraft",
+      "productUri": "https://github.com/storytold/photocraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/photocraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.vectorcraft",
+      "kind": "package",
+      "name": "VectorCraft",
+      "group": "artcraft",
+      "description": "Install the VectorCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.vectorcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "vectorcraft",
+      "productUri": "https://github.com/storytold/vectorcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/vectorcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.filmcraft",
+      "kind": "package",
+      "name": "FilmCraft",
+      "group": "artcraft",
+      "description": "Install the FilmCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.filmcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "filmcraft",
+      "productUri": "https://github.com/storytold/filmcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/filmcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.lightcraft",
+      "kind": "package",
+      "name": "LightCraft",
+      "group": "artcraft",
+      "description": "Install the LightCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.lightcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "lightcraft",
+      "productUri": "https://github.com/storytold/lightcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/lightcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.pdfcraft",
+      "kind": "package",
+      "name": "PdfCraft",
+      "group": "artcraft",
+      "description": "Install the PdfCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.pdfcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "pdfcraft",
+      "productUri": "https://github.com/storytold/pdfcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/pdfcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.effectcraft",
+      "kind": "package",
+      "name": "EffectCraft",
+      "group": "artcraft",
+      "description": "Install the EffectCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.effectcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "effectcraft",
+      "productUri": "https://github.com/storytold/effectcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/effectcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.designcraft",
+      "kind": "package",
+      "name": "DesignCraft",
+      "group": "artcraft",
+      "description": "Install the DesignCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.designcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "designcraft",
+      "productUri": "https://github.com/storytold/designcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/designcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.figcraft",
+      "kind": "package",
+      "name": "FigCraft",
+      "group": "artcraft",
+      "description": "Install the FigCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.figcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "figcraft",
+      "productUri": "https://github.com/storytold/figcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/figcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.wordcraft",
+      "kind": "package",
+      "name": "WordCraft",
+      "group": "artcraft",
+      "description": "Install the WordCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.wordcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "wordcraft",
+      "productUri": "https://github.com/storytold/wordcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/wordcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.soundcraft",
+      "kind": "package",
+      "name": "SoundCraft",
+      "group": "artcraft",
+      "description": "Install the SoundCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.soundcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "soundcraft",
+      "productUri": "https://github.com/storytold/soundcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/soundcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.deckcraft",
+      "kind": "package",
+      "name": "DeckCraft",
+      "group": "artcraft",
+      "description": "Install the DeckCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.deckcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "deckcraft",
+      "productUri": "https://github.com/storytold/deckcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/deckcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.cadcraft",
+      "kind": "package",
+      "name": "CADCraft",
+      "group": "artcraft",
+      "description": "Install the CADCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.cadcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "cadcraft",
+      "productUri": "https://github.com/storytold/cadcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/cadcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
+      "id": "package.gridcraft",
+      "kind": "package",
+      "name": "GridCraft",
+      "group": "artcraft",
+      "description": "Install the GridCraft per-user Flatpak from the official ArtCraft OCI preview remote. User project and configuration data remain outside RIDE removal.",
+      "handler": "artcraft-oci-app",
+      "applicationId": "ai.storyteller.gridcraft",
+      "states": [
+        "installed",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "gridcraft",
+      "productUri": "https://github.com/storytold/gridcraft",
+      "license": "MIT OR Apache-2.0 for code; bundled assets and branding have separate terms",
+      "licenseUri": "https://github.com/storytold/gridcraft/blob/main/LICENSE-APACHE",
+      "sourceUri": "https://getartcraft.com/linux",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "remove-new-install",
+      "sourceId": "artcraft-oci-user-flatpak",
+      "distribution": "installed",
+      "deploymentId": "user-flatpak",
+      "artifactFormat": "flatpak-ref"
+    },
+    {
       "id": "package.expressvpn",
       "kind": "package",
       "name": "ExpressVPN Linux app",
@@ -12880,6 +13440,7 @@
         "configured",
         "absent"
       ],
+      "unsetState": "absent",
       "scope": "system",
       "status": "candidate",
       "targets": {
@@ -12903,6 +13464,42 @@
       "verification": "local-owned-chrome-policy",
       "recovery": "exact-state",
       "acceptanceEvidence": "docs/acceptance/setting.chrome-preferences.md"
+    },
+    {
+      "id": "setting.artcraft-oci-user-remote",
+      "kind": "setting",
+      "name": "ArtCraft OCI user remote",
+      "group": "artcraft",
+      "description": "Configure the official per-user ArtCraft OCI Flatpak preview remote. The publisher currently disables GPG verification for this remote.",
+      "handler": "artcraft-oci-remote",
+      "states": [
+        "configured",
+        "absent"
+      ],
+      "scope": "user",
+      "status": "candidate",
+      "targets": {
+        "fedora": {
+          "releases": [
+            "44",
+            "45"
+          ],
+          "architectures": [
+            "x86_64"
+          ],
+          "variantIds": [
+            "workstation"
+          ]
+        }
+      },
+      "productId": "artcraft-oci-user-remote",
+      "productUri": "https://getartcraft.com/linux",
+      "license": "Not applicable (repository configuration)",
+      "licenseUri": "https://getartcraft.com/linux",
+      "sourceUri": "https://getartcraft.com/artcraft-oci.flatpakrepo",
+      "verification": "publisher-oci-unsigned-preview",
+      "recovery": "exact-state",
+      "unsetState": "absent"
     },
     {
       "id": "setting.flathub-system-remote",
@@ -13124,6 +13721,7 @@
         "configured",
         "absent"
       ],
+      "unsetState": "absent",
       "valueKind": "screensaver-lock-timing",
       "scope": "user",
       "status": "supported",

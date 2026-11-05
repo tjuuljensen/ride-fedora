@@ -169,6 +169,19 @@ class CompletionTests(unittest.TestCase):
         self.assertEqual(set(result.stdout.splitlines()),
                          {":minimize,maximize,close", ":appmenu:close", "close,minimize,maximize:"})
 
+    def test_unset_completes_only_declared_setting_overrides(self):
+        script = ('source "$RIDE_ROOT/completion/ride.bash"; '
+                  'COMP_WORDS=(./ride.sh unset ""); COMP_CWORD=2; _ride_complete; '
+                  'printf "%s\\n" "${COMPREPLY[@]}"')
+        env = os.environ | {"RIDE_ROOT": str(ROOT)}
+        result = subprocess.run(["bash", "-c", script], env=env, text=True,
+                                capture_output=True, check=True)
+        choices = set(result.stdout.splitlines())
+        self.assertIn("setting.gnome-lock-timing", choices)
+        self.assertIn("setting.gnome-region", choices)
+        self.assertNotIn("setting.gnome-clock-date", choices)
+        self.assertNotIn("package.exfatprogs", choices)
+
     def test_status_completes_dynamic_value_option_without_enumerating_users(self):
         script = ('source "$RIDE_ROOT/completion/ride.bash"; '
                   'COMP_WORDS=(./ride.sh status setting.ssh-reboot --); COMP_CWORD=3; '

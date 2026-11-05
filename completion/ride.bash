@@ -98,7 +98,14 @@ _ride_complete() {
         mapfile -t words < <(jq -r '.operations[].id' "$catalog")
         COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
       fi ;;
-    install|unset|download|remove)
+    unset)
+      if [[ "$current" == --* ]]; then
+        COMPREPLY=($(compgen -W '--allow-candidate --dry-run' -- "$current"))
+      else
+        mapfile -t words < <(jq -r '.operations[] | select(.kind == "setting" and .unsetState != null) | .id' "$catalog")
+        COMPREPLY=($(compgen -W "${words[*]}" -- "$current"))
+      fi ;;
+    install|download|remove)
       mapfile -t words < <(jq -r '.operations[].id' "$catalog")
       COMPREPLY=($(compgen -W "${words[*]}" -- "$current")) ;;
     list)

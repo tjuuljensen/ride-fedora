@@ -87,6 +87,22 @@ printf 'STATE=%s\\nOVERRIDES=%s\\n' "$GNOME_STATE" "$GNOME_OVERRIDES"
         self.assertEqual(state, initial)
         self.assertEqual(overrides, initial)
 
+    def test_absent_resets_all_overrides_and_restores_prior_snapshot(self):
+        initial = {"idle-delay": "uint32 720", "idle-activation-enabled": "false",
+                   "lock-enabled": "false", "lock-delay": "uint32 40"}
+        entry = {"id": "setting.gnome-lock-timing"}
+        result = self.run_provider(
+            'before=$(ride_gnome_lock_timing_observe "$ENTRY")\n'
+            '[[ "$before" == prior:* ]]\n'
+            'ride_gnome_lock_timing_change "$ENTRY" absent\n'
+            '[[ "$(ride_gnome_lock_timing_observe "$ENTRY")" == absent ]]\n'
+            'ride_gnome_lock_timing_change "$ENTRY" "$before"\n'
+            '[[ "$(ride_gnome_lock_timing_observe "$ENTRY")" == "$before" ]]',
+            entry=entry, state=initial, overrides=initial)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        overrides = json.loads(result.stdout.split("OVERRIDES=", 1)[1].splitlines()[0])
+        self.assertEqual(overrides, initial)
+
     def test_legacy_enabled_and_disabled_states_preserve_lock_delay(self):
         initial = {"idle-delay": "uint32 720", "idle-activation-enabled": "false",
                    "lock-enabled": "false", "lock-delay": "uint32 40"}

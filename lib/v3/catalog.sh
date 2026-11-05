@@ -16,7 +16,7 @@ ride_validate_catalog() {
       (.id | type == "string" and test("^(package|setting|artifact|system)\\.[a-z0-9.-]+$")) and
       (.kind | IN("package", "setting", "artifact", "system")) and
       (.name | type == "string" and length > 0) and
-      (.handler | IN("dnf-package", "smartmontools-package", "clamav-initial-signatures", "systemd-service", "plex-server-service", "glances-web-service", "sshd-root-login", "ssh-reboot-sudoers", "keyfile-mounts", "github-asset", "python-venv", "rust-source-build", "vmfs6-source-build", "pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-appimage", "pinned-publisher-appimage", "tmog-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "ferium-portable", "minecraft-server-jar", "pinned-rpm", "amp-pinned-rpm", "veracrypt-signed-rpm", "publisher-repo-rpm", "snap-store-package", "pinned-snap-package", "expressvpn-wrapper", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "dnf5-fast-tuning", "system-hostname", "wireguard-keypair", "networkmanager-vpn-profiles", "flatpak-remote", "flatpak-app", "rpmfusion-repositories", "dnf-package-set-update", "dnf5-system-update", "docker-engine", "user-directories", "firefox-preferences", "firefox-extensions", "nsswitch-mdns", "dnf5-automatic")) and
+      (.handler | IN("dnf-package", "smartmontools-package", "clamav-initial-signatures", "systemd-service", "plex-server-service", "glances-web-service", "sshd-root-login", "ssh-reboot-sudoers", "keyfile-mounts", "github-asset", "python-venv", "rust-source-build", "vmfs6-source-build", "pinned-script", "pinned-woeusb-script", "pinned-zip", "networkminer-portable", "pinned-binary", "pinned-eza-binary", "pinned-appimage", "pinned-publisher-appimage", "tmog-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "ferium-portable", "minecraft-server-jar", "pinned-rpm", "amp-pinned-rpm", "veracrypt-signed-rpm", "publisher-repo-rpm", "snap-store-package", "pinned-snap-package", "expressvpn-wrapper", "gsettings-boolean", "ibus-emoji-hotkey", "gsettings-string", "gnome-lock-timing", "gnome-custom-shortcuts", "bash-aliases", "chrome-preferences", "upower-threshold", "dnf5-fast-tuning", "system-hostname", "wireguard-keypair", "networkmanager-vpn-profiles", "flatpak-remote", "flatpak-app", "artcraft-oci-remote", "artcraft-oci-app", "rpmfusion-repositories", "dnf-package-set-update", "dnf5-system-update", "docker-engine", "user-directories", "firefox-preferences", "firefox-extensions", "nsswitch-mdns", "dnf5-automatic")) and
       (.scope | IN("system", "user")) and
       (.status | IN("blocked", "candidate", "supported")) and
       (.status != "blocked" or (.handler | IN("firefox-extensions", "networkmanager-vpn-profiles", "keyfile-mounts"))) and
@@ -41,7 +41,7 @@ ride_validate_catalog() {
       (.licenseUri | type == "string" and startswith("https://")) and
       (if .kind == "package" then
         ((.distribution == "installed") or ((.handler | IN("pinned-appimage", "pinned-publisher-appimage", "tmog-appimage", "pinned-email-header-spa", "pinned-yubico-tarball", "pinned-volatility2-bundle", "pinned-deb-binary", "networkminer-portable", "vmfs6-source-build")) and .distribution == "portable")) and
-        (.deploymentId | IN("local-installed", "system-flatpak", "user-local-bin", "user-applications-appimage", "user-local-opt")) and
+        (.deploymentId | IN("local-installed", "system-flatpak", "user-flatpak", "user-local-bin", "user-applications-appimage", "user-local-opt")) and
         (.artifactFormat | IN("rpm", "wheel", "script", "zip", "sdist", "flatpak-ref", "tar.gz", "AppImage", "snap", "jar", "deb", "source-tree", "run")) and
         (.sourceId | type == "string" and test("^[a-z0-9-]+$")) and
         (.sourceId as $defaultSource | (.sourceProviders // []) | type == "array" and
@@ -200,6 +200,26 @@ ride_validate_catalog() {
        elif .handler == "flatpak-remote" then (.kind == "setting" and .scope == "system" and
          .id == "setting.flathub-system-remote" and .states == ["configured", "absent"] and
          .recovery == "exact-state" and .verification == "local-flatpak-remote")
+       elif .handler == "artcraft-oci-remote" then (.kind == "setting" and .scope == "user" and
+         .id == "setting.artcraft-oci-user-remote" and .states == ["configured", "absent"] and
+         .status == "candidate" and .recovery == "exact-state" and
+         .sourceUri == "https://getartcraft.com/artcraft-oci.flatpakrepo" and
+         .targets == {"fedora":{"releases":["44","45"],"architectures":["x86_64"],"variantIds":["workstation"]}} and
+         .verification == "publisher-oci-unsigned-preview")
+       elif .handler == "artcraft-oci-app" then (.kind == "package" and .scope == "user" and
+         (.id | IN("package.artcraft-launcher", "package.photocraft", "package.vectorcraft",
+                   "package.filmcraft", "package.lightcraft", "package.pdfcraft",
+                   "package.effectcraft", "package.designcraft", "package.figcraft",
+                   "package.wordcraft", "package.soundcraft", "package.deckcraft",
+                   "package.cadcraft", "package.gridcraft")) and
+         .applicationId == ("ai.storyteller." + (.id | sub("^package\\."; ""))) and
+         .status == "candidate" and .states == ["installed", "absent"] and
+         .recovery == "remove-new-install" and .distribution == "installed" and
+         .deploymentId == "user-flatpak" and .artifactFormat == "flatpak-ref" and
+         .sourceUri == "https://getartcraft.com/linux" and
+         .targets == {"fedora":{"releases":["44","45"],"architectures":["x86_64"],"variantIds":["workstation"]}} and
+         .sourceId == "artcraft-oci-user-flatpak" and
+         .verification == "publisher-oci-unsigned-preview")
        elif .handler == "flatpak-app" then (.kind == "package" and
          ((.id == "package.halloy" and .applicationId == "org.squidowl.halloy") or
           (.id == "package.gearlever" and .applicationId == "it.mijorus.gearlever") or
@@ -671,7 +691,7 @@ ride_source_signature() {
        elif .handler == "clamav-initial-signatures" then
          {id, distribution, deploymentId, sourceId, handler, packageName, artifactFormat,
           scope, sourceUri, verification, targets, recovery}
-       elif .handler == "flatpak-app" then
+       elif (.handler | IN("flatpak-app", "artcraft-oci-app")) then
          {id, distribution, deploymentId, sourceId, handler, applicationId, artifactFormat,
           scope, sourceUri, verification, targets, recovery}
        elif .handler == "dnf-package-set-update" then

@@ -12,6 +12,8 @@ DROPIN = "/etc/ssh/sshd_config.d/00-ride-root-login.conf"
 
 def fixtures(vm):
     catalog = json.loads((ROOT / "catalog/operations.json").read_text(encoding="utf-8"))
+    operation = next(item for item in catalog["operations"] if item["id"] == OPERATION)
+    operation["unsetState"] = "absent"
     profile = {
         "schemaVersion": 1,
         "id": "sshd-root-login-acceptance",
@@ -52,6 +54,22 @@ def test_sshd_root_login_policy_reload_and_exact_restore(vm):
     repeated = vm.ride("apply", "--profile", profile, "--allow-candidate", catalog=catalog)
     assert "unchanged" in repeated.stdout
     assert OPERATION in vm.ride("status", OPERATION, catalog=catalog).stdout
+
+    unset = vm.ride("unset", OPERATION, "--allow-candidate", catalog=catalog)
+    unset_run_id = unset.stdout.split("Run ID: ", 1)[1].splitlines()[0]
+    vm.run("sudo test ! -e " + DROPIN)
+    vm.run("sudo sshd -t")
+    assert effective_root_policy(vm) == prior_policy
+    vm.run("systemctl is-active sshd.service | grep -Fx active")
+    vm.run("id -un | grep -Fx ride-test")
+
+    repeated_unset = vm.ride("unset", OPERATION, "--allow-candidate", catalog=catalog)
+    assert "unchanged" in repeated_unset.stdout
+    vm.ride("restore", "--run-id", unset_run_id, "--allow-candidate", catalog=catalog)
+    vm.run(f"sudo grep -Fx 'PermitRootLogin no' {DROPIN}")
+    assert effective_root_policy(vm) == "no"
+    vm.run("sudo sshd -t")
+    vm.run("id -un | grep -Fx ride-test")
 
     vm.ride("restore", "--run-id", run_id, "--allow-candidate", catalog=catalog)
     vm.run("sudo test ! -e " + DROPIN)

@@ -89,15 +89,22 @@ references, not a fallback execution path.
   files must have Git mode `100755`; run `tools/check-shell-executable.sh`
   after adding or moving them. Do not treat sourced Bash modules as portable
   `/bin/sh` programs.
-- New or materially changed entry-point scripts need current English headers
-  for purpose, behavior, compatibility, usage, inputs, side effects,
-  prerequisites, ownership, provenance, and version. Keep help and version
-  output synchronized with the code. Tightly coupled `lib/v3/` modules share
-  the client release version; historical v2 files are migration evidence.
+- Every maintained script, including standalone download tools and sourced
+  modules, needs a current structured English header with spaced, labeled
+  blocks for Purpose, Behavior, Compatibility, Usage, Inputs / environment,
+  Outputs / side effects,
+  Prerequisites, Author, Based on (when adapted), Version, and Changelog.
+  Update the header with behavior changes; keep CLI help and `--version`
+  synchronized with the code. Tightly coupled `lib/v3/` modules share the
+  client release version; historical v2 files are migration evidence and do
+  not need template-only header edits.
 - Keep `README.md` concise. Put detailed procedures and repository-specific
   rules under `docs/`; use relative links and Linux shell syntax. State the
   starting directory, user or root scope, side effects, validation, and
-  recovery for copy-ready commands. Regenerate `docs/COMMANDS.md`,
+  recovery for copy-ready commands. Document each maintained standalone tool
+  with its selections or inputs, source and verification limits, output
+  ownership, and a safe cleanup procedure. Keep that documentation aligned
+  with script behavior. Regenerate `docs/COMMANDS.md`,
   `docs/OPERATIONS.md`, and the burndown from their sources rather than editing
   generated files directly.
 - Distinguish source readiness, publication, VM activation, and verified

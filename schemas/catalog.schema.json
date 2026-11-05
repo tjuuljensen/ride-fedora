@@ -216,6 +216,8 @@
             "networkmanager-vpn-profiles",
             "flatpak-remote",
             "flatpak-app",
+            "artcraft-oci-remote",
+            "artcraft-oci-app",
             "rpmfusion-repositories",
             "dnf-package-set-update",
             "dnf5-system-update",
@@ -242,6 +244,7 @@
           "enum": [
             "local-installed",
             "system-flatpak",
+            "user-flatpak",
             "user-local-bin",
             "user-applications-appimage",
             "user-local-opt"
@@ -548,6 +551,7 @@
             "crypttab-fstab-explicit-mapper-recovery",
             "local-flatpak-remote",
             "flathub-system-gpg",
+            "publisher-oci-unsigned-preview",
             "fedora-rpmfusion-signatures-and-owned-state",
             "dnf5-scoped-package-updates",
             "dnf5-system-update-report",
@@ -970,6 +974,48 @@
               "verification": {
                 "const": "flathub-system-gpg"
               }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"handler": {"const": "artcraft-oci-remote"}}},
+          "then": {
+            "properties": {
+              "id": {"const": "setting.artcraft-oci-user-remote"},
+              "kind": {"const": "setting"},
+              "scope": {"const": "user"},
+              "states": {"const": ["configured", "absent"]},
+              "status": {"const": "candidate"},
+              "recovery": {"const": "exact-state"},
+              "sourceUri": {"const": "https://getartcraft.com/artcraft-oci.flatpakrepo"},
+              "targets": {"const": {"fedora": {"releases": ["44", "45"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}},
+              "verification": {"const": "publisher-oci-unsigned-preview"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"handler": {"const": "artcraft-oci-app"}}},
+          "then": {
+            "required": ["applicationId"],
+            "properties": {
+              "id": {"enum": ["package.artcraft-launcher", "package.photocraft", "package.vectorcraft",
+                             "package.filmcraft", "package.lightcraft", "package.pdfcraft",
+                             "package.effectcraft", "package.designcraft", "package.figcraft",
+                             "package.wordcraft", "package.soundcraft", "package.deckcraft",
+                             "package.cadcraft", "package.gridcraft"]},
+              "kind": {"const": "package"},
+              "scope": {"const": "user"},
+              "distribution": {"const": "installed"},
+              "deploymentId": {"const": "user-flatpak"},
+              "artifactFormat": {"const": "flatpak-ref"},
+              "sourceId": {"const": "artcraft-oci-user-flatpak"},
+              "applicationId": {"pattern": "^ai\\.storyteller\\.[a-z-]+$"},
+              "states": {"const": ["installed", "absent"]},
+              "status": {"const": "candidate"},
+              "recovery": {"const": "remove-new-install"},
+              "sourceUri": {"const": "https://getartcraft.com/linux"},
+              "targets": {"const": {"fedora": {"releases": ["44", "45"], "architectures": ["x86_64"], "variantIds": ["workstation"]}}},
+              "verification": {"const": "publisher-oci-unsigned-preview"}
             }
           }
         },

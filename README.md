@@ -8,12 +8,14 @@ fallback execution path.
 
 ## Supported scope
 
-The supported baseline is Fedora 44 x86_64: the `default` profile on
+The accepted baseline is Fedora 44 x86_64: the `default` profile on
 Workstation and `server-base` on Server. `package.exfatprogs` is also accepted
-on Cloud Base. Other catalog entries are opt-in candidates, require an exact
+on Cloud Base. Fedora 45 Workstation and Server are selected as v3.0 release
+targets, pending image pinning and target-specific acceptance. Until that
+acceptance passes, catalog entries do not gain Fedora 45 support by this
+decision alone. Other catalog entries are opt-in candidates, require an exact
 declared target, and need `--allow-candidate` for a state-changing command.
-Debian, Ubuntu, other Fedora releases, and other architectures are not in the
-current support matrix.
+Debian, Ubuntu, and other architectures are not in the current release scope.
 
 ## Use the development client
 
@@ -39,6 +41,62 @@ Use `./ride.sh --help` for current syntax. Candidate operations stay blocked
 unless explicitly selected with `--allow-candidate`. Run journals are private
 JSON files; `restore` only handles operations with a declared inverse and
 cannot promise the previous version of a package removed by RIDE.
+
+## Read-only catalog reports
+
+Run these from the repository root with `jq` installed. They read the source
+catalog and do not apply changes. The first shows every operation declared as
+a candidate for Fedora 44 or 45, including its declared edition and
+architecture. Candidate status still requires target acceptance before it
+can be claimed as supported.
+
+```bash
+jq -r '
+  .operations[]
+  | select(.status == "candidate")
+  | . as $op
+  | ($op.targets // {} | to_entries[])
+  | select(.key == "fedora")
+  | select(any(.value.releases[]?; . == "44" or . == "45"))
+  | [$op.id, $op.kind, $op.group, $op.status, .key,
+     (.value.releases | join(",")),
+     (.value.variantIds // ["any"] | join(",")),
+     (.value.architectures | join(","))]
+  | @tsv
+' catalog/operations.json
+```
+
+List catalog entries that declare no target at all:
+
+```bash
+jq -r '
+  .operations[]
+  | select((.targets // {}) == {})
+  | [.id, .kind, .status, .name]
+  | @tsv
+' catalog/operations.json
+```
+
+List all entries that do not declare a particular target. Set the variables
+for the release and edition being reviewed; this example reports operations
+without Fedora 45 Workstation x86_64 support:
+
+```bash
+release=45
+variant=workstation
+architecture=x86_64
+jq -r --arg release "$release" --arg variant "$variant" \
+  --arg architecture "$architecture" '
+  .operations[]
+  | . as $op
+  | ($op.targets.fedora // {}) as $fedora
+  | select((($fedora.releases // []) | index($release)) == null
+      or (($fedora.variantIds // []) | index($variant)) == null
+      or (($fedora.architectures // []) | index($architecture)) == null)
+  | [$op.id, $op.kind, $op.status, $op.name]
+  | @tsv
+' catalog/operations.json
+```
 
 Load Bash completion in the current shell with:
 
@@ -66,6 +124,8 @@ of the shell bootstrap.
 
 - [v3.0 release review](docs/release-v3.0-review.md): current gaps and release
   recommendations.
+- [v3.0 release travel plan](docs/runbooks/v3-release-travel-plan.md): offline
+  preparation, ordered acceptance burndown, and legacy-source review queue.
 - [Migration plan](docs/MIGRATION-PLAN.md) and [generated progress](docs/migrations/progress.md):
   scoped v2 outcomes, current status, and next actions.
 - [DFIR software expansion backlog](docs/migrations/dfir-expansion-backlog.md):
@@ -79,8 +139,11 @@ of the shell bootstrap.
   target setup, evidence, and recovery limits.
 - [Generated CLI reference](docs/COMMANDS.md) and
   [generated operation reference](docs/OPERATIONS.md).
-- [ArtCraft download utility](docs/artcraft-downloads.md), a separate archive
-  tool that is not part of the v3 operation catalog.
+- [Linux image downloader](docs/linux-image-downloads.md) and
+  [VM image downloader](docs/vm-image-downloads.md): standalone verified media
+  downloads with local manifests and rotation.
+- [ArtCraft Flatpak candidates](docs/migrations/artcraft-flatpaks.md) and the
+  separate [archive download utility](docs/artcraft-downloads.md).
 - [Legacy v2 notes](legacy/v2/README.md).
 
 The key local checks are listed in

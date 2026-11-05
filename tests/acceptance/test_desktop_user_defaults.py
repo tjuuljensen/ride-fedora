@@ -100,3 +100,47 @@ def test_vm_shortcut_and_favorite_profiles_exactly_restore(vm):
         ride(vm, "restore", "--run-id", run_id, "--allow-candidate")
         for (schema, key), value in lock_values.items():
             assert gsettings(vm, "get", schema, key) == value
+
+
+@pytest.mark.vm_target("fedora-44-workstation-x86_64")
+def test_gnome_lock_unset_resets_overrides_and_restores_prior_values(vm):
+    vm.run("sudo dnf -y install dbus-daemon", timeout=900)
+    vm.run("command -v dbus-run-session && command -v gsettings && command -v dconf")
+    values = {
+        ("org.gnome.desktop.session", "idle-delay", "/org/gnome/desktop/session/idle-delay"): "uint32 720",
+        ("org.gnome.desktop.screensaver", "idle-activation-enabled", "/org/gnome/desktop/screensaver/idle-activation-enabled"): "false",
+        ("org.gnome.desktop.screensaver", "lock-enabled", "/org/gnome/desktop/screensaver/lock-enabled"): "false",
+        ("org.gnome.desktop.screensaver", "lock-delay", "/org/gnome/desktop/screensaver/lock-delay"): "uint32 40",
+    }
+    for (schema, key, path), value in values.items():
+        gsettings(vm, "set", schema, key, value)
+        actual = vm.run("dbus-run-session -- " + shlex.join(["dconf", "read", path])).stdout.strip()
+        assert actual == value
+
+    changed = ride(vm, "unset", "setting.gnome-lock-timing")
+    run_id = re.search(r"Run ID: (\S+)", changed.stdout).group(1)
+    assert "absent" in ride(vm, "status", "setting.gnome-lock-timing").stdout
+    for _, _, path in values:
+        actual = vm.run("dbus-run-session -- " + shlex.join(["dconf", "read", path])).stdout.strip()
+        assert actual == ""
+    repeated = ride(vm, "unset", "setting.gnome-lock-timing")
+    assert "unchanged setting.gnome-lock-timing" in repeated.stdout
+
+    ride(vm, "restore", "--run-id", run_id, "--dry-run")
+    ride(vm, "restore", "--run-id", run_id)
+    for (schema, key, path), value in values.items():
+        assert gsettings(vm, "get", schema, key) == value
+        actual = vm.run("dbus-run-session -- " + shlex.join(["dconf", "read", path])).stdout.strip()
+        assert actual == value
+
+    explicit = ride(vm, "set", "setting.gnome-lock-timing", "--state", "absent")
+    explicit_run_id = re.search(r"Run ID: (\S+)", explicit.stdout).group(1)
+    assert "absent" in ride(vm, "status", "setting.gnome-lock-timing").stdout
+    for _, _, path in values:
+        actual = vm.run("dbus-run-session -- " + shlex.join(["dconf", "read", path])).stdout.strip()
+        assert actual == ""
+    ride(vm, "restore", "--run-id", explicit_run_id)
+    for (schema, key, path), value in values.items():
+        assert gsettings(vm, "get", schema, key) == value
+        actual = vm.run("dbus-run-session -- " + shlex.join(["dconf", "read", path])).stdout.strip()
+        assert actual == value

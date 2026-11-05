@@ -200,3 +200,176 @@ ride_flatpak_halloy_entry() {
 ride_flatpak_halloy_state() { ride_flatpak_app_state "$(ride_flatpak_halloy_entry)"; }
 ride_flatpak_halloy_preflight() { ride_flatpak_app_preflight "$(ride_flatpak_halloy_entry)" "$1"; }
 ride_flatpak_halloy_change() { ride_flatpak_app_change "$(ride_flatpak_halloy_entry)" "$1"; }
+
+ride_artcraft_remote_name() { printf 'artcraft-oci\n'; }
+ride_artcraft_remote_url() { printf 'oci+https://getartcraft.com\n'; }
+ride_artcraft_remote_file() { printf 'https://getartcraft.com/artcraft-oci.flatpakrepo\n'; }
+ride_artcraft_marker_dir() { printf '%s/ride-fedora/owned-remotes\n' "${XDG_DATA_HOME:-$HOME/.local/share}"; }
+ride_artcraft_marker() { printf '%s/artcraft-oci.json\n' "$(ride_artcraft_marker_dir)"; }
+ride_artcraft_marker_content() {
+  printf '{"schemaVersion":1,"installation":"user","name":"artcraft-oci","url":"oci+https://getartcraft.com","gpgVerify":false}\n'
+}
+
+ride_artcraft_remote_json() { flatpak remotes --user --columns=name,url,options --json; }
+ride_artcraft_apps_json() { flatpak list --user --columns=application,origin --json; }
+
+ride_artcraft_marker_valid() {
+  local marker dir
+  marker=$(ride_artcraft_marker)
+  dir=$(ride_artcraft_marker_dir)
+  [[ -d "$dir" && ! -L "$dir" && -f "$marker" && ! -L "$marker" ]] &&
+    [[ "$(stat -c '%u:%a' -- "$dir")" == "$EUID:700" ]] &&
+    [[ "$(stat -c '%u:%a:%h' -- "$marker")" == "$EUID:600:1" ]] &&
+    cmp -s -- "$marker" <(ride_artcraft_marker_content)
+}
+
+ride_artcraft_remote_present() {
+  local remotes
+  remotes=$(ride_artcraft_remote_json) || return 2
+  [[ -n "$remotes" ]] || remotes='[]'
+  jq -e '
+    [.[] | select(.name == "artcraft-oci")] as $rows |
+    ($rows | length) == 1 and
+    ($rows[0].url == "oci+https://getartcraft.com" or
+     $rows[0].url == "oci+https://getartcraft.com/")
+  ' <<< "$remotes" >/dev/null
+}
+
+ride_artcraft_runtime_remote_valid() {
+  local remotes
+  remotes=$(ride_artcraft_remote_json) || return 1
+  [[ -n "$remotes" ]] || remotes='[]'
+  jq -e '
+    [.[] | select(.name == "flathub")] as $rows |
+    ($rows | length) == 1 and
+    $rows[0].url == "https://dl.flathub.org/repo/" and
+    (($rows[0].options // "") | contains("no-gpg-verify") | not)
+  ' <<< "$remotes" >/dev/null
+}
+
+ride_artcraft_remote_state() {
+  local remotes count marker
+  remotes=$(ride_artcraft_remote_json) || return 1
+  [[ -n "$remotes" ]] || remotes='[]'
+  count=$(jq '[.[] | select(.name == "artcraft-oci")] | length' <<< "$remotes") || return 1
+  marker=$(ride_artcraft_marker)
+  if [[ "$count" == 0 ]]; then
+    if [[ ! -e "$marker" && ! -L "$marker" ]]; then printf 'absent\n'; else printf 'unowned\n'; fi
+  elif [[ "$count" == 1 ]] && ride_artcraft_remote_present && ride_artcraft_marker_valid; then
+    printf 'configured\n'
+  else
+    printf 'unowned\n'
+  fi
+}
+
+ride_artcraft_remote_has_apps() {
+  local apps
+  apps=$(ride_artcraft_apps_json) || return 2
+  [[ -n "$apps" ]] || apps='[]'
+  jq -e 'any(.[]; .origin == "artcraft-oci")' <<< "$apps" >/dev/null
+}
+
+ride_artcraft_remote_preflight() {
+  local desired=$1 current marker_dir
+  ride_require_command flatpak
+  current=$(ride_artcraft_remote_state) || ride_die "cannot inspect user ArtCraft Flatpak remote"
+  [[ "$current" == absent || "$current" == configured ]] ||
+    ride_die "ArtCraft Flatpak remote exists without RIDE ownership"
+  if [[ "$desired" == absent && "$current" == configured ]]; then
+    if ride_artcraft_remote_has_apps; then
+      ride_die "cannot remove ArtCraft remote while user apps use it"
+    else
+      local app_status=$?
+      [[ "$app_status" == 1 ]] || ride_die "cannot inspect user Flatpak applications"
+    fi
+  fi
+  marker_dir=$(ride_artcraft_marker_dir)
+  if [[ -e "$marker_dir" || -L "$marker_dir" ]]; then
+    [[ -d "$marker_dir" && ! -L "$marker_dir" &&
+       "$(stat -c '%u:%a' -- "$marker_dir")" == "$EUID:700" ]] ||
+      ride_die "RIDE user Flatpak marker directory is not private and owned"
+  fi
+}
+
+ride_artcraft_remote_rollback() {
+  if ride_artcraft_remote_has_apps; then
+    ride_error "ArtCraft remote rollback refused because applications use it"
+    return 1
+  else
+    local app_status=$?
+    [[ "$app_status" == 1 ]] || { ride_error "cannot inspect apps during ArtCraft remote rollback"; return 1; }
+  fi
+  flatpak remote-delete --user artcraft-oci || ride_error "ArtCraft remote rollback failed"
+}
+
+ride_artcraft_remote_change() {
+  local desired=$1 current dir marker temp
+  [[ "$desired" == configured || "$desired" == absent ]] || ride_die "invalid ArtCraft remote state"
+  ride_artcraft_remote_preflight "$desired"
+  current=$(ride_artcraft_remote_state) || return 1
+  [[ "$current" != "$desired" ]] || return 0
+  marker=$(ride_artcraft_marker)
+  if [[ "$desired" == configured ]]; then
+    flatpak remote-add --user artcraft-oci "$(ride_artcraft_remote_file)" || return 1
+    dir=$(ride_artcraft_marker_dir)
+    if [[ ! -d "$dir" ]] && ! install -d -m 0700 -- "$dir"; then
+      ride_artcraft_remote_rollback
+      return 1
+    fi
+    temp=$(mktemp "$dir/.artcraft-oci.XXXXXXXX") || {
+      ride_artcraft_remote_rollback
+      return 1
+    }
+    if ! ride_artcraft_marker_content > "$temp" || ! chmod 0600 -- "$temp" ||
+       ! mv -T -- "$temp" "$marker"; then
+      rm -f -- "$temp"
+      ride_artcraft_remote_rollback
+      return 1
+    fi
+    if [[ "$(ride_artcraft_remote_state)" != configured ]]; then
+      rm -f -- "$marker"
+      ride_artcraft_remote_rollback
+      ride_die "ArtCraft remote verification failed"
+    fi
+  else
+    flatpak remote-delete --user artcraft-oci || return 1
+    rm -f -- "$marker"
+  fi
+}
+
+ride_artcraft_app_state() {
+  local entry=$1 app_id apps rows count origin
+  app_id=$(jq -r '.applicationId' <<< "$entry")
+  apps=$(ride_artcraft_apps_json) || return 1
+  [[ -n "$apps" ]] || apps='[]'
+  rows=$(jq --arg id "$app_id" '[.[] | select((.application_id // .application) == $id)]' <<< "$apps") || return 1
+  count=$(jq 'length' <<< "$rows") || return 1
+  if [[ "$count" == 0 ]]; then printf 'absent\n'; return; fi
+  [[ "$count" == 1 ]] || { printf 'unowned\n'; return; }
+  origin=$(jq -r '.[0].origin // ""' <<< "$rows") || return 1
+  [[ "$origin" == artcraft-oci ]] || { printf 'unowned\n'; return; }
+  printf 'installed\n'
+}
+
+ride_artcraft_app_preflight() {
+  local entry=$1 desired=$2 current
+  ride_require_command flatpak
+  current=$(ride_artcraft_app_state "$entry") || ride_die "cannot inspect user ArtCraft application"
+  [[ "$current" != unowned ]] || ride_die "ArtCraft application has an unexpected Flatpak origin"
+  if [[ "$desired" == installed && "$current" == absent ]]; then
+    ride_artcraft_remote_present || ride_die "the official ArtCraft user OCI remote is required"
+    ride_artcraft_runtime_remote_valid ||
+      ride_die "a GPG-verified user Flathub remote is required for ArtCraft runtimes"
+  fi
+}
+
+ride_artcraft_app_change() {
+  local entry=$1 desired=$2 app_id
+  app_id=$(jq -r '.applicationId' <<< "$entry")
+  ride_artcraft_app_preflight "$entry" "$desired"
+  case "$desired" in
+    installed) flatpak install --user --noninteractive artcraft-oci "$app_id" ;;
+    absent) flatpak uninstall --user --noninteractive "$app_id" ;;
+    *) ride_die "invalid ArtCraft application state" ;;
+  esac
+}
