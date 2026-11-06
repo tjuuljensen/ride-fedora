@@ -68,6 +68,12 @@ does not preserve a last-good generation or roll back a failed update. The offic
 [DNF5 reposync reference](https://dnf5.readthedocs.io/en/stable/dnf5_plugins/reposync.8.html)
 documents the underlying behavior.
 
+The `--destination` value is the mirror root. The tool adds
+`/<releasever>/<arch>/<repo>` beneath it. For example, use
+`--destination /srv/fedora-mirror` to put Fedora 45 under
+`/srv/fedora-mirror/45/x86_64`. Do not add `45` to the destination unless you
+intend to create `/srv/fedora-mirror/45/45/x86_64`.
+
 ## Prepare a mirror for a Fedora release upgrade
 
 Before upgrading a host from Fedora 44 to Fedora 45, prepare a separate Fedora
@@ -91,6 +97,30 @@ sudo ./tools/manage-fedora-mirror.sh sync --releasever 45 --arch x86_64 \
 ./tools/manage-fedora-mirror.sh verify --releasever 45 --arch x86_64 \
   --destination /srv/fedora-mirror
 ```
+
+On a Fedora 44 staging machine, the Fedora 45 key file can be installed but
+not yet imported into the RPM keyring. DNF5 reposync's `--gpgcheck` checks
+downloaded RPMs against that keyring; its failure removes RPMs it cannot
+verify. Before syncing Fedora 45, check the key file's fingerprint against
+[Fedora's published package signing keys](https://fedoraproject.org/security/).
+For Fedora 45 x86_64 the fingerprint is
+`4F50 A611 4CD5 C697 6A7F 1179 655A 4B02 F577 861E`:
+
+```bash
+gpg --show-keys --fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-45-x86_64
+sudo rpmkeys --import /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-45-x86_64
+rpmkeys --list | grep -i 4f50a6114cd5c6976a7f1179655a4b02f577861e
+```
+
+Run these from the repository root on the online staging machine. Check the
+fingerprint before the import; the import adds Fedora 45 as a system-wide RPM
+trust key and does not change repository configuration or install software.
+The mirror tool now checks for the target Fedora key before syncing `fedora`
+or `updates` and reports a missing key before any RPM download. If you do not
+want the staging machine to trust Fedora 45, use a separate staging machine
+whose RPM keyring already contains the verified key. If a previous sync
+failed, rerun it after the import and verify the completed mirror. Do not use
+`gpgcheck=0` to work around the missing key.
 
 Do not overwrite the previous release's mirror during a distro upgrade. Keep
 the old mirror until the upgraded systems have been validated and no longer

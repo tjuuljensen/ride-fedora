@@ -1,22 +1,33 @@
 #!/usr/bin/env bash
 # Purpose: Create, update, inspect, and verify local Fedora DNF repository mirrors.
-# Behavior: Uses DNF5 reposync with metadata and RPM signature checks; sync updates
-#           the selected release/architecture tree in place and never prunes RPMs.
+#
+# Behavior: Uses DNF5 reposync with metadata and RPM signature checks. Before
+#           syncing Fedora repositories, checks that the target key is in RPM's
+#           keyring. Sync does not prune RPMs omitted from upstream metadata.
+#
 # Compatibility: Bash 4+, Fedora systems with DNF5; not a POSIX sh script.
+#
 # Usage: tools/manage-fedora-mirror.sh {list|plan|sync|verify} [options]
-# Inputs: Fedora release, architecture, destination path, and selected repository IDs.
-# Side effects: sync downloads repository data and writes a TSV sync manifest;
-#               list, plan, and verify are read-only.
-# Prerequisites: Bash, DNF5, dnf5-plugins; coreutils (df, du, mkdir, find, date).
-# Ownership: Standalone repository utility; it does not modify RIDE operations,
-#            system DNF configuration, or repository enablement.
-# Provenance: Fedora DNF5 reposync and repository metadata, verified with --gpgcheck.
-# Version: 1.0.0
+#
+# Inputs / environment: Fedora release, architecture, destination path, and
+#                       selected repository IDs; host Fedora keys and RPM keyring.
+#
+# Outputs / side effects: sync downloads repository data and writes a TSV sync
+#                         manifest; list, plan, and verify are read-only.
+#
+# Prerequisites: Bash, DNF5, dnf5-plugins, gpg, rpmkeys, awk, and coreutils.
+#
+# Author: RIDE Linux contributors.
+#
+# Version: 1.0.1
+#
+# Changelog: 1.0.1 - Check Fedora key trust early and remove the sync lock on exit.
+#            1.0.0 - Initial standalone mirror manager.
 
 set -o nounset
 set -o pipefail
 
-readonly SCRIPT_VERSION=1.0.0
+readonly SCRIPT_VERSION=1.0.1
 readonly DEFAULT_REPOS=(fedora updates)
 
 usage() {
@@ -49,10 +60,11 @@ Options:
   -h, --help            Show this help.
   --version             Show the tool version.
 
-The tool does not enable repositories, edit system DNF configuration, or delete
-old data. Fedora 45 and later repository definitions should be checked with
-`list --releasever VERSION` before syncing. Third-party repositories may not
-publish content for every Fedora release.
+The tool does not enable repositories, import signing keys, edit system DNF
+configuration, or delete old data. Sync requires the selected Fedora release's
+signing key in the RPM keyring. Check Fedora 45 and later repository definitions
+with `list --releasever VERSION` before syncing. Third-party repositories may
+not publish content for every Fedora release.
 USAGE
 }
 
@@ -228,6 +240,29 @@ run_list() {
   dnf5 --releasever="$RELEASEVER" repolist --enabled
 }
 
+check_fedora_key() {
+  local repo
+  for repo in "${REPOS[@]}"; do
+    [[ "$repo" == fedora || "$repo" == updates ]] || continue
+
+    need_command gpg
+    need_command rpmkeys
+    local key_file="/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$RELEASEVER-$ARCH"
+    [[ -r "$key_file" ]] || die "Fedora signing key file is missing: $key_file"
+
+    local fingerprint
+    fingerprint=$(gpg --show-keys --with-colons "$key_file" 2>/dev/null |
+      awk -F: '$1 == "fpr" {print tolower($10); exit}') || die "cannot read Fedora signing key: $key_file"
+    [[ "$fingerprint" =~ ^[0-9a-f]{40}$ ]] || die "invalid Fedora signing key: $key_file"
+    local keyring
+    keyring=$(rpmkeys --list) || die 'cannot inspect the RPM keyring'
+    if ! awk -v key="$fingerprint" 'tolower($1) == key {found = 1} END {exit !found}' <<<"$keyring"; then
+      die "Fedora $RELEASEVER signing key is absent from the RPM keyring ($fingerprint). Verify its fingerprint with Fedora, then import $key_file with 'sudo rpmkeys --import $key_file' and rerun sync"
+    fi
+    break
+  done
+}
+
 run_sync() {
   require_target_options
   [[ -n "$MIN_FREE_GIB" ]] || die 'sync requires --min-free-gib as a disk-space safety floor'
@@ -235,6 +270,7 @@ run_sync() {
   need_command df
   need_command mkdir
   need_command date
+  check_fedora_key
 
   local target="$DESTINATION/$RELEASEVER/$ARCH"
   mkdir -p -- "$target" || die "cannot create mirror destination: $target"
@@ -247,9 +283,9 @@ run_sync() {
     "$(format_gib "$free_kib")" "$MIN_FREE_GIB"
   ((free_kib >= min_kib)) || die 'available space is below --min-free-gib'
 
-  local lock="$target/.manage-fedora-mirror.lock"
-  mkdir -- "$lock" 2>/dev/null || die "another sync may be active, or a stale lock exists: $lock"
-  cleanup_lock() { rmdir -- "$lock" 2>/dev/null || true; }
+  SYNC_LOCK="$target/.manage-fedora-mirror.lock"
+  mkdir -- "$SYNC_LOCK" 2>/dev/null || die "another sync may be active, or a stale lock exists: $SYNC_LOCK"
+  cleanup_lock() { rmdir -- "$SYNC_LOCK" 2>/dev/null || true; }
   trap cleanup_lock EXIT
   trap 'exit 130' INT
   trap 'exit 143' TERM
