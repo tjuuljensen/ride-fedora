@@ -22,6 +22,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGETS = ROOT / "tests" / "acceptance" / "targets.json"
@@ -56,6 +57,11 @@ def main() -> int:
     build_dir = args.build_dir.resolve()
     manifest = read_manifest(build_dir / "manifest.txt")
     iso_name = Path(manifest["iso_source"]).name
+    compose = re.fullmatch(
+        rf"Fedora-Everything-netinst-x86_64-{args.release}-([0-9.]+)\.iso", iso_name
+    )
+    if compose is None:
+        raise SystemExit(f"unexpected Fedora installer image name: {iso_name}")
     checksum_name = manifest["installer_checksum_file"]
     iso = build_dir.parent / iso_name
     checksum_file = build_dir.parent / checksum_name
@@ -85,9 +91,13 @@ def main() -> int:
     target.update({
         "id": target_id,
         "release": args.release,
+        "acceptanceScope": "image-boot-verification",
+        "pilotOperation": "package.less",
+        "pilotPackage": "less",
+        "additionalPilots": [],
         "imageSha256": manifest["image_sha256"],
         "imageSource": manifest["iso_source"],
-        "imageRelease": args.release,
+        "imageRelease": f"{args.release}-{compose.group(1)}",
         "imageInstallerSha256": manifest["iso_sha256"],
         "imageBuildRecipeSha256": manifest["kickstart_sha256"],
         "imageBuildRecipe": f"tests/acceptance/fedora-{args.release}-{args.edition}.ks",

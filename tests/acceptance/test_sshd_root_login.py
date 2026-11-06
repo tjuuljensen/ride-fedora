@@ -43,7 +43,18 @@ def test_sshd_root_login_policy_reload_and_exact_restore(vm):
 
     planned = vm.ride("plan", "--profile", profile, catalog=catalog)
     assert OPERATION in planned.stdout
-    applied = vm.ride("apply", "--profile", profile, "--allow-candidate", catalog=catalog)
+    applied = vm.ride("apply", "--profile", profile, "--allow-candidate", catalog=catalog,
+                      check=False)
+    if applied.returncode != 0:
+        diagnostics = vm.run(
+            "sudo sshd -t; host=$(hostname -f 2>/dev/null || hostname); "
+            "sudo sshd -T -C \"user=root,host=$host,addr=127.0.0.1\" | "
+            "awk 'tolower($1) == \"permitrootlogin\" {print}' | head -1; "
+            "systemctl is-active sshd.service; sudo systemctl reload sshd.service; "
+            "sudo cat /etc/ssh/sshd_config; sudo find /etc/ssh/sshd_config.d -maxdepth 1 -type f -print",
+            check=False,
+        )
+        pytest.fail(f"SSH policy apply failed: {applied.stderr}\n{diagnostics.stdout}\n{diagnostics.stderr}")
     run_id = applied.stdout.split("Run ID: ", 1)[1].splitlines()[0]
     vm.run("sudo sshd -t")
     assert effective_root_policy(vm) == "no"
@@ -65,7 +76,17 @@ def test_sshd_root_login_policy_reload_and_exact_restore(vm):
 
     repeated_unset = vm.ride("unset", OPERATION, "--allow-candidate", catalog=catalog)
     assert "unchanged" in repeated_unset.stdout
-    vm.ride("restore", "--run-id", unset_run_id, "--allow-candidate", catalog=catalog)
+    recovered = vm.ride("restore", "--run-id", unset_run_id, "--allow-candidate",
+                        catalog=catalog, check=False)
+    if recovered.returncode != 0:
+        diagnostics = vm.run(
+            "sudo sshd -t; host=$(hostname -f 2>/dev/null || hostname); "
+            "sudo sshd -T -C \"user=root,host=$host,addr=127.0.0.1\" | "
+            "awk 'tolower($1) == \"permitrootlogin\" {print tolower($2); exit}'; "
+            f"sudo cat {DROPIN}; systemctl is-active sshd.service",
+            check=False,
+        )
+        pytest.fail(f"SSH saved-run restore failed: {recovered.stderr}\n{diagnostics.stdout}\n{diagnostics.stderr}")
     vm.run(f"sudo grep -Fx 'PermitRootLogin no' {DROPIN}")
     assert effective_root_policy(vm) == "no"
     vm.run("sudo sshd -t")

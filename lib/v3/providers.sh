@@ -97,7 +97,7 @@ ride_observe() {
     user-directories) ride_user_default_directories_observe ;;
     firefox-preferences) ride_firefox_preferences_observe ;;
     firefox-extensions) ride_firefox_extensions_observe ;;
-    chrome-preferences) ride_chrome_preferences_observe ;;
+    chrome-preferences) ride_chrome_preferences_observe "$entry" ;;
     gsettings-string) ride_gsettings_string_observe "$entry" ;;
     gnome-custom-shortcuts) ride_gnome_custom_shortcuts_observe "$entry" ;;
     bash-aliases) ride_bash_aliases_observe "$entry" ;;

@@ -31,11 +31,13 @@ check third-party software licenses inside an appliance.
 
 ## Download and refresh
 
-Run from the repository root as the user who owns the destination. POSIX sh, curl, jq, a SHA-256 utility, HTTPS access, sufficient free space,
-and a filesystem supporting
-files larger than 4 GiB are required. The following commands contact publisher
-metadata hosts. `fetch` also downloads complete multi-gigabyte appliances.
-They write only under the chosen destination and do not require root.
+Run from the repository root as the user who owns the destination. POSIX sh,
+curl, jq, `mktemp`, a SHA-256 utility (`sha256sum`, `shasum`, or `openssl`),
+HTTPS access, sufficient free space, and a filesystem supporting files larger
+than 4 GiB are required. `plan`, `fetch`, and SIFT `import` contact publisher
+metadata. `fetch` also downloads complete multi-gigabyte appliances. The
+commands do not require root. They create the destination if it does not exist;
+`plan` does not create a manifest or image file.
 
 ```bash
 sh tools/download-vm-images.sh list
@@ -44,11 +46,17 @@ sh tools/download-vm-images.sh fetch remnux-vmware --destination /path/to/vm-ima
 ```
 
 Use one selection or `all` with `plan` and `fetch`. Before transferring a large
-file, `fetch` compares current publisher metadata to `manifest.json` and
-hashes a matching local file. It skips a verified duplicate; a matching digest
-under another version can be reused locally. A transfer is published only after
-the complete SHA-256 matches. The default rotation keeps two verified versions
-per selection and architecture; `--keep N` changes that count.
+file, `fetch` resolves the current publisher filename and checksum, then checks
+`manifest.json` and hashes the matching local file. It skips a verified copy;
+an identical verified digest under another version or selection is copied
+locally without another network transfer. Downloads go to a temporary file in
+the destination image directory and are moved into place only after the full
+SHA-256 and any publisher-provided byte size match.
+
+The default rotation retains the two most recently acquired verified copies
+per selection and architecture. Use `--keep N` with `fetch` or `prune` to
+change the retained count. Rotation uses acquisition time, which is recorded in
+the manifest, to order copies.
 
 ## Import SIFT after portal login
 
@@ -79,25 +87,36 @@ sh tools/download-vm-images.sh prune --destination /path/to/vm-images --dry-run
 sh tools/download-vm-images.sh prune --destination /path/to/vm-images
 ```
 
-`verify` hashes each recorded VM artifact and exits nonzero on a missing or
-changed file. `prune --dry-run` lists eligible old owned copies. Actual pruning
-removes only manifest-owned files whose bytes still match the recorded digest.
-A changed old file is preserved. A changed current file is moved to
+`verify` hashes recorded VM artifacts and exits nonzero on a missing or changed
+file. `prune --dry-run` previews eligible removals. Actual pruning removes only
+manifest-owned files whose bytes still match their recorded digest. A changed
+old file is preserved and reported. A changed current file is moved to
 `quarantine/` before a replacement is acquired. Unmanaged files are never
 adopted or overwritten. A failed transfer or import leaves earlier verified
-copies intact. Back up the destination before manually editing its manifest.
+copies intact. The manifest is updated through a temporary file in the
+destination and renamed into place.
+
+Mutating commands use an atomic `.lock.d` directory in the destination to
+prevent simultaneous fetch, import, and prune operations. The script removes
+the lock on normal exit and handled signals. If the process is killed and the
+lock remains, confirm no downloader is running before removing
+`/path/to/vm-images/.lock.d` manually. Back up the destination before manually
+editing its manifest.
 
 The VM and Linux image commands can share a destination and manifest; their
-`verify` and `prune` commands act only on their own selections. Local digest
-verification checks recorded bytes against the saved hash. The tool does not
-verify signed checksum files or authenticate a publisher signature, and it
-does not establish that an appliance boots in a particular hypervisor.
+`verify` and `prune` commands act only on their own selections. The manifest
+records publisher URLs, selection, architecture, version, filename, size,
+SHA-256, acquisition time, and verification method. Local `verify` checks file
+bytes against the saved hash without contacting a publisher. Acquisition
+checks publisher hashes over HTTPS, but does not verify signed checksum files
+or authenticate publisher signatures. The tool also does not establish that
+an appliance boots in a particular hypervisor. It rejects image downloads
+larger than 16 GiB and metadata responses larger than 2 MiB.
 
 ## Validation record
 
 On 2026-11-05, Fedora 44 Workstation x86_64 resolved current publisher
-metadata for all six selections. HTTPS HEAD requests returned 200 for both
-REMnux OVAs, both Kali VM archives, and the SOF-ELK redirect target. SIFT's
-publisher page exposed a SHA-256 and a portal login requirement. Local mocked
-tests cover checksum binding, manifest reuse, rotation, and SIFT import. No
+metadata for all six selections. Read-only planning resolved both REMnux OVAs,
+both Kali VM archives, the SOF-ELK redirect target, and SIFT's publisher hash
+with its portal login requirement. POSIX shell syntax checks passed. No
 complete VM appliance was downloaded or booted for this review.

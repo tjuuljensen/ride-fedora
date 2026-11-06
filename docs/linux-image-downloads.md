@@ -36,9 +36,10 @@ make the missing selection visible. No other Kali image is substituted.
 
 ## Prepare and refresh
 
-Run from the repository root as the user who owns the destination. POSIX sh, curl, jq, a SHA-256 utility, HTTPS access to publisher metadata and
-image hosts, and enough free disk space are required. The destination can be a local folder or mounted
-portable storage. Use a filesystem that supports files larger than 4 GiB;
+Run from the repository root as the user who owns the destination. POSIX sh,
+curl, jq, `mktemp`, a SHA-256 utility, HTTPS access to publisher metadata and
+image hosts, and enough free disk space are required. The destination can be a
+local folder or mounted portable storage. Use a filesystem that supports files larger than 4 GiB;
 FAT32 cannot hold several of these images. The commands below create image
 files and a manifest only under the destination; they do not need root.
 
@@ -98,10 +99,9 @@ are downloaded during repository tests.
 ## Validation record
 
 On 2026-11-05, Fedora 44 Workstation x86_64 resolved metadata for the 13
-currently direct-downloadable selections. HEAD requests for all 13 image URLs
-returned HTTPS 200; Kali Live reported the expected unavailable result. A real
-Raspberry Pi OS Lite 64-bit image transfer completed: 550,466,056 bytes, local
-SHA-256 `483db18a48da399b5b7022ffae9a07bc6d99daab30e593aedac09b69ff422843`.
-A second `fetch` skipped the image using the manifest, and offline `verify`
-returned `OK`. The temporary test download folder was removed. The other twelve
-images have not had full-byte transfers or boot checks in this review.
+currently direct-downloadable selections. Read-only planning returned HTTPS
+image URLs for all 13; Kali Live reported the expected unavailable result. A
+real Raspberry Pi OS Lite transfer and manifest verification were completed
+with the earlier Python implementation. The current POSIX shell implementation
+has not completed a full image transfer. None of the other images have had
+full-byte transfers or boot checks in this review.

@@ -60,8 +60,8 @@ preservation, and failure refusal. The
 [VM test](../../tests/acceptance/test_artcraft_flatpaks.py) checks each
 published ref on each target. Keep candidate status after VM acceptance, as
 requested. The [acceptance record](../acceptance/package.artcraft-oci.md)
-reports all 14 refs passing the Fedora 44 Workstation lifecycle and Fedora 45
-remaining pending until its Workstation image is verified and pinned.
+reports all 14 refs passing on both Fedora 44 and 45 Workstation, using
+separately verified and pinned images.
 
 If an app was installed before RIDE or ArtCraft Launcher later updates it,
 RIDE can observe that it exists at the selected origin but cannot prove that

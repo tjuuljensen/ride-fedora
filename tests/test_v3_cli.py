@@ -1014,6 +1014,50 @@ printf 'en_US.utf8\\nda_DK.utf8\\n'
         self.assertIn("no declared unset state", refused.stderr)
         self.assertFalse((self.root / "runs").exists())
 
+    def test_unset_journals_selected_configuration_for_exact_restore(self):
+        catalog = json.loads((ROOT / "catalog" / "operations.json").read_text())
+        entry = next(row for row in catalog["operations"] if row["id"] == "setting.bash-aliases")
+        entry["unsetState"] = "absent"
+        entry["targets"]["fedora"].pop("variantIds", None)
+        (self.root / "catalog.json").write_text(json.dumps({
+            "schemaVersion": 3, "clientVersion": "3.0.0", "operations": [entry],
+        }))
+        home = self.root / "home"
+        home.mkdir()
+        self.env.update({"HOME": str(home), "XDG_STATE_HOME": str(self.root / "user-state")})
+        self.profile.write_text(json.dumps({
+            "schemaVersion": 1, "id": "bash-aliases", "description": "Recovery fixture",
+            "operations": [{"id": entry["id"], "state": "configured",
+                            "value": '["wanip"]'}],
+        }))
+
+        applied = self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        apply_journal = next(row for row in self.journals() if row["runId"] in applied.stdout)
+        self.assertEqual(apply_journal["steps"][0]["selectedValue"], '["wanip"]')
+        unset = self.run_ride("unset", entry["id"], "--allow-candidate")
+        unset_journal = next(row for row in self.journals() if row["runId"] in unset.stdout)
+        self.assertEqual(unset_journal["steps"][0]["selectedValue"], '["wanip"]')
+        self.assertEqual(unset_journal["steps"][0]["observedBefore"], "configured")
+        self.assertEqual(unset_journal["steps"][0]["observedAfter"], "absent")
+
+        self.run_ride("restore", "--run-id", unset_journal["runId"], "--allow-candidate")
+        self.assertTrue((home / ".bash_aliases").is_file())
+        self.assertIn("alias wanip=", (home / ".bash_aliases").read_text())
+        self.run_ride("restore", "--run-id", apply_journal["runId"], "--allow-candidate")
+        self.assertFalse((home / ".bash_aliases").exists())
+
+        self.run_ride("apply", "--profile", str(self.profile), "--allow-candidate")
+        aliases_before_refusal = (home / ".bash_aliases").read_text()
+        for saved_run in Path(self.env["RIDE_STATE_DIR"]).glob("*.json"):
+            saved_run.unlink()
+        refused = self.run_ride("unset", entry["id"], "--allow-candidate", success=False)
+        self.assertIn("selected configuration is unavailable in saved runs", refused.stderr)
+        self.assertEqual((home / ".bash_aliases").read_text(), aliases_before_refusal)
+        self.assertTrue((self.root / "user-state/ride-fedora/owned/setting.bash-aliases.json").is_file())
+        failed = self.journals()[0]
+        self.assertEqual(failed["status"], "failed")
+        self.assertEqual(failed["steps"], [])
+
     def test_profile_removal_keeps_one_way_prerequisite(self):
         catalog = json.loads((self.root / "catalog.json").read_text())
         prerequisite = operation("trust-keys")

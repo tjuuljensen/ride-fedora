@@ -56,14 +56,23 @@ def verify_suite(vm, app_ids=APP_IDS):
             assert "unchanged" in repeated.stdout
             # A clean exit or a GUI still running after 20 seconds passes the
             # startup smoke check under a disposable virtual display.
+            run_command = f"flatpak run --user {shlex.quote(app_id)}"
+            if slug == "designcraft":
+                run_command = f"flatpak run --user --env=WGPU_BACKEND=gl {shlex.quote(app_id)}"
+            launch_script = f"timeout 20s {run_command}; result=$?; sleep 2; exit $result"
             launched = vm.run(
-                "xvfb-run -a dbus-run-session -- timeout 20s "
-                f"flatpak run --user {shlex.quote(app_id)}",
+                "NO_AT_BRIDGE=1 xvfb-run -a dbus-run-session -- bash -c "
+                f"{shlex.quote(launch_script)}",
                 timeout=90, check=False)
             assert launched.returncode in (0, 124), launched.stderr
             diagnostics = (launched.stdout + launched.stderr).lower()
             assert not any(word in diagnostics for word in ("panic", "traceback", "fatal error")), \
                 diagnostics
+            app_errors = [line for line in launched.stdout.splitlines()
+                          if " ERROR " in line and
+                          "The X11 server closed the connection" not in line and
+                          "Broken pipe (os error 32)" not in line]
+            assert not app_errors, "\n".join(app_errors)
         except (AssertionError, subprocess.TimeoutExpired) as exc:
             failures.append(f"{operation}: {exc}")
         finally:
@@ -91,3 +100,8 @@ def test_artcraft_suite_fedora_44(vm):
 @pytest.mark.vm_target("fedora-45-workstation-x86_64")
 def test_artcraft_suite_fedora_45(vm):
     verify_suite(vm)
+
+
+@pytest.mark.vm_target("fedora-45-workstation-x86_64")
+def test_artcraft_designcraft_fedora_45(vm):
+    verify_suite(vm, ["designcraft"])

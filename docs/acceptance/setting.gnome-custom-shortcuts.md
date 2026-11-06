@@ -16,12 +16,15 @@ permissions.
 
 Fedora 44 Workstation x86_64 disposable-VM acceptance passed plan, candidate
 gating, apply, journaled value and mode-0600 owner record, status, repeat,
-conflict refusal, restore, and profile removal. It verified that shortcuts
-added by the user after RIDE apply remain after removal. The captured transcript
-is
-`.acceptance-runs/legacy-vm/.tmp-vm-acceptance-desktop-user-03-shortcuts-verified/fedora-44-workstation-x86_64/20261101T221533Z-test-custom-shortcuts-merge-and-restore-only-ride-owned-entries-9d825a87/transcript.jsonl`
-(SHA-256
-`518b38d9530ce89839646d156ed6d4fce2f9309e947b4fb476129eda1beed4a3`); the
+conflict refusal, and restore. It verified that shortcuts added by the user
+after RIDE apply remain after removal.
+
+ALIGN-03 acceptance additionally passed direct `unset`, repeat-unset, restore
+of the unset run to the selected configured shortcuts, and restore of the
+original apply run to absent. It verified the user's original keybinding arrays
+were restored after unset. Transcript:
+`.acceptance-runs/align03-owned-unset/fedora-44-workstation-x86_64/20261105T150211Z-test-custom-shortcuts-merge-and-restore-only-ride-owned-entries-957a00f7/transcript.jsonl`
+(SHA-256 `972db54594512f4160fd9f10e7db8946dd9c5b83c33a6dcdbb2fd25f09c95997`); the
 Fedora 44 Workstation image SHA-256 is
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
 

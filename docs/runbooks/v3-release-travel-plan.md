@@ -1,15 +1,19 @@
 # v3 release preparation and travel work plan
 
-Status checked: 2026-11-05. This is an execution checklist for the next v3.0
+Status checked: 2026-11-06. This is an execution checklist for the next v3.0
 release-candidate work period. The current release decision and generated
 migration report remain authoritative when this checklist becomes stale.
 
 ## Current starting point
 
 - `docs/release-v3.0-review.md` says **not ready for a release tag**.
-- Release target decided: Fedora 44 and Fedora 45 x86_64. The current target
-  matrix and harness still need Fedora 45 Workstation and Server images,
-  target entries, and target-specific acceptance.
+- Release target decided: Fedora 44 and Fedora 45 x86_64. Workstation and
+  Server images have been created for both releases, and the target matrix
+  includes Fedora 45. Fedora 45 entries currently claim image boot
+  verification only; target-specific package acceptance remains to be done.
+- Travel image downloads are reported complete. The local Fedora 44 and 45
+  repository mirrors are downloading; verify their contents and guest access
+  before treating them as an offline package source.
 - Migration progress reports 182/185 v2 outcomes dispositioned, with three
   unresolved; 150/169 scoped package and setting outcomes have an operable
   v3.0 path. Workstation ExpressVPN rotation and Server VPN rotation stay in
@@ -40,10 +44,11 @@ migration report remain authoritative when this checklist becomes stale.
 - [x] VMFS6 boundary: ship the installer as an opt-in candidate in v3.0;
   defer genuine VMFS6 fixture/access validation to v3.1 under H118. Do not
   claim VMFS6 image access in v3.0.
-- [ ] Review and disposition the 87 functions in the supplementary legacy
-  source audit and the ten unmatched Flatpak install/remove pairs. Record
-  whether each group is reference-only, standalone, or deferred; do not
-  create catalog operations merely to clear an inventory count.
+- [ ] Review the remaining functions in the supplementary legacy source audit
+  and the ten unmatched Flatpak install/remove pairs. Distribution and VM
+  image acquisition now have the standalone dispositions recorded in section
+  D and the audit; decide the remaining groups without creating catalog
+  operations merely to clear an inventory count.
 - [ ] Confirm which optional package and setting candidates are actually in
   the v3.0 release claim. The large candidate inventory is not a requirement
   to promote every candidate.
@@ -144,20 +149,20 @@ worktree changes.
 
 ### B. Build and verify disposable target images
 
-- [ ] Obtain Fedora 44 and Fedora 45 Everything x86_64 installer ISOs and
+- [x] Obtain Fedora 44 and Fedora 45 Everything x86_64 installer ISOs and
   verify Fedora-published checksums/signatures while online.
-- [ ] Build separate Workstation and Server qcow2 images for each release
-  selected above, using the repository's Kickstart recipes as the starting
-  point. Keep target `VARIANT_ID`, release, architecture, recipe hash, ISO
-  hash, qcow2 hash, and image build date in a target manifest.
+- [x] Create separate Workstation and Server qcow2 images for Fedora 44 and
+  45, using the repository's Kickstart recipes.
+- [ ] Confirm each image record contains target `VARIANT_ID`, release,
+  architecture, recipe hash, ISO hash, qcow2 hash, and build date.
 - [ ] Do not treat Cloud Base as Workstation or Server evidence. Keep the
   existing Fedora 44 Cloud Base image only for its declared generic-package
   pilot unless scope explicitly requires it.
-- [ ] Boot every image once, verify identity and SSH/cloud-init access, then
-  shut it down cleanly. Retain immutable base images; acceptance must use fresh
-  disposable overlays.
-- [ ] Add pinned target entries and harness support for Fedora 45. The current
-  `targets.json` contains only Fedora 44; do not relabel an older image as 45.
+- [x] Boot every image once and verify identity and SSH/cloud-init access.
+  Retain immutable base images; acceptance must use fresh disposable overlays.
+- [ ] Reconcile the Fedora 45 Workstation image digest in `targets.json` with
+  the current image and manifest before relying on its pinned target entry.
+  Fedora 45 Server's current image digest matches its target entry.
 
 The image helper runs the documented image flow and keeps files below
 `.acceptance-runs/fedora-images/`:
@@ -170,12 +175,14 @@ tools/build-acceptance-images.sh inspect 45 workstation
 tools/build-acceptance-images.sh inspect 45 server
 ```
 
-The Fedora 44 images are already present and pinned. Check them with
-`qemu-img check`, `virt-cat`, and the boot method below; rebuild them only if
-they fail. To reproduce a Fedora 44 image, use the same `fetch` and `build`
-commands with `44` in place of `45`.
+The Fedora 44 images are already present and pinned under the shared image
+root: `.acceptance-runs/fedora-images/fedora-44-workstation-x86_64/workstation.qcow2`
+and `.acceptance-runs/fedora-images/fedora-44-server-x86_64/server.qcow2`.
+Check them with `qemu-img check`, `virt-cat`, and the boot method below;
+rebuild them only if they fail. To reproduce a Fedora 44 image, use the same
+`fetch` and `build` commands with `44` in place of `45`.
 
-#### Preparation run recorded 2026-11-05
+#### Preparation runs recorded 2026-11-05 and 2026-11-06
 
 - Fedora 44 Workstation and Server passed fresh-overlay boot checks under
   QEMU TCG. Evidence is under
@@ -183,35 +190,29 @@ commands with `44` in place of `45`.
   `.acceptance-runs/travel-prep/boot-fedora44-server/`. This proves boot,
   identity, cloud-init, SSH, and client-bundle readiness only.
 - Fedora 45 installer media was downloaded and its Fedora-signed checksum
-  verified. Both the Workstation and Server net installers then failed to
-  download packages from their configured public repository. Their logs are
-  under `.acceptance-runs/fedora-images/fedora-45-{workstation,server}-x86_64/`.
-  Neither partial image contains an operating system, and neither was
-  registered as a target.
-- Fedora 45 therefore needs a package source available to the guest: prepare a
-  complete local Fedora 45 x86_64 mirror or use verified DVD media, then rerun
-  the image build. The current Kickstarts use a public net installer source;
-  point them at the local mirror or otherwise make that source reachable from
-  the guest. Do not register either Fedora 45 target until build, inspect, and
-  boot all pass.
+  verified. Initial net-install attempts on 2026-11-05 failed to fetch packages;
+  their logs remain under `.acceptance-runs/fedora-images/`. On 2026-11-06,
+  Workstation and Server images were created, inspected, and boot-verified from
+  fresh overlays. Their boot records are under the corresponding
+  `.acceptance-runs/fedora-images/fedora-45-*-x86_64/boot-verification-*/`
+  directories. These checks establish guest identity, cloud-init, SSH, and
+  client-bundle readiness, not package lifecycle acceptance.
+- The Fedora 45 Workstation image and its manifest currently have SHA-256
+  `ae758ebc77298ec7879b691e803c866b4b808324d2a2b6b769ce67536d02d24c`,
+  while `tests/acceptance/targets.json` lists a different digest. Reconcile
+  the target entry before running pinned-target acceptance. The Server image,
+  manifest, and target entry agree on
+  `3860d5288692f9a80e044faf7502bf33ed0a2861791a0e91cf9a5e0364e45614`.
 - A failed build can leave a partial qcow2 even though `qemu-img check` says
-  its container metadata is healthy. `virt-cat` failing to find `/etc/os-release`
-  means there is no installed guest OS. The build helper now writes to a
-  temporary image, preserves failed images with a `.failed-*` name, and writes
-  a final image and manifest only after guest validation. To move earlier
-  incomplete canonical images aside without deleting their evidence, run:
-
-  ```bash
-  tools/build-acceptance-images.sh discard-incomplete 45 workstation
-  tools/build-acceptance-images.sh discard-incomplete 45 server
-  ```
-
-  Do not retry the install until guest access to the package source is fixed.
+  its container metadata is healthy. The build helper now preserves failed
+  images with a `.failed-*` name and writes the final image and manifest only
+  after guest validation.
 - The Python wheelhouse preparation and offline pip-install verification
   passed. Its timestamped preflight record and wheelhouse are under
   `.acceptance-runs/travel-prep/`.
 
-Register a successfully built Fedora 45 image only after `inspect` passes:
+For a rebuilt Fedora 45 image, run `inspect` and boot verification before
+updating its pinned target entry:
 
 ```bash
 python3 tools/register-acceptance-target.py \
@@ -236,9 +237,9 @@ done
 `boot` uses the acceptance VM launcher with a fresh overlay and verifies
 cloud-init, SSH, guest identity, architecture, and the bundled client. Its
 output directory contains the image digest, metadata, identity output, and
-transcript. After successful boot checks, add the verified image digest and
-installer/recipe provenance to `tests/acceptance/targets.json` with the
-registration helper above, then update the acceptance target docs.
+transcript. Compare the verified image digest and installer/recipe provenance
+with `tests/acceptance/targets.json`; use the registration helper above for
+new or rebuilt targets, then update the acceptance target docs.
 
 ### C. Make the VM package source work without Internet
 
@@ -247,7 +248,8 @@ registration helper above, then update the acceptance target docs.
 - [ ] While online, mirror or download the required Fedora 44/45 repository
   metadata, signed RPMs, and dependency closure for each chosen target. Keep
   release/architecture/repository boundaries separate and verify RPM
-  signatures and checksums.
+  signatures and checksums. Both mirrors are downloading as of 2026-11-06;
+  this item remains open until transfer and verification complete.
 - [ ] Make the package source reachable by the guest without public Internet
   (for example, a host-only repository endpoint or attached read-only media).
   Configure disposable guest repo files through a test-only mechanism; do not
@@ -264,7 +266,87 @@ registration helper above, then update the acceptance target docs.
   test assets, source archives, or test data. Keep secrets and real evidence
   out of images, run logs, and repository files.
 
-### D. Dry-run the travel workflow
+### D. Stage standalone distribution and VM images
+
+The standalone [Linux image downloader](../linux-image-downloads.md) and
+[VM image downloader](../vm-image-downloads.md) now cover the image acquisition
+functions inventoried from the v2 distribution and VM libraries. They run
+under POSIX `sh` and require `curl`, `jq`, `mktemp`, and `sha256sum`, `shasum`,
+or `openssl`. Use an operator-owned, disk-backed destination with room for the
+selected complete images; the VM appliances and several distribution images
+are multi-gigabyte files.
+
+From the repository root, inspect the available choices and resolve publisher
+metadata before starting transfers:
+
+```bash
+sh tools/download-linux-images.sh list
+sh tools/download-linux-images.sh plan all --destination /path/to/media
+sh tools/download-vm-images.sh list
+sh tools/download-vm-images.sh plan all --destination /path/to/media
+```
+
+The recorded 2026-11-05 plan output was:
+
+| Downloader | Selection | Resolved publisher version | Plan result |
+| --- | --- | --- | --- |
+| Linux | `debian` | 13.7.0 | Download required |
+| Linux | `debian-netinst` | 13.7.0 | Download required |
+| Linux | `ubuntu` | 26.10 | Download required |
+| Linux | `ubuntu-server` | 26.10 | Download required |
+| Linux | `fedora` | 45 | Download required |
+| Linux | `fedora-server` | 45 | Download required |
+| Linux | `kali` | 2026.3 | Download required |
+| Linux | `kali-live` | — | Unavailable or failed |
+| Linux | `mint` | 22.3 | Download required |
+| Linux | `tails` | 7.16 | Download required |
+| Linux | `raspios-lite` | 2026-10-06 | Download required |
+| Linux | `raspios-full` | 2026-10-06 | Download required |
+| Linux | `securityonion` | 3.4.0-20261102 | Download required |
+| Linux | `arch` | 2026.11.01 | Download required |
+| VM | `remnux-vmware` | 202610b | Download required |
+| VM | `remnux-virtualbox` | 202610b | Download required |
+| VM | `kali-vmware` | 2026.3 | Download required |
+| VM | `kali-virtualbox` | 2026.3 | Download required |
+| VM | `sift` | `sha256-69960210f92f` | Manual portal import required |
+| VM | `sof-elk` | 20260706 | Download required |
+
+These plans fetched publisher metadata only; they did not download the listed
+images. Kali Live requires a direct HTTPS ISO, so its missing direct link
+produced the unavailable result. Versions are observations from that run, not
+pinned release targets.
+
+Progress reported 2026-11-06: the selected travel images have been downloaded.
+The table above remains the earlier plan result. Verify the acquired files and
+manifest before packing; check any selections that required manual acquisition
+or were unavailable in that plan separately.
+
+To acquire missing images or refresh the travel media, run `fetch all` for each
+tool. Both commands continue across selections and return nonzero when an item
+is unavailable; Linux `all` reports
+Kali Live, and VM `all` reports SIFT's required manual import, while acquiring
+the other supported selections. Resolve those expected statuses before
+packing. For SIFT, download the OVA through the SANS portal, then import it:
+
+```bash
+sh tools/download-linux-images.sh fetch all --destination /path/to/media
+sh tools/download-vm-images.sh fetch all --destination /path/to/media
+sh tools/download-vm-images.sh import sift --file /path/to/sift.ova --destination /path/to/media
+sh tools/download-linux-images.sh verify --destination /path/to/media
+sh tools/download-vm-images.sh verify --destination /path/to/media
+```
+
+The two tools can share one destination and manifest. They skip matching
+verified copies, reuse identical verified digests locally, and retain two
+recently acquired copies per selection by default. Review a cleanup before
+running `prune` without `--dry-run`. The manifest records publisher URLs,
+versions, sizes, digests, and acquisition times. Verification checks local
+bytes against recorded SHA-256 values without contacting the network; it does
+not establish publisher signatures, bootability, or suitability as a RIDE
+acceptance image. Keep the media directory and its manifest together, then
+record a separate checksum for the copied travel bundle.
+
+### E. Dry-run the travel workflow
 
 - [ ] From a disconnected or network-blocked host, create a fresh overlay and
   run one RPM test from the repository root using an explicit disk-backed
@@ -421,13 +503,16 @@ against its manifest using `sha256sum --check` before use.
 - [VM acceptance harness](../acceptance/VM-HARNESS.md)
 - [Acceptance record requirements](../acceptance/README.md)
 - [Pinned Fedora targets](../../tests/acceptance/targets.json)
+- [Linux image downloads](../linux-image-downloads.md)
+- [VM image downloads](../vm-image-downloads.md)
 
 ## Review queue: supplementary legacy source functions
 
-Review these 87 functions against the source code and their callers before
-choosing a disposition. The numbered line links point to the function
-definitions. These are review items, not a request to migrate each function.
-The group counts match [the audit](../legacy-source-audit.md).
+The supplementary audit inventories 87 functions. The distribution and VM
+download groups below are dispositioned as standalone utilities in section D;
+the other groups still need review against source and callers. These are review
+items, not a request to migrate each function. Counts match
+[the audit](../legacy-source-audit.md).
 
 ### `lib-upgrade.sh` (3)
 
@@ -435,38 +520,16 @@ The group counts match [the audit](../legacy-source-audit.md).
 - [ ] `UpgradeFedora` — [definition, line 72](../../lib-upgrade.sh#L72)
 - [ ] `InstallKernelHeaders` — [definition, line 85](../../lib-upgrade.sh#L85)
 
-### `lib/distro/lib-distro.sh` (21)
+### Image acquisition functions: dispositioned
 
-- [ ] `GetDebian` — [line 25](../../lib/distro/lib-distro.sh#L25)
-- [ ] `GetDebianTorrent` — [line 35](../../lib/distro/lib-distro.sh#L35)
-- [ ] `GetDebianNetinst` — [line 44](../../lib/distro/lib-distro.sh#L44)
-- [ ] `GetUbuntu` — [line 57](../../lib/distro/lib-distro.sh#L57)
-- [ ] `GetUbuntuTorrent` — [line 67](../../lib/distro/lib-distro.sh#L67)
-- [ ] `GetUbuntuServer` — [line 77](../../lib/distro/lib-distro.sh#L77)
-- [ ] `GetUbuntuServerTorrent` — [line 87](../../lib/distro/lib-distro.sh#L87)
-- [ ] `GetFedora` — [line 100](../../lib/distro/lib-distro.sh#L100)
-- [ ] `GetFedoraTorrent` — [line 107](../../lib/distro/lib-distro.sh#L107)
-- [ ] `GetFedoraServer` — [line 116](../../lib/distro/lib-distro.sh#L116)
-- [ ] `GetFedoraServerTorrent` — [line 123](../../lib/distro/lib-distro.sh#L123)
-- [ ] `GetKali` — [line 137](../../lib/distro/lib-distro.sh#L137)
-- [ ] `GetKaliTorrent` — [line 145](../../lib/distro/lib-distro.sh#L145)
-- [ ] `GetKaliLive` — [line 153](../../lib/distro/lib-distro.sh#L153)
-- [ ] `GetKaliLiveTorrent` — [line 161](../../lib/distro/lib-distro.sh#L161)
-- [ ] `GetMint` — [line 173](../../lib/distro/lib-distro.sh#L173)
-- [ ] `GetTailsTorrent` — [line 186](../../lib/distro/lib-distro.sh#L186)
-- [ ] `GetRaspiOSTorrent` — [line 199](../../lib/distro/lib-distro.sh#L199)
-- [ ] `GetSlackwareTorrent` — [line 233](../../lib/distro/lib-distro.sh#L233)
-- [ ] `GetArchTorrent` — [line 250](../../lib/distro/lib-distro.sh#L250)
-- [ ] `GetSecurityOnion` — [line 267](../../lib/distro/lib-distro.sh#L267)
-
-### `lib/vm/lib-vm.sh` (6)
-
-- [ ] `GetRemnuxVmware` — [line 36](../../lib/vm/lib-vm.sh#L36)
-- [ ] `GetRemnuxVbox` — [line 46](../../lib/vm/lib-vm.sh#L46)
-- [ ] `GetKaliVMware` — [line 56](../../lib/vm/lib-vm.sh#L56)
-- [ ] `GetKaliVbox` — [line 65](../../lib/vm/lib-vm.sh#L65)
-- [ ] `GetSANSsift` — [line 74](../../lib/vm/lib-vm.sh#L74)
-- [ ] `GetSOFelk` — [line 93](../../lib/vm/lib-vm.sh#L93)
+`lib/distro/lib-distro.sh` and `lib/vm/lib-vm.sh` remain as migration evidence;
+their selected full-image workflows are covered by the two standalone tools
+described in section D. The distro tool does not use torrents, reports Kali
+Live unavailable without a direct HTTPS image, and offers the requested
+Raspberry Pi OS Lite selection. The VM tool downloads direct HTTPS REMnux, Kali,
+and SOF-ELK images; SIFT remains a publisher-portal download followed by local
+SHA-256 verification. The omitted legacy torrents and Slackware selection are
+outside the delivered list. Neither library is a runtime fallback.
 
 ### `lib/flatpak/lib-flatpak.sh`: unmatched product pairs (20 functions)
 
@@ -543,8 +606,8 @@ The group counts match [the audit](../legacy-source-audit.md).
 The owner selected the [publisher OCI Flatpak path](../migrations/artcraft-flatpaks.md)
 for ArtCraft Launcher and the published Craft apps on Fedora 44 and 45
 Workstation x86_64. Candidate acceptance requires install, launch without
-errors, and uninstall on each target. All 14 refs passed on Fedora 44
-Workstation; Fedora 45 is pending a verified image. See the
+errors, and uninstall on each target. All 14 refs passed on both Fedora 44
+and 45 Workstation on 2026-11-05. See the
 [acceptance record](../acceptance/package.artcraft-oci.md). The archive
 script remains separate.
 

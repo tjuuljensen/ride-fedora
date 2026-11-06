@@ -85,9 +85,8 @@ def test_bash_aliases_interactive_lifecycle_and_user_content(vm):
     assert "unchanged setting.bash-aliases" in repeated_unset.stdout
     user_ride(vm, "restore", "--run-id", unset_run_id, "--allow-candidate", catalog=catalog)
     assert "configured" in user_ride(vm, "status", "setting.bash-aliases", catalog=catalog).stdout
-    assert "alias ls='eza'" in user_ride(
-        vm, "", catalog=catalog, check=False
-    ).stdout if False else True
+    assert "alias ls='eza'" in vm.run(f"cat {aliases}").stdout
+    assert "RIDE managed Bash aliases" in vm.run(f"cat {rc} {aliases}").stdout
     user_ride(vm, "restore", "--run-id", apply_run_id, "--allow-candidate", catalog=catalog)
     assert "absent" in user_ride(vm, "status", "setting.bash-aliases", catalog=catalog).stdout
     final_rc = vm.run(f"cat {rc}").stdout

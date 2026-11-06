@@ -19,7 +19,7 @@
 #   Writes VM archives, manifest.json, and quarantine/ under the destination.
 #
 # Prerequisites:
-#   curl, jq, awk, sed, and sha256sum, shasum, or openssl.
+#   curl, jq, mktemp, awk, sed, and sha256sum, shasum, or openssl.
 #
 # Author:
 #   tjuuljensen/ride-fedora maintainers.
@@ -67,10 +67,19 @@ resolve_image() {
         sof-elk)
             body=$(di_http "$SOF_ELK_PAGE") || return 1
             row=$(printf '%s\n' "$body" | awk '
-                /Filename:/ && index($0,"Public SOF-ELK x86 v") {name=$0; sub(/^.* v/,"",name); sub(/\.7z.*/,"",name)}
-                index($0,"File size:") && index($0,"bytes") {size=$0; sub(/^.*`/,"",size); sub(/`.*$/, "", size); gsub(/,/,"",size)}
-                index($0,"SHA256:") {hash=$0; sub(/^.*`/,"",hash); sub(/`.*$/, "", hash)}
-                name!="" && size!="" && hash!="" {print name "\t" size "\t" hash; exit}
+                index($0,"Filename:") {
+                    if (active) exit
+                    if (index($0,"Public SOF-ELK x86 v")) {
+                        active=1; name=$0; sub(/^.* v/,"",name); sub(/\.7z.*/,"",name)
+                    }
+                }
+                active && index($0,"File size:") {
+                    size=$0; sub(/^.*File size: `/,"",size); sub(/` bytes.*$/, "", size); gsub(/,/,"",size)
+                }
+                active && index($0,"SHA256:") {
+                    hash=$0; sub(/^.*SHA256: `/,"",hash); sub(/`.*/,"",hash)
+                    print name "\t" size "\t" hash; exit
+                }
             ')
             oldifs=$IFS; IFS="$(printf '\t')"; set -- $row; IFS=$oldifs
             DI_VERSION=$1 DI_SIZE=$2 DI_SHA256=$3 DI_FILENAME=sof-elk-x86-v$1.7z

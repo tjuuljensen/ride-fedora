@@ -33,7 +33,7 @@ class ChromePreferencesTests(unittest.TestCase):
         script = (
             f"source {COMMON}; source {MODULE}; "
             f"ride_chrome_preferences_change '{json.dumps(entry)}' {action}; "
-            "ride_chrome_preferences_observe"
+            f"ride_chrome_preferences_observe '{json.dumps(entry)}'"
         )
         env = os.environ | {
             "RIDE_CHROME_POLICY_FILE": str(self.policy),
@@ -71,6 +71,20 @@ class ChromePreferencesTests(unittest.TestCase):
     def test_selection_is_fixed_and_unknown_policy_is_rejected(self):
         result = self.run_handler("configured", ["HomepageLocation\":\"https://evil.invalid\""], check=False)
         self.assertNotEqual(result.returncode, 0)
+
+    def test_observe_rejects_a_different_owned_selection(self):
+        self.run_handler("configured")
+        entry = json.dumps({"selectedValue": json.dumps(["homepage"])})
+        script = (f"source {COMMON}; source {MODULE}; "
+                  f"ride_chrome_preferences_observe '{entry}'")
+        env = os.environ | {
+            "RIDE_CHROME_POLICY_FILE": str(self.policy),
+            "RIDE_CHROME_POLICY_MANIFEST": str(self.manifest),
+        }
+        result = subprocess.run(["bash", "-c", script], env=env, text=True,
+                                capture_output=True, check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("differs from the selected configuration", result.stderr)
 
 
 if __name__ == "__main__":

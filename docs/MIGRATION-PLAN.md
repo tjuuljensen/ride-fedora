@@ -608,9 +608,10 @@ owns the rules; [Windows alignment](windows-alignment.md) owns local differences
   prove refusal before mutation and preserve explicit set and saved recovery.
   Fedora's core implementation and focused tests are recorded in
   [Windows alignment](windows-alignment.md#align-03-setting-lifecycle-decision-2026-11-05).
-  Fedora still needs per-operation review of the remaining owned-file `absent`
-  states before closing its setting portion; the Windows counterpart remains
-  open.
+  Fedora has reviewed and accepted all five remaining owned-file `absent`
+  settings with disposable Fedora 44 Workstation or Server evidence. The Linux
+  setting portion is complete; the Windows counterpart and paired CLI review
+  remain open.
 - [ ] **ALIGN-04:** Separate download eligibility from VM execution acceptance;
   unify target/identity preflight for all restore previews, including the iBus
   branch. Coordinate Windows flag-free candidate preview and installed-package
@@ -976,8 +977,8 @@ source. Each target needs disposable-VM evidence that every selected app
 installs, launches without errors, and can be uninstalled before that target's
 package lifecycle is counted as accepted. ArtCraft Studio has no Linux
 installer in its current release. The [Fedora 44 Workstation VM run](acceptance/package.artcraft-oci.md)
-passed all 14 refs on 2026-11-05; Fedora 45 remains unaccepted pending a
-verified and pinned Workstation image.
+passed all 14 refs on 2026-11-05. The separately built and boot-verified
+Fedora 45 Workstation VM also passed all 14 refs on 2026-11-05.
 
 ## Former CERT forensic repository burndown
 

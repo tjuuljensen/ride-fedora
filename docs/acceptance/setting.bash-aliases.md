@@ -25,6 +25,14 @@ public ipify service. Transcript:
 SHA-256:
 `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
 
+ALIGN-03 Fedora 44 Workstation acceptance additionally passed direct `unset`,
+repeat-unset, restore of the unset run to its saved selected alias list, and
+restore of the original apply run to `absent`. Later edits to both shell files
+survived. Transcript:
+`.acceptance-runs/align03-owned-unset/fedora-44-workstation-x86_64/20261105T143617Z-test-bash-aliases-interactive-lifecycle-and-user-content-92a834e1/transcript.jsonl`
+(SHA-256 `e010cb1309f356559edc8cb7de66d29a90ef0af839c7926a9a7abcebda461c8f`).
+Image SHA-256: `78356d69277dd0c5f103a6fdf0c603424a1aad8e02242ae893b8335ffca7c178`.
+
 Keep this operation opt-in and outside base profiles. H090 tracks review of the
 public IP service choice and privacy behavior before promoting or broadening
 the alias capability.

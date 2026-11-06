@@ -39,33 +39,114 @@
       "pilotOperation": "package.exfatprogs",
       "pilotPackage": "exfatprogs",
       "additionalPilots": [
-        {"operationId": "package.less", "package": "less"},
-        {"operationId": "package.openssh-clients", "package": "openssh-clients"},
-        {"operationId": "package.scanmem", "package": "scanmem"},
-        {"operationId": "package.unhide", "package": "unhide"},
-        {"operationId": "package.nano-default-editor", "package": "nano-default-editor"},
-        {"operationId": "package.nebula", "package": "nebula"},
-        {"operationId": "package.ntpsec", "package": "ntpsec"},
-        {"operationId": "package.psad", "package": "psad"},
-        {"operationId": "package.rats", "package": "rats"},
-        {"operationId": "package.tripwire", "package": "tripwire"},
-        {"operationId": "package.usbsniff", "package": "usbsniff"},
-        {"operationId": "package.handbrake-cli", "package": "HandBrake"},
-        {"operationId": "package.eza-portable", "package": "eza-portable"},
-        {"operationId": "package.gnome-browser-connector", "package": "gnome-browser-connector"},
-        {"operationId": "package.volatility2", "package": "volatility2-pypy-bundle"},
-        {"operationId": "package.clamav", "package": "clamav"},
-        {"operationId": "package.veracrypt", "package": "veracrypt"},
-        {"operationId": "package.glances", "package": "glances"},
-        {"operationId": "package.zeek-core", "package": "zeek-core"},
-        {"operationId": "package.galleta", "package": "galleta"},
-        {"operationId": "package.email-header-analyzer", "package": "email-header-analyzer"},
-        {"operationId": "setting.gnome-custom-shortcuts", "package": "gsettings-desktop-schemas"},
-        {"operationId": "setting.bash-aliases", "package": "bash"},
-        {"operationId": "setting.networkmanager-vpn-profiles", "package": "NetworkManager"},
-        {"operationId": "setting.firefox-addons", "package": "firefox"},
-        {"operationId": "setting.keyfile-mounts", "package": "cryptsetup"},
-        {"operationId": "package.expressvpn", "package": "expressvpn"}
+        {
+          "operationId": "package.less",
+          "package": "less"
+        },
+        {
+          "operationId": "package.openssh-clients",
+          "package": "openssh-clients"
+        },
+        {
+          "operationId": "package.scanmem",
+          "package": "scanmem"
+        },
+        {
+          "operationId": "package.unhide",
+          "package": "unhide"
+        },
+        {
+          "operationId": "package.nano-default-editor",
+          "package": "nano-default-editor"
+        },
+        {
+          "operationId": "package.nebula",
+          "package": "nebula"
+        },
+        {
+          "operationId": "package.ntpsec",
+          "package": "ntpsec"
+        },
+        {
+          "operationId": "package.psad",
+          "package": "psad"
+        },
+        {
+          "operationId": "package.rats",
+          "package": "rats"
+        },
+        {
+          "operationId": "package.tripwire",
+          "package": "tripwire"
+        },
+        {
+          "operationId": "package.usbsniff",
+          "package": "usbsniff"
+        },
+        {
+          "operationId": "package.handbrake-cli",
+          "package": "HandBrake"
+        },
+        {
+          "operationId": "package.eza-portable",
+          "package": "eza-portable"
+        },
+        {
+          "operationId": "package.gnome-browser-connector",
+          "package": "gnome-browser-connector"
+        },
+        {
+          "operationId": "package.volatility2",
+          "package": "volatility2-pypy-bundle"
+        },
+        {
+          "operationId": "package.clamav",
+          "package": "clamav"
+        },
+        {
+          "operationId": "package.veracrypt",
+          "package": "veracrypt"
+        },
+        {
+          "operationId": "package.glances",
+          "package": "glances"
+        },
+        {
+          "operationId": "package.zeek-core",
+          "package": "zeek-core"
+        },
+        {
+          "operationId": "package.galleta",
+          "package": "galleta"
+        },
+        {
+          "operationId": "package.email-header-analyzer",
+          "package": "email-header-analyzer"
+        },
+        {
+          "operationId": "setting.gnome-custom-shortcuts",
+          "package": "gsettings-desktop-schemas"
+        },
+        {
+          "operationId": "setting.bash-aliases",
+          "package": "bash"
+        },
+        {
+          "operationId": "setting.networkmanager-vpn-profiles",
+          "package": "NetworkManager"
+        },
+        {
+          "operationId": "setting.firefox-addons",
+          "package": "firefox"
+        },
+        {
+          "operationId": "setting.keyfile-mounts",
+          "package": "cryptsetup"
+        },
+        {
+          "operationId": "package.expressvpn",
+          "package": "expressvpn"
+        }
       ],
       "packageDatabase": "rpm",
       "packageVerification": "rpm-signature-and-files"
@@ -89,12 +170,73 @@
       "pilotOperation": "package.less",
       "pilotPackage": "less",
       "additionalPilots": [
-        {"operationId": "package.openssh-clients", "package": "openssh-clients"},
-        {"operationId": "package.ferium-portable", "package": "ferium-portable"},
-        {"operationId": "package.java-25-openjdk-headless", "package": "java-25-openjdk-headless"},
-        {"operationId": "package.minecraft-server", "package": "minecraft-server"},
-        {"operationId": "package.expressvpn", "package": "expressvpn"}
+        {
+          "operationId": "package.openssh-clients",
+          "package": "openssh-clients"
+        },
+        {
+          "operationId": "package.ferium-portable",
+          "package": "ferium-portable"
+        },
+        {
+          "operationId": "package.java-25-openjdk-headless",
+          "package": "java-25-openjdk-headless"
+        },
+        {
+          "operationId": "package.minecraft-server",
+          "package": "minecraft-server"
+        },
+        {
+          "operationId": "package.expressvpn",
+          "package": "expressvpn"
+        }
       ],
+      "packageDatabase": "rpm",
+      "packageVerification": "rpm-signature-and-files"
+    },
+    {
+      "id": "fedora-45-workstation-x86_64",
+      "distro": "fedora",
+      "release": "45",
+      "edition": "Workstation",
+      "variantId": "workstation",
+      "architecture": "x86_64",
+      "imageFormat": "qcow2",
+      "vmSmp": 4,
+      "vmMemoryMiB": 6144,
+      "imageSha256": "0f2d8bd7bb44d41a5dd4a4652943b639592b7a43963a73e1e7def6cd29aa9c5e",
+      "imageSource": "https://dl.fedoraproject.org/pub/fedora/linux/releases/45/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-45-1.4.iso",
+      "imageRelease": "45-1.4",
+      "imageInstallerSha256": "42abc36792f91575b2f541db19110cc661864819031e57cd5f5c9ec764ebbddf",
+      "imageBuildRecipe": "tests/acceptance/fedora-45-workstation.ks",
+      "imageBuildRecipeSha256": "4745c39d10dcb442da74ce7a89307d494380770ebe962c90b120ef9c7e974d44",
+      "acceptanceScope": "image-boot-verification",
+      "seedPackages": [],
+      "pilotOperation": "package.less",
+      "pilotPackage": "less",
+      "additionalPilots": [],
+      "packageDatabase": "rpm",
+      "packageVerification": "rpm-signature-and-files"
+    },
+    {
+      "id": "fedora-45-server-x86_64",
+      "distro": "fedora",
+      "release": "45",
+      "edition": "Server",
+      "variantId": "server",
+      "architecture": "x86_64",
+      "imageFormat": "qcow2",
+      "imageSha256": "3860d5288692f9a80e044faf7502bf33ed0a2861791a0e91cf9a5e0364e45614",
+      "imageSource": "https://dl.fedoraproject.org/pub/fedora/linux/releases/45/Everything/x86_64/iso/Fedora-Everything-netinst-x86_64-45-1.4.iso",
+      "imageRelease": "45-1.4",
+      "imageInstallerSha256": "42abc36792f91575b2f541db19110cc661864819031e57cd5f5c9ec764ebbddf",
+      "imageBuildRecipe": "tests/acceptance/fedora-45-server.ks",
+      "imageBuildRecipeSha256": "f3b2d705fa7c527f36b5a3efa0082207e7f6d0b2549e07ab9c1e4fcae840b006",
+      "acceptanceScope": "image-boot-verification",
+      "seedPackages": [],
+      "pilotOperation": "package.less",
+      "pilotPackage": "less",
+      "additionalPilots": [],
       "packageDatabase": "rpm",
       "packageVerification": "rpm-signature-and-files"
     }

@@ -7,7 +7,7 @@
 #   Download or import complete images, reuse verified duplicates, and rotate owned copies.
 #
 # Compatibility:
-#   POSIX sh on Unix; requires curl, jq, and a SHA-256 utility.
+#   POSIX sh on Unix; requires curl, jq, mktemp, and a SHA-256 utility.
 #
 # Usage:
 #   Sourced by tools/download-linux-images.sh and tools/download-vm-images.sh.
@@ -20,7 +20,7 @@
 #   Writes images, manifest.json, and quarantine/ under DI_DESTINATION.
 #
 # Prerequisites:
-#   HTTPS access, curl, jq, awk, sed, and sha256sum, shasum, or openssl.
+#   HTTPS access, curl, jq, mktemp, awk, sed, and sha256sum, shasum, or openssl.
 #
 # Author:
 #   tjuuljensen/ride-fedora maintainers.
@@ -40,6 +40,8 @@ DI_MAX_BYTES=17179869184
 DI_META_MAX=2097152
 DI_DESTINATION=
 DI_TMP=
+DI_TEMP_IMAGE=
+DI_MANIFEST_TEMP=
 DI_KEEP=2
 DI_SHA256=
 DI_SIZE=
@@ -47,6 +49,13 @@ DI_SIZE=
 
 di_error() { printf '%s\n' "$*" >&2; }
 di_fail() { di_error "$*"; return 1; }
+
+di_cleanup() {
+    [ -z "$DI_LOCK" ] || rmdir "$DI_LOCK" 2>/dev/null || :
+    [ -z "$DI_TEMP_IMAGE" ] || rm -f "$DI_TEMP_IMAGE"
+    [ -z "$DI_MANIFEST_TEMP" ] || rm -f "$DI_MANIFEST_TEMP"
+    [ -z "$DI_TMP" ] || rm -rf "$DI_TMP"
+}
 
 
 di_require() {
@@ -102,18 +111,24 @@ di_manifest_load() {
     fi
     jq -e 'type == "object" and .schemaVersion == 1 and (.artifacts | type == "array")' \
         "$DI_MANIFEST" >/dev/null || { di_fail 'unsupported or malformed image manifest'; return 1; }
-    jq -e 'all(.artifacts[]; (.id|type=="string") and (.path|type=="string") and
+    jq -e 'all(.artifacts[]; (.id|IN("debian","debian-netinst","ubuntu","ubuntu-server","fedora","fedora-server","kali","kali-live","mint","tails","raspios-lite","raspios-full","raspios-mini","securityonion","arch","remnux-vmware","remnux-virtualbox","kali-vmware","kali-virtualbox","sift","sof-elk")) and
+        (.architecture|type=="string") and (.filename|type=="string") and
+        (.path|type=="string") and
         (.sha256|test("^[a-f0-9]{64}$")) and (.version|type=="string") and
         (.architecture|type=="string") and (.retrievedAt|type=="string") and
-        (.path|test("^images/[A-Za-z0-9._+-]+/[A-Za-z0-9._+-]+/[A-Za-z0-9._+-]+/[a-f0-9]{12}/[A-Za-z0-9._+-]+$")))' \
+        (.path == ("images/" + .id + "/" + .architecture + "/" + .version + "/" + .sha256[0:12] + "/" + .filename)) and
+        (.path|test("^images/[A-Za-z0-9._+-]+/[A-Za-z0-9._+-]+/[A-Za-z0-9._+-]+/[a-f0-9]{12}/[A-Za-z0-9._+-]+$"))) and
+        (([.artifacts[].path] | unique | length) == (.artifacts|length))' \
         "$DI_MANIFEST" >/dev/null || { di_fail 'invalid image manifest record'; return 1; }
 }
 
 
 di_manifest_save() {
-    jq -S . "$DI_MANIFEST" > "$DI_TMP/manifest.new" || return 1
-    mv "$DI_TMP/manifest.new" "$DI_DESTINATION/manifest.json" || return 1
+    DI_MANIFEST_TEMP=$(mktemp "$DI_DESTINATION/.manifest.XXXXXX") || return 1
+    jq -S . "$DI_MANIFEST" > "$DI_MANIFEST_TEMP" || { rm -f "$DI_MANIFEST_TEMP"; return 1; }
+    mv "$DI_MANIFEST_TEMP" "$DI_DESTINATION/manifest.json" || { rm -f "$DI_MANIFEST_TEMP"; return 1; }
     DI_MANIFEST=$DI_DESTINATION/manifest.json
+    DI_MANIFEST_TEMP=
 }
 
 
@@ -193,7 +208,8 @@ di_publish() {
     fi
     mkdir -p "$(dirname "$target")" || return 1
     duplicate=$(di_record_for_digest "$DI_SHA256" || :)
-    temporary=$DI_TMP/image
+    temporary=$(mktemp "$(dirname "$target")/.image.XXXXXX") || return 1
+    DI_TEMP_IMAGE=$temporary
     if [ -n "$duplicate" ]; then
         source_file=$(di_checked_file "$duplicate") || return 1
         cp "$source_file" "$temporary" || return 1
@@ -216,6 +232,7 @@ di_publish() {
     [ "$actual" = "$DI_SHA256" ] || { di_fail "publisher SHA-256 mismatch for $DI_ID"; return 1; }
     [ ! -e "$target" ] && [ ! -L "$target" ] || { di_fail "refusing to replace existing image: $target"; return 1; }
     mv "$temporary" "$target" || return 1
+    DI_TEMP_IMAGE=
     DI_OBSERVED_SIZE=$bytes
     DI_NOW=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
     if [ -n "$DI_IMPORT_FILE" ]; then DI_VERIFICATION='manually obtained file matched publisher SHA-256; signature not checked'
@@ -305,13 +322,16 @@ di_main() {
     [ ! -L "$DI_DESTINATION" ] || { di_fail 'destination is a symlink'; return 1; }
     di_require || return 1
     DI_TMP=$(mktemp -d "${TMPDIR:-/tmp}/ride-images.XXXXXX") || return 1
-    trap 'rm -rf "$DI_TMP"' 0 HUP INT TERM
+    DI_LOCK=
+    trap 'di_cleanup' 0
+    trap 'exit 129' HUP
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
     mkdir -p "$DI_DESTINATION" || return 1
     DI_DESTINATION=$(cd -P "$DI_DESTINATION" && pwd) || return 1
     DI_LOCK=$DI_DESTINATION/.lock.d
     if [ "$action" = fetch ] || [ "$action" = import ] || [ "$action" = prune ]; then
         if ! mkdir "$DI_LOCK" 2>/dev/null; then di_fail 'another downloader holds the destination lock'; return 1; fi
-        trap 'rmdir "$DI_LOCK" 2>/dev/null || :; rm -rf "$DI_TMP"' 0 HUP INT TERM
     fi
     di_manifest_load || return 1
     case $action in

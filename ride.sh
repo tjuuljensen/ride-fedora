@@ -350,7 +350,6 @@ ride_apply_one() {
   selected_value=$(jq -r '.selectedValue // ""' <<< "$entry")
   selected_value_present=$(jq -r 'has("selectedValue")' <<< "$entry")
   RIDE_DNF5_SYSTEM_UPDATE_REPORT=
-  signature=$(ride_source_signature "$entry")
   if [[ "$(jq -r '.kind' <<< "$entry")" == package ]]; then
     conflict=$(ride_provider_conflict "$entry")
     if [[ -n "$conflict" && ( "$desired" == installed || "$(ride_observe "$entry")" != installed ) ]]; then
@@ -358,6 +357,15 @@ ride_apply_one() {
     fi
   fi
   before=$(ride_observe "$entry") || ride_die "cannot observe current state for $id"
+  if [[ "$selected_value_present" != true && "$before" == configured &&
+        "$(jq -r '.unsetState // ""' <<< "$entry")" == "$desired" &&
+        "$(jq -r '.handler' <<< "$entry")" =~ ^(bash-aliases|chrome-preferences|gnome-custom-shortcuts)$ ]]; then
+    selected_value=$(ride_latest_configured_value "$id" "$source") ||
+      ride_die "cannot safely unset $id: its selected configuration is unavailable in saved runs"
+    selected_value_present=true
+    entry=$(jq -c --arg value "$selected_value" '. + {selectedValue:$value}' <<< "$entry")
+  fi
+  signature=$(ride_source_signature "$entry")
   step=$(jq -nc --arg id "$id" --arg before "$before" --arg desired "$desired" --arg recovery "$recovery" \
     --arg source "$source" --arg signature "$signature" --arg distribution "$distribution" \
     --arg deployment "$deployment" --arg scope "$scope" --arg selectedValue "$selected_value" \
@@ -474,6 +482,37 @@ ride_apply_single() {
   RIDE_RUN_PENDING=0
   ride_apply_one "$entry" "$desired" || return 1
   if [[ "${RIDE_RUN_PENDING:-0}" == 1 ]]; then ride_journal_finish pending; else ride_journal_finish complete; fi
+}
+
+ride_latest_configured_value() {
+  local id=$1 source=$2 directory file value latest='' recorded_signature signature_version entry expected_signature
+  directory=$(ride_state_dir)
+  [[ -d "$directory" && ! -L "$directory" ]] || return 1
+  for file in "$directory"/*.json; do
+    [[ -f "$file" && ! -L "$file" ]] || continue
+    value=$(jq -er --arg id "$id" --arg source "$source" '
+      select(.status == "complete") |
+      [.steps[] | select(.id == $id and (.result == "changed" or .result == "unchanged") and .desired == "configured" and
+        .observedAfter == "configured" and has("selectedValue") and
+        (.sourceId // "") == $source)] | if length > 0 then .[-1].selectedValue else empty end
+    ' "$file" 2>/dev/null) || continue
+    recorded_signature=$(jq -er --arg id "$id" --arg source "$source" '
+      [.steps[] | select(.id == $id and (.result == "changed" or .result == "unchanged") and .desired == "configured" and
+        .observedAfter == "configured" and has("selectedValue") and
+        (.sourceId // "") == $source)] | if length > 0 then .[-1].sourceSignature // empty else empty end
+    ' "$file" 2>/dev/null) || continue
+    signature_version=$(jq -er --arg id "$id" --arg source "$source" '
+      [.steps[] | select(.id == $id and (.result == "changed" or .result == "unchanged") and .desired == "configured" and
+        .observedAfter == "configured" and has("selectedValue") and
+        (.sourceId // "") == $source)] | if length > 0 then (.[-1].sourceSignatureVersion // 1) else empty end
+    ' "$file" 2>/dev/null) || continue
+    entry=$(ride_entry_or_die "$id" "$source" "$value" true) || continue
+    expected_signature=$(ride_source_signature "$entry" "$signature_version") || continue
+    [[ "$recorded_signature" == "$expected_signature" ]] || continue
+    latest=$value
+  done
+  [[ -n "$latest" ]] || return 1
+  printf '%s\n' "$latest"
 }
 
 ride_restore_steps() {

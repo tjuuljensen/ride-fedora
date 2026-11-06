@@ -19,7 +19,7 @@
 #   Writes images, manifest.json, and quarantine/ under the destination.
 #
 # Prerequisites:
-#   curl, jq, awk, sed, and sha256sum, shasum, or openssl.
+#   curl, jq, mktemp, awk, sed, and sha256sum, shasum, or openssl.
 #
 # Author:
 #   tjuuljensen/ride-fedora maintainers.

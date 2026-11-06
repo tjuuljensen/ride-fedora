@@ -126,6 +126,9 @@ of the shell bootstrap.
   recommendations.
 - [v3.0 release travel plan](docs/runbooks/v3-release-travel-plan.md): offline
   preparation, ordered acceptance burndown, and legacy-source review queue.
+- [Offline Fedora package mirrors](docs/offline-fedora-mirrors.md) and the
+  standalone [Fedora mirror manager](tools/manage-fedora-mirror.sh): prepare and
+  maintain local Fedora repositories for test VMs and air-gapped systems.
 - [Migration plan](docs/MIGRATION-PLAN.md) and [generated progress](docs/migrations/progress.md):
   scoped v2 outcomes, current status, and next actions.
 - [DFIR software expansion backlog](docs/migrations/dfir-expansion-backlog.md):

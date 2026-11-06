@@ -131,20 +131,70 @@ passed on Fedora 44 x86_64. Other
 generated keys, VPN profiles, or other selected objects and need individual
 ownership and recovery review.
 Fedora Bash completion now offers only settings with a declared `unsetState`.
-Before closing Fedora's setting portion of ALIGN-03, review the remaining
-owned-file settings with an `absent` state but no `unsetState`: Bash aliases,
-Chrome preferences, GNOME custom shortcuts, Firefox preferences, and the SSH
-root-login drop-in. The first three need their selected configuration to
-recover a previous `configured` state. Keep `unset` refusing each operation
-until its removal meaning and saved-run recovery are both verified.
+Fedora now declares `unsetState: absent` for the five reviewed owned-file
+settings: Bash aliases, Chrome preferences, GNOME custom shortcuts, Firefox
+preferences, and the SSH root-login drop-in. Fedora 44 Workstation acceptance
+verified Firefox file removal and restoration, Bash and Chrome selected-value
+recovery, GNOME shortcut and global-binding recovery, repeat-unset, and exact
+restore to the original absent state. Fedora 44 Server acceptance verified SSH
+drop-in removal, effective-policy restoration, an active daemon and a fresh
+non-root connection, then saved-run recovery in both directions. Their
+transcripts are recorded in the per-operation acceptance documents.
+
+For Bash aliases, Chrome preferences, and GNOME custom shortcuts, unset runs
+carry forward the selected value from the latest compatible saved run that
+successfully reached `configured`. Saved source signatures must still match.
+If no compatible selected value is available, unset records a failed run for
+audit, refuses, and makes no state change. This lets restoring the unset run
+recreate the exact selected configured state; restoring the original apply run
+returns to `absent`. Chrome observation also checks that an owned policy file
+matches the currently selected policy list before treating it as configured.
+
+This Linux recovery detail was reviewed against the Fedora working tree based
+on `eed301680a9f8d2bf22e107d533b77016ffafa84`, Windows revision
+`6d7435bc075f61a26c6f6223a0d2d3622de5d60b`, and canonical contract 1.1.0,
+SHA-256
+`b88967ea5bde29e0141bca15134e2dac63e02faf7931cb18e83ba08cf5262938`.
+Windows declares `UnsetState` for profile settings and restores captured prior
+setting state from its saved snapshots. Fedora uses its run journal to retain
+the selected configuration needed to recreate a configured state after
+removal. These are native implementations of RB-06's same behavior, and do not
+change the shared contract. Fedora's five reviewed owned-file setting rows are
+complete; Windows' paired setting review remains open.
 
 Windows already routes `unset` through its normal setting plan, with an
 explicit `UnsetState` on profile settings and inferred states for other kinds.
 Its ALIGN-03 follow-up is to declare each eligible override-removal state,
 refuse unsupported cases, and align help and paired tests with these meanings.
 Review this decision when either catalog changes an unset or baseline meaning,
-when an operation gains a new removal action, or at the final v3 alignment
-review.
+when an operation gains a new removal action, when Fedora changes how an unset
+run retains a selected value, or at the final v3 alignment review.
+
+### ALIGN-03/05 contract recheck, 2026-11-06
+
+Synced against Windows `233633af9213f11750fb1ead835f3c5d2e5390bc` and its
+updated [Fedora comparison](https://github.com/tjuuljensen/ride-windows/blob/233633af9213f11750fb1ead835f3c5d2e5390bc/docs/fedora-alignment.md),
+plus the Fedora working tree based on `eed301680a9f8d2bf22e107d533b77016ffafa84`.
+The Windows recheck still adopts contract 1.1.0 at the pinned SHA-256 above;
+the intervening Windows commits changed alignment/migration documentation,
+capability records, and Windows acceptance material, not the shared contract.
+
+The recheck reports a confirmed Fedora RB-07 failure: for a profile whose
+input lists dependent `package.beta` before prerequisite `package.alpha`,
+`remove --profile` removes alpha, then fails to remove beta. The current
+`ride_remove_profile` implementation reverses profile order both when
+preflighting and when applying removals, so the work still needs dependency
+planning that is safe for either input order and preflight that prevents partial
+removal. Track this as `profiles.remove-dependency-order`; cover both profile
+orders under ALIGN-03/05 before promoting profile removal. The current shared
+RB07-01 and Fedora mapped case cover only the opposite order.
+
+Overall ALIGN-03 remains open. Fedora's five owned-file unset declarations and
+saved-run recovery are complete, while Fedora still owns the profile-removal
+ordering fix. Windows still owns its bare-remove transition, refusal of
+irrelevant options, accurate removal help, and per-operation override-removal
+review. The next paired review should retain both the setting recovery cases
+and the dependency-order cases; native platform acceptance remains separate.
 
 Fedora's 2026-11-03 ALIGN-04 work removes VM acceptance as a download gate;
 downloads still require a declared target, eligible handler/source, and the
@@ -2557,5 +2607,5 @@ digest is unchanged.
 Review trigger: either client changes ArtCraft product IDs, source selection,
 installation scope, deployment identity, app-data recovery, or target support;
 the publisher signs the OCI remote; or the final v3 release review. Native
-Fedora 44 acceptance [passed](acceptance/package.artcraft-oci.md) on the
-disposable Workstation VM; Fedora 45 remains pending a verified image.
+Fedora 44 and 45 acceptance [passed](acceptance/package.artcraft-oci.md) on
+separate disposable Workstation VMs.

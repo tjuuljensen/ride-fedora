@@ -39,12 +39,18 @@ ride_chrome_policy_manifest_valid() {
 }
 
 ride_chrome_preferences_observe() {
-  local file manifest
+  local entry=${1:-} file manifest selected payload
   file=$(ride_chrome_policy_file); manifest=$(ride_chrome_policy_manifest)
   [[ ! -L "$file" && ! -L "$manifest" ]] || ride_die "Chrome policy ownership path is a symlink"
   if [[ -e "$file" || -e "$manifest" ]]; then
     ride_chrome_policy_manifest_valid "$file" "$manifest" ||
       ride_die "Chrome policy file or ownership record changed; preserving it"
+    if [[ -n "$entry" ]] && jq -e 'has("selectedValue")' <<< "$entry" >/dev/null; then
+      selected=$(jq -r '.selectedValue' <<< "$entry")
+      payload=$(ride_chrome_policy_payload "$selected") || ride_die "invalid Chrome policy selection"
+      [[ "$(cat -- "$file")" == "$payload" ]] ||
+        ride_die "owned Chrome policy differs from the selected configuration; unset it before applying a different selection"
+    fi
     printf 'configured\n'
   else
     printf 'absent\n'
